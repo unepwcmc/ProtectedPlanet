@@ -4,6 +4,7 @@ class Download::Generators::Base
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents', 'resources').freeze
   SHAPEFILE_README_PATH = File.join(Rails.root, 'lib', 'data', 'documents', 'Shapefile_splitting_README.txt').freeze
   TMP_DOWNLOADS_PREFIX = 'tmp_downloads_'
+  SOURCE_CSV_PREFIX = 'WDPA_sources_'
 
   def self.generate(zip_path, site_ids = nil)
     generator = new zip_path, site_ids
@@ -39,6 +40,22 @@ class Download::Generators::Base
       Rails.logger.warn "Failed to drop temp download view #{view_name}: #{e.message}"
     end
     views.length
+  end
+
+  # Cleans up all WDPA_sources_*.csv files in the tmp directory
+  # regardless of which release label/month they belong to
+  # Can be called as a class method for manual cleanup
+  def self.clean_up_generated_source
+    tmp_dir = Download::TMP_PATH
+    pattern = File.join(tmp_dir, "#{SOURCE_CSV_PREFIX}*.csv")
+    
+    deleted_count = 0
+    Dir.glob(pattern).each do |csv_file|
+      FileUtils.rm_f(csv_file)
+      Rails.logger.info "Cleaned up source CSV: #{csv_file}"
+      deleted_count += 1
+    end
+    deleted_count
   end
 
   private
@@ -116,7 +133,7 @@ class Download::Generators::Base
   attr_reader :zip_path
 
   def sources_path
-    File.join(File.dirname(zip_path), "WDPA_sources_#{Download::Config.current_label}.csv")
+    File.join(File.dirname(zip_path), "#{SOURCE_CSV_PREFIX}#{Download::Config.current_label}.csv")
   end
 
   def add_sources

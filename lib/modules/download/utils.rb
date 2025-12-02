@@ -26,6 +26,7 @@ module Download
       S3.delete_all S3::CURRENT_PREFIX
       $redis.keys('downloads:*').each { |d| $redis.del d }
       Download::Generators::Base.clean_tmp_download_views
+      Download::Generators::Base.clean_up_generated_source
     end
 
     def self.zip_path(download_name)
