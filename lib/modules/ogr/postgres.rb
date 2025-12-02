@@ -25,15 +25,49 @@ class Ogr::Postgres
     # Used for adding the -update flag so to add different layers (poly point source)
     # into the same .gdb file
     needs_updating = File.exist?(file_name)
-    # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
+    # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
     feature_name = get_feature_name(file_name, geom_type)
-    system ogr_command(template, binding)
+    command = ogr_command(template, binding)
+    
+    # Log the full ogr2ogr command for debugging
+    Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
+    puts "\n[OGR::Postgres.export] Full ogr2ogr command:"
+    puts command
+    puts "\n"
+    
+    # Write command to tmp file for debugging on staging
+    log_command_to_file(command, file_type, geom_type)
+    
+    # Execute command and check for errors
+    # system returns: true (success), false (failed), nil (couldn't execute)
+    system(command)
   end
 
   private
 
   def self.db_config
     ActiveRecord::Base.connection_config
+  end
+
+  def self.log_command_to_file(command, file_type, geom_type)
+    log_file = File.join(Rails.root, 'tmp', 'ogr_command_file.txt')
+    # Ensure the tmp directory exists
+    FileUtils.mkdir_p(File.dirname(log_file))
+    
+    timestamp = Time.current.iso8601
+    log_entry = <<~LOG
+      [#{timestamp}] OGR::Postgres.export
+      file_type=#{file_type}, geom_type=#{geom_type}
+      Full ogr2ogr command:
+      #{command}
+      ---
+    LOG
+    
+    File.open(log_file, 'a') do |f|
+      f.write(log_entry)
+    end
+  rescue StandardError => e
+    Rails.logger.warn "Failed to write OGR command to log file: #{e.message}"
   end
 
   def self.ogr_command template, context
