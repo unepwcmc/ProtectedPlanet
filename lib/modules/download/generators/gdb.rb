@@ -61,10 +61,12 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   def export_sources
-    query = "SELECT #{Download::Utils.source_columns} FROM #{Download::Config.sources_view}"
-    escaped_sql = query.gsub('"', '\"')
+    query = <<-SQL
+      SELECT #{Download::Utils.source_columns}
+      FROM #{Download::Config.sources_view}
+    SQL
 
-    Ogr::Postgres.export(:gdb, gdb_component, escaped_sql, 'source')
+    Ogr::Postgres.export(:gdb, gdb_component, query, 'source')
   end
 
   def clean_up_after
