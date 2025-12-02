@@ -17,12 +17,9 @@ module Download
     end
 
     def self.source_columns
-      add_quotes = ->(str) { %("#{str}") }
-
-      Download::Config.source_columns
-        .map(&:upcase)
-        .map(&add_quotes)
-        .join(',')
+      Download::Config.source_columns.map do |column|
+        %(#{column} AS "#{column.upcase}")
+      end.join(',')
     end
 
     def self.clear_downloads

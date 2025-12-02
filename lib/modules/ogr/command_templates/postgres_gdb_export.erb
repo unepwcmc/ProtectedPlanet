@@ -11,7 +11,8 @@ PG:"host=<%= db_config[:host] %>
     password=<%= db_config[:password] %>
   <% end %>
   dbname=<%= db_config[:database] %>"
--sql "<%= query %>"
+  <%# For query we need to use '' instead of "" to avoid shell escaping %>
+-sql '<%= query %>'
 <% unless geom_type == 'source' %>
   -nlt "<%= geom_type.upcase %>"
 <% end %>
