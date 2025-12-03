@@ -28,10 +28,10 @@ class Ogr::Postgres
     # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
     feature_name = get_feature_name(file_name, geom_type)
     command = ogr_command(template, binding)
-    Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
+    # Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
     
     # Write command to tmp file for debugging on staging
-    log_command_to_file(command, file_type, geom_type)
+    # log_command_to_file(command, file_type, geom_type)
     
     # Execute command and check for errors
     # system returns: true (success), false (failed), nil (couldn't execute)
