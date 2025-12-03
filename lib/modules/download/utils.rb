@@ -18,7 +18,7 @@ module Download
 
     def self.source_columns
       Download::Config.source_columns.map do |column|
-        %(#{column} AS \\"#{column.upcase}\\")
+        %(#{column} AS "#{column.upcase}")
       end.join(',')
     end
 

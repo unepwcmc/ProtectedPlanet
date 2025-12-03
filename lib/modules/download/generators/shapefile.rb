@@ -56,10 +56,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     limit = (total_count / @number_of_pieces.to_f).ceil
     offset = limit * piece_index
-    # Download::Config.id_column returns "SITE_ID" (string with quotes as content)
-    # Strip the quotes and add them back with escaping for the SQL string: \"SITE_ID\"
-    id_column = Download::Config.id_column.gsub('"', '')
-    order_by = %(ORDER BY \\"#{id_column}\\" ASC)
+    order_by = %(ORDER BY "#{Download::Config.id_column}" ASC)
 
     sql = "
       SELECT *
