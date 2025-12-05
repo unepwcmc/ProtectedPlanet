@@ -202,25 +202,25 @@ class PameEvaluation < ApplicationRecord
     [
       {
         name: 'methodology',
-        title: 'Methodology',
+        title: I18n.t('data_area.pame.filters.methodology'),
         options: unique_methodologies,
         type: 'multiple'
       },
       {
         name: 'iso3',
-        title: 'Country',
+        title: I18n.t('data_area.pame.filters.country'),
         options: unique_iso3,
         type: 'multiple'
       },
       {
         name: 'year',
-        title: 'Year of assessment',
+        title: I18n.t('data_area.pame.filters.year'),
         options: unique_year,
         type: 'multiple'
       },
       {
         name: 'type',
-        title: 'Type',
+        title: I18n.t('data_area.pame.filters.type'),
         options: %w[Marine Terrestrial],
         type: 'multiple'
       }
