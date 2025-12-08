@@ -10,16 +10,16 @@ en:
       topics:
         name: Topics
         items:
-          wdpa: WDPA
+          wdpa: Protected Area
           oecm: OECM
-          pame: PAME
+          pame: Effectiveness
     download: Download
     filters: Filters
     filter-by: Filter by
     filter-group-db:
       options:
         - OECM
-        - WDPA
+        - PA
     filter-group-designation:
       title: Designations
     filter-group-geo-type:

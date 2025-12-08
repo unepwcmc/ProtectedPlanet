@@ -4,6 +4,7 @@ en:
       wdpa: Protected Areas
       oecm: OECMs
       wdpa_oecm: Protected Areas & OECMs
+    thematic-and-databases: Thematic Areas and Data
     button:
       all: View all
       download-pdf: PDF Download
@@ -39,3 +40,4 @@ en:
       title: Sorry, that page can't be found.
       alt_title: Sorry, something went wrong.
       text: "Feel free to browse the themes and articles below, or go back to the <a href=\"%{url}\">homepage</a>."
+    other_protected_areas: Other Protected Areas & OECMs
