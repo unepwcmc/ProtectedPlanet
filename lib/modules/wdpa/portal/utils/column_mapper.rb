@@ -131,7 +131,10 @@ module Wdpa
                 attributes['marine_type'] = realm_to_marine_type(value)
               when 'site_type'
                 # TODO: This should become a legacy field at some point
-                # consider removing the field as realm is now used instead of is_oecm
+                # consider removing the field as site_type is now used instead of is_oecm
+                
+                # If one day you search the entire codebase here and protectedplanet-api codebase no more is_oecm is used then you can safely remove this 
+                # as well as write a migration to remove the column in table
                 attributes['is_oecm'] = Wdpa::Shared::TypeConverter.convert(value, as: :oecm_string)
               end
             else
