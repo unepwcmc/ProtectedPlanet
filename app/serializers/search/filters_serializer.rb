@@ -8,7 +8,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
 
   INTERNATIONAL_DESIGNATION_IDS = [
     'World Heritage Site (natural or mixed)',
-    'Ramsar Site, Wetland of International Importance',
+    'Wetland of International Importance (Ramsar Site)',
     'UNESCO-MAB Biosphere Reserve'
   ].freeze
 
