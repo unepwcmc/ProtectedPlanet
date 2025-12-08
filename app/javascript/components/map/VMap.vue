@@ -49,9 +49,14 @@ export default {
   data() {
     return {
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
-      containerId: MAP_OPTIONS_DEFAULT.container,
+      containerId: null,
       map: {},
     }
+  },
+
+  beforeMount() {
+    // Ensure a unique container per instance before render to avoid ID clashes
+    this.containerId = `${MAP_OPTIONS_DEFAULT.container}-${this._uid}`
   },
 
   computed: {
@@ -70,6 +75,7 @@ export default {
       const options = {
         ...MAP_OPTIONS_DEFAULT,
         ...this.options.map,
+        container: this.containerId || MAP_OPTIONS_DEFAULT.container,
         style: this.baselayers[0].style,
       }
 
@@ -116,11 +122,16 @@ export default {
       /* eslint-disable no-undef */
       mapboxgl.accessToken = this.accessToken
       // Add support for RTL languages
-      mapboxgl.setRTLTextPlugin(
-        RTL_TEXT_PLUGIN_URL, 
-        null, 
-        true // Lazy loading
-      )
+      if (
+        typeof mapboxgl.getRTLTextPluginStatus === 'function' &&
+        mapboxgl.getRTLTextPluginStatus() !== 'loaded'
+      ) {
+        mapboxgl.setRTLTextPlugin(
+          RTL_TEXT_PLUGIN_URL, 
+          null, 
+          true // Lazy loading
+        )
+      }
       this.map = new mapboxgl.Map(this.mapOptions)
       this.addControls()
       this.addEventHandlersToMap()
