@@ -25,25 +25,14 @@ class HomeController < ApplicationController
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
 
-    @main_map = {
-      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
-      title: I18n.t('map.title'),
-      type: 'all',
-      point_query_services: all_services_for_point_query
-    }
-  end
-
-  private
-
-  def home_overlays
-    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+    @main_map = all_areas_map_config
   end
 
   private
 
   def levels
-    _levels = home_yml[:pas][:levels]
-    _levels.map do |level|
+    levels_config = home_yml[:pas][:levels]
+    levels_config.map do |level|
       level[:url] = search_areas_path(geo_type: level[:geo_type])
       level
     end

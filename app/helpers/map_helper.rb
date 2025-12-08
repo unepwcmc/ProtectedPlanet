@@ -101,6 +101,15 @@ CUSTOM_DATE_LINE_PADDING = {
 }
 
 module MapHelper
+  def all_areas_map_config
+    {
+      overlays: MapOverlaysSerializer.new(overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa']), map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'all',
+      point_query_services: all_services_for_point_query
+    }
+  end
+
   def overlays (ids, options={})
     includedOverlays = OVERLAYS.select {|o| ids.include?(o[:id])}
 

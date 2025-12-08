@@ -1,8 +1,6 @@
-<% get_thematic_areas %>
-
 <div class="cards--themes container">
   <div class="cards__cards">
-    <% @items[:cards].each do |card| %>
+    <% items[:cards].each do |card| %>
       <%= render partial: 'partials/sub_partials/themes', locals: { theme: card } %>
     <% end %>
   </div>

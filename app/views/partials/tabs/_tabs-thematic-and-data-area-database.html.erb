@@ -9,28 +9,24 @@
     <% tabs_list.each do |tab|%>
       <% @tab_element_id = tab[:id].to_json %>
       <% @thematic_area_database_tab_cms_content = cms_fragment_render(tab[:content_id]) %>
-      <% if tab[:id] == 1 %>
-        <tab-target :id=<%= @tab_element_id %> :selected-id="slotProps.selectedId">
-          <section class="container--medium">
-            <%= @thematic_area_database_tab_cms_content %>
-          </section>
+      <tab-target :id=<%= @tab_element_id %> :selected-id="slotProps.selectedId">
+        <section class="container--medium">
+          <%= @thematic_area_database_tab_cms_content %>
+        </section>
+        <% if tab[:show_pas_search] %>
           <section class="spacer-large--bottom">
             <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
           </section>
+        <% end %>
+        <% if tab[:show_wdpca_map] %>
           <section class="map-section">
             <%= render partial: "partials/maps/main", locals: {
-          map: map,
-          map_options: local_assigns.has_key?(:map_options) ? map_options : nil
-        } %>
+              map: map,
+              map_options: local_assigns.has_key?(:map_options) ? map_options : nil
+            } %>
           </section>
-        </tab-target>
-      <% else %>
-        <tab-target :id=<%= @tab_element_id %> :selected-id="slotProps.selectedId">
-          <section class="container--medium">
-            <%= @thematic_area_database_tab_cms_content %>
-          </section>
-        </tab-target>
-      <% end %>
+        <% end %>
+      </tab-target>
     <% end %>
   </template>
 </tabs>

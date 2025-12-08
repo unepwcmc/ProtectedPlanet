@@ -65,10 +65,10 @@ Rails.application.routes.draw do
 
     get '/thematic-areas/green-list', to: 'green_list#index'
     get '/thematic-areas/oecms', to: 'oecm#index'
-    get '/thematic-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
     get '/thematic-areas/marine-protected-areas', to: 'marine#index'
     get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
-    get '/thematic-areas/wdpa', to: 'wdpa#index'
+    get '/databases/wdpca', to: 'wdpca#index'
+    get '/databases/effectiveness', to: 'pame#index'
 
     # JSON endpoints - CMS
     post '/pame/download', to: 'pame#download'

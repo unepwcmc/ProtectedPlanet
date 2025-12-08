@@ -116,7 +116,9 @@ module ApplicationHelper
       map_page('news-and-stories'),
       map_page('resources'),
       map_page('monthly-release-news'),
-      map_page('thematic-areas', true)
+      map_page('thematic-areas', true),
+      # Aka database_areas in codebase to avoid confusion with the meaning 'databases' in the codebase
+      map_page('databases', true)
     ].to_json
   end
 
@@ -163,7 +165,21 @@ module ApplicationHelper
   end
 
   def get_thematic_areas
-    @items = ThematicAreasPresenter.new(@cms_site).thematic_areas
+    ThematicAreasPresenter.new(@cms_site).thematic_areas
+  end
+
+  def get_database_areas
+    DatabaseAreasPresenter.new(@cms_site).database_areas
+  end
+
+  def get_thematic_and_database_areas
+    thematic = get_thematic_areas
+    data = get_database_areas
+
+    {
+      title: I18n.t('global.thematic-and-databases'),
+      cards: thematic[:cards] + data[:cards]
+    }
   end
 
   def get_footer_links
