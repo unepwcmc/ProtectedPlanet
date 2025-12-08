@@ -18,7 +18,7 @@
     &:nth-child(3n) { 
       width: 100%; height: rem-calc(460); 
 
-      @include breakpoint($medium) { padding-right: 50%; };
+      @include breakpoint($medium) { padding-right: 30%; };
     }
   }
 }
