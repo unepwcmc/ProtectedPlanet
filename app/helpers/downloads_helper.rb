@@ -97,14 +97,6 @@ module DownloadsHelper
     end
     current_month = current_month_year.strftime('%B')
     current_year = current_month_year.strftime('%Y')
-    text_variation = '-misc'
-
-    if current_page?(thematic_areas_oecms_path)
-      text_variation = '-oecm'
-    elsif current_page?(thematic_areas_wdpa_path)
-      text_variation = '-wdpa'
-    end
-
-    I18n.t("download.modal-download.citation-text#{text_variation}", month: current_month, year: current_year)
+    I18n.t("download.modal-download.citation-text", month: current_month, year: current_year)
   end
 end
