@@ -7,7 +7,7 @@
       <a v-else :href="item.pa_site_url" title="View protected area on Protected Planet" target="_blank">{{ item.site_id }}</a>
     </p>
     <p class="table__cell">{{ item.id }}</p>
-    <p class="table__cell">{{ checkForMultiples('iso3') }}</p>
+    <p class="table__cell">{{ checkForMultiples('country_names') }}</p>
     <p class="table__cell">{{ item.methodology }}</p>
     <p class="table__cell">{{ item.year }}</p>
     <p 

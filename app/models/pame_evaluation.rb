@@ -27,7 +27,7 @@ class PameEvaluation < ApplicationRecord
     },
     {
       title: 'Country',
-      field: 'iso3'
+      field: 'country_names'
     },
     {
       title: 'Methodology',
@@ -84,18 +84,20 @@ class PameEvaluation < ApplicationRecord
     where_params = { sites: '', methodology: '', year: '', iso3: '', type: '' }
     filters.each do |filter|
       options = filter['options']
-      case filter['name']
-      when 'iso3'
-        countries = options
-        site_ids = countries.flat_map do |iso3|
-          Country.find_by(iso_3: iso3)&.protected_areas&.pluck(:id) || []
+      filter_name = filter['name']
+      case filter_name
+      when 'iso3', 'country_names'
+        country_options = options
+        site_ids = country_options.flat_map do |country_option|
+          country = find_country(country_option, filter_name)
+          country&.protected_areas&.pluck(:id) || []
         end
         where_params[:sites] = site_ids.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
-        country_ids = countries.flat_map do |iso3|
-          country = Country.find_by(iso_3: iso3)
+        country_ids = country_options.flat_map do |country_option|
+          country = find_country(country_option, filter_name)
           # include the parent country id for the overseas territory because PAME evaluation is assigned to the parent country
-          [country.id, country.country_id].compact
-        end
+          [country.id, country.country_id].compact if country
+        end.compact
         where_params[:iso3] = country_ids.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
       when 'methodology'
         options = options.map { |e| "'#{e}'" }
@@ -110,6 +112,22 @@ class PameEvaluation < ApplicationRecord
       end
     end
     where_params
+  end
+
+  def self.find_country(identifier, filter_name)
+    identifier_str = identifier.to_s
+    
+    # Use filter name to determine lookup method
+    case filter_name
+    when 'iso3'
+      # Find by ISO3 code (normalize to uppercase as that's how they're stored)
+      Country.find_by(iso_3: identifier_str.upcase)
+    when 'country_names'
+      # Find by country name
+      Country.find_by(name: identifier_str)
+    else
+       nil
+    end
   end
 
   def self.run_query(page, where_params)
@@ -156,6 +174,7 @@ class PameEvaluation < ApplicationRecord
       designation = evaluation.protected_area&.designation&.name || 'N/A'
       countries = evaluation.protected_area&.countries || evaluation.countries
       iso3 = countries.pluck(:iso_3).sort
+      country_names = countries.pluck(:name).sort
       {
         current_page: evaluations.current_page,
         per_page: evaluations.per_page,
@@ -166,6 +185,7 @@ class PameEvaluation < ApplicationRecord
         pa_site_url: Rails.application.routes.url_helpers.protected_area_path(site_id),
         restricted: evaluation.restricted,
         iso3: iso3,
+        country_names: country_names,
         methodology: evaluation.methodology,
         year: evaluation.year.to_s,
         url: evaluation.url,
@@ -196,31 +216,31 @@ class PameEvaluation < ApplicationRecord
 
   def self.filters_to_json
     unique_methodologies = PameEvaluation.pluck(:methodology).uniq.sort
-    unique_iso3 = Country.pluck(:iso_3).compact.uniq.sort
+    unique_countries = Country.pluck(:name).compact.uniq.sort
     unique_year = PameEvaluation.pluck(:year).uniq.map(&:to_s).sort
 
     [
       {
         name: 'methodology',
-        title: I18n.t('data_area.pame.filters.methodology'),
+        title: I18n.t('database_area.pame.filters.methodology'),
         options: unique_methodologies,
         type: 'multiple'
       },
       {
-        name: 'iso3',
-        title: I18n.t('data_area.pame.filters.country'),
-        options: unique_iso3,
+        name: 'country_names',
+        title: I18n.t('database_area.pame.filters.country'),
+        options: unique_countries,
         type: 'multiple'
       },
       {
         name: 'year',
-        title: I18n.t('data_area.pame.filters.year'),
+        title: I18n.t('database_area.pame.filters.year'),
         options: unique_year,
         type: 'multiple'
       },
       {
         name: 'type',
-        title: I18n.t('data_area.pame.filters.type'),
+        title: I18n.t('database_area.pame.filters.type'),
         options: %w[Marine Terrestrial],
         type: 'multiple'
       }
