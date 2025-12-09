@@ -8,6 +8,16 @@ module Concerns
 
     private
 
+    def area_payload(slug, fallback_title: nil)
+      page = @cms_site.pages.find_by_slug(slug)
+      return nil if page.nil? && fallback_title.nil?
+
+      {
+        title: page ? page.label : fallback_title,
+        cards: page ? cards(page) : []
+      }
+    end
+
     def cards(pages)
       pages.children.published.map do |c|
         {

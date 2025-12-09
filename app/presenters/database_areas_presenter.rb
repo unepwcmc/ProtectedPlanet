@@ -6,11 +6,6 @@ class DatabaseAreasPresenter
   end
 
   def database_areas
-    database_page = @cms_site.pages.find_by_slug('databases')
-
-    {
-      title: database_page.label,
-      cards: cards(database_page)
-    }
+    area_payload('databases')
   end
 end
