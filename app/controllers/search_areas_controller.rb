@@ -11,14 +11,14 @@ class SearchAreasController < ApplicationController
 
   TABS = %w(region country site).freeze
   def index
-    placeholder = @db_type ? @db_type : 'oecm-wdpa'
-    
+    placeholder_tag = @db_type || 'wdpca'
+
     @config_search_areas = {
       id: @db_type || 'all',
-      placeholder: I18n.t("global.placeholder.search-#{placeholder}")
+      placeholder: I18n.t("global.placeholder.search-#{placeholder_tag}")
     }.to_json
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all')
+    @download_options = helpers.get_default_all_wdpca_download_option
 
     @tabs = []
 

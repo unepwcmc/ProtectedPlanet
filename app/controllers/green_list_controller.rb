@@ -7,7 +7,7 @@ class GreenListController < ApplicationController
   before_action :get_green_list_sites
 
   def index
-    @download_options = helpers.download_options(%w[csv shp gdb], 'general', 'greenlist')
+    @download_options = helpers.download_options(%w[csv shp gdb], 'general', Download::Requesters::General::TYPE_MAP[:all_greenlisted_wdpca])
 
     stats = green_list_statistics
     @pas_km = stats['green_list_area']

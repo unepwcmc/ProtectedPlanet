@@ -1,10 +1,15 @@
 class Download::Requesters::General < Download::Requesters::Base
+  TYPE_MAP = {
+    all_wdpca: 'all',
+    all_marine_wdpca: 'marine',
+    all_greenlisted_wdpca: 'greenlist'
+  }.freeze
+
   def initialize format, token
     @format = format
     @token = token
   end
 
-  TYPES = %w(marine greenlist oecm wdpa).freeze
   def request
     unless ['ready', 'generating'].include? generation_info['status']
       DownloadWorkers::General.perform_async(@format, type, identifier)
@@ -24,7 +29,7 @@ class Download::Requesters::General < Download::Requesters::Base
   end
 
   def type
-    if TYPES.include?(identifier)
+    if TYPE_MAP.values.include?(identifier)
       identifier
     else
       (identifier.length == 2 ? "region" : "country")

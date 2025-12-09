@@ -99,4 +99,8 @@ module DownloadsHelper
     current_year = current_month_year.strftime('%Y')
     I18n.t("download.modal-download.citation-text", month: current_month, year: current_year)
   end
+
+  def get_default_all_wdpca_download_option
+    download_options(['csv', 'shp', 'gdb'], 'search', 'all') 
+  end
 end

@@ -21,7 +21,7 @@ class MarineController < ApplicationController
     @marineViewAllUrl = search_areas_path(filters: {is_type: ['marine']}) 
 
     # Removed mpa_map from ['csv', 'shp', 'gdb', 'map_map'] in feat/hide-mpa-download-button
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'marine')
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', Download::Requesters::General::TYPE_MAP[:all_marine_wdpca])
 
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage
