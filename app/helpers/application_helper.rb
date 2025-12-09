@@ -184,7 +184,7 @@ module ApplicationHelper
 
   def get_footer_links
     @links = {}
-    @links['links1'] = make_footer_links(%w[resources oecms wdpa])
+    @links['links1'] = make_footer_links(%w[resources wdpca])
     @links['links2'] = make_footer_links(%w[about legal])
   end
 
