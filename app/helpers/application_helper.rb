@@ -112,13 +112,13 @@ module ApplicationHelper
 
   def get_nav_primary
     [
-      map_page('about'),
-      map_page('news-and-stories'),
-      map_page('resources'),
-      map_page('monthly-release-news'),
-      map_page('thematic-areas', true),
+      map_page(PageSlugs::ABOUT),
+      map_page(PageSlugs::NEWS_AND_STORIES),
+      map_page(PageSlugs::RESOURCES),
+      map_page(PageSlugs::MONTHLY_RELEASE_NEWS),
+      map_page(PageSlugs::THEMATIC_AREAS, true),
       # Aka database_areas in codebase to avoid confusion with the meaning 'databases' in the codebase
-      map_page('databases', true)
+      map_page(PageSlugs::DATABASES, true)
     ].compact.to_json
   end
 
@@ -184,7 +184,7 @@ module ApplicationHelper
 
   def get_footer_links
     @links = {}
-    @links['links1'] = make_footer_links(%w[resources wdpca])
+    @links['links1'] = make_footer_links([PageSlugs::RESOURCES, PageSlugs::WDPCA])
     @links['links2'] = make_footer_links(%w[about legal])
   end
 

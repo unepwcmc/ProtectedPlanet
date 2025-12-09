@@ -6,6 +6,6 @@ class ThematicAreasPresenter
   end
 
   def thematic_areas
-    area_payload('thematic-areas')
+    area_payload(PageSlugs::THEMATIC_AREAS)
   end
 end

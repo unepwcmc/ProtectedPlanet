@@ -30,17 +30,13 @@ module Concerns
     def pas_figure(slug)
       pas = ProtectedArea
       pas = case slug
-            when 'marine-protected-areas'
+            when PageSlugs::MARINE_PROTECTED_AREAS
               pas.marine_areas
-            when 'green-list'
+            when PageSlugs::GREEN_LIST
               pas.green_list_areas
-            when 'wdpa'
-              pas.wdpas
-            when 'wdpca'
+            when PageSlugs::WDPCA
               pas
-            when 'oecms'
-              pas.oecms
-            when 'effectiveness'
+            when PageSlugs::EFFECTIVENESS
               pas.with_pame_evaluations
             else
               -1 #Not applicable - hide ribbon

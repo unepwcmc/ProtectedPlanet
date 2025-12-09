@@ -16,7 +16,7 @@
     @include breakpoint($medium) { width: calc(50% - 10px); };
 
     &:nth-child(3n) { 
-      width: 100%; height: rem-calc(460); 
+      width: 100%; height: rem-calc(520); 
 
       @include breakpoint($medium) { padding-right: 30%; };
     }

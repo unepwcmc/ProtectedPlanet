@@ -6,6 +6,6 @@ class DatabaseAreasPresenter
   end
 
   def database_areas
-    area_payload('databases')
+    area_payload(PageSlugs::DATABASES)
   end
 end
