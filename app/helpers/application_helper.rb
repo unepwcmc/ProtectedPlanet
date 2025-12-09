@@ -119,7 +119,7 @@ module ApplicationHelper
       map_page('thematic-areas', true),
       # Aka database_areas in codebase to avoid confusion with the meaning 'databases' in the codebase
       map_page('databases', true)
-    ].to_json
+    ].compact.to_json
   end
 
   # def link_to_page? card
@@ -218,6 +218,8 @@ module ApplicationHelper
 
   def map_page(slug, map_children = false)
     cms_page = Comfy::Cms::Page.find_by_slug(slug)
+
+    return nil if cms_page.nil?
 
     mapped_page = {
       id: cms_page.slug,

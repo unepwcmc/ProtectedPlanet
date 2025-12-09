@@ -10,11 +10,11 @@ module Concerns
 
     def area_payload(slug, fallback_title: nil)
       page = @cms_site.pages.find_by_slug(slug)
-      return nil if page.nil? && fallback_title.nil?
+      return { title: fallback_title || slug.humanize, cards: [] } if page.nil?
 
       {
-        title: page ? page.label : fallback_title,
-        cards: page ? cards(page) : []
+        title: page.label,
+        cards: cards(page)
       }
     end
 
