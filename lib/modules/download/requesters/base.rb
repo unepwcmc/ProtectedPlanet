@@ -1,4 +1,8 @@
+require 'time'
+
 class Download::Requesters::Base
+  ENQUEUE_LOCK_TTL_SECONDS = 30 * 60 # prevent enqueue stampedes under concurrent requests
+
   def self.request *args
     instance = new(*args)
     instance.request
@@ -16,6 +20,37 @@ class Download::Requesters::Base
 
   def generation_info
     Download.generation_info(domain, identifier, format)
+  end
+
+  # Atomically ensure only one generation job is enqueued per download key.
+  # This prevents a race where multiple web requests observe a non-generating status
+  # and enqueue duplicate Sidekiq jobs before the worker has a chance to set status.
+  #
+  # Usage:
+  #   enqueue_generation_once { DownloadWorkers::X.perform_async(...) }
+  #
+  def enqueue_generation_once
+    status = generation_info['status']
+    return false if %w[ready generating].include?(status)
+
+    lock_key = Download::Utils.enqueue_lock_key(generation_key)
+    acquired = $redis.set(lock_key, Time.now.to_i, nx: true, ex: ENQUEUE_LOCK_TTL_SECONDS)
+    return false unless acquired
+
+    begin
+      mark_generating!
+      yield
+      true
+    rescue StandardError => e
+      # If enqueue fails, allow future requests to try again quickly.
+      $redis.del(lock_key)
+      mark_failed!(e)
+      Rails.logger.error("Download enqueue failed for #{generation_key}: #{e.message}")
+      false
+    end
+  rescue StandardError => e
+    Rails.logger.error("Download enqueue lock failed for #{generation_key}: #{e.message}")
+    false
   end
 
   def json_response
@@ -55,5 +90,28 @@ class Download::Requesters::Base
 
   def url(filename)
     ready? ? Download.link_to(filename) : ''
+  end
+
+  def generation_key
+    Download::Utils.key(domain, identifier, format)
+  end
+
+  def mark_generating!
+    properties = Download::Utils.properties(generation_key)
+    generating_properties = properties.merge(
+      'status' => 'generating',
+      'generating_at' => Time.now.utc.iso8601
+    )
+    $redis.set(generation_key, generating_properties.to_json)
+  end
+
+  def mark_failed!(error)
+    properties = Download::Utils.properties(generation_key)
+    failed_properties = properties.merge(
+      'status' => 'failed',
+      'error' => error.message,
+      'failed_at' => Time.now.utc.iso8601
+    )
+    $redis.set(generation_key, failed_properties.to_json)
   end
 end

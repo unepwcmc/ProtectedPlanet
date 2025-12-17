@@ -5,7 +5,7 @@ class Download::Requesters::ProtectedArea < Download::Requesters::Base
   end
 
   def request
-    unless ['ready', 'generating'].include? generation_info['status']
+    enqueue_generation_once do
       DownloadWorkers::ProtectedArea.perform_async(@format, identifier)
     end
 

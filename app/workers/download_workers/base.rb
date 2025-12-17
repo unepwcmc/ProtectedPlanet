@@ -37,6 +37,11 @@ class DownloadWorkers::Base
       Rails.logger.error("Download generation failed for #{key}: #{e.message}")
       # Do not re-raise so status remains failed and future requests can re-enqueue
       failed_properties.to_json
+    ensure
+      # Clear the enqueue lock (if any) so failed downloads can be retried immediately.
+      # This is safe because requesters also check the main key's status (`generating`/`ready`)
+      # to prevent duplicate enqueueing.
+      $redis.del(Download::Utils.enqueue_lock_key(key))
     end
   end
 
