@@ -88,7 +88,7 @@ RAILS_ENV=production bundle exec rake pp:portal:status
 
 # When ready to go live** (e.g., on the first day of the month), continue with the swap:
 # IMPORTANT! Make sure you change the correct label
-RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Dec2025"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Jan2026"]
 ```
 
 **Important Notes:**
