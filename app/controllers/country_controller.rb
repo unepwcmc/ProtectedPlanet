@@ -46,13 +46,29 @@ class CountryController < ApplicationController
   end
 
   def build_stats
-    @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
-    @stats_data =  build_hash(:wdpa)
+    cache_key = [
+      'country',
+      'stats',
+      @country.iso_3,
+      Download::Config.current_label
+    ].join(':')
 
-    return unless has_oecms
+    cached = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
+      total_oecm = @country.protected_areas.oecms.count
+      tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
+      stats_data = build_hash(:wdpa)
 
-    @stats_data.merge!(build_hash(:wdpa_oecm))
-    @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
+      if total_oecm.positive?
+        stats_data.merge!(build_hash(:wdpa_oecm))
+        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
+      end
+
+      { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
+    end
+
+    @tabs = cached[:tabs]
+    @stats_data = cached[:stats_data]
+    @total_oecm = cached[:total_oecm]
   end
 
   def pdf
@@ -65,17 +81,26 @@ class CountryController < ApplicationController
 
   private
 
-  def has_oecms
-    @total_oecm = @country.protected_areas.oecms.count
-    @total_oecm.positive?
-  end
-
   def calculate_national_designations_counts
     # ['National'] -> all avaliable juriidctions are in /app/presenters/designations_presenter.rb
-    @wdpa_national_designations_count = @country_presenter.get_designations_list(['National'],
-      only_unique_site_ids: true, is_oecm: false).length
-    @oecm_national_designations_count = @country_presenter.get_designations_list(['National'],
-      only_unique_site_ids: true, is_oecm: true).length
+    cache_key = [
+      'country',
+      'national_designations_counts',
+      @country.iso_3,
+      Download::Config.current_label
+    ].join(':')
+
+    cached = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
+      {
+        wdpa: @country_presenter.get_designations_list(['National'],
+              only_unique_site_ids: true, is_oecm: false).length,
+        oecm: @country_presenter.get_designations_list(['National'],
+              only_unique_site_ids: true, is_oecm: true).length
+      }
+    end
+
+    @wdpa_national_designations_count = cached[:wdpa]
+    @oecm_national_designations_count = cached[:oecm]
   end
 
   def build_hash(tab)

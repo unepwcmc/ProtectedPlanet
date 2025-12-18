@@ -16,7 +16,7 @@ class AssetsController < ApplicationController
       (record.respond_to?(:updated_at) && record.updated_at ? record.updated_at.to_i : 'na')
     ].join(':')
 
-    image = Rails.cache.fetch(cache_key, expires_in: 20.days) do
+    image = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
       AssetGenerator.send(method_name, record)
     end
 
@@ -25,7 +25,7 @@ class AssetsController < ApplicationController
       return
     end
 
-    expires_in 5.days, public: true
+    expires_in 3.days, public: true
 
     send_data image, type: 'image/png', disposition: 'inline'
   rescue AssetGenerator::AssetGenerationFailedError

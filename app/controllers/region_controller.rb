@@ -25,21 +25,32 @@ class RegionController < ApplicationController
   end
 
   def build_stats
-    @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
-    @stats_data = build_standard_hash
+    cache_key = [
+      'region',
+      'stats',
+      @region.iso,
+      Download::Config.current_label
+    ].join(':')
 
-    if has_oecms
-      @stats_data.merge!(build_oecm_hash)
-      @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
+    cached = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
+      total_oecm = @region.protected_areas.oecms.count
+      tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
+      stats_data = build_standard_hash
+
+      if total_oecm.positive?
+        stats_data.merge!(build_oecm_hash)
+        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
+      end
+
+      { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
     end
+
+    @tabs = cached[:tabs]
+    @stats_data = cached[:stats_data]
+    @total_oecm = cached[:total_oecm]
   end
 
   private
-
-  def has_oecms
-    @total_oecm = @region.protected_areas.oecms.count
-    @total_oecm.positive?
-  end
 
   def build_hash(tab)
     oecm = tab == :wdpa_oecm
