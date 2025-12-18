@@ -117,7 +117,7 @@ module ApplicationHelper
       map_page('resources'),
       map_page('monthly-release-news'),
       map_page('thematic-areas', true)
-    ].to_json
+    ].compact.to_json
   end
 
   # def link_to_page? card
@@ -149,10 +149,14 @@ module ApplicationHelper
   end
 
   def get_news_items(all = false)
+    return (@items = { title: nil, url: false, cards: [] }) if @cms_site.nil?
+
     news_page = @cms_site.pages.find_by_slug('news-and-stories')
+    return (@items = { title: nil, url: false, cards: [] }) if news_page.nil?
+
     published_pages = news_page.children.published
     sorted_cards = published_pages.sort_by do |c|
-      c.fragments.where(identifier: 'published_date').first.datetime
+      c.fragments.where(identifier: 'published_date').first&.datetime || Time.at(0)
     end.reverse
 
     @items = {
@@ -181,6 +185,7 @@ module ApplicationHelper
   def make_footer_links(slug_array)
     slug_array.map do |slug|
       page = @cms_site.pages.find_by_slug(slug)
+      next if page.nil?
 
       {
         title: if page.fragments.find_by(identifier: 'short_title')
@@ -191,7 +196,7 @@ module ApplicationHelper
                end,
         url: get_cms_url(page.full_path)
       }
-    end
+    end.compact
   end
 
   def get_config_carousel_themes
@@ -202,6 +207,7 @@ module ApplicationHelper
 
   def map_page(slug, map_children = false)
     cms_page = Comfy::Cms::Page.find_by_slug(slug)
+    return nil if cms_page.nil?
 
     mapped_page = {
       id: cms_page.slug,
