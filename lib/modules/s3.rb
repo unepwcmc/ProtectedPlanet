@@ -41,7 +41,7 @@ class S3
       bucket: bucket,
       key: object_name,
     })
-    return
+    true
   end
 
 

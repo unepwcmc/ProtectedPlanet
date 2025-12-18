@@ -47,14 +47,20 @@ module Download
 
   def self.generate(format, download_name, opts = {})
     generator = GENERATORS[format.to_sym]
+    raise ArgumentError, "Unknown download format: #{format.inspect}" unless generator
     zip_path = Utils.zip_path(download_name)
 
     generated = generator.generate zip_path, option(format, opts)
 
-    return unless generated
+    return false unless generated
+
+    unless File.exist?(zip_path)
+      raise "Expected zip not found at #{zip_path}"
+    end
 
     upload_to_s3 zip_path, opts[:for_import]
     clean_up zip_path
+    true
   end
 
   def self.option(format, opts)
@@ -71,6 +77,7 @@ module Download
     prefixed_download_name = prefix + download_name
 
     S3.upload prefixed_download_name, zip_path
+    true
   end
 
   def self.clean_up(path)

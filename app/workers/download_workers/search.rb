@@ -19,7 +19,8 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
-    Download.generate(@format, filename(ids_digest, @format), { site_ids: protected_area_site_ids })
+    success = Download.generate(@format, filename(ids_digest, @format), { site_ids: protected_area_site_ids })
+    raise "Download.generate returned false (#{domain} #{@format} #{@token})" unless success
   end
 
   def ids_digest
