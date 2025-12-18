@@ -10,7 +10,8 @@ class DownloadWorkers::Base
               'default'
             end
 
-    Sidekiq::Client.push('class' => self, 'queue' => queue, 'args' => args)
+    jid = Sidekiq::Client.push('class' => self, 'queue' => queue, 'args' => args)
+    jid
   end
 
   protected

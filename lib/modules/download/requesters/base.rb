@@ -38,8 +38,10 @@ class Download::Requesters::Base
     return false unless acquired
 
     begin
-      mark_generating!
-      yield
+      jid = yield
+      raise "Sidekiq enqueue returned nil jid" if jid.nil?
+
+      mark_generating!(jid: jid, enqueued_at: Time.now.utc.iso8601)
       true
     rescue StandardError => e
       # If enqueue fails, allow future requests to try again quickly.
@@ -96,12 +98,14 @@ class Download::Requesters::Base
     Download::Utils.key(domain, identifier, format)
   end
 
-  def mark_generating!
+  def mark_generating!(jid: nil, enqueued_at: nil)
     properties = Download::Utils.properties(generation_key)
     generating_properties = properties.merge(
       'status' => 'generating',
       'generating_at' => Time.now.utc.iso8601
     )
+    generating_properties['jid'] = jid if jid.present?
+    generating_properties['enqueued_at'] = enqueued_at if enqueued_at.present?
     $redis.set(generation_key, generating_properties.to_json)
   end
 
