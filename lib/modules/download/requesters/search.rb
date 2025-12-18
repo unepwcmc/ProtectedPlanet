@@ -6,7 +6,7 @@ class Download::Requesters::Search < Download::Requesters::Base
   end
 
   def request
-    unless ['ready', 'generating'].include? generation_info['status']
+    enqueue_generation_once do
       DownloadWorkers::Search.perform_async(@format, token, @search_term, filters.to_json)
     end
 

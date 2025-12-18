@@ -55,6 +55,11 @@ module Download
       end
     end
 
+    ENQUEUE_LOCK_SUFFIX = 'enqueue_lock'.freeze
+    def self.enqueue_lock_key(generation_key)
+      "#{generation_key}:#{ENQUEUE_LOCK_SUFFIX}"
+    end
+
     BASENAMES = {
       'wdpa' => 'WDPA',
       'oecm' => 'WDOECM',

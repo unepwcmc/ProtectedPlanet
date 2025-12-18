@@ -5,7 +5,7 @@ class Download::Requesters::Pdf < Download::Requesters::Base
   end
 
   def request
-    unless ['ready', 'generating'].include? generation_info['status']
+    enqueue_generation_once do
       DownloadWorkers::Pdf.perform_async identifier
     end
 

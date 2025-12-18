@@ -3,7 +3,8 @@ class DownloadWorkers::General < DownloadWorkers::Base
     while_generating(key(identifier, format)) do
       options = opts.symbolize_keys.merge({ site_ids: collect_site_ids(type, identifier) })
 
-      Download.generate format, filename(identifier, format), options
+      success = Download.generate format, filename(identifier, format), options
+      raise "Download.generate returned false (#{domain} #{format} #{identifier})" unless success
       { status: 'ready', filename: filename(identifier, format) }.to_json
     end
   end

@@ -80,6 +80,20 @@ given a download name (which already includes the format):
     #=> 'https://pp-downloads-production.s3.amazonaws.com/current/WDPA_WDOECM_Jun2021_Public_AFG_csv.zip'
 ```
 
+## Known issues (staging)
+
+### 18 Dec 2025 - \"Ready\" link returns `NoSuchKey`
+
+On staging, a download can sometimes be reported as `ready` (based on Redis status) while the S3 URL returns `NoSuchKey`.
+
+When investigating:
+- Confirm the Redis key for the download and its `status`/`filename`.
+- Confirm Sidekiq actually processed a job (do not rely on queue length alone).
+- Confirm the object exists in the configured downloads bucket/prefix:
+  - bucket: `Rails.application.secrets.aws_downloads_bucket`
+  - URL base: `Rails.application.secrets.aws_s3_url`
+  - object key prefix: `current/`
+
 ## Shapefile notes
 
 Shapefiles are only able to contain either polygons or points, and so

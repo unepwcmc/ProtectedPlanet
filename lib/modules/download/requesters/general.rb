@@ -11,7 +11,7 @@ class Download::Requesters::General < Download::Requesters::Base
   end
 
   def request
-    unless ['ready', 'generating'].include? generation_info['status']
+    enqueue_generation_once do
       DownloadWorkers::General.perform_async(@format, type, identifier)
     end
 

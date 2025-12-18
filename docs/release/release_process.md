@@ -12,6 +12,7 @@ This guide is the first in a series of four documents:
 2. **[Release Data Imports](release_data_imports.md)** - Comprehensive guide to what data is imported during a release
 3. **[Portal Release Runbook](portal_release_runbook.md)** - Simple guide for developers: commands and workflows to run releases
 4. **[Release Orchestration](release_orchestration.md)** - Technical reference for developers: architecture and code details
+5. **[Monthly Release Flowchart](https://miro.com/app/board/uXjVJiMRukg=/)** - A high-level overview of the monthly release process, showing responsibilities and trigger points across the DT and NC teams.
 
 ---
 
@@ -26,7 +27,7 @@ The monthly WDPA Release updates data for the following websites:
 
 ## Add the CSVs
 
-### Step 1: Collect the CSV Files (As of 24Nov2025 Data for this will be in DB at some point after stats server can store them in DB)
+### Step 1: Collect the CSV Files (As of 24Nov2025 Data for this will be moved to DB tables after stats server can feed in calculated results onto ProtectedPlanet DB)
 
 You will receive CSV files from the WDPA team in the `#protectedplanet` Slack channel. Look for the pinned release thread where all files are shared.
 
@@ -204,23 +205,6 @@ The runbook will guide you through:
 - What to do if something goes wrong
 
 ---
-
-## Update the WDPA download URL
-
-Update the WDPA download short-url on [wcmc.io](https://wcmc.io). For instance, IBAT uses it to pull the latest version of the WDPA. _If you cannot access, ask for the credentials_
-
-This can be achieved over SSH directly: 
-```
-ssh wcmc@wcmc.io <<EOS
-cd ~/wukumurl/current
-bundle exec rails runner -e production 'ShortUrl.find_by_short_name("wdpa_current_release").update_attributes(url: "https://pp-import-production.s3-eu-west-1.amazonaws.com/WDPA_WDOECM_MmmYYYY_Public.zip")'
-EOS
-```
-*Be sure to update the _MMMYYYY_ in the long URL correctly:*
-
-Check that the short-URL works fine: [https://wcmc.io/wdpa_current_release](https://wcmc.io/wdpa_current_release) so that now it points to the latest version of the _GDB WDPA_WDOECM_MMMYYYY_Public.zip_ 
-
-_NB: It may also be possible to do this via the website itself, but there is no documentation How-To do it._
 
 ## ✅ Release Complete
 

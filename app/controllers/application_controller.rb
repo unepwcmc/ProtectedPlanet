@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  CACHE_FETCH_TTL = 10.days
+
   # Clumsy rescue from fragments custom not null database errors
   rescue_from ActiveRecord::StatementInvalid, :with => :record_invalid_error
   class PageNotFound < StandardError; end;
