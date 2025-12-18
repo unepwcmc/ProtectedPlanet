@@ -12,7 +12,7 @@ This guide is the first in a series of four documents:
 2. **[Release Data Imports](release_data_imports.md)** - Comprehensive guide to what data is imported during a release
 3. **[Portal Release Runbook](portal_release_runbook.md)** - Simple guide for developers: commands and workflows to run releases
 4. **[Release Orchestration](release_orchestration.md)** - Technical reference for developers: architecture and code details
-5. **[Monthly Release Flowchart](https://miro.com/app/board/uXjVJiMRukg=/)** - The flowchart will tell you who does what each month between DT and NC team
+5. **[Monthly Release Flowchart](https://miro.com/app/board/uXjVJiMRukg=/)** - A high-level overview of the monthly release process, showing responsibilities and trigger points across the DT and NC teams.
 
 ---
 
