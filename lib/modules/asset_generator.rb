@@ -5,29 +5,62 @@ module AssetGenerator
   def self.protected_area_tile protected_area
     raise AssetGenerationFailedError if protected_area.nil?
 
-    tile_url = mapbox_url protected_area.geojson_for_tile
-    request_tile tile_url
-  rescue AssetGenerationFailedError
-    ''#fallback_tile
+    # Try original detailed geometry first
+    begin
+      tile_url = mapbox_url protected_area.geojson
+      return request_tile tile_url
+    rescue AssetGenerationFailedError
+      # If original fails, try simplified version
+      begin
+        tile_url = mapbox_url protected_area.geojson_for_tile
+        return request_tile tile_url
+      rescue AssetGenerationFailedError
+        # If simplified also fails, return empty string to trigger placeholder
+        return ''
+      end
+    end
   end
 
   def self.country_tile country
     raise AssetGenerationFailedError if country.nil?
 
-    tile_url = mapbox_url country.geojson_for_tile({"fill-opacity" => 0, "stroke-width" => 0})
-    request_tile tile_url
+    geo_properties = {"fill-opacity" => 0, "stroke-width" => 0}
 
-  rescue AssetGenerationFailedError
-    ''#fallback_tile
+    # Try original detailed geometry first
+    begin
+      tile_url = mapbox_url country.geojson(geo_properties)
+      return request_tile tile_url
+    rescue AssetGenerationFailedError
+      # If original fails, try simplified version
+      begin
+        tile_url = mapbox_url country.geojson_for_tile(geo_properties)
+        return request_tile tile_url
+      rescue AssetGenerationFailedError
+        # If simplified also fails, return empty string to trigger placeholder
+        return ''
+      end
+    end
   end
 
   def self.region_tile region
     raise AssetGenerationFailedError if region.nil?
 
-    tile_url = mapbox_url region.geojson_for_tile({"fill-opacity" => 0, "stroke-width" => 0})
-    request_tile tile_url
-  rescue AssetGenerationFailedError
-    ''#fallback_tile
+    geo_properties = {"fill-opacity" => 0, "stroke-width" => 0}
+
+    # Try original detailed geometry first
+    begin
+      tile_url = mapbox_url region.geojson(geo_properties)
+      return request_tile tile_url
+    rescue AssetGenerationFailedError
+      # If original fails, try simplified version
+      begin
+        tile_url = mapbox_url region.geojson_for_tile(geo_properties)
+        return request_tile tile_url
+      rescue AssetGenerationFailedError
+        # If simplified also fails, return empty string to trigger placeholder
+        return ''
+      end
+    end
   end
 
   private
