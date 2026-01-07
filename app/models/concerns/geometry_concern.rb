@@ -1,5 +1,5 @@
 module GeometryConcern
- extend ActiveSupport::Concern
+  extend ActiveSupport::Concern
 
   included do
     scope :without_geometry, -> { select(column_names - self.geometry_columns) }
@@ -22,21 +22,14 @@ module GeometryConcern
     ]
   end
 
-  def geojson geo_properties=nil
-    geojson = ActiveRecord::Base.connection.select_value("""
-      SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_MakeValid(#{main_geom_column}), 0.003), 3)
-      FROM #{self.class.table_name}
-      WHERE id = #{id}
-    """.squish)
+  def geojson(geo_properties = nil)
+    build_geojson(0.003, geo_properties)
+  end
 
-    return nil unless geojson.present?
-    geometry = JSON.parse(geojson)
-
-    URI.encode({
-      "type" => "Feature",
-      "properties" => geo_properties || geometry_properties,
-      "geometry" => geometry
-    }.to_json)
+  # More aggressively simplified geometry for thumbnail tiles so that
+  # the encoded geojson URL sent to Mapbox Static API stays under size limits.
+  def geojson_for_tile(geo_properties = nil)
+    build_geojson(0.02, geo_properties)
   end
 
   private
@@ -63,5 +56,22 @@ module GeometryConcern
 
   def main_geom_column
     self.respond_to?(:the_geom) ? 'the_geom' : 'bounding_box'
+  end
+
+  def build_geojson(tolerance, geo_properties)
+    geojson = ActiveRecord::Base.connection.select_value("""
+      SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_MakeValid(#{main_geom_column}), #{tolerance}), 3)
+      FROM #{self.class.table_name}
+      WHERE id = #{id}
+    """.squish)
+
+    return nil unless geojson.present?
+    geometry = JSON.parse(geojson)
+
+    URI.encode({
+      "type" => "Feature",
+      "properties" => geo_properties || geometry_properties,
+      "geometry" => geometry
+    }.to_json)
   end
 end

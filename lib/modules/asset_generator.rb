@@ -5,7 +5,7 @@ module AssetGenerator
   def self.protected_area_tile protected_area
     raise AssetGenerationFailedError if protected_area.nil?
 
-    tile_url = mapbox_url protected_area.geojson
+    tile_url = mapbox_url protected_area.geojson_for_tile
     request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
@@ -14,7 +14,7 @@ module AssetGenerator
   def self.country_tile country
     raise AssetGenerationFailedError if country.nil?
 
-    tile_url = mapbox_url country.geojson({"fill-opacity" => 0, "stroke-width" => 0})
+    tile_url = mapbox_url country.geojson_for_tile({"fill-opacity" => 0, "stroke-width" => 0})
     request_tile tile_url
 
   rescue AssetGenerationFailedError
@@ -24,7 +24,7 @@ module AssetGenerator
   def self.region_tile region
     raise AssetGenerationFailedError if region.nil?
 
-    tile_url = mapbox_url region.geojson({"fill-opacity" => 0, "stroke-width" => 0})
+    tile_url = mapbox_url region.geojson_for_tile({"fill-opacity" => 0, "stroke-width" => 0})
     request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
@@ -46,18 +46,24 @@ module AssetGenerator
 
   def self.request_tile tile_url
     uri = URI(URI.encode(tile_url, '[]'))
+
     request = Net::HTTP::Get.new(uri)
     # As we have set whitelist to only allow pp server/urls to use the mapbox token
     # so we need to set referer header so mapbox knows the request comes from pp server
     # see https://docs.mapbox.com/accounts/guides/tokens/#url-restrictions
     # and https://console.mapbox.com/account/access-tokens/
     request['Referer'] = Rails.application.routes.url_helpers.root_url
+
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+
     response = http.request(request)
     raise AssetGenerationFailedError if response.code != '200'
-    
+
     response.body
+  rescue StandardError
+    # fall back to a placeholder.
+    raise AssetGenerationFailedError
   end
 
   def self.fallback_tile
