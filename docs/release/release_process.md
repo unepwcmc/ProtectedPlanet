@@ -38,19 +38,7 @@ You will receive CSV files from the WDPA team in the `#protectedplanet` Slack ch
 - Green list sites CSV (not always provided)
 - Overseas Territories CSV (not always provided)
 
-### Step 2: Set Up Your Working Branch
-
-First, get the ProtectedPlanet project and create a new branch for this release:
-
-```bash
-# Switch to the develop branch
-git checkout develop
-
-# Create a new branch for this release (replace YYYY-MM with actual date)
-git checkout -b chore/wdpa-release-YYYY-MM
-```
-
-### Step 3: Transform and Add the CSV Files
+### Step 2: Transform and Add the CSV Files
 
 All CSV files need to be placed in the `<project-root>/lib/data/seeds` directory with specific names and formats.
 
@@ -77,7 +65,7 @@ All CSV files need to be placed in the `<project-root>/lib/data/seeds` directory
 
 > **Note**: You only need to process files that were provided for the current month. If a file wasn't provided (like Green List or PAME), skip it - the system will use the last available version.
 
-#### Step 4: Check CSV Files for Errors
+#### Step 3: Check CSV Files for Errors
 
 Before committing, carefully check each CSV file for common issues:
 
@@ -113,7 +101,7 @@ Before committing, carefully check each CSV file for common issues:
 - Delete old CSV files from previous months (keep only a few of the latest versions)
 - For files that aren't updated monthly (PAME, Green List, etc.), keep the latest version even if it's from an earlier month
 
-### Step 5: Update PDFs (Optional)
+### Step 4: Update PDFs (Optional)
 
 If you received a new version of the WDPA Manual PDF:
 
@@ -125,35 +113,6 @@ If you received a new version of the WDPA Manual PDF:
    - `ru/` - Russian
 
 2. **Important**: Include Arabic and Russian manuals even if they're older versions
-
-## Create a release
-
-### Step 1: Create a Release Branch
-
-1. Check the [latest release version](https://github.com/unepwcmc/ProtectedPlanet/releases) in the CHANGELOG
-2. Create the next version number (e.g., if last was 1.1.1, next is 1.1.2)
-3. See the [How to create a release](https://github.com/unepwcmc/wiki/wiki/How-to-create-a-release) guide for details
-
-### Step 2: Update the CHANGELOG
-
-Add an entry to `CHANGELOG.md`, commit and merge develop to Master:
-
-```markdown
-### x.y.z
-- Chore: July 2024 WDPA Release
-  - Statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
-  - `constants.rb` updated
-```
-
-### Step 4: Create GitHub Release
-
-1. Go to [GitHub Releases](https://github.com/unepwcmc/ProtectedPlanet/releases)
-2. Click "Draft a new release"
-3. Fill in:
-   - **Tag**: `vx.y.z` (e.g., `v1.1.2`)
-   - **Release title**: `x.y.z` (e.g., `1.1.2`)
-   - **Description**: Copy and paste from the CHANGELOG entry
-4. Click "Publish release"
 
 ---
 
