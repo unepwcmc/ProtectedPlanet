@@ -126,36 +126,6 @@ If you received a new version of the WDPA Manual PDF:
 
 2. **Important**: Include Arabic and Russian manuals even if they're older versions
 
----
-
-## Commit and merge into develop
-
-### Step 1: Commit Your Changes
-
-Once all CSV files are added and checked, commit them:
-
-```bash
-# Commit with a descriptive message
-git commit -m 'chore: add files and update constants for monthly release'
-```
-
-> **Note**: If you see an error about "no upstream branch", use the `--set-upstream` option shown above.
-
-### Step 2: Create a Pull Request
-
-1. Go to [GitHub Pull Requests](https://github.com/unepwcmc/ProtectedPlanet/pulls)
-2. Click "New Pull Request"
-3. **Important**: Select `base: develop` (not master)
-4. Create the PR and ask ProtectedPlanet maintainers (or colleagues familiar with this process) to review and approve it
-
-### Step 3: Merge the Pull Request
-
-1. Once the PR is approved, click "Merge" and confirm
-2. You'll see: "Pull request successfully merged and closed"
-3. You're now ready to create a release branch for deployment.
-
----
-
 ## Create a release
 
 ### Step 1: Create a Release Branch
