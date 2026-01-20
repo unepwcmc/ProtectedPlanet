@@ -13,8 +13,8 @@ en:
     coverage: Coverage
     coverage_marine:
       covered: Marine and coastal area covered
-      title_wdpa: Marine protected area Coverage
-      title_wdpa_oecm: Marine protected area & OECM coverage
+      title_wdpa: Marine and Coastal protected area Coverage
+      title_wdpa_oecm: Marine and Coastal protected area & OECM coverage
       total: Total marine and coastal area
     coverage_terrestrial:
       covered: Land area covered
