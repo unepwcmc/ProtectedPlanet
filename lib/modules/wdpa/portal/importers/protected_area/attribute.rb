@@ -70,7 +70,7 @@ module Wdpa
               add_to_protected_area_parcels = entry_info[:has_multiple_parcels]
 
               if add_to_protected_areas
-                pa_attrs = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area(pa_attributes)
+                pa_attrs = Wdpa::Portal::Utils::ProtectedAreaColumnMapper.map_portal_to_pp_protected_area(pa_attributes)
                 Staging::ProtectedArea.create!(pa_attrs)
                 imported_count += 1
                 imported_pa_count += 1
@@ -78,7 +78,7 @@ module Wdpa
 
               # Always add to parcels if there are multiple parcels (including the first one)
               if add_to_protected_area_parcels
-                parcel_attrs = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area_parcel(pa_attributes)
+                parcel_attrs = Wdpa::Portal::Utils::ProtectedAreaColumnMapper.map_portal_to_pp_protected_area_parcel(pa_attributes)
                 Staging::ProtectedAreaParcel.create!(parcel_attrs)
                 # Count all parcels created in ProtectedAreaParcel (including first parcels) to match geometry count
                 imported_parcel_count += 1

@@ -23,7 +23,7 @@ module Wdpa
 
         # Remove temporary fields that were only used for lookups
         def remove_fields
-          Wdpa::Portal::Utils::ColumnMapper::PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT.each do |column_name|
+          Wdpa::Portal::Utils::ProtectedAreaColumnMapper::PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT.each do |column_name|
             next unless column_name
 
             @current_attributes.delete(column_name)

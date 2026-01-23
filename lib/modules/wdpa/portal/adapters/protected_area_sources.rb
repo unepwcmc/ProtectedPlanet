@@ -3,7 +3,7 @@
 module Wdpa
   module Portal
     module Adapters
-      class Sources
+      class ProtectedAreaSources
         private
         def sources_view
           Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:sources]

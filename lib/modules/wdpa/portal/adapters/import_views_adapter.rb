@@ -8,8 +8,10 @@ module Wdpa
           Wdpa::Portal::Adapters::ProtectedAreas.new
         end
 
-        def sources_relation
-          Wdpa::Portal::Adapters::Sources.new
+        def protected_area_sources_relation
+          Wdpa::Portal::Adapters::ProtectedAreaSources.new
+        end
+
         end
       end
     end

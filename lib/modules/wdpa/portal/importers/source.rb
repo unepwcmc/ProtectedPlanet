@@ -12,7 +12,7 @@ module Wdpa
           imported_count = 0
 
           relation.each do |source_attributes|
-            standardised_attributes = Wdpa::Portal::Utils::ColumnMapper.map_portal_sources_to_pp(source_attributes)
+            standardised_attributes = Wdpa::Portal::Utils::ProtectedAreaSourceColumnMapper.map_portal_sources_to_pp(source_attributes)
             Staging::Source.create!(standardised_attributes)
             imported_count += 1
           rescue StandardError => e
