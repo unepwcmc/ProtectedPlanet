@@ -15,17 +15,17 @@ class PameEvaluationTest < ActiveSupport::TestCase
       governance: governance,
       the_geom_latitude: 1, the_geom_longitude: 2,
       has_irreplaceability_info: true, has_parcc_info: false)
-    pe = FactoryGirl.create(:pame_evaluation,
+    FactoryGirl.create(:pame_evaluation,
       name: 'Evaluate Manbone', protected_area: pa, countries: [country])
-    # evaluation with no pa and restricted
-    pe = FactoryGirl.create(:pame_evaluation,
+    # evaluation with no protected area
+    FactoryGirl.create(:pame_evaluation,
       name: 'Evaluate Thingamy', site_id: 42,
       countries: [country])
-    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"methodology","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"methodology","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
+    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
     assert_equal 3, csv_string.lines.count
   end
 
-  test 'restricted excluded in to_csv with default where clause' do
+  test 'to_csv includes evaluations with sites' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
 
@@ -39,13 +39,12 @@ class PameEvaluationTest < ActiveSupport::TestCase
       governance: governance,
       the_geom_latitude: 1, the_geom_longitude: 2,
       has_irreplaceability_info: true, has_parcc_info: false)
-    pe = FactoryGirl.create(:pame_evaluation,
-      name: 'Evaluate Manbone', protected_area: pa, countries: [country], restricted: true)
-    # evaluation with no pa and restricted
-    pe = FactoryGirl.create(:pame_evaluation,
-      name: 'Evaluate Thingamy', site_id: 42, restricted: true,
+    FactoryGirl.create(:pame_evaluation,
+      name: 'Evaluate Manbone', protected_area: pa, countries: [country])
+    FactoryGirl.create(:pame_evaluation,
+      name: 'Evaluate Thingamy', site_id: 42,
       countries: [country])
-    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"methodology","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"methodology","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
-    assert_equal 1, csv_string.lines.count
+    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
+    assert_equal 3, csv_string.lines.count
   end
 end

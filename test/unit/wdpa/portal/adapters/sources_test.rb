@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Wdpa::Portal::Adapters::SourcesTest < ActiveSupport::TestCase
+class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   def setup
-    @adapter = Wdpa::Portal::Adapters::Sources.new
+    @adapter = Wdpa::Portal::Adapters::ProtectedAreaSources.new
     @connection = ActiveRecord::Base.connection
 
     # Mock the configuration
