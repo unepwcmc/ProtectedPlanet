@@ -208,7 +208,6 @@ module PortalRelease
       gl_duplicates = Array(value(results, :green_list, :duplicates)).size
 
       pame_imported = value(results, :pame, :imported_count)
-      pame_unrec    = Array(value(results, :pame, :site_ids_not_recognised)).size
 
       blocks = [
         { type: 'header', text: { type: 'plain_text', text: "Import core — #{status_text}", emoji: true } },
@@ -224,7 +223,7 @@ module PortalRelease
             { type: 'mrkdwn',
               text: "*Green List*\n#{gl_imported || 0} (Not found #{gl_not_found}, Invalid #{gl_invalid}#{gl_duplicates.positive? ? ", Duplicates #{gl_duplicates}" : ''})" },
             { type: 'mrkdwn',
-              text: "*PAME*\n#{pame_imported || 0}#{pame_unrec.positive? ? " (Unrecognised #{pame_unrec})" : ''}" }
+              text: "*PAME*\n#{pame_imported || 0}" }
           ]
         }
       ]

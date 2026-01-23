@@ -68,6 +68,7 @@ module Wdpa
         if protected_areas_result[:hard_errors].empty?
           global_stats_result = should_run.call('global_stats') ? Wdpa::Shared::Importer::GlobalStats.import_to_staging(notifier: notifier) : success_result(0)
           green_list_result = should_run.call('green_list') ? Wdpa::Portal::Importers::GreenList.import_to_staging(notifier: notifier) : success_result(0)
+          pame_sources_result = should_run.call('pame_sources') ? Wdpa::Portal::Importers::PameSource.import_to_staging(notifier: notifier) : success_result(0)
           pame_result = should_run.call('pame') ? Wdpa::Portal::Importers::Pame.import_to_staging(notifier: notifier) : success_result(0)
           story_map_links_result = should_run.call('story_map_links') ? Wdpa::Shared::Importer::StoryMapLinkList.import_to_staging(notifier: notifier) : success_result(0)
           country_statistics_result = if should_run.call('country_statistics')
@@ -81,6 +82,7 @@ module Wdpa
           errors = failure_result('Skipped due to hard errors in protected areas importer')
           global_stats_result = errors
           green_list_result = errors
+          pame_sources_result = errors
           pame_result = errors
           story_map_links_result = errors
           country_statistics_result = {
@@ -95,6 +97,7 @@ module Wdpa
           protected_areas: protected_areas_result,
           global_stats: global_stats_result,
           green_list: green_list_result,
+          pame_sources: pame_sources_result,
           pame: pame_result,
           story_map_links: story_map_links_result,
           country_statistics: country_statistics_result
