@@ -22,6 +22,10 @@ module Wdpa
           10
         end
 
+        def self.batch_import_pame_from_view_size
+          1000
+        end
+
         # Database operation timeouts (in milliseconds)
         def self.lock_timeout_ms
           30_000 # 30 seconds
@@ -46,6 +50,7 @@ module Wdpa
           # Enable/disable progress notifications (default: true)
           ENV['PP_IMPORT_PROGRESS_NOTIFICATIONS'] != 'false'
         end
+
 
         # ============================================================================
         # TABLE DEFINITIONS
@@ -193,6 +198,16 @@ module Wdpa
               staging: 'staging_portal_standard_sources',
               required_for_downloads: false
             },
+            pame: {
+              live: 'portal_standard_pame',
+              staging: 'staging_portal_standard_pame',
+              required_for_downloads: false
+            },
+            pame_sources: {
+              live: 'portal_standard_pame_sources',
+              staging: 'staging_portal_standard_pame_sources',
+              required_for_downloads: false
+            }
           }
         end
 

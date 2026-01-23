@@ -12,6 +12,12 @@ module Wdpa
           Wdpa::Portal::Adapters::ProtectedAreaSources.new
         end
 
+        def pames_relation
+          Wdpa::Portal::Adapters::Pames.new
+        end
+
+        def pame_sources_relation
+          Wdpa::Portal::Adapters::PameSources.new
         end
       end
     end
