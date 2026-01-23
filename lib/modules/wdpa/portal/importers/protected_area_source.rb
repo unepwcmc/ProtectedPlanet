@@ -3,10 +3,10 @@
 module Wdpa
   module Portal
     module Importers
-      class Source < Base
+      class ProtectedAreaSource < Base
         def self.import_to_staging(notifier: nil)
           adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new
-          relation = adapter.sources_relation
+          relation = adapter.protected_area_sources_relation
 
           soft_errors = []
           imported_count = 0

@@ -13,7 +13,7 @@ class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
 
   test 'runs all importers when protected areas import succeeds' do
     # Mock successful protected areas import
-    Wdpa::Portal::Importers::Source.stubs(:import_to_staging).returns({
+    Wdpa::Portal::Importers::ProtectedAreaSource.stubs(:import_to_staging).returns({
       success: true,
       imported_count: 5,
       soft_errors: [],
@@ -87,7 +87,7 @@ class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
 
   test 'skips subsequent importers when protected areas import has hard errors' do
     # Mock successful sources import
-    Wdpa::Portal::Importers::Source.stubs(:import_to_staging).returns({
+    Wdpa::Portal::Importers::ProtectedAreaSource.stubs(:import_to_staging).returns({
       success: true,
       imported_count: 5,
       soft_errors: [],
@@ -136,7 +136,7 @@ class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
 
   test 'runs subsequent importers when protected areas has only soft errors' do
     # Mock successful sources import
-    Wdpa::Portal::Importers::Source.stubs(:import_to_staging).returns({
+    Wdpa::Portal::Importers::ProtectedAreaSource.stubs(:import_to_staging).returns({
       success: true,
       imported_count: 5,
       soft_errors: [],

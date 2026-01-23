@@ -62,7 +62,7 @@ module Wdpa
           only.include?(n)
         end
 
-        sources_result = should_run.call('sources') ? Wdpa::Portal::Importers::Source.import_to_staging(notifier: notifier) : success_result(0)
+        sources_result = should_run.call('sources') ? Wdpa::Portal::Importers::ProtectedAreaSource.import_to_staging(notifier: notifier) : success_result(0)
         protected_areas_result = should_run.call('protected_areas') ? Wdpa::Portal::Importers::ProtectedArea.import_to_staging(notifier: notifier) : success_result(0)
 
         if protected_areas_result[:hard_errors].empty?

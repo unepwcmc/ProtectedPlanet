@@ -47,7 +47,7 @@ During a release, data flows through a staging process:
 - Data source information for protected areas
 - Source metadata and attribution
 
-**Importer**: `Wdpa::Portal::Importers::Source`
+**Importer**: `Wdpa::Portal::Importers::ProtectedAreaSource`
 
 **File location**: [`lib/modules/wdpa/portal/importers/source.rb`](../../lib/modules/wdpa/portal/importers/source.rb)
 

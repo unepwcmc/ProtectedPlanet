@@ -26,7 +26,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
     assert geometry_result[:success], "Geometry import failed: #{geometry_result[:errors]}"
 
     # Test source import
-    source_result = Wdpa::Portal::Importers::Source.import('sources_staging')
+    source_result = Wdpa::Portal::Importers::ProtectedAreaSource.import('sources_staging')
     assert source_result[:success], "Source import failed: #{source_result[:errors]}"
 
     # Verify staging tables have data

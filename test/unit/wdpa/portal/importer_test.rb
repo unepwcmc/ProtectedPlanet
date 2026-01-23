@@ -58,7 +58,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     Wdpa::Portal::Importers::ProtectedArea.expects(:import_to_staging).returns(protected_areas_result)
 
     # Mock other importers
-    Wdpa::Portal::Importers::Source.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
+    Wdpa::Portal::Importers::ProtectedAreaSource.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
     Wdpa::Shared::Importer::GlobalStats.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
     Wdpa::Portal::Importers::GreenList.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
     Wdpa::Portal::Importers::Pame.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
@@ -82,7 +82,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     Wdpa::Portal::Importers::ProtectedArea.expects(:import_to_staging).returns(protected_areas_result)
 
     # Mock source importer (runs before protected areas)
-    Wdpa::Portal::Importers::Source.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
+    Wdpa::Portal::Importers::ProtectedAreaSource.expects(:import_to_staging).returns({ success: true, hard_errors: [] })
 
     # Mock that subsequent importers are not called
     Wdpa::Shared::Importer::GlobalStats.expects(:import_to_staging).never
