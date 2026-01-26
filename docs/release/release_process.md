@@ -18,7 +18,7 @@ This guide is the first in a series of four documents:
 
 ## Affected Sites
 
-The monthly WDPA Release updates data for the following websites:
+The monthly WDPCA Release updates data for the following websites:
 
 - [Protected Planet](http://protectedplanet.net) - Main website (This repo)
 - [Protected Planet API](http://api.protectedplanet.net) - Public API ([repo](https://github.com/unepwcmc/protectedplanet-api))PAME data CSV (not always provided)
@@ -142,7 +142,6 @@ The runbook will guide you through:
 You have successfully:
 - ✅ Added CSV files to the repository
 - ✅ Committed and merged changes
-- ✅ Created a GitHub release
 - ✅ Run the database release
 
 The new data is now live on Protected Planet!
