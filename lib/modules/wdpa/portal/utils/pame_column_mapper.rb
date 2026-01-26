@@ -8,6 +8,7 @@ module Wdpa
           'asmt_id' => { name: 'asmt_id', type: :integer },
           'site_id' => { name: 'site_id', type: :integer },
           'method' => { name: 'method', type: :string },
+          'submityear' => { name: 'submit_year', type: :integer },
           'asmt_year' => { name: 'asmt_year', type: :integer },
           'asmt_url' => { name: 'asmt_url', type: :string },
           'eff_metaid' => { name: 'eff_metaid', type: :integer },
@@ -30,13 +31,20 @@ module Wdpa
 
         PORTAL_PAME_IGNORED_COLUMNS = %w[].freeze
 
+        def self.map_portal_pame_to_pp_evaluation(portal_attributes)
+          attributes = map_portal_pame_to_attributes(portal_attributes)
+          Wdpa::Portal::Relation::PameEvaluation.new(attributes).create_models
+        end
+
         def self.map_portal_pame_to_attributes(portal_attributes)
           pame_attributes = {}
 
           portal_attributes.each do |portal_key, value|
             if PORTAL_TO_PP_PAME_MAPPING.key?(portal_key)
               mapping = PORTAL_TO_PP_PAME_MAPPING[portal_key]
-              pame_attributes[mapping[:name]] = Wdpa::Shared::TypeConverter.convert(value, as: mapping[:type])
+              db_column_name = mapping[:name]
+              column_type_for_conversion = mapping[:type]
+              pame_attributes[db_column_name] = Wdpa::Shared::TypeConverter.convert(value, as: column_type_for_conversion)
             else
               next if PORTAL_PAME_IGNORED_COLUMNS.include?(portal_key)
 
