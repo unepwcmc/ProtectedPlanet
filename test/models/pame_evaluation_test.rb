@@ -21,7 +21,7 @@ class PameEvaluationTest < ActiveSupport::TestCase
     FactoryGirl.create(:pame_evaluation,
       name: 'Evaluate Thingamy', site_id: 42,
       countries: [country])
-    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
+    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
     assert_equal 3, csv_string.lines.count
   end
 
@@ -44,7 +44,7 @@ class PameEvaluationTest < ActiveSupport::TestCase
     FactoryGirl.create(:pame_evaluation,
       name: 'Evaluate Thingamy', site_id: 42,
       countries: [country])
-    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"iso3","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
+    csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
     assert_equal 3, csv_string.lines.count
   end
 end
