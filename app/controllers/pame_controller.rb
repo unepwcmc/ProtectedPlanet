@@ -23,11 +23,9 @@ class PameController < ApplicationController
   end
 
   def download
-    last_update = PameEvaluation.last_csv_update_date.strftime('%Y-%^b')
     send_data PameEvaluation.to_csv(params.to_json), {
                 type: "text/csv; charset=utf-8; header=present",
                 disposition: "attachment",
-                filename: "protectedplanet-pame-#{last_update}.csv" }
+                filename: "protectedplanet-effectiveness-#{Release.current_label}.csv" }
   end
 end
-
