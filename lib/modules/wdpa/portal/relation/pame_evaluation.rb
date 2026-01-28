@@ -33,7 +33,7 @@ module Wdpa
 
           @current_attributes['protected_area'] = protected_area
           @current_attributes['protected_area_parcel'] = protected_area_parcel
-          @current_attributes['name'] = protected_area_parcel&.name.to_s || protected_area&.name.to_s || nil
+          @current_attributes['name'] = protected_area_parcel&.name&.presence || protected_area&.name&.presence
         end
 
         def resolve_associated_table_relations
@@ -45,7 +45,7 @@ module Wdpa
         # so we uses resolve_associated_table_relations to deal with associated tables 
         # Once the method and eff_metaid are moved to the associated tables
         # then we can remove resolve_associated_table_relations and use the following methods instead
-        
+
         # def pame_method(value)
         #   value.present? ? PameMethod.find_or_create_by!(name: value) : nil
         # end

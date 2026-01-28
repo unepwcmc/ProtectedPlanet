@@ -40,8 +40,9 @@ module Wdpa
                 imported_count += 1
               end
             rescue StandardError => e
-            soft_errors << "Row error processing evaluation_id #{row['asmt_id']}: #{e.message}"
-              Rails.logger.error "Error processing PAME row: #{e.message}"
+              error_message = "Row error processing evaluation_id #{row['asmt_id']}: #{e.message}"
+              soft_errors << error_message
+              Rails.logger.error error_message
             end
           end
 

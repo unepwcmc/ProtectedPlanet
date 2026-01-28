@@ -223,7 +223,7 @@ For advanced troubleshooting and technical details, see [Release Orchestration](
 PP_RELEASE_DRY_RUN=true \
 PP_RELEASE_STAGING_LIGHTWEIGHT=true \
 PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS=false \
-bundle exec rake pp:portal:release["Nov2025"]
+bundle exec rake pp:portal:release["Feb2026"]
 
 # Resume from specific phase (after dry run - use SAME label as dry run)
 PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
