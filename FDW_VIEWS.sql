@@ -38,6 +38,10 @@ DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_int_crit_agg;
 DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_parent_iso3_agg;
 DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_iso3_agg;
 
+-- Drop PAME views
+DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_pame_sources;
+DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_pame;
+
 
 
 
@@ -504,12 +508,84 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_sources_metadataid ON staging_port
 -- ⚠️  If you change how index_id is generated, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_sources_pk ON staging_portal_standard_sources(index_id);
 
--- 5) refreshes (make sure to run this after creating the views)
--- YOU PROBABLY DON"T NEED TO RUN IT CONCURRENTLY THEN REMOVE 'CONCURRENTLY'
+
+-- TODO: UPDATE THIS TO USE REAL DATA FROM THE PORTAL
+-- 5) Standardized view (PAME Sources)
+--    PAME source metadata from the portal
+--    ⚠️  If you modify columns here, check Portal DB indexes for:
+--        - dummy_portal_pame_sources.id, dummy_portal_pame_sources.eff_metaid
+--        - This file: Ensure unique index on eff_metaid exists
+
+CREATE MATERIALIZED VIEW public.staging_portal_standard_pame_sources AS
+SELECT
+  (p.id)::integer AS id,
+  (p.eff_metaid)::integer AS eff_metaid,
+  LEFT(p.data_title::varchar, 255) AS data_title,
+  LEFT(p.resp_party::varchar, 255) AS resp_party,
+  LEFT(p.resp_email::varchar, 255) AS resp_email,
+  LEFT(p.resp_pers::varchar, 255) AS resp_pers,
+  LEFT(p.year::varchar, 255) AS year,
+  LEFT(p.update_yr::varchar, 255) AS update_yr,
+  LEFT(p.language::varchar, 255) AS language
+FROM public.dummy_portal_pame_sources p
+WITH NO DATA;
+
+-- Unique index required for CONCURRENT refreshes
+-- ⚠️  If eff_metaid is not unique, consider using a composite key or id
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_pk ON staging_portal_standard_pame_sources(eff_metaid);
+-- Index on id for lookups
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_id ON staging_portal_standard_pame_sources(id);
+
+
+-- TODO: UPDATE THIS TO USE REAL DATA FROM THE PORTAL
+-- 6) Standardized view (PAME Evaluations)
+--    PAME evaluation data from the portal
+--    ⚠️  If you modify columns here, check Portal DB indexes for:
+--        - dummy_portal_pame.asmt_id, dummy_portal_pame.site_id, dummy_portal_pame.eff_metaid
+--        - This file: Ensure unique index on asmt_id exists
+
+CREATE MATERIALIZED VIEW public.staging_portal_standard_pame AS
+SELECT
+  (p.asmt_id)::integer AS asmt_id,
+  (p.eff_metaid)::integer AS eff_metaid,
+  (p.site_id)::integer AS site_id,
+  LEFT(p.site_pid::varchar, 52) AS site_pid,
+  LEFT(p.method::varchar, 255) AS method,
+  (p.submityear)::integer AS submityear,
+  (p.asmt_year)::integer AS asmt_year,
+  LEFT(p.verif_eff::varchar, 255) AS verif_eff,
+  LEFT(p.asmt_url::varchar, 500) AS asmt_url,
+  LEFT(p.info_url::varchar, 500) AS info_url,
+  LEFT(p.gov_act::varchar, 255) AS gov_act,
+  LEFT(p.gov_asmt::varchar, 255) AS gov_asmt,
+  LEFT(p.dp_bio::varchar, 255) AS dp_bio,
+  LEFT(p.dp_other::varchar, 255) AS dp_other,
+  LEFT(p.mgmt_obset::varchar, 255) AS mgmt_obset,
+  LEFT(p.mgmt_obman::varchar, 255) AS mgmt_obman,
+  LEFT(p.mgmt_adapt::varchar, 255) AS mgmt_adapt,
+  LEFT(p.mgmt_staff::varchar, 255) AS mgmt_staff,
+  LEFT(p.mgmt_budgt::varchar, 255) AS mgmt_budgt,
+  LEFT(p.mgmt_thrts::varchar, 255) AS mgmt_thrts,
+  LEFT(p.mgmt_mon::varchar, 255) AS mgmt_mon,
+  LEFT(p.out_bio::varchar, 255) AS out_bio
+FROM public.dummy_portal_pame p
+WITH NO DATA;
+
+-- Unique index required for CONCURRENT refreshes
+-- ⚠️  If asmt_id is not unique, consider using a composite key (asmt_id, site_id, site_pid)
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_pk ON staging_portal_standard_pame(asmt_id);
+-- Indexes for common lookups
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_site_id ON staging_portal_standard_pame(site_id);
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_eff_metaid ON staging_portal_standard_pame(eff_metaid);
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_asmt_year ON staging_portal_standard_pame(asmt_year);
+
+-- 7) refreshes (make sure to run this after creating the views)
 REFRESH MATERIALIZED VIEW staging_portal_iso3_agg;
 REFRESH MATERIALIZED VIEW staging_portal_parent_iso3_agg;
 REFRESH MATERIALIZED VIEW staging_portal_int_crit_agg;
 REFRESH MATERIALIZED VIEW staging_portal_standard_points;
 REFRESH MATERIALIZED VIEW staging_portal_standard_polygons;
 REFRESH MATERIALIZED VIEW staging_portal_standard_sources;
+REFRESH MATERIALIZED VIEW staging_portal_standard_pame_sources;
+REFRESH MATERIALIZED VIEW staging_portal_standard_pame;
 
