@@ -1,10 +1,8 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-&--stats-management {
-  @include card-stats;
-
-  .card {
-    &__h2 { @include card-stats-h2; }
+&--attributes-parcels-dropdown {
+  @include breakpoint($medium) {
+    max-width: rem-calc(400);
   }
 }

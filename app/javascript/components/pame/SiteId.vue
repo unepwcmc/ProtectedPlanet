@@ -8,32 +8,23 @@
     </span>
   </template>
   
-  <script>
-    export default {
-      name: "pame-site-id",
-      props: {
-         site_id: {
-          required: true,
-          type: String,
-        },
-        site_pid: {
-          required: true,
-          type: String,
-        },
-      },
-  
-      computed: {
-        showParcelId () {
-          return String(this.site_pid) !== String(this.site_id)
-        }
-      },
-  
-      methods: {
-        
-      }
+<script>
+export default {
+  name: "pame-site-id",
+  props: {
+    site_id: {
+      required: true,
+      type: Number,
+    },
+    site_pid: {
+      required: true,
+      type: String,
+    },
+  },
+  computed: {
+    showParcelId () {
+      return String(this.site_pid) !== String(this.site_id)
     }
-  </script>
-  <style lang="css">
-  .pame-site-id {
   }
-  </style>
+}
+</script>

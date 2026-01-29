@@ -1,0 +1,10 @@
+<attributes-pames
+  :pames-attributes-list="<%= current_pa_and_all_parcels_pame_evaluations_attributes.to_json %>"
+  title="<%= t('attributes.pame.title') %>"
+  sub-title="<%= t('attributes.parcel_id').html_safe %>"
+  :for-pdf="<%= for_pdf == true %>"
+  :translations="<%= {
+    no_information: t('stats.no-infomation')
+  }.to_json %>"
+  class="<%= get_local_classes local_assigns %>"
+></attributes-pames>

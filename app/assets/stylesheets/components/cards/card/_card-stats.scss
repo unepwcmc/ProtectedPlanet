@@ -83,14 +83,27 @@
 }
 
 @import './stats/card-stats-affiliations';
-@import './stats/card-stats-attributes';
 @import './stats/card-stats-coverage';
 @import './stats/card-stats-designations';
 @import './stats/card-stats-governance';
 @import './stats/card-stats-growth-chart';
 @import './stats/card-stats-iucn';
-@import './stats/card-stats-management';
 @import './stats/card-stats-overview';
 @import './stats/card-stats-related';
-@import './stats/card-stats-sources';
 @import './stats/card-stats-toggle';
+
+// As most of them should be named attributes, not stats so we are gradually moving them to the attributes folder.
+// Once all are moved, we can rename this file to card-attributes.scss.
+@import './attributes/card-attributes-pa-and-parcels';
+@import './attributes/card-attributes-parcels-dropdown';
+@import './attributes/card-attributes-pame';
+
+&--feault-block {
+  @include card-stats;
+
+  .card {
+    &__content { @include card-stat-content; }
+
+    &__h2 { @include card-stats-h2; }
+  }
+}

@@ -22,10 +22,6 @@ class ProtectedAreasController < ApplicationController
     # @networks = load_networks
 
     @locations = get_locations
-
-    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
-    @sources = @protected_area.sources_per_pa
-
     @wdpa_other = get_other_sites
 
     @otherWdpasViewAllUrl = determine_search_path(@protected_area)

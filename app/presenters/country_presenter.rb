@@ -82,8 +82,8 @@ class CountryPresenter
       text_total: I18n.t("stats.coverage_#{yml_key(type)}.total"),
       text_coverage: I18n.t('stats.coverage'), # same as marine
       text_national_report: I18n.t('stats.nr-report-title'), # same as marine
-      text_pame: I18n.t('stats.pame.areas-assessed'), # same as marine
-      text_pame_assessments: I18n.t('stats.pame.with-assessments') # same as marine
+      text_pame: I18n.t('attributes.pame.areas-assessed'), # same as marine
+      text_pame_assessments: I18n.t('attributes.pame.with-assessments') # same as marine
     }
   end
 

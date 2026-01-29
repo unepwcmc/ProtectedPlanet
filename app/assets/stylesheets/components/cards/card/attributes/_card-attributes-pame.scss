@@ -1,0 +1,16 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--attributes-pame {
+  @include card-stats;
+
+  .pdf & {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+  }
+
+  .card {
+    &__h2 { @include card-stats-h2; }
+  }
+}

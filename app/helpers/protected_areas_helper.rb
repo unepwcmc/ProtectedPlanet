@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 module ProtectedAreasHelper
+  # URL query parameter names (e.g. parcel selection)
+  URL_PARAMS = { parcel: 'site_pid' }.freeze
+
+  # Returns the protected area show URL, with optional parcel query param when site_pid is present.
+  def pa_site_url_with_parcel(site_id, site_pid)
+    return nil unless site_id
+    opts = {}
+    opts[URL_PARAMS[:parcel].to_sym] = site_pid if site_pid.present?
+    Rails.application.routes.url_helpers.protected_area_path(site_id, opts)
+  end
+
   def map_bounds(protected_area = nil)
     unless protected_area
       return Rails.application.secrets.default_map_bounds.stringify_keys
@@ -38,12 +49,26 @@ module ProtectedAreasHelper
     reported_area_km&.nonzero? ? "#{reported_area_km.round(2)} km&sup2;".html_safe : 'Not Reported'
   end
 
-  def pame_evaluations_summary
-    grouped_evaluations = @protected_area.pame_evaluations.group_by do |evaluation|
-      evaluation.pame_method&.name
-    end
-    grouped_evaluations.update(grouped_evaluations) do |_, evaluations|
-      evaluations.map { |ev| ev.asmt_year == 0 ? 'Not Reported' : ev.asmt_year }
+  # Returns PAME summaries grouped by parcel site_pid, so the frontend can
+  # switch between parcels using the parcel dropdown.
+  #
+  # If a protected area has no explicit parcels, the PA itself is treated as a
+  # single "parcel" via ProtectedArea#parcels_including_protected_area_self.
+  #
+  # Shape:
+  # {
+  #   "1234_1" => { "METT" => [2018, 2020], "RAPPAM" => [2015] },
+  #   "1234_2" => { "METT" => [2019] }
+  # }
+  def current_pa_and_all_parcels_pame_evaluations_attributes
+    @protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).each_with_object({}) do |parcel, hash|
+      evals = parcel.pame_evaluations
+      next if evals.blank?
+
+      grouped = evals.group_by { |evaluation| evaluation.pame_method&.name }
+      hash[parcel.site_pid] = grouped.transform_values do |evaluations|
+        evaluations.map { |ev| ev.asmt_year == 0 ? 'Not Reported' : ev.asmt_year }
+      end
     end
   end
 
@@ -83,15 +108,15 @@ module ProtectedAreasHelper
       I18n.t('map.overlays.terrestrial_wdpa.title')
     end
   end
-  
-  def stats_attributes_set_description
+
+  def attributes_parcels_dropdown_descriptions
     case area_type_is
     when 'oecm'
-      I18n.t('stats.attributes.description.oecm')
+      I18n.t('attributes.parcel_dropdown.description.oecm')
     when 'marine_pa'
-      I18n.t('stats.attributes.description.marine_pa')
+      I18n.t('attributes.parcel_dropdown.description.marine_pa')
     else
-      I18n.t('stats.attributes.description.pa')
+      I18n.t('attributes.parcel_dropdown.description.pa')
     end
   end
 end

@@ -1,0 +1,20 @@
+en:
+  attributes:
+    pa_and_parcels_attributes: 
+      title: Attributes
+    parcel_dropdown:
+      main_title: Choose a Parcel
+      dropdown_title: Parcel ID
+      description:
+        pa: This protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
+        marine_pa: The marine protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
+        oecm: The OECM consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
+    pame:
+      areas-assessed: Areas assessed
+      title: Management Effectiveness Evaluations
+      with-assessments: With management effectiveness evaluations
+    pa_sources: 
+      title: Sources
+      total: Total Sources
+      updated: Updated
+    parcel_id: Parcel ID

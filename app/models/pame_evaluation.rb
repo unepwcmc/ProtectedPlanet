@@ -112,7 +112,6 @@ class PameEvaluation < ApplicationRecord
         end
       end
     end
-
     where_params
   end
 
@@ -122,7 +121,7 @@ class PameEvaluation < ApplicationRecord
 
     scope = scope.where(where_params[:method]) if where_params[:method].present?
     scope = scope.where(where_params[:year])   if where_params[:year].present?
-    scope = scope.where(where_params[:type])    if where_params[:type].present?
+    scope = scope.where(where_params[:type])   if where_params[:type].present?
     scope = scope.where(where_params[:country]) if where_params[:country].present?
 
     scope.where(HAS_AREA_OR_PARCEL_CONDITION).order(QUERY_ORDER).paginate(page: page_number || 1, per_page: 50)
@@ -132,6 +131,7 @@ class PameEvaluation < ApplicationRecord
     evaluations.to_a.map! do |evaluation|
       area = evaluation.protected_area_parcel || evaluation.protected_area
       site_id = area&.site_id
+      site_pid = area&.site_pid
       name = evaluation.name
       designation = area&.designation&.name || 'N/A'
       countries = evaluation.countries
@@ -142,11 +142,10 @@ class PameEvaluation < ApplicationRecord
         total_entries: evaluations.total_entries,
         total_pages: evaluations.total_pages,
         id: evaluation.id,
-        # TODO: Remove this after PAME data migration is complete (After PAME is using data from data management portal)
-        asmt_id: evaluation.asmt_id || evaluation.id,
+        asmt_id: evaluation.asmt_id,
         site_id: site_id,
-        site_pid: area&.site_pid,
-        pa_site_url: Rails.application.routes.url_helpers.protected_area_path(site_id),
+        site_pid: site_pid,
+        pa_site_url: ApplicationController.helpers.pa_site_url_with_parcel(site_id, site_pid),
         country: country_names,
         method: evaluation.pame_method&.name,
         asmt_year: evaluation.asmt_year.to_s,
@@ -217,6 +216,7 @@ class PameEvaluation < ApplicationRecord
         pame_evaluations.site_id AS site_id,
         pame_evaluations.site_pid AS site_pid,
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT countries.name), ';') AS country,
+        -- We convert site_type true or false later on to Marine / Terrestrial in the CSV generation
         COALESCE(protected_areas.marine, protected_area_parcels.marine) AS site_type,
         pame_evaluations.name AS name_eng,
         COALESCE(parcel_designations.name, pa_designations.name, 'N/A') AS desig_en,
@@ -259,11 +259,9 @@ class PameEvaluation < ApplicationRecord
       GROUP BY
         pame_evaluations.id,
         pame_sources.id,
-        pa_designations.name,
-        parcel_designations.name,
+        COALESCE(parcel_designations.name, pa_designations.name, 'N/A'),
         COALESCE(protected_areas.marine, protected_area_parcels.marine),
-        pa_gl.status,
-        parcel_gl.status
+        COALESCE(parcel_gl.status, pa_gl.status)
     SQL
     evaluations = ActiveRecord::Base.connection.exec_query(query)
     columns = evaluations.columns

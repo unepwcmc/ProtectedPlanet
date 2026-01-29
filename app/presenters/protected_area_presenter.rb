@@ -53,7 +53,7 @@ class ProtectedAreaPresenter
     }
   end
 
-  def parcels_attribute
+  def current_pa_and_parcels_attributes
     parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
     # TODO: once the parcel IDs are change to be 345345_1 345345_2
     # We will need to change this to item.split('_').last.to_i
@@ -61,6 +61,11 @@ class ProtectedAreaPresenter
       {
         site_pid: parcel.site_pid,
         attributes: [
+          {
+            title: 'Parcel ID',
+            value: parcel.site_pid,
+            is_site_pid: true
+          },
           {
             title: 'Name',
             value: parcel.original_name
@@ -128,6 +133,10 @@ class ProtectedAreaPresenter
         ].concat(parcel_oecm_attributes(parcel))
       }
     end
+  end
+
+  def parcels_site_pids
+    protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).map(&:site_pid)
   end
 
   private

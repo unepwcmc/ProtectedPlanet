@@ -10,7 +10,6 @@ class PameController < ApplicationController
   def index
     @table_attributes = PameEvaluation::TABLE_ATTRIBUTES.to_json
     @filters = PameEvaluation.filters_to_json
-    @sources = PameEvaluation.sources_to_json
     @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
 
     @tabs = get_tabs(4).to_json

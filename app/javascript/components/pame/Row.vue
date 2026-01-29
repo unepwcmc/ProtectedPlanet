@@ -87,7 +87,7 @@
       },
 
       trim (phrase) {
-        const length = phrase.length
+        const length = phrase?.length ?? 0
         let output
 
         if (length <= 30) {

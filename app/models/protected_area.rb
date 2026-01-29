@@ -116,7 +116,7 @@ class ProtectedArea < ApplicationRecord
     result.map { |r| JSON.parse(r['data']) }
   end
 
-  def sources_per_pa
+  def sources_attributes_for_current_pa_and_all_parcels
     result = {}
 
     # Get sources from the protected area itself
