@@ -10,8 +10,8 @@ national_waters_pa_coverage_percentage,percentage coverage of national waters (E
 national_waters_pa_coverage_area,national waters (EEZ) area covered by protected areas (km2),31795746.08
 high_seas_pa_coverage_percentage,percentage coverage of Areas Beyond National Jurisdiction (ABNJ) by protected areas,1.45
 high_seas_pa_coverage_area,Areas Beyond National Jurisdiction (ABNJ) area covered by protected areas (km2),3221827.26
-national_waters_percentage,percentage of ocean that is national waters,0
-global_ocean_percentage,percentage of ocean that is in Areas Beyond National Jurisdiction (ABNJ),0
+national_waters_percentage,percentage of ocean that is national waters,39
+global_ocean_percentage,percentage of ocean that is in Areas Beyond National Jurisdiction (ABNJ),61
 total_oecms,number of OECMs,7462
 total_terrestrial_oecms,number of terrestrial and inland waters OECMs,7233
 total_marine_oecms,number of marine OECMs,229
