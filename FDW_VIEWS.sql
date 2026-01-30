@@ -42,6 +42,8 @@ DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_iso3_agg;
 DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_pame_sources;
 DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_pame;
 
+-- Drop Green List view
+DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_greenlist;
 
 
 
@@ -579,7 +581,32 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_site_id ON staging_portal_sta
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_eff_metaid ON staging_portal_standard_pame(eff_metaid);
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_asmt_year ON staging_portal_standard_pame(asmt_year);
 
--- 7) refreshes (make sure to run this after creating the views)
+
+-- TODO: UPDATE THIS TO USE REAL DATA FROM THE PORTAL
+-- 7) Standardized view (Green List)
+--    Green List data from dummy_gl_data (mock); replace with portal FDW when available.
+--    ⚠️  If you modify columns here, check:
+--        - dummy_gl_data: site_id, site_pid indexes
+--        - This file: Ensure unique index on (site_id, site_pid) exists for CONCURRENT refresh
+
+CREATE MATERIALIZED VIEW public.staging_portal_standard_greenlist AS
+SELECT
+  (g.site_id)::bigint AS site_id,
+  LEFT(g.site_pid::varchar, 52) AS site_pid,
+  LEFT(g.gl_status::varchar, 50) AS gl_status,
+  g.gl_expiry AS gl_expiry,
+  LEFT(g.gl_link::varchar, 500) AS gl_link
+FROM public.dummy_gl_data g
+WITH NO DATA;
+
+-- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
+-- ⚠️  If you change the natural key columns, update this index
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_greenlist_pk ON staging_portal_standard_greenlist(site_id, site_pid);
+-- Indexes for common lookups
+CREATE INDEX IF NOT EXISTS staging_idx_portal_greenlist_site_id ON staging_portal_standard_greenlist(site_id);
+CREATE INDEX IF NOT EXISTS staging_idx_portal_greenlist_gl_expiry ON staging_portal_standard_greenlist(gl_expiry);
+
+-- 8) refreshes (make sure to run this after creating the views)
 REFRESH MATERIALIZED VIEW staging_portal_iso3_agg;
 REFRESH MATERIALIZED VIEW staging_portal_parent_iso3_agg;
 REFRESH MATERIALIZED VIEW staging_portal_int_crit_agg;
@@ -588,4 +615,5 @@ REFRESH MATERIALIZED VIEW staging_portal_standard_polygons;
 REFRESH MATERIALIZED VIEW staging_portal_standard_sources;
 REFRESH MATERIALIZED VIEW staging_portal_standard_pame_sources;
 REFRESH MATERIALIZED VIEW staging_portal_standard_pame;
+REFRESH MATERIALIZED VIEW staging_portal_standard_greenlist;
 
