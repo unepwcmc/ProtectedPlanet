@@ -69,10 +69,10 @@ Long-running releases should be run in a persistent terminal session so they kee
 tmux new -s pp-release
 
 # Step 1: Dry run (stops after validation, does not swap tables)
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Jan2026"]
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Feb2026"]
 
 # Detach without stopping the process
-# Press: Ctrl-b then d
+Ctrl-b then d
 
 # Reattach later
 tmux attach -t pp-release
@@ -88,7 +88,7 @@ RAILS_ENV=production bundle exec rake pp:portal:status
 
 # When ready to go live** (e.g., on the first day of the month), continue with the swap:
 # IMPORTANT! Make sure you change the correct label
-RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Jan2026"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Feb2026"]
 ```
 
 **Important Notes:**
