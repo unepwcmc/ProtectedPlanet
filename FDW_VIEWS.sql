@@ -533,8 +533,7 @@ FROM public.dummy_portal_pame_sources p
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes
--- ⚠️  If eff_metaid is not unique, consider using a composite key or id
-CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_pk ON staging_portal_standard_pame_sources(eff_metaid);
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_pk ON staging_portal_standard_pame_sources(id);
 -- Index on id for lookups
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_id ON staging_portal_standard_pame_sources(id);
 
@@ -548,6 +547,7 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_id ON staging_portal_
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_pame AS
 SELECT
+  (p.id)::integer AS id,
   (p.asmt_id)::integer AS asmt_id,
   (p.eff_metaid)::integer AS eff_metaid,
   (p.site_id)::integer AS site_id,
@@ -574,8 +574,7 @@ FROM public.dummy_portal_pame p
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes
--- ⚠️  If asmt_id is not unique, consider using a composite key (asmt_id, site_id, site_pid)
-CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_pk ON staging_portal_standard_pame(asmt_id);
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_pk ON staging_portal_standard_pame(id);
 -- Indexes for common lookups
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_site_id ON staging_portal_standard_pame(site_id);
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_eff_metaid ON staging_portal_standard_pame(eff_metaid);
@@ -591,6 +590,7 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_asmt_year ON staging_portal_s
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_greenlist AS
 SELECT
+  (g.id)::integer AS id,
   (g.site_id)::bigint AS site_id,
   LEFT(g.site_pid::varchar, 52) AS site_pid,
   LEFT(g.gl_status::varchar, 50) AS gl_status,
@@ -599,9 +599,9 @@ SELECT
 FROM public.dummy_gl_data g
 WITH NO DATA;
 
--- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
+-- Unique index required for CONCURRENT refreshes 
 -- ⚠️  If you change the natural key columns, update this index
-CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_greenlist_pk ON staging_portal_standard_greenlist(site_id, site_pid);
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_greenlist_pk ON staging_portal_standard_greenlist(id);
 -- Indexes for common lookups
 CREATE INDEX IF NOT EXISTS staging_idx_portal_greenlist_site_id ON staging_portal_standard_greenlist(site_id);
 CREATE INDEX IF NOT EXISTS staging_idx_portal_greenlist_gl_expiry ON staging_portal_standard_greenlist(gl_expiry);

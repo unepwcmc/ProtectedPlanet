@@ -202,10 +202,8 @@ module PortalRelease
         :imported_count)
       fields_updated = value(results, :global_stats, :fields_updated)
 
-      gl_imported   = value(results, :green_list, :imported_count)
-      gl_not_found  = Array(value(results, :green_list, :not_found_site_ids)).size
-      gl_invalid    = Array(value(results, :green_list, :invalid_site_ids)).size
-      gl_duplicates = Array(value(results, :green_list, :duplicates)).size
+      gl_imported    = value(results, :green_list, :imported_count)
+      gl_soft_errors = Array(value(results, :green_list, :soft_errors)).size
 
       pame_imported = value(results, :pame, :imported_count)
 
@@ -221,7 +219,7 @@ module PortalRelease
             { type: 'mrkdwn', text: "*Geometries (areas/parcels)*\n#{pa_geom_areas || 0} / #{pa_geom_parcels || 0}" },
             { type: 'mrkdwn', text: "*Global statistics fields updated*\n#{fields_updated || 0}" },
             { type: 'mrkdwn',
-              text: "*Green List*\n#{gl_imported || 0} (Not found #{gl_not_found}, Invalid #{gl_invalid}#{gl_duplicates.positive? ? ", Duplicates #{gl_duplicates}" : ''})" },
+              text: "*Green List*\n#{gl_imported || 0}#{gl_soft_errors.positive? ? " (#{gl_soft_errors} soft errors)" : ''}" },
             { type: 'mrkdwn',
               text: "*PAME*\n#{pame_imported || 0}" }
           ]

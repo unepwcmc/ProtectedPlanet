@@ -162,16 +162,16 @@ class ProtectedAreaPresenter
     gls = protected_area.green_list_status
     {
       affiliation: 'greenlist',
-      date: gls.expiry_date,
-      image_url: green_list_logo(gls.status),
+      date: gls.gl_expiry,
+      image_url: green_list_logo(gls.gl_status),
       link_title: "View the Green List page for #{protected_area.name}",
-      type: gls.status,
-      url: protected_area.green_list_url
+      type: gls.gl_status,
+      url: gls.gl_link
     }
   end
 
-  def green_list_logo(status)
-    logo = status.downcase == 'candidate' ? 'green-list-black' : 'green-list'
+  def green_list_logo(gl_status)
+    logo = gl_status.to_s.downcase == 'candidate' ? 'green-list-black' : 'green-list'
     ActionController::Base.helpers.image_url("logos/#{logo}.png")
   end
 

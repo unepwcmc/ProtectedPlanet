@@ -19,6 +19,10 @@ module Wdpa
         def pame_sources_relation
           Wdpa::Portal::Adapters::PameSources.new
         end
+
+        def greenlist_relation
+          Wdpa::Portal::Adapters::Greenlist.new
+        end
       end
     end
   end

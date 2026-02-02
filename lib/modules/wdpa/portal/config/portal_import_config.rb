@@ -26,6 +26,10 @@ module Wdpa
           1000
         end
 
+        def self.batch_import_greenlist_from_view_size
+          500
+        end
+
         # Database operation timeouts (in milliseconds)
         def self.lock_timeout_ms
           30_000 # 30 seconds
@@ -206,6 +210,11 @@ module Wdpa
             pame_sources: {
               live: 'portal_standard_pame_sources',
               staging: 'staging_portal_standard_pame_sources',
+              required_for_downloads: false
+            },
+            greenlist: {
+              live: 'portal_standard_greenlist',
+              staging: 'staging_portal_standard_greenlist',
               required_for_downloads: false
             }
           }
