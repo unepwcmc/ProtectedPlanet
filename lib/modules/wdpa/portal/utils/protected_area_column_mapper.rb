@@ -4,72 +4,71 @@ module Wdpa
   module Portal
     module Utils
       class ProtectedAreaColumnMapper
+        # for_create: true = persist to ProtectedArea/ProtectedAreaParcel; false = used only for relation
         PORTAL_TO_PP_MAPPING = {
           # Core WDPA identifiers
-          'site_id' => { name: 'site_id', type: :integer },
-          'site_pid' => { name: 'site_pid', type: :string },
+          'site_id' => { name: 'site_id', type: :integer, for_create: true },
+          'site_pid' => { name: 'site_pid', type: :string, for_create: true },
 
           # Names and descriptions
-          'name_eng' => { name: 'name', type: :string },
-          'name' => { name: 'original_name', type: :string },
+          'name_eng' => { name: 'name', type: :string, for_create: true },
+          'name' => { name: 'original_name', type: :string, for_create: true },
 
           # Marine and protection status
-          'realm' => { name: 'realm', type: :string }, # Will be converted to boolean marine
-          'site_type' => { name: :site_type, type: :string },
+          'realm' => { name: 'realm', type: :string, for_create: true },
+          'site_type' => { name: :site_type, type: :string, for_create: true },
 
           # Area measurements
-          'rep_m_area' => { name: 'reported_marine_area', type: :float },
-          'rep_area' => { name: 'reported_area', type: :float },
-          'gis_m_area' => { name: 'gis_marine_area', type: :float },
-          'gis_area' => { name: 'gis_area', type: :float },
+          'rep_m_area' => { name: 'reported_marine_area', type: :float, for_create: true },
+          'rep_area' => { name: 'reported_area', type: :float, for_create: true },
+          'gis_m_area' => { name: 'gis_marine_area', type: :float, for_create: true },
+          'gis_area' => { name: 'gis_area', type: :float, for_create: true },
 
           # Geographic and administrative
-          'iso3' => { name: 'countries', type: :csv }, # CSV type for semicolon-separated values
-          'prnt_iso3' => { name: :parent_iso3, type: :string },
+          'iso3' => { name: 'countries', type: :csv, for_create: true },
+          'prnt_iso3' => { name: :parent_iso3, type: :string, for_create: true },
 
-          'status' => { name: 'legal_status', type: :string },
-          'status_yr' => { name: 'legal_status_updated_at', type: :year },
+          'status' => { name: 'legal_status', type: :string, for_create: true },
+          'status_yr' => { name: 'legal_status_updated_at', type: :year, for_create: true },
 
           # Conservation classification
-          'iucn_cat' => { name: 'iucn_category', type: :string },
-          'gov_type' => { name: 'governance', type: :string },
-          'govsubtype' => { name: 'governance_subtype', type: :string },
+          'iucn_cat' => { name: 'iucn_category', type: :string, for_create: true },
+          'gov_type' => { name: 'governance', type: :string, for_create: true },
+          'govsubtype' => { name: 'governance_subtype', type: :string, for_create: true },
 
           # Management information
-          'mang_auth' => { name: 'management_authority', type: :string },
-          'mang_plan' => { name: 'management_plan', type: :string },
-          'int_crit' => { name: 'international_criteria', type: :string },
-          'no_take' => { name: 'no_take_status', type: :string },
-          'no_tk_area' => { name: 'no_take_area', type: :float },
+          'mang_auth' => { name: 'management_authority', type: :string, for_create: true },
+          'mang_plan' => { name: 'management_plan', type: :string, for_create: true },
+          'int_crit' => { name: 'international_criteria', type: :string, for_create: true },
+          'no_take' => { name: 'no_take_status', type: :string, for_create: true },
+          'no_tk_area' => { name: 'no_take_area', type: :float, for_create: false }, # used by no_take_status only
 
           # Designation details
-          'desig_eng' => { name: 'designation', type: :string },
-          'desig_type' => { name: 'jurisdiction', type: :string }, # Will be used by designation
+          'desig_eng' => { name: 'designation', type: :string, for_create: true },
+          'desig_type' => { name: 'jurisdiction', type: :string, for_create: false }, # used by designation only
 
           # Geometry and metadata
-          'wkb_geometry' => { name: 'the_geom', type: :geometry },
-          'metadataid' => { name: 'sources', type: :integer }, # Will be processed as array
+          'wkb_geometry' => { name: 'the_geom', type: :geometry, for_create: true },
+          'metadataid' => { name: 'sources', type: :integer, for_create: true },
 
-          'own_type' => { name: :owner_type, type: :string },
-          'ownsubtype' => { name: 'ownership_subtype', type: :string },
+          'own_type' => { name: :owner_type, type: :string, for_create: true },
+          'ownsubtype' => { name: 'ownership_subtype', type: :string, for_create: true },
 
-          'supp_info' => { name: :supplementary_info, type: :string },
-          'cons_obj' => { name: :conservation_objectives, type: :string },
-          'verif' => { name: :verif, type: :string },
+          'supp_info' => { name: :supplementary_info, type: :string, for_create: true },
+          'cons_obj' => { name: :conservation_objectives, type: :string, for_create: true },
+          'verif' => { name: :verif, type: :string, for_create: true },
 
-          'inlnd_wtrs' => { name: 'inland_waters', type: :string },
-          'oecm_asmt' => { name: 'oecm_assessment', type: :string }
+          'inlnd_wtrs' => { name: 'inland_waters', type: :string, for_create: true },
+          'oecm_asmt' => { name: 'oecm_assessment', type: :string, for_create: true }
         }.freeze
 
-        PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT = [
-          PORTAL_TO_PP_MAPPING['desig_type'][:name],
-          PORTAL_TO_PP_MAPPING['no_tk_area'][:name]
-        ]
-
-        PROTECTED_AREA_PARCEL_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT = [
-          PORTAL_TO_PP_MAPPING['desig_type'][:name],
-          PORTAL_TO_PP_MAPPING['no_tk_area'][:name]
-        ]
+        # Column names to strip before insert (for_create: false). Used by Relation#remove_fields.
+        def self.columns_not_for_create
+          PORTAL_TO_PP_MAPPING.values
+            .select { |config| config[:for_create] == false }
+            .map { |config| config[:name].to_s }
+            .uniq
+        end
 
         # Maps portal attributes to ProtectedArea attributes (non-spatial data only)
         def self.map_portal_to_pp_protected_area(portal_attributes)

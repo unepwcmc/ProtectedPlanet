@@ -21,12 +21,11 @@ module Wdpa
           @current_attributes
         end
 
-        # Remove temporary fields that were only used for lookups
+        # Remove fields that are not persisted (for_create: false in mapping; used only for relation resolution)
         def remove_fields
-          Wdpa::Portal::Utils::ProtectedAreaColumnMapper::PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT.each do |column_name|
-            next unless column_name
-
+          Wdpa::Portal::Utils::ProtectedAreaColumnMapper.columns_not_for_create.each do |column_name|
             @current_attributes.delete(column_name)
+            @current_attributes.delete(column_name.to_sym)
           end
         end
 
