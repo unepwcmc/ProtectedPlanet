@@ -9,20 +9,17 @@ module Wdpa
         end
 
         def create_models
-          resolve_main_table_relations
+          pa = resolve_main_table_relations
           resolve_associated_table_relations
 
-          # Relation callbacks are currently handled in resolve_* methods above.
-          # Uncomment this loop if we re-enable per-key relation methods.
-          # @current_attributes.each do |key, value|
-          #   @current_attributes[key] = send(key, value) if respond_to?(key, true)
-          # end
-
-          @current_attributes
+          {
+            pa: pa,
+            attributes_for_create: @current_attributes
+          }
         end
 
         private
-        
+
         def resolve_main_table_relations
           site_id = @current_attributes['site_id']
           site_pid = @current_attributes['site_pid'].presence || site_id&.to_s || nil
@@ -34,6 +31,7 @@ module Wdpa
           @current_attributes['protected_area'] = protected_area
           @current_attributes['protected_area_parcel'] = protected_area_parcel
           @current_attributes['name'] = protected_area_parcel&.name&.presence || protected_area&.name&.presence
+          protected_area_parcel || protected_area
         end
 
         def resolve_associated_table_relations

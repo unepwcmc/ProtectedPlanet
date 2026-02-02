@@ -203,9 +203,12 @@ module PortalRelease
       fields_updated = value(results, :global_stats, :fields_updated)
 
       gl_imported    = value(results, :green_list, :imported_count)
+      gl_skipped     = value(results, :green_list, :skipped_count)
       gl_soft_errors = Array(value(results, :green_list, :soft_errors)).size
 
-      pame_imported = value(results, :pame, :imported_count)
+      pame_imported     = value(results, :pame, :imported_count)
+      pame_skipped      = value(results, :pame, :skipped_count)
+      pame_soft_errors  = Array(value(results, :pame, :soft_errors)).size
 
       blocks = [
         { type: 'header', text: { type: 'plain_text', text: "Import core — #{status_text}", emoji: true } },
@@ -214,14 +217,14 @@ module PortalRelease
         {
           type: 'section',
           fields: [
-            { type: 'mrkdwn', text: "*Sources imported*\n#{src_count || 0}" },
+            { type: 'mrkdwn', text: "*Protected area sources imported*\n#{src_count || 0}" },
             { type: 'mrkdwn', text: "*Protected areas imported*\n#{pa_attrs || 0}" },
             { type: 'mrkdwn', text: "*Geometries (areas/parcels)*\n#{pa_geom_areas || 0} / #{pa_geom_parcels || 0}" },
             { type: 'mrkdwn', text: "*Global statistics fields updated*\n#{fields_updated || 0}" },
             { type: 'mrkdwn',
-              text: "*Green List*\n#{gl_imported || 0}#{gl_soft_errors.positive? ? " (#{gl_soft_errors} soft errors)" : ''}" },
+              text: "*Green List*\n#{gl_imported || 0} (#{gl_skipped.to_i} skipped) (#{gl_soft_errors} soft errors)" },
             { type: 'mrkdwn',
-              text: "*PAME*\n#{pame_imported || 0}" }
+              text: "*PAME*\n#{pame_imported || 0} (#{pame_skipped.to_i} skipped) (#{pame_soft_errors} soft errors)" }
           ]
         }
       ]

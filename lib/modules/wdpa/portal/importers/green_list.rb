@@ -9,10 +9,10 @@ module Wdpa
           Rails.logger.info 'Importing staging green list from portal view...'
 
           soft_errors = []
-          imported_count = 0
-
           adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new
           relation = adapter.greenlist_relation
+          total_count = relation.count
+          imported_count = 0
 
           relation.find_in_batches do |batch|
             batch.each do |row|
@@ -40,14 +40,16 @@ module Wdpa
             end
           end
 
-          Rails.logger.info "Green list import completed: #{imported_count} records imported"
-          notifier&.phase("#{imported_count} Green list records imported. #{soft_errors.count} soft errors.")
+          skipped_count = total_count - imported_count
+          message = "#{imported_count} Green list records imported. #{skipped_count} skipped. #{soft_errors.count} soft errors."
+          Rails.logger.info message
+          notifier&.phase(message)
 
-          build_result(imported_count, soft_errors, [])
+          build_result(imported_count, soft_errors, [], { skipped_count: skipped_count })
         rescue StandardError => e
           Rails.logger.error "Green list import failed: #{e.message}"
           notifier&.phase("Import failed at Green List importer: #{e.message}")
-          failure_result("Import failed at Green List importer: #{e.message}", 0)
+          failure_result("Import failed at Green List importer: #{e.message}", 0, { skipped_count: 0 })
         end
 
         def self.clear_existing_data
