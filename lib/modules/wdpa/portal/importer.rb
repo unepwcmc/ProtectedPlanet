@@ -5,10 +5,6 @@ module Wdpa
     class Importer < Wdpa::Shared::ImporterBase::Base
       def self.import(create_staging_materialized_views: true, only: nil, skip: nil, sample: nil, label: nil, release_id: nil, notifier: nil)
         notifier&.phase('Start running all importers.')
-        unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
-          error_msg = 'Required materialized views do not exist.'
-          raise StandardError, error_msg
-        end
 
         # Apply runtime flags
         Wdpa::Portal::ImportRuntimeConfig.reset!
@@ -19,10 +15,14 @@ module Wdpa
         Wdpa::Portal::ImportRuntimeConfig.release_id = release_id
         Wdpa::Portal::ImportRuntimeConfig.checkpoints_enabled = (ENV['PP_IMPORT_CHECKPOINTS_DISABLE'] != 'true')
 
-        # Create staging materialized views (only if create_staging_materialized_views is true)
-        # This will create the views and refresh them with data
+        # Create staging materialized views first when requested, so validation passes
         if create_staging_materialized_views
           Wdpa::Portal::Managers::ViewManager.ensure_staging_materialized_views!
+        end
+
+        unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
+          error_msg = 'Required materialized views do not exist.'
+          raise StandardError, error_msg
         end
 
         # Ensure staging tables exist (raise error if missing - should be created before import)
