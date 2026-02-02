@@ -20,7 +20,7 @@ class ProtectedArea < ApplicationRecord
   belongs_to :no_take_status
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
-  belongs_to :green_list_status
+  belongs_to :green_list_status, optional: true
 
   after_create :create_slug
   before_save :set_legacy_fields
@@ -43,7 +43,7 @@ class ProtectedArea < ApplicationRecord
 
   scope :non_candidate_green_list_areas, -> {
     includes(:green_list_status)
-    .where.not(green_list_statuses: {status: 'Candidate'}, green_list_status_id: nil)
+    .where.not(green_list_statuses: {gl_status: 'Candidate'}, green_list_status_id: nil)
   }
 
   scope :most_protected_marine_areas, -> (limit) {
@@ -82,11 +82,11 @@ class ProtectedArea < ApplicationRecord
   end
 
   def is_green_list
-    green_list_status&.status.in?(['Green Listed', 'Relisted'])
+    green_list_status&.gl_status.in?(['Green Listed', 'Relisted'])
   end
 
   def is_green_list_candidate
-    green_list_status&.status == 'Candidate'
+    green_list_status&.gl_status == 'Candidate'
   end
 
   def self.greenlist_coverage_growth(start_year = 0)
@@ -101,7 +101,7 @@ class ProtectedArea < ApplicationRecord
               SUM(pa.gis_area) OVER(ORDER BY pa.legal_status_updated_at) AS area
         FROM protected_areas pa
         JOIN green_list_statuses gls ON gls.id = pa.green_list_status_id
-        WHERE gls.status <> 'Candidate'
+        WHERE gls.gl_status <> 'Candidate'
         ORDER BY year
       ) t
       WHERE EXTRACT(YEAR FROM t.year) >= ?

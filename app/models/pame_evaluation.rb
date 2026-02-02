@@ -224,7 +224,7 @@ class PameEvaluation < ApplicationRecord
         pame_evaluations.asmt_year AS asmt_year,
         pame_evaluations.submit_year AS submityear,
         pame_evaluations.verif_eff AS verif_eff,
-        COALESCE(parcel_gl.status, pa_gl.status) AS gl_status,
+        COALESCE(parcel_gl.gl_status, pa_gl.gl_status) AS gl_status,
         COALESCE(pame_evaluations.asmt_url, 'N/A') AS asmt_url,
         pame_evaluations.info_url AS info_url,
         pame_evaluations.gov_act AS gov_act,
@@ -261,7 +261,7 @@ class PameEvaluation < ApplicationRecord
         pame_sources.id,
         COALESCE(parcel_designations.name, pa_designations.name, 'N/A'),
         COALESCE(protected_areas.marine, protected_area_parcels.marine),
-        COALESCE(parcel_gl.status, pa_gl.status)
+        COALESCE(parcel_gl.gl_status, pa_gl.gl_status)
     SQL
     evaluations = ActiveRecord::Base.connection.exec_query(query)
     columns = evaluations.columns

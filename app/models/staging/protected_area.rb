@@ -40,7 +40,7 @@ module Staging
 
     belongs_to :designation
     delegate :jurisdiction, to: :designation, allow_nil: true
-    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus'
+    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus', optional: true
 
     after_create :create_slug
     before_save :set_legacy_fields

@@ -25,7 +25,7 @@ class ProtectedAreaParcel < ApplicationRecord
   belongs_to :realm
   belongs_to :no_take_status
   belongs_to :designation
-  belongs_to :green_list_status
+  belongs_to :green_list_status, optional: true
   delegate :jurisdiction, to: :designation, allow_nil: true
 
   after_create :create_slug
