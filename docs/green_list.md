@@ -13,9 +13,9 @@ The IUCN Green List of Protected and Conserved Areas is a global standard for pr
 ## Data Model
 
 ### Tables
-- `green_list_statuses` - Status definitions (status, expiry_date)
-- `protected_areas` - Main protected area records with green_list_status_id and green_list_url
-- `protected_area_parcels` - Parcel records with green_list_status_id and green_list_url
+- `green_list_statuses` - Status definitions (gl_status, gl_expiry)
+- `protected_areas` - Main protected area records with green_list_status_id and gl_link
+- `protected_area_parcels` - Parcel records with green_list_status_id and gl_link
 
 ### Relationships
 - `ProtectedArea` belongs_to `GreenListStatus`
@@ -32,7 +32,6 @@ site_id,status,expiry_date,url
 
 ### Importers
 - **Portal Importer**: `Wdpa::Portal::Importers::GreenList` - imports to staging tables
-- **Live Importer**: `Wdpa::GreenListImporter` - imports to live tables
 
 Both importers update both `protected_areas` and `protected_area_parcels` tables to maintain consistency.
 
@@ -48,9 +47,6 @@ If needed, only these components require updates:
 ```ruby
 # Portal importer (staging)
 Wdpa::Portal::Importers::GreenList.import_to_staging(notifier: notifier)
-
-# Live importer
-Wdpa::GreenListImporter.import
 ```
 
 ### Query Data
