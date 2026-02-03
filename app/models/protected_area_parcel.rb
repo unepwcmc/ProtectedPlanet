@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 # This file was copied from app/models/protected_area.rb then modified to only including/linking needed columns
+# IMPORTANT!!!!
+# If you update this file, you likely need to update the protected_area.rb file as well
 
 class ProtectedAreaParcel < ApplicationRecord
   # Make sure to make the uniqueness based on the combination of site_id + site_pid
@@ -36,6 +38,12 @@ class ProtectedAreaParcel < ApplicationRecord
     update_attributes(slug: updated_slug)
   end
 
+  # As of 01Apr2025 we do not have enough data to show so hidding see app/models/country.rb
+  #  # PAs with green list on the PA record only (ignores parcel-level green list).
+  #  scope :greenlisted_parcels, -> {
+  #   where.not(green_list_status_id: nil)
+  # }
+  
   private
 
   # To be removed after migration - ensures wdpa_id and wdpa_pid are filled for backward compatibility

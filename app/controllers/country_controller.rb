@@ -17,8 +17,14 @@ class CountryController < ApplicationController
 
     @flag_path = flag_path(@country.name)
 
-    # exclude transboundary PAs where the PAME evaluation is associated only with another country
-    @total_pame = @country.protected_areas.with_pame_evaluations.includes(pame_evaluations: :countries).where(pame_evaluations: { countries: { id: @country.id } }).count
+    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
+    @total_pame = @country
+                  .protected_areas
+                  .pas_with_pame_on_self_only
+                  .joins(pame_evaluations: :countries)
+                  .where(countries: { id: @country.id })
+                  .distinct
+                  .count
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {

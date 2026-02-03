@@ -70,7 +70,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       'marine' => true,
       'has_irreplaceability_info' => true,
       'has_parcc_info' => false,
-      'is_green_list' => false,
+      'pa_or_any_its_parcels_is_greenlisted' => false,
       'is_oecm' => false,
       'coordinates' => [2.0, 1.0],
       'countries_for_index' => [
@@ -197,5 +197,72 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       [{ protected_area: pa1, visits: 4 }, { protected_area: pa2, visits: 1 }],
       ProtectedArea.most_visited(DateTime.new(1955, 9, 12))
     )
+  end
+
+  # Green list scopes and instance methods
+  test '.pas_with_green_list_on_self_only returns only PAs with green_list_status on the PA record' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa_with_gl = FactoryGirl.create(:protected_area, site_id: 901, green_list_status: gl)
+    FactoryGirl.create(:protected_area, site_id: 902)
+
+    result = ProtectedArea.pas_with_green_list_on_self_only
+    assert_includes result, pa_with_gl
+    assert_equal 1, result.count
+  end
+
+  test '.pas_with_green_list_on_self_or_any_parcel returns PAs with green list on self or any parcel' do
+    gl_pa = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    gl_parcel = FactoryGirl.create(:green_list_status, gl_status: 'Relisted')
+    pa_self = FactoryGirl.create(:protected_area, site_id: 801, green_list_status: gl_pa)
+    pa_parcel_only = FactoryGirl.create(:protected_area, site_id: 802)
+    FactoryGirl.create(:protected_area_parcel, site_id: pa_parcel_only.site_id, site_pid: '802_A', green_list_status: gl_parcel)
+    pa_none = FactoryGirl.create(:protected_area, site_id: 803)
+
+    result = ProtectedArea.pas_with_green_list_on_self_or_any_parcel
+    assert_includes result.to_a, pa_self
+    assert_includes result.to_a, pa_parcel_only
+    refute_includes result.to_a, pa_none
+    assert result.count >= 2
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlisted is true when PA has Green Listed or Relisted' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa = FactoryGirl.create(:protected_area, site_id: 701, green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlisted
+
+    relisted = FactoryGirl.create(:green_list_status, gl_status: 'Relisted')
+    pa2 = FactoryGirl.create(:protected_area, site_id: 702, green_list_status: relisted)
+    assert pa2.pa_or_any_its_parcels_is_greenlisted
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlisted is true when only a parcel is green listed' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa = FactoryGirl.create(:protected_area, site_id: 703)
+    FactoryGirl.create(:protected_area_parcel, site_id: pa.site_id, site_pid: '703_A', green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlisted
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlisted is false when PA and parcels have no green list' do
+    pa = FactoryGirl.create(:protected_area, site_id: 704)
+    assert_not pa.pa_or_any_its_parcels_is_greenlisted
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlist_candidate is true when PA is Candidate' do
+    gl = FactoryGirl.create(:green_list_status, :candidate)
+    pa = FactoryGirl.create(:protected_area, site_id: 705, green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlist_candidate
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlist_candidate is true when only a parcel is Candidate' do
+    gl = FactoryGirl.create(:green_list_status, :candidate)
+    pa = FactoryGirl.create(:protected_area, site_id: 706)
+    FactoryGirl.create(:protected_area_parcel, site_id: pa.site_id, site_pid: '706_A', green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlist_candidate
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlist_candidate is false when PA is Green Listed' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa = FactoryGirl.create(:protected_area, site_id: 707, green_list_status: gl)
+    assert_not pa.pa_or_any_its_parcels_is_greenlist_candidate
   end
 end

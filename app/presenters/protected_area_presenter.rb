@@ -18,11 +18,9 @@ class ProtectedAreaPresenter
     @protected_area = protected_area
   end
 
+  # List of affiliation objects (each has site_pid, affiliation, and link fields).
   def affiliations
-    [
-      green_list_status_info,
-      parcc_info
-    ].compact
+    [greenlist_status_by_pa_and_all_its_parcels, parcc_info].compact.flatten
   end
 
   def external_links
@@ -156,18 +154,22 @@ class ProtectedAreaPresenter
     ]
   end
 
-  def green_list_status_info
-    return unless protected_area.green_list_status_id
+  def greenlist_status_by_pa_and_all_its_parcels
+    protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).map do |parcel|
+      gls = parcel.green_list_status
+      next if gls.blank?
 
-    gls = protected_area.green_list_status
-    {
-      affiliation: 'greenlist',
-      date: gls.gl_expiry,
-      image_url: green_list_logo(gls.gl_status),
-      link_title: "View the Green List page for #{protected_area.name}",
-      type: gls.gl_status,
-      url: gls.gl_link
-    }
+      {
+        site_pid: parcel.site_pid,
+        affiliation: 'greenlist',
+        date: gls.gl_expiry,
+        image_url: green_list_logo(gls.gl_status),
+        link_title: "View the Green List page for #{parcel.name}",
+        link_url: gls.gl_link,
+        type: gls.gl_status,
+        url: gls.gl_link
+      }
+    end.compact
   end
 
   def green_list_logo(gl_status)
@@ -178,11 +180,15 @@ class ProtectedAreaPresenter
   def parcc_info
     return unless protected_area.has_parcc_info
 
-    {
-      image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
-      link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
-      link_url: url_for_related_source('parcc_info', protected_area)
-    }
+    protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).map do |parcel|
+      {
+        site_pid: parcel.site_pid,
+        affiliation: 'parcc_info',
+        image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+        link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
+        link_url: url_for_related_source('parcc_info', protected_area)
+      }
+    end
   end
 
   attr_reader :protected_area

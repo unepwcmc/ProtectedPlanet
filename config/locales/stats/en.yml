@@ -1,7 +1,5 @@
 en:
   stats:
-    affiliations: 
-      title: Affiliations
     citation: Citation Text
     coverage: Coverage
     coverage_marine:
@@ -29,19 +27,12 @@ en:
       title_wdpa_oecm: Growth in protected area and OECM coverage
     governance: 
       title: Governance types
-    green-list:
-      intro: This site is part of the IUCN Green List Community
-      type: Green List Status
-      date: Certification Expiry Date
-      title: View the IUCN profile for %{site_name}
-      url: More info
     iucn-categories: 
       title: IUCN Management Categories
     location: Location
     management-plan:
       button: View Management Plan
       button-title: Download the Management Plan for %{site}
-    no-infomation: No information available
     nr-report-title: th National Report coverage
     nr_latest: Latest National Report
     oecm:

@@ -170,31 +170,32 @@ class RegionPresenter
     }
   end
 
-  def top_gl_coverage_countries
-    # List of all countries with at least one green list PA, grouped by region
-    countries = Country.countries_with_gl.where(region: region)
-    corresponding_stats = get_gl_data_for_countries(countries)
+  # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb
+  # def top_gl_coverage_countries
+  #   # List of all countries with at least one green list PA, grouped by region
+  #   countries = Country.countries_with_gl.where(region: region)
+  #   corresponding_stats = get_gl_data_for_countries(countries)
 
-    {
-      regionTitle: region.name,
-      countries: fill_chart(corresponding_stats)
-    }
-  end
+  #   {
+  #     regionTitle: region.name,
+  #     countries: fill_chart(corresponding_stats)
+  #   }
+  # end
 
-  def get_gl_data_for_countries(countries)
-    top_countries = countries.map do |country|
-      total_area = country.country_statistic.total_area
-      total_gl_area = country.total_gl_coverage
-      percentage_of_total_area = ((total_gl_area / total_area).to_f * 100).round(1)
+  # def get_gl_data_for_countries(countries)
+  #   top_countries = countries.map do |country|
+  #     total_area = country.country_statistic.total_area
+  #     total_gl_area = country.total_gl_coverage
+  #     percentage_of_total_area = ((total_gl_area / total_area).to_f * 100).round(1)
       
-      { country: country, total_area: total_gl_area, percentage: percentage_of_total_area }
-    end
+  #     { country: country, total_area: total_gl_area, percentage: percentage_of_total_area }
+  #   end
     
-    top_countries.sort! do |a, b|
-      # If rounded %s happen to be the same, then sort by area
-      b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage]
-    end.take(10)
-  end
+  #   top_countries.sort! do |a, b|
+  #     # If rounded %s happen to be the same, then sort by area
+  #     b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage]
+  #   end.take(10)
+  # end
 
   def fill_chart(stats)
     # Always return at least an array of empty chart bars (hashes symbolising them here)

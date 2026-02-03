@@ -97,7 +97,7 @@ module SearchHelper
 
   def title_with_filter(params)
     main_filter       = params['main']
-    green_list_filter = params['is_green_list']
+    green_list_filter = params['pa_or_any_its_parcels_is_greenlisted']
 
     if green_list_filter == 'true' && main_filter.nil?
       return 'Protected Areas with Green List status'

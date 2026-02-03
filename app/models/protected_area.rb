@@ -1,3 +1,5 @@
+# IMPORTANT!!!!
+# If you update this file, you likely need to update the protected_area_parcel.rb file as well
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
   include SourceHelper
@@ -37,15 +39,6 @@ class ProtectedArea < ApplicationRecord
     where(marine: true)
   }
 
-  scope :green_list_areas, -> {
-    where.not(green_list_status_id: nil)
-  }
-
-  scope :non_candidate_green_list_areas, -> {
-    includes(:green_list_status)
-    .where.not(green_list_statuses: {gl_status: 'Candidate'}, green_list_status_id: nil)
-  }
-
   scope :most_protected_marine_areas, -> (limit) {
     where("gis_marine_area IS NOT NULL").
     order(gis_marine_area: :desc).limit(limit)
@@ -64,8 +57,33 @@ class ProtectedArea < ApplicationRecord
     where.not(legal_status_id: 4)
   }
 
-  scope :with_pame_evaluations, -> {
+  # PAs with green list on the PA record only (ignores parcel-level green list).
+  scope :pas_with_green_list_on_self_only, -> {
+    where.not(green_list_status_id: nil)
+  }
+
+  # PAs with green list on the PA record and/or on any parcel (parcel-aware).
+  # This still return PAs not parcels you will need to do .protected_area_parcels to get the parcels
+  scope :pas_with_green_list_on_self_or_any_parcel, -> {
+    left_joins(:protected_area_parcels)
+      .where("protected_areas.green_list_status_id IS NOT NULL OR protected_area_parcels.green_list_status_id IS NOT NULL")
+      .distinct
+  }
+
+  # PAs with PAME evaluations on the PA record only (ignores parcel-level PAME).
+  scope :pas_with_pame_on_self_only, -> {
     includes(:pame_evaluations).where.not(pame_evaluations: {id: nil})
+  }
+
+  # PAs with PAME evaluations on the PA record and/or on any parcel (parcel-aware).
+  scope :pas_with_pame_on_self_or_any_parcel, -> {
+    left_joins(:pame_evaluations)
+      .joins(<<~SQL.squish)
+        LEFT JOIN protected_area_parcels ON protected_area_parcels.site_id = protected_areas.site_id
+        LEFT JOIN pame_evaluations pe_parcel ON pe_parcel.protected_area_parcel_id = protected_area_parcels.id
+      SQL
+      .where("pame_evaluations.id IS NOT NULL OR pe_parcel.id IS NOT NULL")
+      .distinct
   }
 
   def self.most_visited(date, limit=3)
@@ -81,40 +99,45 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
-  def is_green_list
-    green_list_status&.gl_status.in?(['Green Listed', 'Relisted'])
+  def pa_or_any_its_parcels_is_greenlisted
+    listed = ['Green Listed', 'Relisted']
+    green_list_status&.gl_status.in?(listed) ||
+      protected_area_parcels.joins(:green_list_status).where(green_list_statuses: { gl_status: listed }).exists?
   end
 
-  def is_green_list_candidate
-    green_list_status&.gl_status == 'Candidate'
+  def pa_or_any_its_parcels_is_greenlist_candidate
+    green_list_status&.gl_status == 'Candidate' ||
+      protected_area_parcels.joins(:green_list_status).where(green_list_statuses: { gl_status: 'Candidate' }).exists?
   end
 
-  def self.greenlist_coverage_growth(start_year = 0)
-    # Is in this format: [{year: year, value: area}...]
-    # Takes an optional start year from which to start counting
-    growth = <<-SQL
-      SELECT DISTINCT ON(t.year) JSON_BUILD_OBJECT(
-        'year', t.year, 'value', t.area
-      ) AS data
-      FROM (
-        SELECT pa.legal_status_updated_at AS year,
-              SUM(pa.gis_area) OVER(ORDER BY pa.legal_status_updated_at) AS area
-        FROM protected_areas pa
-        JOIN green_list_statuses gls ON gls.id = pa.green_list_status_id
-        WHERE gls.gl_status <> 'Candidate'
-        ORDER BY year
-      ) t
-      WHERE EXTRACT(YEAR FROM t.year) >= ?
-    SQL
+  # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb
+  # Growth chart: PA-only for now; parcel gis_area could be included in a future update.
+  # def self.greenlist_coverage_growth(start_year = 0)
+  #   # Is in this format: [{year: year, value: area}...]
+  #   # Takes an optional start year from which to start counting
+  #   growth = <<-SQL
+  #     SELECT DISTINCT ON(t.year) JSON_BUILD_OBJECT(
+  #       'year', t.year, 'value', t.area
+  #     ) AS data
+  #     FROM (
+  #       SELECT pa.legal_status_updated_at AS year,
+  #             SUM(pa.gis_area) OVER(ORDER BY pa.legal_status_updated_at) AS area
+  #       FROM protected_areas pa
+  #       JOIN green_list_statuses gls ON gls.id = pa.green_list_status_id
+  #       WHERE gls.gl_status <> 'Candidate'
+  #       ORDER BY year
+  #     ) t
+  #     WHERE EXTRACT(YEAR FROM t.year) >= ?
+  #   SQL
 
-    result = ActiveRecord::Base.connection.execute(
-      ActiveRecord::Base.send(:sanitize_sql_array, [
-        growth, start_year
-      ])
-    )
+  #   result = ActiveRecord::Base.connection.execute(
+  #     ActiveRecord::Base.send(:sanitize_sql_array, [
+  #       growth, start_year
+  #     ])
+  #   )
 
-    result.map { |r| JSON.parse(r['data']) }
-  end
+  #   result.map { |r| JSON.parse(r['data']) }
+  # end
 
   def sources_attributes_for_current_pa_and_all_parcels
     result = {}
@@ -167,8 +190,8 @@ class ProtectedArea < ApplicationRecord
 
   def special_status
     [
-      ({ name: 'is_green_list' } if is_green_list),
-      ({ name: 'is_green_list_candidate' } if is_green_list_candidate),
+      ({ name: 'pa_or_any_its_parcels_is_greenlisted' } if pa_or_any_its_parcels_is_greenlisted),
+      ({ name: 'pa_or_any_its_parcels_is_greenlist_candidate' } if pa_or_any_its_parcels_is_greenlist_candidate),
       ({ name: 'has_parcc_info' } if has_parcc_info),
       ({ name: 'is_transboundary' } if is_transboundary)
     ].compact
@@ -216,12 +239,6 @@ class ProtectedArea < ApplicationRecord
     overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
     overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
     overlap
-  end
-
-  # As of 08Apr2025 this doesn't seem to be used
-  def self.global_marine_coverage
-    reported_areas = marine_areas.pluck(:reported_marine_area)
-    reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
   def self.sum_of_most_protected_marine_areas

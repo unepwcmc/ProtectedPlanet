@@ -29,7 +29,7 @@ class DownloadWorkers::General < DownloadWorkers::Base
     when 'marine'
       ProtectedArea.marine_areas.pluck(:site_id)
     when 'greenlist'
-      ProtectedArea.green_list_areas.pluck(:site_id)
+      ProtectedArea.pas_with_green_list_on_self_only.pluck(:site_id)
     when 'oecm'
       ProtectedArea.oecms.pluck(:site_id)
     when 'wdpa'

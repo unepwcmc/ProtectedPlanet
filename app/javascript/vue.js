@@ -70,6 +70,7 @@ import IconExclamationCircle from './components/icon/ExclamationCircle'
 import AttributesProtectedAreaParcels from './components/attributes/AttributesProtectedAreaParcels'
 import AttributesProtectedAreaParcelsSources from './components/attributes/AttributesProtectedAreaParcelsSources'
 import AttributesPames from './components/attributes/AttributesPames'
+import AttributesAffiliations from './components/attributes/AttributesAffiliations'
 import AttributesParcelsDropdown from './components/attributes/AttributesParcelsDropdown'
 import BannerBanner from './components/banner/Banner'
 
@@ -159,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         AttributesProtectedAreaParcels,
         AttributesProtectedAreaParcelsSources,
         AttributesPames,
+        AttributesAffiliations,
         AttributesParcelsDropdown,
         BannerBanner
       },

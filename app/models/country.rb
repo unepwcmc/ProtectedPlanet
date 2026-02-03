@@ -116,22 +116,29 @@ class Country < ApplicationRecord
     parent&.staging_pame_evaluations&.joins(protected_area: :countries)&.where(countries: { id: id })&.pluck(:protected_area_id)&.uniq&.count
   end
 
-  def protected_areas_with_iucn_categories
-    valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
-    chart_categories = iucn_categories.where(
-      "iucn_categories.name IN (#{valid_categories})"
-    )
-  end
+  # As of 03Feb2026 we don't use it see app/presenters/region_presenter.rb
+  # def self.countries_with_gl
+  #   joins(:protected_areas).merge(ProtectedArea.pas_with_green_list_on_self_only).distinct
+  # end
 
-  def self.countries_with_gl
-    joins(:protected_areas).where.not(protected_areas: { green_list_status_id: nil }).distinct
-  end
+  # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb app/presenters/region_presenter.rb
+  # def total_gl_coverage
+  #   # 1. Add up reported_area for green-listed parcels in this country (lightweight: no geom)
+  #   parcel_total = protected_area_parcels
+  #                 .greenlisted_parcels
+  #                 .sum(:reported_area)
+  #                 .to_f
 
-  def total_gl_coverage
-    protected_areas.green_list_areas.reduce(0) do |sum, x|
-      sum + x.reported_area
-    end
-  end
+  #   # 2. Add up reported_area for GL PAs that have no parcels
+  #   pa_total = protected_areas
+  #             .pas_with_green_list_on_self_only
+  #             .left_joins(:protected_area_parcels)
+  #             .where(protected_area_parcels: { id: nil })
+  #             .sum(:reported_area)
+  #             .to_f
+
+  #   parcel_total + pa_total
+  # end
 
   def self.data_providers
     joins(:protected_areas).uniq

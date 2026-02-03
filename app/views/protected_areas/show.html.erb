@@ -46,9 +46,10 @@
           classes: 'page__col-child',
           for_pdf: @for_pdf 
           } %>
-        <%= render partial: "partials/stats/stats-affiliations", locals: { 
+        <%= render partial: "partials/attributes/attributes-affiliations", locals: {
           classes: 'page__col-child',
-          affiliations: @presenter.affiliations
+          affiliations: @presenter.affiliations,
+          for_pdf: @for_pdf
         } %>
       </div>
     </div>

@@ -3,9 +3,9 @@ require 'test_helper'
 class SearchAggregationTest < ActiveSupport::TestCase
   test '#all returns a hash with all aggregations configurations' do
     expected_aggregations = {
-      "is_green_list" => {
+      "pa_or_any_its_parcels_is_greenlisted" => {
         "terms" => {
-          "field" => "is_green_list"
+          "field" => "pa_or_any_its_parcels_is_greenlisted"
         }
       },
       "has_irreplaceability_info" => {

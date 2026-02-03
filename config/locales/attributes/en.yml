@@ -18,3 +18,12 @@ en:
       total: Total Sources
       updated: Updated
     parcel_id: Parcel ID
+    green-list:
+      intro: This site is part of the IUCN Green List Community
+      type: Green List Status
+      date: Certification Expiry Date
+      title: View the IUCN profile for %{site_name}
+      url: More info
+    affiliations: 
+      title: Affiliations
+    no-information: No information available
