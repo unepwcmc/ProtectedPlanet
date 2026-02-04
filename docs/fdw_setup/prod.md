@@ -1,8 +1,5 @@
 # ProtectedPlanet ↔ Portal FDW Integration (Production)
 
-## Goal
-- Allow the PP database to read specific tables from the Portal database via PostgreSQL FDW.
-
 ## Prerequisites
 - Portal DB (Postgres) running with a read-only account:
   - CREATE ROLE portal_ro_user LOGIN PASSWORD '...';

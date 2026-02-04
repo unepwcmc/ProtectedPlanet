@@ -3,27 +3,23 @@
 To overcome difficulties with the installation of old packages/versions on different machines and make the setup faster, you can choose to run this project with [Docker](https://docs.docker.com/get-docker/).
 
 ## Prerequisites
-- Docker 20.10.22
-- SQL dump of the production database from the Centre's AWS S3
+- Docker 29.2.0
+- Docker Desktop (optional but easier to manage)
 - Freshly cloned repository with updated .env (Keeper)
  
 _To avoid potential problems, remove `node_modules` from your current directory._
   
 
 ## Step 1: Docker setup
-**1.1. Download and/or build all required images:**
+
+Run compose up to build/run all services:
 
 ```
-SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose build
+docker compose up
 ```
+ 
 
-**1.2. Start the containers:**
-
-```
-SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose up
-```
-
-The following services should be running now:
+After very long long long build time the following services should be running:
 - web (protectedplanet-web)
 - db (protectedplanet-db)
 - webpacker (protectedplanet-webpacker)
@@ -40,82 +36,32 @@ To attach to individual container's console:
 
 `docker attach protectedplanet-web`
 
-## Step 2: DB setup (New method)
-**2.1. Run migrations for development**
+## Step 2: Database restore
+**2.1. Recommended: restore a production dump into Docker Postgres**
 
-```
-docker exec -it protectedplanet-web rake db:create
-```
+The recommended way to populate your local database is:
 
-** Since in the next step [Step 3: PP (WDPA) import](#step-3:-pp-(wdpa)-import) we are importing production db dump so we do not want to duplicate some table content again to avoid errors while importing db. However, if you find the new method does not work for you please update this section as I am the first developer using this method
+- Start the stack:
 
-## Step 2: Rails setup
+  ```bash
+  SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose up
+  ```
 
-## ProtectedPlanet-db fetch
-Migration files are in ProtectedPlanet-db folder and from time to time if your db is not up to date then 
-- cd inside db folder
-- git fetch
-- git merge origin/master
-- You should now have the latest db repo
+- Create a fresh dump from the PP production DB server (e.g. `pp_production_backup.sql`)
+- Restore it into your local Docker Postgres:
+  - In your local machine terminal run `psql -h localhost -p 5441 -U postgres pp_development < pp_production_backup.sql`
+  - When prompted for the Postgres password, use the value of `POSTGRES_PASSWORD` from your `.env` file.
 
-**2.1. Run migrations for development**
-
-```
-docker exec -it protectedplanet-web rake db:create db:migrate db:seed
-```
-
-**2.2. Run migrations for testing**
-
-```
-docker exec -e "RAILS_ENV=test" -it protectedplanet-web rake db:create db:migrate db:seed
-```
-
-## Step 3: PP (WDPA) import
-
-You will need to download a recent copy of the PP production database. If you are using [aws cli](https://github.com/unepwcmc/wiki/wiki/AWS-CLI), you can run the following:
-```
-aws s3 ls # see buckets
-aws s3 ls s3://pp.bkp --recursive --human-readable --summarize # see contents of bucket
-aws s3 cp s3://pp.bkp/Weekly/db/pp_weekly/2023.02.01.05.00.06/pp_weekly.tar pp.tar # copy a pp db dump to a local file
-```
-
-Once downloaded unzip the .tar file until you see .sql file
-Copy the .sql file FULL path and use the command below to import the sql dump into the docker database
-Replace {PATH_TO_WDPA_SQL_DUMP} with the actual file path
-
-```
-SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run -v {PATH_TO_WDPA_SQL_DUMP}:/import_database/pp_development.sql -e "PGPASSWORD={PGPASSWORD_FROM_ENV_FILE}" web bash -c "psql pp_development < /import_database/pp_development.sql -U postgres -h 0.0.0.0"
-```
-*** Notice! the pp_development here has to be the same set for variable POSTGRES_DBNAME in .env file
-
-*** You might see the following error
-  could not connect to server: Connection refused. Is the server running on host "protectedplanet-db" (172.18.0.4) and accepting TCP/IP connections on port 5432.
-
-  That is because web container is run before db container. The solution for this is do not stop any running containers instead run the command again.
-
-## Step 4: CMS setup
-Step 3 should populate the database with the newest CMS data. Step 4.1. will add minor changes (e.g. correct images)
-
-**4.1. Finish CMS setup**
-
-```
-docker exec -it protectedplanet-web rake cms_categories:import
-
-docker exec -it protectedplanet-web rake comfy:staging_import
-
-docker exec -it protectedplanet-web rake 'comfy:cms_seeds:import[protected-planet, protected-planet]'
-```
-
-**4.2.  Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`**
-Credentials are found in your .env file under COMFY_ADMIN_USERNAME and COMFY_ADMIN_PASSWORD
-
-**4.3. Reindex elasticsearch**
+## Step 2: (Optional) Reindex elasticsearch
 
 ```
 docker exec -it protectedplanet-web rake search:reindex
 ```
 
-## Step 5: API setup (optional)
+## Step 3: Set up database connection with Data Management Portal 
+[Read here](fdw_setup/index.md)
+
+## Step 4: API setup (optional)
 The [Protected Planet API](https://github.com/unepwcmc/protectedplanet-api) is a separate Sinatra/Grape application that uses the same database and is included as a service in the docker-compose.yml.
 
 To use this service, you need to add the path to your local protectedplanet-api directory in your .env file under the `API_PATH` key.

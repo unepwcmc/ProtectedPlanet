@@ -1,8 +1,16 @@
 FROM ruby:2.6.3
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
+# Buster is EOL, so point APT to Debian archive mirrors before updating
+RUN printf 'deb http://archive.debian.org/debian buster main\n\
+deb http://archive.debian.org/debian buster-updates main\n\
+deb http://archive.debian.org/debian-security buster/updates main\n' > /etc/apt/sources.list \
+    && printf 'Acquire::Check-Valid-Until \"0\";\nAcquire::Retries \"3\";\n' > /etc/apt/apt.conf.d/99no-check-valid \
+    && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false update
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
-RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && apt-get install --yes nodejs
+RUN echo 'deb [trusted=yes] https://deb.nodesource.com/node_12.x buster main' > /etc/apt/sources.list.d/nodesource.list \
+    && echo 'deb-src [trusted=yes] https://deb.nodesource.com/node_12.x buster main' >> /etc/apt/sources.list.d/nodesource.list \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && apt-get install --yes nodejs
 RUN apt-get install -y \
         apt-utils \
         libgdal-dev \
