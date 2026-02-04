@@ -19,10 +19,6 @@ module Staging
       foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'source_id'
 
-    # As of 09Apr It seems networks are not used in the system now
-    # has_many :networks_protected_areas
-    # has_many :networks, through: :networks_protected_areas
-
     has_many :pame_evaluations, class_name: 'Staging::PameEvaluation'
     # has_many :story_map_links
 

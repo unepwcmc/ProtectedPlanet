@@ -11,10 +11,6 @@ class ProtectedAreaParcel < ApplicationRecord
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sources
 
-  # As of 09Apr It seems networks are not used in the system now
-  # has_many :networks_protected_areas
-  # has_many :networks, through: :networks_protected_areas
-
   # We should only access pame_evaluations through protected_area
   has_many :pame_evaluations
   # has_many :story_map_links

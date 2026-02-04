@@ -128,63 +128,6 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     assert_equal 1, nearest.length
   end
 
-  test '.as_api_feeder returns the PA as JSON with requested attributes' do
-    time = Time.local(2008, 9, 1, 10, 5, 0)
-
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
-
-    jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
-    iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
-    designation = FactoryGirl.create(:designation, id: 654, name: 'National', jurisdiction: jurisdiction)
-    governance = FactoryGirl.create(:governance, id: 111, name: 'Bone Man')
-    legal_status = FactoryGirl.create(:legal_status, id: 987, name: 'Proposed')
-
-    pa = FactoryGirl.create(:protected_area,
-      name: 'Manbone', countries: [country],
-      original_name: 'Manboné', iucn_category: iucn_category,
-      designation: designation, governance: governance,
-      legal_status: legal_status, legal_status_updated_at: time, marine: true, site_id: 555_999,
-      reported_area: 10.2)
-
-    expected_json = {
-      'site_id' => 555_999,
-      'name' => 'Manbone',
-      'original_name' => 'Manboné',
-      'marine' => true,
-      'legal_status_updated_at' => time,
-      'reported_area' => 10.2,
-      'countries' => [
-        {
-          'name' => 'Manboneland',
-          'iso_3' => 'MBN',
-          'region' => {
-            'name' => 'North Manmerica'
-          }
-        }
-      ],
-      'iucn_category' => {
-        'name' => 'IA'
-      },
-      'designation' => {
-        'name' => 'National',
-        'jurisdiction' => {
-          'name' => 'International'
-        }
-      },
-      'legal_status' => {
-        'name' => 'Proposed'
-      },
-      'governance' => {
-        'name' => 'Bone Man'
-      },
-      'networks_no' => 0,
-      'designations_no' => 0
-    }
-
-    assert_equal expected_json, pa.as_api_feeder
-  end
-
   test '::most_visited, given a date, returns an array of most visited PAs for the month' do
     pa1 = FactoryGirl.create(:protected_area, site_id: 345)
     pa2 = FactoryGirl.create(:protected_area, site_id: 123)

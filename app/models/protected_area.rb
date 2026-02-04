@@ -9,8 +9,6 @@ class ProtectedArea < ApplicationRecord
   has_and_belongs_to_many :sources
 
   has_many :protected_area_parcels, foreign_key: 'site_id', primary_key: 'site_id', dependent: :destroy
-  has_many :networks_protected_areas, dependent: :destroy
-  has_many :networks, through: :networks_protected_areas
   has_many :pame_evaluations
   has_many :story_map_links
 
@@ -195,24 +193,6 @@ class ProtectedArea < ApplicationRecord
       ({ name: 'has_parcc_info' } if has_parcc_info),
       ({ name: 'is_transboundary' } if is_transboundary)
     ].compact
-  end
-
-  def as_api_feeder
-    attributes = self.as_json(
-      only: [:site_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
-    )
-
-    relations = {
-      countries: countries_for_index.map {|c| {'name' => c.try(:name), 'iso_3' => c.try(:iso_3), 'region' => {'name' => c.try(:region_for_index).try(:name)}}},
-      iucn_category: {'name' => iucn_category.try(:name)},
-      designation: {'name' => designation.try(:name), 'jurisdiction' => {'name' => designation.try(:jurisdiction).try(:name)}},
-      legal_status: {'name' => legal_status.try(:name)},
-      governance: {'name' => governance.try(:name)},
-      networks_no: networks.count,
-      designations_no: networks.detect(&:designation).try(:protected_areas).try(:count) || 0
-    }.as_json
-
-    relations.merge attributes
   end
 
   def bounds

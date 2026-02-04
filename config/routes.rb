@@ -38,20 +38,6 @@ Rails.application.routes.draw do
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
     resources :downloads, only: %i[show create update]
 
-    namespace :api do
-      namespace :v3 do
-        resources :protected_areas, only: [:show] do
-          member do
-            get 'geojson'
-            get 'overlap/:comparison_site_id', to: 'protected_areas#overlap'
-          end
-        end
-
-        get '/networks/:id/bounds', to: 'networks#bounds'
-        get '/search/by_point', to: 'search#by_point'
-      end
-    end
-
     ## Only CMS routes are present below
 
     get '/marine/download_designations', to: 'marine#download_designations'

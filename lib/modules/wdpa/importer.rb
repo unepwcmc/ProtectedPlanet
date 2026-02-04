@@ -19,7 +19,6 @@ class Wdpa::Importer
     Wdpa::SourceImporter.import wdpa_release
     Wdpa::ProtectedAreaImporter.import
     Wdpa::GeometryRatioCalculator.calculate
-    Wdpa::NetworkImporter.import # As of 20Aug2025, this is no longer used see lib/modules/wdpa/network_importer.rb
     Wdpa::Shared::Importer::CountryOverseasTerritories.update_live_table
     Wdpa::Shared::Importer::GlobalStats.import_live
     Wdpa::Shared::Importer::StoryMapLinkList.import_live

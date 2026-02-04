@@ -26,8 +26,6 @@ module Staging
       primary_key: 'site_id',
       dependent: :destroy
 
-    has_many :networks_protected_areas, dependent: :destroy
-    has_many :networks, through: :networks_protected_areas
     has_many :pame_evaluations, class_name: 'Staging::PameEvaluation'
     has_many :story_map_links, class_name: 'Staging::StoryMapLink'
 
