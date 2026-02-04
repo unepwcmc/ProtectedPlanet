@@ -72,21 +72,13 @@ services:
     stdin_open: true
     tty: true
   elasticsearch:
-    # platform: linux/x86_64
+    platform: linux/x86_64
     container_name: protectedplanet-elasticsearch
     image: elasticsearch:8.6.0
     environment:
-      - cluster.name=docker-cluster
-      - node.name=es01
-      # Single-node in Docker avoids cluster formation / bootstrap failures
       - discovery.type=single-node
-      # Disable memory lock; it often causes "exited unexpectedly" in Docker (cgroups/limits)
-      - bootstrap.memory_lock=false
+      - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     ports:
       - "9200:9200"
     networks:

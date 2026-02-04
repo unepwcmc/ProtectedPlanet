@@ -67,8 +67,6 @@ psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
 
 ### 2.1 Set environment variables
 ```bash
-# Portal DB connection details - using Docker
-export PORTAL_DB_HOST=host.docker.internal
 # Or localhost depending on where is your db
 export PORTAL_DB_HOST=host.docker.internal 
 export PORTAL_DB_PORT=5432
