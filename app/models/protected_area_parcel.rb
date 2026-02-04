@@ -34,11 +34,10 @@ class ProtectedAreaParcel < ApplicationRecord
     update_attributes(slug: updated_slug)
   end
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/models/country.rb
-  #  # PAs with green list on the PA record only (ignores parcel-level green list).
-  #  scope :greenlisted_parcels, -> {
-  #   where.not(green_list_status_id: nil)
-  # }
+   # PAs with green list on the PA record only (ignores parcel-level green list).
+   scope :greenlisted_parcels, -> {
+    where.not(green_list_status_id: nil)
+  }
   
   private
 

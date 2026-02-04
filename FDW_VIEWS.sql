@@ -527,7 +527,6 @@ SELECT
   LEFT(p.resp_email::varchar, 255) AS resp_email,
   LEFT(p.resp_pers::varchar, 255) AS resp_pers,
   LEFT(p.year::varchar, 255) AS year,
-  LEFT(p.update_yr::varchar, 255) AS update_yr,
   LEFT(p.language::varchar, 255) AS language
 FROM public.dummy_portal_pame_sources p
 WITH NO DATA;
