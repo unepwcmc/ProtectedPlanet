@@ -10,14 +10,14 @@ class Download::Generators::Gdb < Download::Generators::Base
     }
   }.freeze
 
-  def initialize(zip_path, site_ids)
-    super(zip_path, site_ids)
+  def initialize(zip_path, selection_entries)
+    super(zip_path, selection_entries)
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
   end
 
   def generate
-    return false if @site_ids.is_a?(Array) && @site_ids.empty?
+    return false if selection_entries_empty?
 
     clean_up_after do
       QUERY_CONDITIONS.each do |name, props|

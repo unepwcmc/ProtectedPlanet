@@ -65,6 +65,6 @@ CREATE TABLE dummy_gl_data (
 \copy dummy_gl_data (site_id, site_pid, gl_status, gl_expiry, gl_link) FROM '/Users/yuelong/Documents/WCMC/ProtectedPlanet/mock_portal_pame_gl/Dummy GL.csv' WITH (FORMAT csv, HEADER true);
 
 
--- Now check out mock_portal_pame_gl/update_dummy_site_ids_from_portal.sql 
+-- After a release is created, Now check out mock_portal_pame_gl/update_dummy_site_ids_from_portal.sql 
 -- to update the dummy_gl_data and dummy_portal_pame with the real site_id and site_pid 
 -- from the portal_standard_points and portal_standard_polygons

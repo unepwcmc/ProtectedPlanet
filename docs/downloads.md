@@ -29,7 +29,7 @@ array of SITE IDs. It is the responsibility of the caller to decide what
 is to be downloaded, and what the file should be saved as in S3.
 
 ```
-Download.generate 'download_name', site_ids: [123, 456, 2881]
+Download.generate 'download_name',  { site_selection: { site_ids: [123, 456, 2881] } }
 ```
 
 ### Data
