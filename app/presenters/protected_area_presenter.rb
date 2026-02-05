@@ -52,85 +52,85 @@ class ProtectedAreaPresenter
   end
 
   def current_pa_and_parcels_attributes
-    parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
-    # TODO: once the parcel IDs are change to be 345345_1 345345_2
-    # We will need to change this to item.split('_').last.to_i
-    parcels_including_protected_area_self.sort_by { |item| item.site_pid }.map do |parcel|
-      {
-        site_pid: parcel.site_pid,
-        attributes: [
-          {
-            title: 'Parcel ID',
-            value: parcel.site_pid,
-            is_site_pid: true
-          },
-          {
-            title: 'Name',
-            value: parcel.original_name
-          },
-          {
-            title: 'English Name',
-            value: parcel.name
-          },
-          {
-            title: 'English Designation',
-            value: parcel.designation.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'IUCN Management Category',
-            value: parcel.iucn_category.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Status',
-            value: parcel.legal_status.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Type of Designation',
-            value: parcel.designation.try(:jurisdiction).try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Status Year',
-            value: parcel.legal_status_updated_at.try(:strftime, '%Y') || 'Not Reported'
-          },
-          {
-            title: 'Governance Type',
-            value: parcel.governance.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Governance Subtype',
-            value: parcel.governance_subtype || 'Not Reported'
-          },
-          {
-            title: 'Management Authority',
-            value: parcel.management_authority.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Management Plan',
-            value: parse_management_plan(parcel.management_plan)
-          },
-          {
-            title: 'Ownership Type',
-            value: parcel.owner_type || 'Not Reported'
-          },
-          {
-            title: 'Ownership Subtype',
-            value: parcel.ownership_subtype || 'Not Reported'
-          },
-          {
-            title: 'International Criteria',
-            value: parcel.international_criteria || 'Not Reported'
-          },
-          {
-            title: 'Inland Waters',
-            value: parcel.inland_waters || 'Not Reported'
-          },
-          {
-            title: 'Supplementary Information',
-            value: parcel.supplementary_info
-          }
-        ].concat(parcel_oecm_attributes(parcel))
-      }
-    end
+    protected_area
+      .parcels_including_protected_area_self
+      .sort_by(&:site_pid)
+      .map do |parcel|
+        {
+          site_pid: parcel.site_pid,
+          attributes: [
+            {
+              title: 'Parcel ID',
+              value: parcel.site_pid,
+              is_site_pid: true
+            },
+            {
+              title: 'Name',
+              value: parcel.original_name
+            },
+            {
+              title: 'English Name',
+              value: parcel.name
+            },
+            {
+              title: 'English Designation',
+              value: parcel.designation.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'IUCN Management Category',
+              value: parcel.iucn_category.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Status',
+              value: parcel.legal_status.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Type of Designation',
+              value: parcel.designation.try(:jurisdiction).try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Status Year',
+              value: parcel.legal_status_updated_at.try(:strftime, '%Y') || 'Not Reported'
+            },
+            {
+              title: 'Governance Type',
+              value: parcel.governance.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Governance Subtype',
+              value: parcel.governance_subtype || 'Not Reported'
+            },
+            {
+              title: 'Management Authority',
+              value: parcel.management_authority.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Management Plan',
+              value: parse_management_plan(parcel.management_plan)
+            },
+            {
+              title: 'Ownership Type',
+              value: parcel.owner_type || 'Not Reported'
+            },
+            {
+              title: 'Ownership Subtype',
+              value: parcel.ownership_subtype || 'Not Reported'
+            },
+            {
+              title: 'International Criteria',
+              value: parcel.international_criteria || 'Not Reported'
+            },
+            {
+              title: 'Inland Waters',
+              value: parcel.inland_waters || 'Not Reported'
+            },
+            {
+              title: 'Supplementary Information',
+              value: parcel.supplementary_info
+            }
+          ].concat(parcel_oecm_attributes(parcel))
+        }
+      end
   end
 
   def parcels_site_pids

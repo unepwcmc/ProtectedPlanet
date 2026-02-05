@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
 
-  # TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
