@@ -9,7 +9,8 @@ class Download::Generators::Pdf < Download::Generators::Base
   end
 
   def generate
-    rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
+    rasterizer_name = Rails.env.development? ? 'rasterize_dev_mode.js' : 'rasterize.js'
+    rasterizer = Rails.root.join('vendor/assets/javascripts', rasterizer_name)
     url = url_for(params)
     `node --trace-warnings #{rasterizer} '#{url}' #{dest_pdf}`
 

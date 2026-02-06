@@ -82,6 +82,17 @@ SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run api
 For debugging with byebug, attach to the server console:
 `docker attach protectedplanet-web`
 
+## Step 5: Set up Chromium Binary (optional)
+
+- If you need the pdf generator to generate PDFs then you need to do the following
+- In `.env`, set `MAILER_HOST=protectedplanet-web:3000` so the PDF generator uses `protectedplanet-web:3000/2222?for_pdf=true`. If it stays as `localhost:3000`, the container cannot reach it as it is triggered inside container.
+- The PDF generator needs a Chromium binary. Because this project is old, Puppeteer's download can fail so we set PUPPETEER_SKIP_DOWNLOAD=true when running yarn install in dockerfile.
+- To make it working, copy all files inside `/home/wcmc/ProtectedPlanet/current/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux` folder from the production server to `./chrome` folder in this project:
+  - In local machine terminal, `cd` to the project root.
+  - Run:
+    `scp -r username@server:/home/wcmc/ProtectedPlanet/current/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux ./chrome`
+  - This creates a local `./chrome` folder with the binary.
+- sidekiq setup in `docker-compose.yml` mounts `./chrome` into the container at the expected path.
 
 # Deployment
 To deploy PP.net with docker:
