@@ -69,7 +69,7 @@ Long-running releases should be run in a persistent terminal session so they kee
 tmux new -s pp-release
 
 # Step 1: Dry run (stops after validation, does not swap tables)
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Feb2026"]
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Mar2026"]
 
 # Detach without stopping the process
 Ctrl-b then d
@@ -88,7 +88,7 @@ RAILS_ENV=production bundle exec rake pp:portal:status
 
 # When ready to go live** (e.g., on the first day of the month), continue with the swap:
 # IMPORTANT! Make sure you change the correct label
-RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Feb2026"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Mar2026"]
 ```
 
 **Important Notes:**
@@ -96,6 +96,11 @@ RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:porta
 - The dry run stops automatically after validation completes
 - Staging tables remain in the database until you run the swap
 - Resuming from `finalise_swap` will perform the actual swap and continue with remaining phases
+
+### ✅ This is all to completed a release using dry run method! If you are looking for direct release read below
+<br>
+<br>
+<a id="running-an-auto-release"></a>
 
 ### Alternative: Direct Release (Automatic)
 
