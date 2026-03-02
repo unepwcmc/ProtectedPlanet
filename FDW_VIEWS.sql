@@ -511,24 +511,23 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_sources_metadataid ON staging_port
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_sources_pk ON staging_portal_standard_sources(index_id);
 
 
--- TODO: UPDATE THIS TO USE REAL DATA FROM THE PORTAL
 -- 5) Standardized view (PAME Sources)
 --    PAME source metadata from the portal
 --    ⚠️  If you modify columns here, check Portal DB indexes for:
---        - dummy_portal_pame_sources.id, dummy_portal_pame_sources.eff_metaid
---        - This file: Ensure unique index on eff_metaid exists
+--        - pame.pame_sources(id, eff_metaid)
+--        - This file: Ensure unique index on (id) exists for CONCURRENT refreshes
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_pame_sources AS
 SELECT
-  (p.id)::integer AS id,
-  (p.eff_metaid)::integer AS eff_metaid,
-  LEFT(p.data_title::varchar, 255) AS data_title,
-  LEFT(p.resp_party::varchar, 255) AS resp_party,
-  LEFT(p.resp_email::varchar, 255) AS resp_email,
-  LEFT(p.resp_pers::varchar, 255) AS resp_pers,
-  LEFT(p.year::varchar, 255) AS year,
-  LEFT(p.language::varchar, 255) AS language
-FROM public.dummy_portal_pame_sources p
+  (ps.id)::bigint AS id,
+  (ps.eff_metaid)::bigint AS eff_metaid,
+  LEFT(ps.data_title::varchar, 255) AS data_title,
+  LEFT(ps.resp_party::varchar, 255) AS resp_party,
+  LEFT(ps.resp_email::varchar, 255) AS resp_email,
+  LEFT(ps.resp_pers::varchar, 255) AS resp_pers,
+  (ps.year)::integer AS year,
+  LEFT(ps.language::varchar, 255) AS language
+FROM portal_fdw.pame_sources ps
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes
@@ -537,39 +536,67 @@ CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_pk ON staging_
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_id ON staging_portal_standard_pame_sources(id);
 
 
--- TODO: UPDATE THIS TO USE REAL DATA FROM THE PORTAL
 -- 6) Standardized view (PAME Evaluations)
 --    PAME evaluation data from the portal
 --    ⚠️  If you modify columns here, check Portal DB indexes for:
---        - dummy_portal_pame.asmt_id, dummy_portal_pame.site_id, dummy_portal_pame.eff_metaid
+--        - pame.pame(asmt_id, site_id, parcel_id, pame_source_id, archived_at)
+--        - pame.pame_designation_purpose_biodiversity_cats(pame_id, designation_purpose_biodiversity_cat_id)
 --        - This file: Ensure unique index on asmt_id exists
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_pame AS
+WITH dp_bio_agg AS (
+  SELECT
+    j.pame_id,
+    string_agg(
+      DISTINCT COALESCE(c.description->>'en', c.code),
+      ';' ORDER BY COALESCE(c.description->>'en', c.code)
+    ) AS dp_bio
+  FROM portal_fdw.pame_designation_purpose_biodiversity_cats j
+  JOIN portal_fdw.designation_purpose_biodiversity_cat c
+    ON c.id = j.designation_purpose_biodiversity_cat_id
+  GROUP BY j.pame_id
+)
 SELECT
-  (p.id)::integer AS id,
-  (p.asmt_id)::integer AS asmt_id,
-  (p.eff_metaid)::integer AS eff_metaid,
-  (p.site_id)::integer AS site_id,
-  LEFT(p.site_pid::varchar, 52) AS site_pid,
-  LEFT(p.method::varchar, 255) AS method,
-  (p.submityear)::integer AS submityear,
+  (p.id)::bigint AS id,
+  (p.asmt_id)::bigint AS asmt_id,
+  (ps.eff_metaid)::bigint AS eff_metaid,
+  (p.site_id)::bigint AS site_id,
+  LEFT(p.parcel_id::varchar, 52) AS site_pid,
+  LEFT(COALESCE(m.description->>'en', m.code, p.method_text)::varchar, 255) AS method,
+  (p.submit_year)::integer AS submityear,
   (p.asmt_year)::integer AS asmt_year,
-  LEFT(p.verif_eff::varchar, 255) AS verif_eff,
+  LEFT(COALESCE(ve.description->>'en', ve.code)::varchar, 255) AS verif_eff,
   LEFT(p.asmt_url::varchar, 500) AS asmt_url,
   LEFT(p.info_url::varchar, 500) AS info_url,
-  LEFT(p.gov_act::varchar, 255) AS gov_act,
-  LEFT(p.gov_asmt::varchar, 255) AS gov_asmt,
-  LEFT(p.dp_bio::varchar, 255) AS dp_bio,
-  LEFT(p.dp_other::varchar, 255) AS dp_other,
-  LEFT(p.mgmt_obset::varchar, 255) AS mgmt_obset,
-  LEFT(p.mgmt_obman::varchar, 255) AS mgmt_obman,
-  LEFT(p.mgmt_adapt::varchar, 255) AS mgmt_adapt,
-  LEFT(p.mgmt_staff::varchar, 255) AS mgmt_staff,
-  LEFT(p.mgmt_budgt::varchar, 255) AS mgmt_budgt,
-  LEFT(p.mgmt_thrts::varchar, 255) AS mgmt_thrts,
-  LEFT(p.mgmt_mon::varchar, 255) AS mgmt_mon,
-  LEFT(p.out_bio::varchar, 255) AS out_bio
-FROM public.dummy_portal_pame p
+  LEFT(COALESCE(ga.description->>'en', ga.code)::varchar, 255) AS gov_act,
+  LEFT(COALESCE(gas.description->>'en', gas.code)::varchar, 255) AS gov_asmt,
+  LEFT(dp.dp_bio::varchar, 255) AS dp_bio,
+  LEFT(COALESCE(dpo.description->>'en', dpo.code)::varchar, 255) AS dp_other,
+  LEFT(COALESCE(mos.description->>'en', mos.code)::varchar, 255) AS mgmt_obset,
+  LEFT(COALESCE(mom.description->>'en', mom.code)::varchar, 255) AS mgmt_obman,
+  LEFT(COALESCE(ma.description->>'en', ma.code)::varchar, 255) AS mgmt_adapt,
+  LEFT(COALESCE(ms.description->>'en', ms.code)::varchar, 255) AS mgmt_staff,
+  LEFT(COALESCE(mb.description->>'en', mb.code)::varchar, 255) AS mgmt_budgt,
+  LEFT(COALESCE(mt.description->>'en', mt.code)::varchar, 255) AS mgmt_thrts,
+  LEFT(COALESCE(mm.description->>'en', mm.code)::varchar, 255) AS mgmt_mon,
+  LEFT(COALESCE(ob.description->>'en', ob.code)::varchar, 255) AS out_bio
+FROM portal_fdw.pame p
+JOIN portal_fdw.pame_sources ps ON ps.id = p.pame_source_id
+LEFT JOIN dp_bio_agg dp ON dp.pame_id = p.id
+LEFT JOIN portal_fdw.method_cat m ON m.id = p.method_id
+LEFT JOIN portal_fdw.verification_effectiveness_cat ve ON ve.id = p.verification_effectiveness_id
+LEFT JOIN portal_fdw.governance_action_cat ga ON ga.id = p.governance_action_id
+LEFT JOIN portal_fdw.governance_assessment_cat gas ON gas.id = p.governance_assessment_id
+LEFT JOIN portal_fdw.designation_purpose_other_cat dpo ON dpo.id = p.designation_purpose_other_id
+LEFT JOIN portal_fdw.management_objectives_set_cat mos ON mos.id = p.management_objectives_set_id
+LEFT JOIN portal_fdw.management_objectives_managed_cat mom ON mom.id = p.management_objectives_managed_id
+LEFT JOIN portal_fdw.management_adaptation_cat ma ON ma.id = p.management_adaptation_id
+LEFT JOIN portal_fdw.management_staff_cat ms ON ms.id = p.management_staff_id
+LEFT JOIN portal_fdw.management_budget_cat mb ON mb.id = p.management_budget_id
+LEFT JOIN portal_fdw.management_threats_cat mt ON mt.id = p.management_threats_id
+LEFT JOIN portal_fdw.management_monitoring_cat mm ON mm.id = p.management_monitoring_id
+LEFT JOIN portal_fdw.outcomes_biodiversity_cat ob ON ob.id = p.outcomes_biodiversity_id
+WHERE p.archived_at IS NULL
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes
@@ -580,22 +607,22 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_eff_metaid ON staging_portal_
 CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_asmt_year ON staging_portal_standard_pame(asmt_year);
 
 
--- TODO: UPDATE THIS TO USE REAL DATA FROM THE PORTAL
 -- 7) Standardized view (Green List)
---    Green List data from dummy_gl_data (mock); replace with portal FDW when available.
 --    ⚠️  If you modify columns here, check:
---        - dummy_gl_data: site_id, site_pid indexes
---        - This file: Ensure unique index on (site_id, site_pid) exists for CONCURRENT refresh
+--        - pame.greenlists(site_id, parcel_id, gl_status_id, archived_at)
+--        - This file: Ensure unique index on (id) exists for CONCURRENT refreshes
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_greenlist AS
 SELECT
-  (g.id)::integer AS id,
+  (g.id)::bigint AS id,
   (g.site_id)::bigint AS site_id,
-  LEFT(g.site_pid::varchar, 52) AS site_pid,
-  LEFT(g.gl_status::varchar, 50) AS gl_status,
-  g.gl_expiry AS gl_expiry,
+  LEFT(g.parcel_id::varchar, 52) AS site_pid,
+  LEFT(COALESCE(sc.description->>'en', sc.code)::varchar, 50) AS gl_status,
+  (g.gl_expiry)::integer AS gl_expiry,
   LEFT(g.gl_link::varchar, 500) AS gl_link
-FROM public.dummy_gl_data g
+FROM portal_fdw.greenlists g
+JOIN portal_fdw.greenlist_status_cat sc ON sc.id = g.gl_status_id
+WHERE g.archived_at IS NULL
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes 

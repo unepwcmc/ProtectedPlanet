@@ -109,7 +109,7 @@ SQL
 ```
 
 ## 3. Import only the tables required by Wdpa model associations
-- From schema wdpa and reference.
+- From schema `wdpa`, `reference`, and `pame`
 
 ### 3.1 Import wdpa schema tables
 ```bash
@@ -165,6 +165,37 @@ IMPORT FOREIGN SCHEMA reference
   INTO portal_fdw;
 
 GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO PUBLIC;  -- dev only; restrict in prod
+SQL
+```
+
+### 3.3 Import pame schema tables (PAME + Green List)
+```bash
+PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
+  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
+IMPORT FOREIGN SCHEMA pame
+  LIMIT TO (
+    pame,
+    pame_sources,
+    greenlists,
+    greenlist_status_cat,
+    method_cat,
+    verification_effectiveness_cat,
+    governance_action_cat,
+    governance_assessment_cat,
+    designation_purpose_biodiversity_cat,
+    pame_designation_purpose_biodiversity_cats,
+    designation_purpose_other_cat,
+    management_objectives_set_cat,
+    management_objectives_managed_cat,
+    management_adaptation_cat,
+    management_staff_cat,
+    management_budget_cat,
+    management_threats_cat,
+    management_monitoring_cat,
+    outcomes_biodiversity_cat
+  )
+  FROM SERVER portal_srv
+  INTO portal_fdw;
 SQL
 ```
 

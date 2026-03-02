@@ -146,6 +146,32 @@ IMPORT FOREIGN SCHEMA reference
   FROM SERVER portal_srv
   INTO portal_fdw;
 
+-- Import pame schema tables (PAME + Green List)
+IMPORT FOREIGN SCHEMA pame
+  LIMIT TO (
+    pame,
+    pame_sources,
+    greenlists,
+    greenlist_status_cat,
+    method_cat,
+    verification_effectiveness_cat,
+    governance_action_cat,
+    governance_assessment_cat,
+    designation_purpose_biodiversity_cat,
+    pame_designation_purpose_biodiversity_cats,
+    designation_purpose_other_cat,
+    management_objectives_set_cat,
+    management_objectives_managed_cat,
+    management_adaptation_cat,
+    management_staff_cat,
+    management_budget_cat,
+    management_threats_cat,
+    management_monitoring_cat,
+    outcomes_biodiversity_cat
+  )
+  FROM SERVER portal_srv
+  INTO portal_fdw;
+
 -- Grant SELECT permission on all imported foreign tables
 GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO wcmc;
 ```
