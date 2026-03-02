@@ -63,6 +63,23 @@ pg_ctl -D "$(psql -U postgres -d postgres -Atc 'SHOW data_directory;')" reload
 psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
 ```
 
+### 1.6 Grant Portal DB schema permissions to portal_ro_user (CRITICAL - must be done before FDW setup)
+- **IMPORTANT**: Run these commands on the Portal DB, not on PP Database.
+- This must be completed before importing foreign tables, otherwise queries will fail with permission errors.
+
+```sql
+-- Run on Portal DB (pp_data_management_backend_development)
+GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
+GRANT USAGE ON SCHEMA reference TO portal_ro_user;
+GRANT USAGE ON SCHEMA pame TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA pame TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA pame GRANT SELECT ON TABLES TO portal_ro_user;
+```
+
 ## 2. Create the FDW on the PP DB (Docker)
 
 ### 2.1 Set environment variables
@@ -322,14 +339,20 @@ SQL
 - Use this when the Portal schema changes (e.g., new reference tables/columns like inland_waters_cat / inland_waters_id) or when FDW_VIEWS.sql (located in the ProtectedPlanet folder) is updated.
 
 ### 7.1 Portal DB privileges (run once, on the Portal DB)
-- Ensure the read-only role can access the wdpa schema and new tables.
+- Ensure the read-only role can access the wdpa, reference, and pame schemas and all tables.
 
 ```bash
 # Replace <portal_db_name> and run on the Portal DB host or container
 psql -U postgres -d <portal_db_name> -X <<'SQL'
 GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
-GRANT SELECT ON wdpa.inland_waters_cat TO portal_ro_user;
+GRANT USAGE ON SCHEMA reference TO portal_ro_user;
+GRANT USAGE ON SCHEMA pame TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA pame TO portal_ro_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA pame GRANT SELECT ON TABLES TO portal_ro_user;
 SQL
 ```
 
