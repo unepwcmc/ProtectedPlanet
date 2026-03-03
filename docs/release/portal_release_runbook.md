@@ -65,8 +65,13 @@ You don't need to run these phases individually - the release command handles ev
 Long-running releases should be run in a persistent terminal session so they keep running if your SSH connection drops.
 
 ```bash
-# Start a named tmux session
+# Normally we don't kill the session so you basically attach to the pp-release session
+tmux attach -t pp-release
+
+# Or start a named tmux session
 tmux new -s pp-release
+
+
 
 # Step 1: Dry run (stops after validation, does not swap tables)
 RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Mar2026"]
@@ -97,7 +102,7 @@ RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:porta
 - Staging tables remain in the database until you run the swap
 - Resuming from `finalise_swap` will perform the actual swap and continue with remaining phases
 
-### ✅ This is all to completed a release using dry run method! If you are looking for direct release read below
+### ✅ Once You see Congragulations xxxx message on slack then you have completed a monthly release using dry run method! If you are looking for direct release read below
 <br>
 <br>
 <a id="running-an-auto-release"></a>
@@ -107,18 +112,23 @@ RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:porta
 If you want to run the entire release automatically:
 
 ```bash
-# Start a named tmux session
+# Normally we don't kill the session so you basically attach to the pp-release session
+tmux attach -t pp-release
+
+# Or start a named tmux session
 tmux new -s pp-release
 
 # Direct release (swaps tables immediately - no inspection step)
-RAILS_ENV=production bundle exec rake pp:portal:release["Dec2025"]
+RAILS_ENV=production bundle exec rake pp:portal:release["Mar2026"]
 
 # Detach without stopping the process
 # Press: Ctrl-b then d
 
-# Reattach later
+# Reattach later if needed
 tmux attach -t pp-release
 ```
+
+✅ Once You see Congragulations xxxx message on slack then you have completed a monthly release
 
 > **⚠️ Note**: This approach skips the inspection step.
 
