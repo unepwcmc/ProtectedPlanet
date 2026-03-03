@@ -26,13 +26,6 @@ class Region < ApplicationRecord
     countries.joins(:protected_areas).uniq
   end
 
-  def protected_areas_with_iucn_categories
-    valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
-    iucn_categories.where(
-      "iucn_categories.name IN (#{valid_categories})"
-    )
-  end
-
   def protected_areas_per_governance(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("
       SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count AS count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage

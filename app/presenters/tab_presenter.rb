@@ -51,9 +51,9 @@ class TabPresenter
   def sources(oecms_tab: false)
     {
       count: sources_per_geo_entity(exclude_oecms: !oecms_tab).count,
-      source_updated: I18n.t('stats.sources.updated'),
+      source_updated: I18n.t('attributes.pa_sources.updated'),
       sources: sources_per_geo_entity(exclude_oecms: !oecms_tab),
-      title: I18n.t('stats.sources.title')
+      title: I18n.t('attributes.pa_sources.title')
     }
   end
 

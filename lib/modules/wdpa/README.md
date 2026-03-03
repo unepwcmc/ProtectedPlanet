@@ -59,10 +59,9 @@ Protected Areas and Parcels (if a PA has multiple parcels) in the Rails database
 ### Importing Geometries
 
 `Wdpa::ProtectedAreaImporter::GeometryImporter` imports the Protected
-Area geometries on to the matching `ProtectedArea` models. It does so
-through an `UPDATE` SQL query, for performance reasons (primarily to
-avoid the ActiveRecord Postgis Adapter).
-TODO: think about adding Geometry to ProtectedAreaParcel but only if it is needed as this takes a lot of space in db
+Area geometries onto the matching `ProtectedArea` and `ProtectedAreaParcel`
+records. It does so through `UPDATE` SQL queries, for performance reasons
+(primarily to avoid the ActiveRecord Postgis Adapter).
 
 ### Cleanup
 

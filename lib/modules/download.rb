@@ -67,7 +67,7 @@ module Download
     if format.to_s == 'pdf'
       opts[:identifier]
     else
-      opts[:site_ids]
+      opts[:site_selection]
     end
   end
 

@@ -2,66 +2,74 @@
 
 ## Overview
 
-The IUCN Green List of Protected and Conserved Areas is a global standard for protected areas. The Protected Planet application supports importing and displaying green list data for both protected areas and their associated parcels.
+The IUCN Green List of Protected and Conserved Areas is a global standard for protected areas. The Protected Planet application supports importing and displaying green list data for both **protected areas** and their **parcels**. Green list status can be set on the PA record and/or on individual parcels.
 
-## Current Implementation (as of 29Sep2025)
+## Current Implementation
 
-**Key Behavior:** When a protected area is green-listed, ALL associated parcels automatically inherit the same green list status. This ensures consistency between the main protected area record and all its parcels.
+**Parcel-aware behaviour:** The PA and each parcel have their own `green_list_status_id`. A PA is considered green-listed for search/display if the PA record is green-listed **or** any of its parcels is green-listed. The application does not require all parcels to inherit the PA’s status; parcel-level status is supported.
 
-**Future Considerations:** If parcel-specific green listing is needed (where only certain parcels are green-listed), only the (monthly release) importers and frontend Vue components need to be updated. The protectedplanet-api will work automatically since parcels already have green list columns in the database tables.
+**Search / indexing:** The `special_status` field used for filtering (e.g. “Green Listed”) is derived from `pa_or_any_its_parcels_is_greenlisted` and `pa_or_any_its_parcels_is_greenlist_candidate` on `ProtectedArea`, so a PA appears in Green List filters when it or any of its parcels is green-listed.
 
 ## Data Model
 
 ### Tables
-- `green_list_statuses` - Status definitions (status, expiry_date)
-- `protected_areas` - Main protected area records with green_list_status_id and green_list_url
-- `protected_area_parcels` - Parcel records with green_list_status_id and green_list_url
+- `green_list_statuses` – Status definitions (e.g. `gl_status`, `gl_expiry`, `gl_link`)
+- `protected_areas` – `green_list_status_id` (optional), plus other PA attributes
+- `protected_area_parcels` – `green_list_status_id` (optional) per parcel
 
 ### Relationships
-- `ProtectedArea` belongs_to `GreenListStatus`
-- `ProtectedAreaParcel` belongs_to `GreenListStatus`
+- `ProtectedArea` `belongs_to` `GreenListStatus` (optional)
+- `ProtectedAreaParcel` `belongs_to` `GreenListStatus` (optional)
+
+## Scopes and queries
+
+### ProtectedArea
+- **`pas_with_green_list_on_self_only`** – PAs whose **own** record has a green list status (ignores parcels). Returns PA records.
+- **`pas_with_green_list_on_self_or_any_parcel`** – PAs that are green-listed on the PA record **or** on any parcel. Returns **PA** records (not parcels); use `.protected_area_parcels` on each PA to get parcels.
+
+### Instance methods (for search/indexing)
+- **`pa_or_any_its_parcels_is_greenlisted`** – `true` if the PA or any of its parcels is Green Listed / Relisted.
+- **`pa_or_any_its_parcels_is_greenlist_candidate`** – `true` if the PA or any of its parcels is a Candidate.
+
+### Parcels
+- Parcels with a green list status: `ProtectedAreaParcel.where.not(green_list_status_id: nil)` or join through `green_list_status`.
 
 ## Import Process
 
-### Data Sources
-CSV files in `lib/data/seeds/green_list_sites_*.csv` with format:
-```csv
-site_id,status,expiry_date,url
-17231,Green Listed,27-10-2023,"https://iucngreenlist.org/sites/Ajloun-Forest-Reserve"
-```
+### Data sources
+Green list data is sourced from the **portal materialised view**, not from CSV files. The view is created and refreshed as part of the portal release (e.g. via `FDW_VIEWS.sql`).
 
 ### Importers
-- **Portal Importer**: `Wdpa::Portal::Importers::GreenList` - imports to staging tables
-- **Live Importer**: `Wdpa::GreenListImporter` - imports to live tables
+- **Portal importer:** `Wdpa::Portal::Importers::GreenList` – reads from the green list materialised view via `Wdpa::Portal::Adapters::Greenlist` and imports into staging tables (`staging_protected_areas`, `staging_protected_area_parcels`, `staging_green_list_statuses`).
 
-Both importers update both `protected_areas` and `protected_area_parcels` tables to maintain consistency.
-
-### Future Parcel-Specific Green Listing
-If needed, only these components require updates:
-- **Importers**: Add site_pid support in CSV processing
-- **Frontend Vue**: Update UI to handle parcel-specific status
-- **API**: No changes needed (parcels already have green list columns)
+Import logic resolves each view row to a PA or parcel (by `site_id` / `site_pid`) and sets `green_list_status_id` on the corresponding record. The data model supports parcel-specific status when the view contains parcel-level rows.
 
 ## Usage
 
-### Import Data
+### Import
 ```ruby
 # Portal importer (staging)
 Wdpa::Portal::Importers::GreenList.import_to_staging(notifier: notifier)
-
-# Live importer
-Wdpa::GreenListImporter.import
 ```
 
-### Query Data
+### Query examples
 ```ruby
-# Green listed areas
-ProtectedArea.green_list_areas
+# PAs green-listed on the PA record only (no parcel logic)
+ProtectedArea.pas_with_green_list_on_self_only
 
-# Green listed parcels
+# PAs green-listed on the PA and/or on any parcel (returns PAs, not parcels)
+ProtectedArea.pas_with_green_list_on_self_or_any_parcel
+
+# Parcels that have a green list status
+ProtectedAreaParcel.where.not(green_list_status_id: nil)
+# Or with join:
 ProtectedAreaParcel.joins(:green_list_status)
 ```
 
-## Related Documentation
+## Downloads
+
+The general download worker uses green list to build the set of areas for the “greenlist” download type. It currently uses `ProtectedArea.pas_with_green_list_on_self_only` to collect `site_id`s.
+
+## Related documentation
 - [Protected Area Parcels](protected_area_parcels.md)
 - [Release Process](./release/release_process.md)

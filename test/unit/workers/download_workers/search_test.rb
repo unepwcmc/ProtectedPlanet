@@ -20,7 +20,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
       .returns(saved_search_mock)
 
     Download.expects(:generate)
-      .with("WDPA_Jun2015_search_manbone_#{digested_pa_ids}", { site_ids: pa_ids })
+      .with("WDPA_Jun2015_search_manbone_#{digested_pa_ids}", { site_selection: { site_ids: pa_ids } })
 
     DownloadWorkers::Search.new.perform token, query_term, {}.to_json
   end
@@ -39,7 +39,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
       .returns(saved_search_mock)
 
     Download.expects(:generate)
-      .with("WDPA_Jun2015_search_#{digested_pa_ids}", { site_ids: pa_ids })
+      .with("WDPA_Jun2015_search_#{digested_pa_ids}", { site_selection: { site_ids: pa_ids } })
 
     DownloadWorkers::Search.new.perform token, nil, {}.to_json
   end
@@ -87,7 +87,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
       .returns(saved_search_mock)
 
     Download.expects(:generate)
-      .with("WDPA_Jun2015_search_#{digested_pa_ids}", { site_ids: pa_ids })
+      .with("WDPA_Jun2015_search_#{digested_pa_ids}", { site_selection: { site_ids: pa_ids } })
 
     DownloadWorkers::Search.new.perform token, nil, { country: 'PER' }.to_json
   end

@@ -1,14 +1,13 @@
-version: '3'
 services:
   web:
     platform: linux/x86_64
     container_name: protectedplanet-web
     build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install; bundle exec rails db:migrate; bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;PUPPETEER_SKIP_DOWNLOAD=true yarn install; bundle exec rails db:migrate; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
-      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - ./node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
       - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
     ports:
@@ -31,6 +30,8 @@ services:
     dns:
       - 1.1.1.1
       - 8.8.8.8
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   db:
     platform: linux/x86_64
     container_name: protectedplanet-db
@@ -45,7 +46,6 @@ services:
       - protectedplanet_pg_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
-    platform: linux/x86_64
     container_name: protectedplanet-redis
     image: redis
     ports:
@@ -61,8 +61,10 @@ services:
     build: .
     volumes:
       - .:/ProtectedPlanet
-      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - ./node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
+      # See ## Step 5: Set up Chromium Binary for more info
+      - ./chrome:/ProtectedPlanet/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux
     networks:
       - protectedplanet
     env_file:
@@ -73,18 +75,16 @@ services:
     command: /bin/bash -l -c "bundle exec sidekiq"
     stdin_open: true
     tty: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   elasticsearch:
-    # platform: linux/x86_64
+    platform: linux/x86_64
     container_name: protectedplanet-elasticsearch
     image: elasticsearch:8.6.0
     environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     ports:
       - "9200:9200"
     networks:
@@ -109,10 +109,10 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-webpacker
     build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; bundle i;yarn install; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; bundle i;PUPPETEER_SKIP_DOWNLOAD=true yarn install; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
     volumes: 
       - .:/ProtectedPlanet
-      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - ./node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
     ports:
       - "3035:3035"
@@ -120,6 +120,8 @@ services:
       - '.env'
     networks:
       - protectedplanet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   api:
     platform: linux/x86_64
     container_name: protectedplanet-api
@@ -151,4 +153,3 @@ volumes:
   protectedplanet_redis_data:
   protectedplanet_es_data:
   protectedplanet_bundler:
-  protectedplanet_node_modules:

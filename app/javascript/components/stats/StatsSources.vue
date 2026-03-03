@@ -1,5 +1,6 @@
+<!-- Used for region -->
 <template>
-  <div class="card--stats-sources sm-sources pdf-break-inside-avoid">
+  <div class="card--feault-block sm-sources pdf-break-inside-avoid">
     <h2 class="card__h2">{{ title }} {{ count }}</h2>
     
     <div class="card__content flex">

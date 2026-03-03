@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ProtectedAreaPresenterTest < ActiveSupport::TestCase
-  test '#parcels_attribute, test a protected area\'s with multiple parcels' do
+  test '#current_pa_and_parcels_attributes, test a protected area\'s with multiple parcels' do
     time = Time.local(2025, 0o4, 0o7)
     region = FactoryGirl.create(:region, id: 225_672, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 2_265_721, iso_3: 'MBN', name: 'Manboneland', region: region)
@@ -100,9 +100,9 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     ]
 
     presenter = ProtectedAreaPresenter.new(pa)
-    assert_equal expected_response, presenter.parcels_attribute
+    assert_equal expected_response, presenter.current_pa_and_parcels_attributes
   end
-  test '#parcels_attribute, test a protected area\'s with only one parcel' do
+  test '#current_pa_and_parcels_attributes, test a protected area\'s with only one parcel' do
     time = Time.local(2025, 0o4, 0o7)
     region = FactoryGirl.create(:region, id: 225_672, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 2_265_721, iso_3: 'MBN', name: 'Manboneland', region: region)
@@ -150,6 +150,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     }]
 
     presenter = ProtectedAreaPresenter.new(pa)
-    assert_equal expected_response, presenter.parcels_attribute
+    assert_equal expected_response, presenter.current_pa_and_parcels_attributes
   end
 end

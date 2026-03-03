@@ -19,12 +19,7 @@ module Staging
       foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'source_id'
 
-    # As of 09Apr It seems networks are not used in the system now
-    # has_many :networks_protected_areas
-    # has_many :networks, through: :networks_protected_areas
-
-    # We should only access pame_evaluations through protected_area
-    # has_many :pame_evaluations
+    has_many :pame_evaluations, class_name: 'Staging::PameEvaluation'
     # has_many :story_map_links
 
     belongs_to :protected_area, class_name: 'Staging::ProtectedArea', foreign_key: 'site_id', primary_key: 'site_id'
@@ -35,7 +30,7 @@ module Staging
     belongs_to :realm
     belongs_to :no_take_status, class_name: 'Staging::NoTakeStatus'
     belongs_to :designation
-    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus'
+    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus', optional: true
     delegate :jurisdiction, to: :designation, allow_nil: true
 
     after_create :create_slug

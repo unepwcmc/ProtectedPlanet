@@ -3,9 +3,15 @@
     @click="download"
     title="Download CSV file of filtered protected area management effectiveness evaluations"
     class="button--download"
-    :class="{ 'button--disabled' : noResults }"
-    v-bind="{ 'disabled' : noResults }">
-    CSV
+    :class="{ 'button--disabled' : noResults || isLoading }"
+    v-bind="{ 'disabled' : noResults || isLoading }">
+    <span
+      v-if="isLoading"
+      :class="['icon--loading-spinner', 'margin-center', { 'icon-visible': isLoading }]"
+    />
+    <span v-else>
+      CSV
+    </span>
   </button>
 </template>
 
@@ -22,6 +28,12 @@
       }
     },
 
+    data () {
+      return {
+        isLoading: false
+      }
+    },
+
     computed: {
       noResults () {
         return this.totalItems == 0
@@ -30,6 +42,10 @@
 
     methods: {
       download () {
+        if (this.noResults || this.isLoading) return
+
+        this.isLoading = true
+
         const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].
         getAttribute('content'),
           data = this.$store.state.pame.selectedFilterOptions,
@@ -50,11 +66,12 @@
             const filename = response.headers['content-disposition'].split('filename\="')[1].split('\"')[0]
 
             this.createBlob(filename, response.data)
-
             this.$ga.event('Button', 'click', 'PAME - CSV download')
+            this.isLoading = false
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error)
+            this.isLoading = false
           })
       },
 

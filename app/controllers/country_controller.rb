@@ -17,8 +17,14 @@ class CountryController < ApplicationController
 
     @flag_path = flag_path(@country.name)
 
-    # exclude transboundary PAs where the PAME evaluation is associated only with another country
-    @total_pame = @country.protected_areas.with_pame_evaluations.includes(pame_evaluations: :countries).where(pame_evaluations: { countries: { id: @country.id } }).count
+    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
+    @total_pame = @country
+                  .protected_areas
+                  .pas_with_pame_on_self_only
+                  .joins(pame_evaluations: :countries)
+                  .where(countries: { id: @country.id })
+                  .distinct
+                  .count
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {
@@ -35,7 +41,8 @@ class CountryController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
+        rasterizer_name = Rails.env.development? ? 'rasterize_dev_mode.js' : 'rasterize.js'
+        rasterizer = Rails.root.join('vendor/assets/javascripts', rasterizer_name)
         url = url_for(action: :pdf, iso: @country.iso)
         dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
 

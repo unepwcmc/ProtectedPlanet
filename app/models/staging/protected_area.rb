@@ -26,8 +26,6 @@ module Staging
       primary_key: 'site_id',
       dependent: :destroy
 
-    has_many :networks_protected_areas, dependent: :destroy
-    has_many :networks, through: :networks_protected_areas
     has_many :pame_evaluations, class_name: 'Staging::PameEvaluation'
     has_many :story_map_links, class_name: 'Staging::StoryMapLink'
 
@@ -40,7 +38,7 @@ module Staging
 
     belongs_to :designation
     delegate :jurisdiction, to: :designation, allow_nil: true
-    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus'
+    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus', optional: true
 
     after_create :create_slug
     before_save :set_legacy_fields

@@ -1,20 +1,11 @@
 en:
   stats:
-    affiliations: 
-      title: Affiliations
-    attributes: 
-      title: Attributes 
-      description:
-        pa: This protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
-        marine_pa: The marine protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
-        oecm: The OECM consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
-      dropdown_title: Parcel ID
     citation: Citation Text
     coverage: Coverage
     coverage_marine:
       covered: Marine and coastal area covered
-      title_wdpa: Marine protected area Coverage
-      title_wdpa_oecm: Marine protected area & OECM coverage
+      title_wdpa: Marine and coastal protected area Coverage
+      title_wdpa_oecm: Marine and coastal protected area & OECM coverage
       total: Total marine and coastal area
     coverage_terrestrial:
       covered: Land area covered
@@ -36,27 +27,16 @@ en:
       title_wdpa_oecm: Growth in protected area and OECM coverage
     governance: 
       title: Governance types
-    green-list:
-      intro: This site is part of the IUCN Green List Community
-      type: Green List Status
-      date: Certification Expiry Date
-      title: View the IUCN profile for %{site_name}
-      url: More info
     iucn-categories: 
       title: IUCN Management Categories
     location: Location
     management-plan:
       button: View Management Plan
       button-title: Download the Management Plan for %{site}
-    no-infomation: No information available
     nr-report-title: th National Report coverage
     nr_latest: Latest National Report
     oecm:
       title: Total Other effective area-based conservation measures
-    pame:
-      areas-assessed: Areas assessed
-      title: Management Effectiveness Evaluations
-      with-assessments: With management effectiveness evaluations
     points: Points
     polygons: Polygons
     related-countries:
@@ -64,10 +44,6 @@ en:
       title-child: Child countries & territories
       title-parent: Parent country
     reported-area: Reported Area
-    sources: 
-      title: Sources
-      total: Total Sources
-      updated: Updated
     type: Type
     warning: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
     warning_wdpa_oecm: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area and OECM coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
@@ -85,3 +61,4 @@ en:
     oecm_tooltip:
           description: Some geographic locations are designated more than once, e.g., as both a Watershed Management Area (a national designation) and a World Heritage Site (an international designation). In the WD-OECM, these designations are counted as separate OECMs, meaning this number might appear higher than expected.
           designations: Number of national designations only
+

@@ -20,7 +20,7 @@ module HomeHelper
   end
 
   def get_filters(filter)
-    if filter == 'is_green_list'
+    if filter == 'pa_or_any_its_parcels_is_greenlisted'
       { special_status: [filter] }
     else
       { is_type: [filter] }

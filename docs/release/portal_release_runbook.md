@@ -25,13 +25,17 @@ docker compose ps  # Check status
 
 ### Essential Commands
 
-| Task | Production | Local Development |
-|------|------------|------------------|
-| **⭐ Run release with dry run (Recommended)** | `PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]` | `docker compose exec -T web bash -lc 'PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]'` |
-| **Run release (Automatic)** | `bundle exec rake pp:portal:release["Nov2025"]` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:release["Nov2025"]'` |
-| **Check status** | `bundle exec rake pp:portal:status` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:status'` |
-| **Abort release** | `bundle exec rake pp:portal:abort` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:abort'` |
-| **Rollback** | `bundle exec rake pp:portal:rollback["2509121644"]` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:rollback["2509121644"]'` |
+| Task | Command |
+|------|------------|
+| **⭐ Run release with dry run (Recommended)** | [See Dry Run section](#run-a-dry-run) |
+| **Run release (Automatic)** |  [See Automatic release section](#running-an-auto-release) |
+| **Check status** | `bundle exec rake pp:portal:status` |
+| **Abort release** | `bundle exec rake pp:portal:abort` |
+| **Rollback** | `bundle exec rake pp:portal:rollback["2509121644"]` |
+
+> ** To run commands locally please see examples below
+> - (Outside docker) ``docker compose exec -T web bash -lc 'bundle exec rake pp:portal:abort'``
+> - (Inside docker) ``bundle exec rake pp:portal:abort``
 
 > **⚠️ Important**: The release label is **REQUIRED** for all `pp:portal:release` commands. Format: `MMMYYYY` (e.g., `Nov2025`, `Jan2026`). The task will fail with an error if the label is not provided.
 
@@ -53,6 +57,7 @@ You don't need to run these phases individually - the release command handles ev
 
 ---
 
+<a id="run-a-dry-run"></a>
 ## 🛠️ Running a Release
 
 ### Recommended: Dry Run Workflow
@@ -65,14 +70,19 @@ You don't need to run these phases individually - the release command handles ev
 Long-running releases should be run in a persistent terminal session so they keep running if your SSH connection drops.
 
 ```bash
-# Start a named tmux session
+# Normally we don't kill the session so you basically attach to the pp-release session
+tmux attach -t pp-release
+
+# Or start a named tmux session
 tmux new -s pp-release
 
+
+
 # Step 1: Dry run (stops after validation, does not swap tables)
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Jan2026"]
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Mar2026"]
 
 # Detach without stopping the process
-# Press: Ctrl-b then d
+Ctrl-b then d
 
 # Reattach later
 tmux attach -t pp-release
@@ -88,7 +98,7 @@ RAILS_ENV=production bundle exec rake pp:portal:status
 
 # When ready to go live** (e.g., on the first day of the month), continue with the swap:
 # IMPORTANT! Make sure you change the correct label
-RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Jan2026"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Mar2026"]
 ```
 
 **Important Notes:**
@@ -97,23 +107,33 @@ RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:porta
 - Staging tables remain in the database until you run the swap
 - Resuming from `finalise_swap` will perform the actual swap and continue with remaining phases
 
+### ✅ Once You see Congragulations xxxx message on slack then you have completed a monthly release using dry run method! If you are looking for direct release read below
+<br>
+<br>
+<a id="running-an-auto-release"></a>
+
 ### Alternative: Direct Release (Automatic)
 
 If you want to run the entire release automatically:
 
 ```bash
-# Start a named tmux session
+# Normally we don't kill the session so you basically attach to the pp-release session
+tmux attach -t pp-release
+
+# Or start a named tmux session
 tmux new -s pp-release
 
 # Direct release (swaps tables immediately - no inspection step)
-RAILS_ENV=production bundle exec rake pp:portal:release["Dec2025"]
+RAILS_ENV=production bundle exec rake pp:portal:release["Mar2026"]
 
 # Detach without stopping the process
 # Press: Ctrl-b then d
 
-# Reattach later
+# Reattach later if needed
 tmux attach -t pp-release
 ```
+
+### ✅ Once You see Congragulations xxxx message on slack then you have completed a monthly release
 
 > **⚠️ Note**: This approach skips the inspection step.
 
@@ -217,7 +237,7 @@ For advanced troubleshooting and technical details, see [Release Orchestration](
 PP_RELEASE_DRY_RUN=true \
 PP_RELEASE_STAGING_LIGHTWEIGHT=true \
 PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS=false \
-bundle exec rake pp:portal:release["Nov2025"]
+bundle exec rake pp:portal:release["Feb2026"]
 
 # Resume from specific phase (after dry run - use SAME label as dry run)
 PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
