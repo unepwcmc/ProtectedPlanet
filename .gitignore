@@ -39,3 +39,4 @@ tmp/cache/webpacker
 
 vendor/bundle
 /public/manifests
+/chrome
