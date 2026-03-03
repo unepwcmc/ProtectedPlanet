@@ -33,11 +33,11 @@ module Concerns
             when PageSlugs::MARINE_PROTECTED_AREAS
               pas.marine_areas
             when PageSlugs::GREEN_LIST
-              pas.green_list_areas
+              pas.pas_with_green_list_on_self_or_any_parcel
             when PageSlugs::WDPCA
               pas
             when PageSlugs::EFFECTIVENESS
-              pas.with_pame_evaluations
+              pas.pas_with_pame_on_self_or_any_parcel
             else
               -1 #Not applicable - hide ribbon
             end
