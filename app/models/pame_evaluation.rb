@@ -79,7 +79,7 @@ class PameEvaluation < ApplicationRecord
   end
 
   def self.parse_filters(filters)
-    where_params = { method: nil, year: nil, country: nil, type: nil }
+    where_params = { method: nil, year: nil, country: nil, type: nil, site_type: nil }
 
     filters.each do |filter|
       options = filter['options']
@@ -102,13 +102,21 @@ class PameEvaluation < ApplicationRecord
         where_params[:method] = quoted.empty? ? nil : "pame_methods.name IN (#{quoted.join(',')})"
       when 'year'
         where_params[:year] = options.empty? ? nil : "pame_evaluations.asmt_year IN (#{options.join(',')})"
-      else
+      when 'type'
         if options.length == 1
           where_params[:type] = if options[0] == 'Marine'
                                   'COALESCE(protected_areas.marine, protected_area_parcels.marine)'
                                 else
                                   'COALESCE(protected_areas.marine, protected_area_parcels.marine) = false'
                                 end
+        end
+      when 'site_type'
+        if options.length == 1
+          where_params[:site_type] = if options[0] == 'OECM'
+                                       'protected_areas.is_oecm = true'
+                                     else
+                                       '(protected_areas.is_oecm = false OR protected_areas.is_oecm IS NULL)'
+                                     end
         end
       end
     end
@@ -119,10 +127,11 @@ class PameEvaluation < ApplicationRecord
     scope = PameEvaluation.left_joins(:protected_area, :protected_area_parcel, :pame_method)
     scope = scope.joins(:countries) if where_params[:country].present?
 
-    scope = scope.where(where_params[:method]) if where_params[:method].present?
-    scope = scope.where(where_params[:year])   if where_params[:year].present?
-    scope = scope.where(where_params[:type])   if where_params[:type].present?
-    scope = scope.where(where_params[:country]) if where_params[:country].present?
+    scope = scope.where(where_params[:method])    if where_params[:method].present?
+    scope = scope.where(where_params[:year])      if where_params[:year].present?
+    scope = scope.where(where_params[:type])      if where_params[:type].present?
+    scope = scope.where(where_params[:site_type]) if where_params[:site_type].present?
+    scope = scope.where(where_params[:country])   if where_params[:country].present?
 
     scope.where(HAS_AREA_OR_PARCEL_CONDITION).order(QUERY_ORDER).paginate(page: page_number || 1, per_page: 50)
   end
@@ -201,8 +210,14 @@ class PameEvaluation < ApplicationRecord
       },
       {
         name: 'type',
-        title: 'Type',
+        title: 'Realm',
         options: %w[Marine Terrestrial],
+        type: 'multiple'
+      },
+      {
+        name: 'site_type',
+        title: 'Site Type',
+        options: ['Protected Area', 'OECM'],
         type: 'multiple'
       }
     ].to_json
