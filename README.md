@@ -37,6 +37,13 @@ git submodule update --init --recursive
 13. [DB Connection between PP and Data Management Portal (FDW) Setup](docs/fdw_setup/index.md)
 14. [Banner system](docs/banner_system.md)
 
+### Naming convention
+
+- **WDPA vs WDPCA**: The World Database on Protected Areas (WDPA) is exposed in this app as **WDPCA** in routes and code (for example `/databases/wdpca`, `WdpcaController`).
+- **PAME vs Effectiveness**: The Protected Area Management Effectiveness (PAME) database is shown in the UI as the **Effectiveness** database (for example `/databases/effectiveness`, `PameController`, `pame_evaluations` table).
+
+These pairs (WDPA/WDPCA and PAME/Effectiveness) are just different labels for the same underlying datasets.
+
 ## Licence
 
 Protected Planet is released under the [BSD

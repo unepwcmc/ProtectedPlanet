@@ -52,6 +52,10 @@ Rails.application.routes.draw do
     get '/thematic-areas/oecms', to: 'oecm#index'
     get '/thematic-areas/marine-protected-areas', to: 'marine#index'
     get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
+
+    # Database routes:
+    # - "effectiveness" == PAME (management-effectiveness evaluations)
+    # - "wdpca" == WDPA (protected areas database)
     get '/databases/wdpca', to: 'wdpca#index'
     get '/databases/effectiveness', to: 'pame#index'
 
