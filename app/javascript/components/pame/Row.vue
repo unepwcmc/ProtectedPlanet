@@ -4,7 +4,7 @@
     <p class="table__cell">{{ item.designation }}</p>
     <p class="table__cell">
       <a v-if="item.site_id" 
-        :href="linkToPAUrl" 
+        :href="item.pa_site_url" 
         title="View protected area on Protected Planet" 
         target="_blank">
         <pame-site-id 
@@ -53,11 +53,6 @@
     computed: {
       projectTitle () {
         return this.trim(this.item.title)
-      },
-      linkToPAUrl () {
-        return this.item.site_pid ? 
-        `${this.item.pa_site_url}?pid=${this.item.site_pid}`
-         : this.item.pa_site_url
       }
     },
 
