@@ -9,7 +9,7 @@ class RegionController < ApplicationController
   def show
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', params[:iso].upcase)
 
-    @total_pame = @region.protected_areas.with_pame_evaluations.count
+    @total_pame = @region.protected_areas.pas_with_pame_on_self_or_any_parcel.count
     @total_wdpa = @region.protected_areas.wdpas.count
 
     @map = {

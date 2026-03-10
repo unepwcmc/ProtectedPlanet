@@ -70,7 +70,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       'marine' => true,
       'has_irreplaceability_info' => true,
       'has_parcc_info' => false,
-      'is_green_list' => false,
+      'pa_or_any_its_parcels_is_greenlisted' => false,
       'is_oecm' => false,
       'coordinates' => [2.0, 1.0],
       'countries_for_index' => [
@@ -128,63 +128,6 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     assert_equal 1, nearest.length
   end
 
-  test '.as_api_feeder returns the PA as JSON with requested attributes' do
-    time = Time.local(2008, 9, 1, 10, 5, 0)
-
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
-
-    jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
-    iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
-    designation = FactoryGirl.create(:designation, id: 654, name: 'National', jurisdiction: jurisdiction)
-    governance = FactoryGirl.create(:governance, id: 111, name: 'Bone Man')
-    legal_status = FactoryGirl.create(:legal_status, id: 987, name: 'Proposed')
-
-    pa = FactoryGirl.create(:protected_area,
-      name: 'Manbone', countries: [country],
-      original_name: 'Manboné', iucn_category: iucn_category,
-      designation: designation, governance: governance,
-      legal_status: legal_status, legal_status_updated_at: time, marine: true, site_id: 555_999,
-      reported_area: 10.2)
-
-    expected_json = {
-      'site_id' => 555_999,
-      'name' => 'Manbone',
-      'original_name' => 'Manboné',
-      'marine' => true,
-      'legal_status_updated_at' => time,
-      'reported_area' => 10.2,
-      'countries' => [
-        {
-          'name' => 'Manboneland',
-          'iso_3' => 'MBN',
-          'region' => {
-            'name' => 'North Manmerica'
-          }
-        }
-      ],
-      'iucn_category' => {
-        'name' => 'IA'
-      },
-      'designation' => {
-        'name' => 'National',
-        'jurisdiction' => {
-          'name' => 'International'
-        }
-      },
-      'legal_status' => {
-        'name' => 'Proposed'
-      },
-      'governance' => {
-        'name' => 'Bone Man'
-      },
-      'networks_no' => 0,
-      'designations_no' => 0
-    }
-
-    assert_equal expected_json, pa.as_api_feeder
-  end
-
   test '::most_visited, given a date, returns an array of most visited PAs for the month' do
     pa1 = FactoryGirl.create(:protected_area, site_id: 345)
     pa2 = FactoryGirl.create(:protected_area, site_id: 123)
@@ -197,5 +140,72 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       [{ protected_area: pa1, visits: 4 }, { protected_area: pa2, visits: 1 }],
       ProtectedArea.most_visited(DateTime.new(1955, 9, 12))
     )
+  end
+
+  # Green list scopes and instance methods
+  test '.pas_with_green_list_on_self_only returns only PAs with green_list_status on the PA record' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa_with_gl = FactoryGirl.create(:protected_area, site_id: 901, green_list_status: gl)
+    FactoryGirl.create(:protected_area, site_id: 902)
+
+    result = ProtectedArea.pas_with_green_list_on_self_only
+    assert_includes result, pa_with_gl
+    assert_equal 1, result.count
+  end
+
+  test '.pas_with_green_list_on_self_or_any_parcel returns PAs with green list on self or any parcel' do
+    gl_pa = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    gl_parcel = FactoryGirl.create(:green_list_status, gl_status: 'Relisted')
+    pa_self = FactoryGirl.create(:protected_area, site_id: 801, green_list_status: gl_pa)
+    pa_parcel_only = FactoryGirl.create(:protected_area, site_id: 802)
+    FactoryGirl.create(:protected_area_parcel, site_id: pa_parcel_only.site_id, site_pid: '802_A', green_list_status: gl_parcel)
+    pa_none = FactoryGirl.create(:protected_area, site_id: 803)
+
+    result = ProtectedArea.pas_with_green_list_on_self_or_any_parcel
+    assert_includes result.to_a, pa_self
+    assert_includes result.to_a, pa_parcel_only
+    refute_includes result.to_a, pa_none
+    assert result.count >= 2
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlisted is true when PA has Green Listed or Relisted' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa = FactoryGirl.create(:protected_area, site_id: 701, green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlisted
+
+    relisted = FactoryGirl.create(:green_list_status, gl_status: 'Relisted')
+    pa2 = FactoryGirl.create(:protected_area, site_id: 702, green_list_status: relisted)
+    assert pa2.pa_or_any_its_parcels_is_greenlisted
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlisted is true when only a parcel is green listed' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa = FactoryGirl.create(:protected_area, site_id: 703)
+    FactoryGirl.create(:protected_area_parcel, site_id: pa.site_id, site_pid: '703_A', green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlisted
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlisted is false when PA and parcels have no green list' do
+    pa = FactoryGirl.create(:protected_area, site_id: 704)
+    assert_not pa.pa_or_any_its_parcels_is_greenlisted
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlist_candidate is true when PA is Candidate' do
+    gl = FactoryGirl.create(:green_list_status, :candidate)
+    pa = FactoryGirl.create(:protected_area, site_id: 705, green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlist_candidate
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlist_candidate is true when only a parcel is Candidate' do
+    gl = FactoryGirl.create(:green_list_status, :candidate)
+    pa = FactoryGirl.create(:protected_area, site_id: 706)
+    FactoryGirl.create(:protected_area_parcel, site_id: pa.site_id, site_pid: '706_A', green_list_status: gl)
+    assert pa.pa_or_any_its_parcels_is_greenlist_candidate
+  end
+
+  test '#pa_or_any_its_parcels_is_greenlist_candidate is false when PA is Green Listed' do
+    gl = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
+    pa = FactoryGirl.create(:protected_area, site_id: 707, green_list_status: gl)
+    assert_not pa.pa_or_any_its_parcels_is_greenlist_candidate
   end
 end

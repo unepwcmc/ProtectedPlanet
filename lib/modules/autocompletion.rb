@@ -52,8 +52,8 @@ module Autocompletion
     'oecm' => { is_oecm: true },
     'wdpa' => { is_oecm: false },
     'marine' => { marine: true },
-    'is_green_list' => { is_green_list: true },
-    'is_green_list_candidate' => { is_green_list_candidate: true }
+    'pa_or_any_its_parcels_is_greenlisted' => { special_status: 'pa_or_any_its_parcels_is_greenlisted' },
+    'pa_or_any_its_parcels_is_greenlist_candidate' => { special_status: 'pa_or_any_its_parcels_is_greenlist_candidate' }
   }.freeze
   def self.get_filters(type)
     filter = ALLOWED_FILTERS[type]

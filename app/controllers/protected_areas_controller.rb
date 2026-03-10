@@ -18,14 +18,8 @@ class ProtectedAreasController < ApplicationController
     @protected_area || raise_404
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
-    @other_designations = load_other_designations
-    # @networks = load_networks
 
     @locations = get_locations
-
-    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
-    @sources = @protected_area.sources_per_pa
-
     @wdpa_other = get_other_sites
 
     @otherWdpasViewAllUrl = determine_search_path(@protected_area)
@@ -92,13 +86,6 @@ class ProtectedAreasController < ApplicationController
 
     year_month = DateTime.now.strftime('%m-%Y')
     $redis.zincrby(year_month, 1, @protected_area.site_id)
-  end
-
-  def load_other_designations
-    other_designations = @protected_area.networks.detect(&:designation).try(:protected_areas)
-
-    other_designations = Array.wrap(other_designations)
-    other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 
   OTHER_SITES = 3

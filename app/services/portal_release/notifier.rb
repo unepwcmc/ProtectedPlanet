@@ -202,13 +202,13 @@ module PortalRelease
         :imported_count)
       fields_updated = value(results, :global_stats, :fields_updated)
 
-      gl_imported   = value(results, :green_list, :imported_count)
-      gl_not_found  = Array(value(results, :green_list, :not_found_site_ids)).size
-      gl_invalid    = Array(value(results, :green_list, :invalid_site_ids)).size
-      gl_duplicates = Array(value(results, :green_list, :duplicates)).size
+      gl_imported    = value(results, :green_list, :imported_count)
+      gl_skipped     = value(results, :green_list, :skipped_count)
+      gl_soft_errors = Array(value(results, :green_list, :soft_errors)).size
 
-      pame_imported = value(results, :pame, :imported_count)
-      pame_unrec    = Array(value(results, :pame, :site_ids_not_recognised)).size
+      pame_imported     = value(results, :pame, :imported_count)
+      pame_skipped      = value(results, :pame, :skipped_count)
+      pame_soft_errors  = Array(value(results, :pame, :soft_errors)).size
 
       blocks = [
         { type: 'header', text: { type: 'plain_text', text: "Import core — #{status_text}", emoji: true } },
@@ -217,14 +217,14 @@ module PortalRelease
         {
           type: 'section',
           fields: [
-            { type: 'mrkdwn', text: "*Sources imported*\n#{src_count || 0}" },
+            { type: 'mrkdwn', text: "*Protected area sources imported*\n#{src_count || 0}" },
             { type: 'mrkdwn', text: "*Protected areas imported*\n#{pa_attrs || 0}" },
             { type: 'mrkdwn', text: "*Geometries (areas/parcels)*\n#{pa_geom_areas || 0} / #{pa_geom_parcels || 0}" },
             { type: 'mrkdwn', text: "*Global statistics fields updated*\n#{fields_updated || 0}" },
             { type: 'mrkdwn',
-              text: "*Green List*\n#{gl_imported || 0} (Not found #{gl_not_found}, Invalid #{gl_invalid}#{gl_duplicates.positive? ? ", Duplicates #{gl_duplicates}" : ''})" },
+              text: "*Green List*\n#{gl_imported || 0} (#{gl_skipped.to_i} skipped) (#{gl_soft_errors} soft errors)" },
             { type: 'mrkdwn',
-              text: "*PAME*\n#{pame_imported || 0}#{pame_unrec.positive? ? " (Unrecognised #{pame_unrec})" : ''}" }
+              text: "*PAME*\n#{pame_imported || 0} (#{pame_skipped.to_i} skipped) (#{pame_soft_errors} soft errors)" }
           ]
         }
       ]

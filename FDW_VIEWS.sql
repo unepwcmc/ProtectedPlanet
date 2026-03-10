@@ -38,6 +38,12 @@ DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_int_crit_agg;
 DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_parent_iso3_agg;
 DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_iso3_agg;
 
+-- Drop PAME views
+DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_pame_sources;
+DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_pame;
+
+-- Drop Green List view
+DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_standard_greenlist;
 
 
 
@@ -504,12 +510,136 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_sources_metadataid ON staging_port
 -- ⚠️  If you change how index_id is generated, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_sources_pk ON staging_portal_standard_sources(index_id);
 
--- 5) refreshes (make sure to run this after creating the views)
--- YOU PROBABLY DON"T NEED TO RUN IT CONCURRENTLY THEN REMOVE 'CONCURRENTLY'
+
+-- 5) Standardized view (PAME Sources)
+--    PAME source metadata from the portal
+--    ⚠️  If you modify columns here, check Portal DB indexes for:
+--        - pame.pame_sources(id, eff_metaid)
+--        - This file: Ensure unique index on (id) exists for CONCURRENT refreshes
+
+CREATE MATERIALIZED VIEW public.staging_portal_standard_pame_sources AS
+SELECT
+  (ps.id)::bigint AS id,
+  (ps.eff_metaid)::bigint AS eff_metaid,
+  LEFT(ps.data_title::varchar, 255) AS data_title,
+  LEFT(ps.resp_party::varchar, 255) AS resp_party,
+  LEFT(ps.resp_email::varchar, 255) AS resp_email,
+  LEFT(ps.resp_pers::varchar, 255) AS resp_pers,
+  (ps.year)::integer AS year,
+  LEFT(ps.language::varchar, 255) AS language
+FROM portal_fdw.pame_sources ps
+WITH NO DATA;
+
+-- Unique index required for CONCURRENT refreshes
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_pk ON staging_portal_standard_pame_sources(id);
+-- Index on id for lookups
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_id ON staging_portal_standard_pame_sources(id);
+
+
+-- 6) Standardized view (PAME Evaluations)
+--    PAME evaluation data from the portal
+--    ⚠️  If you modify columns here, check Portal DB indexes for:
+--        - pame.pame(asmt_id, site_id, parcel_id, pame_source_id, archived_at)
+--        - pame.pame_designation_purpose_biodiversity_cats(pame_id, designation_purpose_biodiversity_cat_id)
+--        - This file: Ensure unique index on asmt_id exists
+
+CREATE MATERIALIZED VIEW public.staging_portal_standard_pame AS
+WITH dp_bio_agg AS (
+  SELECT
+    j.pame_id,
+    string_agg(
+      DISTINCT COALESCE(c.description->>'en', c.code),
+      ';' ORDER BY COALESCE(c.description->>'en', c.code)
+    ) AS dp_bio
+  FROM portal_fdw.pame_designation_purpose_biodiversity_cats j
+  JOIN portal_fdw.designation_purpose_biodiversity_cat c
+    ON c.id = j.designation_purpose_biodiversity_cat_id
+  GROUP BY j.pame_id
+)
+SELECT
+  (p.id)::bigint AS id,
+  (p.asmt_id)::bigint AS asmt_id,
+  (ps.eff_metaid)::bigint AS eff_metaid,
+  (p.site_id)::bigint AS site_id,
+  LEFT(p.parcel_id::varchar, 52) AS site_pid,
+  LEFT(COALESCE(m.description->>'en', m.code, p.method_text)::varchar, 255) AS method,
+  (p.submit_year)::integer AS submityear,
+  (p.asmt_year)::integer AS asmt_year,
+  LEFT(COALESCE(ve.description->>'en', ve.code)::varchar, 255) AS verif_eff,
+  LEFT(p.asmt_url::varchar, 500) AS asmt_url,
+  LEFT(p.info_url::varchar, 500) AS info_url,
+  LEFT(COALESCE(ga.description->>'en', ga.code)::varchar, 255) AS gov_act,
+  LEFT(COALESCE(gas.description->>'en', gas.code)::varchar, 255) AS gov_asmt,
+  LEFT(dp.dp_bio::varchar, 255) AS dp_bio,
+  LEFT(COALESCE(dpo.description->>'en', dpo.code)::varchar, 255) AS dp_other,
+  LEFT(COALESCE(mos.description->>'en', mos.code)::varchar, 255) AS mgmt_obset,
+  LEFT(COALESCE(mom.description->>'en', mom.code)::varchar, 255) AS mgmt_obman,
+  LEFT(COALESCE(ma.description->>'en', ma.code)::varchar, 255) AS mgmt_adapt,
+  LEFT(COALESCE(ms.description->>'en', ms.code)::varchar, 255) AS mgmt_staff,
+  LEFT(COALESCE(mb.description->>'en', mb.code)::varchar, 255) AS mgmt_budgt,
+  LEFT(COALESCE(mt.description->>'en', mt.code)::varchar, 255) AS mgmt_thrts,
+  LEFT(COALESCE(mm.description->>'en', mm.code)::varchar, 255) AS mgmt_mon,
+  LEFT(COALESCE(ob.description->>'en', ob.code)::varchar, 255) AS out_bio
+FROM portal_fdw.pame p
+JOIN portal_fdw.pame_sources ps ON ps.id = p.pame_source_id
+LEFT JOIN dp_bio_agg dp ON dp.pame_id = p.id
+LEFT JOIN portal_fdw.method_cat m ON m.id = p.method_id
+LEFT JOIN portal_fdw.verification_effectiveness_cat ve ON ve.id = p.verification_effectiveness_id
+LEFT JOIN portal_fdw.governance_action_cat ga ON ga.id = p.governance_action_id
+LEFT JOIN portal_fdw.governance_assessment_cat gas ON gas.id = p.governance_assessment_id
+LEFT JOIN portal_fdw.designation_purpose_other_cat dpo ON dpo.id = p.designation_purpose_other_id
+LEFT JOIN portal_fdw.management_objectives_set_cat mos ON mos.id = p.management_objectives_set_id
+LEFT JOIN portal_fdw.management_objectives_managed_cat mom ON mom.id = p.management_objectives_managed_id
+LEFT JOIN portal_fdw.management_adaptation_cat ma ON ma.id = p.management_adaptation_id
+LEFT JOIN portal_fdw.management_staff_cat ms ON ms.id = p.management_staff_id
+LEFT JOIN portal_fdw.management_budget_cat mb ON mb.id = p.management_budget_id
+LEFT JOIN portal_fdw.management_threats_cat mt ON mt.id = p.management_threats_id
+LEFT JOIN portal_fdw.management_monitoring_cat mm ON mm.id = p.management_monitoring_id
+LEFT JOIN portal_fdw.outcomes_biodiversity_cat ob ON ob.id = p.outcomes_biodiversity_id
+WHERE p.archived_at IS NULL
+WITH NO DATA;
+
+-- Unique index required for CONCURRENT refreshes
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_pame_pk ON staging_portal_standard_pame(id);
+-- Indexes for common lookups
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_site_id ON staging_portal_standard_pame(site_id);
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_eff_metaid ON staging_portal_standard_pame(eff_metaid);
+CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_asmt_year ON staging_portal_standard_pame(asmt_year);
+
+
+-- 7) Standardized view (Green List)
+--    ⚠️  If you modify columns here, check:
+--        - pame.greenlists(site_id, parcel_id, gl_status_id, archived_at)
+--        - This file: Ensure unique index on (id) exists for CONCURRENT refreshes
+
+CREATE MATERIALIZED VIEW public.staging_portal_standard_greenlist AS
+SELECT
+  (g.id)::bigint AS id,
+  (g.site_id)::bigint AS site_id,
+  LEFT(g.parcel_id::varchar, 52) AS site_pid,
+  LEFT(COALESCE(sc.description->>'en', sc.code)::varchar, 50) AS gl_status,
+  (g.gl_expiry)::integer AS gl_expiry,
+  LEFT(g.gl_link::varchar, 500) AS gl_link
+FROM portal_fdw.greenlists g
+JOIN portal_fdw.greenlist_status_cat sc ON sc.id = g.gl_status_id
+WHERE g.archived_at IS NULL
+WITH NO DATA;
+
+-- Unique index required for CONCURRENT refreshes 
+-- ⚠️  If you change the natural key columns, update this index
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_greenlist_pk ON staging_portal_standard_greenlist(id);
+-- Indexes for common lookups
+CREATE INDEX IF NOT EXISTS staging_idx_portal_greenlist_site_id ON staging_portal_standard_greenlist(site_id);
+CREATE INDEX IF NOT EXISTS staging_idx_portal_greenlist_gl_expiry ON staging_portal_standard_greenlist(gl_expiry);
+
+-- 8) refreshes (make sure to run this after creating the views)
 REFRESH MATERIALIZED VIEW staging_portal_iso3_agg;
 REFRESH MATERIALIZED VIEW staging_portal_parent_iso3_agg;
 REFRESH MATERIALIZED VIEW staging_portal_int_crit_agg;
 REFRESH MATERIALIZED VIEW staging_portal_standard_points;
 REFRESH MATERIALIZED VIEW staging_portal_standard_polygons;
 REFRESH MATERIALIZED VIEW staging_portal_standard_sources;
+REFRESH MATERIALIZED VIEW staging_portal_standard_pame_sources;
+REFRESH MATERIALIZED VIEW staging_portal_standard_pame;
+REFRESH MATERIALIZED VIEW staging_portal_standard_greenlist;
 

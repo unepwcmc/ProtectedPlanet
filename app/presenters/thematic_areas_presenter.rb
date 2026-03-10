@@ -33,20 +33,21 @@ class ThematicAreasPresenter
 
   def pas_figure(slug)
     pas = ProtectedArea
+
     pas = case slug
-    when 'marine-protected-areas'
-      pas.marine_areas
-    when 'green-list'
-      pas.green_list_areas
-    when 'wdpa'
-      pas.wdpas
-    when 'oecms'
-      pas.oecms
-    when 'protected-areas-management-effectiveness-pame'
-      pas.with_pame_evaluations
-    else
-      -1 #Not applicable - hide ribbon
-    end
+          when 'marine-protected-areas'
+            pas.marine_areas
+          when 'green-list'
+            pas.pas_with_green_list_on_self_or_any_parcel
+          when 'wdpa'
+            pas.wdpas
+          when 'oecms'
+            pas.oecms
+          when 'protected-areas-management-effectiveness-pame'
+            pas.pas_with_pame_on_self_or_any_parcel
+          else
+            -1 #Not applicable - hide ribbon
+          end
 
     pas.respond_to?(:count) ? number_with_delimiter(pas.count) : pas
   end

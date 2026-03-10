@@ -4,6 +4,16 @@
 &--stats-affiliations {
   @include card-stats;
 
+  .pdf & {
+    .card{
+      &__all-attributes{
+        @include flex;
+        @include flex-column;
+        gap: 4rem;
+      }   
+    }
+  }
+  
   .card {
     &__button {
       @include card-button-external;
@@ -17,14 +27,9 @@
 
     &__logos {
       @include flex;
+      @include flex-column;
+      gap: 1rem;
       @include ul-unstyled;
-    }
-
-    &__logo {
-      margin-left: rem-calc(30);
-      max-width: rem-calc(200);
-
-      &:first-child { margin-left: 0; }
     }
 
     &__logo-image {

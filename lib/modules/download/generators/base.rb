@@ -6,18 +6,20 @@ class Download::Generators::Base
   TMP_DOWNLOADS_PREFIX = 'tmp_downloads_'
   SOURCE_CSV_PREFIX = 'WDPA_sources_'
 
-  def self.generate(zip_path, site_ids = nil)
-    generator = new zip_path, site_ids
+  # For non-PDF generators, we accept a selection hash: nil (no filter),
+  # { site_ids: [...] }, or { site_id_and_pid_pairs: [[site_id, site_pid], ...] }.
+  def self.generate(zip_path, selection_entries = nil)
+    generator = new zip_path, selection_entries
     generator.generate
   end
 
-  def initialize(zip_path, site_ids)
+  def initialize(zip_path, selection_entries)
     @zip_path = zip_path
-    @site_ids = site_ids
+    @selection_entries = selection_entries
   end
 
   def generate
-    return false if @site_ids.is_a?(Array) && @site_ids.empty?
+    return false if selection_entries_empty?
 
     clean_up_after { export and export_sources and zip }
   end
@@ -98,21 +100,88 @@ class Download::Generators::Base
     add_conditions(query, conditions).squish
   end
 
+  # See build_site_selection in app/workers/download_workers/general.rb for the usage
   def add_conditions(query, conditions)
     conditions = Array.wrap(conditions)
-    if @site_ids.present?
-      sanitized_ids = @site_ids.select { |id| id.to_s =~ /\A\d+\z/ }.map(&:to_i)
-      if sanitized_ids.empty?
-        # If site_ids were provided but none are valid, ensure no rows are returned
+
+    if @selection_entries.is_a?(Hash)
+      site_ids   = (@selection_entries[:site_ids] || []).map(&:to_i).reject(&:zero?)
+      site_id_pid_pairs = build_pair_clauses(@selection_entries[:site_id_and_pid_pairs] || [])
+      iso3_vals  = Array(@selection_entries[:iso3]).reject(&:blank?)
+      site_types = Array(@selection_entries[:site_types]).reject(&:blank?)
+      realms = Array(@selection_entries[:realms]).reject(&:blank?)
+
+      if site_ids.empty? && site_id_pid_pairs.empty? && iso3_vals.empty? && site_types.empty? && realms.empty?
         conditions << "1=0"
       else
-        # Use SITE_ID for portal views, WDPAID for standard views
-        conditions << %{"#{Download::Config.id_column}" IN (#{sanitized_ids.join(',')})}
+        disjuncts = []
+        disjuncts << build_site_ids_clause(site_ids) if site_ids.any?
+        disjuncts.concat(site_id_pid_pairs) if site_id_pid_pairs.any?
+        disjuncts << build_iso3_clause(iso3_vals) if iso3_vals.any?
+        disjuncts << build_site_types_clause(site_types) if site_types.any?
+        disjuncts << build_realms_clause(realms) if realms.any?
+
+        conditions << "(#{disjuncts.join(' OR ')})"
       end
     end
+
     query.tap do |q|
       q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
     end
+  end
+
+  def selection_entries_empty?
+    return false if @selection_entries.nil?
+    return true unless @selection_entries.is_a?(Hash)
+
+    site_ids = Array.wrap(@selection_entries[:site_ids])
+    pairs = Array.wrap(@selection_entries[:site_id_and_pid_pairs])
+    iso3s = Array.wrap(@selection_entries[:iso3])
+    types = Array.wrap(@selection_entries[:site_types])
+    realms = Array.wrap(@selection_entries[:realms])
+    site_ids.empty? && pairs.empty? && iso3s.empty? && types.empty? && realms.empty?
+  end
+
+  def build_pair_clauses(pairs)
+    pairs.each_with_object([]) do |(site_id, site_pid), clauses|
+      next if site_id.to_i.zero? || site_pid.blank?
+
+      escaped_pid = site_pid.to_s.gsub("'", "''")
+      cols = Download::Config.download_view_column_names
+      # Wrap in parentheses so each (site_id, site_pid) pair is treated as a unit when OR-ed
+      clauses << %(("#{cols[:site_id]}" = #{site_id.to_i} AND "#{cols[:site_pid]}" = '#{escaped_pid}'))
+    end
+  end
+
+  def build_site_ids_clause(site_ids)
+    return nil if site_ids.blank?
+
+    %("#{Download::Config.download_view_column_names[:site_id]}" IN (#{site_ids.join(',')}))
+  end
+
+  def build_iso3_clause(iso3_vals)
+    return nil if iso3_vals.blank?
+
+    iso3_list = sql_in_list(iso3_vals)
+    %("#{Download::Config.download_view_column_names[:iso3]}" IN (#{iso3_list}))
+  end
+
+  def build_site_types_clause(site_types)
+    return nil if site_types.blank?
+
+    types_list = sql_in_list(site_types)
+    %("#{Download::Config.download_view_column_names[:site_type]}" IN (#{types_list}))
+  end
+
+  def build_realms_clause(realms)
+    return nil if realms.blank?
+
+    realms_list = sql_in_list(realms)
+    %("#{Download::Config.download_view_column_names[:realm]}" IN (#{realms_list}))
+  end
+
+  def sql_in_list(values)
+    values.map { |v| "'#{v.to_s.gsub("'", "''")}'" }.join(',')
   end
 
   def clean_up_after

@@ -117,7 +117,7 @@ module Wdpa
         end
 
         def self.find_geometry_columns_from_mapping
-          Wdpa::Portal::Utils::ColumnMapper::PORTAL_TO_PP_MAPPING
+          Wdpa::Portal::Utils::ProtectedAreaColumnMapper::PORTAL_TO_PP_MAPPING
             .select { |_portal_key, mapping| mapping[:type] == :geometry }
             .map { |_portal_key, mapping| mapping[:name] }
         end

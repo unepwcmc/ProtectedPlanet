@@ -104,7 +104,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 
-    assert_equal true, Download::Generators::Csv.generate(zip_file_path, site_ids),
+    assert_equal true, Download::Generators::Csv.generate(zip_file_path, { site_ids: site_ids }),
       'Expected #generate to return true on success'
   end
 end

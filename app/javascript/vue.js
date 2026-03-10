@@ -67,8 +67,11 @@ import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 import IconExclamationCircle from './components/icon/ExclamationCircle'
-import StatsAttributesSet from './components/stats/StatsAttributesSet'
-import StatsParcelsSources from './components/stats/StatsParcelsSources'
+import AttributesProtectedAreaParcels from './components/attributes/AttributesProtectedAreaParcels'
+import AttributesProtectedAreaParcelsSources from './components/attributes/AttributesProtectedAreaParcelsSources'
+import AttributesPames from './components/attributes/AttributesPames'
+import AttributesAffiliations from './components/attributes/AttributesAffiliations'
+import AttributesParcelsDropdown from './components/attributes/AttributesParcelsDropdown'
 import BannerBanner from './components/banner/Banner'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -154,8 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
         VSelectSearchable,
         VTable,
         IconExclamationCircle,
-        StatsAttributesSet,
-        StatsParcelsSources,
+        AttributesProtectedAreaParcels,
+        AttributesProtectedAreaParcelsSources,
+        AttributesPames,
+        AttributesAffiliations,
+        AttributesParcelsDropdown,
         BannerBanner
       },
       beforeCreate() { 

@@ -17,6 +17,24 @@ module Wdpa::Shared
         return nil if value.to_i.zero?
 
         Date.strptime(value, '%Y')
+      },
+      gl_expiry_date: lambda { |value|
+        begin
+          return nil if value.blank?
+          return value if value.is_a?(Date)
+
+          value = value.to_s.strip
+          return nil if value.blank?
+
+          # YYYYMMDD (e.g. 20261231) or ISO/other format
+          if value.match?(/\A\d{8}\z/)
+            Date.strptime(value, '%Y%m%d')
+          else
+            Date.parse(value)
+          end
+        rescue ArgumentError
+          nil
+        end
       }
     }.freeze
 
