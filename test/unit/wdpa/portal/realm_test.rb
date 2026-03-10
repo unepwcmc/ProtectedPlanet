@@ -101,7 +101,6 @@ class RealmTest < ActiveSupport::TestCase
   end
 
   test 'realm name is unique' do
-    Realm.create!(name: 'Terrestrial')
     duplicate_realm = Realm.new(name: 'Terrestrial')
     refute duplicate_realm.valid?
     assert_includes duplicate_realm.errors[:name], 'has already been taken'

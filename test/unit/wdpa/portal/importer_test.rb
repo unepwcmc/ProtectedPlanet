@@ -38,7 +38,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     Wdpa::Portal::Importer.expects(:import_data_to_staging_tables).returns(staging_results)
     Wdpa::Portal::Importer.expects(:update_data_in_live_tables).returns(live_results)
 
-    result = Wdpa::Portal::Importer.import
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: false)
 
     assert result[:success]
     assert_empty result[:hard_errors]
@@ -47,9 +47,11 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
   test '.import raises error when views do not exist' do
     Wdpa::Portal::Managers::ViewManager.expects(:validate_required_views_exist).returns(false)
 
-    assert_raises(StandardError, /Required materialized views do not exist/) do
-      Wdpa::Portal::Importer.import
-    end
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: false)
+
+    refute result[:success]
+    # Error message should indicate missing materialized views
+    assert_includes result[:hard_errors].first.to_s, 'Required materialized views do not exist'
   end
 
   test '.import_data_to_staging_tables runs all importers when protected areas succeed' do
@@ -121,7 +123,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     live_results = {}
 
     result = Wdpa::Portal::Importer.check_for_hard_errors(staging_results, live_results)
-    assert result
+    refute_empty result
   end
 
   test '.check_for_hard_errors returns false when no hard errors' do
@@ -132,7 +134,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     live_results = {}
 
     result = Wdpa::Portal::Importer.check_for_hard_errors(staging_results, live_results)
-    refute result
+    assert_equal [], result
   end
 
   test '.check_for_hard_errors_recursive finds nested hard errors' do
@@ -144,19 +146,21 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
       }
     }
 
-    result = Wdpa::Portal::Importer.check_for_hard_errors_recursive(hash, 'test')
-    assert result
+    all_errors = []
+    Wdpa::Portal::Importer.check_for_hard_errors_recursive(hash, 'test', all_errors)
+    assert_equal ['test.level1.level2: Nested error'], all_errors
   end
 
   test '.check_for_hard_errors_recursive returns false for non-hash input' do
-    result = Wdpa::Portal::Importer.check_for_hard_errors_recursive('not a hash', 'test')
-    refute result
+    all_errors = []
+    Wdpa::Portal::Importer.check_for_hard_errors_recursive('not a hash', 'test', all_errors)
+    assert_empty all_errors
   end
 
   test '.import handles exceptions gracefully' do
     Wdpa::Portal::Managers::ViewManager.expects(:validate_required_views_exist).raises(StandardError, 'Test error')
 
-    result = Wdpa::Portal::Importer.import
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: false)
 
     refute result[:success]
     assert_includes result[:hard_errors].first, 'Portal import failed: Test error'

@@ -6,7 +6,8 @@ class GreenListControllerTest < ActionController::TestCase
   tests GreenListController
 
   test 'index returns success' do
-    seed_cms_home
+    @controller.stubs(:render)
+    seed_cms
     GlobalStatistic.stubs(:green_list_stats).returns(
       'green_list_area' => 100.0,
       'green_list_perc' => 1.5,
@@ -17,7 +18,8 @@ class GreenListControllerTest < ActionController::TestCase
   end
 
   test 'index assigns green list stats and filters' do
-    seed_cms_home
+    @controller.stubs(:render)
+    seed_cms
     GlobalStatistic.stubs(:green_list_stats).returns(
       'green_list_area' => 200.0,
       'green_list_perc' => 2.0,

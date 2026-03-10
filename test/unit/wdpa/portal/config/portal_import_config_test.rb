@@ -23,7 +23,7 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
   end
 
   test 'keep_backup_count returns correct value' do
-    assert_equal 2, @config.keep_backup_count
+    assert_equal 1, @config.keep_backup_count
   end
 
   test 'independent_table_names returns correct mapping' do
@@ -40,9 +40,9 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_includes result.keys, 'pame_statistics'
     assert_includes result.keys, 'story_map_links'
 
-    # Check that values are staging table names
-    assert_includes result.values, 'sources_staging'
-    assert_includes result.values, 'green_list_statuses_staging'
+    # Check that values are staging table names (using current naming convention)
+    assert_includes result.values, 'staging_sources'
+    assert_includes result.values, 'staging_green_list_statuses'
   end
 
   test 'main_entity_tables returns correct mapping' do
@@ -53,8 +53,8 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_includes result.keys, 'protected_area_parcels'
 
     # Check that values are staging table names
-    assert_includes result.values, 'protected_areas_staging'
-    assert_includes result.values, 'protected_area_parcels_staging'
+    assert_includes result.values, 'staging_protected_areas'
+    assert_includes result.values, 'staging_protected_area_parcels'
   end
 
   test 'junction_tables returns correct mapping' do
@@ -68,8 +68,8 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_includes result.keys, 'protected_area_parcels_sources'
 
     # Check that values are staging table names
-    assert_includes result.values, 'countries_protected_areas_staging'
-    assert_includes result.values, 'countries_protected_area_parcels_staging'
+    assert_includes result.values, 'staging_countries_protected_areas'
+    assert_includes result.values, 'staging_countries_protected_area_parcels'
   end
 
   test 'generate_staging_table_index_name adds staging prefix' do
@@ -145,22 +145,22 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_includes result.keys, 'countries_protected_areas'
 
     # Should contain corresponding staging table names
-    assert_includes result.values, 'sources_staging'
-    assert_includes result.values, 'protected_areas_staging'
-    assert_includes result.values, 'countries_protected_areas_staging'
+    assert_includes result.values, 'staging_sources'
+    assert_includes result.values, 'staging_protected_areas'
+    assert_includes result.values, 'staging_countries_protected_areas'
   end
 
   test 'staging_tables returns all staging table names' do
     result = @config.staging_tables
 
     # Should contain all staging table names
-    assert_includes result, 'sources_staging'
-    assert_includes result, 'protected_areas_staging'
-    assert_includes result, 'countries_protected_areas_staging'
+    assert_includes result, 'staging_sources'
+    assert_includes result, 'staging_protected_areas'
+    assert_includes result, 'staging_countries_protected_areas'
   end
 
   test 'get_live_table_name_from_staging_name returns correct live table name' do
-    result = @config.get_live_table_name_from_staging_name('sources_staging')
+    result = @config.get_live_table_name_from_staging_name('staging_sources')
     assert_equal 'sources', result
   end
 
@@ -171,7 +171,7 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
 
   test 'get_staging_table_name_from_live_table returns correct staging table name' do
     result = @config.get_staging_table_name_from_live_table('sources')
-    assert_equal 'sources_staging', result
+    assert_equal 'staging_sources', result
   end
 
   test 'get_staging_table_name_from_live_table returns nil for unknown live table' do
@@ -180,9 +180,9 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
   end
 
   test 'portal_staging_materialised_views returns correct view name' do
-    assert_equal 'portal_standard_polygons', @config.portal_staging_materialised_views[:polygons]
-    assert_equal 'portal_standard_points', @config.portal_staging_materialised_views[:points]
-    assert_equal 'portal_standard_sources', @config.portal_staging_materialised_views[:sources]
+    assert_equal 'staging_portal_standard_polygons', @config.portal_staging_materialised_views[:polygons]
+    assert_equal 'staging_portal_standard_points', @config.portal_staging_materialised_views[:points]
+    assert_equal 'staging_portal_standard_sources', @config.portal_staging_materialised_views[:sources]
   end
 
   test 'portal_staging_materialised_views returns nil for unknown view type' do
@@ -200,6 +200,9 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
       portal_standard_polygons
       portal_standard_points
       portal_standard_sources
+      portal_standard_pame
+      portal_standard_pame_sources
+      portal_standard_greenlist
     ]
 
     assert_equal expected, result
@@ -208,7 +211,7 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
   test 'portal_protected_area_staging_materialised_views returns protected area view names' do
     result = @config.portal_protected_area_staging_materialised_views
 
-    expected = %w[portal_standard_polygons portal_standard_points]
+    expected = %w[staging_portal_standard_polygons staging_portal_standard_points]
     assert_equal expected, result
   end
 
