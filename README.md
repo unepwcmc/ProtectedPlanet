@@ -7,6 +7,9 @@
 You can check out the previous version of Protected Planet on
 [GitHub](https://github.com/unepwcmc/ppe).
 
+> **All protected planet projects in same place:** For Vscode users open `./protected-planet-family-apps.code-workspace` to open all protected planet apps in the same workspace
+
+
 ## Topics
 
 When you clone this repo please do it recursively. For the first time:

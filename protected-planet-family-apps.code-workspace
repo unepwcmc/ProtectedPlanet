@@ -1,0 +1,55 @@
+{
+	"folders": [
+		{
+			"path": "."
+			// https://github.com/unepwcmc/ProtectedPlanet
+		},
+		{
+			"path": "../protectedplanet-api"
+			// https://github.com/unepwcmc/protectedplanet-api
+		},
+		{
+			"path": "./db",
+			"name": "protectedplanet-db"
+			// https://github.com/unepwcmc/protectedplanet-db
+			// It is the same as the db folder in the ProtectedPlanet project
+		},
+		{
+			"path": "../pp-data-management-portal"
+			// The frontend for the PP Data Management Portal
+			// https://github.com/unepwcmc/pp-data-management-portal
+		},
+		{
+			"path": "../wdpa-data-management-portal"
+			// https://github.com/unepwcmc/wdpa-data-management-portal
+		},
+		{
+			"path": "../api-pp-authentication"
+			// https://github.com/unepwcmc/api-pp-authentication
+		},
+		{
+			"path": "../icca-data-management-portal"
+			// https://github.com/unepwcmc/icca-data-management-portal
+		},
+		{
+			"path": "../icca-registry"
+			// https://github.com/unepwcmc/icca-registry
+		},
+		{
+			"path": "../DSL-spatial-file-api"
+			// Only used by icca-registry
+			// https://github.com/unepwcmc/DSL-spatial-file-api
+		},
+		{
+			"path": "../pp-digital-report"
+			// https://github.com/unepwcmc/pp-digital-report
+		},
+		{
+			"path": "../protected-planet-wiki"
+			// https://github.com/unepwcmc/protected-planet-wiki
+		}
+	],
+	"settings": {
+		"window.title": "Protected Planet Family of Apps",
+	}
+}
