@@ -16,6 +16,7 @@ class ProtectedAreaPresenterGreenListTest < ActiveSupport::TestCase
     assert_equal 'greenlist', aff[:affiliation]
     assert_equal 'Green Listed', aff[:type]
     assert_equal status.gl_link, aff[:link_url]
+    assert_equal status.gl_expiry.year, aff[:date], 'Frontend should receive gl_expiry as a 4-digit year'
     assert aff[:image_url].include?('green-list')
   end
 end

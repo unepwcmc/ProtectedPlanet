@@ -19,6 +19,11 @@ module Wdpa::Shared
         Date.strptime(value, '%Y')
       },
       gl_expiry_date: lambda { |value|
+        # gl_expiry was a date column in the database but now as of 19Mar2026 
+        # NC team decided to store only 4 digits year in DMP
+        # so we store it as last day of the year yyyy-12-31 but display it as YYYY in the frontend
+        # We do this in case they decide to store the date again in the future, 
+        # we can easily change the code here and greenlist_status_by_pa_and_all_its_parcels method.
         begin
           return nil if value.blank?
           return value if value.is_a?(Date)
@@ -26,8 +31,10 @@ module Wdpa::Shared
           value = value.to_s.strip
           return nil if value.blank?
 
-          # YYYYMMDD (e.g. 20261231) or ISO/other format
-          if value.match?(/\A\d{8}\z/)
+          # incoming value should be YYYY
+          if value.match?(/\A\d{4}\z/)
+            Date.strptime("#{value}-12-31", '%Y-%m-%d')
+          elsif value.match?(/\A\d{8}\z/)
             Date.strptime(value, '%Y%m%d')
           else
             Date.parse(value)
