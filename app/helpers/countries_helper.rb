@@ -19,12 +19,15 @@ module CountriesHelper
     I18n.t("country.message.restricted.#{get_iso3}")
   end
 
-  def chart_link(category)
+  def chart_link(category, oecms_tab: false)
     return unless geo_entity
 
     type, name, locale = search_path_vars(geo_entity)
     title_variable = ""
     filters = base_filters(type, name)
+
+    # WDPA tab (oecms_tab: false) should exclude OECMs.
+    filters = filters.deep_merge(filters: { db_type: ['wdpa'] }) unless oecms_tab
 
     # Looking for the name of the designation, iucn category etc.
     category_name = category.keys.find { |key| key.match?(/(_name)$/) }
@@ -37,7 +40,7 @@ module CountriesHelper
 
     # This hash is used to populate the view links of the various charts for the
     # region and country pages
-    { 
+    {
       link: search_areas_path(locale, filters),
       title: title_variable
     }
@@ -45,7 +48,7 @@ module CountriesHelper
 
   def has_restricted_sites?
     restricted_iso3 = ["RUS", "EST", "CHN", "GBR"]
-    
+
     @country && (restricted_iso3.include? @country.iso_3)
   end
 
