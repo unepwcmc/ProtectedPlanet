@@ -24,12 +24,9 @@ class GreenListController < ApplicationController
 
     @total_area_percent = GlobalStatistic.global_oecms_pas_coverage_percentage
 
-    @filters = {
-      db_type: %w[wdpa oecm],
-      special_status: %w[is_green_list is_green_list_candidate]
-    }
+    @filters = SearchAreaLinkFilters.green_list_filters
 
-    @greenListViewAllUrl = search_areas_path(filters: { special_status: %w[is_green_list is_green_list_candidate] })
+    @green_list_view_all_url = search_areas_path(filters: SearchAreaLinkFilters.green_list_status_filters)
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,

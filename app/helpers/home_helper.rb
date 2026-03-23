@@ -14,16 +14,8 @@ module HomeHelper
       {
         image: image,
         title: category[:title],
-        url: search_areas_path(filters: get_filters(category[:filter]))
+        url: search_areas_path(filters: SearchAreaLinkFilters.home_category_filters(category[:filter]))
       }
     end
-  end
-
-  def get_filters(filter)
-    if filter == 'is_green_list'
-      { special_status: [filter] }
-    else
-      { is_type: [filter] }
-    end.merge(db_type: ['wdpa'])
   end
 end

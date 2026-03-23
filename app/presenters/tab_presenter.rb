@@ -88,7 +88,7 @@ class TabPresenter
     {
       site_details: fetch_site_names_and_site_ids(3, oecms_tab),
       title: other_sites_title(oecms_tab),
-      view_all: oecms_tab ? view_all_link : view_all_link(db_type: ['wdpa']),
+      view_all: view_all_link(oecms_tab: oecms_tab),
       text_view_all: I18n.t('global.button.all')
     }
   end

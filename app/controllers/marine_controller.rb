@@ -18,7 +18,7 @@ class MarineController < ApplicationController
   def index
     @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
-    @marineViewAllUrl = search_areas_path(filters: {is_type: ['marine']}) 
+    @marineViewAllUrl = search_areas_path(filters: SearchAreaLinkFilters.is_type_marine_filters)
 
     # Removed mpa_map from ['csv', 'shp', 'gdb', 'map_map'] in feat/hide-mpa-download-button
     @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'marine')
@@ -36,7 +36,7 @@ class MarineController < ApplicationController
       type: 'marine',
       point_query_services: marine_services_for_point_query
     }
-    @filters = { db_type: ['wdpa'], is_marine: true }
+    @filters = SearchAreaLinkFilters.wdpa_and_marine_is_true_filters
   end
 
   def download_designations
