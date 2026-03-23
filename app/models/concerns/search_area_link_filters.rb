@@ -10,7 +10,7 @@ module SearchAreaLinkFilters
   end
 
   def self.green_list_status_filters
-    { SPECIAL_STATUS_FILTER_KEY => %w[is_green_list is_green_list_candidate] }
+    { SPECIAL_STATUS_FILTER_KEY => %w[pa_or_any_its_parcels_is_greenlisted pa_or_any_its_parcels_is_greenlist_candidate] }
   end
 
   def self.green_list_filters
