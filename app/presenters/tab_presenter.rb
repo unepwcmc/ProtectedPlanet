@@ -34,16 +34,23 @@ class TabPresenter
     {
       chart: presenter.iucn_categories_chart(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)),
       country: @geo_entity.name,
-      categories: create_chart_links(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)),
+      categories: create_chart_links(
+        @geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab),
+        oecms_tab: oecms_tab
+      ),
       title: I18n.t('stats.iucn-categories.title')
     }
   end
 
   def governance(oecms_tab: false)
+
     {
       chart: presenter.governance_chart(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
       country: @geo_entity.name,
-      governance: create_chart_links(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
+      governance: create_chart_links(
+        @geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab),
+        oecms_tab: oecms_tab
+      ),
       title: I18n.t('stats.governance.title')
     }
   end
@@ -60,7 +67,11 @@ class TabPresenter
   def designations(oecms_tab: false)
     {
       chart: designation_percentages(oecms_tab),
-      designations: create_chart_links(presenter.designations(exclude_oecms: !oecms_tab), true),
+      designations: create_chart_links(
+        presenter.designations(exclude_oecms: !oecms_tab),
+        true,
+        oecms_tab: oecms_tab
+      ),
       title: I18n.t('stats.designations.title')
     }
   end
@@ -77,7 +88,7 @@ class TabPresenter
     {
       site_details: fetch_site_names_and_site_ids(3, oecms_tab),
       title: other_sites_title(oecms_tab),
-      view_all: oecms_tab ? view_all_link : view_all_link(db_type: ['wdpa']),
+      view_all: view_all_link(oecms_tab: oecms_tab),
       text_view_all: I18n.t('global.button.all')
     }
   end
@@ -105,25 +116,22 @@ class TabPresenter
     end
   end
 
-  def create_chart_links(input_data, is_designations = false)
+  def create_chart_links(input_data, is_designations = false, oecms_tab: false)
     if is_designations
       input_data.map do |j|
         jurisdictions_with_links = {
-          jurisdictions: merge_chart_links(j[:jurisdictions])
+          jurisdictions: merge_chart_links(j[:jurisdictions], oecms_tab: oecms_tab)
         }
         j.merge!(jurisdictions_with_links)
       end
     else
-      merge_chart_links(input_data)
+      merge_chart_links(input_data, oecms_tab: oecms_tab)
     end
   end
 
-  def merge_chart_links(input)
+  def merge_chart_links(input, oecms_tab: false)
     input.map do |category|
-      category.merge!({
-        link: chart_link(category)[:link],
-                        title: chart_link(category)[:title]
-      })
+      category.merge!(chart_link(category, oecms_tab: oecms_tab))
     end
   end
 

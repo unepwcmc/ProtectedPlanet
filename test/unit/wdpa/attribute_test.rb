@@ -47,6 +47,14 @@ class TestWdpaAttribute < ActiveSupport::TestCase
       "Expected a non-year-looking string to be converted to null"
   end
 
+  test '.standardise converts gl_expiry_date year-only values to 31 Dec dates' do
+    assert_equal Date.new(2026, 12, 31), Wdpa::Shared::TypeConverter.convert('2026', as: :gl_expiry_date),
+      "Expected '2026' to be converted to 31 Dec 2026"
+
+    assert_equal Date.new(2026, 12, 31), Wdpa::Shared::TypeConverter.convert(2026, as: :gl_expiry_date),
+      'Expected integer 2026 to be handled as year-only input'
+  end
+
   test ".standardise raises an error if the specified converter doesn't exist" do
     assert_raises NotImplementedError, "No conversion exists for type 'blue'" do
       Wdpa::Shared::TypeConverter.convert('carebear', as: :blue)

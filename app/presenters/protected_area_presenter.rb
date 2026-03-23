@@ -162,7 +162,8 @@ class ProtectedAreaPresenter
       {
         site_pid: parcel.site_pid,
         affiliation: 'greenlist',
-        date: gls.gl_expiry,
+        # Frontend expects the Green List expiry as a 4-digit year.
+        date: gls.gl_expiry.is_a?(Date) ? gls.gl_expiry.year : gls.gl_expiry,
         image_url: green_list_logo(gls.gl_status),
         link_title: "View the Green List page for #{parcel.name}",
         link_url: gls.gl_link,

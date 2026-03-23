@@ -154,7 +154,8 @@ module SearchHelper
     end
   end
 
+  # As of 23March2026, this seems to be unused double check if it's needed
   def designation_link(desig)
-    search_areas_path(filters: { designation: [desig] })
+    search_areas_path(filters: SearchAreaLinkFilters.designation_filters(desig))
   end
 end

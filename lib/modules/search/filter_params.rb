@@ -35,6 +35,7 @@ class Search::FilterParams
     return if db_type.blank? || db_type.length != 1
 
     filters[:is_oecm] = true if db_type.first == 'oecm'
+    filters[:is_oecm] = false if db_type.first == 'wdpa'
   end
 
   def sanitise_type_filter

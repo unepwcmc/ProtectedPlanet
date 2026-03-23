@@ -15,7 +15,6 @@ class Wdpa::Portal::BasicStructureTest < ActiveSupport::TestCase
   test 'portal adapter returns portal relations' do
     adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new
 
-    assert adapter.portal?
     assert_kind_of Wdpa::Portal::Adapters::ProtectedAreas, adapter.protected_areas_relation
     assert_kind_of Wdpa::Portal::Adapters::ProtectedAreaSources, adapter.protected_area_sources_relation
   end

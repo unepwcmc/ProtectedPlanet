@@ -19,12 +19,12 @@ module CountriesHelper
     I18n.t("country.message.restricted.#{get_iso3}")
   end
 
-  def chart_link(category)
+  def chart_link(category, oecms_tab: false)
     return unless geo_entity
 
     type, name, locale = search_path_vars(geo_entity)
     title_variable = ""
-    filters = base_filters(type, name)
+    filters = base_filters(type, name, oecms_tab: oecms_tab)
 
     # Looking for the name of the designation, iucn category etc.
     category_name = category.keys.find { |key| key.match?(/(_name)$/) }
@@ -37,7 +37,7 @@ module CountriesHelper
 
     # This hash is used to populate the view links of the various charts for the
     # region and country pages
-    { 
+    {
       link: search_areas_path(locale, filters),
       title: title_variable
     }
@@ -45,22 +45,16 @@ module CountriesHelper
 
   def has_restricted_sites?
     restricted_iso3 = ["RUS", "EST", "CHN", "GBR"]
-    
+
     @country && (restricted_iso3.include? @country.iso_3)
   end
 
-  def view_all_link(additional_filter_hash = nil)
+  def view_all_link(oecms_tab: false)
     return unless geo_entity
 
     type, name, locale = search_path_vars(geo_entity)
-    filters = base_filters(type, name)
-
-    if additional_filter_hash.nil? || !additional_filter_hash.is_a?(Hash)
-      search_areas_path(locale, filters)
-    else
-      combined_filters = filters.deep_merge(filters: additional_filter_hash)
-      search_areas_path(locale, combined_filters)
-    end
+    filters = base_filters(type, name, oecms_tab: oecms_tab)
+    search_areas_path(locale, filters)
   end
 
   def geo_entity
@@ -75,7 +69,11 @@ module CountriesHelper
     ]
   end
 
-  def base_filters(type, name)
-    { filters: { location: { type: type, options: [name] } } }
+  def base_filters(type, name, oecms_tab: false)
+    filters = { filters: { location: { type: type, options: [name] } } }
+
+    filters = filters.deep_merge(filters: SearchAreaLinkFilters.db_types_filters(wdpa_plus_ocem: false)) unless oecms_tab
+
+    filters
   end
 end
