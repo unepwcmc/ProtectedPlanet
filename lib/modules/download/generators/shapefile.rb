@@ -13,16 +13,17 @@ class Download::Generators::Shapefile < Download::Generators::Base
     }
   }.freeze
 
-  def initialize(zip_path, site_ids, number_of_pieces = 3)
-    super(zip_path, site_ids)
+  def initialize(zip_path, selection_entries, number_of_pieces = 3)
+    super(zip_path, selection_entries)
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
-    # If there are 2 areas involved max, generate just one shp
-    @number_of_pieces = site_ids.size > 2 || site_ids.blank? ? number_of_pieces : 1
+    # If there are 2 or fewer selected sites/parcels, generate just one shp
+    selection_count = selection_entries.is_a?(Hash) ? (Array(selection_entries[:site_ids]).size + Array(selection_entries[:site_id_and_pid_pairs]).size) : 0
+    @number_of_pieces = selection_count <= 2 && selection_count.positive? ? 1 : number_of_pieces
   end
 
   def generate
-    return false if @site_ids.is_a?(Array) && @site_ids.empty?
+    return false if selection_entries_empty?
 
     shapefile_paths = []
 
@@ -56,7 +57,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     limit = (total_count / @number_of_pieces.to_f).ceil
     offset = limit * piece_index
-    order_by = %(ORDER BY "#{Download::Config.id_column}" ASC)
+    order_by = %(ORDER BY "#{Download::Config.download_view_column_names[:site_id]}" ASC)
 
     sql = "
       SELECT *

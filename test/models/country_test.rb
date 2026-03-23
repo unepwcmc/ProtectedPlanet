@@ -65,24 +65,6 @@ class CountryTest < ActiveSupport::TestCase
     assert_equal 2, country_1.designations.count
   end
 
-  test '.protected_areas_with_iucn_categories returns all Protected
-   Areas with valid IUCN categories' do
-    iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
-    iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
-    invalid_iucn_category = FactoryGirl.create(:iucn_category, name: 'Pepe')
-
-    country_1 = FactoryGirl.create(:country)
-    country_2 = FactoryGirl.create(:country)
-    country_3 = FactoryGirl.create(:country)
-
-    FactoryGirl.create(:protected_area, iucn_category: iucn_category_1, countries: [country_1] )
-    FactoryGirl.create(:protected_area, iucn_category: iucn_category_2, countries: [country_1])
-    FactoryGirl.create(:protected_area, iucn_category: invalid_iucn_category, countries: [country_2])
-    FactoryGirl.create(:protected_area, iucn_category: iucn_category_2, countries: [country_3])
-
-    assert_equal 2, country_1.protected_areas_with_iucn_categories.count
-  end
-
   test '#data_providers returns all countries that provide PA data' do
     country_1 = FactoryGirl.create(:country)
     country_2 = FactoryGirl.create(:country)

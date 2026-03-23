@@ -87,35 +87,41 @@ module Download
         Wdpa::Release::DOWNLOADS_VIEW_NAME
     end
 
-    # Column names
-    def self.id_column
-      has_successful_portal_release? ? "SITE_ID" : "WDPAID"
+    # Column names – centralised in a single hash for easy maintenance
+    def self.download_view_column_names
+      {
+        site_id: has_successful_portal_release? ? 'SITE_ID' : 'WDPAID',
+        site_pid: 'SITE_PID',
+        iso3: 'ISO3',
+        site_type: 'SITE_TYPE',
+        realm: 'REALM'
+      }
+    end
+
+    def self.oecm_site_type_value
+      'OECM'
+    end
+
+    def self.marine_realm_value
+      'Marine'
     end
 
     # Labels for filenames
     def self.current_label
-      has_successful_portal_release? ? 
-        Release.current_label : 
-        Wdpa::S3.current_wdpa_identifier
+      has_successful_portal_release? ? Release.current_label : Wdpa::S3.current_wdpa_identifier
     end
 
     # Column definitions
     def self.points_columns
-      has_successful_portal_release? ? 
-        PORTAL_POINTS_COLUMNS : 
-        STANDARD_POINTS_COLUMNS
+      has_successful_portal_release? ? PORTAL_POINTS_COLUMNS : STANDARD_POINTS_COLUMNS
     end
 
     def self.polygons_columns
-      has_successful_portal_release? ? 
-        PORTAL_POLYGONS_COLUMNS : 
-        STANDARD_POLYGONS_COLUMNS
+      has_successful_portal_release? ? PORTAL_POLYGONS_COLUMNS : STANDARD_POLYGONS_COLUMNS
     end
 
     def self.source_columns
-      has_successful_portal_release? ? 
-        PORTAL_SOURCE_COLUMNS : 
-        STANDARD_SOURCE_COLUMNS
+      has_successful_portal_release? ? PORTAL_SOURCE_COLUMNS : STANDARD_SOURCE_COLUMNS
     end
   end
 end

@@ -10,7 +10,6 @@ class PameController < ApplicationController
   def index
     @table_attributes = PameEvaluation::TABLE_ATTRIBUTES.to_json
     @filters = PameEvaluation.filters_to_json
-    @sources = PameEvaluation.sources_to_json
     @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
 
     @tabs = get_tabs(4).to_json
@@ -23,11 +22,9 @@ class PameController < ApplicationController
   end
 
   def download
-    last_update = PameEvaluation.last_csv_update_date.strftime('%Y-%^b')
     send_data PameEvaluation.to_csv(params.to_json), {
                 type: "text/csv; charset=utf-8; header=present",
                 disposition: "attachment",
-                filename: "protectedplanet-pame-#{last_update}.csv" }
+                filename: "protectedplanet-effectiveness-#{Release.current_label}.csv" }
   end
 end
-

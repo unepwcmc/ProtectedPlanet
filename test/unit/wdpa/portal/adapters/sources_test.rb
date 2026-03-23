@@ -1,15 +1,15 @@
 require 'test_helper'
 
-class Wdpa::Portal::Adapters::SourcesTest < ActiveSupport::TestCase
+class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   def setup
-    @adapter = Wdpa::Portal::Adapters::Sources.new
+    @adapter = Wdpa::Portal::Adapters::ProtectedAreaSources.new
     @connection = ActiveRecord::Base.connection
 
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_staging_materialised_views).with('sources').returns('portal_standard_sources')
+    @config.stubs(:portal_staging_materialised_views).returns({ sources: 'portal_standard_sources' })
 
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_views).with('sources').returns(@config.portal_staging_materialised_views[:sources])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_views).returns(@config.portal_staging_materialised_views)
   end
 
   def teardown
@@ -121,7 +121,7 @@ class Wdpa::Portal::Adapters::SourcesTest < ActiveSupport::TestCase
   end
 
   test 'portal_sources_exist? delegates to ViewManager' do
-    Wdpa::Portal::Managers::ViewManager.expects(:view_exists?).with('portal_standard_sources').returns(true)
+    Wdpa::Portal::Managers::ViewManager.expects(:materialized_view_exists?).with('portal_standard_sources').returns(true)
 
     result = @adapter.portal_sources_exist?
     assert result

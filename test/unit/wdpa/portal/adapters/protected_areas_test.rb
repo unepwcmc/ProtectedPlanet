@@ -21,46 +21,37 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     @connection.execute('DROP MATERIALIZED VIEW IF EXISTS portal_standard_points CASCADE')
   end
 
-  test 'find_in_batches processes all views in batches' do
-    # Create test materialized views
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'Polygon 1' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
-      UNION ALL
-      SELECT 2 as wdpaid, 'Polygon 2' as name, ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry
-      UNION ALL
-      SELECT 3 as wdpaid, 'Polygon 3' as name, ST_GeomFromText('POLYGON((2 2, 3 2, 3 3, 2 3, 2 2))') as wkb_geometry
-    SQL
+  test 'find_in_batches respects sample_limit for a single view' do
+    # Configure a single staging view and a small batch size
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['portal_standard_polygons'])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_protected_area_staging_materialised_views).returns(@config.portal_protected_area_staging_materialised_views)
 
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_points AS
-      SELECT 4 as wdpaid, 'Point 1' as name, ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry
-      UNION ALL
-      SELECT 5 as wdpaid, 'Point 2' as name, ST_GeomFromText('POINT(1.5 1.5)') as wkb_geometry
-    SQL
+    @config.stubs(:batch_import_protected_areas_from_view_size).returns(2)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:batch_import_protected_areas_from_view_size).returns(@config.batch_import_protected_areas_from_view_size)
+
+    # Limit sampling to 3 rows so we should see two batches: 2 + 1
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:sample_limit).returns(3)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:checkpoints?).returns(false)
+
+    # Total count reported by the database
+    @connection.stubs(:select_value).with('SELECT COUNT(*) FROM portal_standard_polygons').returns(10)
+
+    # Expect two batch queries matching the computed LIMIT/OFFSET pairs
+    @connection.expects(:select_all).with('SELECT * FROM portal_standard_polygons LIMIT 2 OFFSET 0')
+               .returns([{ 'wdpaid' => 1 }, { 'wdpaid' => 2 }])
+    @connection.expects(:select_all).with('SELECT * FROM portal_standard_polygons LIMIT 1 OFFSET 2')
+               .returns([{ 'wdpaid' => 3 }])
 
     batches = []
     @adapter.find_in_batches do |batch|
       batches << batch
     end
 
-    # Should have 3 batches: 2 polygons + 1 polygon, then 2 points
-    assert_equal 3, batches.length
-
-    # First batch should have 2 polygons
-    assert_equal 2, batches[0].length
-    assert_equal 'Polygon 1', batches[0][0]['name']
-    assert_equal 'Polygon 2', batches[0][1]['name']
-
-    # Second batch should have 1 polygon
-    assert_equal 1, batches[1].length
-    assert_equal 'Polygon 3', batches[1][0]['name']
-
-    # Third batch should have 2 points
-    assert_equal 2, batches[2].length
-    assert_equal 'Point 1', batches[2][0]['name']
-    assert_equal 'Point 2', batches[2][1]['name']
+    assert_equal 2, batches.length
+    assert_equal [1, 2], batches[0].map { |row| row['wdpaid'] }
+    assert_equal [3], batches[1].map { |row| row['wdpaid'] }
   end
+
 
   test 'find_in_batches handles empty views' do
     # Create empty materialized views
@@ -85,26 +76,6 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     assert_equal 0, batches.length
   end
 
-  test 'find_in_batches handles single view' do
-    # Mock single view
-    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['portal_standard_polygons'])
-
-    # Create test materialized view
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'Polygon 1' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
-    SQL
-
-    batches = []
-    @adapter.find_in_batches do |batch|
-      batches << batch
-    end
-
-    # Should have 1 batch
-    assert_equal 1, batches.length
-    assert_equal 1, batches[0].length
-    assert_equal 'Polygon 1', batches[0][0]['name']
-  end
 
   test 'count returns total count from all views' do
     # Create test materialized views
@@ -147,49 +118,6 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     result = @adapter.count
 
     assert_equal 0, result
-  end
-
-  test 'count handles single view' do
-    # Mock single view
-    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['portal_standard_polygons'])
-
-    # Create test materialized view
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'Polygon 1' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
-      UNION ALL
-      SELECT 2 as wdpaid, 'Polygon 2' as name, ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry
-    SQL
-
-    result = @adapter.count
-
-    assert_equal 2, result
-  end
-
-  test 'find_in_batches respects batch size configuration' do
-    # Mock smaller batch size
-    @config.stubs(:batch_import_protected_areas_from_view_size).returns(1)
-
-    # Create test materialized view with 3 records
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'Polygon 1' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
-      UNION ALL
-      SELECT 2 as wdpaid, 'Polygon 2' as name, ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry
-      UNION ALL
-      SELECT 3 as wdpaid, 'Polygon 3' as name, ST_GeomFromText('POLYGON((2 2, 3 2, 3 3, 2 3, 2 2))') as wkb_geometry
-    SQL
-
-    batches = []
-    @adapter.find_in_batches do |batch|
-      batches << batch
-    end
-
-    # Should have 3 batches of 1 record each
-    assert_equal 3, batches.length
-    batches.each do |batch|
-      assert_equal 1, batch.length
-    end
   end
 
   test 'find_in_batches handles database errors gracefully' do

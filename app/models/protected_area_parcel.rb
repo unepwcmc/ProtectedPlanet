@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 # This file was copied from app/models/protected_area.rb then modified to only including/linking needed columns
+# IMPORTANT!!!!
+# If you update this file, you likely need to update the protected_area.rb file as well
 
 class ProtectedAreaParcel < ApplicationRecord
   # Make sure to make the uniqueness based on the combination of site_id + site_pid
@@ -9,12 +11,8 @@ class ProtectedAreaParcel < ApplicationRecord
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sources
 
-  # As of 09Apr It seems networks are not used in the system now
-  # has_many :networks_protected_areas
-  # has_many :networks, through: :networks_protected_areas
-
   # We should only access pame_evaluations through protected_area
-  # has_many :pame_evaluations
+  has_many :pame_evaluations
   # has_many :story_map_links
 
   belongs_to :protected_area, foreign_key: 'site_id', primary_key: 'site_id'
@@ -25,7 +23,7 @@ class ProtectedAreaParcel < ApplicationRecord
   belongs_to :realm
   belongs_to :no_take_status
   belongs_to :designation
-  belongs_to :green_list_status
+  belongs_to :green_list_status, optional: true
   delegate :jurisdiction, to: :designation, allow_nil: true
 
   after_create :create_slug
@@ -36,6 +34,11 @@ class ProtectedAreaParcel < ApplicationRecord
     update_attributes(slug: updated_slug)
   end
 
+   # PAs with green list on the PA record only (ignores parcel-level green list).
+   scope :greenlisted_parcels, -> {
+    where.not(green_list_status_id: nil)
+  }
+  
   private
 
   # To be removed after migration - ensures wdpa_id and wdpa_pid are filled for backward compatibility

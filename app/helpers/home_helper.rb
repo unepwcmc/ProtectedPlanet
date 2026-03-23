@@ -11,10 +11,11 @@ module HomeHelper
       else
         image = image_path 'terrestrial.jpg' # this is only here until the terrestrial page is built
       end
+      is_green_list = category[:filter] == 'pa_or_any_its_parcels_is_greenlisted'
       {
         image: image,
         title: category[:title],
-        url: search_areas_path(filters: SearchAreaLinkFilters.home_category_filters(category[:filter]))
+        url: search_areas_path(filters: SearchAreaLinkFilters.home_category_filters(filter: category[:filter], is_green_list: is_green_list))
       }
     end
   end

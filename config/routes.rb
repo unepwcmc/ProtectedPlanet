@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
 
-  # TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
@@ -37,20 +36,6 @@ Rails.application.routes.draw do
     # JSON endpoints
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
     resources :downloads, only: %i[show create update]
-
-    namespace :api do
-      namespace :v3 do
-        resources :protected_areas, only: [:show] do
-          member do
-            get 'geojson'
-            get 'overlap/:comparison_site_id', to: 'protected_areas#overlap'
-          end
-        end
-
-        get '/networks/:id/bounds', to: 'networks#bounds'
-        get '/search/by_point', to: 'search#by_point'
-      end
-    end
 
     ## Only CMS routes are present below
 

@@ -181,15 +181,14 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Shapefile.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
-    Download::Generators::Shapefile.generate zip_file_path, site_ids
+    Download::Generators::Shapefile.generate zip_file_path, { site_ids: site_ids }
   end
 
-  test '#generate, given a path and an empty array of site_ids,
-   returns immediately' do
+  test '#generate, given a path and an empty selection, returns immediately' do
     Download::Generators::Base.any_instance.expects(:system).never
     Ogr::Postgres.expects(:export).never
 
-    refute Download::Generators::Shapefile.generate('./none.zip', [])
+    refute Download::Generators::Shapefile.generate('./none.zip', { site_ids: [] })
   end
 
   test '#generate doesnt call Ogr::Postgres::export if the view has no pas' do
@@ -199,6 +198,6 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Base.any_instance.expects(:system)
     Ogr::Postgres.expects(:export).never
 
-    Download::Generators::Shapefile.generate('./none.zip', [1, 2, 3])
+    Download::Generators::Shapefile.generate('./none.zip', { site_ids: [1, 2, 3] })
   end
 end

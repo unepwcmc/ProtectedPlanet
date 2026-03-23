@@ -9,7 +9,7 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     # need some data to force index/field creation but don't want it to be found in test searches
     region = FactoryGirl.create(:region, id: 999, name: 'jsdfasdf')
     country = FactoryGirl.create(:country, id: 999, iso_3: 'jsd', name: 'jsdjkjkasdhf', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, is_green_list: false, has_irreplaceability_info: false)
+    pa = FactoryGirl.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, pa_or_any_its_parcels_is_greenlisted: false, has_irreplaceability_info: false)
 
     @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
     @psi.create

@@ -1,24 +1,19 @@
 # ProtectedPlanet ↔ Portal FDW Integration (macOS + Docker Desktop)
 
-## Goal
-- Allow the PP database (in Docker) to read specific tables from the Portal database via PostgreSQL FDW.
+**If you do not know what is Data Management Portal please read**
 
 ## Recommended topology
 - Portal DB: runs on host macOS (Homebrew Postgres). Variation: Portal DB in Docker (see Variations).
 - PP DB: runs in Docker, exposed on localhost:55432.
 
 ## Prerequisites
-- macOS with Docker Desktop installed.
-- Portal DB (Postgres) running locally (Homebrew or Docker) with a read-only account:
+- macOS with Docker installed.
+- Portal DB (Postgres) running with a read-only account:
   - CREATE ROLE portal_ro_user LOGIN PASSWORD '...';
   - Store the password in an environment variable, not inline.
 - PP DB running in Docker and accessible on localhost:55432.
 - Portal app DB name (for this repo): pp_data_management_backend_development.
 
-## Security notes
-- Prefer scram-sha-256 for pg_hba.conf.
-- Never paste secrets inline. Use environment variables like PORTAL_RO_PASSWORD and PP_DB_PASSWORD.
-- In staging/prod, grant access to a specific application role, not PUBLIC.
 
 ## 1. Configure the Portal DB to accept connections from the PP container
 
@@ -26,6 +21,13 @@
 ```bash
 # Shows exact files/paths on your machine
 psql -U postgres -d postgres -Atc "SHOW hba_file; SHOW data_directory; SHOW listen_addresses;"
+
+# I am seeing 
+/Users/xxxxx/Library/Application Support/Postgres/var-17/pg_hba.conf
+/Users/xxxxx/Library/Application Support/Postgres/var-17
+
+# so the file path is at 
+cat "/Users/xxxxx/Library/Application Support/Postgres/var-17/pg_hba.conf"
 ```
 
 ### 1.2 Back up pg_hba.conf
@@ -34,7 +36,7 @@ HBA=$(psql -U postgres -d postgres -Atc "SHOW hba_file;")
 cp -a "$HBA" "${HBA}.bak-$(date +%Y%m%d-%H%M%S)"
 ```
 
-### 1.3 Add auth rules for portal_ro_user
+### 1.3 Add auth rules for portal_ro_user onto pg_hba.conf
 - Allow localhost and Docker Desktop's bridge subnet (commonly 192.168.65.0/24 on macOS). Adjust the subnet if yours differs.
 
 ```conf
@@ -61,22 +63,32 @@ pg_ctl -D "$(psql -U postgres -d postgres -Atc 'SHOW data_directory;')" reload
 psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
 ```
 
+### 1.6 Grant Portal DB schema permissions to portal_ro_user (CRITICAL - must be done before FDW setup)
+- **IMPORTANT**: Run these commands on the Portal DB, not on PP Database.
+- This must be completed before importing foreign tables, otherwise queries will fail with permission errors.
+
+```sql
+-- Run on Portal DB (pp_data_management_backend_development)
+GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
+GRANT USAGE ON SCHEMA reference TO portal_ro_user;
+GRANT USAGE ON SCHEMA pame TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA pame TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA pame GRANT SELECT ON TABLES TO portal_ro_user;
+```
+
 ## 2. Create the FDW on the PP DB (Docker)
 
 ### 2.1 Set environment variables
 ```bash
-# PP DB connection (example values)
-export PP_DB_HOST=127.0.0.1
-export PP_DB_PORT=55432
-export PP_DB_NAME=pp_development
-export PP_DB_USER=postgres
-export PP_DB_PASSWORD={{PP_DB_PASSWORD}}     # e.g., 'postgres' in dev
-
-# Portal DB connection details
-export PORTAL_DB_HOST=host.docker.internal   # Portal DB on host macOS
+# Or localhost depending on where is your db
+export PORTAL_DB_HOST=host.docker.internal 
 export PORTAL_DB_PORT=5432
 export PORTAL_DB_NAME=pp_data_management_backend_development
-export PORTAL_RO_PASSWORD={{PORTAL_RO_PASSWORD}}
+export PORTAL_RO_PASSWORD='actual_portal_ro_user_password'   # replace with the real password; if it contains single quotes, use: export PORTAL_RO_PASSWORD="pass''word"
 ```
 
 ### 2.2 Create extension, server, mapping, and schema
@@ -114,7 +126,7 @@ SQL
 ```
 
 ## 3. Import only the tables required by Wdpa model associations
-- From schema wdpa and reference.
+- From schema `wdpa`, `reference`, and `pame`
 
 ### 3.1 Import wdpa schema tables
 ```bash
@@ -170,6 +182,37 @@ IMPORT FOREIGN SCHEMA reference
   INTO portal_fdw;
 
 GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO PUBLIC;  -- dev only; restrict in prod
+SQL
+```
+
+### 3.3 Import pame schema tables (PAME + Green List)
+```bash
+PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
+  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
+IMPORT FOREIGN SCHEMA pame
+  LIMIT TO (
+    pame,
+    pame_sources,
+    greenlists,
+    greenlist_status_cat,
+    method_cat,
+    verification_effectiveness_cat,
+    governance_action_cat,
+    governance_assessment_cat,
+    designation_purpose_biodiversity_cat,
+    pame_designation_purpose_biodiversity_cats,
+    designation_purpose_other_cat,
+    management_objectives_set_cat,
+    management_objectives_managed_cat,
+    management_adaptation_cat,
+    management_staff_cat,
+    management_budget_cat,
+    management_threats_cat,
+    management_monitoring_cat,
+    outcomes_biodiversity_cat
+  )
+  FROM SERVER portal_srv
+  INTO portal_fdw;
 SQL
 ```
 
@@ -296,14 +339,20 @@ SQL
 - Use this when the Portal schema changes (e.g., new reference tables/columns like inland_waters_cat / inland_waters_id) or when FDW_VIEWS.sql (located in the ProtectedPlanet folder) is updated.
 
 ### 7.1 Portal DB privileges (run once, on the Portal DB)
-- Ensure the read-only role can access the wdpa schema and new tables.
+- Ensure the read-only role can access the wdpa, reference, and pame schemas and all tables.
 
 ```bash
 # Replace <portal_db_name> and run on the Portal DB host or container
 psql -U postgres -d <portal_db_name> -X <<'SQL'
 GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
-GRANT SELECT ON wdpa.inland_waters_cat TO portal_ro_user;
+GRANT USAGE ON SCHEMA reference TO portal_ro_user;
+GRANT USAGE ON SCHEMA pame TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA pame TO portal_ro_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA pame GRANT SELECT ON TABLES TO portal_ro_user;
 SQL
 ```
 
