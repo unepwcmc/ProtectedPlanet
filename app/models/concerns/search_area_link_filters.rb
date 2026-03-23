@@ -13,10 +13,6 @@ module SearchAreaLinkFilters
     { SPECIAL_STATUS_FILTER_KEY => %w[is_green_list is_green_list_candidate] }
   end
 
-  def self.green_list_filters
-    db_types_filters(wdpa_plus_ocem: true).merge(green_list_status_filters)
-  end
-
   def self.is_type_marine_filters
     { is_type: %w[marine] }
   end
