@@ -110,7 +110,7 @@ class ProtectedAreasController < ApplicationController
 
   def determine_search_path(area)
     if area.is_transboundary
-      search_areas_path(filters: { special_status: ['is_transboundary'] })
+      search_areas_path(filters: SearchAreaLinkFilters.special_status_is_transboundary_filters)
     else
       filters = @countries.empty? ? {} : { filters: location_filter(@countries.first.name) }
       search_areas_path(filters)

@@ -12,7 +12,7 @@ class WdpaController < ApplicationController
       placeholder: I18n.t('global.placeholder.search-wdpa')
     }.to_json
 
-    @filters = { db_type: ['wdpa'] }
+    @filters = SearchAreaLinkFilters.db_types_filters(wdpa_plus_ocem: false)
     @tabs_list = get_tabs(5, true)
     @tabs = @tabs_list.to_json
 
