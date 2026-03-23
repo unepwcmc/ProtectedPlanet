@@ -26,7 +26,7 @@ class GreenListController < ApplicationController
 
     @total_area_percent = GlobalStatistic.global_oecms_pas_coverage_percentage
 
-    @filters = SearchAreaLinkFilters.green_list_filters
+    @filters = SearchAreaLinkFilters.green_list_status_filters
 
     @green_list_view_all_url = search_areas_path(filters: SearchAreaLinkFilters.green_list_status_filters)
 
