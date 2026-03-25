@@ -19,22 +19,16 @@
 
   display: none;
 
-  @include breakpoint($medium) { display: block; }
+  @include breakpoint($large) { display: table-header-group; }
+
+  &.table-head--stuck {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    animation: none;
+  }
 
   .table-head {
-    &--stuck {
-      position: fixed;
-      top: 0;
-
-      width: rem-calc(1160);
-
-      animation: showHeader .25s forwards linear;
-    }
-
-    &__row {
-      display: flex;
-    }
-
     &__cell {
       @include table-pame-column-widths;
       background-color: black;
@@ -43,8 +37,8 @@
       font-size: rem-calc(18);
       height: rem-calc(57);
       padding: rem-calc(8 14 0 14);
-
-      display: inline-block;
+      text-align: left;
+      vertical-align: top;
 
       &:first-child { border-left: none; }
     }

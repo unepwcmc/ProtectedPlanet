@@ -12,21 +12,27 @@ $total-width-desktop: rem-calc(24);
 // classes
 //--------------------------------------------------
 &--pame {
-  @include breakpoint($small) {
-    @include flex;
-    @include flex-v-center;
-  }
+  @include flex;
+  @include flex-h-between;
+  @include flex-wrap;
 
   .filter {
-    margin-right: rem-calc(10);
     margin-bottom: rem-calc(10);
 
     display: inline-block;
     position: relative;
 
-    @include breakpoint($medium) { 
-      margin-right: rem-calc(20); 
+    @include breakpoint($medium) {
       margin-bottom: 0;
+    }
+
+    &__wrapper {
+      @include flex;
+      @include flex-wrap;
+      gap: 1rem;
+      @include breakpoint($medium) {
+        gap: 0.5rem;
+      }
     }
 
     &__title {
@@ -232,10 +238,6 @@ $total-width-desktop: rem-calc(24);
     }
 
     &__button-apply { @include button-primary; }
-
-    &__button-download {
-      @include breakpoint($small) { margin-left: auto; }
-    }
 
     &__button-cancel { 
       @include button-outline;

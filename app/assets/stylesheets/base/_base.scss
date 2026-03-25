@@ -13,10 +13,6 @@ body {
   margin: 0;
 }
 
-section {
-  
-}
-
 h1 { 
   @include h1; 
 
@@ -83,6 +79,16 @@ input {
 .container {
   @include site-width;
   @include container;
+
+  &--pame {
+    @include container;
+
+    width: 100%;
+
+    @include breakpoint($xlarge){ 
+      width: 86%;
+    }
+  }
 }
 
 .container--medium { @include container-medium; }

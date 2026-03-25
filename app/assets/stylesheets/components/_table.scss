@@ -27,15 +27,15 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 // fix the columns widths so that they don't change
 // size when you use the pagination
 @mixin table-pame-column-widths() {
-  &:first-child { width: 142px; }
-  &:nth-child(2) { width: 138px; }
-  &:nth-child(3) { width: 127px; }
-  &:nth-child(4) { width: 128px; }
-  &:nth-child(5) { width: 100px; }
-  &:nth-child(6) { width: 138px; }
-  &:nth-child(7) { width: 128px; }
-  &:nth-child(8) { width: 128px; }
-  &:nth-child(9) { width: 120px; }
+  &:first-child { width: 15%; }
+  &:nth-child(2) { width: 15%; }
+  &:nth-child(3) { width: 10%; }
+  &:nth-child(4) { width: 10%; }
+  &:nth-child(5) { width: 10%; }
+  &:nth-child(6) { width: 15%; }
+  &:nth-child(7) { width: 7%; }
+  &:nth-child(8) { width: 10%; }
+  &:nth-child(9) { width: 8%; }
 }
 
 //--------------------------------------------------
@@ -43,6 +43,13 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 //--------------------------------------------------
 .filtered-table {
   min-height: $filters-menu-max-height + rem-calc(200);
+  @include flex;
+  @include flex-column;
+  gap: 0.5rem;
+
+  @include breakpoint($large) {
+    gap: 2rem;
+  }
 }
 
 //--------------------------------------------------

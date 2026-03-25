@@ -23,16 +23,16 @@ class PameEvaluation < ApplicationRecord
       field: 'designation'
     },
     {
-      title: 'SITE_ID',
+      title: 'Site/Parcel ID',
       field: 'site_id',
       tooltip: 'Unrestricted Protected Areas can be viewed on Protected Planet'
     },
     {
-      title: 'ASMT_ID',
+      title: 'Assessment ID',
       field: 'asmt_id'
     },
     {
-      title: 'Country',
+      title: 'Country/Territory',
       field: 'country'
     },
     {
@@ -48,7 +48,7 @@ class PameEvaluation < ApplicationRecord
       field: 'asmt_url',
     },
     {
-      title: 'EFF_METAID',
+      title: 'Metadata ID',
       field: 'eff_metaid'
     }
   ].freeze
@@ -230,7 +230,7 @@ class PameEvaluation < ApplicationRecord
         pame_evaluations.asmt_id AS asmt_id,
         pame_evaluations.site_id AS site_id,
         pame_evaluations.site_pid AS site_pid,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT countries.name), ';') AS country,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT countries.iso_3), ';') AS iso3,
         -- We convert site_type true or false later on to Marine / Terrestrial in the CSV generation
         COALESCE(protected_areas.marine, protected_area_parcels.marine) AS site_type,
         pame_evaluations.name AS name_eng,
