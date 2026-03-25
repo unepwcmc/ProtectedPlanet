@@ -81,12 +81,13 @@ input {
   @include container;
 
   &--pame {
-    @include container;
-
-    width: 100%;
+    margin: 0;
+    padding: 0 1.25rem;
 
     @include breakpoint($xlarge){ 
-      width: 86%;
+      width: 82%;
+      padding: 0;
+      margin: 0 auto;
     }
   }
 }

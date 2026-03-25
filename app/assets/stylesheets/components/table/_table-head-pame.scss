@@ -30,7 +30,6 @@
 
   .table-head {
     &__cell {
-      @include table-pame-column-widths;
       background-color: black;
       border-left: dotted white 2px;
       color: $white;

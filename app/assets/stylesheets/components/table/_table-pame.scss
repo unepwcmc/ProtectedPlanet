@@ -27,8 +27,6 @@
     &__cell {
       margin: 0;
       padding: rem-calc(4 14);
-      width: 100%;
-      @include table-pame-column-widths;
       border-left: dotted white 2px;
       padding: rem-calc(16 14);
 

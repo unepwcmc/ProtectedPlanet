@@ -24,20 +24,6 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
   @include responsive(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(32), rem-calc(16));
 }
 
-// fix the columns widths so that they don't change
-// size when you use the pagination
-@mixin table-pame-column-widths() {
-  &:first-child { width: 15%; }
-  &:nth-child(2) { width: 15%; }
-  &:nth-child(3) { width: 10%; }
-  &:nth-child(4) { width: 10%; }
-  &:nth-child(5) { width: 10%; }
-  &:nth-child(6) { width: 15%; }
-  &:nth-child(7) { width: 7%; }
-  &:nth-child(8) { width: 10%; }
-  &:nth-child(9) { width: 8%; }
-}
-
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
