@@ -3,9 +3,12 @@ en:
     marine:
       hero:
         button_text: Explore marine protected areas
-        stat_text_1: Percent of the ocean covered by marine protected areas
-        stat_text_2: Marine Protected Areas
-        stat_text_3: Total area protected
+        stat_text_1: Percent of the ocean covered by protected areas
+        stat_text_2: Marine protected areas
+        stat_text_3: Percent of the ocean covered by OECMs
+        stat_text_4: Marine OECMs
+        stat_text_5: Percent of the ocean covered by PAs and OECMs
+        stat_text_6: Total area protected (protected areas and OECMs)
       ocean:
         national-title: National Waters
         high-title: High Seas

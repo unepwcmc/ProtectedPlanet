@@ -1,6 +1,7 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
 <%= render partial: "./layouts/partials/hero-thematic", locals: {
+  page_type_class_name: 'marine',
   button_text: t('thematic_area.marine.hero.button_text'),
   button_url: @marineViewAllUrl,
   classes: @cms_page.slug,
@@ -8,12 +9,7 @@
   hero_small_text: cms_fragment_render(:hero_small_text, @cms_page),
   hero_small_text_url: cms_fragment_render(:hero_small_text_url, @cms_page),
   title: @cms_page.label,
-  stat_pas_km: @pas_km,
-  stat_pas_percent: @pas_percent,
-  stat_pas_total: @pas_total,
-  stat_text_1: t('thematic_area.marine.hero.stat_text_1'),
-  stat_text_2: t('thematic_area.marine.hero.stat_text_2'),
-  stat_text_3: t('thematic_area.marine.hero.stat_text_3'),
+  stats_items: @marine_stats_items,
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
@@ -53,7 +49,7 @@
 
 <%= render partial: "partials/charts/chart-coverage-growth", locals: {
   content: cms_fragment_render(:section_coverage_content, @cms_page),
-  chart_data: @protectedAreasGrowth,
+  chart_data: @marine_protected_areas_growth,
   title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
 

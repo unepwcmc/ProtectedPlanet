@@ -4,9 +4,10 @@ class MarineController < ApplicationController
 
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
-  before_action :growth, only: [:index]
+  before_action :maine_protected_areas_growth, only: [:index]
   before_action :ecoregions, only: [:index]
   before_action :pledges, only: [:index]
+  before_action :marine_stats_items, only: [:index]
 
   #Calculated stats
   before_action :coverage
@@ -39,6 +40,7 @@ class MarineController < ApplicationController
     @filters = SearchAreaLinkFilters.wdpa_and_marine_is_true_filters
   end
 
+  # Remove, it is not used
   def download_designations
     send_data(
       generate_designations_csv,
@@ -57,6 +59,7 @@ class MarineController < ApplicationController
     })
   end
 
+  # Remove, it is not used
   def generate_designations_csv
     columns = ["PA name", "Country", "Size", "Date of designation"]
     CSV.generate(headers: true) do |csv|
@@ -83,17 +86,24 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    @regionsTopCountries = Region.without_global.map do |region|
-      RegionPresenter.new(region).top_marine_coverage_countries
-    end.to_json
+    @regionsTopCountries = Rails.cache.fetch(
+      "marine/regions_top_countries/#{marine_data_cache_version}",
+      expires_in: 12.days
+    ) do
+      Region.without_global.map do |region|
+        RegionPresenter.new(region).top_marine_coverage_countries
+      end.to_json
+    end
   end
 
+  # Remove, it is not used
   def least_protected_areas
     ProtectedArea.least_protected_marine_areas(20).map do |pa|
       ProtectedAreaPresenter.new(pa).name_size
     end
   end
 
+  # Remove, it is not used
   def national_statistics
     ## TODO it should take into account ABNJ as well
     @top_marine_coverage_countries = {
@@ -106,19 +116,86 @@ class MarineController < ApplicationController
     }
   end
 
+  # Remove, it is not used
   def designations
-    protected_areas = ProtectedArea.most_recent_designations(10)
-    @designations = protected_areas.map do |pa|
-      ProtectedAreaPresenter.new(pa).marine_designation
+    @designations = Rails.cache.fetch(
+      "marine/designations/#{marine_data_cache_version}",
+      expires_in: 6.hours
+    ) do
+      protected_areas = ProtectedArea.most_recent_designations(10)
+      protected_areas.map do |pa|
+        ProtectedAreaPresenter.new(pa).marine_designation
+      end
     end
   end
 
   def marine_statistics
-    @marine_statistics = GlobalStatistic.marine_stats
+    @marine_statistics = Rails.cache.fetch(
+      "marine/statistics/#{global_stats_cache_version}",
+      expires_in: 12.days
+    ) { GlobalStatistic.marine_stats }
   end
 
-  def growth
-    @protectedAreasGrowth = {
+  def marine_stats_items
+    @marine_stats_items = Rails.cache.fetch(
+      "marine/stats_items/#{I18n.locale}/#{global_stats_cache_version}",
+      expires_in: 12.days
+    ) do
+      [
+        {
+          total: @marine_statistics['total_ocean_pa_coverage_percentage'],
+          text: t('thematic_area.marine.hero.stat_text_1'),
+          decimal: 2,
+          suffix: '%',
+          small_number: true
+        },
+        {
+          total: @marine_statistics['total_marine_protected_areas'],
+          text: t('thematic_area.marine.hero.stat_text_2'),
+          decimal: 0,
+          small_number: true
+        },
+        {
+          total: @marine_statistics['total_ocean_oecms_pas_coverage_percentage'].to_f - @marine_statistics['total_ocean_pa_coverage_percentage'].to_f,
+          text: t('thematic_area.marine.hero.stat_text_3'),
+          decimal: 2,
+          suffix: '%',
+          small_number: true
+        },
+        {
+          total: @marine_statistics['total_marine_oecms_pas'].to_i - @marine_statistics['total_marine_protected_areas'].to_i,
+          text: t('thematic_area.marine.hero.stat_text_4'),
+          decimal: 0,
+          small_number: true
+        },
+        {
+          total: @marine_statistics['total_ocean_oecms_pas_coverage_percentage'],
+          text: t('thematic_area.marine.hero.stat_text_5'),
+          decimal: 2,
+          suffix: '%',
+          small_number: true
+        },
+        {
+          total: @marine_statistics['total_ocean_area_oecms_pas'],
+          text: t('thematic_area.marine.hero.stat_text_6'),
+          decimal: 0,
+          suffix: 'km<sup>2</sup>',
+          small_number: true
+        }
+      ]
+    end
+  end
+
+  def marine_data_cache_version
+    @marine_data_cache_version ||= (ProtectedArea.maximum(:updated_at)&.to_i || 0)
+  end
+
+  def global_stats_cache_version
+    @global_stats_cache_version ||= (GlobalStatistic.maximum(:updated_at)&.to_i || 0)
+  end
+
+  def maine_protected_areas_growth
+    @marine_protected_areas_growth = {
       # x = x axis
       # 1, 2, 3 = series on the chart and also make the y axis
       datapoints: [
@@ -149,6 +226,7 @@ class MarineController < ApplicationController
     }.to_json
   end
 
+  # Remove, it is not used
   def ecoregions
     @mostProtectedEcoregions = [
       {
@@ -182,6 +260,7 @@ class MarineController < ApplicationController
 
   end
 
+  # Remove, it is not used
   def pledges
     @pledges = {
       name: "protected areas",
