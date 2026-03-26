@@ -6,7 +6,7 @@ en:
         language: Language
         modal_title: Source details
         responsible: Responsible party
-        title: Data title
+        title: Source Data Title
         year: Year of submission
       filters:
         methodology: Methodology

@@ -23,8 +23,8 @@ class PameController < ApplicationController
 
   def download
     send_data PameEvaluation.to_csv(params.to_json), {
-                type: "text/csv; charset=utf-8; header=present",
-                disposition: "attachment",
+                type: 'text/csv; charset=utf-8',
+                disposition: 'attachment',
                 filename: "protectedplanet-effectiveness-#{Release.current_label}.csv" }
   end
 end

@@ -1,29 +1,32 @@
 <template>
-    <span class="pame-site-id">
-        <span class="pame-site-id__site-id">{{ site_id }}</span>
-        <span v-if="showParcelId" class="pame-site-id__site-pid">
-            <span class="pame-site-id__site-pid-label">SITE_PID:</span>
-            <span>{{ site_pid }}</span>
-        </span>
+  <span class="pame-site-id">
+    <span class="pame-site-id__site-id">{{ siteId }}</span>
+    <span 
+      v-if="showParcelId" 
+      class="pame-site-id__site-pid"
+    >
+      <span class="pame-site-id__site-pid-label">/</span>
+      <span>{{ sitePid }}</span>
     </span>
-  </template>
-  
+  </span>
+</template>
+
 <script>
 export default {
-  name: "pame-site-id",
+  name: 'PameSiteId',
   props: {
-    site_id: {
+    siteId: {
       required: true,
       type: Number,
     },
-    site_pid: {
+    sitePid: {
       required: true,
       type: String,
     },
   },
   computed: {
-    showParcelId () {
-      return String(this.site_pid) !== String(this.site_id)
+    showParcelId() {
+      return String(this.sitePid) !== String(this.siteId)
     }
   }
 }

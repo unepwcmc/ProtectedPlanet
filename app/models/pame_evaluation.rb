@@ -23,16 +23,16 @@ class PameEvaluation < ApplicationRecord
       field: 'designation'
     },
     {
-      title: 'SITE_ID',
+      title: 'Site/Parcel ID',
       field: 'site_id',
       tooltip: 'Unrestricted Protected Areas can be viewed on Protected Planet'
     },
     {
-      title: 'ASMT_ID',
+      title: 'Assessment ID',
       field: 'asmt_id'
     },
     {
-      title: 'Country',
+      title: 'Country/Territory',
       field: 'country'
     },
     {
@@ -48,7 +48,7 @@ class PameEvaluation < ApplicationRecord
       field: 'asmt_url',
     },
     {
-      title: 'EFF_METAID',
+      title: 'Metadata ID',
       field: 'eff_metaid'
     }
   ].freeze
@@ -230,7 +230,7 @@ class PameEvaluation < ApplicationRecord
         pame_evaluations.asmt_id AS asmt_id,
         pame_evaluations.site_id AS site_id,
         pame_evaluations.site_pid AS site_pid,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT countries.name), ';') AS country,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT countries.iso_3), ';') AS iso3,
         -- We convert site_type true or false later on to Marine / Terrestrial in the CSV generation
         COALESCE(protected_areas.marine, protected_area_parcels.marine) AS site_type,
         pame_evaluations.name AS name_eng,
@@ -239,7 +239,7 @@ class PameEvaluation < ApplicationRecord
         pame_evaluations.asmt_year AS asmt_year,
         pame_evaluations.submit_year AS submityear,
         pame_evaluations.verif_eff AS verif_eff,
-        COALESCE(parcel_gl.gl_status, pa_gl.gl_status) AS gl_status,
+        COALESCE(parcel_gl.gl_status, pa_gl.gl_status, 'Not applicable') AS gl_status,
         COALESCE(pame_evaluations.asmt_url, 'N/A') AS asmt_url,
         pame_evaluations.info_url AS info_url,
         pame_evaluations.gov_act AS gov_act,
@@ -276,13 +276,12 @@ class PameEvaluation < ApplicationRecord
         pame_sources.id,
         COALESCE(parcel_designations.name, pa_designations.name, 'N/A'),
         COALESCE(protected_areas.marine, protected_area_parcels.marine),
-        COALESCE(parcel_gl.gl_status, pa_gl.gl_status)
+        COALESCE(parcel_gl.gl_status, pa_gl.gl_status, 'Not applicable')
     SQL
     evaluations = ActiveRecord::Base.connection.exec_query(query)
     columns = evaluations.columns
 
-    CSV.generate(encoding: 'UTF-8') do |csv_line|
-      # Use SQL column order, but uppercase for header row
+    csv_string = CSV.generate(headers: true) do |csv_line|
       csv_line << columns.map(&:upcase)
 
       evaluations.each do |evaluation|
@@ -290,7 +289,6 @@ class PameEvaluation < ApplicationRecord
           value = evaluation[col]
 
           if col == 'site_type'
-            # Convert boolean-ish site_type to Marine / Terrestrial
             value = value ? 'Marine' : 'Terrestrial'
           end
 
@@ -298,6 +296,8 @@ class PameEvaluation < ApplicationRecord
         end
       end
     end
+    # As NC reqested the file to be UTF-8 with BOM
+    "\uFEFF".encode('UTF-8') + csv_string.encode('UTF-8')
   end
 
   def self.to_csv(json = nil)
@@ -326,11 +326,5 @@ class PameEvaluation < ApplicationRecord
     where_statement = where_statement_parts.join(' AND ')
 
     generate_csv(where_statement)
-  end
-
-  def self.last_csv_update_date
-    pame_data_csvs = Dir.glob("#{Rails.root}/lib/data/seeds/pame_data*")
-    latest_pame_csv = pame_data_csvs.sort.last.split('_').last
-    latest_pame_csv.split('.').first.to_date
   end
 end
