@@ -3,8 +3,6 @@ class GreenListController < ApplicationController
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/views/green_list/index.html.erb
-  # before_action :most_protected_areas
   before_action :get_green_list_sites
 
   def index
@@ -63,13 +61,6 @@ class GreenListController < ApplicationController
       })
     end
   end
-
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/views/green_list/index.html.erb
-  # def most_protected_areas
-  #   @regionsTopCountries = Region.without_global.map do |region|
-  #     RegionPresenter.new(region).top_gl_coverage_countries
-  #   end.compact.to_json
-  # end
 
   def pas_with_green_list_on_self_only
     @pas_with_green_list_on_self_only ||= ProtectedArea.pas_with_green_list_on_self_only

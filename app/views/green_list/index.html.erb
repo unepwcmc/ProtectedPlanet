@@ -71,16 +71,6 @@
   </div>
 </div> %>
 
-
-<%# As of 01Apr2025 the data is too less to show so we do not display the chart
-    
-    render partial: "partials/charts/chart-top-ten", locals: {
-  content: cms_fragment_render(:section_size_content, @cms_page),
-  ga_id: 'Slug: @cms_page.slug - Component: regions top countries',
-  regionsTopCountries: @regionsTopCountries,
-  title: cms_fragment_render(:section_size_title, @cms_page)
-} %>
-
 <section class="map-section">
   <%= render partial: "partials/maps/main", locals: {
     map: @map
