@@ -54,6 +54,10 @@
   <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
 </section>
 
+<section class="spacer-small--top spacer-small--bottom">
+  <%= render "partials/ctas/mpa-guide" %>
+</section>
+
 <section class="map-section">
   <%= render partial: "partials/maps/main", locals: {
     map: @map
@@ -66,10 +70,6 @@
     title: "#{t('global.area-types.wdpa')} (#{@marine_total_pas_count})",
     url: @view_all_marine_pas_url
   } %>
-</section>
-
-<section class="spacer-small--top">
-<%= render "partials/ctas/mpa-guide" %>
 </section>
 
 <section class="spacer-small--top spacer-small--bottom">

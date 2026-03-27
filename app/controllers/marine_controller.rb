@@ -109,6 +109,7 @@ class MarineController < ApplicationController
           small_number: true
         },
         {
+          # TODO: Once stats server is hooked up, we will have a dedicated field for this
           total: marine_statistics['total_ocean_oecms_pas_coverage_percentage'].to_f - @marine_statistics['total_ocean_pa_coverage_percentage'].to_f,
           text: t('thematic_area.marine.hero.stat_text_3'),
           decimal: 2,
@@ -116,7 +117,7 @@ class MarineController < ApplicationController
           small_number: true
         },
         {
-          total: marine_statistics['total_marine_oecms_pas'].to_i - @marine_statistics['total_marine_protected_areas'].to_i,
+          total: marine_statistics['total_marine_oecms'].to_i,
           text: t('thematic_area.marine.hero.stat_text_4'),
           decimal: 0,
           small_number: true
