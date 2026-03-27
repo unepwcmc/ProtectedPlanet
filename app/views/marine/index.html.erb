@@ -13,10 +13,6 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<section class="spacer-small--top">
-<%= render "partials/ctas/mpa-guide" %>
-</section>
-
 <section class="container--medium spacer-small--top">
   <h2><%= t('thematic_area.marine.distribution.title') %></h2>
   <div>
@@ -77,6 +73,10 @@
     title: "#{t('global.area-types.wdpa')} (#{@marine_total_pas_count})",
     url: @view_all_marine_pas_url
   } %>
+</section>
+
+<section class="spacer-small--top">
+<%= render "partials/ctas/mpa-guide" %>
 </section>
 
 <section class="spacer-small--top spacer-small--bottom">
