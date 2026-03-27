@@ -26,7 +26,6 @@ import Counter from './components/counter/Counter'
 import ChartBar from './components/charts/chart-bar/ChartBar'
 import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
-import ChartColumnTabbed from './components/charts/chart-column-tabbed/ChartColumnTabbed'
 import ChartDial from './components/charts/chart-dial/ChartDial'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
@@ -93,17 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
       bind: function (el, binding, vnode) {
         el.clickOutsideEvent = function (event) {
           if (!(el == event.target || el.contains(event.target))) {
-            vnode.context[binding.expression](event);
+            vnode.context[binding.expression](event)
           }
-        };
+        }
         document.body.addEventListener('click', el.clickOutsideEvent)
       },
       unbind: function (el) {
         document.body.removeEventListener('click', el.clickOutsideEvent)
       },
-    });
+    })
 
-    const app = new Vue({
+    new Vue({
       el: '#v-app',
       store,
       components: {
@@ -117,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBarSimple,
         ChartBarStacked,
         ChartDial,
-        ChartColumnTabbed,
         ChartTreemapInteractive,
         ChartRectangles,
         ChartRowPa,
@@ -127,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Download,
         GaLink,
         DownloadModal,
-	      FilteredTable,
+        FilteredTable,
         Flickity,
         ListingPage,
         ListingPageCardNews,

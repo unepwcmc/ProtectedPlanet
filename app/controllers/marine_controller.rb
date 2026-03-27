@@ -7,7 +7,6 @@ class MarineController < ApplicationController
     marine_statistics
     maine_protected_areas_growth
     marine_stats_items
-    top_regions_countries_with_most_marine_protected_areas
     num_of_marine_protected_areas
     
     @view_all_marine_pas_url = search_areas_path(filters: SearchAreaLinkFilters.is_type_marine_filters)
@@ -137,17 +136,6 @@ class MarineController < ApplicationController
           small_number: true
         }
       ]
-    end
-  end
-
-  def top_regions_countries_with_most_marine_protected_areas
-    @top_regions_countries_with_most_marine_protected_areas ||= Rails.cache.fetch(
-      "marine/regions_top_countries/#{marine_data_cache_version}",
-      expires_in: 12.days
-    ) do
-      Region.without_global.map do |region|
-        RegionPresenter.new(region).top_marine_coverage_countries
-      end.to_json
     end
   end
 

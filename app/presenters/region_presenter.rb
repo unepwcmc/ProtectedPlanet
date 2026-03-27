@@ -151,25 +151,6 @@ class RegionPresenter
     }
   end
 
-  def top_marine_coverage_countries
-    sorted_stats = @statistics.sort_by do |s|
-      s.percentage_pa_marine_cover ? -s.percentage_pa_marine_cover : 0.0
-    end.first(10)
-
-    {
-      regionTitle: region.name,
-      countries: sorted_stats.map do |stat|
-        percentage= stat.percentage_pa_marine_cover>100 ? 100.0 : stat.percentage_pa_marine_cover 
-        {
-          title: stat.country.name,
-          percentage: percentage.round(1),
-          km: number_with_delimiter(stat.pa_marine_area.round(0)),
-          iso3: stat.country.iso_3
-        }
-      end
-    }
-  end
-
   # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb
   # def top_gl_coverage_countries
   #   # List of all countries with at least one green list PA, grouped by region

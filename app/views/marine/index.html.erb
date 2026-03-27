@@ -54,13 +54,6 @@
   <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
 </section>
 
-<%= render partial: "partials/charts/chart-top-ten", locals: {
-  content: cms_fragment_render(:section_size_growth_content, @cms_page),
-  ga_id: 'Slug: @cms_page.slug - Component: regions top countries',
-  regionsTopCountries: @top_regions_countries_with_most_marine_protected_areas,
-  title: cms_fragment_render(:section_size_growth_title, @cms_page)
-} %>
-
 <section class="map-section">
   <%= render partial: "partials/maps/main", locals: {
     map: @map
