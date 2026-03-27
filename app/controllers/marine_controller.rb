@@ -54,35 +54,13 @@ class MarineController < ApplicationController
 
   def maine_protected_areas_growth
     @marine_protected_areas_growth ||= Rails.cache.fetch(
-      "marine/maine_protected_areas_growth",
+      "marine/maine_protected_areas_growth/#{marine_growth_cache_version}",
       expires_in: 12.days
     ) {
         {
           # x = x axis
           # 1, 2, 3 = series on the chart and also make the y axis
-          datapoints: [
-            { "x": Time.new(2000, 1, 1), "1": 2526266, "2": 0, "3": 2526266 },
-            { "x": Time.new(2001, 1, 1), "1": 2723044, "2": 0, "3": 2723044 },
-            { "x": Time.new(2002, 1, 1), "1": 2845701, "2": 0, "3": 2845701 },
-            { "x": Time.new(2003, 1, 1), "1": 2878904, "2": 0, "3": 2878904 },
-            { "x": Time.new(2004, 1, 1), "1": 2980729, "2": 0, "3": 2980729 },
-            { "x": Time.new(2005, 1, 1), "1": 3079037, "2": 0, "3": 3079037 },
-            { "x": Time.new(2006, 1, 1), "1": 6670152, "2": 0, "3": 6670152 },
-            { "x": Time.new(2007, 1, 1), "1": 7835671, "2": 0, "3": 7835671 },
-            { "x": Time.new(2008, 1, 1), "1": 7916368, "2": 0, "3": 7916368 },
-            { "x": Time.new(2009, 1, 1), "1": 9583472, "2": 0, "3": 9583472 },
-            { "x": Time.new(2010, 1, 1), "1": 10649529, "2": 380819, "3": 11030348 },
-            { "x": Time.new(2011, 1, 1), "1": 10713142, "2": 380819, "3": 11093961 },
-            { "x": Time.new(2012, 1, 1), "1": 12409801, "2": 558231, "3": 12968032 },
-            { "x": Time.new(2013, 1, 1), "1": 12641722, "2": 558231, "3": 13199953 },
-            { "x": Time.new(2014, 1, 1), "1": 14053366, "2": 558231, "3": 14611597 },
-            { "x": Time.new(2015, 1, 1), "1": 15085513, "2": 558231, "3": 15643744 },
-            { "x": Time.new(2016, 1, 1), "1": 16938756, "2": 558231, "3": 17496987 },
-            { "x": Time.new(2017, 1, 1), "1": 19363517, "2": 2608187, "3": 21971704 },
-            { "x": Time.new(2018, 1, 1), "1": 23665971, "2": 2608187, "3": 26274158 },
-            { "x": Time.new(2019, 1, 1), "1": 24360959, "2": 2608187, "3": 26969146 },
-            { "x": Time.new(2020, 1, 1), "1": 24360975, "2": 2608187, "3": 26969162 }
-          ],
+          datapoints: marine_growth_datapoints_from_csv,
           units: "km2",
           legend: ["National", "ABNJ", "Global"]
         }.to_json
@@ -146,5 +124,40 @@ class MarineController < ApplicationController
         isShownByDefault: true
       }
     })
+  end
+
+  def marine_growth_csv_path
+    ::Utilities::Files.latest_file_by_glob('lib/data/seeds/marine_protected_areas_growth_*.csv')
+  end
+
+  def marine_growth_cache_version
+    path = marine_growth_csv_path
+    path.present? && File.exist?(path) ? File.mtime(path).to_i : 0
+  end
+
+  def marine_growth_datapoints_from_csv
+    path = marine_growth_csv_path
+    return [] unless path.present? && File.exist?(path)
+
+    CSV.foreach(path, headers: true).map do |row|
+      {
+        x: marine_growth_row_date(row),
+        "1": row.fetch('national_waters').to_i,
+        "2": row.fetch('abnj').to_i,
+        "3": row.fetch('global_ocean').to_i
+      }
+    end
+  rescue => e
+    Rails.logger.error("Failed to parse marine growth CSV: #{e.message}")
+    []
+  end
+
+  def marine_growth_row_date(row)
+    date_value = row['year'].to_s.strip
+    raise KeyError, "Missing date/year column" if date_value.blank?
+
+    return Time.new(date_value.to_i, 1, 1) if date_value.match?(/\A\d{4}\z/)
+
+    Date.parse(date_value.to_s).to_time
   end
 end
