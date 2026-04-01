@@ -91,8 +91,12 @@ tmux attach -t pp-release
 After the dry run completes, the staging tables are ready. You can then:
 
 ```bash
-# Check the release status
+# Check the release status 
 RAILS_ENV=production bundle exec rake pp:portal:status
+
+# This is something you would see. It says it is stopped/completed at validating stage/state
+{"id":14,"label":"Apr2026","state":"validating","created_at":"2026-03-26T14:21:32.343Z","updated_at":"2026-03-26T17:25:18.350Z","manifest_url":"/manifests/14_Apr2026.json"}
+
 
 # And then inspect staging tables in the database to verify data looks correct. Check `staging_protected_areas`, `staging_sources` tables, etc...
 
