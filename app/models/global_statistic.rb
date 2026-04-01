@@ -9,6 +9,7 @@ class GlobalStatistic < ApplicationRecord
 
   MARINE_STATS = %w(
     total_marine_protected_areas
+    total_marine_oecms
     total_marine_oecms_pas
     total_ocean_pa_coverage_percentage
     total_ocean_oecms_pas_coverage_percentage
