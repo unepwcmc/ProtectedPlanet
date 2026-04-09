@@ -104,7 +104,6 @@ services:
       - "5601:5601"
     networks:
       - protectedplanet
-
   webpacker:
     platform: linux/x86_64
     container_name: protectedplanet-webpacker
@@ -127,25 +126,59 @@ services:
     container_name: protectedplanet-api
     build:
       context: ${API_PATH}
+    # Remove this once api is using the ruby 4 version
     command: /bin/bash -l -c " bundle i; bundle exec rackup --host 0.0.0.0"
     volumes:
-      - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
       # This should be removed once the api is using the latest gem versions branch is merged 
       - ${API_PATH}:/ProtectedPlanetApi
       - ${API_PATH}:/app
-      - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
+      # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
+      # The following 2 lines are probably not needed when we use ruby 4 
+      # as it was for capistrano deployment but not used in ruby 4
+      - /run/host-services/ssh-auth.sock:/ssh-agent 
+      - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
     ports:
       - "9292:9292"
     networks:
       - protectedplanet
+    extra_hosts:
+      - "localhost:host-gateway"
     environment:
+      # The following is probably not needed when we use ruby 4
       - SSH_AUTH_SOCK=/ssh-agent
-      - APPSIGNAL_LOG_PATH=/tmp
+      - RACK_ENV=development
+      - MAILER_HOST=protectedplanet-mailpit
+      - MAILER_ADDRESS=protectedplanet-mailpit
+      - MAILER_PORT=1025
+      - MAILER_DOMAIN=localhost
+      - MAILER_USERNAME=dev
+      - MAILER_PASSWORD=dev
+      - MAILER_AUTHENTICATION=login
     depends_on:
       - db
+      - mailpit
     stdin_open: true
     tty: true
     profiles: ['api']
+  mailpit:
+    # Mailpit is a mail server for testing and development purposes. 
+    # It is used to send and receive emails. 
+    # See MAILER_* enviroment section in protectedplanet-api for all needed envs
+    image: axllent/mailpit:v1.29
+    restart: unless-stopped
+    container_name: protectedplanet-mailpit
+    volumes:
+      - protectedplanet_mailpit_data:/data
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - protectedplanet
+    environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATABASE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
 networks:
   protectedplanet:
@@ -156,3 +189,5 @@ volumes:
   protectedplanet_redis_data:
   protectedplanet_es_data:
   protectedplanet_bundler:
+  protectedplanet_node_modules:
+  protectedplanet_mailpit_data:
