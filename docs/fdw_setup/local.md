@@ -12,7 +12,7 @@
 - Portal DB (Postgres) running locally (Homebrew or Docker) with a read-only account:
   - CREATE ROLE portal_ro_user LOGIN PASSWORD '...';
   - Store the password in an environment variable, not inline.
-- PP DB running in Docker and accessible on localhost:55432.
+- PP DB running in Docker and accessible on localhost:5432.
 - Portal app DB name (for this repo): pp_data_management_backend_development.
 
 ## Security notes
@@ -104,6 +104,7 @@ GRANT USAGE ON FOREIGN SERVER portal_srv TO PUBLIC;
 CREATE USER MAPPING IF NOT EXISTS FOR PUBLIC
   SERVER portal_srv
   OPTIONS (user 'portal_ro_user', password '$PORTAL_RO_PASSWORD');
+
 
 CREATE SCHEMA IF NOT EXISTS portal_fdw;
 GRANT USAGE ON SCHEMA portal_fdw TO PUBLIC;
