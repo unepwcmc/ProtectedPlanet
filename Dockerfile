@@ -1,15 +1,24 @@
 FROM ruby:2.6.3
 
+RUN printf 'deb https://snapshot.debian.org/archive/debian/20240311T000000Z buster main contrib non-free\n' > /etc/apt/sources.list \
+    && printf 'deb https://snapshot.debian.org/archive/debian-security/20240311T000000Z buster/updates main contrib non-free\n' >> /etc/apt/sources.list \
+    && printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "5";\n' > /etc/apt/apt.conf.d/99no-check-valid-until
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
-RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && apt-get install --yes nodejs
+RUN apt-get update && apt-get install -y curl gnupg
+RUN mkdir -p /usr/share/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key \
+    | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
+RUN echo "deb [trusted=yes] https://deb.nodesource.com/node_12.x buster main" \
+    > /etc/apt/sources.list.d/nodesource.list
+RUN apt-get update && apt-get install -y nodejs
 RUN apt-get install -y \
         apt-utils \
         libgdal-dev \
         libspatialite-dev \
         shared-mime-info \
         build-essential
-RUN apt-get install -y postgresql postgresql-client
+RUN apt-get install -y postgresql-client libpq-dev
 RUN apt-get install -y zip
 
 # To install dependecies for puppeteer to generate pdfs
