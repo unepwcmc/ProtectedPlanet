@@ -17,7 +17,7 @@ RUN apt-get install -y \
         libspatialite-dev \
         shared-mime-info \
         build-essential
-RUN apt-get install -y postgresql-client libpq-dev
+RUN apt-get install -y postgresql postgresql-client
 RUN apt-get install -y zip
 
 # for sassc specifically
