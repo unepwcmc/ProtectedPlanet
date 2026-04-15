@@ -9,7 +9,7 @@
 You can check out the previous version of Protected Planet on
 [GitHub](https://github.com/unepwcmc/ppe).
 
-> **All protected planet projects in same place:** For Vscode users open `./protected-planet-family-apps.code-workspace` to open all protected planet apps in the same workspace
+> **TO DEVELOPERS - All protected planet family apps in one same place:** For VSCode users, clone [ProtectedPlanet](https://github.com/unepwcmc/ProtectedPlanet) repo and read/use [protected-planet-family-apps.code-workspace](https://github.com/unepwcmc/ProtectedPlanet/blob/master/protected-planet-family-apps.code-workspace) to see all protected planet family apps in the same workspace and its repository links. To access the data-management-portal realted apps please read [pp-data-management-portal](https://github.com/unepwcmc/pp-data-management-portal).
 
 
 ## Topics

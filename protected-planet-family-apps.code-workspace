@@ -6,6 +6,7 @@
 		},
 		{
 			"path": "../protectedplanet-api"
+			// API for the Protected Planet, use the same db as ProtectedPlanet
 			// https://github.com/unepwcmc/protectedplanet-api
 		},
 		{
@@ -21,14 +22,17 @@
 		},
 		{
 			"path": "../wdpa-data-management-portal"
+			// The backend for the PP Data Management Portal
 			// https://github.com/unepwcmc/wdpa-data-management-portal
 		},
 		{
 			"path": "../api-pp-authentication"
+			// The backend for the PP Data Management Portal
 			// https://github.com/unepwcmc/api-pp-authentication
 		},
 		{
 			"path": "../icca-data-management-portal"
+			// The backend for the PP Data Management Portal
 			// https://github.com/unepwcmc/icca-data-management-portal
 		},
 		{
