@@ -34,11 +34,19 @@ class ProtectedAreaParcel < ApplicationRecord
     update_attributes(slug: updated_slug)
   end
 
-   # PAs with green list on the PA record only (ignores parcel-level green list).
-   scope :greenlisted_parcels, -> {
+  # PAs with green list on the PA record only (ignores parcel-level green list).
+  scope :greenlisted_parcels, -> {
     where.not(green_list_status_id: nil)
   }
-  
+
+  scope :terrestrial_areas, -> {
+    where(marine: false)
+  }
+
+  scope :marine_areas, -> {
+    where(marine: true)
+  }
+
   private
 
   # To be removed after migration - ensures wdpa_id and wdpa_pid are filled for backward compatibility
