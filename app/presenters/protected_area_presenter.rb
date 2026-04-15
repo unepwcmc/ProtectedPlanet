@@ -181,15 +181,13 @@ class ProtectedAreaPresenter
   def parcc_info
     return unless protected_area.has_parcc_info
 
-    protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).map do |parcel|
-      {
-        site_pid: parcel.site_pid,
-        affiliation: 'parcc_info',
-        image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
-        link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
-        link_url: url_for_related_source('parcc_info', protected_area)
-      }
-    end
+    [{
+      site_pid: protected_area.site_pid,
+      affiliation: 'parcc_info',
+      image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+      link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
+      link_url: url_for_related_source('parcc_info', protected_area)
+    }]
   end
 
   attr_reader :protected_area
