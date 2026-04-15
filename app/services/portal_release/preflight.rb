@@ -17,12 +17,12 @@ module PortalRelease
         contract!
         counts = counts_snapshot
         # Require at least one of points/polygons to be present; allow one to be zero
-        if counts[:points].zero? && counts[:polygons].zero?
+        if counts[:wdpca_points].zero? && counts[:wdpca_polygon].zero?
           raise 'Empty source views (both points and polygons are empty)'
         end
 
         # Optionally ensure sources present; comment this out if not required
-        # raise 'Empty sources view' if counts[:sources].zero?
+        # raise 'Empty sources view' if counts[:wdpca_sources].zero?
         check_geometry!
         check_duplicates!
 
@@ -41,9 +41,12 @@ module PortalRelease
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         {
-          points: conn.select_value("SELECT COUNT(*) FROM #{views[:points]}").to_i,
-          polygons: conn.select_value("SELECT COUNT(*) FROM #{views[:polygons]}").to_i,
-          sources: conn.select_value("SELECT COUNT(*) FROM #{views[:sources]}").to_i
+          wdpca_points: conn.select_value("SELECT COUNT(*) FROM #{views[:points]}").to_i,
+          wdpca_polygon: conn.select_value("SELECT COUNT(*) FROM #{views[:polygons]}").to_i,
+          wdpca_sources: conn.select_value("SELECT COUNT(*) FROM #{views[:sources]}").to_i,
+          effectiveness_pame: conn.select_value("SELECT COUNT(*) FROM #{views[:pame]}").to_i,
+          effectiveness_pame_sources: conn.select_value("SELECT COUNT(*) FROM #{views[:pame_sources]}").to_i,
+          greenlist: conn.select_value("SELECT COUNT(*) FROM #{views[:greenlist]}").to_i
         }
       end
 
