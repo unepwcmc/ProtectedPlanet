@@ -15,7 +15,7 @@ class DownloadTest < ActiveSupport::TestCase
     Download::Generators::Csv.expects(:generate).with(csv_zip_path, nil).returns(true)
     S3.expects(:upload).with(Download::CURRENT_PREFIX + csv_download_zip_name, csv_zip_path)
 
-    download_success = Download.generate download_name
+    download_success = Download.generate download_name, { site_selection: nil }
     assert download_success, "Expected Download.generate to return true on success"
   end
 
@@ -28,7 +28,7 @@ class DownloadTest < ActiveSupport::TestCase
     Download::Generators::Csv.stubs(:generate).returns(true)
     S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-csv.zip', anything)
 
-    Download.generate download_name, for_import: true
+    Download.generate download_name, { site_selection: nil, for_import: true }
   end
 
   test '.generate, called with an array of PA IDs, generates downloads
@@ -39,12 +39,12 @@ class DownloadTest < ActiveSupport::TestCase
     S3.stubs(:upload)
 
     shapefile_zip_path = File.join(Rails.root, 'tmp', 'an_download-shapefile.zip')
-    Download::Generators::Shapefile.expects(:generate).with(shapefile_zip_path, pa_ids)
+    Download::Generators::Shapefile.expects(:generate).with(shapefile_zip_path, { site_ids: pa_ids })
 
     csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
-    Download::Generators::Csv.expects(:generate).with(csv_zip_path, pa_ids)
+    Download::Generators::Csv.expects(:generate).with(csv_zip_path, { site_ids: pa_ids })
 
-    download_success = Download.generate download_name, site_ids: pa_ids
+    download_success = Download.generate download_name, { site_selection: { site_ids: pa_ids } }  
     assert download_success, "Expected Download.generate to return true on success"
   end
 
@@ -59,7 +59,7 @@ class DownloadTest < ActiveSupport::TestCase
     csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
     FileUtils.expects(:rm_rf).with(csv_zip_path)
 
-    Download.generate 'an_download'
+    Download.generate 'an_download', { site_selection: nil }
   end
 
   test '.generate does not upload to S3 if a Generator returns
@@ -69,7 +69,7 @@ class DownloadTest < ActiveSupport::TestCase
 
     S3.expects(:upload).once
 
-    Download.generate 'an_download'
+    Download.generate 'an_download', { site_selection: nil }
   end
 
   test '.request, given an hash of params, requests the router with

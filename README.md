@@ -1,8 +1,10 @@
 # Protected Planet
 
-[![Build Status](https://travis-ci.org/unepwcmc/ProtectedPlanet.svg)](https://travis-ci.org/unepwcmc/ProtectedPlanet)
-[![Code Climate](https://codeclimate.com/repos/539b16466956806b20010ddc/badges/e90cf6ba84f66503705c/gpa.svg)](https://codeclimate.com/repos/539b16466956806b20010ddc/feed)
-[![Test Coverage](https://codeclimate.com/repos/539b16466956806b20010ddc/badges/e90cf6ba84f66503705c/coverage.svg)](https://codeclimate.com/repos/539b16466956806b20010ddc/feed)
+>
+> If you are reading here for very first time we reccomend you to read [Protected Planet WIKI](https://github.com/unepwcmc/protected-planet-wiki) to understand the PP family/architechture
+>
+
+ 
 
 You can check out the previous version of Protected Planet on
 [GitHub](https://github.com/unepwcmc/ppe).
@@ -23,7 +25,7 @@ git submodule update --init --recursive
 ```
 
 1. [Getting Started and Configuration with Docker](docs/docker.md)
-    * [Setup Without Docker - not recommended](docs/installation.md)
+    * [Setup Without Docker - not recommended and outdated](docs/installation.md)
 2. [Release Process (Sync Data Management Portal Data to Protected Planet)](docs/release/release_process.md)
     * [Release Data Imports](docs/release/release_data_imports.md) - What data is imported during a release
 3. [Deployment](docs/deployment.md)
@@ -35,9 +37,9 @@ git submodule update --init --recursive
 10. [CMS](docs/cms.md)
 11. [Relationships between Protected Areas and Parcels](docs/protected_area_parcels.md)
 12. [Green List Functionality](docs/green_list.md)
-13. [DB Connection between PP and Data Management Portal (FDW) Setup - Production](docs/fdw_setup/local.md)
-14. [DB Connection between PP and Data Management Portal (FDW) Setup - Local Development](docs/fdw_setup/prod.md)
-15. [Banner system](docs/banner_system.md)
+13. [DB Connection between PP and Data Management Portal (FDW) Setup](docs/fdw_setup/index.md)
+14. [Banner system](docs/banner_system.md)
+
 ## Licence
 
 Protected Planet is released under the [BSD

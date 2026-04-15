@@ -8,7 +8,7 @@
 - As of 29Sep2025, green list status is maintained in both protected_areas and protected_area_parcels tables
 - When a protected area is green-listed, ALL associated parcels inherit the same green list status
 - This ensures consistency between the main protected area record and all its parcels
-- Both tables have green_list_status_id and green_list_url columns
+- Both tables have green_list_status_id and gl_link columns
 - See [Green List Documentation](green_list.md) for detailed information about the import process
 
 # Import

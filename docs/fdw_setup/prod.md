@@ -1,8 +1,5 @@
 # ProtectedPlanet ↔ Portal FDW Integration (Production)
 
-## Goal
-- Allow the PP database to read specific tables from the Portal database via PostgreSQL FDW.
-
 ## Prerequisites
 - Portal DB (Postgres) running with a read-only account:
   - CREATE ROLE portal_ro_user LOGIN PASSWORD '...';
@@ -43,13 +40,16 @@ SELECT schema_name FROM information_schema.schemata
 WHERE schema_name NOT IN ('pg_catalog', 'information_schema', 'pg_toast') 
 ORDER BY schema_name;
 
--- Then grant permissions (adjust schema names based on what exists - commonly 'wdpa' and 'reference')
+-- Then grant permissions (adjust schema names based on what exists - commonly 'wdpa', 'reference', and 'pame')
 GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
 GRANT USAGE ON SCHEMA reference TO portal_ro_user;
+GRANT USAGE ON SCHEMA pame TO portal_ro_user;
 GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
 GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA pame TO portal_ro_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA pame GRANT SELECT ON TABLES TO portal_ro_user;
 
 -- Set connection limit for portal_ro_user (recommended for production)
 ALTER ROLE portal_ro_user CONNECTION LIMIT 5;
@@ -149,6 +149,32 @@ IMPORT FOREIGN SCHEMA reference
   FROM SERVER portal_srv
   INTO portal_fdw;
 
+-- Import pame schema tables (PAME + Green List)
+IMPORT FOREIGN SCHEMA pame
+  LIMIT TO (
+    pame,
+    pame_sources,
+    greenlists,
+    greenlist_status_cat,
+    method_cat,
+    verification_effectiveness_cat,
+    governance_action_cat,
+    governance_assessment_cat,
+    designation_purpose_biodiversity_cat,
+    pame_designation_purpose_biodiversity_cats,
+    designation_purpose_other_cat,
+    management_objectives_set_cat,
+    management_objectives_managed_cat,
+    management_adaptation_cat,
+    management_staff_cat,
+    management_budget_cat,
+    management_threats_cat,
+    management_monitoring_cat,
+    outcomes_biodiversity_cat
+  )
+  FROM SERVER portal_srv
+  INTO portal_fdw;
+
 -- Grant SELECT permission on all imported foreign tables
 GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO wcmc;
 ```
@@ -171,7 +197,7 @@ UNION ALL SELECT 'provider', count(*) FROM portal_fdw.provider
 UNION ALL SELECT 'iso3', count(*) FROM portal_fdw.iso3;
 ```
 
-That is all done. If you want to test creating all staging materialised views please view the SQL [here](../FDW_VIEWS.sql)
+That is all done. If you want to test creating all staging materialised views please view the SQL [here](../../FDW_VIEWS.sql)
 
 ## Details
 
@@ -253,7 +279,7 @@ GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO wcmc;
 - Use this when the Portal schema changes (e.g., new reference tables/columns like inland_waters_cat / inland_waters_id) or when FDW_VIEWS.sql is updated.
 
 #### Portal DB privileges (run once, on the Portal DB)
-- Ensure the read-only role can access the wdpa and reference schemas and all tables.
+- Ensure the read-only role can access the wdpa, reference, and pame schemas and all tables.
 
 ```bash
 # Replace <portal_db_name> and run on the Portal DB host
@@ -261,16 +287,17 @@ psql -U postgres -d <portal_db_name> -X <<'SQL'
 -- Grant schema usage
 GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
 GRANT USAGE ON SCHEMA reference TO portal_ro_user;
+GRANT USAGE ON SCHEMA pame TO portal_ro_user;
 
--- Grant SELECT on ALL existing tables in wdpa schema
+-- Grant SELECT on ALL existing tables in each schema
 GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
-
--- Grant SELECT on ALL existing tables in reference schema
 GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA pame TO portal_ro_user;
 
 -- Ensure future tables are also accessible
 ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA pame GRANT SELECT ON TABLES TO portal_ro_user;
 SQL
 ```
 

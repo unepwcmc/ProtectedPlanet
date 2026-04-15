@@ -1,102 +1,83 @@
 <template>
-  <button
-    @click="download"
-    title="Download CSV file of filtered protected area management effectiveness evaluations"
-    class="button--download"
-    :class="{ 'button--disabled' : noResults }"
-    v-bind="{ 'disabled' : noResults }">
-    CSV
+  <button @click="download" title="Download CSV file of filtered protected area management effectiveness evaluations"
+    class="button--download" :class="{ 'button--disabled': noResults || isLoading }"
+    v-bind="{ 'disabled': noResults || isLoading }">
+    <span v-if="isLoading" :class="['icon--loading-spinner', 'margin-center', { 'icon-visible': isLoading }]" />
+    <span v-else>
+      CSV
+    </span>
   </button>
 </template>
 
 <script>
-  import axios from 'axios'
+import axios from 'axios'
 
-  export default {
-    name: 'download-csv',
+export default {
+  name: 'download-csv',
 
-    props: {
-      totalItems: {
-        required: true,
-        type: Number
-      }
-    },
+  props: {
+    totalItems: {
+      required: true,
+      type: Number
+    }
+  },
 
-    computed: {
-      noResults () {
-        return this.totalItems == 0
-      }
-    },
+  data() {
+    return {
+      isLoading: false
+    }
+  },
 
-    methods: {
-      download () {
-        const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].
-        getAttribute('content'),
-          data = this.$store.state.pame.selectedFilterOptions,
-          config = {
-            headers: {
-              'X-CSRF-Token': csrf,
-              'Accept': 'text/csv',
-              'responseType': 'blob'
-            }
-          }
+  computed: {
+    noResults() {
+      return this.totalItems == 0
+    }
+  },
 
-        axios.post('/pame/download', data, config)
-          .then((response) => {
-            // content-disposition looks something like: 'attachment; filename="the_file_name_here.csv"
-            // so splitting the string by 'filename=" will leave us with ['attachemnt;', 'the_file_name_here.csv"']
-            // we then get the last item and split it further by the the remaining '"' to ensure anything after that is gone.
-            // Finally we get the first element of that split.
-            const filename = response.headers['content-disposition'].split('filename\="')[1].split('\"')[0]
+  methods: {
+    download() {
+      if (this.noResults || this.isLoading) return
 
-            this.createBlob(filename, response.data)
+      this.isLoading = true
 
-            this.$ga.event('Button', 'click', 'PAME - CSV download')
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      },
-
-      createBlob (filename, data) {
-        let blob = new Blob([data])
-
-        if (typeof window.navigator.msSaveBlob !== 'undefined') {
-          // IE workaround for "HTML7007: One or more blob URLs were 
-          // revoked by closing the blob for which they were created. 
-          // These URLs will no longer resolve as the data backing 
-          // the URL has been freed."
-          window.navigator.msSaveBlob(blob, filename)
-
-        } else {
-          const blobURL = window.URL.createObjectURL(blob),
-            tempLink = document.createElement('a')
-
-          // Safari thinks _blank anchor are pop ups. We only want to set _blank
-          // target if the browser does not support the HTML5 download attribute.
-          // This allows you to download files in desktop safari if pop up blocking 
-          // is enabled.
-          if (typeof tempLink.download === 'undefined') {
-              tempLink.setAttribute('target', '_blank')
-          }
-          
-          tempLink.href = blobURL
-          tempLink.setAttribute('download', filename)
-          this.simulateClick(tempLink)
-          window.URL.revokeObjectURL(blobURL)
+      const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute('content')
+      const data = this.$store.state.pame.selectedFilterOptions
+      const config = {
+        responseType: 'blob',
+        headers: {
+          'X-CSRF-Token': csrf,
+          'Accept': 'text/csv'
         }
-      },
-
-      simulateClick (element) {
-        // created because standard .click() doesn't work in Firefox
-        const event = new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          view: window
-        })
-        // If cancelled, don't dispatch our event
-        var canceled = !element.dispatchEvent(event)
       }
+
+      axios.post('/pame/download', data, config)
+        .then(response => {
+          const disposition = response.headers['content-disposition'] || ''
+          const match = disposition.match(/filename="?([^"]+)"?/)
+          const filename = match ? match[1] : 'download.csv'
+
+          return {
+            filename,
+            blob: response.data
+          }
+        })
+        .then(({ filename, blob }) => {
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
+
+          a.href = url
+          a.download = filename
+          a.click()
+          window.URL.revokeObjectURL(url)
+
+          this.$ga.event('Button', 'click', 'PAME - CSV download')
+          this.isLoading = false
+        })
+        .catch((error) => {
+          console.log(error)
+          this.isLoading = false
+        })
     }
   }
+}
 </script>

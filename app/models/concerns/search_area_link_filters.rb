@@ -10,7 +10,7 @@ module SearchAreaLinkFilters
   end
 
   def self.green_list_status_filters
-    { SPECIAL_STATUS_FILTER_KEY => %w[is_green_list is_green_list_candidate] }
+    { SPECIAL_STATUS_FILTER_KEY => %w[pa_or_any_its_parcels_is_greenlisted pa_or_any_its_parcels_is_greenlist_candidate] }
   end
 
   def self.is_type_marine_filters
@@ -25,8 +25,8 @@ module SearchAreaLinkFilters
     { designation: [designation] }
   end
 
-  def self.home_category_filters(filter)
-    if filter == 'is_green_list'
+  def self.home_category_filters(filter:, is_green_list: false)
+    if is_green_list
       { SPECIAL_STATUS_FILTER_KEY => [filter] }
     else
       { is_type: [filter] }

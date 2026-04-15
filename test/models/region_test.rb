@@ -60,27 +60,6 @@ class RegionTest < ActiveSupport::TestCase
     assert_equal 2, region_1.designations.count
   end
 
-  test '.protected_areas_with_iucn_categories returns all Protected
-   Areas with valid IUCN categories' do
-    iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
-    iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
-    invalid_iucn_category = FactoryGirl.create(:iucn_category, name: 'Pepe')
-
-    region_1 = FactoryGirl.create(:region, name: 'Americasia', iso: 'AMA')
-    region_2 = FactoryGirl.create(:region, name: 'Oceanafrica', iso: 'OAF')
-
-    country_1 = FactoryGirl.create(:country, region: region_1)
-    country_2 = FactoryGirl.create(:country, region: region_2)
-    country_3 = FactoryGirl.create(:country, region: region_1)
-
-    FactoryGirl.create(:protected_area, iucn_category: iucn_category_1, countries: [country_1] )
-    FactoryGirl.create(:protected_area, iucn_category: iucn_category_2, countries: [country_2])
-    FactoryGirl.create(:protected_area, iucn_category: invalid_iucn_category, countries: [country_2])
-    FactoryGirl.create(:protected_area, iucn_category: iucn_category_2, countries: [country_3])
-
-    assert_equal 2, region_1.protected_areas_with_iucn_categories.count
-  end
-
   test '.without_geometry does not select the geometry columns' do
     region = FactoryGirl.create(:region)
 

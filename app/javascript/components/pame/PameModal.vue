@@ -16,12 +16,12 @@
 
         <h2 class="modal__title">{{ text.modal_title }}</h2>
 
-        <template v-if="modalContent.metadata_id">
-          <p><strong>{{ text.id }}:</strong> {{ modalContent.metadata_id }}</p>
+        <template v-if="modalContent.eff_metaid">
+          <p><strong>{{ text.id }}:</strong> {{ modalContent.eff_metaid }}</p>
         </template>
 
         <template v-if="modalContent.data_title">
-          <p><strong>{{ text.id }}:</strong> {{ modalContent.data_title }}</p>
+          <p><strong>{{ text.title }}:</strong> {{ modalContent.data_title }}</p>
         </template>
 
         <template v-if="modalContent.resp_party">

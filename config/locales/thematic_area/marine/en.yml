@@ -3,24 +3,26 @@ en:
     marine:
       hero:
         button_text: Explore marine protected areas
-        stat_text_1: Percent of the ocean covered by marine protected areas
-        stat_text_2: Marine Protected Areas
-        stat_text_3: Total area protected
+        stat_text_1: Percent of the ocean covered by protected areas
+        stat_text_2: Marine protected areas
+        stat_text_3: Percent of the ocean covered by OECMs
+        stat_text_4: Marine OECMs
+        stat_text_5: Percent of the ocean covered by PAs and OECMs
+        stat_text_6: Total area protected (protected areas and OECMs)
       ocean:
         national-title: National Waters
         high-title: High Seas
-        legend_text_1: "% of Protected Area Coverage"
-        legend_text_2: "% of Ocean that is National waters"
-        legend_text_3: "% of Ocean that is High Seas"
+        legend_text_1: "% of protected area and OECM coverage"
+        legend_text_2: "% of ocean that is in national waters"
+        legend_text_3: "% of ocean that is High Seas"
       national:
         sub_title: Top 6 countries
         chart_text: "%{country} and its %{overseas} overseas countries and territories have a combined area of %{km}km<sup>2</sup>"
         chart_stat_text: of their national waters are protected
         chart_stat_text_overseas: of their overseas territories waters are protected
       distribution:
-        title: Distribution of marine protected areas
-        content: "<p>The global coverage of marine protected areas (MPAs) is %{total_ocean_pa_coverage_percentage}%. The Global Ocean can be divided into areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ))</p>
-                  <p>MPAs can be more easily created by governments in national waters where there are dedicated legal systems in place. In ABNJ it is more difficult to create MPAs due to the complex legal framework in place. As such, the percentage of MPAs created within national waters is much higher than that for ABNJ. National waters represent 39% of the global ocean and at present, %{national_waters_pa_coverage_percentage}% of these waters are designated as protected areas. In contrast, only %{high_seas_pa_coverage_percentage}% of ABNJ, which makes up the remaining 61% of the global ocean, has been established as protected areas. At present, international discussions are underway to establish ways of simplifying the process to create MPAs in ABNJ. For more information on this, please see the DOALOS website.</p>"
+        title: Distribution and size of marine protected and conserved areas
+        content: "<p>The global ocean includes areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ)). National waters make up 39% of the global ocean. At present, %{national_waters_pa_coverage_percentage}% of this area is within protected areas and other effective area-based conservation measures (OECMs). ABNJ make up 61% of the global marine area or nearly half of the Earth&rsquo;s surface. Currently only %{high_seas_pa_coverage_percentage}% of this area is within protected areas and OECMs. Located beyond the jurisdiction of any single country, these protected areas and OECMs have been designated and reported to Protected Planet by secretariats of international conventions and frameworks of cooperation on behalf of their member states.</p>"
       coverage_growth:
         title: Growth in marine protected area coverage
         content: "<p>Over the last several years the number and spatial extent of MPAs have increased rapidly. In 2000 the area covered by MPAs was approximately 2 million km² (or 0.7% of the Ocean), since then there has been over a ten-fold increase in MPA coverage with %{total_ocean_area_protected} km² (or %{total_ocean_pa_coverage_percentage}%) of the ocean being covered by MPAs.</p>"

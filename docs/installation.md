@@ -1,6 +1,6 @@
 > ## ⚠️ **WARNING**
 >
-> Please use docker.md to setup locally
+> Please use docker.md to setup locally and this doc is out of date
 >
 
 ## Setup and Configuration

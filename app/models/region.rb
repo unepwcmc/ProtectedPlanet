@@ -12,8 +12,6 @@ class Region < ApplicationRecord
 
   has_one :regional_statistic
 
-  scope :without_global, -> { where.not(name: 'Global').order(:name) }
-
   def site_ids
     protected_areas.map(&:site_id)
   end
@@ -24,13 +22,6 @@ class Region < ApplicationRecord
 
   def countries_providing_data
     countries.joins(:protected_areas).uniq
-  end
-
-  def protected_areas_with_iucn_categories
-    valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
-    iucn_categories.where(
-      "iucn_categories.name IN (#{valid_categories})"
-    )
   end
 
   def protected_areas_per_governance(exclude_oecms: false)

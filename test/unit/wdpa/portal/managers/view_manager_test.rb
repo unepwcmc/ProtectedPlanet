@@ -6,10 +6,10 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
 
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_live_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
+    @config.stubs(:portal_staging_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
       portal_standard_sources])
 
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns(@config.portal_live_materialised_view_values)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_view_values).returns(@config.portal_staging_materialised_view_values)
   end
 
   def teardown
@@ -25,28 +25,19 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
     end
   end
 
-  test 'view_exists? returns true for existing view' do
+  test 'materialized_view_exists? returns true for existing view' do
     # Create a test materialized view
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW test_view AS
       SELECT 1 as id, 'test' as name
     SQL
 
-    result = Wdpa::Portal::Managers::ViewManager.view_exists?('test_view')
+    result = Wdpa::Portal::Managers::ViewManager.materialized_view_exists?('test_view')
     assert result
   end
 
-  test 'view_exists? returns false for non-existent view' do
-    result = Wdpa::Portal::Managers::ViewManager.view_exists?('non_existent_view')
-    refute result
-  end
-
-  test 'view_exists? handles query errors gracefully' do
-    # Mock the connection to raise an error
-    @connection.expects(:execute).with('SELECT 1 FROM invalid_view LIMIT 1').raises(StandardError,
-      'View does not exist')
-
-    result = Wdpa::Portal::Managers::ViewManager.view_exists?('invalid_view')
+  test 'materialized_view_exists? returns false for non-existent view' do
+    result = Wdpa::Portal::Managers::ViewManager.materialized_view_exists?('non_existent_view')
     refute result
   end
 
@@ -88,54 +79,10 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
     refute result
   end
 
-  test 'refresh_view_concurrently executes REFRESH MATERIALIZED VIEW CONCURRENTLY' do
-    # Create a test view
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW test_view AS
-      SELECT 1 as id, 'test' as name
-    SQL
-
-    # Mock the connection to expect the concurrent refresh
-    @connection.expects(:execute).with('REFRESH MATERIALIZED VIEW CONCURRENTLY test_view')
-
-    Wdpa::Portal::Managers::ViewManager.refresh_view_concurrently('test_view')
-  end
-
-  test 'refresh_view_concurrently handles PG::ObjectNotInPrerequisiteState error' do
-    # Create a test view
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW test_view AS
-      SELECT 1 as id, 'test' as name
-    SQL
-
-    # Mock the connection to raise the specific error
-    @connection.expects(:execute).with('REFRESH MATERIALIZED VIEW CONCURRENTLY test_view').raises(PG::ObjectNotInPrerequisiteState.new('Indexes may not have been created properly'))
-
-    assert_raises(PG::ObjectNotInPrerequisiteState) do
-      Wdpa::Portal::Managers::ViewManager.refresh_view_concurrently('test_view')
-    end
-  end
-
-  test 'refresh_view_concurrently handles general errors' do
-    # Create a test view
-    @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW test_view AS
-      SELECT 1 as id, 'test' as name
-    SQL
-
-    # Mock the connection to raise a general error
-    @connection.expects(:execute).with('REFRESH MATERIALIZED VIEW CONCURRENTLY test_view').raises(StandardError,
-      'General error')
-
-    assert_raises(StandardError, 'General error') do
-      Wdpa::Portal::Managers::ViewManager.refresh_view_concurrently('test_view')
-    end
-  end
-
   test 'validate_required_views_exist with empty view list' do
     # Mock empty view list
-    @config.stubs(:portal_live_materialised_view_values).returns([])
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns([])
+    @config.stubs(:portal_staging_materialised_view_values).returns([])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_view_values).returns([])
 
     result = Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
     assert result

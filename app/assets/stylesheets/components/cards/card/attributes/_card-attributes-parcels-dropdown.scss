@@ -1,0 +1,8 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--attributes-parcels-dropdown {
+  @include breakpoint($medium) {
+    max-width: rem-calc(400);
+  }
+}

@@ -18,11 +18,9 @@ class ProtectedAreaPresenter
     @protected_area = protected_area
   end
 
+  # List of affiliation objects (each has site_pid, affiliation, and link fields).
   def affiliations
-    [
-      green_list_status_info,
-      parcc_info
-    ].compact
+    [greenlist_status_by_pa_and_all_its_parcels, parcc_info].compact.flatten
   end
 
   def external_links
@@ -53,81 +51,90 @@ class ProtectedAreaPresenter
     }
   end
 
-  def parcels_attribute
-    parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
-    # TODO: once the parcel IDs are change to be 345345_1 345345_2
-    # We will need to change this to item.split('_').last.to_i
-    parcels_including_protected_area_self.sort_by { |item| item.site_pid }.map do |parcel|
-      {
-        site_pid: parcel.site_pid,
-        attributes: [
-          {
-            title: 'Name',
-            value: parcel.original_name
-          },
-          {
-            title: 'English Name',
-            value: parcel.name
-          },
-          {
-            title: 'English Designation',
-            value: parcel.designation.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'IUCN Management Category',
-            value: parcel.iucn_category.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Status',
-            value: parcel.legal_status.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Type of Designation',
-            value: parcel.designation.try(:jurisdiction).try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Status Year',
-            value: parcel.legal_status_updated_at.try(:strftime, '%Y') || 'Not Reported'
-          },
-          {
-            title: 'Governance Type',
-            value: parcel.governance.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Governance Subtype',
-            value: parcel.governance_subtype || 'Not Reported'
-          },
-          {
-            title: 'Management Authority',
-            value: parcel.management_authority.try(:name) || 'Not Reported'
-          },
-          {
-            title: 'Management Plan',
-            value: parse_management_plan(parcel.management_plan)
-          },
-          {
-            title: 'Ownership Type',
-            value: parcel.owner_type || 'Not Reported'
-          },
-          {
-            title: 'Ownership Subtype',
-            value: parcel.ownership_subtype || 'Not Reported'
-          },
-          {
-            title: 'International Criteria',
-            value: parcel.international_criteria || 'Not Reported'
-          },
-          {
-            title: 'Inland Waters',
-            value: parcel.inland_waters || 'Not Reported'
-          },
-          {
-            title: 'Supplementary Information',
-            value: parcel.supplementary_info
-          }
-        ].concat(parcel_oecm_attributes(parcel))
-      }
-    end
+  def current_pa_and_parcels_attributes
+    protected_area
+      .parcels_including_protected_area_self
+      .sort_by(&:site_pid)
+      .map do |parcel|
+        {
+          site_pid: parcel.site_pid,
+          attributes: [
+            {
+              title: 'Parcel ID',
+              value: parcel.site_pid,
+              is_site_pid: true
+            },
+            {
+              title: 'Name',
+              value: parcel.original_name
+            },
+            {
+              title: 'English Name',
+              value: parcel.name
+            },
+            {
+              title: 'English Designation',
+              value: parcel.designation.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'IUCN Management Category',
+              value: parcel.iucn_category.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Status',
+              value: parcel.legal_status.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Type of Designation',
+              value: parcel.designation.try(:jurisdiction).try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Status Year',
+              value: parcel.legal_status_updated_at.try(:strftime, '%Y') || 'Not Reported'
+            },
+            {
+              title: 'Governance Type',
+              value: parcel.governance.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Governance Subtype',
+              value: parcel.governance_subtype || 'Not Reported'
+            },
+            {
+              title: 'Management Authority',
+              value: parcel.management_authority.try(:name) || 'Not Reported'
+            },
+            {
+              title: 'Management Plan',
+              value: parse_management_plan(parcel.management_plan)
+            },
+            {
+              title: 'Ownership Type',
+              value: parcel.owner_type || 'Not Reported'
+            },
+            {
+              title: 'Ownership Subtype',
+              value: parcel.ownership_subtype || 'Not Reported'
+            },
+            {
+              title: 'International Criteria',
+              value: parcel.international_criteria || 'Not Reported'
+            },
+            {
+              title: 'Inland Waters',
+              value: parcel.inland_waters || 'Not Reported'
+            },
+            {
+              title: 'Supplementary Information',
+              value: parcel.supplementary_info
+            }
+          ].concat(parcel_oecm_attributes(parcel))
+        }
+      end
+  end
+
+  def parcels_site_pids
+    protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).map(&:site_pid)
   end
 
   private
@@ -147,33 +154,40 @@ class ProtectedAreaPresenter
     ]
   end
 
-  def green_list_status_info
-    return unless protected_area.green_list_status_id
+  def greenlist_status_by_pa_and_all_its_parcels
+    protected_area.parcels_including_protected_area_self.sort_by(&:site_pid).map do |parcel|
+      gls = parcel.green_list_status
+      next if gls.blank?
 
-    gls = protected_area.green_list_status
-    {
-      affiliation: 'greenlist',
-      date: gls.expiry_date,
-      image_url: green_list_logo(gls.status),
-      link_title: "View the Green List page for #{protected_area.name}",
-      type: gls.status,
-      url: protected_area.green_list_url
-    }
+      {
+        site_pid: parcel.site_pid,
+        affiliation: 'greenlist',
+        # Frontend expects the Green List expiry as a 4-digit year.
+        date: gls.gl_expiry.is_a?(Date) ? gls.gl_expiry.year : gls.gl_expiry,
+        image_url: green_list_logo(gls.gl_status),
+        link_title: "View the Green List page for #{parcel.name}",
+        link_url: gls.gl_link,
+        type: gls.gl_status,
+        url: gls.gl_link
+      }
+    end.compact
   end
 
-  def green_list_logo(status)
-    logo = status.downcase == 'candidate' ? 'green-list-black' : 'green-list'
+  def green_list_logo(gl_status)
+    logo = gl_status.to_s.downcase == 'candidate' ? 'green-list-black' : 'green-list'
     ActionController::Base.helpers.image_url("logos/#{logo}.png")
   end
 
   def parcc_info
     return unless protected_area.has_parcc_info
 
-    {
+    [{
+      site_pid: protected_area.site_pid,
+      affiliation: 'parcc_info',
       image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
       link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
       link_url: url_for_related_source('parcc_info', protected_area)
-    }
+    }]
   end
 
   attr_reader :protected_area

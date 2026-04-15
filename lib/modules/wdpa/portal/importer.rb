@@ -5,10 +5,6 @@ module Wdpa
     class Importer < Wdpa::Shared::ImporterBase::Base
       def self.import(create_staging_materialized_views: true, only: nil, skip: nil, sample: nil, label: nil, release_id: nil, notifier: nil)
         notifier&.phase('Start running all importers.')
-        unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
-          error_msg = 'Required materialized views do not exist.'
-          raise StandardError, error_msg
-        end
 
         # Apply runtime flags
         Wdpa::Portal::ImportRuntimeConfig.reset!
@@ -19,10 +15,14 @@ module Wdpa
         Wdpa::Portal::ImportRuntimeConfig.release_id = release_id
         Wdpa::Portal::ImportRuntimeConfig.checkpoints_enabled = (ENV['PP_IMPORT_CHECKPOINTS_DISABLE'] != 'true')
 
-        # Create staging materialized views (only if create_staging_materialized_views is true)
-        # This will create the views and refresh them with data
+        # Create staging materialized views first when requested, so validation passes
         if create_staging_materialized_views
           Wdpa::Portal::Managers::ViewManager.ensure_staging_materialized_views!
+        end
+
+        unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
+          error_msg = 'Required materialized views do not exist.'
+          raise StandardError, error_msg
         end
 
         # Ensure staging tables exist (raise error if missing - should be created before import)
@@ -62,12 +62,13 @@ module Wdpa
           only.include?(n)
         end
 
-        sources_result = should_run.call('sources') ? Wdpa::Portal::Importers::Source.import_to_staging(notifier: notifier) : success_result(0)
+        sources_result = should_run.call('sources') ? Wdpa::Portal::Importers::ProtectedAreaSource.import_to_staging(notifier: notifier) : success_result(0)
         protected_areas_result = should_run.call('protected_areas') ? Wdpa::Portal::Importers::ProtectedArea.import_to_staging(notifier: notifier) : success_result(0)
 
         if protected_areas_result[:hard_errors].empty?
           global_stats_result = should_run.call('global_stats') ? Wdpa::Shared::Importer::GlobalStats.import_to_staging(notifier: notifier) : success_result(0)
           green_list_result = should_run.call('green_list') ? Wdpa::Portal::Importers::GreenList.import_to_staging(notifier: notifier) : success_result(0)
+          pame_sources_result = should_run.call('pame_sources') ? Wdpa::Portal::Importers::PameSource.import_to_staging(notifier: notifier) : success_result(0)
           pame_result = should_run.call('pame') ? Wdpa::Portal::Importers::Pame.import_to_staging(notifier: notifier) : success_result(0)
           story_map_links_result = should_run.call('story_map_links') ? Wdpa::Shared::Importer::StoryMapLinkList.import_to_staging(notifier: notifier) : success_result(0)
           country_statistics_result = if should_run.call('country_statistics')
@@ -81,6 +82,7 @@ module Wdpa
           errors = failure_result('Skipped due to hard errors in protected areas importer')
           global_stats_result = errors
           green_list_result = errors
+          pame_sources_result = errors
           pame_result = errors
           story_map_links_result = errors
           country_statistics_result = {
@@ -95,6 +97,7 @@ module Wdpa
           protected_areas: protected_areas_result,
           global_stats: global_stats_result,
           green_list: green_list_result,
+          pame_sources: pame_sources_result,
           pame: pame_result,
           story_map_links: story_map_links_result,
           country_statistics: country_statistics_result

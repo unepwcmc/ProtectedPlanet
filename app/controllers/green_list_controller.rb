@@ -3,7 +3,6 @@ class GreenListController < ApplicationController
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
 
-  before_action :most_protected_areas
   before_action :get_green_list_sites
 
   def index
@@ -14,13 +13,14 @@ class GreenListController < ApplicationController
     @pas_percent = stats['green_list_perc']
     @pas_total = stats['green_list_count']
 
-    # Starts from 2000
-    @protectedAreaGrowth =
-      {
-        title: I18n.t('charts.legend.coverage_km2'),
-        units: I18n.t('charts.units.km2'),
-        datapoints: ProtectedArea.greenlist_coverage_growth(2000)
-      }.to_json
+    # As of 01Apr2025 we do not have enough data to show so hidding
+    # # Starts from 2000
+    # @protectedAreaGrowth =
+    #   {
+    #     title: I18n.t('charts.legend.coverage_km2'),
+    #     units: I18n.t('charts.units.km2'),
+    #     datapoints: ProtectedArea.greenlist_coverage_growth(2000)
+    #   }.to_json
 
     @total_area_percent = GlobalStatistic.global_oecms_pas_coverage_percentage
 
@@ -31,7 +31,7 @@ class GreenListController < ApplicationController
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
-      type: 'is_green_list',
+      type: 'pa_or_any_its_parcels_is_greenlisted',
       point_query_services: point_query_services
     }
   end
@@ -45,41 +45,59 @@ class GreenListController < ApplicationController
   def map_overlays
     overlays(%w[greenlist_terrestrial greenlist_marine], {
       greenlist_terrestrial: {
-        queryString: greenlist_query_string(terrestrial_green_list_area_ids)
+        queryString: greenlist_site_pids_query_string(green_list_site_pids(marine: false))
       },
       greenlist_marine: {
-        queryString: greenlist_query_string(marine_green_list_area_ids)
+        queryString: greenlist_site_pids_query_string(green_list_site_pids(marine: true))
       }
     })
   end
 
   def point_query_services
+    site_pids = green_list_site_pids
     wdpa_services_for_point_query.map do |service|
       service.merge({
-        queryString: site_ids_where_query(green_list_areas.map(&:site_id))
+        # We need this so it will only return the site pids that are green listed, without this it will return any site at the point.
+        queryString: site_pids_where_query(site_pids)
       })
     end
   end
 
-  def most_protected_areas
-    @regionsTopCountries = Region.without_global.map do |region|
-      RegionPresenter.new(region).top_gl_coverage_countries
-    end.compact.to_json
+  def pas_with_green_list_on_self_only
+    @pas_with_green_list_on_self_only ||= ProtectedArea.pas_with_green_list_on_self_only
   end
 
-  def green_list_areas
-    @green_list_areas ||= ProtectedArea.green_list_areas
+  def pas_with_green_list_on_self_or_any_parcel
+    @pas_with_green_list_on_self_or_any_parcel ||= ProtectedArea.pas_with_green_list_on_self_or_any_parcel
   end
 
   def get_green_list_sites
-    @example_greenlist ||= green_list_areas.take(3)
+    @example_greenlist ||= pas_with_green_list_on_self_only.take(3)
   end
 
-  def terrestrial_green_list_area_ids
-    green_list_areas.terrestrial_areas.map(&:site_id)
+  def green_list_site_pids(marine: nil)
+    pa_site_pids = green_list_pa_site_pids(marine: marine)
+    parcel_site_pids = green_list_parcel_site_pids(marine: marine)
+    (pa_site_pids + parcel_site_pids).uniq
   end
 
-  def marine_green_list_area_ids
-    green_list_areas.marine_areas.map(&:site_id)
+  def green_list_pa_site_pids(marine: nil)
+    scope = pas_with_green_list_on_self_only
+    scope = with_optional_marine_filter(scope, marine)
+
+    scope.pluck(:site_pid)
+  end
+
+  def green_list_parcel_site_pids(marine: nil)
+    scope = ProtectedAreaParcel.greenlisted_parcels
+    scope = with_optional_marine_filter(scope, marine)
+
+    scope.pluck(:site_pid)
+  end
+
+  def with_optional_marine_filter(scope, marine)
+    return scope if marine.nil?
+
+    marine ? scope.marine_areas : scope.terrestrial_areas
   end
 end

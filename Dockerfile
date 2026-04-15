@@ -1,29 +1,24 @@
 FROM ruby:2.6.3
 
-RUN printf 'deb https://snapshot.debian.org/archive/debian/20240311T000000Z buster main contrib non-free\n' > /etc/apt/sources.list \
-    && printf 'deb https://snapshot.debian.org/archive/debian-security/20240311T000000Z buster/updates main contrib non-free\n' >> /etc/apt/sources.list \
-    && printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "5";\n' > /etc/apt/apt.conf.d/99no-check-valid-until
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN apt-get update && apt-get install -y curl gnupg
-RUN mkdir -p /usr/share/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key \
-    | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-RUN echo "deb [trusted=yes] https://deb.nodesource.com/node_12.x buster main" \
-    > /etc/apt/sources.list.d/nodesource.list
-RUN apt-get update && apt-get install -y nodejs
+# Buster is EOL, so point APT to Debian archive mirrors before updating
+RUN printf 'deb https://archive.debian.org/debian buster main\n\
+deb https://archive.debian.org/debian buster-updates main\n\
+deb https://archive.debian.org/debian-security buster/updates main\n' > /etc/apt/sources.list \
+ && printf 'Acquire::Check-Valid-Until "0";\nAcquire::Retries "3";\nAcquire::http::Pipeline-Depth "0";\n' > /etc/apt/apt.conf.d/99no-check-valid \
+ && apt-get -o Acquire::Check-Valid-Until=false update
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+RUN echo 'deb [trusted=yes] https://deb.nodesource.com/node_12.x buster main' > /etc/apt/sources.list.d/nodesource.list \
+    && echo 'deb-src [trusted=yes] https://deb.nodesource.com/node_12.x buster main' >> /etc/apt/sources.list.d/nodesource.list \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && apt-get install --yes nodejs
 RUN apt-get install -y \
         apt-utils \
         libgdal-dev \
         libspatialite-dev \
         shared-mime-info \
         build-essential
-RUN apt-get install -y postgresql-client libpq-dev
+RUN apt-get install -y postgresql postgresql-client
 RUN apt-get install -y zip
-
-# To install dependecies for puppeteer to generate pdfs
-RUN apt-get update && apt-get install -y chromium
-
 
 # for sassc specifically
 RUN apt-get install -y \
@@ -93,6 +88,24 @@ RUN cd ./gdal-2.2.3 && ./configure \
 --without-xml2 \ 
 && make && make install && ldconfig
 
+# This is required for Chromium to work (puppeter triggers Chromium then Chromium needs the following)
+RUN apt-get update && \
+    apt-get install -y \
+        ca-certificates \
+        fonts-liberation \
+        libgtk-3-0 \
+        libcups2 \
+        libx11-xcb1 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxfixes3 \
+        libxrandr2 \
+        libgbm1 \
+        libnss3 \
+        libasound2 \
+        libdrm2 \
+        libxkbcommon0 && \
+    rm -rf /var/lib/apt/lists/*
 
 # RUN wget https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.2/FileGDB_API-RHEL7-64gcc83.tar.gz -O - | tar -xz 
 # RUN cp ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.a ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.so ./FileGDB_API-RHEL7-64gcc83/lib/libFileGDBAPI.so /usr/local/lib  \
@@ -114,13 +127,9 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 RUN bundle config build.nokogiri --use-system-libraries
 RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
 
-# As it fails for not able to download r809590 during first time of yarn install so we need to skip it first and then manually install it after yarn install
-ENV PUPPETEER_SKIP_DOWNLOAD = true
-RUN yarn install
-# For some reason Chromium r809590 is not installed during yarn install so you will have to manually run this to install Chromium
-# puppeteer is used to generate
-ENV PUPPETEER_SKIP_DOWNLOAD = false
-RUN node node_modules/puppeteer/install.js
+# As it fails for not able to download r809590 during first time of yarn install so we need to skip it and install it manually later
+RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install
+
 
 COPY . /ProtectedPlanet
 

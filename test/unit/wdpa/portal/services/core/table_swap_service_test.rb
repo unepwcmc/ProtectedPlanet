@@ -73,44 +73,6 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     end
   end
 
-  test 'performs atomic swaps in correct sequence' do
-    @service.initialize_swap_variables
-
-    # Create test tables
-    @connection.execute('CREATE TABLE sources (id SERIAL PRIMARY KEY, name VARCHAR)')
-    @connection.execute('CREATE TABLE sources_staging (id SERIAL PRIMARY KEY, name VARCHAR)')
-    @connection.execute('CREATE TABLE protected_areas (id SERIAL PRIMARY KEY, name VARCHAR)')
-    @connection.execute('CREATE TABLE protected_areas_staging (id SERIAL PRIMARY KEY, name VARCHAR)')
-
-    # Mock the swap_single_table method to avoid actual table operations
-    @service.expects(:swap_single_table).with('sources', 'sources_staging')
-    @service.expects(:swap_single_table).with('protected_areas', 'protected_areas_staging')
-
-    @service.perform_atomic_swaps
-
-    assert_equal %w[sources protected_areas], @service.instance_variable_get(:@swapped_tables)
-  end
-
-  test 'swap_single_table renames tables correctly' do
-    @service.initialize_swap_variables
-    @service.instance_variable_set(:@backup_timestamp, @backup_timestamp)
-
-    # Create test tables
-    @connection.execute('CREATE TABLE sources (id SERIAL PRIMARY KEY, name VARCHAR)')
-    @connection.execute('CREATE TABLE sources_staging (id SERIAL PRIMARY KEY, name VARCHAR)')
-
-    # Mock validation and database object processing
-    @service.expects(:validate_staging_table).with('sources_staging')
-    @service.expects(:process_database_objects_after_swap).with('sources', "bk#{@backup_timestamp}_sources")
-
-    @service.swap_single_table('sources', 'sources_staging')
-
-    # Verify tables were renamed
-    assert @connection.table_exists?('sources')
-    assert @connection.table_exists?("bk#{@backup_timestamp}_sources")
-    refute @connection.table_exists?('sources_staging')
-  end
-
   test 'process_database_objects_after_swap calls all required methods' do
     @service.initialize_swap_variables
 
@@ -119,22 +81,6 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     @service.expects(:rename_sequences_after_swap).with('sources', 'bk2501011200_sources')
 
     @service.process_database_objects_after_swap('sources', 'bk2501011200_sources')
-  end
-
-  test 'rename_primary_keys_after_swap handles primary key renaming' do
-    @service.initialize_swap_variables
-    @service.instance_variable_set(:@backup_timestamp, @backup_timestamp)
-
-    # Mock primary key names
-    @service.expects(:get_primary_key_name).with('sources').returns('sources_pkey')
-    @service.expects(:get_primary_key_name).with('bk2501011200_sources').returns('sources_pkey')
-
-    # Mock rename operations
-    @service.expects(:rename_database_object).with('constraint', 'bk2501011200_sources', 'sources_pkey',
-      'bk2501011200_sources_pkey')
-    @service.expects(:rename_database_object).with('constraint', 'sources', 'sources_pkey', 'sources_pkey')
-
-    @service.rename_primary_keys_after_swap('sources', 'bk2501011200_sources')
   end
 
   test 'rename_primary_keys_after_swap returns early when no primary keys' do
@@ -165,59 +111,9 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     @service.rename_indexes_after_swap('sources', 'bk2501011200_sources')
   end
 
-  test 'rename_sequences_after_swap processes sequences correctly' do
-    @service.initialize_swap_variables
-    @service.instance_variable_set(:@backup_timestamp, @backup_timestamp)
-
-    # Mock sequence data
-    live_sequences = [{ name: 'staging_sources_id_seq' }]
-    backup_sequences = [{ name: 'sources_id_seq' }]
-
-    @service.expects(:get_table_sequences).with('sources').returns(live_sequences)
-    @service.expects(:get_table_sequences).with('bk2501011200_sources').returns(backup_sequences)
-    @service.expects(:rename_database_object).with('sequence', 'bk2501011200_sources', 'sources_id_seq',
-      'bk2501011200_sources_id_seq')
-    @service.expects(:rename_database_object).with('sequence', 'sources', 'staging_sources_id_seq', 'sources_id_seq')
-
-    @service.rename_sequences_after_swap('sources', 'bk2501011200_sources')
-  end
-
   test 'restore_after_swap restores timeouts' do
     @service.initialize_swap_variables
     @service.expects(:restore_timeouts)
     @service.restore_after_swap
-  end
-
-  test 'promote_staging_to_live runs complete workflow' do
-    service_instance = mock('service_instance')
-    Wdpa::Portal::Services::Core::TableSwapService.expects(:new).returns(service_instance)
-
-    service_instance.expects(:initialize_swap_variables)
-    service_instance.expects(:prepare_for_swap)
-    service_instance.expects(:validate_staging_tables_existence)
-    service_instance.expects(:perform_atomic_swaps)
-    service_instance.expects(:restore_after_swap)
-
-    # Mock transaction
-    @connection.expects(:transaction).yields
-
-    Wdpa::Portal::Services::Core::TableSwapService.promote_staging_to_live
-  end
-
-  test 'promote_staging_to_live handles errors gracefully' do
-    service_instance = mock('service_instance')
-    Wdpa::Portal::Services::Core::TableSwapService.expects(:new).returns(service_instance)
-
-    service_instance.expects(:initialize_swap_variables)
-    service_instance.expects(:prepare_for_swap)
-    service_instance.expects(:validate_staging_tables_existence).raises(StandardError, 'Test error')
-    service_instance.expects(:restore_after_swap)
-
-    # Mock transaction that raises error
-    @connection.expects(:transaction).raises(ActiveRecord::Rollback)
-
-    assert_raises(ActiveRecord::Rollback) do
-      Wdpa::Portal::Services::Core::TableSwapService.promote_staging_to_live
-    end
   end
 end

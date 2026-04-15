@@ -47,4 +47,4 @@ en:
         -
           title: Green Listed Protected Areas and OECMs
           slug: /green-list
-          filter: 'is_green_list'
+          filter: 'pa_or_any_its_parcels_is_greenlisted'

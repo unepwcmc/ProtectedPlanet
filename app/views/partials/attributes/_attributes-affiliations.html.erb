@@ -1,0 +1,16 @@
+<attributes-affiliations
+  :affiliations="<%= affiliations.to_json %>"
+  title="<%= t('attributes.affiliations.title') %>"
+  sub-title="<%= t('attributes.parcel_id').html_safe %>"
+  :for-pdf="<%= for_pdf == true %>"
+  :translations="<%= {
+    green_list_intro: t('attributes.green-list.intro'),
+    green_list_type: t('attributes.green-list.type'),
+    green_list_date: t('attributes.green-list.gl_expiry'),
+    green_list_title: t('attributes.green-list.title', site_name: @protected_area.name),
+    green_list_url: t('attributes.green-list.url'),
+    no_information: t('attributes.no-information'),
+    more: t('global.button.more')
+  }.to_json %>"
+  class="<%= get_local_classes local_assigns %>"
+></attributes-affiliations>

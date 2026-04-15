@@ -40,8 +40,8 @@ class Search::FiltersSerializer < Search::BaseSerializer
             id: 'special_status',
             name: 'special_status',
             options: [
-              { id: 'is_green_list', title: I18n.t('search.filter-group-special-status.options')[0] },
-              { id: 'is_green_list_candidate', title: I18n.t('search.filter-group-special-status.options')[1] },
+              { id: 'pa_or_any_its_parcels_is_greenlisted', title: I18n.t('search.filter-group-special-status.options')[0] },
+              { id: 'pa_or_any_its_parcels_is_greenlist_candidate', title: I18n.t('search.filter-group-special-status.options')[1] },
               { id: 'has_parcc_info', title: I18n.t('search.filter-group-special-status.options')[2] },
               { id: 'is_transboundary', title: I18n.t('search.filter-group-special-status.options')[3] }
             ],
