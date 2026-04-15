@@ -540,6 +540,7 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_sources_id ON staging_portal_
 --    PAME evaluation data from the portal
 --    ⚠️  If you modify columns here, check Portal DB indexes for:
 --        - pame.pame(asmt_id, site_id, parcel_id, pame_source_id, archived_at)
+--        - wdpas(site_id, parcel_id, data_restriction_level_id), data_restriction_levels.code
 --        - pame.pame_designation_purpose_biodiversity_cats(pame_id, designation_purpose_biodiversity_cat_id)
 --        - This file: Ensure unique index on asmt_id exists
 
@@ -582,6 +583,10 @@ SELECT
   LEFT(COALESCE(ob.description->>'en', ob.code)::varchar, 255) AS out_bio
 FROM portal_fdw.pame p
 JOIN portal_fdw.pame_sources ps ON ps.id = p.pame_source_id
+JOIN portal_fdw.wdpas w
+  ON w.site_id = p.site_id
+ AND w.parcel_id = p.parcel_id
+JOIN portal_fdw.data_restriction_levels dr ON dr.id = w.data_restriction_level_id
 LEFT JOIN dp_bio_agg dp ON dp.pame_id = p.id
 LEFT JOIN portal_fdw.method_cat m ON m.id = p.method_id
 LEFT JOIN portal_fdw.verification_effectiveness_cat ve ON ve.id = p.verification_effectiveness_id
@@ -597,6 +602,8 @@ LEFT JOIN portal_fdw.management_threats_cat mt ON mt.id = p.management_threats_i
 LEFT JOIN portal_fdw.management_monitoring_cat mm ON mm.id = p.management_monitoring_id
 LEFT JOIN portal_fdw.outcomes_biodiversity_cat ob ON ob.id = p.outcomes_biodiversity_id
 WHERE p.archived_at IS NULL
+  AND w.archived_at IS NULL
+  AND dr.code IN ('not restricted', 'commercial restriction')
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes
@@ -610,6 +617,7 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_pame_asmt_year ON staging_portal_s
 -- 7) Standardized view (Green List)
 --    ⚠️  If you modify columns here, check:
 --        - pame.greenlists(site_id, parcel_id, gl_status_id, archived_at)
+--        - wdpas(site_id, parcel_id, data_restriction_level_id), data_restriction_levels.code
 --        - This file: Ensure unique index on (id) exists for CONCURRENT refreshes
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_greenlist AS
@@ -622,7 +630,13 @@ SELECT
   LEFT(g.gl_link::varchar, 500) AS gl_link
 FROM portal_fdw.greenlists g
 JOIN portal_fdw.greenlist_status_cat sc ON sc.id = g.gl_status_id
+JOIN portal_fdw.wdpas w
+  ON w.site_id = g.site_id
+ AND w.parcel_id = g.parcel_id
+JOIN portal_fdw.data_restriction_levels dr ON dr.id = w.data_restriction_level_id
 WHERE g.archived_at IS NULL
+  AND w.archived_at IS NULL
+  AND dr.code IN ('not restricted', 'commercial restriction')
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes 
