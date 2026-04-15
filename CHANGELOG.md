@@ -1,3 +1,18 @@
+### 6.0.0
+  - Hook up to read Effectiveness and Greenlist from DMP
+  - Update importer to Effectiveness and Greenlist
+  - Change frontend to use new schema for Effectiveness and Greenlist
+  - Update Effectiveness download CSV
+  - Add parcel dropdown to control all info in PA page
+  - Remove dead code
+  - Remove dead files
+  - Add vscode pp family apps to workspace
+  - Update marine page to new layout
+  - Remove dead APIs
+  - Cache country page stats
+  - Remove networks
+  - Update unit tests for all above
+
 ### 5.0.1
 Chore: December 2025 WDPA Release
   - add December CSVs: country_statistics, global_statistics, pame_country, pame_data (Same as Nov2025 Data), greenlist CSV.

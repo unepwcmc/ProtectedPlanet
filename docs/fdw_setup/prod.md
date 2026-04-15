@@ -197,7 +197,7 @@ UNION ALL SELECT 'provider', count(*) FROM portal_fdw.provider
 UNION ALL SELECT 'iso3', count(*) FROM portal_fdw.iso3;
 ```
 
-That is all done. If you want to test creating all staging materialised views please view the SQL [here](../FDW_VIEWS.sql)
+That is all done. If you want to test creating all staging materialised views please view the SQL [here](../../FDW_VIEWS.sql)
 
 ## Details
 

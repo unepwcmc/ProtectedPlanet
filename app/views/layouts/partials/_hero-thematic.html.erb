@@ -1,11 +1,11 @@
 <header 
-  class="hero--thematic bg-image-overlay--white <%= get_local_classes local_assigns %>"
+  class="hero--thematic bg-image-overlay--white <%= page_type_class_name %>__hero <%= get_local_classes local_assigns %>"
   <% if local_assigns.has_key? :image %>
     style="background-image: url('<%= image %>')"
   <% end %>
 >
-  <div class="hero__container container">
-    <div class="hero__content">
+  <div class="hero__container container <%= page_type_class_name %>__container">
+    <div class="hero__content <%= page_type_class_name %>__content">
       <h1><%= title %></h1>
 
       <% if local_assigns.has_key? :summary %>
@@ -19,37 +19,21 @@
       <% end %>
     </div>
     
-    <div class="hero__stats">
-      <div class="hero__stats-content bg--grey-black sm-home-hero-stats">
-        <div>
-          <div class="hero__stat-number">
-            <counter 
-              :total="<%= stat_pas_percent %>" 
-              trigger="sm-home-hero-stats" 
-              :decimal="2"
-            ></counter>%
+    <div class="hero__stats <%= page_type_class_name %>__stats">
+      <div class="hero__stats-content bg--grey-black sm-home-hero-stats <%= page_type_class_name %>__stats-content">
+        <% stats_items.each_with_index do |stat_item, index| %>
+          <div class="<%= page_type_class_name %>__stat-item">
+            <% small_number = stat_item[:small_number] == true %>
+            <div class="<%= page_type_class_name + '__stat-number'%> <%= small_number ? 'hero__stat-number-small' : 'hero__stat-number' %>">
+              <counter
+                :total="<%= stat_item[:total] %>"
+                trigger="sm-home-hero-stats"
+                :decimal="<%= stat_item[:decimal] || 0 %>"
+              ></counter><%= stat_item[:suffix].to_s.html_safe %>
+            </div>
+            <span class="hero__stat-text"><%= stat_item[:text] %></span>
           </div>
-          <span class="hero__stat-text"><%= stat_text_1 %></span>
-        </div>
-        <div>
-          <counter 
-            class="hero__stat-number-small"
-            :total="<%= stat_pas_total %>" 
-            trigger="sm-home-hero-stats" 
-            :decimal="0"
-          ></counter>
-          <span class="hero__stat-text"><%= stat_text_2 %></span>
-        </div>
-        <div>
-          <div class="hero__stat-number-small">
-            <counter 
-              :total="<%= stat_pas_km %>" 
-              trigger="sm-home-hero-stats" 
-              :decimal="0"
-            ></counter>km<sup>2</sup>
-          </div>
-          <span class="hero__stat-text"><%= stat_text_3 %></span>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>

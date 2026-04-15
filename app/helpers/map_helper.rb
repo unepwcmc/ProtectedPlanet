@@ -164,8 +164,15 @@ module MapHelper
     'where=site_id+IN+%28' + site_ids.join('%2C+') + '%29'
   end
 
-  def greenlist_query_string site_ids
-    '/query?' + site_ids_where_query(site_ids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+  def site_pids_where_query site_pids
+    return 'where=1%3D0' if site_pids.blank?
+
+    encoded_site_pids = site_pids.uniq.map { |site_pid| "%27#{CGI.escape(site_pid.to_s)}%27" }
+    'where=site_pid+IN+%28' + encoded_site_pids.join('%2C+') + '%29'
+  end
+
+  def greenlist_site_pids_query_string site_pids
+    '/query?' + site_pids_where_query(site_pids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
   end
 
   def map_search_types

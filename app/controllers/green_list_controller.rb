@@ -3,8 +3,6 @@ class GreenListController < ApplicationController
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/views/green_list/index.html.erb
-  # before_action :most_protected_areas
   before_action :get_green_list_sites
 
   def index
@@ -47,43 +45,59 @@ class GreenListController < ApplicationController
   def map_overlays
     overlays(%w[greenlist_terrestrial greenlist_marine], {
       greenlist_terrestrial: {
-        queryString: greenlist_query_string(terrestrial_green_list_area_ids)
+        queryString: greenlist_site_pids_query_string(green_list_site_pids(marine: false))
       },
       greenlist_marine: {
-        queryString: greenlist_query_string(marine_green_list_area_ids)
+        queryString: greenlist_site_pids_query_string(green_list_site_pids(marine: true))
       }
     })
   end
 
   def point_query_services
-    site_ids = pas_with_green_list_on_self_only.pluck(:site_id)
+    site_pids = green_list_site_pids
     wdpa_services_for_point_query.map do |service|
       service.merge({
-        queryString: site_ids_where_query(site_ids)
+        # We need this so it will only return the site pids that are green listed, without this it will return any site at the point.
+        queryString: site_pids_where_query(site_pids)
       })
     end
   end
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/views/green_list/index.html.erb
-  # def most_protected_areas
-  #   @regionsTopCountries = Region.without_global.map do |region|
-  #     RegionPresenter.new(region).top_gl_coverage_countries
-  #   end.compact.to_json
-  # end
-
   def pas_with_green_list_on_self_only
     @pas_with_green_list_on_self_only ||= ProtectedArea.pas_with_green_list_on_self_only
+  end
+
+  def pas_with_green_list_on_self_or_any_parcel
+    @pas_with_green_list_on_self_or_any_parcel ||= ProtectedArea.pas_with_green_list_on_self_or_any_parcel
   end
 
   def get_green_list_sites
     @example_greenlist ||= pas_with_green_list_on_self_only.take(3)
   end
 
-  def terrestrial_green_list_area_ids
-    pas_with_green_list_on_self_only.terrestrial_areas.pluck(:site_id)
+  def green_list_site_pids(marine: nil)
+    pa_site_pids = green_list_pa_site_pids(marine: marine)
+    parcel_site_pids = green_list_parcel_site_pids(marine: marine)
+    (pa_site_pids + parcel_site_pids).uniq
   end
 
-  def marine_green_list_area_ids
-    pas_with_green_list_on_self_only.marine_areas.pluck(:site_id)
+  def green_list_pa_site_pids(marine: nil)
+    scope = pas_with_green_list_on_self_only
+    scope = with_optional_marine_filter(scope, marine)
+
+    scope.pluck(:site_pid)
+  end
+
+  def green_list_parcel_site_pids(marine: nil)
+    scope = ProtectedAreaParcel.greenlisted_parcels
+    scope = with_optional_marine_filter(scope, marine)
+
+    scope.pluck(:site_pid)
+  end
+
+  def with_optional_marine_filter(scope, marine)
+    return scope if marine.nil?
+
+    marine ? scope.marine_areas : scope.terrestrial_areas
   end
 end

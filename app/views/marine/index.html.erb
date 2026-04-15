@@ -1,25 +1,17 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
 <%= render partial: "./layouts/partials/hero-thematic", locals: {
+  page_type_class_name: 'marine',
   button_text: t('thematic_area.marine.hero.button_text'),
-  button_url: @marineViewAllUrl,
+  button_url: @view_all_marine_pas_url,
   classes: @cms_page.slug,
   image: cms_fragment_render(:image, @cms_page),
   hero_small_text: cms_fragment_render(:hero_small_text, @cms_page),
   hero_small_text_url: cms_fragment_render(:hero_small_text_url, @cms_page),
   title: @cms_page.label,
-  stat_pas_km: @pas_km,
-  stat_pas_percent: @pas_percent,
-  stat_pas_total: @pas_total,
-  stat_text_1: t('thematic_area.marine.hero.stat_text_1'),
-  stat_text_2: t('thematic_area.marine.hero.stat_text_2'),
-  stat_text_3: t('thematic_area.marine.hero.stat_text_3'),
+  stats_items: @marine_stats_items,
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
-
-<section class="spacer-small--top">
-<%= render "partials/ctas/mpa-guide" %>
-</section>
 
 <section class="container--medium spacer-small--top">
   <h2><%= t('thematic_area.marine.distribution.title') %></h2>
@@ -53,27 +45,23 @@
 
 <%= render partial: "partials/charts/chart-coverage-growth", locals: {
   content: cms_fragment_render(:section_coverage_content, @cms_page),
-  chart_data: @protectedAreasGrowth,
+  chart_data: @marine_protected_areas_growth,
   title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
 
 <section class="container--medium">
-  <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
-  <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
+  <h2><%= cms_fragment_render(:section_bbnj_agreement_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_bbnj_agreement_content, @cms_page) %></div>
 </section>
 
-<%= render partial: "partials/charts/chart-top-ten", locals: {
-  content: cms_fragment_render(:section_size_growth_content, @cms_page),
-  ga_id: 'Slug: @cms_page.slug - Component: regions top countries',
-  regionsTopCountries: @regionsTopCountries,
-  title: cms_fragment_render(:section_size_growth_title, @cms_page)
-} %>
+<section class="container--medium">
+  <h2><%= cms_fragment_render(:section_beyond_coverage_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_beyond_coverage_content, @cms_page) %></div>
+</section>
 
-<%# As of 01Apr2025 we do not have correct coverage_growth data 
-    the @regionCoverage is only coverage data not  'Growth' data
-render partial: "marine/sections/coverage_growth", locals: {
- regionCoverage: @regionCoverage,
-} %>
+<section class="spacer-small--top spacer-small--bottom">
+  <%= render "partials/ctas/mpa-guide" %>
+</section>
 
 <section class="map-section">
   <%= render partial: "partials/maps/main", locals: {
@@ -83,9 +71,9 @@ render partial: "marine/sections/coverage_growth", locals: {
 
 <section class="container spacer-small--top">
   <%= render partial: "partials/cards/sites", locals: { 
-    cards: @marineSites, 
-    title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
-    url: @marineViewAllUrl
+    cards: @num_of_marine_protected_areas,
+    title: "#{t('global.area-types.wdpa')} (#{@marine_total_pas_count})",
+    url: @view_all_marine_pas_url
   } %>
 </section>
 

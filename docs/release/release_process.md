@@ -34,8 +34,6 @@ You will receive CSV files from the WDPA team in the `#protectedplanet` Slack ch
 **Files you may receive:**
 - Global monthly statistics CSV
 - National monthly statistics CSV (needs to be split - see below)
-- PAME data CSV (most likly updated monthly/provided)
-- Green list sites CSV (not always provided)
 - Overseas Territories CSV (not always provided)
 
 ### Step 2: Transform and Add the CSV Files
@@ -56,12 +54,6 @@ All CSV files need to be placed in the `<project-root>/lib/data/seeds` directory
 
 **2. Global Statistics CSV** - Simple rename:
    - Rename `PP_Global_Monthly_Stats_<MM-YY>.csv` → `global_statistics_<YYYY-MM>-01.csv`
-
-**3. Green List CSV** - Simple rename:
-   - Rename `Green List Sites Report - <M> <Y>` → `green_list_sites_<YYYY-MM>-01.csv`
-
-**4. PAME Data CSV** - Simple rename:
-   - Rename `PAME_data_<Y>_<M>.csv` → `pame_data_<YYYY-MM>-01.csv`
 
 > **Note**: You only need to process files that were provided for the current month. If a file wasn't provided (like Green List or PAME), skip it - the system will use the last available version.
 
@@ -148,7 +140,9 @@ The new data is now live on Protected Planet!
 
 ---
 
-## Updating PP Maps and ESRI API
+## Updating PP Maps and ESRI API 
+
+*** This might be out of date as of 15Apr2026 as Osgur has mentioned now we put the public version file to the correct location in O drive the script will kick in automatically
 
 This step is usually handled by Osgur, but if he's unavailable, you can follow these steps:
 

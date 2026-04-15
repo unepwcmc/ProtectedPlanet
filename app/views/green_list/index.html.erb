@@ -1,17 +1,33 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
-<%= render partial: "./layouts/partials/hero-thematic", locals: { 
+<%= render partial: "./layouts/partials/hero-thematic", locals: {
+  page_type_class_name: 'green-list',
   button_text: t('thematic_area.green_list.hero.button_text'),
   button_url: search_areas_path(filters: @filters),
   classes: @cms_page.slug,
   image: cms_fragment_render(:image, @cms_page),
   title: @cms_page.label,
-  stat_pas_km: @pas_km,
-  stat_pas_percent: @pas_percent,
-  stat_pas_total: @pas_total,
-  stat_text_1: t('thematic_area.green_list.hero.stat_text_1'),
-  stat_text_2: t('thematic_area.green_list.hero.stat_text_2'),
-  stat_text_3: t('thematic_area.green_list.hero.stat_text_3'),
+  stats_items: [
+    {
+      total: @pas_percent,
+      text: t('thematic_area.green_list.hero.stat_text_1'),
+      decimal: 2,
+      suffix: '%'
+    },
+    {
+      total: @pas_total,
+      text: t('thematic_area.green_list.hero.stat_text_2'),
+      decimal: 0,
+      small_number: true
+    },
+    {
+      total: @pas_km,
+      text: t('thematic_area.green_list.hero.stat_text_3'),
+      decimal: 0,
+      small_number: true,
+      suffix: 'km<sup>2</sup>'
+    }
+  ],
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
@@ -54,16 +70,6 @@
     </div>
   </div>
 </div> %>
-
-
-<%# As of 01Apr2025 the data is too less to show so we do not display the chart
-    
-    render partial: "partials/charts/chart-top-ten", locals: {
-  content: cms_fragment_render(:section_size_content, @cms_page),
-  ga_id: 'Slug: @cms_page.slug - Component: regions top countries',
-  regionsTopCountries: @regionsTopCountries,
-  title: cms_fragment_render(:section_size_title, @cms_page)
-} %>
 
 <section class="map-section">
   <%= render partial: "partials/maps/main", locals: {

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-yarn check || yarn install
+yarn install --frozen-lockfile --check-files
 bundle check || bundle install
 /ProtectedPlanet/bin/webpack-dev-server

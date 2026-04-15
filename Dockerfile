@@ -1,7 +1,5 @@
 FROM ruby:2.6.3
 
-
-
 # Buster is EOL, so point APT to Debian archive mirrors before updating
 RUN printf 'deb https://archive.debian.org/debian buster main\n\
 deb https://archive.debian.org/debian buster-updates main\n\
