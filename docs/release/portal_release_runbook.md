@@ -6,6 +6,15 @@ This guide provides step-by-step instructions for running a monthly data release
 
 ---
 
+
+## Release Timing
+
+- Run the dry run before the monthly go-live date.
+- Standard timing: go live (swap tables) on the **1st day of each month**.
+- Exception: if the **1st falls on a Friday**, complete the dry run before Thursday and go live on **Thursday (the day before)**. This gives Thursday and Friday for any data fixes, if needed. (Agreed with NC Team)
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -27,7 +36,7 @@ docker compose ps  # Check status
 
 | Task | Command |
 |------|------------|
-| **⭐ Run release with dry run (Recommended)** | [See Dry Run section](#run-a-dry-run) |
+| **⭐ Run release with dry run (Recommended, Current method for monthly release as of Dec2025)** | [See Dry Run section](#run-a-dry-run) |
 | **Run release (Automatic)** |  [See Automatic release section](#running-an-auto-release) |
 | **Check status** | `bundle exec rake pp:portal:status` |
 | **Abort release** | `bundle exec rake pp:portal:abort` |
@@ -70,16 +79,15 @@ You don't need to run these phases individually - the release command handles ev
 Long-running releases should be run in a persistent terminal session so they keep running if your SSH connection drops.
 
 ```bash
-# Normally we don't kill the session so you basically attach to the pp-release session
-tmux attach -t pp-release
-
-# Or start a named tmux session
+# Kill any old pp-release session if existing
+tmux kill-session -t pp-release
+# Start a named tmux session
 tmux new -s pp-release
 
 
 
-# Step 1: Dry run (stops after validation, does not swap tables)
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Apr2026"]
+# Step 1: Dry run (stops after validation, does not swap tables), can do this as soon as NC completes all drafts approval on all needed data
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["May2026"]
 
 # Detach without stopping the process
 Ctrl-b then d
@@ -100,9 +108,14 @@ RAILS_ENV=production bundle exec rake pp:portal:status
 
 # And then inspect staging tables in the database to verify data looks correct. Check `staging_protected_areas`, `staging_sources` tables, etc...
 
-# When ready to go live** (e.g., on the first day of the month), continue with the swap:
+# When ready to go live** (normally on the first day of the month), continue with the swap:
+# If the first day is a Friday, run this on Thursday instead (see Monthly Release Date Rule above)
 # IMPORTANT! Make sure you change the correct label
-RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Apr2026"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["May2026"]
+
+
+# Make sure to kill the session so next time next release can start refresh
+tmux kill-session -t pp-release
 ```
 
 **Important Notes:**
@@ -121,10 +134,9 @@ RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:porta
 If you want to run the entire release automatically:
 
 ```bash
-# Normally we don't kill the session so you basically attach to the pp-release session
-tmux attach -t pp-release
-
-# Or start a named tmux session
+# Kill any old pp-release session if existing
+tmux kill-session -t pp-release
+# Start a named tmux session
 tmux new -s pp-release
 
 # Direct release (swaps tables immediately - no inspection step)
@@ -135,6 +147,9 @@ RAILS_ENV=production bundle exec rake pp:portal:release["Mar2026"]
 
 # Reattach later if needed
 tmux attach -t pp-release
+
+# Make sure to kill the session so next time next release can start refresh
+tmux kill-session -t pp-release
 ```
 
 ### ✅ Once You see Congragulations xxxx message on slack then you have completed a monthly release
