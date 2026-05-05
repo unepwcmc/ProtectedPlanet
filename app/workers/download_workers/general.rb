@@ -21,7 +21,7 @@ class DownloadWorkers::General < DownloadWorkers::Base
   # Returns a selection hash (or nil) describing how to filter:
   # - country:   by ISO3 = [identifier(iso3)]
   # - region:    by ISO3 in that region's countries [iso3_1, iso3_2]
-  # - marine:    by SITE_TYPE = ["OECM"]
+  # - marine:    by REALM IN ['Marine', 'Coastal']
   # - greenlist: by explicit [site_id, site_pid] pairs
   # - oecm/wdpa: by site_ids
   # See add_conditions in lib/modules/download/generators/base.rb for the usuage
@@ -65,7 +65,7 @@ class DownloadWorkers::General < DownloadWorkers::Base
         site_ids: nil,
         site_id_and_pid_pairs: nil,
         site_types: nil,
-        realms: [Download::Config.marine_realm_value]
+        realms: Download::Config.marine_realm_values
       }
 
     when 'greenlist'

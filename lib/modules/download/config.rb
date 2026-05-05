@@ -102,8 +102,8 @@ module Download
       'OECM'
     end
 
-    def self.marine_realm_value
-      'Marine'
+    def self.marine_realm_values
+      ['Marine', 'Coastal']
     end
 
     # Labels for filenames
