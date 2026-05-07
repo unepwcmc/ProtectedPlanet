@@ -1,7 +1,6 @@
 class Search::FilterParams
-
   def self.standardise(filters)
-    self.new(filters).standardise
+    new(filters).standardise
   end
 
   def initialize(filters)
@@ -19,7 +18,7 @@ class Search::FilterParams
     filters
   end
 
-  #{'location' => {'type' => 'country', 'options' => ['Italy']}}
+  # {'location' => {'type' => 'country', 'options' => ['Italy']}}
   def sanitise_location_filter
     if filters['location'].present? && filters['location']['options'].present?
       filters[filters['location']['type'].to_sym] = filters['location']['options']
@@ -31,7 +30,7 @@ class Search::FilterParams
 
   def sanitise_db_type_filter
     db_type = filters.delete('db_type')
-    db_type = db_type && db_type.reject { |i| i == 'all' }
+    db_type &&= db_type.reject { |i| i == 'all' }
     return if db_type.blank? || db_type.length != 1
 
     filters[:is_oecm] = true if db_type.first == 'oecm'
@@ -46,7 +45,7 @@ class Search::FilterParams
     filters[:marine] = is_type.first == 'marine'
   end
 
-  FAKE_CATEGORIES = %w(all areas).freeze
+  FAKE_CATEGORIES = %w[all areas].freeze
   def sanitise_ancestor_filter
     ancestor = filters.delete('ancestor')
 
@@ -67,7 +66,5 @@ class Search::FilterParams
 
   private
 
-  def filters
-    @filters
-  end
+  attr_reader :filters
 end

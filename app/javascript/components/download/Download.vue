@@ -1,7 +1,8 @@
 <template>
   <div>
     <button
-      :class="['download__trigger', { 'disabled': downloadDisabled }]"
+      :class="['download__trigger', { 'button--disabled': downloadDisabled }]"
+      :disabled="downloadDisabled"
       @click="toggleDownloadPane"
     >
       <span class="download__trigger-text">{{ buttonText }}</span>

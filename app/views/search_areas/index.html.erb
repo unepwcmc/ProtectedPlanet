@@ -21,10 +21,11 @@
     text-map="<%= t('search.map') %>"
     :results="<%= @results.to_json %>"
   >
-    <template v-slot:download>
+    <template v-slot:download="{ downloadDisabled }">
       <%= render partial: "partials/download/download", locals: {
         classes: 'download--search',
-        options: @download_options
+        options: @download_options,
+        download_disabled: 'downloadDisabled'
       } %>
     </template>
   </search-areas>

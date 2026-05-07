@@ -8,7 +8,7 @@
         <search-areas-input-autocomplete :config="configAutocomplete" :endpoint="endpointAutocomplete"
           :pre-populated-search-term="searchTerm" v-on:submit-search="updateSearchTerm" />
 
-        <slot name="download" />
+        <slot name="download" :download-disabled="downloadDisabled" />
       </div>
     </div>
 
@@ -152,6 +152,12 @@ export default {
   watch: {
     activeFilterOptions() {
       this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
+    }
+  },
+
+  computed: {
+    downloadDisabled() {
+      return Number(this.newResults.total || 0) === 0
     }
   },
 

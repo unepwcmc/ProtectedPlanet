@@ -2,7 +2,7 @@
 
 class Search::FiltersSerializer < Search::BaseSerializer
   def initialize(search, opts = {})
-    super(search, opts)
+    super
     @aggregations = @search.aggregations
   end
 
@@ -13,6 +13,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
   ].freeze
 
   def serialize
+    # If you add any new filters here, make sure to also hook them up in the download feature. Search build_site_selection method in the repo.
     [
       {
         title: I18n.t('search.filter-by'),
@@ -40,8 +41,10 @@ class Search::FiltersSerializer < Search::BaseSerializer
             id: 'special_status',
             name: 'special_status',
             options: [
-              { id: 'pa_or_any_its_parcels_is_greenlisted', title: I18n.t('search.filter-group-special-status.options')[0] },
-              { id: 'pa_or_any_its_parcels_is_greenlist_candidate', title: I18n.t('search.filter-group-special-status.options')[1] },
+              { id: 'pa_or_any_its_parcels_is_greenlisted',
+                title: I18n.t('search.filter-group-special-status.options')[0] },
+              { id: 'pa_or_any_its_parcels_is_greenlist_candidate',
+                title: I18n.t('search.filter-group-special-status.options')[1] },
               { id: 'has_parcc_info', title: I18n.t('search.filter-group-special-status.options')[2] },
               { id: 'is_transboundary', title: I18n.t('search.filter-group-special-status.options')[3] }
             ],

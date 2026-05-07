@@ -50,6 +50,12 @@ class SearchAreasTest < ActionDispatch::IntegrationTest
     get '/en/search-areas?search_term=nonexistent'
     assert_response :success
   end
+
+  test 'search page disables download button when initial site results are empty' do
+    get '/en/search-areas?search_term=nonexistent'
+    assert_response :success
+    assert_includes response.body, ':download-disabled="downloadDisabled"'
+  end
   
   # test json endpoint for ajax search
   test 'search query that would hit country, doesnt as we dont return countries in main search' do
