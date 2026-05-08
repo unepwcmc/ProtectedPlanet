@@ -140,7 +140,7 @@ tmux kill-session -t pp-release
 tmux new -s pp-release
 
 # Direct release (swaps tables immediately - no inspection step)
-RAILS_ENV=production bundle exec rake pp:portal:release["Mar2026"]
+RAILS_ENV=production bundle exec rake pp:portal:release["May2026"]
 
 # Detach without stopping the process
 # Press: Ctrl-b then d

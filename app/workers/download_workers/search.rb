@@ -19,9 +19,11 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
-    # As of 05Feb2026 we are fetching all site_ids for creating views in Download.generate and it can be 350,000 site_ids max at the dated time it can be a lot more in future.
-    # At some point we will need to change this to use proper query build up when we start noticing the slow down in performance.
-    success = Download.generate(@format, filename(ids_digest, @format), { site_selection: { site_ids: protected_area_site_ids } })
+    filters = JSON.parse(@filters_json)
+    site_selection = build_site_selection('search', filters)
+    Rails.logger.info "[DownloadWorkers::Search] token=#{@token} format=#{@format} filters=#{@filters_json}"
+    Rails.logger.info "site_selection: #{site_selection.inspect}"
+    success = Download.generate(@format, filename(ids_digest, @format), { site_selection: site_selection })
     raise "Download.generate returned false (#{domain} #{@format} #{@token})" unless success
   end
 
@@ -31,16 +33,5 @@ class DownloadWorkers::Search < DownloadWorkers::Base
 
     filter = @filters_values.map { |f| f.to_s[0..9] }.join(',')
     "#{@search_term[0..11]}_#{filter}_#{@token}".gsub(' ', '_')
-  end
-
-  def protected_area_site_ids
-    search.all_site_ids
-  end
-
-  def search
-    @search ||= SavedSearch.new(
-      search_term: @search_term,
-      filters: @filters_json
-    )
   end
 end

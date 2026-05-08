@@ -50,7 +50,7 @@ class Download::Generators::Base
   def self.clean_up_generated_source
     tmp_dir = Download::TMP_PATH
     pattern = File.join(tmp_dir, "#{SOURCE_CSV_PREFIX}*.csv")
-    
+
     deleted_count = 0
     Dir.glob(pattern).each do |csv_file|
       FileUtils.rm_f(csv_file)
@@ -100,46 +100,98 @@ class Download::Generators::Base
     add_conditions(query, conditions).squish
   end
 
-  # See build_site_selection in app/workers/download_workers/general.rb for the usage
+  # See build_site_selection in app/workers/download_workers/base.rb for the usage
   def add_conditions(query, conditions)
     conditions = Array.wrap(conditions)
 
-    if @selection_entries.is_a?(Hash)
-      site_ids   = (@selection_entries[:site_ids] || []).map(&:to_i).reject(&:zero?)
-      site_id_pid_pairs = build_pair_clauses(@selection_entries[:site_id_and_pid_pairs] || [])
-      iso3_vals  = Array(@selection_entries[:iso3]).reject(&:blank?)
-      site_types = Array(@selection_entries[:site_types]).reject(&:blank?)
-      realms = Array(@selection_entries[:realms]).reject(&:blank?)
-
-      if site_ids.empty? && site_id_pid_pairs.empty? && iso3_vals.empty? && site_types.empty? && realms.empty?
-        conditions << "1=0"
-      else
-        disjuncts = []
-        disjuncts << build_site_ids_clause(site_ids) if site_ids.any?
-        disjuncts.concat(site_id_pid_pairs) if site_id_pid_pairs.any?
-        disjuncts << build_iso3_clause(iso3_vals) if iso3_vals.any?
-        disjuncts << build_site_types_clause(site_types) if site_types.any?
-        disjuncts << build_realms_clause(realms) if realms.any?
-
-        conditions << "(#{disjuncts.join(' OR ')})"
-      end
-    end
+    add_selection_conditions(conditions) if @selection_entries.is_a?(Hash)
 
     query.tap do |q|
       q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
     end
   end
 
+  # Builds selection conditions for all download types.
+  # Filter groups are AND-ed; site_ids and site_id_and_pid_pairs are OR-ed within one subgroup.
+  def add_selection_conditions(conditions)
+    # Empty hash means "no filters" and should download all records.
+    return if @selection_entries.empty?
+
+    site_ids          = (@selection_entries[:site_ids] || []).map(&:to_i).reject(&:zero?)
+    site_id_pid_pairs = @selection_entries[:site_id_and_pid_pairs] || []
+    is_oecm           = @selection_entries[:is_oecm]
+    is_marine         = @selection_entries[:is_marine]
+    iso3_vals         = Array(@selection_entries[:iso3]).reject(&:blank?)
+    iucn_cats         = Array(@selection_entries[:iucn_categories]).reject(&:blank?)
+    designations      = Array(@selection_entries[:designations]).reject(&:blank?)
+    governance_types  = Array(@selection_entries[:governance_types]).reject(&:blank?)
+
+    if site_ids.empty? && site_id_pid_pairs.empty? && iso3_vals.empty? &&
+       is_oecm.nil? && is_marine.nil? &&
+       iucn_cats.empty? && designations.empty? && governance_types.empty?
+      conditions << '1=0'
+      return
+    end
+
+    conditions << build_iso3_clause(iso3_vals)                    if iso3_vals.any?
+    conditions << build_iucn_categories_clause(iucn_cats)         if iucn_cats.any?
+    conditions << build_designations_clause(designations)         if designations.any?
+    conditions << build_governance_types_clause(governance_types) if governance_types.any?
+    conditions << build_marine_clause(is_marine)                  unless is_marine.nil?
+    conditions << build_is_oecm_clause(is_oecm)                   unless is_oecm.nil?
+
+    db_disjuncts = []
+    db_disjuncts << build_site_ids_clause(site_ids)             if site_ids.any?
+    db_disjuncts.concat(build_pair_clauses(site_id_pid_pairs))  if site_id_pid_pairs.any?
+    conditions << "(#{db_disjuncts.join(' OR ')})"              if db_disjuncts.any?
+  end
+
   def selection_entries_empty?
     return false if @selection_entries.nil?
     return true unless @selection_entries.is_a?(Hash)
+    return true if @selection_entries[:has_filters_but_empty_matches]
+
+    # Unified flat selection: an empty hash is valid and means "no filters" (download all).
+    return false if @selection_entries.empty?
 
     site_ids = Array.wrap(@selection_entries[:site_ids])
     pairs = Array.wrap(@selection_entries[:site_id_and_pid_pairs])
     iso3s = Array.wrap(@selection_entries[:iso3])
-    types = Array.wrap(@selection_entries[:site_types])
-    realms = Array.wrap(@selection_entries[:realms])
-    site_ids.empty? && pairs.empty? && iso3s.empty? && types.empty? && realms.empty?
+    is_oecm = @selection_entries[:is_oecm]
+    is_marine = @selection_entries[:is_marine]
+    iucn_cats = Array.wrap(@selection_entries[:iucn_categories])
+    designations = Array.wrap(@selection_entries[:designations])
+    governance_types = Array.wrap(@selection_entries[:governance_types])
+    site_ids.empty? && pairs.empty? && iso3s.empty? && is_oecm.nil? && is_marine.nil? &&
+      iucn_cats.empty? && designations.empty? && governance_types.empty?
+  end
+
+  def build_marine_clause(marine_val)
+    realm_vals = marine_val ? Download::Config.marine_realm_values : Download::Config.terrestrial_realm_values
+    %("#{Download::Config.download_view_column_names[:realm]}" IN (#{sql_in_list(realm_vals)}))
+  end
+
+  def build_is_oecm_clause(is_oecm_val)
+    site_type = is_oecm_val ? Download::Config.oecm_site_type_value : Download::Config.pa_site_type_value
+    %("#{Download::Config.download_view_column_names[:site_type]}" IN (#{sql_in_list([site_type])}))
+  end
+
+  def build_iucn_categories_clause(iucn_cats)
+    return nil if iucn_cats.blank?
+
+    %("#{Download::Config.download_view_column_names[:iucn_cat]}" IN (#{sql_in_list(iucn_cats)}))
+  end
+
+  def build_designations_clause(designations)
+    return nil if designations.blank?
+
+    %("#{Download::Config.download_view_column_names[:desig_eng]}" IN (#{sql_in_list(designations)}))
+  end
+
+  def build_governance_types_clause(governance_types)
+    return nil if governance_types.blank?
+
+    %("#{Download::Config.download_view_column_names[:gov_type]}" IN (#{sql_in_list(governance_types)}))
   end
 
   def build_pair_clauses(pairs)
@@ -164,20 +216,6 @@ class Download::Generators::Base
 
     iso3_list = sql_in_list(iso3_vals)
     %("#{Download::Config.download_view_column_names[:iso3]}" IN (#{iso3_list}))
-  end
-
-  def build_site_types_clause(site_types)
-    return nil if site_types.blank?
-
-    types_list = sql_in_list(site_types)
-    %("#{Download::Config.download_view_column_names[:site_type]}" IN (#{types_list}))
-  end
-
-  def build_realms_clause(realms)
-    return nil if realms.blank?
-
-    realms_list = sql_in_list(realms)
-    %("#{Download::Config.download_view_column_names[:realm]}" IN (#{realms_list}))
   end
 
   def sql_in_list(values)

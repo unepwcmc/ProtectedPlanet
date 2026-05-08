@@ -90,16 +90,27 @@ module Download
     # Column names – centralised in a single hash for easy maintenance
     def self.download_view_column_names
       {
-        site_id: has_successful_portal_release? ? 'SITE_ID' : 'WDPAID',
+        site_id:  has_successful_portal_release? ? 'SITE_ID' : 'WDPAID',
         site_pid: 'SITE_PID',
-        iso3: 'ISO3',
+        iso3:     'ISO3',
         site_type: 'SITE_TYPE',
-        realm: 'REALM'
+        realm:    'REALM',
+        iucn_cat: 'IUCN_CAT',
+        desig_eng: 'DESIG_ENG',
+        gov_type: 'GOV_TYPE'
       }
+    end
+
+    def self.pa_site_type_value
+      'PA'
     end
 
     def self.oecm_site_type_value
       'OECM'
+    end
+
+    def self.terrestrial_realm_values
+      ['Terrestrial']
     end
 
     def self.marine_realm_values
