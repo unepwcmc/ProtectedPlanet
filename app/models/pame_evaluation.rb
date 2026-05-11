@@ -45,7 +45,7 @@ class PameEvaluation < ApplicationRecord
     },
     {
       title: 'Link to assessment',
-      field: 'asmt_url',
+      field: 'asmt_url'
     },
     {
       title: 'Metadata ID',
@@ -231,8 +231,8 @@ class PameEvaluation < ApplicationRecord
         pame_evaluations.site_id AS site_id,
         pame_evaluations.site_pid AS site_pid,
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT countries.iso_3), ';') AS iso3,
-        -- We convert site_type true or false later on to Marine / Terrestrial in the CSV generation
-        COALESCE(protected_areas.marine, protected_area_parcels.marine) AS site_type,
+        COALESCE(protected_areas.site_type, protected_area_parcels.site_type) AS site_type,
+        COALESCE(pa_realms.name, parcel_realms.name) AS realm,
         pame_evaluations.name AS name_eng,
         COALESCE(parcel_designations.name, pa_designations.name, 'N/A') AS desig_en,
         pame_evaluations.method AS method,
@@ -270,12 +270,15 @@ class PameEvaluation < ApplicationRecord
       LEFT JOIN green_list_statuses parcel_gl ON parcel_gl.id = protected_area_parcels.green_list_status_id
       LEFT JOIN designations pa_designations ON pa_designations.id = protected_areas.designation_id
       LEFT JOIN designations parcel_designations ON parcel_designations.id = protected_area_parcels.designation_id
+      LEFT JOIN realms pa_realms ON pa_realms.id = protected_areas.realm_id
+      LEFT JOIN realms parcel_realms ON parcel_realms.id = protected_area_parcels.realm_id
       #{where_statement}
       GROUP BY
         pame_evaluations.id,
         pame_sources.id,
         COALESCE(parcel_designations.name, pa_designations.name, 'N/A'),
-        COALESCE(protected_areas.marine, protected_area_parcels.marine),
+        COALESCE(protected_areas.site_type, protected_area_parcels.site_type),
+        COALESCE(pa_realms.name, parcel_realms.name),
         COALESCE(parcel_gl.gl_status, pa_gl.gl_status, 'Not applicable')
     SQL
     evaluations = ActiveRecord::Base.connection.exec_query(query)
@@ -285,15 +288,7 @@ class PameEvaluation < ApplicationRecord
       csv_line << columns.map(&:upcase)
 
       evaluations.each do |evaluation|
-        csv_line << columns.map do |col|
-          value = evaluation[col]
-
-          if col == 'site_type'
-            value = value ? 'Marine' : 'Terrestrial'
-          end
-
-          value
-        end
+        csv_line << columns.map { |col| evaluation[col] }
       end
     end
     # As NC reqested the file to be UTF-8 with BOM
