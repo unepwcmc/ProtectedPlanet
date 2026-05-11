@@ -2,7 +2,8 @@ class Download::Generators::Gdb < Download::Generators::Base
   QUERY_CONDITIONS = {
     multipolygons: {
       select: Download::Utils.download_columns,
-      where: %("TYPE" = 'Polygon')
+      where: %("TYPE" = 'Polygon'),
+      cast_geom_to_multi: true
     },
     multipoints: {
       select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
@@ -36,11 +37,12 @@ class Download::Generators::Gdb < Download::Generators::Base
 
   def export_component(name, props)
     component_path = gdb_component
-    view_name = create_view query(props[:select], props[:where])
+    select = props[:cast_geom_to_multi] ? with_multi_geom(props[:select]) : props[:select]
+    view_name = create_view query(select, props[:where])
 
-    return [] if ActiveRecord::Base.connection.select_value("
-      SELECT COUNT(*) FROM #{view_name}
-    ").to_i.zero?
+    row_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
+    Rails.logger.info "[GDB export] #{name}: #{row_count} rows in view #{view_name}"
+    return [] if row_count.zero?
 
     export_success = Ogr::Postgres.export(
       :gdb,
@@ -58,6 +60,13 @@ class Download::Generators::Gdb < Download::Generators::Base
     query = "SELECT #{select}"
     query << " FROM #{Download::Config.downloads_view}"
     add_conditions(query, conditions).squish
+  end
+
+  # Wraps "WKB_GEOMETRY" in ST_Multi() so every polygon feature is MULTIPOLYGON
+  # before it reaches the FileGDB driver, preventing -skipfailures from silently
+  # dropping features whose stored geometry type is POLYGON rather than MULTIPOLYGON.
+  def with_multi_geom(select)
+    select.sub('"WKB_GEOMETRY"', 'ST_Multi("WKB_GEOMETRY") AS "WKB_GEOMETRY"')
   end
 
   def export_sources
