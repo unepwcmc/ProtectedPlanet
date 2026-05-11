@@ -1,26 +1,27 @@
 class Ogr::Postgres
-  class ExportError < StandardError; end;
+  class ExportError < StandardError; end
 
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
-    csv:       'CSV',
-    gdb:       'FileGDB'
+    csv: 'CSV',
+    gdb: 'FileGDB'
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')
   TEMPLATES = {
-    import:     File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_import.erb')),
-    export:     File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_export.erb')),
+    import: File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_import.erb')),
+    export: File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_export.erb')),
     gdb_export: File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_gdb_export.erb'))
   }
 
-  def self.import file_path, original_table_name=nil, table_name=nil
+  def self.import(file_path, original_table_name = nil, table_name = nil)
     raise ArgumentError, WRONG_ARGUMENTS_MSG if table_name && !original_table_name
+
     system ogr_command(TEMPLATES[:import], binding)
   end
 
-  def self.export file_type, file_name, query, geom_type='polygon'
+  def self.export(file_type, file_name, query, geom_type = 'polygon')
     template = file_type == :gdb ? TEMPLATES[:gdb_export] : TEMPLATES[:export]
     # Used for adding the -update flag so to add different layers (poly point source)
     # into the same .gdb file
@@ -28,23 +29,21 @@ class Ogr::Postgres
     # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
     feature_name = get_feature_name(file_name, geom_type)
     command = ogr_command(template, binding)
-    Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
-    
+    # Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
+
     # Write command to tmp file for debugging on staging
     # log_command_to_file(command, file_type, geom_type)
-    
+
     # Execute command and check for errors
     # system returns: true (success), false (failed), nil (couldn't execute)
     system(command)
   end
 
-  private
-
   def self.db_config
     ActiveRecord::Base.connection_config
   end
 
-  def self.ogr_command template, context
+  def self.ogr_command(template, context)
     compiled_template = ERB.new(template).result context
     compiled_template.squish
   end
@@ -57,7 +56,7 @@ class Ogr::Postgres
       #{command}
       ---
     LOG
-    
+
     File.open(log_file, 'a') do |f|
       f.write(log_entry)
     end
@@ -71,7 +70,7 @@ class Ogr::Postgres
   # WDOECM_MmmYYYY_Public if full WDOECM (and only WDOECM areas) download
   # WDPA_WDOECM_MmmYYYY_Public in all other scenarios.
   #
-  # The GDB features naming convention follows the above with regards WDPA and WDOECM
+  #  The GDB features naming convention follows the above with regards WDPA and WDOECM
   # but with a minor amendment described as follows:
   #
   # WDPA_WDOECM_poly_MmmYYYY if polygon feature
@@ -96,7 +95,7 @@ class Ogr::Postgres
     attrs = filename.split('_')
     # Given the original filename should also contains 'polygons' or 'points' at the end,
     # we remove this bit.
-    attrs.pop if %w(multipolygons multipoints polygons points).include?(attrs[-1])
+    attrs.pop if %w[multipolygons multipoints polygons points].include?(attrs[-1])
     # If the filename does not end with 'Public' it means there's also an identifier (e.g. an ISO or a SITE ID)
     # So the original filename would have been something like WDPA_MmmYYY_Public_identifier
     identifier = attrs.pop unless attrs[-1].downcase == 'public'

@@ -21,8 +21,8 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   def generate_download
     filters = JSON.parse(@filters_json)
     site_selection = build_site_selection('search', filters)
-    Rails.logger.info "[DownloadWorkers::Search] token=#{@token} format=#{@format} filters=#{@filters_json}"
-    Rails.logger.info "site_selection: #{site_selection.inspect}"
+    # Rails.logger.info "[DownloadWorkers::Search] token=#{@token} format=#{@format} filters=#{@filters_json}"
+    # Rails.logger.info "site_selection: #{site_selection.inspect}"
     success = Download.generate(@format, filename(ids_digest, @format), { site_selection: site_selection })
     raise "Download.generate returned false (#{domain} #{@format} #{@token})" unless success
   end

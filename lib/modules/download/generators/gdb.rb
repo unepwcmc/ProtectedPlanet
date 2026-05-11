@@ -41,7 +41,7 @@ class Download::Generators::Gdb < Download::Generators::Base
     view_name = create_view query(select, props[:where])
 
     row_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
-    Rails.logger.info "[GDB export] #{name}: #{row_count} rows in view #{view_name}"
+    # Rails.logger.info "[GDB export] #{name}: #{row_count} rows in view #{view_name}"
     return [] if row_count.zero?
 
     export_success = Ogr::Postgres.export(
