@@ -34,7 +34,10 @@ gem 'rails-controller-testing'
 gem 'gdal', '~> 2.0'
 gem 'net-sftp'
 gem 'net-scp'
-#
+
+# 3.x needs Ruby 2.7+ (filter_map) and Vite 5+ (Node 18+). Pin 2.x for Rails 5 / Ruby 2.6 / Node 12 spike.
+gem 'vite_rails', '~> 2.0.13'
+
 group :production, :staging do
 #  gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
@@ -116,6 +119,7 @@ gem 'comfortable_mexican_sofa', '~> 2.0.0'
 # Use this in local docker file, comment out the one with v1.10.4
 # gem 'nokogiri'
 gem 'nokogiri', '~> 1.10.4'
+gem 'loofah', '~> 2.19.1' # 2.21+ needs Nokogiri::HTML4 (not in nokogiri 1.10)
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'

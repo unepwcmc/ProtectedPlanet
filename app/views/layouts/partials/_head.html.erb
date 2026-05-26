@@ -27,7 +27,7 @@
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet'>
 
 <% if @for_pdf %>
-  <%= stylesheet_link_tag 'pdf', media: 'all' %>    
+  <%= stylesheet_link_tag 'pdf', media: 'all' %>
 <% end %>
 
 <%= stylesheet_link_tag 'application', media: 'all' %>
@@ -36,6 +36,8 @@
 
 <!-- scripts -->
 <%= javascript_pack_tag 'application' %>
+<%= vite_client_tag %>
+<%= vite_javascript_tag 'entrypoints/application' %>
 
 <%= render 'partials/google_analytics' %>
 
