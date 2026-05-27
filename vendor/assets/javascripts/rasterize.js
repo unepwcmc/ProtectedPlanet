@@ -1,10 +1,17 @@
+const fs = require('fs');
 const puppeteer = require('puppeteer');
 const address = process.argv[2];
 const captureDelay = 10000;
 const output = process.argv[3];
 
 (async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage'
+    ]
+  });
   const page = await browser.newPage();
   
   page.setViewport({
@@ -30,7 +37,7 @@ const output = process.argv[3];
     <span style="color:#000; float:right; font-family:'Hind Siliguri',Arial; font-size:5pt; font-weight:bold;" class="date"></span>
   </div>`;
 
-  await page.pdf({
+  const pdf = await page.pdf({
     displayHeaderFooter: true,
     headerTemplate: headerHTML,
     footerTemplate: footerHTML,
@@ -41,10 +48,10 @@ const output = process.argv[3];
       bottom: '60px',
       left: '20px',
     },
-    path: output, 
     printBackground: true,
     scale: .63
   });
+  fs.writeFileSync(output, pdf);
 
   await browser.close();
 })();
