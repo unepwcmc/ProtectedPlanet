@@ -47,7 +47,6 @@ Rails.application.routes.draw do
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
     get '/thematic-areas/green-list', to: 'green_list#index'
-    get '/thematic-areas/oecms', to: 'oecm#index'
     get '/thematic-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
     get '/thematic-areas/marine-protected-areas', to: 'marine#index'
     get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
