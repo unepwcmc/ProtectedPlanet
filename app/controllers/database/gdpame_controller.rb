@@ -11,7 +11,7 @@ class Database::GdpameController < ApplicationController
     @filters = PameEvaluation.filters_to_json
     @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
 
-    @tabs_list = cms_page_tabs
+    @tabs_list = helpers.thematic_area_database_tabs(@cms_page)
   end
 
   def list

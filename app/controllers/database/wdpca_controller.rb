@@ -12,7 +12,7 @@ class Database::WdpcaController < ApplicationController
     }.to_json
 
     @wdpca_view_all_url = search_areas_path(geo_type: 'site')
-    @tabs_list = cms_page_tabs
+    @tabs_list = helpers.thematic_area_database_tabs(@cms_page)
 
     @map = {
       overlays: MapOverlaysSerializer.new(wdpca_overlays, map_yml).serialize,
