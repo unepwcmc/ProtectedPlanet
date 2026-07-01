@@ -54,26 +54,24 @@ class ActiveSupport::TestCase
   def seed_cms
     @site = FactoryGirl.create(:cms_site)
     @layout = FactoryGirl.create(:cms_layout, site: @site)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'about')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'news-and-stories')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'resources')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'monthly-release-news')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematic-areas')
-    # As of 07Apr2025 The oecms and wdpa don't seem to be needed
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'oecms')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Databases::WDPCA)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
   end
 
   # and home page needs some extra cms bits
   def seed_cms_home
     seed_cms
     # we need to add extra pages for pa categories on the home page
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'marine-protected-areas')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'green-list')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
     # and the CTAs
-    FactoryGirl.create(:cms_cta, css_class: 'api')
-    FactoryGirl.create(:cms_cta, css_class: 'live-report')
+    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::API)
+    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::LIVE_REPORT)
 
   end
 end

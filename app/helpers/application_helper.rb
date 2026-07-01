@@ -26,13 +26,6 @@ module ApplicationHelper
     number_with_delimiter(number, delimeter: ' ')
   end
 
-  def yml_key
-    case controller_name
-    when 'target_dashboard'
-      'thematic_area.target_11_dashboard'
-    end
-  end
-
   def active_nav_item?(current_path)
     request.fullpath == current_path
   end
@@ -111,13 +104,10 @@ module ApplicationHelper
   end
 
   def get_nav_primary
-    [
-      map_page('about'),
-      map_page('news-and-stories'),
-      map_page('resources'),
-      map_page('monthly-release-news'),
-      map_page('thematic-areas', true)
-    ].compact.to_json
+    PageSlugs::NAV_PRIMARY.map do |slug|
+      map_children = slug == PageSlugs::Databases::PARENT || slug == PageSlugs::ThematicAreas::PARENT
+      map_page(slug, map_children)
+    end.compact.to_json
   end
 
   # def link_to_page? card
@@ -125,6 +115,11 @@ module ApplicationHelper
   # end
 
   def get_resource_cards(all = false)
+    return (@items = empty_resource_cards) if @cms_site.nil?
+
+    resources_page = @cms_site.pages.find_by_slug(PageSlugs::RESOURCES)
+    return (@items = empty_resource_cards) if resources_page.nil?
+
     presenter = ResourcesPresenter.new(@cms_site, all)
     _resources = presenter.resources
 
@@ -134,9 +129,10 @@ module ApplicationHelper
       file = cms_fragment_render(:file, page)
       link = cms_fragment_render(:link, page)
       url = file.present? || link.present? ? nil : get_cms_url(page.full_path)
+      published_date = page.fragments.find_by(identifier: 'published_date')&.datetime
 
       c.merge(
-        date: DateTime.parse(cms_fragment_render(:published_date, page)).strftime('%d %B %y'),
+        date: published_date ? published_date.strftime('%d %B %y') : '',
         url: url,
         summary: cms_fragment_render(:summary, page),
         fileUrl: file,
@@ -151,7 +147,7 @@ module ApplicationHelper
   def get_news_items(all = false)
     return (@items = { title: nil, url: false, cards: [] }) if @cms_site.nil?
 
-    news_page = @cms_site.pages.find_by_slug('news-and-stories')
+    news_page = @cms_site.pages.find_by_slug(PageSlugs::NEWS_AND_STORIES)
     return (@items = { title: nil, url: false, cards: [] }) if news_page.nil?
 
     published_pages = news_page.children.published
@@ -167,13 +163,29 @@ module ApplicationHelper
   end
 
   def get_thematic_areas
+    return (@items = empty_thematic_areas) if @cms_site.nil?
+
     @items = ThematicAreasPresenter.new(@cms_site).thematic_areas
   end
 
+  def get_databases
+    return (@items = empty_thematic_areas) if @cms_site.nil?
+
+    @items = ThematicAreasPresenter.new(@cms_site).databases
+  end
+
+  def get_all_theme_cards
+    return (@items = empty_thematic_areas) if @cms_site.nil?
+
+    @items = ThematicAreasPresenter.new(@cms_site).all_cards
+  end
+
   def get_footer_links
-    @links = {}
-    @links['links1'] = make_footer_links(%w[resources oecms wdpa])
-    @links['links2'] = make_footer_links(%w[about legal])
+    @links = { 'links1' => [], 'links2' => [] }
+    return @links if @cms_site.nil?
+
+    @links['links1'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
+    @links['links2'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
   end
 
   def get_local_classes(local_assigns)
@@ -181,6 +193,14 @@ module ApplicationHelper
   end
 
   private
+
+  def empty_resource_cards
+    { title: nil, url: nil, total: 0, cards: [] }
+  end
+
+  def empty_thematic_areas
+    { title: nil, cards: [] }
+  end
 
   def make_footer_links(slug_array)
     slug_array.map do |slug|

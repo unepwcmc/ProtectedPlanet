@@ -5,7 +5,7 @@ class ResourcesPresenter
   end
 
   def resources
-    resources_page = cms_site.pages.find_by_slug('resources')
+    resources_page = cms_site.pages.find_by_slug(PageSlugs::RESOURCES)
     published_pages = resources_page.children.published
     sorted_cards = published_pages.sort_by { |c| c.fragments.where(identifier: 'published_date').first&.datetime }.reverse
     selected_cards = limit = all ? sorted_cards : sorted_cards.first(4)
