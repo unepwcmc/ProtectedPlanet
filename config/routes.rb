@@ -41,8 +41,6 @@ Rails.application.routes.draw do
 
     get '/marine/download_designations', to: 'marine#download_designations'
 
-    get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
-      as: 'target_dashboard_load_countries'
 
     get '/terms', to: redirect('/c/terms-and-conditions')
 

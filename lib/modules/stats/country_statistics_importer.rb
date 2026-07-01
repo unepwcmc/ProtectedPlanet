@@ -13,11 +13,6 @@ module Stats::CountryStatisticsImporter
     import_stats(latest_country_statistics_csv, CountryStatistic)
     import_stats(latest_pame_country_statistics_csv, PameStatistic)
 
-    # Import stats from DOPA services
-    # Stats::CountryStatisticsApi.import
-
-    # Import Aichi11Target stats from CSV
-    Aichi11Target.instance
   end
 
   def self.import_stats(path, model)

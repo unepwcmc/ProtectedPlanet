@@ -108,8 +108,7 @@ module Wdpa
       def self.update_data_in_live_tables(notifier: nil)
         {
           country_overseas_territories: Wdpa::Shared::Importer::CountryOverseasTerritories.update_live_table(notifier: notifier), # not depending on any importer
-          biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table(notifier: notifier), # As of 05Sep2025 it might not used # not depending on any importer
-          aichi11_target: Aichi11Target.update_live_table(notifier: notifier) # As of 05Sep2025 it is probably not used # not depending on any importer
+          biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table(notifier: notifier) # As of 05Sep2025 it might not used # not depending on any importer
         }
       end
 
