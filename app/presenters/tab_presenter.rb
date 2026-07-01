@@ -43,7 +43,6 @@ class TabPresenter
   end
 
   def governance(oecms_tab: false)
-
     {
       chart: presenter.governance_chart(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
       country: @geo_entity.name,
@@ -104,7 +103,7 @@ class TabPresenter
   end
 
   def other_sites_title(oecms_tab)
-    text = oecms_tab ? I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')
+    text = oecms_tab ? I18n.t('global.area-types.wdpca_oecm') : I18n.t('global.area-types.wdpca')
     @geo_entity.name + ' ' + text
   end
 

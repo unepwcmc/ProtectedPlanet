@@ -1,0 +1,13 @@
+<%= render partial: "./layouts/partials/hero-basic", locals: thematic_area_database_hero_locals(@cms_page) %>
+
+<% tabs_list = thematic_area_database_tabs(@cms_page) %>
+<% if tabs_list.any? %>
+  <section class="spacer-medium--bottom">
+    <%= render partial: 'partials/thematic_area_database/tabs', locals: {
+      ga_id: "Slug: #{@cms_page.slug}",
+      tabs_list: tabs_list
+    } %>
+  </section>
+<% end %>
+
+<%= render "partials/thematic_area_database/footer" %>

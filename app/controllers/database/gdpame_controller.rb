@@ -1,5 +1,4 @@
-class PameController < ApplicationController
-  include Concerns::Tabs
+class Database::GdpameController < ApplicationController
 
   DEFAULT_PARAMS =
   {
@@ -12,7 +11,7 @@ class PameController < ApplicationController
     @filters = PameEvaluation.filters_to_json
     @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
 
-    @tabs = get_tabs(4).to_json
+    @tabs_list = cms_page_tabs
   end
 
   def list

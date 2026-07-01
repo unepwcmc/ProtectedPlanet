@@ -1,4 +1,4 @@
-class MarineController < ApplicationController
+class Thematic::MarineController < ApplicationController
   include ActionView::Helpers::NumberHelper
   include MapHelper
 
@@ -13,7 +13,6 @@ class MarineController < ApplicationController
     # Removed mpa_map from ['csv', 'shp', 'gdb', 'map_map'] in feat/hide-mpa-download-button
     @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'marine')
 
-
     @map = {
       overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
@@ -24,7 +23,6 @@ class MarineController < ApplicationController
   end
 
   private
-
 
   def marine_data_cache_version
     @marine_data_cache_version ||= (ProtectedArea.maximum(:updated_at)&.to_i || 0)

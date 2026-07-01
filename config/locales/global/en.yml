@@ -1,9 +1,9 @@
 en:
   global:
     area-types:
-      wdpa: Protected Areas
+      wdpca: Protected Areas
       oecm: OECMs
-      wdpa_oecm: Protected Areas & OECMs
+      wdpca_oecm: Protected Areas & OECMs
     button:
       all: View all
       download-pdf: PDF Download
@@ -29,11 +29,11 @@ en:
       email: "Email: %{email}"
       visit: "Visit: %{link}"
     placeholder:
-      search-oecm-wdpa: Search for a protected area or OECM...
-      search-wdpa: Search for a protected area...
+      search-wdpca: Search for a protected area or OECM...
       search-site: Search...
     status:
       updated: Updated
+    carousels_all_cards_title: Explore more
     redirect:
       title: Sorry, that page can't be found.
       alt_title: Sorry, something went wrong.

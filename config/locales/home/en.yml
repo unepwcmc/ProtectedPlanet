@@ -36,15 +36,6 @@ en:
           geo_type: site
           icon: area
       categories:
-        -
-          title: Marine Protected Areas and OECMs
-          slug: /marine-protected-areas
-          filter: 'marine'
-        -
-          title: Terrestrial and Inland Waters Protected Areas and OECMs
-          slug: 
-          filter: 'terrestrial'
-        -
-          title: Green Listed Protected Areas and OECMs
-          slug: /green-list
-          filter: 'pa_or_any_its_parcels_is_greenlisted'
+        marine: Marine Protected Areas and OECMs
+        terrestrial: Terrestrial and Inland Waters Protected Areas and OECMs
+        green_list: Green Listed Protected Areas and OECMs

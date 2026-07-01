@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class PameControllerTest < ActionController::TestCase
-  tests PameController
+class Database::GdpameControllerTest < ActionController::TestCase
+  tests Database::GdpameController
 
   def setup
     seed_cms
@@ -16,7 +16,7 @@ class PameControllerTest < ActionController::TestCase
     assert assigns(:table_attributes).present?
     assert assigns(:filters).present?
     assert assigns(:json).present?
-    assert assigns(:tabs).present?
+    assert assigns(:tabs_list).present?
   end
 
   test 'list returns paginated evaluations as json' do
@@ -37,4 +37,3 @@ class PameControllerTest < ActionController::TestCase
     assert_equal 1, body['items'].first['id']
   end
 end
-

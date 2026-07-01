@@ -1,4 +1,4 @@
-module MarineHelper
+module Thematic::MarineHelper
   def chart_row_pa_legend_national
     [
       {
@@ -24,7 +24,7 @@ module MarineHelper
       }
     ]
   end
-  
+
   def marine_stats(key)
     statistic = @marine_statistics[key]
 

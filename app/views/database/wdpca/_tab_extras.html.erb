@@ -1,0 +1,10 @@
+<section class="spacer-large--bottom">
+  <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+</section>
+
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: map,
+    map_options: local_assigns[:map_options]
+  } %>
+</section>

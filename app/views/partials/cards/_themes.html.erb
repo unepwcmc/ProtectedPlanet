@@ -1,4 +1,8 @@
-<% get_thematic_areas %>
+<% case local_assigns[:card_set]
+   when :databases then get_databases
+   when :thematic then get_thematic_areas
+   else get_thematic_areas
+   end %>
 
 <div class="cards--themes container">
   <div class="cards__cards">

@@ -2,8 +2,8 @@
 
 require 'test_helper'
 
-class GreenListControllerTest < ActionController::TestCase
-  tests GreenListController
+class Thematic::EffectivenessControllerTest < ActionController::TestCase
+  tests Thematic::EffectivenessController
 
   test 'index returns success' do
     @controller.stubs(:render)
@@ -26,9 +26,11 @@ class GreenListControllerTest < ActionController::TestCase
       'green_list_count' => 20
     )
     get :index, params: { locale: 'en' }
-    assert_equal 200.0, assigns(:pas_km)
-    assert_equal 2.0, assigns(:pas_percent)
-    assert_equal 20, assigns(:pas_total)
-    assert_equal %w[pa_or_any_its_parcels_is_greenlisted pa_or_any_its_parcels_is_greenlist_candidate], assigns(:filters)[:special_status]
+    assert_equal 200.0, assigns(:greenlisted_pas_km)
+    assert_equal 2.0, assigns(:greenlisted_pas_percent)
+    assert_equal 20, assigns(:greenlisted_pas_total_count)
+    assert_equal search_areas_path(
+      filters: ::SearchAreaLinkFilters.green_list_status_filters
+    ), assigns(:green_list_view_all_url)
   end
 end
