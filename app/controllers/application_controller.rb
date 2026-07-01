@@ -66,12 +66,14 @@ class ApplicationController < ActionController::Base
     raise PageNotFound
   end
 
-  rescue_from PageNotFound do
-    render_404
-  end
+  if Rails.env.production?
+    rescue_from PageNotFound do
+      render_404
+    end
 
-  rescue_from StandardError do
-    render_500
+    rescue_from StandardError do
+      render_500
+    end
   end
 
   def enable_caching
