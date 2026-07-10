@@ -14,6 +14,7 @@ module Wdpa
         Wdpa::Portal::ImportRuntimeConfig.label = label || ENV.fetch('PP_RELEASE_LABEL', nil)
         Wdpa::Portal::ImportRuntimeConfig.release_id = release_id
         Wdpa::Portal::ImportRuntimeConfig.checkpoints_enabled = (ENV['PP_IMPORT_CHECKPOINTS_DISABLE'] != 'true')
+        Wdpa::Portal::ImportRuntimeConfig.stats_source = ENV.fetch('PP_STATS_SOURCE', 'csv')
 
         # Create staging materialized views first when requested, so validation passes
         if create_staging_materialized_views

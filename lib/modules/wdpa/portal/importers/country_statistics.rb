@@ -27,13 +27,21 @@ module Wdpa
         end
 
         def self.import_country_statistics
-          import_stats(latest_country_statistics_csv, Staging::CountryStatistic)
+          if Wdpa::Portal::ImportRuntimeConfig.stats_from_db?
+            import_stats_from_db(Wdpa::Portal::Importers::StatsDbSource::NationalStats, Staging::CountryStatistic)
+          else
+            import_stats(latest_country_statistics_csv, Staging::CountryStatistic)
+          end
         rescue StandardError => e
           failure_result("Country statistics import failed: #{e.message}", 0)
         end
 
         def self.import_pame_statistics
-          import_stats(latest_pame_country_statistics_csv, Staging::PameStatistic)
+          if Wdpa::Portal::ImportRuntimeConfig.stats_from_db?
+            import_stats_from_db(Wdpa::Portal::Importers::StatsDbSource::PameStats, Staging::PameStatistic)
+          else
+            import_stats(latest_pame_country_statistics_csv, Staging::PameStatistic)
+          end
         rescue StandardError => e
           failure_result("PAME statistics import failed: #{e.message}", 0)
         end
@@ -63,6 +71,53 @@ module Wdpa
           end
 
           build_result(imported_count, soft_errors, [])
+        end
+
+        # DB path: rows come pre-mapped from the stats schema; NR fields are not in
+        # the stats server so they are merged from the latest CSV by iso3.
+        def self.import_stats_from_db(source_class, model)
+          countries = Country.pluck(:id, :iso_3).each_with_object({}) do |(id, iso_3), hash|
+            hash[iso_3] = id
+          end
+
+          imported_count = 0
+          soft_errors = []
+          nr_attrs = model == Staging::CountryStatistic ? nr_attrs_by_iso3 : {}
+
+          source_class.rows.each do |row|
+            iso3 = row[:iso3]
+            country_id = countries[iso3]
+            attrs = { country_id: country_id }.merge(row[:attrs])
+
+            if model == Staging::CountryStatistic
+              attrs = attrs.merge(nr_attrs.fetch(iso3, {}))
+            elsif model == Staging::PameStatistic
+              attrs = attrs.merge(pame_assessments(country_id))
+            end
+
+            record = model.find_or_initialize_by(country_id: country_id)
+            record.assign_attributes(attrs)
+            record.save!
+            imported_count += 1
+          rescue StandardError => e
+            soft_errors << "Row error processing country #{iso3}: #{e.message}"
+          end
+
+          build_result(imported_count, soft_errors, [])
+        end
+
+        NR_FIELDS = %w[percentage_nr_land_cover percentage_nr_marine_cover nr_version nr_report_url].freeze
+
+        def self.nr_attrs_by_iso3
+          CSV.foreach(latest_country_statistics_csv, headers: true).each_with_object({}) do |row, hash|
+            iso3 = row['iso3']
+            next unless iso3
+
+            hash[iso3] = NR_FIELDS.each_with_object({}) do |field, attrs|
+              value = row[field]
+              attrs[field] = value && value.downcase == 'na' ? nil : value
+            end
+          end
         end
 
         def self.pame_assessments(country_id)

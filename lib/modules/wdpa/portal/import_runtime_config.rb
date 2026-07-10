@@ -6,6 +6,9 @@ module Wdpa
     module ImportRuntimeConfig
       class << self
         attr_accessor :only, :skip, :sample, :label, :release_id, :checkpoints_enabled
+        attr_reader :stats_source
+
+        STATS_SOURCES = %w[db csv].freeze
 
         def reset!
           self.only = nil
@@ -14,6 +17,21 @@ module Wdpa
           self.label = nil
           self.release_id = nil
           self.checkpoints_enabled = true
+          @stats_source = 'csv'
+        end
+
+        def stats_source=(val)
+          normalized = val.to_s.strip.downcase
+          normalized = 'csv' if normalized.empty?
+          unless STATS_SOURCES.include?(normalized)
+            raise ArgumentError, "Invalid stats source '#{val}' (PP_STATS_SOURCE) — expected one of: #{STATS_SOURCES.join(', ')}"
+          end
+
+          @stats_source = normalized
+        end
+
+        def stats_from_db?
+          stats_source == 'db'
         end
 
         def only_list
