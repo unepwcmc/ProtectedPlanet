@@ -9,16 +9,16 @@ class ThematicAreasPresenter
     build_collection(PageSlugs::ThematicAreas::PARENT)
   end
 
-  def databases
-    build_collection(PageSlugs::Databases::PARENT)
+  def data_areas
+    build_collection(PageSlugs::Data::PARENT)
   end
 
   def all_cards
     thematic_page = parent_page(PageSlugs::ThematicAreas::PARENT)
-    database_page = parent_page(PageSlugs::Databases::PARENT)
+    data_page = parent_page(PageSlugs::Data::PARENT)
 
     combined_cards = []
-    combined_cards.concat(cards(database_page)) if database_page
+    combined_cards.concat(cards(data_page)) if data_page
     combined_cards.concat(cards(thematic_page)) if thematic_page
 
     {
@@ -55,9 +55,9 @@ class ThematicAreasPresenter
   def pas_figure(slug)
     # TODO: update here once NC knows what they want to show in home page
     scope = case slug
-            when PageSlugs::Databases::WDPCA
+            when PageSlugs::Data::WDPCA
               ProtectedArea.all
-            when PageSlugs::Databases::GDPAME
+            when PageSlugs::Data::GDPAME
               ProtectedArea.pas_with_pame_on_self_or_any_parcel
             when PageSlugs::ThematicAreas::MARINE
               ProtectedArea.marine_areas

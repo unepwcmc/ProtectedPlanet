@@ -1,4 +1,4 @@
-<% show_tab_triggers = thematic_area_database_show_tab_triggers?(tabs_list) %>
+<% show_tab_triggers = thematic_and_data_area_show_tab_triggers?(tabs_list) %>
 <% panel_locals = { tab_extras: local_assigns[:tab_extras] } %>
 
 <% if show_tab_triggers %>
@@ -11,13 +11,13 @@
     <template slot-scope="slotProps">
       <% tabs_list.each do |tab| %>
         <tab-target :id=<%= tab[:id].to_json %> :selected-id="slotProps.selectedId">
-          <%= render partial: 'partials/thematic_area_database/panel_content', locals: panel_locals.merge(tab: tab) %>
+          <%= render partial: 'partials/thematic_and_data_area/panel_content', locals: panel_locals.merge(tab: tab) %>
         </tab-target>
       <% end %>
     </template>
   </tabs>
 <% else %>
   <% tabs_list.each do |tab| %>
-    <%= render partial: 'partials/thematic_area_database/panel_content', locals: panel_locals.merge(tab: tab) %>
+    <%= render partial: 'partials/thematic_and_data_area/panel_content', locals: panel_locals.merge(tab: tab) %>
   <% end %>
 <% end %>

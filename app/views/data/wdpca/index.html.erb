@@ -11,13 +11,13 @@
   title: @cms_page.label
 } %>
 
-<%= render partial: 'partials/thematic_area_database/tabs', locals: {
+<%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
   ga_id: "Slug: #{@cms_page.slug}",
   tabs_list: @tabs_list,
   tab_extras: [
     {
       tab_id: 1,
-      partial: 'database/wdpca/tab_extras',
+      partial: 'data/wdpca/tab_extras',
       locals: {
         config_search: @config_search_areas,
         map: @map
@@ -26,4 +26,4 @@
   ]
 } %>
 
-<%= render "partials/thematic_area_database/footer" %>
+<%= render "partials/thematic_and_data_area/footer" %>

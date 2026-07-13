@@ -1,4 +1,4 @@
-<% extras = thematic_area_database_tab_extras_config(tab, tab_extras) %>
+<% extras = thematic_and_data_area_tab_extras_config(tab, tab_extras) %>
 <% unless extras&.fetch(:replace_content, false) %>
   <section class="container--medium">
     <%= cms_fragment_render(tab[:content_id]) %>

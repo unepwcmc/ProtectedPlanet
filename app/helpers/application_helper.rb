@@ -105,7 +105,7 @@ module ApplicationHelper
 
   def get_nav_primary
     PageSlugs::NAV_PRIMARY.map do |slug|
-      map_children = slug == PageSlugs::Databases::PARENT || slug == PageSlugs::ThematicAreas::PARENT
+      map_children = slug == PageSlugs::Data::PARENT || slug == PageSlugs::ThematicAreas::PARENT
       map_page(slug, map_children)
     end.compact.to_json
   end
@@ -168,10 +168,10 @@ module ApplicationHelper
     @items = ThematicAreasPresenter.new(@cms_site).thematic_areas
   end
 
-  def get_databases
+  def get_data_areas
     return (@items = empty_thematic_areas) if @cms_site.nil?
 
-    @items = ThematicAreasPresenter.new(@cms_site).databases
+    @items = ThematicAreasPresenter.new(@cms_site).data_areas
   end
 
   def get_all_theme_cards

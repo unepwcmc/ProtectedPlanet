@@ -43,15 +43,15 @@ Rails.application.routes.draw do
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-    get PageSlugs::Databases.path(PageSlugs::Databases::WDPCA), to: 'database/wdpca#index'
-    get PageSlugs::Databases.path(PageSlugs::Databases::GDPAME), to: 'database/gdpame#index'
+    get PageSlugs::Data.path(PageSlugs::Data::WDPCA), to: 'data/wdpca#index'
+    get PageSlugs::Data.path(PageSlugs::Data::GDPAME), to: 'data/gdpame#index'
 
     get PageSlugs::ThematicAreas.path(PageSlugs::ThematicAreas::EFFECTIVENESS), to: 'thematic/effectiveness#index'
     get PageSlugs::ThematicAreas.path(PageSlugs::ThematicAreas::MARINE), to: 'thematic/marine#index'
 
     # JSON endpoints - CMS
-    post '/pame/download', to: 'database/gdpame#download'
-    post '/pame/list', to: 'database/gdpame#list'
+    post '/pame/download', to: 'data/gdpame#download'
+    post '/pame/list', to: 'data/gdpame#list'
 
     # Used for site-wide search
     post '/search/autocomplete', to: 'search#autocomplete'

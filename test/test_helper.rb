@@ -59,8 +59,8 @@ class ActiveSupport::TestCase
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Databases::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Databases::WDPCA)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
   end
 

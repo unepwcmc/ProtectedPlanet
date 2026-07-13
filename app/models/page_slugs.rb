@@ -18,9 +18,9 @@ module PageSlugs
     MPA_GUIDE = 'mpa-guide'
   end
 
-  # /databases/* — CMS parent + children; some routes override with custom controllers
-  module Databases
-    PARENT = 'databases'
+  # /data/* — CMS parent + children; some routes override with custom controllers
+  module Data
+    PARENT = 'data'
 
     WDPCA = 'wdpca'
     GDPAME = 'global-database-on-protected-area-management-effectiveness'
@@ -43,7 +43,7 @@ module PageSlugs
     end
   end
 
-  FOOTER_LINKS_PRIMARY = [RESOURCES, Databases::WDPCA].freeze
+  FOOTER_LINKS_PRIMARY = [RESOURCES, Data::WDPCA].freeze
   FOOTER_LINKS_SECONDARY = [ABOUT, LEGAL].freeze
 
   NAV_PRIMARY = [
@@ -51,7 +51,7 @@ module PageSlugs
     NEWS_AND_STORIES,
     RESOURCES,
     MONTHLY_RELEASE_NEWS,
-    Databases::PARENT,
+    Data::PARENT,
     ThematicAreas::PARENT
   ].freeze
 end

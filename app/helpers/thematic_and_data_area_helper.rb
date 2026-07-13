@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module ThematicAreaDatabaseHelper
+module ThematicAndDataAreaHelper
   MAX_TABS = 5
 
-  def thematic_area_database_tabs(page = @cms_page)
+  def thematic_and_data_area_tabs(page = @cms_page)
     (1..MAX_TABS).map do |tab_id|
       content_id = "tab-content-#{tab_id}"
       title = cms_fragment_content(:"tab-title-#{tab_id}", page)
@@ -18,17 +18,17 @@ module ThematicAreaDatabaseHelper
     end.compact
   end
 
-  def thematic_area_database_show_tab_triggers?(tabs_list)
+  def thematic_and_data_area_show_tab_triggers?(tabs_list)
     tabs_list.count { |tab| tab[:title].present? } > 1
   end
 
-  def thematic_area_database_tab_extras_config(tab, tab_extras)
+  def thematic_and_data_area_tab_extras_config(tab, tab_extras)
     return if tab_extras.blank?
 
     Array(tab_extras).find { |extra| extra[:tab_id].to_i == tab[:id].to_i }
   end
 
-  def thematic_area_database_hero_locals(page = @cms_page)
+  def thematic_and_data_area_hero_locals(page = @cms_page)
     locals = {
       classes: "#{page.slug} thematic-area",
       image: cms_fragment_render(:image, page),
