@@ -1,3 +1,5 @@
+require 'csv'
+
 class GlobalStatistic < ApplicationRecord
   self.table_name = 'global_statistics'
 
@@ -43,8 +45,36 @@ class GlobalStatistic < ApplicationRecord
     end
   end
 
-  def self.latest_csv
-    global_statistics_csvs = Dir.glob("#{Rails.root}/lib/data/seeds/global_statistics*")
-    global_statistics_csvs.sort.last
+  DESCRIPTIONS_CSV_PATH = Rails.root.join('lib/data/seeds/global_statistics_descriptions.csv')
+
+  # Values always come from this record (whichever import source populated it), so the
+  # download can never drift from what's rendered on the site. Descriptions (including
+  # the trailing methodology note, which has a blank type) live in their own file since
+  # they aren't stored on this table and change far less often than values.
+  def self.download_csv
+    record = instance
+    Rails.cache.fetch(download_csv_cache_key(record)) { generate_download_csv(record) }
+  end
+
+  def self.download_csv_cache_key(record)
+    "global_statistics_download_csv/#{record.updated_at.to_f}/#{File.mtime(DESCRIPTIONS_CSV_PATH).to_f}"
+  end
+  private_class_method :download_csv_cache_key
+
+  def self.generate_download_csv(record)
+    CSV.generate(headers: true) do |csv|
+      csv << %w(type description value)
+      CSV.foreach(DESCRIPTIONS_CSV_PATH, headers: true) do |row|
+        value = row['type'].present? ? record[row['type']] : nil
+        csv << [row['type'], row['description'], value]
+      end
+    end
+  end
+  private_class_method :generate_download_csv
+
+  def self.download_csv_filename
+    "global_statistics_#{Date.parse(Release.current_label).strftime('%Y-%m-01')}.csv"
+  rescue TypeError, ArgumentError
+    "global_statistics.csv"
   end
 end
