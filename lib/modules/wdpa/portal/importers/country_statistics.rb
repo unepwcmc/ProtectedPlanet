@@ -12,6 +12,10 @@ module Wdpa
           ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_country_statistics_*.csv')
         end
 
+        def self.latest_country_statistics_merge_fields_csv
+          ::Utilities::Files.latest_file_by_glob('lib/data/seeds/country_stats_merge_fields_*.csv')
+        end
+
         def self.import_to_staging(notifier: nil)
           country_result = import_country_statistics
           pame_result = import_pame_statistics
@@ -74,7 +78,7 @@ module Wdpa
         end
 
         # DB path: rows come pre-mapped from the stats schema; NR fields are not in
-        # the stats server so they are merged from the latest CSV by iso3.
+        # the stats server so they are merged from the merge-fields CSV by iso3.
         def self.import_stats_from_db(source_class, model)
           countries = Country.pluck(:id, :iso_3).each_with_object({}) do |(id, iso_3), hash|
             hash[iso_3] = id
@@ -106,16 +110,13 @@ module Wdpa
           build_result(imported_count, soft_errors, [])
         end
 
-        NR_FIELDS = %w[percentage_nr_land_cover percentage_nr_marine_cover nr_version nr_report_url].freeze
-
         def self.nr_attrs_by_iso3
-          CSV.foreach(latest_country_statistics_csv, headers: true).each_with_object({}) do |row, hash|
+          CSV.foreach(latest_country_statistics_merge_fields_csv, headers: true).each_with_object({}) do |row, hash|
             iso3 = row['iso3']
             next unless iso3
 
-            hash[iso3] = NR_FIELDS.each_with_object({}) do |field, attrs|
-              value = row[field]
-              attrs[field] = value && value.downcase == 'na' ? nil : value
+            hash[iso3] = row.to_h.reject { |k, _| k == 'iso3' }.transform_values do |value|
+              value && value.downcase == 'na' ? nil : value
             end
           end
         end

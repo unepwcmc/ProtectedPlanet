@@ -143,7 +143,7 @@ These will continue to be sourced from the CSV and merged with stats server data
 
 | Source | Notes |
 |--------|-------|
-| `description` | Do **not** use `stat_description` from the stats server on the website. Descriptions are sourced from `lib/data/seeds/global_statistics_descriptions.csv` (a standalone `type,description` file), not from the release's `global_statistics_*.csv` — that file no longer carries a `description` column, only `type,value`, since descriptions change far less often than values and shouldn't be coupled to the release cadence. |
+| `description` | Do **not** use `stat_description` from the stats server on the website. Descriptions are sourced from `lib/data/seeds/global_stats_descriptions.csv` (a standalone `type,description` file), not from the release's `global_statistics_*.csv` — that file no longer carries a `description` column, only `type,value`, since descriptions change far less often than values and shouldn't be coupled to the release cadence. |
 
 ---
 
@@ -220,13 +220,13 @@ As described in Section 5: biggest run within the vintage matching the release l
 
 ### CSV merge in db mode
 
-- **Country stats**: NR fields (`percentage_nr_land_cover`, `percentage_nr_marine_cover`, `nr_version`, `nr_report_url`) merged from the latest `country_statistics_*.csv` by iso3. Update NR data by committing a new CSV — no stats-server involvement.
+- **Country stats**: NR fields (`percentage_nr_land_cover`, `percentage_nr_marine_cover`, `nr_version`, `nr_report_url`) merged from the latest `country_stats_merge_fields_*.csv` by iso3 — a dedicated file, separate from the release's `country_statistics_*.csv` (which still carries NR columns too, for the CSV-mode/legacy-import path). Update NR data by committing a new merge-fields CSV — no stats-server involvement, and no need to touch the full `country_statistics_*.csv` in `db` mode.
 - **Global stats**: hybrid — CSV provides the full base (including fields the stats server doesn't emit, e.g. `green_list_*`, PA counts), stats-server values overwrite where present. Unknown `stat_type` values are skipped with a soft error. `stat_description` is ignored (the `global_statistics` table has no description column).
 - **PAME stats**: no CSV merge; `assessments` / `assessed_pas` still computed from PP's own PAME evaluations.
 
 ### Global statistics CSV download
 
-`GET /global_statistics_download` (`GlobalStatisticsController#download`) no longer serves the raw seed CSV file from disk. It calls `GlobalStatistic.download_csv`, which builds the CSV from the **live `GlobalStatistic` record** (whichever import source populated it — CSV or DB) joined against `lib/data/seeds/global_statistics_descriptions.csv`, and caches the result via `Rails.cache` keyed on the record's `updated_at` and the descriptions file's mtime. This keeps the download in sync with whatever's rendered on the site regardless of `PP_STATS_SOURCE`, and decouples descriptions (rarely change) from release value CSVs (change every release).
+`GET /global_statistics_download` (`GlobalStatisticsController#download`) no longer serves the raw seed CSV file from disk. It calls `GlobalStatistic.download_csv`, which builds the CSV from the **live `GlobalStatistic` record** (whichever import source populated it — CSV or DB) joined against `lib/data/seeds/global_stats_descriptions.csv`, and caches the result via `Rails.cache` keyed on the record's `updated_at` and the descriptions file's mtime. This keeps the download in sync with whatever's rendered on the site regardless of `PP_STATS_SOURCE`, and decouples descriptions (rarely change) from release value CSVs (change every release).
 
 ### Corrected `stats.pame_stats` columns (differs from Section 3.3 early sample)
 

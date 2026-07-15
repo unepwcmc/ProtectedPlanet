@@ -45,7 +45,7 @@ class GlobalStatistic < ApplicationRecord
     end
   end
 
-  DESCRIPTIONS_CSV_PATH = Rails.root.join('lib/data/seeds/global_statistics_descriptions.csv')
+  DESCRIPTIONS_CSV_PATH = Rails.root.join('lib/data/seeds/global_stats_descriptions.csv')
 
   # Values always come from this record (whichever import source populated it), so the
   # download can never drift from what's rendered on the site. Descriptions (including

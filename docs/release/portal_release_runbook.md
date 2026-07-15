@@ -275,6 +275,7 @@ Common environment variables you might need:
 | `PP_RELEASE_START_AT` | Phase to start at |
 | `PP_RELEASE_STOP_AFTER` | Phase to stop after |
 | `PP_RELEASE_STAGING_LIGHTWEIGHT` | Disable indexes during staging (faster) |
+| `PP_STATS_SOURCE` | `csv` (default) or `db` — where the release imports national/PAME/global stats from. See [Stats Server DB Ingestion](../stats_server_db_ingestion.md) |
 
 > For complete list of environment variables and configuration options, see [Release Orchestration](release_orchestration.md#configuration).
 
