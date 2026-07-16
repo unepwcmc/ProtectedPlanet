@@ -9,6 +9,19 @@ module Wdpa
         class NationalStats
           extend Wdpa::Portal::Importers::StatsDbSource::Base
 
+          FIELDS = %w[
+            pa_marine_area pa_land_area marine_area land_area
+            oecms_pa_marine_area oecms_pa_land_area
+            percentage_pa_marine_cover percentage_pa_land_cover
+            percentage_oecms_pa_marine_cover percentage_oecms_pa_land_cover
+          ].freeze
+
+          # Countries absent from the stats server run genuinely have zero PA
+          # coverage (rather than unknown data), so they default to 0 here.
+          def self.default_attrs
+            FIELDS.each_with_object({}) { |field, hash| hash[field] = 0.0 }
+          end
+
           def self.rows
             run_id = select_run_id(table: 'national_stats', run_column: 'metadata_ns_uuid')
             quoted_run_id = ActiveRecord::Base.connection.quote(run_id)

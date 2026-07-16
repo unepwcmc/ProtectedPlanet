@@ -79,19 +79,25 @@ module Wdpa
 
         # DB path: rows come pre-mapped from the stats schema; NR fields are not in
         # the stats server so they are merged from the merge-fields CSV by iso3.
+        # Countries with no row in the stats server run have zero coverage, not
+        # unknown data, so every country is imported using source_class.default_attrs
+        # as a fallback rather than only the countries the stats server returned.
         def self.import_stats_from_db(source_class, model)
           countries = Country.pluck(:id, :iso_3).each_with_object({}) do |(id, iso_3), hash|
             hash[iso_3] = id
+          end
+
+          attrs_by_iso3 = source_class.rows.each_with_object({}) do |row, hash|
+            hash[row[:iso3]] = row[:attrs]
           end
 
           imported_count = 0
           soft_errors = []
           nr_attrs = model == Staging::CountryStatistic ? nr_attrs_by_iso3 : {}
 
-          source_class.rows.each do |row|
-            iso3 = row[:iso3]
-            country_id = countries[iso3]
-            attrs = { country_id: country_id }.merge(row[:attrs])
+          countries.each do |iso3, country_id|
+            country_stats = attrs_by_iso3.fetch(iso3) { source_class.default_attrs }
+            attrs = { country_id: country_id }.merge(country_stats)
 
             if model == Staging::CountryStatistic
               attrs = attrs.merge(nr_attrs.fetch(iso3, {}))
