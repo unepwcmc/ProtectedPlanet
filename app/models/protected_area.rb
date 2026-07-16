@@ -98,7 +98,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def pa_or_any_its_parcels_is_greenlisted
-    listed = ['Green Listed', 'Relisted']
+    listed = ['Green Listed', 'Re-Listed']
     green_list_status&.gl_status.in?(listed) ||
       protected_area_parcels.joins(:green_list_status).where(green_list_statuses: { gl_status: listed }).exists?
   end

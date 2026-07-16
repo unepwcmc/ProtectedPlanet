@@ -2,19 +2,6 @@ en:
   country:
     message:
       restricted:
-        nzl:
-          New Zealand chooses to restrict some data on its protected areas. As a result, data on 1 protected area is not publicly-available and cannot be viewed or downloaded on this page. While this site is included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        ind:
-          India chooses to restrict some data on its protected areas. As a result, data on 900 protected areas is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        chn:
-          China chooses to restrict some data on its protected areas. As a result, data on 2,960 protected areas is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        shn:
-          Saint Helena, Ascension and Tristan da Cunha chooses to restrict some data on its protected areas. As a result, data on 14 protected areas is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        irl:
-          Ireland chooses to restrict some data on its protected areas. As a result, data on 150 protected areas is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        est:
-          Estonia chooses to restrict some data on its protected areas. As a result, data on 4,626 protected areas is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        tur:
-          Türkiye chooses to restrict some data on its protected areas. As a result, data on 4,254 protected area is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
-        lbn:
-          Lebanon chooses to restrict some data on its protected areas. As a result, data on 45 protected area is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
+        body: "%{country_name} chooses to restrict some data on its protected areas and/or OECMs. As a result, data on %{restricted_data} are not publicly available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly available data only."
+        protected_areas: "%{formatted_count} protected area(s)"
+        protected_areas_and_oecms: "%{protected_areas} and %{oecms} OECM(s)"

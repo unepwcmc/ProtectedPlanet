@@ -4,10 +4,10 @@
 } %>
 <div class="page--country bg--grey-xlight spacer-small--top">
   <div class="container">
-    <% if country_has_restricted_data %>
+    <% if (restricted_message = get_restricted_message) %>
       <section class="spacer-small--bottom">
         <%= render partial: "partials/messages/message-country-restricted", locals: { 
-          message: get_restricted_message
+          message: restricted_message
         } %>
       </section>
     <% end %>

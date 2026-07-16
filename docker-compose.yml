@@ -78,7 +78,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   elasticsearch:
-    platform: linux/x86_64
     container_name: protectedplanet-elasticsearch
     image: elasticsearch:8.6.0
     environment:
