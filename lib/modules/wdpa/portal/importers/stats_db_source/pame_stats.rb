@@ -9,6 +9,17 @@ module Wdpa
         class PameStats
           extend Wdpa::Portal::Importers::StatsDbSource::Base
 
+          FIELDS = %w[
+            pame_pa_marine_area pame_pa_land_area
+            pame_percentage_pa_marine_cover pame_percentage_pa_land_cover
+          ].freeze
+
+          # Countries absent from the stats server run genuinely have zero PAME
+          # coverage (rather than unknown data), so they default to 0 here.
+          def self.default_attrs
+            FIELDS.each_with_object({}) { |field, hash| hash[field] = 0.0 }
+          end
+
           def self.rows
             run_id = select_run_id(table: 'pame_stats', run_column: 'metadata_pame_uuid')
             quoted_run_id = ActiveRecord::Base.connection.quote(run_id)
