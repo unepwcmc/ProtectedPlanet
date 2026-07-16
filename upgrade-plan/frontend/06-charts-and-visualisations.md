@@ -18,11 +18,20 @@ All charts render under Vue 3. amCharts upgraded. Country/region/marine stats ma
 
 ## Current stack
 
-| Type | Components / files |
-|------|-------------------|
-| amCharts 4 | `AmChartLine`, `AmChartMultiline`, `AmChartPie` |
-| Custom SVG/CSS | `ChartBar`, `ChartRowPa`, `ChartRowStacked`, `ChartTreemap`, `ChartSunburst`, `ChartDial`, … |
-| D3 | `d3@5` in package.json (audit actual usage) |
+**Live chart families (4)** — see [01-live-inventory](./01-live-inventory.md#live-chart-families-for-phase-6):
+
+| Chart | Where | Type |
+|-------|-------|------|
+| `chart-row-pa` (`ChartRowPa`) | Marine, Green List tab | Custom SVG/CSS |
+| `am-chart-multiline` (`AmChartMultiline`) | Marine coverage growth (`_chart-coverage-growth`) | amCharts 4 |
+| `ChartRowStacked` | Country/region stats (`StatsDesignations`) | Custom |
+| `AmChartPie` | Country/region stats (`StatsGovernance`, `StatsIucnCategories`) | amCharts 4 |
+
+| Other | Status |
+|-------|--------|
+| `AmChartLine` | Present but **disabled** (`StatsGrowth`, ticket #265) |
+| `ChartDial`, `ChartSunburst`, `ChartTreemapInteractive`, `ChartBar`, `ChartBarSimple`, `ChartRectangles` | **Dead** — no live usage; do not migrate |
+| D3 | `d3@5` in package.json — audit actual usage; likely removable |
 | Data from Rails | Presenters + ERB partials under `app/views/partials/charts/`, `partials/stats/` |
 
 ---
@@ -30,6 +39,8 @@ All charts render under Vue 3. amCharts upgraded. Country/region/marine stats ma
 ## Tasks
 
 ### amCharts 4 → 5
+
+Live amCharts SFCs: `AmChartMultiline` (marine growth) and `AmChartPie` (country/region stats). `AmChartLine` only if `StatsGrowth` (#265) is re-enabled.
 
 - [ ] Inventory each amCharts SFC and its options/data shape.
 - [ ] Port per [amCharts v5 docs](https://www.amcharts.com/docs/v5/); one chart type at a time with before/after screenshots.
@@ -47,11 +58,11 @@ All charts render under Vue 3. amCharts upgraded. Country/region/marine stats ma
 
 ### Visual regression
 
-- [ ] Country show page — overview + tabs (WDPA / OECM if applicable).
-- [ ] Region show page.
-- [ ] Marine index + sections.
-- [ ] Target 11 dashboard (`chart-dial`).
-- [ ] Protected area show — stats tabs.
+- [ ] Country show page (`country#show`) — `region-country-pages` stats (designations bar, governance/IUCN pies).
+- [ ] Region show page (`region#show`).
+- [ ] Marine index (`thematic/marine#index`) — `chart-row-pa` + coverage-growth multiline.
+- [ ] Effectiveness / Green List tab (`thematic/effectiveness#index`) — `chart-row-pa`.
+- [ ] Protected area show — attributes/stats.
 
 ---
 

@@ -78,9 +78,9 @@ createApp(SearchAreas, props).mount(el)
 | 3 | `search-areas.ts` | `search_areas/index.html.erb` |
 | 4 | `map.ts` | `partials/maps/_main.html.erb` → wrapper `MapPage.vue` |
 | 5 | `search-site.ts` | `search/index.html.erb` |
-| 6 | `thematic-database.ts` | `_tabs-thematic-area-database.html.erb` → `ThematicDatabasePage.vue` ([14](./14-architecture-and-design.md#cms--frontend-integration)) |
-| 7 | `equity-tabs.ts` | `_tabs-equity.html.erb` |
-| 8+ | Per stats/chart partial | Country, region, marine, target dashboard, … |
+| 6 | `data-wdpca.ts` / `pame.ts` / `thematic-effectiveness.ts` | `partials/thematic_and_data_area/_tabs.html.erb` (shared) → tab-page SFC ([14](./14-architecture-and-design.md#cms--frontend-integration)) |
+| 7 | `equity-tabs.ts` | `_tabs-equity.html.erb` (only if `select-equity` re-enabled) |
+| 8+ | Per stats/chart partial | Country, region, marine |
 
 ### Eliminate ERB ↔ Vue slot coupling
 

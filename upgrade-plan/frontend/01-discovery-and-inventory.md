@@ -15,7 +15,7 @@
 
 Document exactly how Rails and Vue connect today so nothing is discovered mid-migration.
 
-**Nav-led baseline:** [01b — Live inventory](./01-live-inventory.md) (pages, ~14 entrypoints, dead components excluded from estimates).
+**Nav-led baseline:** [01b — Live inventory](./01-live-inventory.md) (pages, ~12 entrypoints, dead components excluded from estimates).
 
 ---
 
@@ -64,15 +64,15 @@ Document exactly how Rails and Vue connect today so nothing is discovered mid-mi
 - [ ] List every view that uses **`cms_fragment_render`** on the same page as a Vue custom tag.
 - [ ] Assign pattern **A / B / C** per page (definitions in [14](./14-architecture-and-design.md#cms--frontend-integration)).
 - [ ] **Pattern B (high priority)** — document target redesign:
-  - `app/views/partials/tabs/_tabs-thematic-area-database.html.erb` — CMS + search + map inside tabs
-  - `app/views/partials/tabs/_tabs-equity.html.erb` — CMS inside `tab-target`
-  - `app/views/pame/index.html.erb` — tabs + PAME components
+  - `app/views/partials/thematic_and_data_area/_tabs.html.erb` — shared `<tabs>`/`<tab-target>` with `slot-scope` + `cms_fragment_render` + per-tab extras (search/map/filtered-table); drives `data/wdpca`, `data/gdpame`, `thematic/effectiveness`
+  - `app/views/partials/tabs/_tabs-equity.html.erb` — CMS inside `tab-target` (`layouts/cms/_equity`)
+  - `app/views/data/gdpame/index.html.erb` + `_tab_content.html.erb` — tabs + `filtered-table` + `pame-modal`
 - [ ] **Pattern C:** `app/views/cms/_child_dropdown.html.erb` — `select-with-content` + fragment-driven options
 - [ ] **Pattern A + Vue listing:** `layouts/cms/_resources.html.erb`, `_news-and-stories.html.erb` — `listing-page` + CMS hero
 - [ ] Comfortable Mexican Sofa — spot-check **production** body HTML for accidental `<v-` / `<chart-` tags (seeds look clean).
 - [ ] Confirm plan rejects **global mount-all-widgets** / `window.cmsData` for entire site.
 - [ ] Map each **Comfy layout** in `db/cms_seeds/protected-planet/layouts/` → pattern A/B/C (see [README table](./README.md#comfy-layout-types-from-db_cms_seedsprotected-planet--plan-fit)).
-- [ ] `template-thematic-area-database`: document `tab-show-pas-search-*` / `tab-show-wdpca-map-*` — used in seeds only; app hardcodes tab 1 widgets today.
+- [ ] Tab-driven pages (`data/wdpca`, `data/gdpame`, `thematic/effectiveness`): document how `ThematicAndDataAreaHelper#thematic_and_data_area_tabs` builds tabs from CMS `tab-title-N`/`tab-content-N` fragments, and how controllers inject per-tab `tab_extras` (search/map/filtered-table) — app hardcodes these extras today.
 - [ ] **Gemfile / admin assets** — [12](./12-gemfile-frontend-dependencies.md): `tinymce-rails`, Coffee → JS in Comfy admin.
 
 ---

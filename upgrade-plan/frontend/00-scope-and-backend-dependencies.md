@@ -5,7 +5,7 @@
 | **Type** | **Reference** — not a gated phase or estimate line |
 | **Status** | Assumed **done for active work** (B0a complete, prep/2a underway). **Revisit before B0** merge if ownership or dates change. |
 | **Owner** | You (frontend lead + integration backend) |
-| **Target** | **Rails 8** + Vite 5 + Vue 3 · **B0 (Rails 7.1+)** for target gem/npm stack |
+| **Target** | Vite 5 + Vue 3 · real gate is **Ruby 2.7+ & Node 18+**, *not* Rails 7 (Rails 7/8 desirable, not required — see [README §Version gates](./README.md#version-gates--execution-order)) |
 
 [← Back to overview](./README.md) · **[Work while blocked →](./13-work-while-rails-upgrades.md)**
 
@@ -33,7 +33,7 @@
 |----|-----------|-----|----------|
 | — | **Prep work on Rails 5.2** | **You** ([13](./13-work-while-rails-upgrades.md)) | Smaller diff on upgrade branch |
 | **B0a** | **Vite 2 + vite_rails 2.x** on Rails 5.2 (Docker) | **You** | **Done** — dual bundler ([02a](./02a-vite-spike-rails-5.md)) |
-| **B0** | **Rails 7.1+ boots** locally & CI | Backend (+ you: vite 3.x bump PR) | **vite_rails 3.x, Vite 5, Vue 3 (G1)** |
+| **B0** | **Ruby 2.7+ & Node 18+** (Rails 5.2 OK; Rails 7.1+ optional/later) | Shared (you: Ruby/Node bump + vite 3.x PR) | **vite_rails 3.x, Vite 5, Vue 3 (G1)** |
 | B1 | `bin/vite dev` + HMR on target stack | Shared | Phase 2b |
 | B2 | Staging deploy includes `vite build` | DevOps + you | Staging QA |
 | B3 | Comfy `/admin` works on upgrade branch | Backend + you smoke test | CMS pages |

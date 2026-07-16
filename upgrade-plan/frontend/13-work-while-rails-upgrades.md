@@ -12,11 +12,11 @@
 
 ## Gates
 
-| Gate | Rails | You can |
-|------|-------|---------|
-| **G0** | **5.2 (today)** | Track A + B + **Vite 2 foundation (2a)** |
-| **G1** | **7.1+** | `vite_rails` 3.x, Vite 5, Vue 3 ([02b](./02-vite-on-rails-8.md#phase-2b--on-upgrade-branch-rails-71)) |
-| **G2** | **8.0** | Same frontend; backend gem alignment |
+| Gate | Requires | You can |
+|------|----------|---------|
+| **G0** | Ruby 2.6 · Node 12 · Rails 5.2 (today) | Track A + B + **Vite 2 foundation (2a)** |
+| **G1** | **Ruby 2.7+ · Node 18+** (Rails 5.2 OK — *not* gated on Rails 7) | `vite_rails` 3.x, Vite 5, Vue 3 ([02b](./02-vite-on-rails-8.md#phase-2b--on-upgrade-branch-rails-71)) — keep Webpacker alive with `--openssl-legacy-provider`, see [README §Version gates](./README.md#version-gates--execution-order) |
+| **G2** | Rails 7/8 (optional, later) | Comfy / `dartsass-rails` / security; frontend unchanged |
 
 ---
 

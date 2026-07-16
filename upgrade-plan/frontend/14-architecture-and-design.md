@@ -235,19 +235,19 @@ Not a global loop over all CMS widget types.
 | Page / layout | Entrypoint | Pattern |
 |---------------|------------|---------|
 | `layouts/cms/_resources` | `listing-page.ts` | Vue only; CMS in ERB hero |
-| `partials/tabs/_tabs-thematic-area-database` | `thematic-database.ts` | B — page SFC |
+| `partials/thematic_and_data_area/_tabs` (shared) | `data-wdpca.ts` / `thematic-effectiveness.ts` | B — page SFC |
 | `partials/tabs/_tabs-equity` | `equity-tabs.ts` | B — CMS as `bodyHtml` props |
-| `pame/index` | `pame.ts` | B/C — inventory in phase 1 |
+| `data/gdpame/index` | `pame.ts` | B/C — inventory in phase 1 |
 | Country/region stats | `stats-country.ts` etc. | CMS copy in ERB; charts in Vue |
 
 ### Comfy layout contract (`db/cms_seeds/protected-planet`)
 
 | Layout seed | Role of fragments | Vue integration |
 |-------------|-------------------|-----------------|
-| `template-thematic-area-database` | `tab-title-*`, `tab-content-*` (wysiwyg), hero fields, optional `tab-show-*` checkboxes | Controller (`wdpa`, `oecm`) builds tab array → mount **one** SFC; wysiwyg → `bodyHtml` |
+| `template-thematic-area-database` (+ `page-database-areas`, `page-pame`) | `tab-title-*`, `tab-content-*` (wysiwyg), hero fields | Controllers `data/wdpca`, `data/gdpame` build tab array via `thematic_and_data_area_tabs` → mount **one** SFC; wysiwyg → `bodyHtml` |
 | `template-thematic-area-basic` | `summary`, `image`, `content` (wysiwyg) | ERB partial only — **pattern A** |
 | `template-resource` | `published_date`, `content`, resource file/link fields | ERB partial only — **pattern A** |
-| `page-equity` | `tab-title-*`, `tab-content-*` | **pattern B** via `tabs-equity` |
+| equity (`layouts/cms/_equity`, marked "to be removed") | `tab-title-*`, `tab-content-*` | **pattern B** via `tabs-equity`; `select-equity` chart currently commented out (#NC 14 May 2025) |
 | `page-resources` | listing filters via categories | `listing-page` mount; CMS for hero |
 
 `{{ cms:partial layouts/cms/... }}` in layout seed → `app/views/layouts/cms/_*.html.erb`. Those partials remain Rails; add `frontend_mount` only where Vue is needed.

@@ -28,7 +28,7 @@ Search, CMS listings, and download flows work without the global `#v-app` root o
 | CMS news | `layouts/cms/_news-and-stories.html.erb` | `ListingPage` | `template="news"` |
 | Download button | `partials/download/_download.html.erb` | `Download` | Nested in many pages |
 | Download modal | `application.html.erb` | `DownloadModal` | Vuex `download` module |
-| PAME | `pame/index.html.erb` | `FilteredTable`, modals | Multiple PAME components |
+| PAME (GD-PAME) | `data/gdpame/index.html.erb` + `_tab_content.html.erb` | `FilteredTable`, `PameModal` | `data/gdpame#index`; table endpoint `POST /pame/list` |
 
 ---
 
@@ -67,10 +67,10 @@ Search, CMS listings, and download flows work without the global `#v-app` root o
 - [ ] `Download.vue` / `DownloadItem.vue` — Vue 3 + still opens modal via store.
 - [ ] Poll endpoints: `/downloads`, `/downloads/poll` (from layout modal attrs).
 
-### 5. PAME
+### 5. PAME (GD-PAME)
 
-- [ ] `pame.ts` entrypoint.
-- [ ] `FilteredTable`, `PameModal`, table head mixins → composables.
+- [ ] `pame.ts` entrypoint for `data/gdpame/index.html.erb` (rendered inside the shared `tabs` / `tab-target` partial).
+- [ ] `FilteredTable` (endpoint `POST /pame/list`), `PameModal`, `TableHeader` → composables.
 - [ ] Filter state and GA events.
 
 ---
@@ -80,9 +80,10 @@ Search, CMS listings, and download flows work without the global `#v-app` root o
 Coordinate with backend — these endpoints must not break during migration:
 
 - `POST /search/autocomplete`
-- Search areas results paths (pagination)
+- `GET /search-areas-results` (PA search pagination)
 - `POST /downloads`, `GET /downloads/poll`
-- CMS `/en/search-cms`
+- `POST /pame/list`, `POST /pame/download` (GD-PAME table)
+- CMS `GET /search-cms`
 
 ---
 

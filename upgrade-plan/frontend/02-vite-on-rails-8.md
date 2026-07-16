@@ -5,7 +5,7 @@
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | **Estimate**                      | **2a:** 1–2 wk after **B0**                                                                                  |
 | **Prep (now)**                    | [02a — Spike validated](./02a-vite-spike-rails-5.md)                                                         |
-| **Blocked for target stack only** | `vite_rails` 3.x, Vite 5, Vue 3 plugin, Node 20 Docker ([00](./00-scope-and-backend-dependencies.md) **B0**) |
+| **Blocked for target stack only** | `vite_rails` 3.x, Vite 5, Vue 3 plugin — gated on **Ruby 2.7+ & Node 18+ (Node 24 LTS)**, *not* Rails 7 ([README §Version gates](./README.md#version-gates--execution-order)) |
 | **Design**                        | [14 — Architecture](./14-architecture-and-design.md)                                                         |
 
 
