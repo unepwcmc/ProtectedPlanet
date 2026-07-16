@@ -12,11 +12,12 @@
         <p class="hero__intro"><%= summary %></p>
       <% end %>
 
-      <%= link_to button_search_text, 
-        button_search_url, 
-        title: t('global.links.visit', link: button_search_url), 
-        class: 'hero__button-1 button--primary' 
-      %>
+      <% if local_assigns[:button_search_text].present? && local_assigns[:button_search_url].present? %>
+        <%= link_to button_search_text,
+          button_search_url,
+          title: t('global.links.visit', link: button_search_url),
+          class: 'hero__button-1 button--primary' %>
+      <% end %>
     </div>
 
     <div>

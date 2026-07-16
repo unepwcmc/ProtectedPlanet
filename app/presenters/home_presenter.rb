@@ -8,7 +8,7 @@ class HomePresenter
   def terrestrial_pas
     @terrestrial_pas ||= number_with_delimiter(GlobalStatistic.total_terrestrial_protected_areas)
   end
-  
+
   def marine_pas
     @marine_pas ||= number_with_delimiter(GlobalStatistic.total_marine_protected_areas)
   end
@@ -36,7 +36,7 @@ class HomePresenter
   def oecm_pa_marine_cover
     GlobalStatistic.total_ocean_oecms_pas_coverage_percentage.round(2)
   end
-  
+
   def fact_card_stats
     [
       {
@@ -46,7 +46,7 @@ class HomePresenter
         totals: [
           {
             number: terrestrial_pas,
-            text: I18n.t('global.area-types.wdpa')
+            text: I18n.t('global.area-types.wdpca')
           }
         ]
       },
@@ -57,7 +57,7 @@ class HomePresenter
         totals: [
           {
             number: marine_pas,
-            text: I18n.t('global.area-types.wdpa')
+            text: I18n.t('global.area-types.wdpca')
           }
         ]
       },
@@ -68,7 +68,7 @@ class HomePresenter
         totals: [
           {
             number: terrestrial_pas,
-            text: I18n.t('global.area-types.wdpa')
+            text: I18n.t('global.area-types.wdpca')
           },
           {
             number: terrestrial_oecms,
@@ -83,7 +83,7 @@ class HomePresenter
         totals: [
           {
             number: marine_pas,
-            text: I18n.t('global.area-types.wdpa')
+            text: I18n.t('global.area-types.wdpca')
           },
           {
             number: marine_oecms,
@@ -97,7 +97,7 @@ class HomePresenter
   def update_date
     current_label = Release.current_label
     return 'Unknown' unless current_label
-    
+
     # Format MMMYYYY to "MMM YYYY" (e.g., "Nov2025" -> "Nov 2025")
     current_label.insert(3, ' ')
   end

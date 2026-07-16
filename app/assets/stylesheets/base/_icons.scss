@@ -2,8 +2,6 @@
 // classes
 //--------------------------------------------------
 .icon {
-  &--aichi { @include icon-aichi; }
-  
   &--area { @include icon-area; }
   
   &--circle-chevron-black { @include icon-circle-chevron-black; }

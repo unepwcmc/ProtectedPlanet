@@ -44,14 +44,6 @@ $icon-search-width: rem-calc(21);
 //--------------------------------------------------
 // mixins for specific classes
 //--------------------------------------------------
-@mixin icon-aichi() {
-  @include responsive(width, rem-calc(85), rem-calc(85), rem-calc(110));
-  @include responsive(height, rem-calc(85), rem-calc(85), rem-calc(110));
-  margin-bottom: rem-calc(20);
-
-  display: block;
-}
-
 @mixin icon-area() {
   @include icon-basic;
   @include icon-image('area.svg', rem-calc(52), rem-calc(52));

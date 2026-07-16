@@ -127,7 +127,11 @@ export default {
     },
 
     addEventHandlersToMap() {
-      this.$eventHub.$on('map:resize', () => this.map.resize())
+      this.$eventHub.$on('map:resize', () => {
+        if (this.map && typeof this.map.resize === 'function') {
+          this.map.resize()
+        }
+      })
 
       this.map.on('style.load', () => {
         this.setFirstForegroundLayerId()

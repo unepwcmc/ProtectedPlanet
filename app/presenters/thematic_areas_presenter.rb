@@ -6,19 +6,45 @@ class ThematicAreasPresenter
   end
 
   def thematic_areas
-    thematic_page = @cms_site.pages.find_by_slug('thematic-areas')
+    build_collection(PageSlugs::ThematicAreas::PARENT)
+  end
 
-    items = {
-      "title": thematic_page.label,
-      "cards": cards(thematic_page)
+  def data_areas
+    build_collection(PageSlugs::Data::PARENT)
+  end
+
+  def all_cards
+    thematic_page = parent_page(PageSlugs::ThematicAreas::PARENT)
+    data_page = parent_page(PageSlugs::Data::PARENT)
+
+    combined_cards = []
+    combined_cards.concat(cards(data_page)) if data_page
+    combined_cards.concat(cards(thematic_page)) if thematic_page
+
+    {
+      title: I18n.t('global.carousels_all_cards_title'),
+      cards: combined_cards
     }
   end
 
   private
 
-  def cards(thematic_page)
-    _cards = thematic_page.children.published
-    _cards.map do |c|
+  def build_collection(parent_slug)
+    parent_page = parent_page(parent_slug)
+    return { title: nil, cards: [] } if parent_page.nil?
+
+    {
+      title: parent_page.label,
+      cards: cards(parent_page)
+    }
+  end
+
+  def parent_page(slug)
+    @cms_site.pages.find_by_slug(slug)
+  end
+
+  def cards(parent_page)
+    parent_page.children.published.map do |c|
       {
         obj: c,
         pas_no: pas_figure(c.slug)
@@ -26,29 +52,19 @@ class ThematicAreasPresenter
     end
   end
 
-  # Finds by slug rather than by label - which is more likely to change after all
-  THEMATIC_AREAS = %w(wdpa protected-areas-management-effectiveness-pame oecms
-    indigenous-and-community-conserved-areas global-partnership-on-aichi-target-11
-    green-list connectivity-conservation equity marine-protected-areas).freeze
-
   def pas_figure(slug)
-    pas = ProtectedArea
+    # TODO: update here once NC knows what they want to show in home page
+    scope = case slug
+            when PageSlugs::Data::WDPCA
+              ProtectedArea.all
+            when PageSlugs::Data::GDPAME
+              ProtectedArea.pas_with_pame_on_self_or_any_parcel
+            when PageSlugs::ThematicAreas::MARINE
+              ProtectedArea.marine_areas
+            else
+              return -1
+            end
 
-    pas = case slug
-          when 'marine-protected-areas'
-            pas.marine_areas
-          when 'green-list'
-            pas.pas_with_green_list_on_self_or_any_parcel
-          when 'wdpa'
-            pas.wdpas
-          when 'oecms'
-            pas.oecms
-          when 'protected-areas-management-effectiveness-pame'
-            pas.pas_with_pame_on_self_or_any_parcel
-          else
-            -1 #Not applicable - hide ribbon
-          end
-
-    pas.respond_to?(:count) ? number_with_delimiter(pas.count) : pas
+    number_with_delimiter(scope.count)
   end
 end

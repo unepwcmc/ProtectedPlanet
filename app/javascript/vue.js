@@ -31,7 +31,6 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
-import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
@@ -52,10 +51,8 @@ import SelectEquity from './components/select/SelectEquity'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
-import TableHead from './components/table/TableHead'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
-import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import TooltipSecond from './components/tooltip/TooltipSecond'
 import VMapDisclaimer from './components/map/VMapDisclaimer'
@@ -64,7 +61,6 @@ import VMapPASearch from './components/map/VMapPASearch'
 import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
-import VTable from './components/table/VTable'
 import IconExclamationCircle from './components/icon/ExclamationCircle'
 import AttributesProtectedAreaParcels from './components/attributes/AttributesProtectedAreaParcels'
 import AttributesProtectedAreaParcelsSources from './components/attributes/AttributesProtectedAreaParcelsSources'
@@ -120,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartRowPa,
         ChartRowStacked,
-        ChartRowTarget,
         ChartSunburst,
         Download,
         GaLink,
@@ -141,10 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
         SelectWithContent,
         StickyBar,
         StickyNav,
-        TableHead,
         Tabs,
         TabTarget,
-        Target11Dashboard,
         Tooltip,
         TooltipSecond,
         VMap,
@@ -153,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
         VMapHeader,
         VMapFilters,
         VSelectSearchable,
-        VTable,
         IconExclamationCircle,
         AttributesProtectedAreaParcels,
         AttributesProtectedAreaParcelsSources,

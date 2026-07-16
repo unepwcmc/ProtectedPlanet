@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
     @config_search_areas = {
       id: 'all',
-      placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
+      placeholder: I18n.t('global.placeholder.search-wdpca')
     }.to_json
 
     @pas_title = home_yml[:pas][:title]
@@ -17,13 +17,7 @@ class HomeController < ApplicationController
     @site_facts = home_presenter.fact_card_stats
     @update_date = home_presenter.update_date
 
-    comfy_themes = Comfy::Cms::Page.find_by_slug("thematic-areas")
-    @themes_title = comfy_themes.label
-    @themes_url = comfy_themes.full_path
-
-    @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
-
-    @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
+    @carousel_slides = HomeCarouselSlide.all.select { |slide| slide.published }
 
     @main_map = {
       overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
@@ -36,10 +30,8 @@ class HomeController < ApplicationController
   private
 
   def home_overlays
-    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+    overlays(%w[oecm marine_wdpa terrestrial_wdpa])
   end
-
-  private
 
   def levels
     _levels = home_yml[:pas][:levels]
@@ -53,7 +45,7 @@ class HomeController < ApplicationController
     @home_yml ||= I18n.t('home')
   end
 
-  def home_presenter 
+  def home_presenter
     @presenter ||= HomePresenter.new
   end
 end

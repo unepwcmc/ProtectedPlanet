@@ -6,7 +6,7 @@
 //--------------------------------------------------
 @mixin tabs-horizontal-scroll {
   @include flex;
-  overflow-x: scroll;
+  overflow-x: auto;
 
   @include breakpoint($medium){ 
     overflow-x: initial;

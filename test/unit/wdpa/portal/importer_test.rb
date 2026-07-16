@@ -31,8 +31,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
 
     live_results = {
       country_overseas_territories: { success: true, hard_errors: [] },
-      biopama_countries: { success: true, hard_errors: [] },
-      aichi11_target: { success: true, hard_errors: [] }
+      biopama_countries: { success: true, hard_errors: [] }
     }
 
     Wdpa::Portal::Importer.expects(:import_data_to_staging_tables).returns(staging_results)
@@ -106,13 +105,11 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
   test '.update_data_in_live_tables runs live table updaters' do
     Wdpa::Shared::Importer::CountryOverseasTerritories.expects(:update_live_table).returns({ success: true })
     Wdpa::Shared::Importer::BiopamaCountries.expects(:update_live_table).returns({ success: true })
-    Aichi11Target.expects(:update_live_table).returns({ success: true })
 
     result = Wdpa::Portal::Importer.update_data_in_live_tables
 
     assert_includes result.keys, :country_overseas_territories
     assert_includes result.keys, :biopama_countries
-    assert_includes result.keys, :aichi11_target
   end
 
   test '.check_for_hard_errors returns true when hard errors exist' do

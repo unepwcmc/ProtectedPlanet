@@ -1,0 +1,107 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--basic {
+  @include border-radius;
+  background: $grey-light center no-repeat;
+  background-size: cover;
+  margin-bottom: rem-calc(30);
+  overflow: hidden;
+
+  @include breakpoint($small) { margin-bottom: rem-calc(40); }
+
+  .content-banner__container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: rem-calc(20);
+    padding: rem-calc(24);
+
+    @include breakpoint($medium) {
+      flex-direction: row;
+      align-items: center;
+      gap: rem-calc(32);
+      padding: rem-calc(32);
+    }
+  }
+
+  .content-banner__content {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    @include breakpoint($medium) {
+      flex: 1 1 0;
+    }
+  }
+
+  .content-banner__title {
+    margin-top: 0;
+  }
+
+  .content-banner__intro { @include content-banner-intro; }
+
+  .content-banner__small-text {
+    font-weight: $bold;
+    margin-top: rem-calc(16);
+
+    display: block;
+  }
+
+  .content-banner__stats {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: 100%;
+
+    @include breakpoint($medium) {
+      flex: 0 0 rem-calc(320);
+      max-width: 38%;
+      width: auto;
+    }
+  }
+
+  .content-banner__stats-content {
+    @include border-radius;
+    display: flex;
+    flex-direction: column;
+    gap: rem-calc(16);
+    box-sizing: border-box;
+    padding: rem-calc(20);
+    width: 100%;
+
+    @include breakpoint($small) { padding: rem-calc(24); }
+  }
+
+  .content-banner__stat-item {
+    min-width: 0;
+  }
+
+  .content-banner__stat-number {
+    color: $primary;
+    font-size: rem-calc(28);
+    font-weight: $bold;
+    line-height: 1.1;
+    margin-bottom: rem-calc(4);
+
+    @include breakpoint($small) { font-size: rem-calc(36); }
+    @include breakpoint($medium) { font-size: rem-calc(42); }
+  }
+
+  .content-banner__stat-number-small {
+    color: $primary;
+    font-size: rem-calc(24);
+    font-weight: $bold;
+    line-height: 1.1;
+    margin-bottom: rem-calc(4);
+
+    @include breakpoint($small) { font-size: rem-calc(28); }
+    @include breakpoint($medium) { font-size: rem-calc(32); }
+  }
+
+  .content-banner__stat-text {
+    @include content-banner-stat-text;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    display: block;
+  }
+}

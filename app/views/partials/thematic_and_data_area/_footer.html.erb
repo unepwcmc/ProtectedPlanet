@@ -1,0 +1,11 @@
+<% if local_assigns.fetch(:show_resources, true) %>
+  <section class="container spacer-small--top">
+    <%= render "partials/cards/resources" %>
+  </section>
+<% end %>
+
+<section class="spacer-small--bottom">
+  <%= render "partials/carousels/themes" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

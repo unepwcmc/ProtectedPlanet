@@ -2,6 +2,8 @@
   <div
     class="nav__dropdown"
     :class="{'active': isActive}"
+    @mouseenter="openDropdown"
+    @mouseleave="closeDropdown"
   >
     <button 
       :id="mixinTriggerId"
@@ -9,7 +11,6 @@
       :aria-expanded="isActive"
       :aria-controls="mixinModalId"
       class="nav__dropdown-toggle hover--pointer flex-inline flex-v-center"
-      @mouseenter="openDropdown"
     >
       <label :for="mixinModalId">
         <nav-link 
@@ -24,7 +25,6 @@
       :id="mixinModalId"
       class="nav__dropdown-wrapper"
       :class="{'active': isActive}"
-      @mouseleave="closeDropdown"
     >
       <nav-link
         v-for="dropdownLink in link.children"

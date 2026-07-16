@@ -39,25 +39,19 @@ Rails.application.routes.draw do
 
     ## Only CMS routes are present below
 
-    get '/marine/download_designations', to: 'marine#download_designations'
-
-    get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
-      as: 'target_dashboard_load_countries'
-
-    get '/terms', to: redirect('/c/terms-and-conditions')
+    get '/terms', to: redirect("/c/#{PageSlugs::TERMS_AND_CONDITIONS}")
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-    get '/thematic-areas/green-list', to: 'green_list#index'
-    get '/thematic-areas/oecms', to: 'oecm#index'
-    get '/thematic-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
-    get '/thematic-areas/marine-protected-areas', to: 'marine#index'
-    get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
-    get '/thematic-areas/wdpa', to: 'wdpa#index'
+    get PageSlugs::Data.path(PageSlugs::Data::WDPCA), to: 'data/wdpca#index'
+    get PageSlugs::Data.path(PageSlugs::Data::GDPAME), to: 'data/gdpame#index'
+
+    get PageSlugs::ThematicAreas.path(PageSlugs::ThematicAreas::EFFECTIVENESS), to: 'thematic/effectiveness#index'
+    get PageSlugs::ThematicAreas.path(PageSlugs::ThematicAreas::MARINE), to: 'thematic/marine#index'
 
     # JSON endpoints - CMS
-    post '/pame/download', to: 'pame#download'
-    post '/pame/list', to: 'pame#list'
+    post '/pame/download', to: 'data/gdpame#download'
+    post '/pame/list', to: 'data/gdpame#list'
 
     # Used for site-wide search
     post '/search/autocomplete', to: 'search#autocomplete'

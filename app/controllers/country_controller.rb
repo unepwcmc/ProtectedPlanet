@@ -19,12 +19,12 @@ class CountryController < ApplicationController
 
     # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
     @total_pame = @country
-                  .protected_areas
-                  .pas_with_pame_on_self_only
-                  .joins(pame_evaluations: :countries)
-                  .where(countries: { id: @country.id })
-                  .distinct
-                  .count
+      .protected_areas
+      .pas_with_pame_on_self_only
+      .joins(pame_evaluations: :countries)
+      .where(countries: { id: @country.id })
+      .distinct
+      .count
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {
@@ -62,12 +62,12 @@ class CountryController < ApplicationController
 
     cached = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
       total_oecm = @country.protected_areas.oecms.count
-      tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
+      tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpca') }]
       stats_data = build_hash(:wdpa)
 
       if total_oecm.positive?
         stats_data.merge!(build_hash(:wdpa_oecm))
-        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
+        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpca_oecm') })
       end
 
       { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
@@ -100,9 +100,9 @@ class CountryController < ApplicationController
     cached = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
       {
         wdpa: @country_presenter.get_designations_list(['National'],
-              only_unique_site_ids: true, is_oecm: false).length,
+          only_unique_site_ids: true, is_oecm: false).length,
         oecm: @country_presenter.get_designations_list(['National'],
-              only_unique_site_ids: true, is_oecm: true).length
+          only_unique_site_ids: true, is_oecm: true).length
       }
     end
 

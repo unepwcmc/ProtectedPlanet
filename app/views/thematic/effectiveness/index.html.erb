@@ -1,0 +1,19 @@
+<%= render partial: "./layouts/partials/hero-basic", locals: thematic_and_data_area_hero_locals(@cms_page).merge(
+  classes: "#{@cms_page.slug} bg-image-overlay--white"
+) %>
+
+<section class="spacer-medium--bottom">
+  <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
+    ga_id: "Slug: #{@cms_page.slug}",
+    tabs_list: @tabs_list,
+    tab_extras: [
+      {
+        tab_id: 2,
+        partial: 'thematic/effectiveness/green_list_tab',
+        replace_content: true
+      }
+    ]
+  } %>
+</section>
+
+<%= render "partials/thematic_and_data_area/footer", locals: { show_resources: false } %>

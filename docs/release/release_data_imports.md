@@ -223,20 +223,6 @@ These tables are updated directly in live tables (not through staging):
 
 **Note**: As of 05Sep2025, this may not be actively used.
 
-### 14. Aichi 11 Target
-
-**Table**: `aichi11_targets`
-
-**What's updated**:
-- Aichi Target 11 global statistics
-- Target achievement metrics
-
-**Importer**: `Aichi11Target.update_live_table`
-
-**File location**: [`app/models/aichi11_target.rb`](../../app/models/aichi11_target.rb)
-
-**Note**: As of 05Sep2025, this may not be actively used.
-
 ## Import Order
 
 The importers run in a specific order to respect dependencies:

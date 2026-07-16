@@ -34,12 +34,12 @@ class RegionController < ApplicationController
 
     cached = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
       total_oecm = @region.protected_areas.oecms.count
-      tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
+      tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpca') }]
       stats_data = build_standard_hash
 
       if total_oecm.positive?
         stats_data.merge!(build_oecm_hash)
-        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
+        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpca_oecm') })
       end
 
       { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
