@@ -5,3 +5,22 @@ Dockerfile
 README.md
 .env*
 docker-compose.yml
+
+# Large dirs that must NOT be sent as build context — they are either
+# regenerated in the image (node_modules via `yarn install`) or volume-mounted
+# at runtime (node_modules, chrome). Sending them made the context ~6.3 GB and
+# stalled builds.
+node_modules/
+chrome/
+
+# ActiveStorage runtime uploads — never needed at build time
+storage/
+
+# Build artifacts (regenerated; also gitignored)
+public/vite-dev/
+public/vite-test/
+public/vite/
+public/packs/
+public/packs-test/
+public/assets/
+coverage/
