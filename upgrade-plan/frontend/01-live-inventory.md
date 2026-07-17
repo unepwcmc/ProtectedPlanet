@@ -111,7 +111,7 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 
 ### Registered in `vue.js` (46 imports) — used from ERB as root tags
 
-`nav-burger`, `search-site-topbar`, `search-site`, `search-areas`, `search-areas-home`, `tabs`, `tab-target`, `v-map`, `v-map-header`, `v-map-filters`, `v-map-disclaimer`, `v-map-pa-search`, `region-country-pages`, `attributes-*` (5), `download`, `download-modal`, `listing-page`, `listing-page-card-news`, `listing-page-card-resources`, `filtered-table`, `pame-modal`, `select-with-content`, `chart-row-pa`, `am-chart-multiline` (via partial), `counter`, `flickity`, `ga-link`, `banner-banner`, `sticky-bar`, `tooltip`, `v-select-searchable`.
+`nav-burger`, `search-site-topbar`, `search-site`, `search-areas`, `search-areas-home`, `tabs`, `tab-target`, `v-map`, `v-map-header`, `v-map-filters`, `v-map-disclaimer`, `v-map-pa-search`, `region-country-pages`, `attributes-*` (5), `download`, `download-modal`, `listing-page`, `listing-page-card-news`, `listing-page-card-resources`, `filtered-table`, `pame-modal`, `select-with-content`, `chart-row-pa`, `am-chart-multiline` (via partial), `counter`, `flickity`, `ga-link`, `banner-banner`, `sticky-bar`, `tooltip`, `tooltip-second` (country stats overview), `v-select-searchable`.
 
 ### Registered but **child-import only** — drop global registration, keep as local import
 
@@ -130,8 +130,7 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 | `ChartBar`, `ChartBarSimple` | No template usage |
 | `ChartSunburst`, `ChartTreemapInteractive`, `ChartRectangles` | No imports from live components |
 | `ChartDial` | **Only imported in `vue.js`** — no ERB tag, no child import → **dead** |
-| `SelectEquity` | Only usage (`_tabs-equity`) is **commented out** → effectively dead until re-enabled |
-| `TooltipSecond` | Verify — no live root tag found |
+| `SelectEquity` (+ `SelectDropdown`) | **Removed** — only usage (`_tabs-equity`) was commented out (NC decision 14 May 2025); `SelectDropdown` was its only child |
 
 ### Orphan `.vue` files (no import found — **~10**, delete or archive)
 
@@ -147,7 +146,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 | Item | Location |
 |------|----------|
 | `stats-growth` / growth chart (`AmChartLine`) | `RegionCountryPages.vue` (ticket #265) |
-| `select-equity` | `partials/tabs/_tabs-equity.html.erb` (NC decision 14 May 2025) |
 | Region marine stats / iucn / governance / designations | commented in `region/show.html.erb` |
 
 ---

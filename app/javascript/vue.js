@@ -20,18 +20,10 @@ import store from './store/store.js'
 import AmChartLine from './components/charts/am-chart-line/AmChartLine'
 import AmChartMultiline from './components/charts/am-chart-line/AmChartMultiline'
 import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
-import Carousel from './components/carousel/Carousel'
-import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
-import ChartBar from './components/charts/chart-bar/ChartBar'
-import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
-import ChartDial from './components/charts/chart-dial/ChartDial'
-import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
-import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
-import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
@@ -47,10 +39,8 @@ import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
 import SearchSiteTopbar from './components/search/SearchSiteTopbar'
-import SelectEquity from './components/select/SelectEquity'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
-import StickyNav from './components/sticky/StickyNav'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Tooltip from './components/tooltip/Tooltip'
@@ -105,18 +95,10 @@ document.addEventListener('DOMContentLoaded', () => {
         AmChartLine,
         AmChartMultiline,
         AmChartPie,
-        Carousel,
-        CarouselSlide,
         Counter,
-        ChartBar,
-        ChartBarSimple,
         ChartBarStacked,
-        ChartDial,
-        ChartTreemapInteractive,
-        ChartRectangles,
         ChartRowPa,
         ChartRowStacked,
-        ChartSunburst,
         Download,
         GaLink,
         DownloadModal,
@@ -132,10 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         SearchAreasHome,
         SearchSite,
         SearchSiteTopbar,
-        SelectEquity,
         SelectWithContent,
         StickyBar,
-        StickyNav,
         Tabs,
         TabTarget,
         Tooltip,
