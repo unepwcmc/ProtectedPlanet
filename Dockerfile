@@ -1,4 +1,7 @@
-FROM ruby:2.6.3
+# Ruby 2.7 on Debian buster — Rails 5.2 supports Ruby up to 2.7, and 2.7's
+# `filter_map` unlocks vite_rails 3.x (G1 gate). buster tag keeps the apt/GDAL
+# setup below working. Node stays 12 in this step; bumped to 24 in the next.
+FROM ruby:2.7-buster
 
 # Buster is EOL, so point APT to Debian archive mirrors before updating
 RUN printf 'deb https://archive.debian.org/debian buster main\n\
@@ -124,8 +127,12 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 # We need the following to avoid bundler install error
 # https://nokogiri.org/tutorials/installing_nokogiri.html#installing-using-standard-system-libraries
-RUN bundle config build.nokogiri --use-system-libraries
-RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
+# Install the locked bundler (1.17.3) BEFORE any `bundle` call: Ruby 2.7's
+# rubygems errors hard when Gemfile.lock's BUNDLED WITH version is absent
+# (Ruby 2.6.3 only warned). Pin every bundle invocation to 1.17.3.
+RUN gem install bundler -v 1.17.3
+RUN bundle _1.17.3_ config build.nokogiri --use-system-libraries
+RUN bundle _1.17.3_ install
 
 # As it fails for not able to download r809590 during first time of yarn install so we need to skip it and install it manually later
 RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install
