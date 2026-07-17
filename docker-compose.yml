@@ -24,6 +24,7 @@ services:
       - redis
       - elasticsearch
       - webpacker
+      - vite
     stdin_open: true
     tty: true    
     # In order for container to be able to find servers
@@ -114,6 +115,26 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     ports:
       - "3035:3035"
+    env_file:
+      - '.env'
+    networks:
+      - protectedplanet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  # Vite dev server (D1 — runs alongside webpacker during the migration overlap).
+  # Serves Vite entrypoints on :3036; Vue 2 packs still come from webpacker :3035.
+  # Removed only once Webpacker is gone — see upgrade-plan/frontend/15-docker-vite-dev.md.
+  vite:
+    platform: linux/x86_64
+    container_name: protectedplanet-vite
+    build: .
+    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/vite"
+    volumes:
+      - .:/ProtectedPlanet
+      - ./node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_bundler:/usr/local/bundle
+    ports:
+      - "3036:3036"
     env_file:
       - '.env'
     networks:

@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+yarn install --frozen-lockfile --check-files
+bundle check || bundle install
+# host/port come from config/vite.json (development) — vite_ruby 1.2.x's
+# `vite dev` CLI does not accept --host/--port flags.
+exec /ProtectedPlanet/bin/vite dev
