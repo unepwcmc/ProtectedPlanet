@@ -1,9 +1,40 @@
 services:
+  # One-shot dependency installer. Runs bundle + yarn install ONCE into the shared
+  # bundler + node_modules volumes so web/webpacker/vite/sidekiq don't race each
+  # other running install concurrently on a cold `docker compose up`. Every ruby
+  # service waits on this (service_completed_successfully) then just starts its server.
+  install:
+    platform: linux/x86_64
+    container_name: protectedplanet-install
+    image: protectedplanet-app
+    command: /bin/bash -l -c "bundle install && yarn install --frozen-lockfile"
+    volumes:
+      - .:/ProtectedPlanet
+      - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
+      - ./node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_bundler:/usr/local/bundle
+      - /run/host-services/ssh-auth.sock:/ssh-agent
+    env_file:
+      - '.env'
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
+    networks:
+      - protectedplanet
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   web:
     platform: linux/x86_64
     container_name: protectedplanet-web
+    # Sole builder of the shared app image. webpacker, sidekiq and vite all run
+    # the same `protectedplanet-app` image (identical Dockerfile) — one build,
+    # no per-service image drift.
+    image: protectedplanet-app
     build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install --frozen-lockfile --check-files; bundle exec rails db:migrate; bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # Deps installed by the `install` service (waited on below). Just migrate + serve.
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid; bundle exec rails db:migrate; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
@@ -20,13 +51,20 @@ services:
       - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
     depends_on:
-      - db
-      - redis
-      - elasticsearch
-      - webpacker
-      - vite
+      install:
+        condition: service_completed_successfully
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+      webpacker:
+        condition: service_started
+      vite:
+        condition: service_started
     stdin_open: true
-    tty: true    
+    tty: true
     # In order for container to be able to find servers
     dns:
       - 1.1.1.1
@@ -59,7 +97,7 @@ services:
       - protectedplanet_redis_data:/data
   sidekiq:
     platform: linux/x86_64
-    build: .
+    image: protectedplanet-app
     volumes:
       - .:/ProtectedPlanet
       - ./node_modules:/ProtectedPlanet/node_modules
@@ -71,8 +109,12 @@ services:
     env_file:
       - '.env'
     depends_on:
-      - db
-      - redis
+      install:
+        condition: service_completed_successfully
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
     command: /bin/bash -l -c "bundle exec sidekiq"
     stdin_open: true
     tty: true
@@ -107,9 +149,14 @@ services:
   webpacker:
     platform: linux/x86_64
     container_name: protectedplanet-webpacker
-    build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; bundle i; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
-    volumes: 
+    image: protectedplanet-app
+    # Deps installed by the `install` service (waited on below). Just clear stale
+    # packs/cache and start the dev server.
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
+    depends_on:
+      install:
+        condition: service_completed_successfully
+    volumes:
       - .:/ProtectedPlanet
       - ./node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
@@ -117,12 +164,14 @@ services:
       - "3035:3035"
     env_file:
       - '.env'
+    environment:
+      # Keep Webpacker 4 / webpack 4 alive on Node 24: webpack 4 uses md4, which
+      # OpenSSL 3 rejects (ERR_OSSL_EVP_UNSUPPORTED). Removed with Webpacker (D3).
+      - NODE_OPTIONS=--openssl-legacy-provider
     networks:
       - protectedplanet
     extra_hosts:
       - "host.docker.internal:host-gateway"
-  # Vite dev server (D1 — runs alongside webpacker during the migration overlap).
-  # Serves Vite entrypoints on :3036; Vue 2 packs still come from webpacker :3035.
   # Removed only once Webpacker is gone — see upgrade-plan/frontend/15-docker-vite-dev.md.
   vite:
     platform: linux/x86_64
