@@ -6,7 +6,9 @@
   "scripts": {
     "start": "./bin/webpack-dev-server --host 0.0.0.0 --inline --content-base .",
     "lint": "eslint --ext .js,.vue",
-    "vite:build": "bundle exec vite build"
+    "vite:build": "bundle exec vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.9.28",
@@ -37,7 +39,10 @@
     "eslint": "~5.16.0",
     "eslint-plugin-vue": "^5.2.3",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^25.0.1",
     "vite": "^7.1.2",
-    "vite-plugin-rails": "^0.5.0"
+    "vite-plugin-rails": "^0.5.0",
+    "vitest": "^3.2.4"
   }
 }
