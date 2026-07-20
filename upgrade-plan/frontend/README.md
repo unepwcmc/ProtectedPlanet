@@ -7,13 +7,26 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 
 |                     |                                                                                                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **Target**          | Vite 5+ · Vue 3 · island mounts (Rails 7/8 desirable but **not required** for the frontend — see gates)                          |
-| **Now**             | Rails 5.2 · Ruby 2.6.3 · Node 12 · Webpacker · `#v-app` · Vite 2 spike ✓                                                        |
+| **Target**          | Vite 7 · Vue 3 · island mounts (Rails 7/8 desirable but **not required** for the frontend — see gates)                          |
+| **Now**             | Rails 5.2 · **Ruby 2.7.8 ✓ · Node 24.4.1 ✓ · Vite 7 + vite-plugin-rails ✓** · Webpacker⇄Vite dual bundler ✓ · `#v-app` (Vue 2) intact · first island **Banner ✓** · Tabs island proven · Vitest ✓                                                        |
 | **Owner**           | Frontend (+ Vite/ERB integration, Comfy admin JS)                                                                               |
 | **Not in estimate** | Backend Rails 5→8 · CMS redesign                                                                                                |
 | **Scope**           | **[Live inventory](./01-live-inventory.md)** — nav-led; ~12 entrypoints; dead code + **Vue 2–only npm** replacements in phase 4 |
 | **Real gates**      | **Ruby 2.7+** (for `vite_rails` 3.x) + **Node 18+** (for Vite 5) — *not* Rails 7. See [Version gates](#version-gates--execution-order) |
 
+
+---
+
+## Status — G1 gate done (Jul 2026)
+
+**Done this cycle** (branch `feat/upgrade-frontend`): Ruby 2.6.3→**2.7.8**, Node 12→**24.4.1**, **Vite 7 + `vite-plugin-rails`** (`vite_rails` 3.11.1) running **alongside Webpacker/Vue 2** (dual bundler, cold-start safe). Islands foundation built — `frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue, `MutationObserver`), registered in `entrypoints/layout.ts`. **First real island migrated: `Banner`** (lifted out of `#v-app`, on every page). **Tabs island proven** (real `v-if` panels; verified live on wdpca with dummy search/map mounts, then reverted) — confirms hidden / late / nested mounts work with no `v-show`. **Vitest** set up (13 tests). Everything else still runs under Vue 2 / `#v-app`.
+
+**Also added: Tailwind v4** via Vite (preflight disabled, **additive** alongside the legacy SCSS — not a redesign) for styling new/migrated components. Detail + caveats: [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026).
+
+**Next:** phase 3/4 island-by-island (see execution order); rewrite migrated components onto Tailwind; `download-modal`→Pinia; shrink/break up `#v-app`; Webpacker removed last.
+
+### Decisions to revisit later
+- **Mounting library — homegrown for now; revisit `turbo-mount` after Ruby 3 / Rails 6+.** We use a small in-house mounter (`frontend_mount` + `islands.ts`). [`turbo-mount`](https://github.com/skryukov/turbo-mount) (Evil Martians, Stimulus-based) is the "batteries-included" equivalent, but its **gem requires Ruby ≥ 3.0 and railties ≥ 6.0** — won't install on our **Ruby 2.7.8 / Rails 5.2** — and it pulls in Hotwire/Stimulus. Because views only ever call `frontend_mount`, adopting it later is a ~2-file swap (Vue SFCs never move). Detail: [14 Architecture](./14-architecture-and-design.md#mounting-mechanism-and-the-turbo-mount-decision).
 
 ---
 
@@ -73,6 +86,8 @@ NODE_OPTIONS=--openssl-legacy-provider
 With that, a single bumped Node (24 LTS) runs **both** Webpacker 4 (Vue 2, with the flag) and Vite 5 (Vue 3) during the migration overlap. Expect minor `yarn install` peer-dep friction, but no native-module wall. Use **Node 24 LTS**, not 26 (26 is not LTS until ~Oct 2026).
 
 ### Recommended execution order (constrained path — current Ruby/Rails)
+
+> **Status (Jul 2026):** steps **2–5 ✓ done** · step **6 in progress** (`Banner` island ✓, `Tabs` proven, Vitest ✓) · steps **1 & 7 pending**.
 
 1. **Delete genuinely-dead code now** (safe on Rails 5.2): orphan `.vue` files, dead globals (`ChartDial`, carousel, sunburst/treemap/bar), `leaflet`, polyfills — [01](./01-live-inventory.md), [13](./13-work-while-rails-upgrades.md).
 2. **Add Vite as a Docker dev service alongside Webpacker** (dual bundler, already spiked) — [15](./15-docker-vite-dev.md).

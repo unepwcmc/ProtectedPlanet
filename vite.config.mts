@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import rails from 'vite-plugin-rails'
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 // Force plugin-vue to use Vue 3's compiler even though the main `vue` package is
 // still 2.7 (Webpacker/vue-loader 15 needs 2.7). `vue3` is an npm alias for vue@3.
@@ -10,6 +11,7 @@ import * as vue3Compiler from 'vue3/compiler-sfc'
 export default defineConfig({
   plugins: [
     rails(),
+    tailwindcss(),
     vue({ compiler: vue3Compiler }),
   ],
   resolve: {

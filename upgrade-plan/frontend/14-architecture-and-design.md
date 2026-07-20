@@ -110,6 +110,30 @@ Implement `frontend_mount` + `search_areas_vue_props` in a presenter/helper (int
 
 ---
 
+## Mounting mechanism and the turbo-mount decision
+
+**Implemented** (branch `feat/upgrade-frontend`, Jul 2026):
+
+- `app/helpers/frontend_helper.rb` — `frontend_mount(name, props:)` emits a mount `<div data-mount>` + a `<script type="application/json">` props block.
+- `app/frontend/lib/readMountProps.ts` — reads/parses that block.
+- `app/frontend/lib/islands.ts` — island registry + lazy `createApp` + a `MutationObserver`; started from `entrypoints/layout.ts`.
+
+**Why the `MutationObserver`:** a mount point can enter the DOM *after* first paint — inside a `v-if` region revealed later, or (today) when Webpacker's Vue 2 rebuilds `#v-app`. Observing added nodes means such mounts still mount, so **`v-if` is safe** (true unmount/remount) and we never need `v-show` to keep hidden regions in the DOM. Proven live on wdpca: a Tabs island whose search/map mounts appear only when their tab is revealed, mount once, and unmount on leave. **Transitional** — once Webpacker/`#v-app` is gone this can shrink to a one-shot scan; keep the observer only if adopting Turbo/Hotwire or CMS-injected mount points.
+
+**`frontend_mount` is the stable seam.** Views only ever call `frontend_mount`; the mount-id → component wiring lives in `layout.ts`. Swapping the *mechanism* underneath (e.g. to a library) is a ~2-file change and never touches the views or the Vue SFCs.
+
+### Decision: mounting library — homegrown now, revisit `turbo-mount` after Ruby 3 / Rails 6+
+
+[`turbo-mount`](https://github.com/skryukov/turbo-mount) (skryukov / Evil Martians, MIT, actively maintained — v0.4.4 Dec 2025) is the "batteries-included" equivalent of our mounter: a `turbo_mount(...)` Rails helper + a Stimulus controller that mounts React/Vue/Svelte components and manages their lifecycle (including Turbo navigation).
+
+**Blocked on the current stack:** the gem declares `required_ruby_version >= 3.0.0` and depends on `railties >= 6.0.0`, but we are on **Ruby 2.7.8 / Rails 5.2**, so it will not install. It also introduces **Hotwire/Stimulus**, which PP does not use today.
+
+**Decision:** stay on the homegrown mounter for now (no deps, works on 2.7 / 5.2, proven incl. `v-if`). **Revisit `turbo-mount` after the Ruby 3 + Rails 6+ upgrade.** Even then it's optional, and — thanks to the `frontend_mount` seam — reversible: swap one helper + one JS registration file; the Vue SFCs never move. Risk if abandoned is low: it's small + MIT (fork/vendor), and its real runtime dependency (Stimulus) is Basecamp-maintained.
+
+Refs: `turbo-mount.gemspec` (`required_ruby_version >= 3.0.0`, `railties >= 6.0.0`) · https://github.com/skryukov/turbo-mount
+
+---
+
 ## Entrypoint strategy
 
 | Entrypoint | Mounts | Loads on |

@@ -15,6 +15,10 @@
 // See: app/helpers/frontend_helper.rb, app/frontend/lib/readMountProps.ts,
 //      app/frontend/lib/islands.ts, upgrade-plan/frontend/14-architecture-and-design.md
 
+// Tailwind v4 (utilities only, preflight disabled) — loads on every page. See the
+// file header for why preflight is off during the SCSS coexistence period.
+import '../styles/tailwind.css'
+
 import { registerIslands, startIslands } from '../lib/islands'
 
 registerIslands({

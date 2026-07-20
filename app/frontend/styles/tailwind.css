@@ -1,0 +1,25 @@
+/*
+ * Tailwind v4 entrypoint (imported from app/frontend/entrypoints/layout.ts, so it
+ * loads on every page during the migration).
+ *
+ * PREFLIGHT (Tailwind's base reset) IS INTENTIONALLY OMITTED. The site is still
+ * styled by ~8.7k lines of global SCSS (Bourbon/Neat era) that assume browser
+ * defaults; enabling Tailwind's reset would fight those styles. We import only the
+ * `theme` (design tokens / CSS vars) and `utilities` layers, so Tailwind utility
+ * classes work WITHOUT touching existing pages. Re-enable preflight (add the
+ * `preflight.css` import below) once the legacy SCSS is retired.
+ *
+ * See upgrade-plan/frontend/08-styles-and-assets.md and 14-architecture-and-design.md.
+ */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+/* @import "tailwindcss/preflight.css" layer(base);  <-- deliberately disabled for now */
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * Where Tailwind scans for class names. CMS content lives in the DB and is NOT
+ * scanned — developer-authored views/components only. Paths are relative to this file.
+ */
+@source "../";
+@source "../../views";
