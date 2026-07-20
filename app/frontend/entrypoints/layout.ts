@@ -1,43 +1,39 @@
-// Global entrypoint — loaded on every page.
+// Global entrypoint — loaded on every page (see layouts/partials/_head.html.erb).
 //
-// Island-mount foundation for the Webpacker->Vite migration. Each `frontend_mount`
-// element on the page gets its own Vue 3 app, mounted here, while the legacy Vue 2
-// tree still runs under Webpacker's #v-app during the overlap. `vue` resolves to
-// Vue 3 here (Vite alias -> vue3); Webpacker keeps Vue 2.
-//
-// Vue + each component are loaded LAZILY (dynamic import) so pages with no island
-// don't ship the Vue 3 runtime. While `islands` is empty this file stays tiny.
+// Registers the Vue 3 "islands" available during the Webpacker->Vite migration and
+// starts the mounter. The mounter (app/frontend/lib/islands.ts) lazily loads Vue
+// only when a `frontend_mount` element is present, and keeps watching the DOM so a
+// mount point revealed later (e.g. inside a `v-if` region) still mounts — so we are
+// never forced to keep hidden regions alive with `v-show`.
 //
 // To migrate a component (island-by-island):
 //   1. Add its Vue 3 SFC under app/frontend/components/.
-//   2. Register a loader below: `'<mount-id>': () => import('../components/My.vue')`.
-//   3. In the ERB, render `<%= frontend_mount "<mount-id>", props: {...} %>` and
-//      remove the old <tag> from Webpacker's #v-app (so exactly one system compiles it).
+//   2. Register a lazy loader below.
+//   3. In the ERB, render `<%= frontend_mount "<id>", props: {...} %>` and remove the
+//      old <tag> from Webpacker's #v-app (so exactly one system compiles it).
 //
-// See:
-//   app/helpers/frontend_helper.rb          (server side: emits mount + props)
-//   app/frontend/lib/readMountProps.ts       (client side: reads props)
-//   upgrade-plan/frontend/14-architecture-and-design.md
+// See: app/helpers/frontend_helper.rb, app/frontend/lib/readMountProps.ts,
+//      app/frontend/lib/islands.ts, upgrade-plan/frontend/14-architecture-and-design.md
 
-import { readMountProps } from '../lib/readMountProps'
+import { registerIslands, startIslands } from '../lib/islands'
 
-// Island id -> lazy loader for its Vue 3 root component. Empty until the first
-// component is migrated. Each loader is only invoked when its mount is on the page.
-const islands: Record<string, () => Promise<{ default: unknown }>> = {}
-
-async function mountIslands(): Promise<void> {
-  const els = [...document.querySelectorAll<HTMLElement>('[data-mount]')]
-    .filter((el) => el.dataset.mount && islands[el.dataset.mount])
-  if (!els.length) return // no islands on this page — Vue 3 never loaded
-
-  const { createApp } = await import('vue')
-  for (const el of els) {
-    const id = el.dataset.mount as string
-    const { default: root } = await islands[id]()
-    createApp(root as Parameters<typeof createApp>[0], readMountProps(id) ?? {}).mount(el)
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  void mountIslands()
+registerIslands({
+  // Global chrome banner — first migrated island. Rendered by
+  // app/views/layouts/partials/_banner.html.erb via frontend_mount "Banner".
+  Banner: () => import('../components/Banner.vue'),
+  // Tabbed pages (thematic/data). Validated Vue 3 Tabs island using real v-if panels
+  // (see Tabs.vue + specs). Not yet wired to a live page — the first real tab-page
+  // migration (e.g. wdpca) will register its page island here and use frontend_mount.
+  Tabs: () => import('../components/Tabs.vue'),
 })
+
+// Mount on DOMContentLoaded, NOT immediately. Webpacker's Vue 2 registers its
+// `#v-app` mount on DOMContentLoaded from a classic <script> in <head> (which runs
+// before this deferred module), so waiting for the same event means Vue 2 rebuilds
+// `#v-app` FIRST. Islands that sit inside `#v-app` then mount into the final node
+// once — no mount/re-mount race. (`complete` = the event already fired.)
+if (document.readyState === 'complete') {
+  startIslands()
+} else {
+  document.addEventListener('DOMContentLoaded', startIslands, { once: true })
+}
