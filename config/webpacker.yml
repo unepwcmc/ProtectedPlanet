@@ -54,7 +54,10 @@ development:
   compile: true
 
   # Verifies that versions and hashed value of the package contents in the project's package.json
-  check_yarn_integrity: true
+  # Disabled: Webpacker's `yarn check` cannot understand the node-sass->dart-sass
+  # `resolutions` alias (package.json) and fails the boot. Webpacker is being
+  # removed anyway; --frozen-lockfile still enforces the lockfile.
+  check_yarn_integrity: false
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
