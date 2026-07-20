@@ -189,6 +189,12 @@ services:
       - "3036:3036"
     env_file:
       - '.env'
+    environment:
+      # esbuild (Go binary) crashes under heavy parallel load when the x86 image
+      # runs under Apple-Silicon emulation. Single-threading it keeps `vite build`
+      # stable. Harmless on native amd64 (dev builds are tiny). A faster alternative
+      # is enabling Rosetta in Docker Desktop.
+      - GOMAXPROCS=1
     networks:
       - protectedplanet
     extra_hosts:

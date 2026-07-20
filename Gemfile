@@ -36,7 +36,7 @@ gem 'net-sftp'
 gem 'net-scp'
 
 # 3.x needs Ruby 2.7+ (filter_map) and Vite 5+ (Node 18+). Pin 2.x for Rails 5 / Ruby 2.6 / Node 12 spike.
-gem 'vite_rails', '~> 2.0.13'
+gem 'vite_rails', '~> 3.11.1'
 
 group :production, :staging do
 #  gem 'unicorn'
