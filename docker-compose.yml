@@ -176,8 +176,11 @@ services:
   vite:
     platform: linux/x86_64
     container_name: protectedplanet-vite
-    build: .
+    image: protectedplanet-app
     command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/vite"
+    depends_on:
+      install:
+        condition: service_completed_successfully
     volumes:
       - .:/ProtectedPlanet
       - ./node_modules:/ProtectedPlanet/node_modules
