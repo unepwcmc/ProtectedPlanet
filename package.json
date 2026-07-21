@@ -1,11 +1,10 @@
 {
   "license": "MIT",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "yarn@4.17.1",
   "resolutions": {
     "node-sass": "npm:sass@^1.77.0"
   },
   "scripts": {
-    "start": "./bin/webpack-dev-server --host 0.0.0.0 --inline --content-base .",
     "lint": "eslint --ext .js,.vue",
     "vite:build": "bundle exec vite build",
     "test": "vitest run",
