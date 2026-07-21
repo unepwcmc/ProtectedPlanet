@@ -14,7 +14,8 @@ export function readMountProps<T = Record<string, unknown>>(
   if (!el?.textContent) return fallback
   try {
     return JSON.parse(el.textContent) as T
-  } catch (err) {
+  }
+  catch (err) {
     console.error(`[frontend_mount] invalid JSON for props-${id}`, err)
     return fallback
   }

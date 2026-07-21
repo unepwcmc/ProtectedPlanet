@@ -9,7 +9,7 @@ const Mini = defineComponent({
   props: { msg: { type: String, default: '' } },
   render() {
     return h('span', { class: 'mini' }, `mini:${this.msg}`)
-  },
+  }
 })
 
 // Register once; the registry is module-global (same as in the real app).
@@ -20,7 +20,7 @@ registerIslands({ mini: () => Promise.resolve({ default: Mini }) })
 const flush = async (n = 5) => {
   for (let i = 0; i < n; i++) {
     await Promise.resolve()
-    await new Promise((r) => setTimeout(r, 0))
+    await new Promise(r => setTimeout(r, 0))
   }
 }
 
@@ -98,9 +98,9 @@ describe('island mounter', () => {
         id: 2,
         title: 'Two',
         bodyHtml:
-          '<div data-mount="mini"></div>' +
-          '<script type="application/json" id="props-mini">{"msg":"revealed"}</script>',
-      },
+          '<div data-mount="mini"></div>'
+          + '<script type="application/json" id="props-mini">{"msg":"revealed"}</script>'
+      }
     ]
 
     const wrapper = mount(Tabs, { props: { tabs }, attachTo: document.body })

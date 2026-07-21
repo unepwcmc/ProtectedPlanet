@@ -8,7 +8,7 @@ export function mountWhenVisible(el: HTMLElement, mount: () => void): void {
     return
   }
   const io = new IntersectionObserver((entries) => {
-    if (entries.some((e) => e.isIntersecting)) {
+    if (entries.some(e => e.isIntersecting)) {
       mount()
       io.disconnect()
     }

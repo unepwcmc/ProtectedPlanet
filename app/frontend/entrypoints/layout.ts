@@ -28,7 +28,7 @@ registerIslands({
   // Tabbed pages (thematic/data). Validated Vue 3 Tabs island using real v-if panels
   // (see Tabs.vue + specs). Not yet wired to a live page — the first real tab-page
   // migration (e.g. wdpca) will register its page island here and use frontend_mount.
-  Tabs: () => import('@/components/Tabs.vue'),
+  Tabs: () => import('@/components/Tabs.vue')
 })
 
 // Mount on DOMContentLoaded, NOT immediately. Webpacker's Vue 2 registers its
@@ -38,6 +38,7 @@ registerIslands({
 // once — no mount/re-mount race. (`complete` = the event already fired.)
 if (document.readyState === 'complete') {
   startIslands()
-} else {
+}
+else {
   document.addEventListener('DOMContentLoaded', startIslands, { once: true })
 }

@@ -31,7 +31,7 @@ export function registerIslands(map: Record<string, IslandLoader>): void {
 
 function loadCreateApp() {
   if (!createAppPromise) {
-    createAppPromise = import('vue').then((m) => m.createApp)
+    createAppPromise = import('vue').then(m => m.createApp)
   }
   return createAppPromise
 }
@@ -52,7 +52,7 @@ export async function mountEl(el: HTMLElement): Promise<void> {
 /** Mount `root` itself (if it's a mount point) and any mount points beneath it. */
 export function mountAll(root: ParentNode = document): void {
   if (root instanceof HTMLElement && root.dataset.mount) void mountEl(root)
-  root.querySelectorAll<HTMLElement>('[data-mount]').forEach((el) => void mountEl(el))
+  root.querySelectorAll<HTMLElement>('[data-mount]').forEach(el => void mountEl(el))
 }
 
 /** Scan the current DOM, then watch for mount points added later. Idempotent. */
