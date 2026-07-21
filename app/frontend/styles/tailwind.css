@@ -18,6 +18,22 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 /*
+ * Design tokens mirrored from the legacy SCSS palette (app/assets/stylesheets/_settings.scss),
+ * so migrated components can use e.g. `bg-primary`, `text-grey-dark`, `border-grey-light`
+ * instead of arbitrary hex values, and stay visually consistent with pages still on the
+ * legacy stylesheet. Add tokens here as more components migrate; don't duplicate per-file.
+ */
+@theme {
+  --color-primary: #71a32b;
+  --color-primary-dark: #415519;
+  --color-grey-xlight: #f4f4f4;
+  --color-grey-light: #c8c8c8;
+  --color-grey: #919191;
+  --color-grey-dark: #666666;
+  --color-grey-black: #242424;
+}
+
+/*
  * Where Tailwind scans for class names. CMS content lives in the DB and is NOT
  * scanned — developer-authored views/components only. Paths are relative to this file.
  */
