@@ -8,7 +8,7 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 |                     |                                                                                                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | **Target**          | Vite 7 · Vue 3 · island mounts (Rails 7/8 desirable but **not required** for the frontend — see gates)                          |
-| **Now**             | Rails 5.2 · **Ruby 2.7.8 ✓ · Node 24.4.1 ✓ · Vite 7 + vite-plugin-rails ✓** · Webpacker⇄Vite dual bundler ✓ · `#v-app` (Vue 2) intact · first island **Banner ✓** · Tabs island proven · Vitest ✓                                                        |
+| **Now**             | Rails 5.2 · **Ruby 2.7.8 ✓ · Node 24.4.1 ✓ · Vite 7 + vite-plugin-rails ✓** · Webpacker⇄Vite dual bundler ✓ · `#v-app` (Vue 2) intact · **dead code removed ✓** (Wave 0) · first island **Banner ✓** · Tabs island proven · Vitest ✓                                                        |
 | **Owner**           | Frontend (+ Vite/ERB integration, Comfy admin JS)                                                                               |
 | **Not in estimate** | Backend Rails 5→8 · CMS redesign                                                                                                |
 | **Scope**           | **[Live inventory](./01-live-inventory.md)** — nav-led; ~12 entrypoints; dead code + **Vue 2–only npm** replacements in phase 4 |
@@ -87,9 +87,9 @@ With that, a single bumped Node (24 LTS) runs **both** Webpacker 4 (Vue 2, with 
 
 ### Recommended execution order (constrained path — current Ruby/Rails)
 
-> **Status (Jul 2026):** steps **2–5 ✓ done** · step **6 in progress** (`Banner` island ✓, `Tabs` proven, Vitest ✓) · steps **1 & 7 pending**.
+> **Status (Jul 2026):** steps **1–5 ✓ done** · step **6 in progress** (`Banner` island ✓, `Tabs` proven, Vitest ✓, dead-code cleanup ✓) · step **7 pending**.
 
-1. **Delete genuinely-dead code now** (safe on Rails 5.2): orphan `.vue` files, dead globals (`ChartDial`, carousel, sunburst/treemap/bar), `leaflet`, polyfills — [01](./01-live-inventory.md), [13](./13-work-while-rails-upgrades.md).
+1. **Delete genuinely-dead code now ✓ done** (safe on Rails 5.2): orphan `.vue` files, dead globals (`ChartDial`, carousel, sunburst/treemap/bar, `select-equity`/`select-dropdown`), `leaflet`, plus the last orphaned SCSS (`_select-equity.scss`). Browser polyfills (`babel-polyfill`/`es6-promise`/`url-search-params-polyfill`) are a separate, not-yet-done audit — [01](./01-live-inventory.md), [13](./13-work-while-rails-upgrades.md).
 2. **Add Vite as a Docker dev service alongside Webpacker** (dual bundler, already spiked) — [15](./15-docker-vite-dev.md).
 3. **Ruby 2.6.3 → 2.7** on Rails 5.2 (rebuild image on `ruby:2.7` base). Unlocks `vite_rails` 3.x.
 4. **Node 12 → 24 LTS** in the Dockerfile; add `--openssl-legacy-provider` to the webpacker service.
@@ -98,6 +98,85 @@ With that, a single bumped Node (24 LTS) runs **both** Webpacker 4 (Vue 2, with 
 7. **Remove Webpacker last** — service, gem, `@rails/webpacker`, config, and the legacy flag together — [03](./03-end-runtime-compilation.md), [15](./15-docker-vite-dev.md) D3.
 
 **Webpack removal is the finish line, not the first step** — it stays until the last Vue component is on Vite. Keep the dual-Node overlap window short.
+
+---
+
+## Component migration order (Vue 2 → Vue 3)
+
+Order derived from a coupling scan (mixin / Vuex `$store` / `$eventHub` / maps / charts) over the
+live components. **Principle:** leaf & zero-coupling first → mixin-only → global chrome (then break
+`#v-app`) → **state stores before the components that use them** → maps & charts (gated on their
+library decisions) → Webpacker removed last. Every component is rewritten to the conventions:
+**TypeScript `<script setup>` (Composition API) + Tailwind + mixins replaced by composables/utils**
+(not ported as-is) — see [Code conventions](#code-conventions-vue-3--typescript) below for the full list.
+
+| Wave | Components (ERB tag) | Prereq / why |
+|------|----------------------|--------------|
+| **0 · Delete dead code first ✓ done** | `chart-dial`, carousel/`carousel-slide`, `sticky-nav`, `chart-bar`/`chart-bar-simple`, `chart-sunburst`/`chart-treemap-*`/`chart-rectangles`, `select-equity`/`select-dropdown`, ~10 orphan `.vue` | Don't migrate the dead — shrinks phase 4. Safe on Rails 5.2. See [01](./01-live-inventory.md). |
+| **1 · Simple leaves** (zero coupling) | `banner-banner` **✓ done**, `ga-link`, `counter`, `select-with-content`, `listing-page-card-news`, `listing-page-card-resources` | Establish the Composition-API + Tailwind + composable pattern on the lowest-risk surface. |
+| **2 · Mixin-only leaves** | `tooltip`, `tooltip-second` | First mixin→composable extractions; no store/bus. |
+| **3 · Global chrome → break `#v-app`** | `nav-burger`, `search-site-topbar`, `search-site` | mixin→composable, `$eventHub`→`mitt`/emits. Once chrome is islands, **dismantle `#v-app`**. |
+| **4 · Pinia + downloads** | `useDownloadStore` (port Vuex `download`), `download`, `download-item`, `download-csv`, `download-modal` | Set up **Pinia**; downloads span pages (loaded from `layout`). |
+| **5 · Listings + tabs** | `listing-page`, `tabs`/`tab-target`/`tab-trigger` (**`Tabs.vue` proven**) | `$eventHub 'map:resize'`→composable; wire news/resources + a real tab page. |
+| **6 · Maps** (phase 5) | `v-map` (+ `-header`/`-filters`/`-pa-search`/`-disclaimer`/`-baselayer-controls`/`-toggler`) | **Decide Mapbox GL v2+ vs MapLibre** + `useMapStore` (Pinia) first. |
+| **7 · Search areas** | `search-areas`, `search-areas-home`, `search-areas-input-autocomplete` | Depends on maps + downloads; then complete `wdpca`/data pages. |
+| **8 · Charts + stats** (phase 6) | `chart-row-pa`, `chart-row-stacked`, `am-chart-multiline`, `am-chart-pie`, `region-country-pages` (+ `Stats*`) | Port custom SVG charts first; amCharts 4→5; country/region/marine/effectiveness pages. |
+| **9 · PA show** | `attributes-*` (5) | mixin→composable; protected-area page. |
+| **10 · PAME** | `usePameStore` (port Vuex `pame`), `filtered-table`, `pame-modal` (+ table subcomponents) | gdpame page. |
+| **11 · Carousel** | replace `flickity` (`vue-flickity`) → Swiper/CSS | affects home + marine hero carousels. |
+| **12 · Finish** | remove `#v-app`, `vue.js`, Vuex, `vue-analytics`/`vue2-touch-events`/`vue-lazyload`, Webpacker + packs | Webpacker removed last, once nothing is left on Vue 2. |
+
+*Retrofit note: `Banner.vue` and `Tabs.vue` were migrated earlier in **Options API** with global SCSS — bring them in line with the conventions (Composition API + Tailwind) as the reference examples when Wave 1 starts.*
+
+*Wave 0 note: `stats-growth`/`AmChartLine` (growth chart, ticket #265) has been removed — component, registration, and SCSS all deleted from `RegionCountryPages.vue`/`vue.js`.*
+
+---
+
+## Code conventions (Vue 3 / TypeScript)
+
+Binding rules for every component written or migrated from Wave 1 onward. These extend the
+"Composition API + Tailwind + composables" note above with the specifics:
+
+1. **TypeScript everywhere.** New/migrated SFCs use `<script setup lang="ts">` — no plain JS.
+2. **Types live in `app/frontend/types/`.** Shared/domain types go directly under
+   `app/frontend/types/`. Anything shaped by the backend (Rails-rendered props, API JSON) goes under
+   `app/frontend/types/backend/` — one file per resource/serializer shape, so a backend contract
+   change is easy to find and update in one place.
+3. **Component naming = Nuxt-style flattened path.** A component's folder path becomes its tag name:
+   `app/frontend/components/Chart/Circle.vue` is used as `<ChartCircle />`. Nested folders flatten to
+   PascalCase in the order they nest (`Chart/Circle.vue` → `ChartCircle`, not `CircleChart`).
+   **Once a component has its own sub-components**, move it into its own folder as `Index.vue` and
+   keep its sub-components alongside it there (each already named with its full tag name), instead
+   of leaving a flat `Tabs.vue` sitting next to a `Tabs/` folder. `Index.vue` maps to the bare folder
+   name: `components/Tabs/Index.vue` → `<Tabs />`, `components/Tabs/TabsTitle.vue` → `<TabsTitle />`.
+4. **CSS is BEM.** Class names follow `block__element--modifier` (e.g. `chart-circle__label--active`),
+   for both legacy SCSS and any component-scoped classes in new SFCs.
+5. **Shared Tailwind classes live in `app/frontend/styles/shared/<name>.css`.** Reusable
+   utility/component classes (built with `@apply`, custom properties, etc.) that more than one
+   component needs go in a dedicated file there — don't duplicate them per-component or inline them
+   ad hoc in a single SFC.
+6. **Imports use the `@/` alias, never relative paths.** e.g.
+   `import ChartCircle from "@/components/Chart/Circle.vue"`,
+   `import { ProtectedArea } from "@/types/backend/protectedArea"` — not `../../../`.
+7. **Tailwind inside an SFC `<style>` block needs `@reference "tailwindcss"`.** This project's
+   Tailwind entry (`app/frontend/styles/tailwind.css`) is customised (preflight disabled — see
+   [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026)), so
+   both `vite.config.mts` and `vitest.config.mts` alias the bare `tailwindcss` specifier
+   (exact-match only, via regex — subpaths like `tailwindcss/theme.css` stay untouched) to that
+   file. Any `<style>` block using `@apply`/`theme()` starts with:
+   ```css
+   @reference "tailwindcss";
+   ```
+   instead of a relative path back to the real entry file.
+
+*Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend/`
+(banner.ts, tab.ts), the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
+`tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and
+the `tailwindcss` bare-specifier alias for point 7 all exist and were confirmed working (a scratch
+`@reference "tailwindcss"` + `@apply` component built correctly, then removed). `Banner.vue` and
+`Tabs.vue` are the first components retrofitted to these conventions. `app/frontend/styles/shared/`
+does not exist yet — create it the first time a Tailwind class needs sharing across more than one
+component; don't scaffold an empty directory ahead of that.*
 
 ---
 

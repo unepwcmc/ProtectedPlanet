@@ -1,16 +1,16 @@
 import { describe, it, expect, afterEach, beforeEach } from 'vitest'
-import { h } from 'vue'
+import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
-import { registerIslands, mountAll, startIslands, stopIslands } from '../islands'
-import Tabs from '../../components/Tabs.vue'
+import { registerIslands, mountAll, startIslands, stopIslands } from '@/lib/islands'
+import Tabs from '@/components/Tabs.vue'
 
 // A trivial Vue 3 island (render fn so no runtime template compiler is needed).
-const Mini = {
+const Mini = defineComponent({
   props: { msg: { type: String, default: '' } },
   render() {
     return h('span', { class: 'mini' }, `mini:${this.msg}`)
   },
-}
+})
 
 // Register once; the registry is module-global (same as in the real app).
 registerIslands({ mini: () => Promise.resolve({ default: Mini }) })

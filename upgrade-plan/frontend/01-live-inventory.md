@@ -119,7 +119,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 |-----------|-------------|-------|
 | `ChartRowStacked` | `StatsDesignations.vue` | Live (country/region stats) |
 | `AmChartPie` | `StatsGovernance.vue`, `StatsIucnCategories.vue` | Live (country/region stats) |
-| `AmChartLine` | `StatsGrowth.vue` | **Disabled** — `StatsGrowth` is commented out in `RegionCountryPages.vue` (ticket #265) |
 
 ### Globally registered but **unused** (remove on upgrade — do not migrate)
 
@@ -131,6 +130,7 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 | `ChartSunburst`, `ChartTreemapInteractive`, `ChartRectangles` | No imports from live components |
 | `ChartDial` | **Only imported in `vue.js`** — no ERB tag, no child import → **dead** |
 | `SelectEquity` (+ `SelectDropdown`) | **Removed** — only usage (`_tabs-equity`) was commented out (NC decision 14 May 2025); `SelectDropdown` was its only child |
+| `StatsGrowth` (+ `AmChartLine`) | **Removed** — only usage (growth chart, ticket #265) was HTML-commented in `RegionCountryPages.vue`; `AmChartLine` was its only child |
 
 ### Orphan `.vue` files (no import found — **~10**, delete or archive)
 
@@ -145,7 +145,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 
 | Item | Location |
 |------|----------|
-| `stats-growth` / growth chart (`AmChartLine`) | `RegionCountryPages.vue` (ticket #265) |
 | Region marine stats / iucn / governance / designations | commented in `region/show.html.erb` |
 
 ---
@@ -161,7 +160,7 @@ Charts actually rendered on a live page — **4 families**:
 | `ChartRowStacked` | Country/region stats (`StatsDesignations`) | Custom |
 | `AmChartPie` | Country/region stats (`StatsGovernance`, `StatsIucnCategories`) | amCharts 4 |
 
-`AmChartLine` (growth) is present but disabled (#265). `ChartDial`, `ChartSunburst`, `ChartTreemap*`, `ChartBar*`, `ChartRectangles` are **dead**.
+`AmChartLine` (growth, #265) has been removed. `ChartDial`, `ChartSunburst`, `ChartTreemap*`, `ChartBar*`, `ChartRectangles` are **dead**.
 
 ---
 
@@ -226,5 +225,5 @@ Phase **4** estimate includes swapping these packages and retesting affected UI 
 
 - [ ] Confirm `monthly-release-news` layout (Vue or static).
 - [ ] Production Comfy check: no `<chart-bar>` / dead tags in CMS HTML.
-- [ ] Confirm with NC whether `select-equity` / `stats-growth` (#265) will be re-enabled — affects equity + stats scope.
-- [ ] PR to remove dead globals (`ChartDial`, carousel, sticky-nav, chart-bar/sunburst/treemap/rectangles) + orphan SFCs (optional prep on Rails 5.2).
+- [x] `stats-growth` (#265) is resolved: removed for good, along with `select-equity` (see below).
+- [x] PR to remove dead globals (`ChartDial`, carousel, sticky-nav, chart-bar/sunburst/treemap/rectangles, `select-equity`/`select-dropdown`, `stats-growth`/`AmChartLine`) + orphan SFCs + the orphaned `_select-equity.scss`/`_am-chart-line.scss`/`_card-stats-growth-chart.scss` — done Jul 2026 (`701f6f31` + follow-up cleanup).

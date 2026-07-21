@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import rails from 'vite-plugin-rails'
 import tailwindcss from '@tailwindcss/vite'
@@ -15,9 +16,20 @@ export default defineConfig({
     vue({ compiler: vue3Compiler }),
   ],
   resolve: {
-    alias: {
+    alias: [
       // Vite bundles Vue 3 (runtime + compiler). Does NOT affect Webpacker's webpack.
-      vue: 'vue3/dist/vue.esm-bundler.js',
-    },
+      { find: 'vue', replacement: 'vue3/dist/vue.esm-bundler.js' },
+      // Component code imports as `@/components/...`, never relative `../../`.
+      { find: '@', replacement: fileURLToPath(new URL('./app/frontend', import.meta.url)) },
+      // Lets any SFC <style> block write `@reference "tailwindcss";` and have it
+      // resolve to OUR customised entry (preflight disabled, see that file) instead
+      // of the npm package's default CSS. Documented Tailwind v4 + Vite pattern.
+      // Exact-match regex only — subpaths like "tailwindcss/theme.css", which
+      // app/frontend/styles/tailwind.css itself imports, must stay untouched.
+      {
+        find: /^tailwindcss$/,
+        replacement: fileURLToPath(new URL('./app/frontend/styles/tailwind.css', import.meta.url)),
+      },
+    ],
   },
 })
