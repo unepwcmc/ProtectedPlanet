@@ -17,7 +17,6 @@ import 'cookieconsent/build/cookieconsent.min.css'
 import store from './store/store.js'
 
 // components
-import AmChartLine from './components/charts/am-chart-line/AmChartLine'
 import AmChartMultiline from './components/charts/am-chart-line/AmChartMultiline'
 import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import Counter from './components/counter/Counter'
@@ -92,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
       el: '#v-app',
       store,
       components: {
-        AmChartLine,
         AmChartMultiline,
         AmChartPie,
         Counter,
