@@ -56,7 +56,8 @@ import AttributesProtectedAreaParcelsSources from './components/attributes/Attri
 import AttributesPames from './components/attributes/AttributesPames'
 import AttributesAffiliations from './components/attributes/AttributesAffiliations'
 import AttributesParcelsDropdown from './components/attributes/AttributesParcelsDropdown'
-import BannerBanner from './components/banner/Banner'
+// BannerBanner migrated to a Vite/Vue 3 island (app/frontend/components/Banner.vue,
+// mounted via layout.ts). Kept out of the Vue 2 #v-app root so only one system compiles it.
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -129,8 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         AttributesProtectedAreaParcelsSources,
         AttributesPames,
         AttributesAffiliations,
-        AttributesParcelsDropdown,
-        BannerBanner
+        AttributesParcelsDropdown
       },
       beforeCreate() { 
         this.$store.dispatch('download/initialiseStore')

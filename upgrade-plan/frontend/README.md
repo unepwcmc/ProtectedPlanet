@@ -168,15 +168,34 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
    @reference "tailwindcss";
    ```
    instead of a relative path back to the real entry file.
+8. **Tailwind utility classes never sit in the template.** A component's `<template>` only ever
+   carries semantic BEM classes (`banner__title`, `tab__trigger`, plus BEM modifiers like
+   `tab__trigger.active` or `banner__container--single` for state/variant toggles). Every Tailwind
+   utility backing those classes lives in the SFC's own `<style scoped>` block, one rule per BEM
+   class, using `@apply`:
+   ```css
+   @reference "tailwindcss";
+
+   .banner__title {
+     @apply mt-0 mb-[0.5em] text-[1.125rem] font-bold leading-[1.3] text-grey-black md:text-[1.25rem];
+   }
+   ```
+   This keeps templates readable (class names describe *what*, not a long utility soup), keeps BEM
+   selectors stable for tests that query them directly, and keeps the styling colocated with the
+   component like any other scoped CSS. Only actual state flags that Vue needs to toggle (`is-active`,
+   `active`, `:class="{ ... }"` bindings) belong in the template — never a raw utility class like
+   `flex` or `text-primary`.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend/`
 (banner.ts, tab.ts), the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and
 the `tailwindcss` bare-specifier alias for point 7 all exist and were confirmed working (a scratch
 `@reference "tailwindcss"` + `@apply` component built correctly, then removed). `Banner.vue` and
-`Tabs.vue` are the first components retrofitted to these conventions. `app/frontend/styles/shared/`
-does not exist yet — create it the first time a Tailwind class needs sharing across more than one
-component; don't scaffold an empty directory ahead of that.*
+`Tabs.vue` are the first components retrofitted to these conventions, including point 8 — their
+templates carry only BEM classes, with every Tailwind utility moved into each component's
+`<style scoped>` block via `@apply`. `app/frontend/styles/shared/` does not exist yet — create it
+the first time a Tailwind class needs sharing across more than one component; don't scaffold an
+empty directory ahead of that.*
 
 ---
 

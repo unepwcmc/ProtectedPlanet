@@ -1,0 +1,72 @@
+import { describe, it, expect, beforeEach } from 'vitest'
+import { mount } from '@vue/test-utils'
+import Banner from '@/components/Banner.vue'
+import type { Banner as BannerRow } from '@/types/backend/banner'
+
+const bannerRow = (overrides: Partial<BannerRow>): BannerRow => ({
+  id: 0,
+  title: null,
+  content: '',
+  is_active: true,
+  created_at: '2026-01-01T00:00:00.000Z',
+  updated_at: '2026-01-01T00:00:00.000Z',
+  ...overrides
+})
+
+const single = [bannerRow({ id: 1, title: 'Hello', content: '<p>World</p>' })]
+const many = [
+  bannerRow({ id: 1, title: 'A', content: '<p>a</p>' }),
+  bannerRow({ id: 2, title: 'B', content: '<p>b</p>' })
+]
+
+// jsdom keeps cookies between tests — clear so close-cookie assertions are isolated.
+beforeEach(() => {
+  document.cookie.split(';').forEach((c) => {
+    const name = c.split('=')[0].trim()
+    if (name) document.cookie = `${name}=; path=/; max-age=0`
+  })
+})
+
+describe('Banner', () => {
+  it('renders a single banner without the carousel modifier', () => {
+    const wrapper = mount(Banner, { props: { banners: single, signature: 'sig' } })
+
+    expect(wrapper.find('.banner__title').text()).toBe('Hello')
+    expect(wrapper.find('.banner__body').html()).toContain('<p>World</p>')
+    expect(wrapper.classes()).not.toContain('banner--carousel')
+    expect(wrapper.attributes('data-banner-sig')).toBe('sig')
+  })
+
+  it('adds the carousel modifier and cycles (wrapping) with next/prev', async () => {
+    const wrapper = mount(Banner, { props: { banners: many, signature: 'sig' } })
+    const vm = wrapper.vm as unknown as { currentIndex: number }
+
+    expect(wrapper.classes()).toContain('banner--carousel')
+
+    await wrapper.find('.banner__nav--next').trigger('click')
+    expect(vm.currentIndex).toBe(1)
+
+    await wrapper.find('.banner__nav--next').trigger('click')
+    expect(vm.currentIndex).toBe(0) // wraps forward
+
+    await wrapper.find('.banner__nav--prev').trigger('click')
+    expect(vm.currentIndex).toBe(1) // wraps backward
+  })
+
+  it('hides and sets the per-id cookie on close (single banner)', async () => {
+    const wrapper = mount(Banner, { props: { banners: single, signature: 'sig' } })
+
+    await wrapper.find('.banner__close').trigger('click')
+
+    expect(wrapper.find('.banner').exists()).toBe(false)
+    expect(document.cookie).toContain('banner_closed=1')
+  })
+
+  it('sets the signature cookie on close (multiple banners)', async () => {
+    const wrapper = mount(Banner, { props: { banners: many, signature: 'sig-abc' } })
+
+    await wrapper.find('.banner__close').trigger('click')
+
+    expect(document.cookie).toContain('banner_closed_sig=sig-abc')
+  })
+})
