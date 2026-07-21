@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import Banner from '@/components/Banner.vue'
+import Banner from '@/components/Banner/Index.vue'
 import type { Banner as BannerRow } from '@/types/backend/banner'
 
 const bannerRow = (overrides: Partial<BannerRow>): BannerRow => ({

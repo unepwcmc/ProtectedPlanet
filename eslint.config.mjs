@@ -21,7 +21,8 @@ export default tseslint.config(
 		},
 		rules: {
 			"vue/multi-word-component-names": "off",
-			"vue/no-v-html": "off"
+			"vue/no-v-html": "off",
+			"vue/attribute-hyphenation": "off"
 		}
 	},
 	{

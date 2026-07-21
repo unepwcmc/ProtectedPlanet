@@ -39,3 +39,5 @@
  */
 @source "../";
 @source "../../views";
+
+@import './shared/base.css';

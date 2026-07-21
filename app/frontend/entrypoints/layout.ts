@@ -24,7 +24,7 @@ import { registerIslands, startIslands } from '@/lib/islands'
 registerIslands({
   // Global chrome banner — first migrated island. Rendered by
   // app/views/layouts/partials/_banner.html.erb via frontend_mount "Banner".
-  Banner: () => import('@/components/Banner.vue'),
+  Banner: () => import('@/components/Banner/Index.vue'),
   // Tabbed pages (thematic/data). Validated Vue 3 Tabs island using real v-if panels
   // (see Tabs.vue + specs). Not yet wired to a live page — the first real tab-page
   // migration (e.g. wdpca) will register its page island here and use frontend_mount.

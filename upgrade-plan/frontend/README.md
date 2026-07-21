@@ -149,12 +149,22 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
    keep its sub-components alongside it there (each already named with its full tag name), instead
    of leaving a flat `Tabs.vue` sitting next to a `Tabs/` folder. `Index.vue` maps to the bare folder
    name: `components/Tabs/Index.vue` → `<Tabs />`, `components/Tabs/TabsTitle.vue` → `<TabsTitle />`.
-4. **CSS is BEM.** Class names follow `block__element--modifier` (e.g. `chart-circle__label--active`),
-   for both legacy SCSS and any component-scoped classes in new SFCs.
-5. **Shared Tailwind classes live in `app/frontend/styles/shared/<name>.css`.** Reusable
-   utility/component classes (built with `@apply`, custom properties, etc.) that more than one
-   component needs go in a dedicated file there — don't duplicate them per-component or inline them
-   ad hoc in a single SFC.
+4. **CSS is BEM, namespaced `ct-`.** Class names follow `ct-block__element--modifier` (e.g.
+   `ct-banner__nav`, `ct-banner-content--is-active`) for any component-scoped classes in new SFCs —
+   the `ct-` prefix is enforced by Stylelint (`@namics/stylelint-bem`, `namespaces: ["app", "ct-"]`
+   in `stylelint.config.mjs`). Legacy SCSS keeps its existing unprefixed BEM (`chart-circle__label--active`).
+   A sub-component gets its **own** top-level BEM block rather than nesting under the parent's:
+   `Banner/Content.vue`'s root is `ct-banner-content`, not `ct-banner__content`.
+   **Test-only hook classes may skip the namespace.** When two elements are visually identical and
+   only need a stable selector for tests/JS (not a style), add a second, plain (non-`ct-`) class
+   purely for that — e.g. `class="ct-banner__nav banner__nav--prev"`, where `ct-banner__nav` carries
+   all the `@apply` styling and `banner__nav--prev` exists only so a spec can tell prev from next.
+   Never put Tailwind/`@apply` rules on the unnamespaced class.
+5. **Shared Tailwind classes live in `app/frontend/styles/shared/<name>.css`, prefixed `tw-shared-`.**
+   Reusable utility/component classes (built with `@apply`, custom properties, etc.) that more than
+   one component needs go in a dedicated file there, declared with `@utility tw-shared-<name>` (e.g.
+   `tw-shared-base-container` in `styles/shared/base.css`) — don't duplicate them per-component or
+   inline them ad hoc in a single SFC.
 6. **Imports use the `@/` alias, never relative paths.** e.g.
    `import ChartCircle from "@/components/Chart/Circle.vue"`,
    `import { ProtectedArea } from "@/types/backend/protectedArea"` — not `../../../`.
@@ -169,33 +179,48 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
    ```
    instead of a relative path back to the real entry file.
 8. **Tailwind utility classes never sit in the template.** A component's `<template>` only ever
-   carries semantic BEM classes (`banner__title`, `tab__trigger`, plus BEM modifiers like
-   `tab__trigger.active` or `banner__container--single` for state/variant toggles). Every Tailwind
-   utility backing those classes lives in the SFC's own `<style scoped>` block, one rule per BEM
-   class, using `@apply`:
+   carries semantic BEM classes (`ct-banner__title`, `ct-banner-content--is-active`, plus state
+   toggles bound via `:class="{ ... }"`). Every Tailwind utility backing those classes lives in the
+   SFC's own `<style scoped>` block, one rule per BEM class, using `@apply`:
    ```css
    @reference "tailwindcss";
 
-   .banner__title {
-     @apply mt-0 mb-[0.5em] text-[1.125rem] font-bold leading-[1.3] text-grey-black md:text-[1.25rem];
+   .ct-banner-content__title {
+     @apply mt-0 mb-[0.5em] text-[1.125rem] font-bold leading-[1.3] text-theme-grey-black md:text-[1.25rem];
    }
    ```
    This keeps templates readable (class names describe *what*, not a long utility soup), keeps BEM
    selectors stable for tests that query them directly, and keeps the styling colocated with the
    component like any other scoped CSS. Only actual state flags that Vue needs to toggle (`is-active`,
    `active`, `:class="{ ... }"` bindings) belong in the template — never a raw utility class like
-   `flex` or `text-primary`.
+   `flex` or `text-theme-primary`.
+9. **One attribute per line once an element has more than one.** Any tag with two or more
+   attributes/bindings (including a single `v-if`/`v-for` plus a class) wraps each onto its own line,
+   closing `>` on its own line too:
+   ```html
+   <button
+     v-if="hasMultipleBanners"
+     class="ct-banner__nav banner__nav--prev"
+     @click="previousBanner"
+   >
+   ```
+   A tag with exactly one attribute (e.g. `class="ct-banner__slides"`) can stay on one line.
+10. **`defineProps` is assigned to `props`, never destructured.** Use
+    `const props = defineProps<BannerProps>()` and reference `props.banners`/`props.signature`
+    throughout the rest of `<script setup>` — destructuring props directly loses reactivity outside
+    of Vue's opt-in reactive-props-destructure compiler transform, which this project doesn't enable.
+11. **Boolean computed values are named `has`/`is` + noun.** e.g. `hasMultipleBanners`, not
+    `multipleBanners` or `showNav`.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend/`
 (banner.ts, tab.ts), the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and
 the `tailwindcss` bare-specifier alias for point 7 all exist and were confirmed working (a scratch
-`@reference "tailwindcss"` + `@apply` component built correctly, then removed). `Banner.vue` and
-`Tabs.vue` are the first components retrofitted to these conventions, including point 8 — their
-templates carry only BEM classes, with every Tailwind utility moved into each component's
-`<style scoped>` block via `@apply`. `app/frontend/styles/shared/` does not exist yet — create it
-the first time a Tailwind class needs sharing across more than one component; don't scaffold an
-empty directory ahead of that.*
+`@reference "tailwindcss"` + `@apply` component built correctly, then removed). `Banner/Index.vue` +
+`Banner/Content.vue` and `Tabs.vue` are the first components retrofitted to these conventions,
+including point 8 — their templates carry only `ct-`-namespaced BEM classes, with every Tailwind
+utility moved into each component's `<style scoped>` block via `@apply`. `app/frontend/styles/shared/base.css`
+now exists, providing `tw-shared-base-container` (point 5) to both `Banner/Index.vue` and `Tabs.vue`.*
 
 ---
 

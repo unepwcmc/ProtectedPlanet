@@ -43,10 +43,19 @@ export async function mountEl(el: HTMLElement): Promise<void> {
   // Mark before awaiting so a concurrent observer callback can't double-mount.
   mountedEls.add(el)
   const [createApp, mod] = await Promise.all([loadCreateApp(), registry[id]()])
-  createApp(
+  const app = createApp(
     mod.default as Parameters<typeof createApp>[0],
     readMountProps(id) ?? {}
-  ).mount(el)
+  )
+  app.mount(el)
+  // Vue 3 mounts INTO el rather than replacing it (Vue 2's behaviour), leaving a
+  // redundant `<div data-mount>` wrapper around every island's real root. Swap it
+  // out for the rendered root so the wrapper doesn't ship to the page. Only safe
+  // for single-root components (the only kind used here) — skip otherwise so a
+  // future multi-root component degrades to "extra wrapper" instead of losing nodes.
+  if (el.childNodes.length === 1 && el.firstElementChild) {
+    el.replaceWith(el.firstElementChild)
+  }
 }
 
 /** Mount `root` itself (if it's a mount point) and any mount points beneath it. */

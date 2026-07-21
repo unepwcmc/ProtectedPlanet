@@ -9,7 +9,7 @@ export default {
 	rules: {
 		// As of 04Jun2025 Stylelint doesn't recognise Tailwind @reference tag so we need to ignore
 		"at-rule-no-unknown": [true, {
-			ignoreAtRules: ["reference"]
+			ignoreAtRules: ["reference","apply"]
 		}],
 		"function-no-unknown": null,
 		"no-descending-specificity": null,
