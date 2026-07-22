@@ -24,9 +24,10 @@ const flush = async (n = 5) => {
   }
 }
 
-function mountPoint(id: string, props?: Record<string, unknown>): HTMLElement {
+function mountPoint(id: string, props?: Record<string, unknown>, wrapperClass?: string): HTMLElement {
   const el = document.createElement('div')
   el.dataset.mount = id
+  if (wrapperClass) el.className = wrapperClass
   document.body.appendChild(el)
   if (props) {
     const script = document.createElement('script')
@@ -58,6 +59,17 @@ describe('island mounter', () => {
     // islands.ts), so lookups happen against the live document, not a reference to
     // the original (now-detached) wrapper element.
     expect(document.querySelector('.mini')?.textContent).toBe('mini:hello')
+  })
+
+  it('carries a class passed to frontend_mount (e.g. layout positioning) onto the mounted root', async () => {
+    mountPoint('mini', { msg: 'hello' }, 'topbar__nav nav--primary')
+
+    mountAll(document)
+    await flush()
+
+    const root = document.querySelector('.mini')
+    expect(root?.classList.contains('topbar__nav')).toBe(true)
+    expect(root?.classList.contains('nav--primary')).toBe(true)
   })
 
   it('ignores unregistered mount ids', async () => {

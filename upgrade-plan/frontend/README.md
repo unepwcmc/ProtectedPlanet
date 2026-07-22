@@ -19,7 +19,7 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 
 ## Status — G1 gate done (Jul 2026)
 
-**Done this cycle** (branch `feat/upgrade-frontend`): Ruby 2.6.3→**2.7.8**, Node 12→**24.4.1**, **Vite 7 + `vite-plugin-rails`** (`vite_rails` 3.11.1) running **alongside Webpacker/Vue 2** (dual bundler, cold-start safe). Islands foundation built — `frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue, `MutationObserver`), registered in `entrypoints/layout.ts`. **First real island migrated: `Banner`** (lifted out of `#v-app`, on every page). **Tabs island proven** (real `v-if` panels; verified live on wdpca with dummy search/map mounts, then reverted) — confirms hidden / late / nested mounts work with no `v-show`. **Vitest** set up (27 tests, all green — also covers Wave 1 below). Everything else still runs under Vue 2 / `#v-app`.
+**Done this cycle** (branch `feat/upgrade-frontend`): Ruby 2.6.3→**2.7.8**, Node 12→**24.4.1**, **Vite 7 + `vite-plugin-rails`** (`vite_rails` 3.11.1) running **alongside Webpacker/Vue 2** (dual bundler, cold-start safe). Islands foundation built — `frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue, `MutationObserver`), registered in `entrypoints/layout.ts`. **First real island migrated: `Banner`** (lifted out of `#v-app`, on every page). **Tabs island proven** (real `v-if` panels; verified live on wdpca with dummy search/map mounts, then reverted) — confirms hidden / late / nested mounts work with no `v-show`. **Vitest** set up (60 tests, all green — also covers Waves 1–3 below). Everything else still runs under Vue 2 / `#v-app`.
 
 **Also added: Tailwind v4** via Vite (preflight disabled, **additive** alongside the legacy SCSS — not a redesign) for styling new/migrated components. Detail + caveats: [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026).
 
@@ -29,7 +29,11 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 repeated-instance components (the two card types, rendered in a loop) each get their own DOM id/props block
 while resolving to one registry entry — see [FrontendHelper](../../app/helpers/frontend_helper.rb).
 
-**Next:** Wave 2 (mixin-only leaves: `tooltip`, `tooltip-second`); rewrite migrated components onto Tailwind; `download-modal`→Pinia; shrink/break up `#v-app`; Webpacker removed last.
+**Also done: Wave 2 · mixin-only leaves** (`tooltip`, `tooltip-second`) — migrated to Vue 3 (`app/frontend/components/Tooltip/Index.vue` → `<Tooltip>`, `Tooltip/Second.vue` → `<TooltipSecond>`). Their only Vue 2 coupling, `mixin-popup-close-listeners`, became `app/frontend/composables/usePopupCloseListeners.ts` (click-outside + Escape-to-close, reusable by later waves — `nav`, `search`, `select` mixins share the same legacy mixin). Registered as islands in `layout.ts` but **not yet wired to a live page**: their current callers (PAME table header's `<tooltip>`, `_stats-overview-country.html.erb`'s `<tooltip-second>`) still run under Webpacker/Vue 2 and haven't reached their own wave (8/10) yet — swap the callers over then.
+
+**Wave 3 · global chrome, in progress:** `nav-burger` (+ `NavDropdown`, `NavLink`) and `search-site-topbar` (+ `SearchSiteInput`) migrated to Vue 3 (`app/frontend/components/Nav/{Burger,Dropdown,Link}.vue`, `app/frontend/components/Search/{SiteTopbar,SiteInput}.vue`). `mixin-focus-capture` (Tab-trap accessibility) and `mixin-responsive` (breakpoint tracking, previously broadcast via a global `$eventHub` Vue 3 doesn't need here) became `app/frontend/composables/{useFocusCapture,useBreakpoint}.ts`; `mixin-popup-close-listeners` reused from Wave 2. Legacy `_nav.scss`/`_search-main.scss` kept as-is (unprefixed BEM classes, no `ct-`/Tailwind rewrite) rather than a from-scratch reimplementation — deliberate exception given this is global, every-page chrome where a visual regression has outsized blast radius; revisit once it's proven live. **Wired live:** `_topbar.html.erb` now calls `frontend_mount "NavBurger"`/`frontend_mount "SearchSiteTopbar"` directly — no Vue 2 tags left in that partial — and the `_topbar` render moved outside `#v-app` in `application.html.erb` (same as Banner). `get_nav_primary` now returns the raw links array instead of a pre-`.to_json`'d string, since `frontend_mount` serializes props itself. Old Vue 2 `Nav{Burger,Dropdown,Link}.vue`/`SearchSiteTopbar.vue` deleted (zero remaining references); `SearchSiteInput.vue` kept since un-migrated `SearchSite.vue` still uses it. Along the way, found+fixed a real bug in `app/frontend/lib/islands.ts`: the mount-unwrap logic carried `id`/`dataset` from the `frontend_mount` wrapper onto the real mounted root but silently dropped `class` — would have broken `.topbar__nav`/`.topbar__search` CSS; fixed with a covering test. `search-site` (the full results page, pulls in `Pagination`/`TabsFake`) remains deferred to a later pass given its size.
+
+**Next:** finish Wave 3 (`search-site`, deferred); rewrite migrated components onto Tailwind; `download-modal`→Pinia; Webpacker removed last.
 
 ### Decisions made
 - **Vite/Rails glue — `vite-plugin-rails`** (not `vite-plugin-ruby`) is the npm package actually wired up (`vite.config.mts`) alongside the `vite_rails` gem. [02](./02-vite-on-rails-8.md) corrected to match.
@@ -151,7 +155,7 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
 1. **TypeScript everywhere.** New/migrated SFCs use `<script setup lang="ts">` — no plain JS.
 2. **Types live in `app/frontend/types/`.** Shared/domain types go directly under
    `app/frontend/types/`. Anything shaped by the backend (Rails-rendered props, API JSON) goes under
-   `app/frontend/types/backend/` — one file per resource/serializer shape, so a backend contract
+   `app/frontend/types/backend.ts` — one file per resource/serializer shape, so a backend contract
    change is easy to find and update in one place.
 3. **Component naming = Nuxt-style flattened path.** A component's folder path becomes its tag name:
    `app/frontend/components/Chart/Circle.vue` is used as `<ChartCircle />`. Nested folders flatten to
@@ -162,14 +166,18 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
    name: `components/Tabs/Index.vue` → `<Tabs />`, `components/Tabs/TabsTitle.vue` → `<TabsTitle />`.
    This applies from the first sibling on, even with no shared/base component: a family of leaf
    components that only share a name prefix (no bare `<ListingPageCard />` itself) still goes in a
-   folder with no `Index.vue` — `components/ListingPageCard/News.vue` → `<ListingPageCardNews />`,
-   `components/ListingPageCard/Resources.vue` → `<ListingPageCardResources />` — never a flat
-   `ListingPageCardNews.vue` file.
+   folder with no `Index.vue` — e.g. `components/ListingPageCard/{News,Resources}/Index.vue` →
+   `<ListingPageCardNews />`/`<ListingPageCardResources />` (the mounted list wrapper) and
+   `components/ListingPageCard/{News,Resources}/Card.vue` → the individual card, used internally —
+   never a flat `ListingPageCardNews.vue` file. (This pair started as a single flat `.vue` file per
+   type in Wave 1 — one `frontend_mount` per card in an ERB loop — and was split into `Index`/`Card`
+   in a Wave-1 follow-up once a second use case (a `cards` array with one list-level mount) came up;
+   see the roadmap memory note.)
 4. **CSS is BEM, namespaced `ct-`.** Class names follow `ct-block__element--modifier` (e.g.
    `ct-banner__nav`, `ct-banner-content--is-active`) for any component-scoped classes in new SFCs —
    the `ct-` prefix is enforced by Stylelint (`@namics/stylelint-bem`, `namespaces: ["app", "ct-"]`
    in `stylelint.config.mjs`). Legacy SCSS keeps its existing unprefixed BEM (`chart-circle__label--active`).
-   **Reminder for future waves:** `ListingPageCard/News.vue` and `Resources.vue` (Wave 1) kept their
+   **Reminder for future waves:** `ListingPageCard/{News,Resources}/Card.vue` (Wave 1) kept their
    unprefixed legacy classes (`card__date`, `card__h3`, ...) as a one-off exception because they reuse
    existing shared Webpacker SCSS mixins as-is. That's the exception, not the pattern — don't copy it
    forward. A component migrated from here on writes fresh component-scoped styles and must use the
@@ -189,7 +197,7 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
    inline them ad hoc in a single SFC.
 6. **Imports use the `@/` alias, never relative paths.** e.g.
    `import ChartCircle from "@/components/Chart/Circle.vue"`,
-   `import { ProtectedArea } from "@/types/backend/protectedArea"` — not `../../../`.
+   `import { ProtectedArea } from "@/types/backend"` — not `../../../`.
 7. **Tailwind inside an SFC `<style>` block needs `@reference "tailwindcss"`.** This project's
    Tailwind entry (`app/frontend/styles/tailwind.css`) is customised (preflight disabled — see
    [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026)), so
@@ -233,9 +241,24 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     of Vue's opt-in reactive-props-destructure compiler transform, which this project doesn't enable.
 11. **Boolean computed values are named `has`/`is` + noun.** e.g. `hasMultipleBanners`, not
     `multipleBanners` or `showNav`.
+12. **Prefer re-declaring an imported props type as a local alias before `defineProps<T>()`.**
+    Most migrated components do this:
+    ```ts
+    import type { ListingPageCardResourcesListProps } from '@/types/backend'
 
-*Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend/`
-(banner.ts, tab.ts), the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
+    type ListingPageCardResourcesList = ListingPageCardResourcesListProps
+    defineProps<ListingPageCardResourcesList>()
+    ```
+    rather than `defineProps<ListingPageCardResourcesListProps>()` directly. **Note this is a
+    consistency convention, not a hard compiler requirement** — verified (Jul 2026) that passing
+    an imported type straight into `defineProps<T>()` compiles, typechecks (`vue-tsc`), and works at
+    runtime just fine in this project's Vite/Vue setup; `Search/SiteTopbar.vue` already does exactly
+    that (`defineProps<SearchSiteTopbarProps>()`, no alias) and is fully working. Follow the alias
+    pattern for new components to match the majority (`Banner`, `GaLink`, `Counter`,
+    `ListingPageCard*`), but don't invent a workaround if a future component skips it — it isn't
+    broken.
+
+*Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend`, the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and
 the `tailwindcss` bare-specifier alias for point 7 all exist and were confirmed working (a scratch
 `@reference "tailwindcss"` + `@apply` component built correctly, then removed). `Banner/Index.vue` +

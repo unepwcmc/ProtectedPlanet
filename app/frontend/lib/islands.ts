@@ -62,6 +62,10 @@ export async function mountEl(el: HTMLElement): Promise<void> {
     // id/data-mount *after* mounting (tests, devtools, future re-scans) still finds
     // it — only the wrapper's redundant DOM nesting is being removed, not its identity.
     if (el.id) root.id ||= el.id
+    // A caller can pass `class:` to frontend_mount to position/style the mount
+    // point from outside (e.g. layout-specific classes) — carry those over too,
+    // same rationale as id/dataset, or they'd be lost when the wrapper is dropped.
+    el.classList.forEach(cls => root.classList.add(cls))
     for (const [key, value] of Object.entries(el.dataset)) {
       if (value !== undefined && !(key in root.dataset)) root.dataset[key] = value
     }

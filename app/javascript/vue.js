@@ -19,7 +19,6 @@ import store from './store/store.js'
 // components
 import AmChartMultiline from './components/charts/am-chart-line/AmChartMultiline'
 import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
-import Counter from './components/counter/Counter'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
@@ -27,10 +26,7 @@ import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
-import GaLink from './components/link/GaLink'
 import ListingPage from './components/listing/ListingPage.vue'
-import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
-import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
 import NavBurger from './components/nav/NavBurger'
 import PameModal from './components/pame/PameModal'
 import RegionCountryPages from './components/pages/RegionCountryPages'
@@ -94,18 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
       components: {
         AmChartMultiline,
         AmChartPie,
-        Counter,
         ChartBarStacked,
         ChartRowPa,
         ChartRowStacked,
         Download,
-        GaLink,
         DownloadModal,
         FilteredTable,
         Flickity,
         ListingPage,
-        ListingPageCardNews,
-        ListingPageCardResources,
         NavBurger,
         PameModal,
         RegionCountryPages,

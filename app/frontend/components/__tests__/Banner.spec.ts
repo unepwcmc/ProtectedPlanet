@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Banner from '@/components/Banner/Index.vue'
-import type { Banner as BannerRow } from '@/types/backend/banner'
+import type { Banner as BannerRow } from '@/types/backend'
 
 const bannerRow = (overrides: Partial<BannerRow>): BannerRow => ({
   id: 0,
@@ -28,44 +28,48 @@ beforeEach(() => {
 })
 
 describe('Banner', () => {
-  it('renders a single banner without the carousel modifier', () => {
+  it('renders a single banner without nav controls', () => {
     const wrapper = mount(Banner, { props: { banners: single, signature: 'sig' } })
 
-    expect(wrapper.find('.banner__title').text()).toBe('Hello')
-    expect(wrapper.find('.banner__body').html()).toContain('<p>World</p>')
-    expect(wrapper.classes()).not.toContain('banner--carousel')
-    expect(wrapper.attributes('data-banner-sig')).toBe('sig')
+    expect(wrapper.find('.ct-banner__title').text()).toBe('Hello')
+    expect(wrapper.find('.ct-banner__body').html()).toContain('<p>World</p>')
+    expect(wrapper.find('.banner__nav--next').exists()).toBe(false)
+    expect(wrapper.find('.banner__nav--prev').exists()).toBe(false)
   })
 
-  it('adds the carousel modifier and cycles (wrapping) with next/prev', async () => {
+  it('shows nav controls and cycles (wrapping) with next/prev', async () => {
     const wrapper = mount(Banner, { props: { banners: many, signature: 'sig' } })
-    const vm = wrapper.vm as unknown as { currentIndex: number }
 
-    expect(wrapper.classes()).toContain('banner--carousel')
+    const activeSlideTitle = () => wrapper.findAll('.ct-banner__slide')
+      .find(slide => slide.classes().includes('ct-banner-content--is-active'))
+      ?.find('.ct-banner__title')
+      .text()
+
+    expect(activeSlideTitle()).toBe('A')
 
     await wrapper.find('.banner__nav--next').trigger('click')
-    expect(vm.currentIndex).toBe(1)
+    expect(activeSlideTitle()).toBe('B')
 
     await wrapper.find('.banner__nav--next').trigger('click')
-    expect(vm.currentIndex).toBe(0) // wraps forward
+    expect(activeSlideTitle()).toBe('A') // wraps forward
 
     await wrapper.find('.banner__nav--prev').trigger('click')
-    expect(vm.currentIndex).toBe(1) // wraps backward
+    expect(activeSlideTitle()).toBe('B') // wraps backward
   })
 
   it('hides and sets the per-id cookie on close (single banner)', async () => {
     const wrapper = mount(Banner, { props: { banners: single, signature: 'sig' } })
 
-    await wrapper.find('.banner__close').trigger('click')
+    await wrapper.find('.ct-banner__close').trigger('click')
 
-    expect(wrapper.find('.banner').exists()).toBe(false)
+    expect(wrapper.find('.ct-banner').exists()).toBe(false)
     expect(document.cookie).toContain('banner_closed=1')
   })
 
   it('sets the signature cookie on close (multiple banners)', async () => {
     const wrapper = mount(Banner, { props: { banners: many, signature: 'sig-abc' } })
 
-    await wrapper.find('.banner__close').trigger('click')
+    await wrapper.find('.ct-banner__close').trigger('click')
 
     expect(document.cookie).toContain('banner_closed_sig=sig-abc')
   })

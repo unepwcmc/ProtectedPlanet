@@ -46,10 +46,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { BannerProps } from '@/types/backend/banner'
+import type { BannerProps } from '@/types/backend'
 import BannerContent from '@/components/Banner/Content.vue'
 
-const props = defineProps<BannerProps>()
+type Banner = BannerProps
+const props = defineProps<Banner>()
 
 const currentIndex = ref(0)
 const visible = ref(true)

@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Banner } from '@/types/backend/banner'
+import type { Banner } from '@/types/backend'
 
 defineProps<{
   data: Banner

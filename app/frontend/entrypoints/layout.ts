@@ -29,6 +29,11 @@ registerIslands({
   // (see Tabs.vue + specs). Not yet wired to a live page — the first real tab-page
   // migration (e.g. wdpca) will register its page island here and use frontend_mount.
   Tabs: () => import('@/components/Tabs.vue')
+  Tabs: () => import('@/components/Tabs.vue'),
+  GaLink: () => import('@/components/GaLink.vue'),
+  Counter: () => import('@/components/Counter.vue'),
+  ListingPageCardNews: () => import('@/components/ListingPageCard/News/Index.vue'),
+  ListingPageCardResources: () => import('@/components/ListingPageCard/Resources/Index.vue'),
 })
 
 // Mount on DOMContentLoaded, NOT immediately. Webpacker's Vue 2 registers its

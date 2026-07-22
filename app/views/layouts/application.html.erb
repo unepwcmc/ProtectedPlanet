@@ -8,15 +8,13 @@
 
     <%= render "layouts/partials/cookieconsent" %>
 
-    <%# Banner is a Vite/Vue 3 island — mounted OUTSIDE #v-app so Webpacker's %>
-    <%# Vue 2 root does not try to compile its mount point / JSON props script. %>
     <% unless @for_pdf %>
       <%= render "layouts/partials/banner" %>
     <% end %>
 
+    <%= render "layouts/partials/topbar" %>
+
     <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
-      <%= render "layouts/partials/topbar" %>
-        
       <%= yield %>
       
       <%= render "layouts/partials/footer" %>  
