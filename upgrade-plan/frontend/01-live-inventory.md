@@ -55,7 +55,7 @@ Footer: `FOOTER_LINKS_PRIMARY = [resources, wdpca]`, `FOOTER_LINKS_SECONDARY = [
 | `marine-protected-areas` | `/thematic-areas/marine-protected-areas` | `thematic/marine#index` | `chart-row-pa`, `am-chart-multiline` (via `_chart-coverage-growth`), `v-map` (`_main`), `flickity`, `counter` — **no tabs** |
 | `protected-and-conserved-area-effectiveness` | `/thematic-areas/protected-and-conserved-area-effectiveness` | `thematic/effectiveness#index` | `tabs`; **tab 2** = Green List (`chart-row-pa` + `v-map` via `_green_list_tab`) |
 | `oecms` | `/thematic-areas/oecms` | Pure CMS (comfy catch-all) — no controller | **No** (static) |
-| `equity` | `/thematic-areas/equity` | CMS layout `layouts/cms/_equity` (marked "TO be removed") | `tabs` (via `partials/tabs/_tabs-equity`). `select-equity` is **commented out** (disabled 14 May 2025) → effectively dead |
+| `equity` | — | **Removed Jul 2026** — `layouts/cms/_equity` and `partials/tabs/_tabs-equity.html.erb` were dead code (no CMS layout used them) and have been deleted along with `EquityHelper` |
 | `connectivity-conservation` | CMS content | Pure CMS | **No** (static) |
 | `indigenous-and-community-conserved-areas` | CMS content | Pure CMS | **No** (static) |
 | `territories-governed-by-indigenous-peoples-and-local-communities` | CMS content | Pure CMS | **No** (static) |
@@ -70,7 +70,7 @@ All tabbed thematic/data pages use **one** reusable pattern, not per-page tab co
 - `partials/thematic_and_data_area/_tabs.html.erb` → `<tabs>` + `<tab-target>` with `slot-scope`.
 - Tab list built by `ThematicAndDataAreaHelper#thematic_and_data_area_tabs` from CMS fragments `tab-title-N` / `tab-content-N` (max 5).
 - Per-tab "extras" (search, map, filtered-table, green list) injected via a `tab_extras` array of `{ tab_id, partial, locals, replace_content }`.
-- Equity uses a **separate** `partials/tabs/_tabs-equity.html.erb` (same `<tabs>`/`<tab-target>` components, hardcoded 2 tabs).
+- `partials/tabs/_tabs-equity.html.erb` (the equity-specific variant) was dead code and has been deleted — see the `equity` row above.
 
 This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.md)): the `slot-scope` + `<%= cms_fragment_render %>` inside `<tab-target>` must become a Vue component tree fed by props.
 
@@ -100,8 +100,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 | `thematic-effectiveness.ts` | `/thematic-areas/protected-and-conserved-area-effectiveness` | tabs + green list (chart-row-pa + map) |
 | `thematic-marine.ts` | `/thematic-areas/marine-protected-areas` | chart-row-pa, am-chart-multiline, map |
 | `listing-page.ts` | News + resources index | listing-page |
-
-*(`equity` currently has no live interactive component — `select-equity` is commented out — so it needs only `layout.ts` until NC re-enables the chart.)*
 
 **Not separate entrypoints:** `oecms`, `about`, `legal`, `monthly-release-news`, connectivity, ICCA/indigenous, `green-list` CMS seed, equity study sites, and ~100+ CMS resource/news/article URLs (all static HTML).
 
@@ -217,7 +215,7 @@ Phase **4** estimate includes swapping these packages and retesting affected UI 
 | 3 Islands | **~12 entrypoints**, not 40+ page types |
 | 4 Vue 3 | **~110** SFCs; drop orphan/dead first |
 | 6 Charts | **4 live families**; no dial/sunburst/treemap/bar |
-| 7 Search/CMS | **Listings + wdpca/gdpame/marine/effectiveness + equity tabs**; not 127 CMS pages |
+| 7 Search/CMS | **Listings + wdpca/gdpame/marine/effectiveness**; not 127 CMS pages (equity tabs removed as dead code) |
 
 ---
 

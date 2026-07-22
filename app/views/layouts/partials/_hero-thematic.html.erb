@@ -25,11 +25,14 @@
           <div class="<%= page_type_class_name %>__stat-item">
             <% small_number = stat_item[:small_number] == true %>
             <div class="<%= page_type_class_name + '__stat-number'%> <%= small_number ? 'hero__stat-number-small' : 'hero__stat-number' %>">
-              <counter
-                :total="<%= stat_item[:total] %>"
-                trigger="sm-home-hero-stats"
-                :decimal="<%= stat_item[:decimal] || 0 %>"
-              ></counter><%= stat_item[:suffix].to_s.html_safe %>
+              <%= frontend_mount "Counter",
+                    tag: :span,
+                    key: index,
+                    props: {
+                      total: stat_item[:total],
+                      trigger: "sm-home-hero-stats",
+                      decimal: stat_item[:decimal] || 0
+                    } %><%= stat_item[:suffix].to_s.html_safe %>
             </div>
             <span class="hero__stat-text"><%= stat_item[:text] %></span>
           </div>

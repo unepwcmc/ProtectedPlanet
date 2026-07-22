@@ -226,7 +226,7 @@ PP uses **Comfortable Mexican Sofa** + ERB, not a single JSON blob that drives a
 
 ### Pattern C — CMS fragments → Vue props
 
-Example: `cms/_child_dropdown.html.erb` builds options from fragments → `<select-with-content :options="...">`.
+Example (historical — `cms/_child_dropdown.html.erb` was deleted as dead code, never wired into a live CMS page): built options from fragments → `<select-with-content :options="...">`.
 
 **Target:** `frontend_mount` + JSON props; component in `layout.ts` or page entrypoint.
 
@@ -262,7 +262,6 @@ Not a global loop over all CMS widget types.
 |---------------|------------|---------|
 | `layouts/cms/_resources` | `listing-page.ts` | Vue only; CMS in ERB hero |
 | `partials/thematic_and_data_area/_tabs` (shared) | `data-wdpca.ts` / `thematic-effectiveness.ts` | B — page SFC |
-| `partials/tabs/_tabs-equity` | `equity-tabs.ts` | B — CMS as `bodyHtml` props |
 | `data/gdpame/index` | `pame.ts` | B/C — inventory in phase 1 |
 | Country/region stats | `stats-country.ts` etc. | CMS copy in ERB; charts in Vue |
 
@@ -273,7 +272,6 @@ Not a global loop over all CMS widget types.
 | `template-thematic-area-database` (+ `page-database-areas`, `page-pame`) | `tab-title-*`, `tab-content-*` (wysiwyg), hero fields | Controllers `data/wdpca`, `data/gdpame` build tab array via `thematic_and_data_area_tabs` → mount **one** SFC; wysiwyg → `bodyHtml` |
 | `template-thematic-area-basic` | `summary`, `image`, `content` (wysiwyg) | ERB partial only — **pattern A** |
 | `template-resource` | `published_date`, `content`, resource file/link fields | ERB partial only — **pattern A** |
-| equity (`layouts/cms/_equity`, marked "to be removed") | `tab-title-*`, `tab-content-*` | **pattern B** via `tabs-equity`; `select-equity` chart currently commented out (#NC 14 May 2025) |
 | `page-resources` | listing filters via categories | `listing-page` mount; CMS for hero |
 
 `{{ cms:partial layouts/cms/... }}` in layout seed → `app/views/layouts/cms/_*.html.erb`. Those partials remain Rails; add `frontend_mount` only where Vue is needed.
@@ -322,4 +320,4 @@ Or Vitest tests with mocked DOM for composables. Do **not** require cloning othe
 - [ ] Entrypoint list matches [01](./01-discovery-and-inventory.md) inventory.
 - [ ] Map and chart choices recorded with PP-specific acceptance tests.
 - [ ] Every CMS+Vue page has pattern **A/B/C** and no mount-all-widgets design.
-- [ ] Thematic/equity tabs work without ERB inside Vue slots.
+- [x] ~~Thematic/equity tabs work without ERB inside Vue slots.~~ Moot — equity layout/tabs were dead code, deleted Jul 2026.

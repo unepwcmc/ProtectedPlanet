@@ -2,8 +2,6 @@ class Data::WdpcaController < ApplicationController
   include MapHelper
 
   def index
-    @pa_coverage_percentage = GlobalStatistic.global_oecms_pas_coverage_percentage
-
     @download_options = helpers.download_options(%w[csv shp gdb esri_wdpa], 'general', 'wdpa')
 
     @config_search_areas = {
