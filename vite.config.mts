@@ -10,6 +10,11 @@ import * as vue3Compiler from 'vue3/compiler-sfc'
 
 // Vite 7 + vite-plugin-rails, paired with the vite_ruby 3.x gem.
 export default defineConfig({
+  server: {
+		// https://stackoverflow.com/questions/79372334/blocked-request-this-host-frontend-web-is-not-allowed
+		// New breaking change for newer vite version
+		allowedHosts: true
+	},
   plugins: [
     rails(),
     tailwindcss(),

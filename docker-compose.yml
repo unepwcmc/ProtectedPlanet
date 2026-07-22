@@ -50,6 +50,8 @@ services:
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
+      # https://vite-ruby.netlify.app/guide/troubleshooting.html#making-hmr-work-in-docker-compose
+      - VITE_RUBY_HOST=vite
       # Constrain vite_ruby's on-demand autoBuild (esbuild + Tailwind oxide) so it
       # doesn't OOM-kill this container under x86 emulation. Mirrors the vite service:
       # GOMAXPROCS caps the Go native threads; max-old-space-size caps the Node heap.
@@ -200,6 +202,7 @@ services:
       # stable. Harmless on native amd64 (dev builds are tiny). A faster alternative
       # is enabling Rosetta in Docker Desktop.
       - GOMAXPROCS=1
+      - VITE_RUBY_HOST=0.0.0.0
     networks:
       - protectedplanet
     extra_hosts:

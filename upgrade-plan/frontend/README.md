@@ -19,11 +19,22 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 
 ## Status — G1 gate done (Jul 2026)
 
-**Done this cycle** (branch `feat/upgrade-frontend`): Ruby 2.6.3→**2.7.8**, Node 12→**24.4.1**, **Vite 7 + `vite-plugin-rails`** (`vite_rails` 3.11.1) running **alongside Webpacker/Vue 2** (dual bundler, cold-start safe). Islands foundation built — `frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue, `MutationObserver`), registered in `entrypoints/layout.ts`. **First real island migrated: `Banner`** (lifted out of `#v-app`, on every page). **Tabs island proven** (real `v-if` panels; verified live on wdpca with dummy search/map mounts, then reverted) — confirms hidden / late / nested mounts work with no `v-show`. **Vitest** set up (13 tests). Everything else still runs under Vue 2 / `#v-app`.
+**Done this cycle** (branch `feat/upgrade-frontend`): Ruby 2.6.3→**2.7.8**, Node 12→**24.4.1**, **Vite 7 + `vite-plugin-rails`** (`vite_rails` 3.11.1) running **alongside Webpacker/Vue 2** (dual bundler, cold-start safe). Islands foundation built — `frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue, `MutationObserver`), registered in `entrypoints/layout.ts`. **First real island migrated: `Banner`** (lifted out of `#v-app`, on every page). **Tabs island proven** (real `v-if` panels; verified live on wdpca with dummy search/map mounts, then reverted) — confirms hidden / late / nested mounts work with no `v-show`. **Vitest** set up (27 tests, all green — also covers Wave 1 below). Everything else still runs under Vue 2 / `#v-app`.
 
 **Also added: Tailwind v4** via Vite (preflight disabled, **additive** alongside the legacy SCSS — not a redesign) for styling new/migrated components. Detail + caveats: [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026).
 
-**Next:** phase 3/4 island-by-island (see execution order); rewrite migrated components onto Tailwind; `download-modal`→Pinia; shrink/break up `#v-app`; Webpacker removed last.
+**Also done: Wave 1 · simple leaves** (`ga-link`, `counter`, `select-with-content`, `listing-page-card-news`,
+`listing-page-card-resources`) — migrated to Vue 3 islands alongside `Banner`. `Counter` dropped its
+`scrollmagic` dependency for a native `IntersectionObserver`; `frontend_mount` gained a `key:` option so
+repeated-instance components (the two card types, rendered in a loop) each get their own DOM id/props block
+while resolving to one registry entry — see [FrontendHelper](../../app/helpers/frontend_helper.rb).
+
+**Next:** Wave 2 (mixin-only leaves: `tooltip`, `tooltip-second`); rewrite migrated components onto Tailwind; `download-modal`→Pinia; shrink/break up `#v-app`; Webpacker removed last.
+
+### Decisions made
+- **Vite/Rails glue — `vite-plugin-rails`** (not `vite-plugin-ruby`) is the npm package actually wired up (`vite.config.mts`) alongside the `vite_rails` gem. [02](./02-vite-on-rails-8.md) corrected to match.
+- **Maps — MapLibre GL JS** (open source, no Mapbox account/licensing dependency) over Mapbox GL v2+. Requires migrating `mapbox://` style URLs and re-testing RTL/polygons/zoom. Detail: [05](./05-maps.md#decision-maplibre).
+- **Analytics — `vue-gtag`** (GA4) replaces `vue-analytics`. Detail: [04](./04-vue3-and-state.md#dependency-replacements).
 
 ### Decisions to revisit later
 - **Mounting library — homegrown for now; revisit `turbo-mount` after Ruby 3 / Rails 6+.** We use a small in-house mounter (`frontend_mount` + `islands.ts`). [`turbo-mount`](https://github.com/skryukov/turbo-mount) (Evil Martians, Stimulus-based) is the "batteries-included" equivalent, but its **gem requires Ruby ≥ 3.0 and railties ≥ 6.0** — won't install on our **Ruby 2.7.8 / Rails 5.2** — and it pulls in Hotwire/Stimulus. Because views only ever call `frontend_mount`, adopting it later is a ~2-file swap (Vue SFCs never move). Detail: [14 Architecture](./14-architecture-and-design.md#mounting-mechanism-and-the-turbo-mount-decision).
@@ -113,12 +124,12 @@ library decisions) → Webpacker removed last. Every component is rewritten to t
 | Wave | Components (ERB tag) | Prereq / why |
 |------|----------------------|--------------|
 | **0 · Delete dead code first ✓ done** | `chart-dial`, carousel/`carousel-slide`, `sticky-nav`, `chart-bar`/`chart-bar-simple`, `chart-sunburst`/`chart-treemap-*`/`chart-rectangles`, `select-equity`/`select-dropdown`, ~10 orphan `.vue` | Don't migrate the dead — shrinks phase 4. Safe on Rails 5.2. See [01](./01-live-inventory.md). |
-| **1 · Simple leaves** (zero coupling) | `banner-banner` **✓ done**, `ga-link`, `counter`, `select-with-content`, `listing-page-card-news`, `listing-page-card-resources` | Establish the Composition-API + Tailwind + composable pattern on the lowest-risk surface. |
+| **1 · Simple leaves** (zero coupling) **✓ done** | `banner-banner`, `ga-link`, `counter`, `select-with-content`, `listing-page-card-news`, `listing-page-card-resources` | Establish the Composition-API + Tailwind + composable pattern on the lowest-risk surface. |
 | **2 · Mixin-only leaves** | `tooltip`, `tooltip-second` | First mixin→composable extractions; no store/bus. |
 | **3 · Global chrome → break `#v-app`** | `nav-burger`, `search-site-topbar`, `search-site` | mixin→composable, `$eventHub`→`mitt`/emits. Once chrome is islands, **dismantle `#v-app`**. |
 | **4 · Pinia + downloads** | `useDownloadStore` (port Vuex `download`), `download`, `download-item`, `download-csv`, `download-modal` | Set up **Pinia**; downloads span pages (loaded from `layout`). |
 | **5 · Listings + tabs** | `listing-page`, `tabs`/`tab-target`/`tab-trigger` (**`Tabs.vue` proven**) | `$eventHub 'map:resize'`→composable; wire news/resources + a real tab page. |
-| **6 · Maps** (phase 5) | `v-map` (+ `-header`/`-filters`/`-pa-search`/`-disclaimer`/`-baselayer-controls`/`-toggler`) | **Decide Mapbox GL v2+ vs MapLibre** + `useMapStore` (Pinia) first. |
+| **6 · Maps** (phase 5) | `v-map` (+ `-header`/`-filters`/`-pa-search`/`-disclaimer`/`-baselayer-controls`/`-toggler`) | **MapLibre chosen** (see decisions above) + `useMapStore` (Pinia) first. |
 | **7 · Search areas** | `search-areas`, `search-areas-home`, `search-areas-input-autocomplete` | Depends on maps + downloads; then complete `wdpca`/data pages. |
 | **8 · Charts + stats** (phase 6) | `chart-row-pa`, `chart-row-stacked`, `am-chart-multiline`, `am-chart-pie`, `region-country-pages` (+ `Stats*`) | Port custom SVG charts first; amCharts 4→5; country/region/marine/effectiveness pages. |
 | **9 · PA show** | `attributes-*` (5) | mixin→composable; protected-area page. |
@@ -149,10 +160,21 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
    keep its sub-components alongside it there (each already named with its full tag name), instead
    of leaving a flat `Tabs.vue` sitting next to a `Tabs/` folder. `Index.vue` maps to the bare folder
    name: `components/Tabs/Index.vue` → `<Tabs />`, `components/Tabs/TabsTitle.vue` → `<TabsTitle />`.
+   This applies from the first sibling on, even with no shared/base component: a family of leaf
+   components that only share a name prefix (no bare `<ListingPageCard />` itself) still goes in a
+   folder with no `Index.vue` — `components/ListingPageCard/News.vue` → `<ListingPageCardNews />`,
+   `components/ListingPageCard/Resources.vue` → `<ListingPageCardResources />` — never a flat
+   `ListingPageCardNews.vue` file.
 4. **CSS is BEM, namespaced `ct-`.** Class names follow `ct-block__element--modifier` (e.g.
    `ct-banner__nav`, `ct-banner-content--is-active`) for any component-scoped classes in new SFCs —
    the `ct-` prefix is enforced by Stylelint (`@namics/stylelint-bem`, `namespaces: ["app", "ct-"]`
    in `stylelint.config.mjs`). Legacy SCSS keeps its existing unprefixed BEM (`chart-circle__label--active`).
+   **Reminder for future waves:** `ListingPageCard/News.vue` and `Resources.vue` (Wave 1) kept their
+   unprefixed legacy classes (`card__date`, `card__h3`, ...) as a one-off exception because they reuse
+   existing shared Webpacker SCSS mixins as-is. That's the exception, not the pattern — don't copy it
+   forward. A component migrated from here on writes fresh component-scoped styles and must use the
+   `ct-` prefix (`ct-card__date`, not `card__date`), even when its markup/classes started life copied
+   from a legacy `.vue` file.
    A sub-component gets its **own** top-level BEM block rather than nesting under the parent's:
    `Banner/Content.vue`'s root is `ct-banner-content`, not `ct-banner__content`.
    **Test-only hook classes may skip the namespace.** When two elements are visually identical and

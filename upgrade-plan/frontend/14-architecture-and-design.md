@@ -114,9 +114,9 @@ Implement `frontend_mount` + `search_areas_vue_props` in a presenter/helper (int
 
 **Implemented** (branch `feat/upgrade-frontend`, Jul 2026):
 
-- `app/helpers/frontend_helper.rb` — `frontend_mount(name, props:)` emits a mount `<div data-mount>` + a `<script type="application/json">` props block.
+- `app/helpers/frontend_helper.rb` — `frontend_mount(name, props:, tag:, key:, **html)` emits a mount `<div data-mount>` + a `<script type="application/json">` props block. `key:` is optional and only needed when the same component is rendered more than once on a page (e.g. cards in a loop) — it namespaces the DOM id and props-script id per instance (`mount-#{name}-#{key}` / `props-#{name}-#{key}`, tracked via `data-props-id`) while `data-mount` stays the plain registry key. Omitting `key:` behaves exactly as before.
 - `app/frontend/lib/readMountProps.ts` — reads/parses that block.
-- `app/frontend/lib/islands.ts` — island registry + lazy `createApp` + a `MutationObserver`; started from `entrypoints/layout.ts`.
+- `app/frontend/lib/islands.ts` — island registry + lazy `createApp` + a `MutationObserver`; started from `entrypoints/layout.ts`. Once a component mounts, its wrapper `<div data-mount>` is replaced with the component's own rendered root (`el.replaceWith(el.firstElementChild)`) so islands don't leave an extra empty `<div>` around their markup — the `id`/`data-*` attributes are carried over onto the new root first (and the new root is pre-registered as "already mounted") so nothing double-mounts and any code/tests that look up the mount point by id or `data-mount` after mount still finds it, just on the real root element instead of the original wrapper.
 
 **Why the `MutationObserver`:** a mount point can enter the DOM *after* first paint — inside a `v-if` region revealed later, or (today) when Webpacker's Vue 2 rebuilds `#v-app`. Observing added nodes means such mounts still mount, so **`v-if` is safe** (true unmount/remount) and we never need `v-show` to keep hidden regions in the DOM. Proven live on wdpca: a Tabs island whose search/map mounts appear only when their tab is revealed, mount once, and unmount on leave. **Transitional** — once Webpacker/`#v-app` is gone this can shrink to a one-shot scan; keep the observer only if adopting Turbo/Hotwire or CMS-injected mount points.
 
@@ -165,12 +165,14 @@ Use **setup stores** + composables for map layer logic (replaces mixins).
 
 Current: Mapbox GL **1.4.1** CDN, custom styles `mapbox://styles/unepwcmc/...`.
 
+**Chosen: MapLibre GL JS** — open source, no Mapbox account/licensing dependency. Requires migrating
+off `mapbox://` style URLs and re-testing layer toggles, RTL, PA search, and popups against PP's own
+acceptance criteria (not another product's MapLibre setup). Detail: [05 — Maps](./05-maps.md#decision-maplibre).
+
 | Option | When to choose |
 |--------|----------------|
-| **Mapbox GL v2+** (bundled) | Keep existing styles & team Mapbox account; accept license |
-| **MapLibre** | Need open-source GL; budget to migrate styles and re-test polygons/zoom |
-
-Evaluate against **PP** acceptance criteria (layer toggles, RTL, PA search, popups) — not another product’s MapLibre pins.
+| Mapbox GL v2+ (bundled) | Keep existing styles & team Mapbox account; accept license |
+| **MapLibre (chosen)** | Open-source GL; no licensing dependency; budget to migrate styles and re-test polygons/zoom |
 
 ---
 

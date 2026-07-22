@@ -62,7 +62,7 @@ Tasks:
 |-------------------|--------|
 | `vue@2.7` | `vue@3` |
 | `vue-loader@15` | `@vitejs/plugin-vue` |
-| `vue-analytics` | GA4 / Google Tag Manager |
+| `vue-analytics` | **`vue-gtag`** (GA4) |
 | `vue-lazyload` | `@vueuse/core` / native `loading="lazy"` |
 | `vue2-touch-events` | `@vueuse/gesture` or remove |
 | `vue-flickity` | Modern carousel lib or CSS-only |
