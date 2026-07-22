@@ -4,7 +4,7 @@
 |---|---|
 | **Estimate** | 1–2 wk (2.6 → 2.7) + 1–2 wk (2.7 → 3.x) = **2–4 wk total** |
 | **Depends on** | [01 — Gem audit](./01-gem-audit.md) (native extensions audited) |
-| **Blocks** | `vite_rails` 3.x needs Ruby 2.7+; Rails 8 requires Ruby 3.1+ |
+| **Blocks** | `vite_rails` 3.x needs Ruby 2.7+ · **[09 — Media Surfer needs Ruby ≥ 3.2](./09-cms-comfy.md)** · Rails 8 requires Ruby 3.1+ |
 
 [← Back to overview](./README.md)
 
@@ -12,17 +12,20 @@
 
 ## Goal
 
-Move Ruby from 2.6.3 (EOL March 2022) to 3.3.x. Done in two stages: **2.7 first** (unblocks B0 / vite_rails 3.x), then **3.x after B0** (doesn't need to block frontend).
+Move Ruby from 2.6.3 (EOL March 2022) to 3.3.x. Done in two stages: **2.7 first** (unblocks vite_rails 3.x), then **3.2+ before the Rails 7.0 bump**.
+
+> **Sequencing change.** Stage 2 was previously scheduled *after* B0. It now runs **before Rails 7.0**, because `comfortable_media_surfer` requires **Ruby ≥ 3.2 and Rails ≥ 7.0** and we want to adopt it in the same step as the Rails 7.0 bump — see [09](./09-cms-comfy.md). Doing Ruby 3.2 first means the CMS swap is a single cutover rather than two.
 
 ---
 
-## Stage 1 — Ruby 2.6.3 → 2.7 (do before B0)
+## Stage 1 — Ruby 2.6.3 → 2.7 (do before the Rails 6 bumps)
 
 ### Why 2.7 first
 
 - `vite_rails` 3.x uses `filter_map` — requires Ruby 2.7+
 - Rails 7.0+ recommends Ruby 2.7; Rails 8 **requires** Ruby 3.1
 - Ruby 2.7 surfaces keyword argument deprecation warnings without breaking — gives time to fix them before the hard break in 3.0
+- `comfortable_mexican_sofa 2.0.19` still has to run on this Ruby through the Rails 6.0/6.1 hops, so don't jump straight to 3.x
 
 ### Tasks
 
@@ -42,15 +45,17 @@ Move Ruby from 2.6.3 (EOL March 2022) to 3.3.x. Done in two stages: **2.7 first*
 ### Native extensions to verify at 2.7
 
 - `pg` — upgrade to `~> 1.5` here (0.21 does not compile on Ruby 3)
-- `gdal` — confirm native ext compiles on 2.7; test a spatial query
+- `gdal` — confirm native ext compiles on 2.7; test a spatial query. **Being removed entirely in [13](./13-gdal-and-spatial-tooling.md)** — if that phase runs early, this risk disappears rather than being carried to 3.3
 - `levenshtein` — confirm compiles
 - `nokogiri` — usually fine; already pinned to 1.10.4 but should verify
 
 ---
 
-## Stage 2 — Ruby 2.7 → 3.x (after B0)
+## Stage 2 — Ruby 2.7 → 3.2+ (before Rails 7.0)
 
-This stage does **not** block the frontend. Schedule it after Rails 7.1 boots (B0).
+Run this **after the Rails 6.1 bump and before Rails 7.0**, so the CMS swap to Media Surfer can happen in the Rails 7.0 step ([09](./09-cms-comfy.md)).
+
+Minimum useful target is **3.2** (Media Surfer floor, and the `activerecord-postgis-adapter` 11.x floor). Go to **3.3** directly unless something forces otherwise.
 
 ### Breaking changes in Ruby 3.0
 
@@ -101,29 +106,29 @@ foo(**{a: 1, b: 2})
 ### Recommended Ruby version path
 
 ```
-2.6.3  →  2.7.8  →  3.1.6  →  3.3.x
-          (B0)       (Rails 8   (target)
-                     requires 3.1)
+2.6.3  →  2.7.8  →  3.3.x
+          │          │
+   before Rails 6   before Rails 7.0
+                    (Media Surfer floor is 3.2)
 ```
 
-Going 2.7 → 3.1 directly is safe if all keyword arg issues are resolved. 3.2 is an optional intermediate.
+Going 2.7 → 3.3 directly is safe if all keyword arg issues are resolved. 3.1/3.2 are optional intermediates.
 
 ---
 
-## Deployment (Capistrano)
+## Deployment
 
-`config/deploy.rb` sets `rvm_ruby_version`. This must be updated in step:
+While Capistrano is still live, `config/deploy.rb` sets `rvm_ruby_version` and must be updated in step:
 
 ```ruby
-# config/deploy.rb — update for each Ruby bump
 set :rvm_ruby_version, '3.3.x'
 ```
 
-Also update the Ansible role that sets the system Ruby if applicable — check `config/deploy/ansible/`.
+Once [11 — Docker + Kamal 2](./11-deploy-and-devops.md) lands, the Ruby version is **baked into the image** and rvm on the servers goes away entirely. That is the point of that phase — no more rvm/nvm drift.
 
 ---
 
 ## Exit criteria
 
-- Stage 1: App boots and tests pass on Ruby 2.7.8; staging deploy confirmed; B0 unblocked
-- Stage 2: App boots and tests pass on Ruby 3.3; no `ArgumentError` from keyword arg separation; native extensions compile; staging + production deploy confirmed
+- Stage 1: App boots and tests pass on Ruby 2.7.8; staging deploy confirmed
+- Stage 2: App boots and tests pass on Ruby 3.3 **before the Rails 7.0 bump**; no `ArgumentError` from keyword arg separation; native extensions compile; staging deploy confirmed

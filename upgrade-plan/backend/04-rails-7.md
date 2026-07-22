@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Estimate** | 3–5 weeks · ~0.75–1.25 months |
-| **Depends on** | [03 — Rails 6.1 green](./03-rails-6.md) |
+| **Depends on** | [03 — Rails 6.1 green](./03-rails-6.md) · **[02 — Ruby ≥ 3.2 done first](./02-ruby-upgrade.md)** |
 | **Blocks** | **B0 — frontend phase 2b** (vite_rails 3.x, Vite 5, Vue 3) |
 
 [← Back to overview](./README.md)
@@ -47,13 +47,17 @@ Rails 7.1 boots locally and in CI. This is **milestone B0** — the most time-cr
 - Propshaft is mentioned as an option but Sprockets still works — **keep Sprockets** for now
 - `importmap-rails` is the new default for JS but we're using Vite — ignore it
 
-**Comfy CMS (B3 gate):**
+**CMS swap — Comfy → Media Surfer (B3 gate):**
 
-This is where ComfortableMexicanSofa compat becomes critical. See [09](./09-cms-comfy.md) for the full investigation. Before merging Rails 7.0:
+`comfortable_mexican_sofa 2.0.19` does not run on Rails 7. The Rails 7.0 bump is where we **swap it for `comfortable_media_surfer ~> 3.1`** — the gem requires Rails ≥ 7.0 and Ruby ≥ 3.2, so this is the earliest possible step and it should be a single cutover, not a two-stage move.
 
-- [ ] Boot app with Comfy loaded — confirm no boot errors
-- [ ] Hit `/admin` — login, edit a CMS page, upload an image
-- [ ] If Comfy breaks, follow the patch/fork plan from [09](./09-cms-comfy.md) before proceeding
+Full port scope and checklist: **[09](./09-cms-comfy.md)**. It is a phase in its own right (2–3 wk) and runs alongside this one, not inside it.
+
+- [ ] Ruby ≥ 3.2 already landed ([02](./02-ruby-upgrade.md)) — hard prerequisite
+- [ ] Swap the gem and run the engine's pending migrations (**DB snapshot first**)
+- [ ] Port `comfy_patching.rb`, the custom CMS tag and the category models — see [09](./09-cms-comfy.md)
+- [ ] Remove `tinymce-rails` — Media Surfer uses Redactor
+- [ ] Do not merge Rails 7.0 until the B3 checklist in [09](./09-cms-comfy.md) passes
 
 **Nokogiri / Loofah unpin:**
 
@@ -68,9 +72,11 @@ This is where ComfortableMexicanSofa compat becomes critical. See [09](./09-cms-
 - [ ] Grep `redirect_to params[` — add `allow_other_host: false` or explicit allowlist
 - [ ] Flush staging cache after deploy (cache format version changed)
 - [ ] Upgrade `nokogiri` to `~> 1.16`; remove `loofah` pin
-- [ ] Upgrade `activerecord-postgis-adapter` to 8.x — see [06](./06-postgis-and-database.md)
+- [ ] Upgrade `activerecord-postgis-adapter` to **8.x** (Rails 7.0 row — 9.x at 7.1, 11.x at Rails 8) — see [06](./06-postgis-and-database.md)
+- [ ] **`PostgisDatabaseTasks` is gone from 8.x** — add explicit `CREATE EXTENSION postgis` to CI and the Docker entrypoint
+- [ ] Replace `ActiveRecord::Base.connection_config` (removed in 7.0) — used in `lib/modules/ogr/postgres.rb`, see [13](./13-gdal-and-spatial-tooling.md)
 - [ ] Grep Arel private API usage in `lib/modules/search/` — update to public API
-- [ ] Smoke-test Comfy `/admin` — see [09](./09-cms-comfy.md)
+- [ ] Swap to `comfortable_media_surfer` and pass the B3 checklist — see [09](./09-cms-comfy.md)
 - [ ] Run full test suite; confirm green
 
 ---
@@ -104,7 +110,8 @@ Rails 7.1 is a smaller bump from 7.0. Primary new features are opt-in (async que
 - [ ] Update `gem 'rails', '7.1.x'`; `bundle update rails`
 - [ ] Run `rails app:update`; review diffs
 - [ ] Apply `config.load_defaults 7.1`
-- [ ] Migrate `config/secrets.yml` → `config/credentials.yml.enc` if not already done
+- [ ] Migrate `config/secrets.yml` → `config/credentials.yml.enc` if not already done — note `config/storage.yml` reads `Rails.application.secrets.*` for the S3 credentials and must be updated with it
+- [ ] Bump `activerecord-postgis-adapter` 8.x → **9.x** (the Rails 7.1 row) — see [06](./06-postgis-and-database.md)
 - [ ] Check AR callback order in import workers — `run_commit_callbacks_on_first_saved_instances_in_transaction` change
 - [ ] Run `rails db:migrate:status` — ensure no pending migrations
 - [ ] Run full test suite
@@ -139,7 +146,8 @@ See [frontend/00](../frontend/00-scope-and-backend-dependencies.md) for the full
 
 - Rails 7.1 boots locally with `bin/rails server`
 - CI passes on Rails 7.1
-- Comfy `/admin` works (B3 checkpoint)
+- `comfortable_media_surfer` in place; `/admin` works (B3 checkpoint — see [09](./09-cms-comfy.md))
+- `activerecord-postgis-adapter` on 9.x
 - `secrets.yml` migrated to credentials
 - No pending migrations
 - Frontend colleague notified of B0

@@ -29,8 +29,8 @@ This document maps **every Gemfile entry that affects the browser, assets, or CM
 | `jquery-rails` | **No** | Gem present; **no `app/assets` jquery manifest** found for public site | **Audit** Comfy/vendor JS; likely removable from *public* path |
 | `bourbon` | **No** | Path in `config/initializers/assets.rb`; **no `@import bourbon` in SCSS** | **Remove** if confirmed unused |
 | `neat` | **No** | Grid companion to Bourbon; no imports found | **Remove** with Bourbon if unused |
-| `tinymce-rails` | **No** | Comfy CMS WYSIWYG (`config.tinymce.install = :compile`) | **Upgrade** with Comfy/Rails 7; test `/admin` editor |
-| `comfortable_mexican_sofa` | **No** (CMS) | Whole CMS admin + public CMS pages | **Major** — Rails upgrade + admin asset QA (not Vue, but frontend-facing) |
+| `tinymce-rails` | **No** | Comfy CMS WYSIWYG (`config.tinymce.install = :compile`) | **Remove** — Media Surfer uses Redactor, not TinyMCE. See [backend/09](../backend/09-cms-comfy.md) |
+| `comfortable_mexican_sofa` | **No** (CMS) | Whole CMS admin + public CMS pages | **Replaced** by `comfortable_media_surfer ~> 3.1` at the Rails 7.0 step — see [backend/09](../backend/09-cms-comfy.md). Admin asset QA is frontend-facing |
 | `phantompdf` | Partial (Puppeteer only) | Gem in Gemfile; **PDF generation uses Node Puppeteer**, not this gem | **Remove** gem after confirming no `Phantompdf` calls |
 | `premailer-rails` | N/A (email) | Inline CSS for **emails** | Out of public frontend scope; keep for mailers |
 | `ejs` | **No** | Test/dev group — EJS templates for JS tests | Update/remove with test stack (`factory_girl`, capybara 2) |
@@ -84,8 +84,8 @@ Comfortable Mexican Sofa brings its own admin UI:
 
 **Tasks (coordinate with backend):**
 
-- [ ] Smoke-test CMS after each Rails minor bump: login, edit page, TinyMCE, upload, fixtures import.
-- [ ] Confirm Comfy 2.x compatibility with target Rails or plan Comfy upgrade.
+- [ ] Smoke-test CMS after each Rails minor bump: login, edit page, editor loads, upload, fixtures import. **From Rails 7.0 the editor is Redactor, not TinyMCE.**
+- [ ] **Admin asset pipeline is no longer a safe assumption.** Media Surfer 3.1 dropped sassc-sprockets, added Propshaft support and requires Node for admin assets. Re-test whether Comfy admin still renders under Sprockets at the swap — backend flags the outcome, see [backend/09](../backend/09-cms-comfy.md).
 - [ ] **[Migrate CMS CoffeeScript → plain JS](#migrate-cms-coffeescript--plain-js-coffee-rails)** — small, do early in phase 2 (unblocks removing `coffee-rails`).
 - [ ] Do **not** assume Vite is needed for Comfy admin on day one — Sprockets may carry admin until Comfy is upgraded.
 
@@ -168,7 +168,7 @@ gem 'neat'
 - [ ] Grep `Phantompdf`, `phantompdf`, `best_in_place`, `bourbon`, `neat` across repo.
 - [ ] List all `javascript_include_tag` / `stylesheet_link_tag` in layouts (public + `comfy`).
 - [ ] Open `/admin` → Network tab: which assets load (Sprockets vs pack vs CDN).
-- [ ] Document Comfy version constraint vs Rails 7 in ComfortableMexicanSofa changelog.
+- [ ] Re-run the `/admin` asset check **after** the Media Surfer swap and compare — see [backend/09](../backend/09-cms-comfy.md).
 
 ---
 
