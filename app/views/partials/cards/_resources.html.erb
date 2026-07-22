@@ -10,18 +10,18 @@
     <% end %>
   </div>
 
-  <div class="cards__cards <%= !get_all ? 'preview' : '' %>">
-    <% @items[:cards].each_with_index do |card, index| %>
-      <listing-page-card-resources
-        :key="<%= index %>"
-        date="<%= card[:date] %>"
-        file-url="<%= card[:fileUrl] %>"
-        link-title="<%= card[:linkTitle] %>"
-        link-url="<%= card[:linkUrl] %>"
-        summary="<%= card[:summary] %>"
-        title="<%= card[:title] %>"
-        url="<%= card[:url] %>"
-      ></listing-page-card-resources>
-    <% end %>
-  </div>
+  <%= frontend_mount "ListingPageCardResources", props: {
+        cards: @items[:cards].map do |card|
+          {
+            date: card[:date],
+            fileUrl: card[:fileUrl],
+            linkTitle: card[:linkTitle],
+            linkUrl: card[:linkUrl],
+            summary: card[:summary],
+            title: card[:title],
+            url: card[:url]
+          }
+        end,
+        preview: !get_all
+      } %>
 </div>

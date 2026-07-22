@@ -22,25 +22,18 @@ import '@/styles/tailwind.css'
 import { registerIslands, startIslands } from '@/lib/islands'
 
 registerIslands({
-  // Global chrome banner — first migrated island. Rendered by
-  // app/views/layouts/partials/_banner.html.erb via frontend_mount "Banner".
   Banner: () => import('@/components/Banner/Index.vue'),
-  // Tabbed pages (thematic/data). Validated Vue 3 Tabs island using real v-if panels
-  // (see Tabs.vue + specs). Not yet wired to a live page — the first real tab-page
-  // migration (e.g. wdpca) will register its page island here and use frontend_mount.
-  Tabs: () => import('@/components/Tabs.vue')
   Tabs: () => import('@/components/Tabs.vue'),
   GaLink: () => import('@/components/GaLink.vue'),
   Counter: () => import('@/components/Counter.vue'),
   ListingPageCardNews: () => import('@/components/ListingPageCard/News/Index.vue'),
   ListingPageCardResources: () => import('@/components/ListingPageCard/Resources/Index.vue'),
+  Tooltip: () => import('@/components/Tooltip/Index.vue'),
+  TooltipSecond: () => import('@/components/Tooltip/Second.vue'),
+  NavBurger: () => import('@/components/Nav/Burger.vue'),
+  SearchSiteTopbar: () => import('@/components/Search/SiteTopbar.vue')
 })
 
-// Mount on DOMContentLoaded, NOT immediately. Webpacker's Vue 2 registers its
-// `#v-app` mount on DOMContentLoaded from a classic <script> in <head> (which runs
-// before this deferred module), so waiting for the same event means Vue 2 rebuilds
-// `#v-app` FIRST. Islands that sit inside `#v-app` then mount into the final node
-// once — no mount/re-mount race. (`complete` = the event already fired.)
 if (document.readyState === 'complete') {
   startIslands()
 }
