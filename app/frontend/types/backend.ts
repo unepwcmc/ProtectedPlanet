@@ -76,7 +76,7 @@ export interface ListingPageCardResourcesListProps {
 }
 
 // Shape produced by ApplicationHelper#map_page (used by #get_nav_primary),
-// currently serialized directly into the `<nav-burger :links="...">` attribute.
+// passed as the `links` prop to the `NavBar` island (frontend_mount "NavBar").
 // See app/helpers/application_helper.rb.
 export interface NavLink {
   id: string

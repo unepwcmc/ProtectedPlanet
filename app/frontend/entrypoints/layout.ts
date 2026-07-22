@@ -30,7 +30,7 @@ registerIslands({
   ListingPageCardResources: () => import('@/components/ListingPageCard/Resources/Index.vue'),
   Tooltip: () => import('@/components/Tooltip/Index.vue'),
   TooltipSecond: () => import('@/components/Tooltip/Second.vue'),
-  NavBurger: () => import('@/components/Nav/Burger.vue'),
+  NavBar: () => import('@/components/NavBar/Index.vue'),
   SearchSiteTopbar: () => import('@/components/Search/SiteTopbar.vue')
 })
 

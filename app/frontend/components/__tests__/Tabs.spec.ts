@@ -41,7 +41,7 @@ describe('Tabs (v-if panels)', () => {
   it('renders a previously-hidden panel when its trigger is clicked', async () => {
     const wrapper = mount(Tabs, { props: { tabs } })
 
-    const secondTrigger = wrapper.findAll('.tab__trigger')[1]
+    const secondTrigger = wrapper.findAll('.ct-tabs__trigger')[1]
     await secondTrigger.trigger('click')
 
     // Panel 2 now exists and its body rendered; panel 1 was torn down.
@@ -76,7 +76,7 @@ describe('Tabs (v-if panels)', () => {
     expect(wrapper.find('.widget').text()).toBe('widget:A')
 
     // Reveal tab 2: A unmounts, B mounts for the first time.
-    await wrapper.findAll('.tab__trigger')[1].trigger('click')
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
 
     expect(lifecycle).toEqual(['mount:A', 'unmount:A', 'mount:B'])
     expect(wrapper.findAll('.widget')).toHaveLength(1)

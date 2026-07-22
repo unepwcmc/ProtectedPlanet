@@ -27,14 +27,11 @@ import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
 import ListingPage from './components/listing/ListingPage.vue'
-import NavBurger from './components/nav/NavBurger'
 import PameModal from './components/pame/PameModal'
 import RegionCountryPages from './components/pages/RegionCountryPages'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
-import SearchSiteTopbar from './components/search/SearchSiteTopbar'
-import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
@@ -98,14 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         FilteredTable,
         Flickity,
         ListingPage,
-        NavBurger,
         PameModal,
         RegionCountryPages,
         SearchAreas,
         SearchAreasHome,
         SearchSite,
-        SearchSiteTopbar,
-        SelectWithContent,
         StickyBar,
         Tabs,
         TabTarget,

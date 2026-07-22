@@ -73,7 +73,7 @@ createApp(SearchAreas, props).mount(el)
 
 | Priority | Entrypoint | Source ERB / component |
 |----------|------------|------------------------|
-| 1 | `layout.ts` | `_topbar.html.erb` — `NavBurger`, `SearchSiteTopbar` |
+| 1 | `layout.ts` | `_topbar.html.erb` — `NavBar`, `SearchSiteTopbar` |
 | 2 | `listing-page.ts` | `layouts/cms/_resources.html.erb` |
 | 3 | `search-areas.ts` | `search_areas/index.html.erb` |
 | 4 | `map.ts` | `partials/maps/_main.html.erb` → wrapper `MapPage.vue` |
