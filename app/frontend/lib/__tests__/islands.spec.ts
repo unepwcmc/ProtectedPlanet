@@ -49,12 +49,15 @@ afterEach(() => {
 
 describe('island mounter', () => {
   it('mounts a registered mount point present at start, passing its JSON props', async () => {
-    const el = mountPoint('mini', { msg: 'hello' })
+    mountPoint('mini', { msg: 'hello' })
 
     mountAll(document)
     await flush()
 
-    expect(el.querySelector('.mini')?.textContent).toBe('mini:hello')
+    // Note: mounting replaces the wrapper with the component's own root (see
+    // islands.ts), so lookups happen against the live document, not a reference to
+    // the original (now-detached) wrapper element.
+    expect(document.querySelector('.mini')?.textContent).toBe('mini:hello')
   })
 
   it('ignores unregistered mount ids', async () => {
@@ -68,13 +71,13 @@ describe('island mounter', () => {
   })
 
   it('does not double-mount the same element', async () => {
-    const el = mountPoint('mini', { msg: 'once' })
+    mountPoint('mini', { msg: 'once' })
 
     mountAll(document)
     mountAll(document) // second scan (e.g. observer + initial) must be a no-op
     await flush()
 
-    expect(el.querySelectorAll('.mini').length).toBe(1)
+    expect(document.querySelectorAll('.mini').length).toBe(1)
   })
 
   it('mounts a mount point ADDED AFTER start (the v-if / late-reveal trap)', async () => {
@@ -83,10 +86,10 @@ describe('island mounter', () => {
     await flush()
 
     // Simulate a region being revealed later and bringing a mount point with it.
-    const el = mountPoint('mini', { msg: 'late' })
+    mountPoint('mini', { msg: 'late' })
     await flush()
 
-    expect(el.querySelector('.mini')?.textContent).toBe('mini:late')
+    expect(document.querySelector('.mini')?.textContent).toBe('mini:late')
   })
 
   it('mounts a nested island inside a Tabs panel that is v-if-hidden by default', async () => {
@@ -112,7 +115,7 @@ describe('island mounter', () => {
     expect(document.querySelector('.mini')).toBeNull()
 
     // Reveal tab 2 -> its bodyHtml (incl. the nested mount point) enters the DOM.
-    await wrapper.findAll('.tab__trigger')[1].trigger('click')
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
     await flush()
 
     // The observer picked up the newly-inserted mount point and mounted it.

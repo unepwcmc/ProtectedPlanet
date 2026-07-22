@@ -43,9 +43,12 @@ export async function mountEl(el: HTMLElement): Promise<void> {
   // Mark before awaiting so a concurrent observer callback can't double-mount.
   mountedEls.add(el)
   const [createApp, mod] = await Promise.all([loadCreateApp(), registry[id]()])
+  // Repeated instances of the same registered id (see FrontendHelper#frontend_mount's
+  // `key:` option) carry their own props block via `data-props-id`; fall back to `id`
+  // for the common one-instance-per-page case.
   const app = createApp(
     mod.default as Parameters<typeof createApp>[0],
-    readMountProps(id) ?? {}
+    readMountProps(el.dataset.propsId ?? id) ?? {}
   )
   app.mount(el)
   // Vue 3 mounts INTO el rather than replacing it (Vue 2's behaviour), leaving a
@@ -53,8 +56,21 @@ export async function mountEl(el: HTMLElement): Promise<void> {
   // out for the rendered root so the wrapper doesn't ship to the page. Only safe
   // for single-root components (the only kind used here) — skip otherwise so a
   // future multi-root component degrades to "extra wrapper" instead of losing nodes.
-  if (el.childNodes.length === 1 && el.firstElementChild) {
-    el.replaceWith(el.firstElementChild)
+  if (el.childNodes.length === 1 && el.firstElementChild instanceof HTMLElement) {
+    const root = el.firstElementChild
+    // Carry the identifying markers over so code that looks a mount point up by
+    // id/data-mount *after* mounting (tests, devtools, future re-scans) still finds
+    // it — only the wrapper's redundant DOM nesting is being removed, not its identity.
+    if (el.id) root.id ||= el.id
+    for (const [key, value] of Object.entries(el.dataset)) {
+      if (value !== undefined && !(key in root.dataset)) root.dataset[key] = value
+    }
+    // `data-mount` is carried over above, so the MutationObserver sees `root` (now
+    // bearing that attribute) arrive as a new node when replaceWith fires its
+    // childList mutation. Mark it mounted up front so that re-scan is a no-op
+    // instead of mounting a second Vue app onto the same node.
+    mountedEls.add(root)
+    el.replaceWith(root)
   }
 }
 
