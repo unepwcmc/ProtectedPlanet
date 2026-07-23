@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class GreenListHelperTest < ActionView::TestCase
-  include GreenListHelper
+  include Thematic::Effectiveness::GreenListHelper
 
   test 'chart_row_pa_legend returns two legend entries with expected themes' do
     legends = chart_row_pa_legend

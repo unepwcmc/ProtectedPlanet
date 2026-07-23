@@ -39,14 +39,33 @@ The plan's entire safety model is "run suite, confirm green" at each Rails bump.
 - **The Jenkins CI fix must not merge to a built branch until the suite loads** — `backend/ci-test-baseline` flips the Test stage from `echo "rakeTest()"` to a real run, which would turn every build red at load. Land it *with or after* this phase, not before.
 - Estimate is genuinely uncertain: each gem bump surfaces the next wall (mocha → webmock → factory_bot → real test failures). Could be a week to load-green; the *pass*-green depth is unknown until we excavate.
 
-### "Make it load" ladder (do in this order, on Rails 5.2)
+### "Make it load" ladder — ✅ DONE (L0 reached, Jul 2026)
 
-1. **`mocha` 1.0.0 → `~> 1.16`** (last 1.x — keeps the `.stubs`/`.expects` API the 61 files use; avoids mocha 2.x's stricter breaking changes). Change `test_helper.rb:14`: `require 'mocha/mini_test'` → `require 'mocha/minitest'`.
-2. **`webmock` 1.22 → `~> 3.x`** — next crash at `test_helper.rb:15` (`require 'webmock/minitest'`). Same MiniTest-constant era.
-3. **`factory_girl_rails` → `factory_bot_rails`** — likely the next load wall (`FactoryGirl` constant).
-4. Re-run → first real pass/fail count. *Then* the numbers below become meaningful.
+Climbed on `backend/test-suite-revival`. What it actually took:
 
-**Milestone L0 — "suite loads and reports pass/fail on Rails 5.2."** This is the true first deliverable of the whole backend upgrade.
+1. **`mocha` 1.0.0 → `~> 2.7`** (resolved 2.8.2). 1.16 was a dead end — mocha 1.x never fixed the `MiniTest`-constant reference that `minitest` 5.19 removed. Required three call-site fixes in `test_helper.rb`:
+   - `require 'mocha/mini_test'` → `require 'mocha/minitest'`
+   - `Mocha::Configuration.prevent(:stubbing_non_existent_method)` → `Mocha.configure { |c| c.stubbing_non_existent_method = :prevent }` (class API removed in mocha 2.0)
+   - `module MiniTest::Assertions` → `module Minitest::Assertions`
+2. **`webmock` 1.22 → `~> 3.23`** — same MiniTest-era crash.
+3. **`ruby2_keywords` 0.0.2 → 0.0.5** — transitive; mocha 2.x needs `>= 0.0.5`, lockfile pinned it. `bundle update mocha webmock ruby2_keywords`.
+4. **1 stale test file** — `test/helpers/green_list_helper_test.rb` did `include GreenListHelper`, but the helper was namespaced to `Thematic::Effectiveness::GreenListHelper` since the test was written. **This was the only load-wall in app test code** — a probe confirmed 120/121 files loaded clean.
+5. **`factory_girl_rails` was NOT a load wall** — still installed, still defines `FactoryGirl`, factories eager-load fine. Rename to `factory_bot` deferred to the green stage.
+
+**✅ Milestone L0 reached — suite loads (121/121) and runs on Rails 5.2.**
+
+### First real baseline (Jul 2026, Rails 5.2 / Ruby 2.7.8)
+
+```
+631 runs, 1349 assertions, 43 failures, 64 errors, 7 skips
+```
+
+**~83% pass (524/631).** The suite was never rotten — the "100% dead" was entirely the gem-load crashes. The remaining **107 failures/errors** are the real excavation:
+
+- Some are **real network leaks** — tests hitting live AWS S3 (`pp-import-development.s3...`), i.e. webmock/VCR stubbing gaps, not app bugs.
+- The rest are app-level drift (moved constants, changed behaviour) accumulated since 2021.
+
+Next: triage the 107 into buckets (network-stub vs app-drift vs genuinely-obsolete) → **green on 5.2**. *Then* the Rails bumps have their safety net.
 
 ---
 

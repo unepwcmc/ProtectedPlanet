@@ -11,14 +11,16 @@ require 'rails/test_help'
 
 ActiveRecord::Migration.maintain_test_schema!
 
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'webmock/minitest'
 
 require 'database_cleaner'
 
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
-Mocha::Configuration.prevent(:stubbing_non_existent_method)
+Mocha.configure do |c|
+  c.stubbing_non_existent_method = :prevent
+end
 
 class ActionMailer::TestCase
   def html_body mail
@@ -26,7 +28,7 @@ class ActionMailer::TestCase
   end
 end
 
-module MiniTest::Assertions
+module Minitest::Assertions
   def assert_same_elements(array_one, array_two)
     assert ((array_one - array_two) + (array_two - array_one)).empty?,
       "Expected #{array_one} to contain the same elements as #{array_two}"
