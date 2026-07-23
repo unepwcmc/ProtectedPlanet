@@ -1,7 +1,5 @@
 <%= render partial: "./layouts/partials/hero-home", locals: {
-    button: t('home.hero.button'),
-    hero_stat_percentage: @pa_coverage_percentage,
-    hero_stat_text: t('home.hero.stat-text')
+    button: t('home.hero.button')
   }
 %>
 
@@ -14,13 +12,14 @@
     
     <%= @update_date %>
 
-    <ga-link
-      class="margin-space--left"
-      ga-id="Download global statistics"
-      href="<%= global_statistics_download_path %>"
-    >
-      <%= t('home.download.link') %>
-    </ga-link>
+    <%= frontend_mount "GaLink",
+          tag: :span,
+          class: "margin-space--left",
+          props: {
+            gaId: "Download global statistics",
+            href: global_statistics_download_path,
+            text: t('home.download.link')
+          } %>
   </p>
 </section>
 
@@ -51,7 +50,7 @@
 </section>
 
 <section class="container spacer-medium--bottom">
-  <%= render "partials/cards/articles" %>
+  <%= render "partials/cards/news" %>
 </section>
 
 <%= render "partials/ctas/live-report" %>

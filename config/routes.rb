@@ -41,8 +41,6 @@ Rails.application.routes.draw do
 
     get '/terms', to: redirect("/c/#{PageSlugs::TERMS_AND_CONDITIONS}")
 
-    get '/country_codes', to: 'country#codes', as: 'country_codes'
-
     get PageSlugs::Data.path(PageSlugs::Data::WDPCA), to: 'data/wdpca#index'
     get PageSlugs::Data.path(PageSlugs::Data::GDPAME), to: 'data/gdpame#index'
 

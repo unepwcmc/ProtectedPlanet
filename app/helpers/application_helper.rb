@@ -107,7 +107,7 @@ module ApplicationHelper
     PageSlugs::NAV_PRIMARY.map do |slug|
       map_children = slug == PageSlugs::Data::PARENT || slug == PageSlugs::ThematicAreas::PARENT
       map_page(slug, map_children)
-    end.compact.to_json
+    end.compact
   end
 
   # def link_to_page? card

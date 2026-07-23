@@ -27,7 +27,7 @@
 - [ ] ERB ↔ component spreadsheet (include **CMS pattern A/B/C** per [README](./README.md#cms--frontend-important--read-before-phase-3))
 - [ ] Entrypoint list per [14](./14-architecture-and-design.md)
 - [ ] Props schemas for `frontend_mount` helper (design doc, no Rails 7 required)
-- [ ] Document thematic/equity tab redesign (pattern B) before Rails 7
+- [x] Document thematic/equity tab redesign (pattern B) before Rails 7 — moot: the equity layout/tabs were dead code, deleted Jul 2026
 
 ### 2. Vue 2 prep (Webpacker unchanged)
 

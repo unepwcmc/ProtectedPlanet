@@ -87,19 +87,6 @@
       }"
     />
 
-    <!--
-      Growth chart hidden because calculation is incorrect
-      https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/265
-      <stats-growth
-        v-if="hasGrowth"
-        v-bind="{
-          chart: activeDatabase.growth.chart,
-          smallprint: activeDatabase.growth.smallprint,
-          title: activeDatabase.growth.title,
-        }"
-      />
-    -->
-
     <slot name="related_countries" />
 
     <stats-sites
@@ -118,7 +105,6 @@
 import StatsCoverage from '../stats/StatsCoverage.vue'
 import StatsDesignations from '../stats/StatsDesignations.vue'
 import StatsGovernance from '../stats/StatsGovernance.vue'
-import StatsGrowth from '../stats/StatsGrowth.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
 import StatsMessage from '../stats/StatsMessage.vue'
 import StatsSites from '../stats/StatsSites.vue'
@@ -132,7 +118,6 @@ export default {
     StatsCoverage,
     StatsDesignations,
     StatsGovernance,
-    StatsGrowth,
     StatsMessage,
     StatsIucnCategories,
     StatsSites,
@@ -173,9 +158,6 @@ export default {
     },
     hasGovernanceTypes () {
       return 'governance' in this.activeDatabase
-    },
-    hasGrowth () {
-      return 'growth' in this.activeDatabase
     },
     hasIucnCategories () {
       return 'iucn' in this.activeDatabase

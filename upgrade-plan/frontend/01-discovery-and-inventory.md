@@ -65,9 +65,9 @@ Document exactly how Rails and Vue connect today so nothing is discovered mid-mi
 - [ ] Assign pattern **A / B / C** per page (definitions in [14](./14-architecture-and-design.md#cms--frontend-integration)).
 - [ ] **Pattern B (high priority)** — document target redesign:
   - `app/views/partials/thematic_and_data_area/_tabs.html.erb` — shared `<tabs>`/`<tab-target>` with `slot-scope` + `cms_fragment_render` + per-tab extras (search/map/filtered-table); drives `data/wdpca`, `data/gdpame`, `thematic/effectiveness`
-  - `app/views/partials/tabs/_tabs-equity.html.erb` — CMS inside `tab-target` (`layouts/cms/_equity`)
   - `app/views/data/gdpame/index.html.erb` + `_tab_content.html.erb` — tabs + `filtered-table` + `pame-modal`
-- [ ] **Pattern C:** `app/views/cms/_child_dropdown.html.erb` — `select-with-content` + fragment-driven options
+- [x] **Pattern C:** ~~`app/views/cms/_child_dropdown.html.erb`~~ — deleted, was orphaned (never rendered by any CMS layout)
+- [x] `app/views/partials/tabs/_tabs-equity.html.erb` + `layouts/cms/_equity` — deleted, dead code (no CMS layout used them; **Removed Jul 2026**)
 - [ ] **Pattern A + Vue listing:** `layouts/cms/_resources.html.erb`, `_news-and-stories.html.erb` — `listing-page` + CMS hero
 - [ ] Comfortable Mexican Sofa — spot-check **production** body HTML for accidental `<v-` / `<chart-` tags (seeds look clean).
 - [ ] Confirm plan rejects **global mount-all-widgets** / `window.cmsData` for entire site.

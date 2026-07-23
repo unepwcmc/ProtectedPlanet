@@ -1,10 +1,4 @@
 #!/bin/bash
 set -e
 
-# Dependencies (bundle + yarn) are installed once by the `install` compose service,
-# which the vite service waits on (service_completed_successfully). This avoids
-# concurrent yarn/bundle installs racing on the shared volumes at cold start.
-# host/port come from config/vite.json (vite_ruby 1.2.x's `vite dev` CLI does not
-# accept --host/--port flags).
 exec /ProtectedPlanet/bin/vite dev
-  

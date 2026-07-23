@@ -2,8 +2,6 @@ class HomeController < ApplicationController
   include MapHelper
 
   def index
-    @pa_coverage_percentage = home_presenter.pas_coverage_percentage
-
     @config_search_areas = {
       id: 'all',
       placeholder: I18n.t('global.placeholder.search-wdpca')

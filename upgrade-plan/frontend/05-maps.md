@@ -29,14 +29,19 @@ Maps work without global `mapboxgl` from CDN v1.4.1. Map logic uses composables.
 
 ---
 
-## Decision required
+## Decision: MapLibre
+
+**Chosen: MapLibre GL JS** (open-source fork, no Mapbox account/licensing dependency). Style URLs
+(`mapbox://styles/unepwcmc/...`) need migrating off the `mapbox://` scheme, and PA polygons, zoom
+limits, and the RTL text plugin need re-testing against MapLibre's build — track these as the
+first tasks below, before wider map work starts.
 
 | Option | Pros | Cons |
 |--------|------|------|
-| **Mapbox GL v2+** | Same vendor, style URLs may port | Licensing, API changes from v1 |
-| **MapLibre** | Open source GL | Migrate off `mapbox://` style URLs; re-test PA polygons, zoom limits, RTL plugin |
+| Mapbox GL v2+ | Same vendor, style URLs may port | Licensing, API changes from v1 |
+| **MapLibre (chosen)** | Open source GL, no licensing risk | Migrate off `mapbox://` style URLs; re-test PA polygons, zoom limits, RTL plugin |
 
-Document decision in [README](./README.md#decisions) and [14](./14-architecture-and-design.md).
+Recorded in [14](./14-architecture-and-design.md#maps-decision-framework-for-pp).
 
 ---
 
@@ -44,9 +49,10 @@ Document decision in [README](./README.md#decisions) and [14](./14-architecture-
 
 ### Build & config
 
-- [ ] Bundle map library via Vite (remove `<script src="mapbox-gl.js">` from layout).
-- [ ] Token via `import.meta.env.VITE_MAPBOX_TOKEN` or Rails → `config/vite.rb`.
-- [ ] RTL plugin URL update for chosen GL version.
+- [ ] Bundle **`maplibre-gl`** via Vite (remove `<script src="mapbox-gl.js">` from layout).
+- [ ] Migrate `mapbox://styles/unepwcmc/...` style URLs off the `mapbox://` scheme (MapLibre needs a resolvable style JSON URL, not Mapbox's proprietary scheme).
+- [ ] Token/URL via `import.meta.env.VITE_MAPLIBRE_STYLE_URL` (or equivalent) via Rails → `config/vite.rb`.
+- [ ] RTL text plugin URL update for MapLibre's RTL plugin.
 
 ### Architecture
 
@@ -80,6 +86,7 @@ Document decision in [README](./README.md#decisions) and [14](./14-architecture-
 
 ## Reference
 
-- [Mapbox GL JS migration](https://docs.mapbox.com/mapbox-gl-js/guides/) or [MapLibre](https://maplibre.org/maplibre-gl-js/docs/)
+- [MapLibre GL JS docs](https://maplibre.org/maplibre-gl-js/docs/) — chosen library
+- [Mapbox → MapLibre migration guide](https://maplibre.org/maplibre-gl-js/docs/guides/migrate-to-maplibre/)
 - `app/javascript/components/map/default-options.js` — existing style IDs
 - [14 — Architecture](./14-architecture-and-design.md) — `map.ts` entrypoint + `MapPage.vue` wrapper

@@ -1,6 +1,3 @@
 <% if banner_visible? %>
-  <banner-banner 
-    :banners="<%= active_banners.to_json %>"
-    :signature="<%= banner_signature.to_json %>"
-  ></banner-banner>
+  <%= frontend_mount "Banner", props: { banners: active_banners, signature: banner_signature } %>
 <% end %>

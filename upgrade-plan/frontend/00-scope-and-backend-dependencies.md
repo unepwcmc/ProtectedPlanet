@@ -17,7 +17,7 @@
 
 **Also (integration backend):** Small Ruby/DevOps changes that unblock the frontend — you can own these with backend review:
 
-- `vite_rails` 2.x on `main` (spike); bump to 3.x + `config/vite.rb` on upgrade branch
+- `vite_rails` 2.x on `main` (spike); bump to 3.x + `config/vite.rb` on upgrade branch (npm side: **`vite-plugin-rails`**, confirmed)
 - ERB helpers, layout tags, `Procfile.dev`
 - Comfy admin Coffee → JS + removing `coffee-rails`
 - Dead gem removal (`sprockets-vue`, `phantompdf`, …) when audited

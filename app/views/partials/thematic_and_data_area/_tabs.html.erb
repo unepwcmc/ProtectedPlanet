@@ -1,7 +1,16 @@
 <% show_tab_triggers = thematic_and_data_area_show_tab_triggers?(tabs_list) %>
-<% panel_locals = { tab_extras: local_assigns[:tab_extras] } %>
+<% tab_extras = local_assigns[:tab_extras] %>
+<% panel_locals = { tab_extras: tab_extras } %>
 
-<% if show_tab_triggers %>
+<% if show_tab_triggers && tab_extras.blank? %>
+  <%# No tab_extras means no live Vue2 widget embedded in any tab, so this can
+      run as a Vue3 island — see [[tabs-wiring-blocked-on-vapp]] memory. %>
+  <%= frontend_mount "Tabs", props: {
+    tabs: thematic_and_data_area_vue_tabs(tabs_list),
+    preselectedTab: params[:tab],
+    gaId: ga_id
+  } %>
+<% elsif show_tab_triggers %>
   <tabs
     class="tabs--hero"
     ga-id="<%= ga_id %>"

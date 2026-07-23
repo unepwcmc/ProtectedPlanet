@@ -15,7 +15,7 @@
     name: 'chart-row-stacked',
 
     props: {
-      title: String,
+      title: String, 
       theme: String,
       rows: {
         type: Array, //[{ percent: Number }]

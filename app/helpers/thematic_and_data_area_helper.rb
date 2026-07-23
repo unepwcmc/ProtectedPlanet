@@ -22,6 +22,19 @@ module ThematicAndDataAreaHelper
     tabs_list.count { |tab| tab[:title].present? } > 1
   end
 
+  # Props for `frontend_mount "Tabs"` — only valid when no tab has `tab_extras`
+  # (those embed legacy Vue2 widgets still bound to `#v-app`, see
+  # ThematicAndDataAreaHelper#thematic_and_data_area_tab_extras_config).
+  def thematic_and_data_area_vue_tabs(tabs_list)
+    tabs_list.map do |tab|
+      {
+        id: tab[:id],
+        title: tab[:title],
+        bodyHtml: content_tag(:section, cms_fragment_render(tab[:content_id]), class: "container--medium")
+      }
+    end
+  end
+
   def thematic_and_data_area_tab_extras_config(tab, tab_extras)
     return if tab_extras.blank?
 
