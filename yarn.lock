@@ -2517,6 +2517,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/devtools-api@npm:^8.1.5":
+  version: 8.1.5
+  resolution: "@vue/devtools-api@npm:8.1.5"
+  dependencies:
+    "@vue/devtools-kit": "npm:^8.1.5"
+  checksum: 10c0/ee15daf3de2d52f856b86c6773ecdd86e27e5b4cdc5d92474504a431db2c9dc993165128016f1689b68ac16d13e311a17261f57c48fe46724bfced7005af11e1
+  languageName: node
+  linkType: hard
+
+"@vue/devtools-kit@npm:^8.1.5":
+  version: 8.1.5
+  resolution: "@vue/devtools-kit@npm:8.1.5"
+  dependencies:
+    "@vue/devtools-shared": "npm:^8.1.5"
+    birpc: "npm:^2.6.1"
+    hookable: "npm:^5.5.3"
+    perfect-debounce: "npm:^2.0.0"
+  checksum: 10c0/8c521b8f5ae6a11b9a455de23e1b70a561cb74996af1d594dc496b2657791db632f95e1b9a967ae8d984879e5088b017f94d0e6664e7e3a350765f30dff7d91f
+  languageName: node
+  linkType: hard
+
+"@vue/devtools-shared@npm:^8.1.5":
+  version: 8.1.5
+  resolution: "@vue/devtools-shared@npm:8.1.5"
+  checksum: 10c0/2e05aa71e68e038a5e143f8cbf77a597e2ec4c3d623f312c1633cb3e89cc4e0bf837954ebec252369ac9be11c0ca6316b8688127511d244e98f5287ff17f8a93
+  languageName: node
+  linkType: hard
+
 "@vue/language-core@npm:2.2.12":
   version: 2.2.12
   resolution: "@vue/language-core@npm:2.2.12"
@@ -3492,6 +3520,13 @@ __metadata:
   dependencies:
     file-uri-to-path: "npm:1.0.0"
   checksum: 10c0/3dab2491b4bb24124252a91e656803eac24292473e56554e35bbfe3cc1875332cfa77600c3bac7564049dc95075bf6fcc63a4609920ff2d64d0fe405fcf0d4ba
+  languageName: node
+  linkType: hard
+
+"birpc@npm:^2.6.1":
+  version: 2.9.0
+  resolution: "birpc@npm:2.9.0"
+  checksum: 10c0/2462d0d67061f95bae213b0b9b323a6643ff749f7457a25242897c99e31355f1bd522c17f83ecf57506351e3e28b4e38c12a39b8beddee2dd0cbf78f9b9876ce
   languageName: node
   linkType: hard
 
@@ -7760,6 +7795,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hookable@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "hookable@npm:5.5.3"
+  checksum: 10c0/275f4cc84d27f8d48c5a5cd5685b6c0fea9291be9deea5bff0cfa72856ed566abde1dcd8cb1da0f9a70b4da3d7ec0d60dc3554c4edbba647058cc38816eced3d
+  languageName: node
+  linkType: hard
+
 "hookified@npm:^1.15.0, hookified@npm:^1.15.1":
   version: 1.15.1
   resolution: "hookified@npm:1.15.1"
@@ -10287,6 +10329,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nostics@npm:^1.1.4":
+  version: 1.2.0
+  resolution: "nostics@npm:1.2.0"
+  checksum: 10c0/fae2da4abce570a55837957a95dd93b75e3c36987015dfb6c96158844fedbc3f53421486dde3bce5d26209abc1d4250703d2166f639553204187f7209cc56cae
+  languageName: node
+  linkType: hard
+
 "npm-bundled@npm:^1.0.1":
   version: 1.1.2
   resolution: "npm-bundled@npm:1.1.2"
@@ -10989,6 +11038,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"perfect-debounce@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "perfect-debounce@npm:2.1.0"
+  checksum: 10c0/c4f833816f249129cea996d60b1351b640cf06954ab4eecaca440234ef70f4aefe6483637049750f5b00e15a5036307ea77f831c9779d6ad878457680af49b6d
+  languageName: node
+  linkType: hard
+
 "performance-now@npm:^2.1.0":
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
@@ -11028,6 +11084,24 @@ __metadata:
   version: 4.0.1
   resolution: "pify@npm:4.0.1"
   checksum: 10c0/6f9d404b0d47a965437403c9b90eca8bb2536407f03de165940e62e72c8c8b75adda5516c6b9b23675a5877cc0bcac6bdfb0ef0e39414cd2476d5495da40e7cf
+  languageName: node
+  linkType: hard
+
+"pinia@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "pinia@npm:4.0.2"
+  dependencies:
+    nostics: "npm:^1.1.4"
+  peerDependencies:
+    "@vue/devtools-api": ^8.1.5
+    typescript: ">=5.6.0"
+    vue: ^3.5.11
+  peerDependenciesMeta:
+    "@vue/devtools-api":
+      optional: false
+    typescript:
+      optional: true
+  checksum: 10c0/210f76c147cadf379437abc0150763add506e0328204f4f42adb14e74967bd60f3036eae5e06b572ee6666047bbfb9158db2f0cf9b9016c1f94c724eba4b30d4
   languageName: node
   linkType: hard
 
@@ -12874,6 +12948,7 @@ __metadata:
     "@tailwindcss/vite": "npm:^4.3.3"
     "@types/node": "npm:^26.1.1"
     "@vitejs/plugin-vue": "npm:^6.0.8"
+    "@vue/devtools-api": "npm:^8.1.5"
     "@vue/test-utils": "npm:^2.4.11"
     "@vueuse/core": "npm:^14.3.0"
     axios: "npm:^0.19.0"
@@ -12887,6 +12962,7 @@ __metadata:
     eslint-plugin-vue: "npm:^10.4.0"
     globals: "npm:^17.7.0"
     jsdom: "npm:^25.0.1"
+    pinia: "npm:^4.0.2"
     postcss-html: "npm:^1.8.0"
     puppeteer: "npm:^5.2.1"
     save: "npm:^2.4.0"

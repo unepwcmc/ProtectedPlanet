@@ -108,3 +108,58 @@ export interface TabsProps {
   // Matches by id or by title, mirroring the legacy `?tab=` query param.
   preselectedTab?: number | string | null
 }
+
+// One entry of DownloadsHelper::DEFAULT_OPTIONS merged with #download_params,
+// passed to `Download` (`frontend_mount "Download"`) as `options`.
+export interface DownloadOption {
+  isDownload?: boolean
+  isMap?: boolean
+  title: string
+  commercialAvailable?: boolean
+  url?: string
+  params?: {
+    domain: string
+    format: string
+    token: string
+    // Attached for the 'search' domain option — see Download/Index.vue's
+    // clickNonCommercial, sourced from useDownloadStore's search bridge.
+    filters?: unknown
+    search?: string
+  }
+}
+
+export interface DownloadProps {
+  buttonText: string
+  options: DownloadOption[]
+  // See DownloadsHelper#download_text[:commercial].
+  textCommercial: {
+    commercialText: string
+    commercialTitle: string
+    nonCommercialText: string
+    nonCommercialTitle: string
+    nonCommercialButton: string
+    title: string
+  }
+  downloadDisabled?: boolean
+  gaId: string
+}
+
+// Props for `DownloadModal` (`frontend_mount "DownloadModal"`, mounted once
+// globally in application.html.erb).
+export interface DownloadModalProps {
+  endpointCreate: string
+  endpointPoll: string
+  gaId: string
+  // See DownloadsHelper#download_text[:download].
+  textDownload: {
+    citationText: string
+    citationTitle: string
+    title: string
+  }
+  // See DownloadsHelper#download_text[:status].
+  textStatus: {
+    download: string
+    failed: string
+    generating: string
+  }
+}

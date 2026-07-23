@@ -20,6 +20,12 @@
 import '@/styles/tailwind.css'
 
 import { registerIslands, startIslands } from '@/lib/islands'
+import { installDownloadStoreBridge } from '@/stores/downloadBridge'
+
+// Legacy Vue2 SearchAreas.vue (Wave 7, not yet migrated) still writes active
+// search filters/term into this bridge so the new Download island can read
+// them for its "search" domain option — see stores/downloadBridge.ts.
+installDownloadStoreBridge()
 
 registerIslands({
   Banner: () => import('@/components/Banner/Index.vue'),
@@ -31,7 +37,9 @@ registerIslands({
   Tooltip: () => import('@/components/Tooltip/Index.vue'),
   TooltipSecond: () => import('@/components/Tooltip/Second.vue'),
   NavBar: () => import('@/components/NavBar/Index.vue'),
-  SearchSiteTopbar: () => import('@/components/Search/SiteTopbar.vue')
+  SearchSiteTopbar: () => import('@/components/Search/SiteTopbar.vue'),
+  Download: () => import('@/components/Download/Index.vue'),
+  DownloadModal: () => import('@/components/Download/Modal.vue')
 })
 
 if (document.readyState === 'complete') {

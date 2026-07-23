@@ -23,7 +23,6 @@ import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import Download from './components/download/Download'
-import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
 import ListingPage from './components/listing/ListingPage.vue'
@@ -91,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowPa,
         ChartRowStacked,
         Download,
-        DownloadModal,
         FilteredTable,
         Flickity,
         ListingPage,
@@ -117,17 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         AttributesPames,
         AttributesAffiliations,
         AttributesParcelsDropdown
-      },
-      beforeCreate() { 
-        this.$store.dispatch('download/initialiseStore')
-      },
-      mounted () {
-        window.addEventListener('beforeunload', e => {
-          this.$store.dispatch('download/updateLocalStorage')
-
-          // the absence of a returnValue property on the event will guarantee the browser unload happens
-          delete e['returnValue']
-        })
       }
     })
   }

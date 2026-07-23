@@ -16,16 +16,16 @@
 
     <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
       <%= yield %>
-      
-      <%= render "layouts/partials/footer" %>  
 
-      <download-modal
-        endpoint-create="/downloads"
-        endpoint-poll="/downloads/poll"
-        ga-id="Download modal"
-        :text-download="<%= download_text[:download].to_json %>"
-        :text-status="<%= download_text[:status].to_json %>"
-      ></download-modal>
+      <%= render "layouts/partials/footer" %>
     </div>
+
+    <%= frontend_mount "DownloadModal", props: {
+      endpointCreate: '/downloads',
+      endpointPoll: '/downloads/poll',
+      gaId: 'Download modal',
+      textDownload: download_text[:download],
+      textStatus: download_text[:status]
+    } %>
   </body>
 </html>

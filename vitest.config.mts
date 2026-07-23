@@ -45,10 +45,11 @@ export default defineConfig({
     // of loading it as an externalized dep via native import/require.
     server: {
       deps: {
-        // @vueuse/core's own `import ... from 'vue'` needs the same aliasing as
-        // @vue/test-utils above — inline it so Vite transforms it instead of
-        // loading it as an externalized dep that resolves 'vue' natively (Vue 2.7).
-        inline: [/@vue\/test-utils/, /@vueuse\//],
+        // @vueuse/core's and pinia's own `import ... from 'vue'` need the same
+        // aliasing as @vue/test-utils above — inline them so Vite transforms them
+        // instead of loading them as externalized deps that resolve 'vue' natively
+        // (Vue 2.7).
+        inline: [/@vue\/test-utils/, /@vueuse\//, /pinia/],
       },
     },
   },

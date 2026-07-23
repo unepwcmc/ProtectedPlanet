@@ -151,7 +151,10 @@ export default {
 
   watch: {
     activeFilterOptions() {
-      this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
+      // download-modal + Download.vue moved to a Vue3/Pinia island (Wave 4); this
+      // component hasn't migrated yet (Wave 7), so it feeds them via a window
+      // bridge instead of Vuex — see app/frontend/stores/downloadBridge.ts.
+      window.__downloadStoreBridge?.updateSearchFilters(this.activeFilterOptions)
     }
   },
 
@@ -228,7 +231,7 @@ export default {
       if (params.includes('search_term')) {
         const searchTerm = paramsFromUrl.get('search_term')
         this.searchTerm = searchTerm
-        this.$store.dispatch('download/updateSearchTerm', searchTerm)
+        window.__downloadStoreBridge?.updateSearchTerm(searchTerm)
       }
 
       if (params.includes('geo_type')) {
@@ -284,8 +287,8 @@ export default {
       this.getFilteredSearchResults()
       this.updateQueryString({ filters: filters })
       this.handleQueryString()
-      this.$store.dispatch('download/updateSearchFilters', filters)
-    }, 
+      window.__downloadStoreBridge?.updateSearchFilters(filters)
+    },
     updateProperties(response, resetFilters) {
       this.newResults = response.data.areas
       if (resetFilters) this.filterGroupsWithPreSelected = response.data.filters
@@ -352,7 +355,7 @@ export default {
       this.resetSearchTerm(searchParams)
       this.ajaxSubmission(true)
       this.updateQueryString({ search_term: searchParams.search_term })
-      this.$store.dispatch('download/updateSearchTerm', searchParams.search_term)
+      window.__downloadStoreBridge?.updateSearchTerm(searchParams.search_term)
     },
 
     requestMore(requestedPage) {

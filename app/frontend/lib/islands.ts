@@ -14,6 +14,7 @@
 // safe to use freely.
 
 import { readMountProps } from './readMountProps'
+import { pinia } from '@/stores/pinia'
 
 export type IslandLoader = () => Promise<{ default: unknown }>
 
@@ -50,6 +51,7 @@ export async function mountEl(el: HTMLElement): Promise<void> {
     mod.default as Parameters<typeof createApp>[0],
     readMountProps(el.dataset.propsId ?? id) ?? {}
   )
+  app.use(pinia)
   app.mount(el)
   // Vue 3 mounts INTO el rather than replacing it (Vue 2's behaviour), leaving a
   // redundant `<div data-mount>` wrapper around every island's real root. Swap it
