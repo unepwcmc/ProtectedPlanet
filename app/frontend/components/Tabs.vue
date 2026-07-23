@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { trackEvent } from '@/lib/analytics'
 import type { TabsProps } from '@/types/backend'
 
 type Tabs = TabsProps
@@ -55,10 +56,31 @@ function initialTabId() {
 
 const selectedId = ref(initialTabId())
 
+// Strips non-ASCII chars/newlines from CMS titles before putting them in the
+// URL, matching the legacy Vue2 Tabs component's `removeEncodedChars`.
+function sanitizeTabParam(title: string) {
+  return title.replace(/[^\x00-\x7F]|\n/g, '')
+}
+
+function updateTabParam(id: number) {
+  const tab = props.tabs.find(t => t.id === id)
+  if (!tab) return
+  const url = new URL(window.location.href)
+  url.searchParams.set('tab', sanitizeTabParam(tab.title))
+  window.history.replaceState({ page: 1 }, '', url)
+}
+
 function select(id: number) {
+  const tab = props.tabs.find(t => t.id === id)
+  if (props.gaId && tab) {
+    trackEvent('click', { event_label: `${props.gaId} - Tab: ${tab.title}` })
+  }
   selectedId.value = id
+  updateTabParam(id)
   emit('change', id)
 }
+
+if (selectedId.value !== undefined) updateTabParam(selectedId.value)
 </script>
 
 <style scoped lang="css">

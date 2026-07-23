@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import Tabs from '@/components/Tabs.vue'
@@ -26,6 +26,11 @@ const tabs = [
 ]
 
 describe('Tabs (v-if panels)', () => {
+  beforeEach(() => {
+    window.gtag = vi.fn()
+    window.history.replaceState({}, '', '/')
+  })
+
   it('renders ONLY the active panel in the DOM; hidden panels are absent', () => {
     const wrapper = mount(Tabs, { props: { tabs } })
 
@@ -57,6 +62,36 @@ describe('Tabs (v-if panels)', () => {
 
     const byTitle = mount(Tabs, { props: { tabs, preselectedTab: 'Second' } })
     expect(byTitle.find('[data-tab-panel="2"]').exists()).toBe(true)
+  })
+
+  it('syncs the ?tab= URL param on select, sanitizing non-ASCII chars', async () => {
+    const wrapper = mount(Tabs, {
+      props: { tabs: [{ id: 1, title: 'First' }, { id: 2, title: 'Secönd\ntab' }] }
+    })
+
+    expect(new URL(window.location.href).searchParams.get('tab')).toBe('First')
+
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
+
+    expect(new URL(window.location.href).searchParams.get('tab')).toBe('Secndtab')
+  })
+
+  it('fires a GA4 event with the gaId-derived label on select, only when gaId is set', async () => {
+    const wrapper = mount(Tabs, { props: { tabs, gaId: 'Slug: about-us' } })
+
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
+
+    expect(window.gtag).toHaveBeenCalledWith('event', 'click', {
+      event_label: 'Slug: about-us - Tab: Second'
+    })
+  })
+
+  it('does not fire a GA4 event when gaId is absent', async () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
+
+    expect(window.gtag).not.toHaveBeenCalled()
   })
 
   it('only mounts the ACTIVE tab\'s slot components; hidden tabs never create theirs', async () => {

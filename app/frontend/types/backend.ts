@@ -107,6 +107,8 @@ export interface TabsProps {
   tabs: Tab[]
   // Matches by id or by title, mirroring the legacy `?tab=` query param.
   preselectedTab?: number | string | null
+  // GA event label prefix, e.g. "Slug: about-us". Omit to skip tracking.
+  gaId?: string
 }
 
 // One entry of DownloadsHelper::DEFAULT_OPTIONS merged with #download_params,
