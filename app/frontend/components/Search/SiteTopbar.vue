@@ -8,11 +8,10 @@
 
 <script setup lang="ts">
 import SearchSiteInput from '@/components/Search/SiteInput.vue'
+import type { SearchSiteTopbarProps } from '@/types/backend'
 
-const props = defineProps<{
-  endpoint: string
-  placeholder: string
-}>()
+type SearchSiteTopbar = SearchSiteTopbarProps
+const props = defineProps<SearchSiteTopbar>()
 
 function updateSearchTerm(searchTerm: string) {
   window.location.href = props.endpoint + searchTerm

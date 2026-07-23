@@ -6,7 +6,10 @@
       @click="toggleInput"
     />
 
-    <div :class="['search__pane', { active: isActive, popout: popout }]">
+    <div
+      class="search__pane"
+      :class="{ active: isActive, popout: popout }"
+    >
       <input
         ref="inputEl"
         v-model="searchTerm"

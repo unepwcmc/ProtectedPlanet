@@ -2,11 +2,11 @@
   <a
     :id="link.id"
     role="menuitem"
-    :class="['nav__a', { 'is-current-page': link.is_current_page }]"
+    class="nav__a"
+    :class="{ 'is-current-page': link.is_current_page }"
     :href="link.url"
-  >
-    {{ link.label }}
-  </a>
+    v-text="link.label"
+  />
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,8 @@
 <template>
-  <div :class="['cards__cards', { preview }]">
+  <div
+    class="cards__cards"
+    :class="{ preview }"
+  >
     <ListingPageCardResourcesCard
       v-for="(card, index) in cards"
       :key="index"

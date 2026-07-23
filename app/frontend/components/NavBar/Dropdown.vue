@@ -16,7 +16,8 @@
       <label :for="modalId">
         <NavBarLink
           :link="link"
-          :class="[{ active: isActive }, 'nav__dropdown-toggle-a']"
+          class="nav__dropdown-toggle-a"
+          :class="{ active: isActive }"
           @touchend="toggleDropdown"
         />
       </label>

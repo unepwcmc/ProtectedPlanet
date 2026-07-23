@@ -1,7 +1,8 @@
 <template>
   <div
     ref="rootEl"
-    :class="['ct-tooltip', { 'ct-tooltip--active': isActive }]"
+    class="ct-tooltip"
+    :class="{ 'ct-tooltip--active': isActive }"
   >
     <div
       v-if="onHover"

@@ -241,22 +241,32 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     of Vue's opt-in reactive-props-destructure compiler transform, which this project doesn't enable.
 11. **Boolean computed values are named `has`/`is` + noun.** e.g. `hasMultipleBanners`, not
     `multipleBanners` or `showNav`.
-12. **Prefer re-declaring an imported props type as a local alias before `defineProps<T>()`.**
-    Most migrated components do this:
+12. **Always re-declare an imported props type as a local alias before `defineProps<T>()`.**
+    Every migrated component must do this:
     ```ts
     import type { ListingPageCardResourcesListProps } from '@/types/backend'
 
     type ListingPageCardResourcesList = ListingPageCardResourcesListProps
     defineProps<ListingPageCardResourcesList>()
     ```
-    rather than `defineProps<ListingPageCardResourcesListProps>()` directly. **Note this is a
-    consistency convention, not a hard compiler requirement** — verified (Jul 2026) that passing
-    an imported type straight into `defineProps<T>()` compiles, typechecks (`vue-tsc`), and works at
-    runtime just fine in this project's Vite/Vue setup; `Search/SiteTopbar.vue` already does exactly
-    that (`defineProps<SearchSiteTopbarProps>()`, no alias) and is fully working. Follow the alias
-    pattern for new components to match the majority (`Banner`, `GaLink`, `Counter`,
-    `ListingPageCard*`), but don't invent a workaround if a future component skips it — it isn't
-    broken.
+    rather than `defineProps<ListingPageCardResourcesListProps>()` directly. **This is now a hard
+    rule (Jul 2026), superseding the earlier "consistency convention, not a hard requirement" note**
+    — passing an imported type straight into `defineProps<T>()` can compile fine at first but the
+    Vue SFC compiler surfaces errors on it later (as the type is re-exported/re-shaped across
+    changes), so alias it up front rather than fixing it under pressure later. `Search/SiteTopbar.vue`
+    is the one remaining component that skips this — fix it the next time that file is touched.
+13. **Use `v-text`/`v-html` instead of `{{ }}` mustache interpolation** for rendering a single
+    dynamic value into an element, e.g. `<span v-text="textDownload.title" />` rather than
+    `<span>{{ textDownload.title }}</span>` (and `v-html` when the string contains markup, e.g. CMS
+    copy). `Download/Modal.vue` is the reference example. Existing `{{ }}` usage (e.g.
+    `NavBar/Link.vue`) should be converted the next time that file is touched.
+14. **A static class always goes in a plain `class="..."` attribute, never inside a `:class="[...]"`
+    array.** Only genuinely dynamic/conditional classes belong in `:class`, and when both are needed
+    on the same element, split them: `class="ct-card"` `:class="{ 'ct-card--link': props.url }"` —
+    not `:class="['ct-card', { 'ct-card--link': props.url }]"`. Existing components that mix a static
+    string into the `:class` array (`NavBar/Dropdown.vue`, `NavBar/Link.vue`, `Tooltip/Index.vue`,
+    `Search/SiteInput.vue`, `ListingPageCard/Resources/{Index,Card}.vue`) should be split the next
+    time each file is touched.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend`, the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and

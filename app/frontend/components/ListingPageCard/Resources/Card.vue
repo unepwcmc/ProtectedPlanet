@@ -1,5 +1,8 @@
 <template>
-  <div :class="['card', { 'card--link': props.url }]">
+  <div
+    class="card"
+    :class="{ 'card--link': props.url }"
+  >
     <a
       v-if="props.url"
       class="card__link"
