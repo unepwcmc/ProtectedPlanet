@@ -18,7 +18,17 @@ Move Ruby from 2.6.3 (EOL March 2022) to 3.3.x. Done in two stages: **2.7 first*
 
 ---
 
-## Stage 1 — Ruby 2.6.3 → 2.7 (do before the Rails 6 bumps)
+## Stage 1 — Ruby 2.6.3 → 2.7 ✓ **already done**
+
+**Delivered on `feat/upgrade-frontend`:** `.ruby-version` is **2.7.8**, the Dockerfile base is `ruby:2.7-buster`, Node is 24.4.1, and the bundle resolves. Backend **inherits** this rather than repeating it.
+
+Remaining backend work for this stage is verification, not migration:
+
+- [ ] Full backend test suite green on 2.7.8 (frontend validated the boot, not the import/spatial paths)
+- [ ] Import pipeline and download generators exercised on 2.7 — the keyword-arg sweep below still applies to `lib/modules/`
+- [ ] Confirm native extensions compile on 2.7 in the image: `pg`, `gdal`, `levenshtein`, `bystander`
+
+The rationale below is kept for the record.
 
 ### Why 2.7 first
 

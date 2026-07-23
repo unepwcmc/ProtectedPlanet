@@ -32,7 +32,7 @@ Every Gemfile entry has a **keep / upgrade / remove** decision recorded before a
 | Gem | Current | Action | When | Notes |
 |-----|---------|--------|------|-------|
 | `webpacker` | ~> 4.0.2 | **Remove** | B5 (shared with frontend) | Remove gem + deploy hook together |
-| `vite_rails` | ~> 2.0.13 | **Upgrade to 3.x** on upgrade branch | B0 | Frontend writes PR; backend reviews |
+| `vite_rails` | ~> 2.0.13 | ✓ **Done — 3.11.1** on `feat/upgrade-frontend` | Delivered | Works on **Rails 5.2** (`railties >= 5.1, < 9`); needed only Ruby 2.7. Backend inherits it |
 | `sass-rails` | ~> 5.0.7 | **Upgrade to `sassc-rails`** or keep for transition | Rails 6 | `sass-rails` 5 breaks on Rails 6 |
 | `sprockets-rails` | ~> 3.2.1 | **Keep** through transition; Sprockets 4 on Rails 6 | Rails 6 | Required until Vite serves all CSS |
 | `uglifier` | ~> 4.1.17 | **Remove** when Sprockets JS gone | B5 | Vite minifies; no Sprockets JS needed |

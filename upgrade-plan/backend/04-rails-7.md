@@ -4,7 +4,7 @@
 |---|---|
 | **Estimate** | 3–5 weeks · ~0.75–1.25 months |
 | **Depends on** | [03 — Rails 6.1 green](./03-rails-6.md) · **[02 — Ruby ≥ 3.2 done first](./02-ruby-upgrade.md)** |
-| **Blocks** | **B0 — frontend phase 2b** (vite_rails 3.x, Vite 5, Vue 3) |
+| **Blocks** | **B0** — backend phases 6–14 ([05](./05-rails-8.md), [11](./11-deploy-and-devops.md), [12](./12-infrastructure-migration.md)) |
 
 [← Back to overview](./README.md)
 
@@ -12,9 +12,13 @@
 
 ## Goal
 
-Rails 7.1 boots locally and in CI. This is **milestone B0** — the most time-critical deliverable for the whole upgrade project. The frontend team cannot move to vite_rails 3.x or Vue 3 until this lands.
+Rails 7.1 boots locally and in CI — **milestone B0**.
 
-**Announce B0 completion to frontend colleague immediately on landing.**
+> **Corrected July 2026.** This document previously called B0 "the most time-critical deliverable for the whole upgrade project" because the frontend supposedly could not move to `vite_rails` 3.x or Vue 3 without it. **That was wrong** — `feat/upgrade-frontend` runs `vite_rails 3.11.1` + Vite 7 + Vue 3 islands on **Rails 5.2.0** (the gem only requires `railties >= 5.1, < 9`). The real gates were Ruby 2.7 and Node 18, both already met. See [00](./00-scope-and-shared-milestones.md).
+>
+> B0 is still the gate for the *backend's* own remaining phases — Rails 8, Docker/Kamal, the infra move — so it stays the sequencing pivot for this track. It is simply no longer a cross-team deadline.
+
+**Announce B0 on landing** so the frontend team knows the platform moved under them — informational, not a handoff.
 
 ---
 
@@ -118,27 +122,29 @@ Rails 7.1 is a smaller bump from 7.0. Primary new features are opt-in (async que
 - [ ] Boot locally — confirm clean boot with no deprecation warnings
 - [ ] CI green
 - [ ] **Tag B0 on upgrade branch**
-- [ ] **Notify frontend colleague — B0 is done**
+- [ ] **Notify frontend colleague — B0 is done** (informational)
 
-### What B0 unlocks for frontend
+### What B0 unlocks
 
-Once B0 lands, the frontend team can:
+**Backend only** — Rails 8 ([05](./05-rails-8.md)), then the infrastructure track ([13](./13-gdal-and-spatial-tooling.md) → [11](./11-deploy-and-devops.md) → [12](./12-infrastructure-migration.md)).
 
-- Bump `vite_rails` to 3.x on the upgrade branch (needs Ruby 2.7+ and Rails 7.1+)
-- Target Vite 5 and Vue 3 builds
-- Start Vue 3 island mounts (frontend phase 2b)
+The frontend already has what it needs and is not waiting on this.
 
 ---
 
-## Shared work at B0
+## Frontend setup that must survive this bump
 
-| Item | Backend | Frontend |
-|------|---------|----------|
-| `vite_rails` 3.x bump | Review + bundle | Write PR |
-| `config/vite.rb` | Set prod env vars | Write stub |
-| `bin/vite dev` + HMR | Ensure server boots | Wire Docker vite service |
+`vite_rails 3.11.1`, Vite 7 and the Vue 3 island system are **already live on Rails 5.2**. The backend's job across the Rails bumps is to not break them.
 
-See [frontend/00](../frontend/00-scope-and-backend-dependencies.md) for the full frontend view.
+| Item | Check after each bump |
+|------|-----------------------|
+| `vite_client_tag` / `vite_javascript_tag` / `vite_typescript_tag` | Still render in `app/views/layouts/partials/_head.html.erb` |
+| `frontend_mount` helper | `app/helpers/frontend_helper.rb` — `content_tag` + `json_escape` behaviour unchanged |
+| Banner island | Renders on a live page (it is in the global layout, outside `#v-app`) |
+| Webpacker ⇄ Vite dual bundler | Both still compile until B5 |
+| `config/vite.json` / `config/vite.rb` | Survives `rails app:update` — **review that diff, `app:update` likes to clobber config** |
+
+See [frontend/00](../frontend/00-scope-and-backend-dependencies.md) and [frontend/README](../frontend/README.md) for the frontend's current state.
 
 ---
 
@@ -150,4 +156,5 @@ See [frontend/00](../frontend/00-scope-and-backend-dependencies.md) for the full
 - `activerecord-postgis-adapter` on 9.x
 - `secrets.yml` migrated to credentials
 - No pending migrations
+- **Vite/Vue 3 island setup still works** — Banner renders, `bin/vite dev` and `vite build` both run
 - Frontend colleague notified of B0

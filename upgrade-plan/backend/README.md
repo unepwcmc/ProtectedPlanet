@@ -11,7 +11,7 @@ Total around 6–8.5 months for backend if no major surprises (GDAL/FileGDB and 
 | **Now**             | Rails 5.2 · Ruby 2.6.3 · Sidekiq 5.2.5 · Node v10 · ES client 7.2.0 · Capistrano + Passenger    |
 | **Owner**           | Backend (+ shared deploy/DevOps tasks with frontend)                                             |
 | **Not in estimate** | Frontend Vue 3 / Vite migration · CMS content redesign · Elasticsearch server upgrade (stays 7.17) |
-| **Critical gate**   | **B0 = Rails 7.1+ boots** — unblocks frontend phases 2b onward (vite_rails 3.x, Vue 3)          |
+| **Critical gate**   | **B0 = Rails 7.1+ boots** — sequencing pivot for backend phases 6–14. **Does not gate the frontend** (corrected Jul 2026, see below) |
 | **Scope**           | **[Gem audit](./01-gem-audit.md)** — every Gemfile entry with keep/upgrade/remove decision       |
 
 
@@ -45,7 +45,16 @@ Total around 6–8.5 months for backend if no major surprises (GDAL/FileGDB and 
 
 *Phases 12–14 replace the previous 1–2 wk "Capistrano refresh" scope. Net addition to the plan is roughly **+3–4 weeks**, not the full 6–9 weeks those three phases total.*
 
-**B0 target (Rails 7.1)** can realistically land in **months 2–3**, unblocking the frontend team well before the full backend upgrade is complete.
+**B0 target (Rails 7.1)** can realistically land in **months 2–3**.
+
+> ### ⚠️ Correction (Jul 2026) — B0 is not the frontend's gate
+>
+> This plan previously treated B0 as the project's most time-critical item because `vite_rails` 3.x and Vue 3 were believed to need Rails 7.1+. **They don't.** `feat/upgrade-frontend` runs `vite_rails 3.11.1` + Vite 7 + Vue 3 islands on **Rails 5.2.0** — the gem only requires `railties >= 5.1, < 9`. The real gates were **Ruby ≥ 2.7** and **Node ≥ 18**, both already delivered there (Ruby 2.7.8, Node 24.4.1).
+>
+> - The frontend and backend tracks are **decoupled**; frontend is not waiting on us.
+> - **Phase 2 stage 1 (Ruby 2.6.3 → 2.7.8) is already done** — inherit it, don't redo it.
+> - Rails bumps can now be sequenced on risk and review capacity rather than against a handoff date.
+> - The remaining cross-team dependency runs the other way: **don't break the existing Vite/island setup** while bumping Rails.
 
 ---
 
@@ -54,8 +63,9 @@ Total around 6–8.5 months for backend if no major surprises (GDAL/FileGDB and 
 | ID  | Milestone                              | Owner              | Unblocks                          |
 | --- | -------------------------------------- | ------------------ | --------------------------------- |
 | B0a | Vite 2 + vite_rails 2.x on Rails 5.2  | Frontend ✓ Done    | Dual bundler                      |
-| **B0** | **Rails 7.1+ boots locally & CI** | **Backend**        | **Frontend phases 2b onward**     |
-| B1  | `bin/vite dev` + HMR on target stack   | Shared             | Frontend phase 2b                 |
+| **G1** | **Ruby 2.7.8 + Node 24 + Vite 7 + vite_rails 3.11.1** | Frontend ✓ **Done** | The actual frontend gate — already met |
+| **B0** | **Rails 7.1+ boots locally & CI** | **Backend**        | Backend phases 6–14               |
+| B1  | `bin/vite dev` + HMR on target stack   | Shared ✓ Done      | Delivered on `feat/upgrade-frontend` |
 | B2  | Staging deploy includes `vite build`   | DevOps + Frontend  | Staging QA                        |
 | B3  | CMS `/admin` works on upgrade branch   | Backend            | CMS pages                         |
 | B4  | Rails 8.0 target reached               | **Backend**        | Platform target                   |
