@@ -25,9 +25,9 @@ class DownloadRequestersSearchTest < ActiveSupport::TestCase
   end
 
   test "token should depend on search term and all filters" do
-    no_filter_token = Download::Requesters::Search.new('badger', {}).token
-    fra_filter_token = Download::Requesters::Search.new('badger', {country: 'fra'}).token
-    bra_filter_token = Download::Requesters::Search.new('badger', {country: 'bra'}).token
+    no_filter_token = Download::Requesters::Search.new('csv', 'badger',{}).token
+    fra_filter_token = Download::Requesters::Search.new('csv', 'badger',{country: 'fra'}).token
+    bra_filter_token = Download::Requesters::Search.new('csv', 'badger',{country: 'bra'}).token
 
     assert_not_equal no_filter_token, fra_filter_token
     assert_not_equal no_filter_token, bra_filter_token
@@ -35,8 +35,8 @@ class DownloadRequestersSearchTest < ActiveSupport::TestCase
   end
 
   test "token should be agnostic to order of filters" do
-    one_filter_token = Download::Requesters::Search.new('badger', {country: 'fra', designation: 'Conservation Area'}).token
-    two_filter_token = Download::Requesters::Search.new('badger', {designation: 'Conservation Area', country: 'fra'}).token
+    one_filter_token = Download::Requesters::Search.new('csv', 'badger',{country: 'fra', designation: 'Conservation Area'}).token
+    two_filter_token = Download::Requesters::Search.new('csv', 'badger',{designation: 'Conservation Area', country: 'fra'}).token
 
     assert_equal one_filter_token, two_filter_token
   end

@@ -67,6 +67,68 @@ Climbed on `backend/test-suite-revival`. What it actually took:
 
 Next: triage the 107 into buckets (network-stub vs app-drift vs genuinely-obsolete) → **green on 5.2**. *Then* the Rails bumps have their safety net.
 
+### 107-red triage (Jul 2026)
+
+Grouped by root cause. **`D` = needs a domain/keep-delete decision (backend dev), `M` = mechanical fix, `S` = subsystem rewrite.**
+
+| Count | Cluster | Root cause | Action |
+|---|---|---|---|
+| 12 | `AddNewFieldsMigrationTest` errors | Migration `20250909140226` is already in `schema_migrations`; the test's `Migration.run(:up, …)` can't re-run it. Also an autoload miss on the constant. | **D** — almost certainly **obsolete** (a TDD-a-migration test). Delete? |
+| 11 | `undefined method pa_or_any_its_parcels_is_greenlisted=` | Column is **absent from `structure.sql` entirely** — removed from the DB. Factories/tests/model specs still set it. | **D** — was greenlist removed, or moved to an ES-only field? Drives fix vs delete |
+| 11 | `Elasticsearch … NotFound` | Test ES index not created/refreshed before query | **M/S** — add ES index setup+refresh to affected tests (one shared helper likely clears the batch) |
+| 11 | `undefined method delete for nil` | Single shared root (not yet pinpointed) | **M** — one fix, investigate |
+| ~9 | `WebMock::NetConnectNotAllowedError` / `Aws::S3::Error` | Real S3 calls not stubbed; webmock now correctly blocks them | **M** — add webmock stubs (or WebMock allow for a test S3). Cluster fix |
+| ~8 | mocha "unexpected invocation" (Download generators, PostGISAdapter) | Either mocha 2.x stricter matching, or the generators' call patterns drifted | **S** — verify against current `Download::Generators::*` |
+| 5 | `Unknown download format "an_download"` | `Download.generate` gained a `format` first arg — `download_test.rb` still calls the old 2-arg signature | **S** — rewrite `download_test.rb` to the new one-format-per-call API |
+| 12 | `NameError: uninitialized constant …` (misc) | Moved/renamed constants (like the green_list helper already fixed) | **M** — update constant paths per file |
+| 18 + 4 | assertion diffs (`--- expected`, "Expected false to be truthy") | Behaviour drift since 2021 | **S** — per-test, spread across subsystems |
+| ~10 | long tail (IndexError, PageNotFound, PG::CheckViolation, arg-count) | Assorted app-drift | per-test |
+
+**Decisions needed from the backend team before fixing (the `D` rows):**
+1. `AddNewFieldsMigrationTest` — delete as obsolete? (migration already applied; test cannot pass by design)
+2. `pa_or_any_its_parcels_is_greenlisted` — was this DB column intentionally removed? Is greenlist now ES-only? This drives ~11 fixes across factories, model, search, and download-worker tests.
+
+**Suggested fix order (highest leverage first):** ES-index setup (11) → webmock S3 stubs (9) → constant-path updates (12) → `delete for nil` (11) → then the `D`-decisions, then the `S` rewrites and assertion tail.
+
+### Progress log
+
+- **Batch 1 (Jul 2026): 107 → 99 red.** Deleted obsolete `AddNewFieldsMigrationTest` (cleared the 12-strong `NameError` cluster). Stripped the invalid `pa_or_any_its_parcels_is_greenlisted:` setter from the two search-integration `setup` blocks — it's a **computed method** (`protected_area.rb:100`), not a settable column; the setter raised in `setup`, which also caused the 11 `delete for nil` teardown cascades (`@psi` never assigned). Net effect was smaller than the raw counts suggested: those tests now run past setup and surface their **real** dependency — live Elasticsearch indexing — so ES `NotFound`/`ArgumentError` are now the top clusters. Classic excavation: fixing a layer reveals the next.
+- **Now top:** ES `NotFound` (11), `ArgumentError` (16, incl. the `an_download` `Download.generate` signature drift), WebMock/S3 leaks (10).
+- **Batch 2 (Jul 2026): 99 → 97.** Stubbed the two `DownloadWorkersSearchTest#generate_download` tests. **Shared-root insight:** the S3 leak is always `filename → Download::Config.current_label → Wdpa::S3.current_wdpa_identifier` (lists the import bucket). Rather than stub per test, a **single global default** — `Wdpa::S3.stubs(:current_wdpa_identifier)` in an `ActiveSupport::TestCase` setup — would clear the whole WebMock/S3 cluster at once (verify no test actually exercises that method first).
+- **Rate note:** targeted per-test fixes clear ~2 red/cycle under emulation. Efficient path from here is **shared-root/global fixes** (one S3 stub for the WebMock cluster; regenerate the `SearchTest` ES client mock + expected query once for the 11 ES `NotFound`), not per-test.
+
+- **Batch 3 (Jul 2026): 97 → 95. Whole WebMock/S3 leak cluster eliminated** (8 → 0) with one global `Wdpa::S3.current_wdpa_identifier` stub in `test_helper`'s `ActiveSupport::TestCase` setup (confirmed no test exercises that method). Errors −6 but failures +4: those tests now reach their assertions and fail on behaviour drift. **No more real-network leaks in the suite.**
+
+**State after batches 1–3: 107 → 95 red (46 failures, 49 errors, 7 skips).** The gem-wall, obsolete-test, cascade, and network-leak layers are cleared. What remains is dominated by **assertion-level app-drift and subsystem-mock regen** — increasingly work that's faster for someone who knows the app's post-2021 behaviour than for solo excavation through slow emulated cycles.
+
+- **Batch 4 (Jul 2026): 95 → 87.** All fixed **purely by reading the app** (no domain decisions), proving the method:
+  - Rewrote `download_test.rb` to the current `Download.generate(format, name, opts)` API (one format/call, zip named `<name>.zip`, format key `:shp` not `:shapefile`) — cleared the 5 `Unknown download format` errors, file now fully green.
+  - `autocompletion_test.rb`: updated expected hash to the current `{id, is_pa, extent_url, title, url}` shape (using `pa.extent_url` so it stays in sync).
+  - `download/requesters/search_test.rb`: constructor is now `new(format, search_term, filters)` — added the missing format arg to the token tests.
+
+**State after batches 1–4: 107 → 87 red (45 failures, 42 errors, 7 skips; ~85% green).** Confirmed: essentially every remaining failure is fixable by reading the code (app = source of truth) or debugging the integration flows — **not** by domain decisions. The only interrupts for the human are the *rare* genuine "app regressed vs test stale" ambiguities, surfaced one at a time with evidence.
+
+**Remaining clusters (all code/debug-fixable):**
+- ES `NotFound` (11) — `SearchTest`/others mock `Elasticsearch::Client.stubs(:new)`; the stub misses because client wiring changed. Regenerate the expected `query_object` (capture the app's actual query once).
+- "must be of type Search" (8) — `SearchAreasTest`/`SearchPageTest` integration ES flow; debug why `@search` isn't a `Search` (ES index/refresh in test).
+- NoMethodError (8) — moved/removed methods: `HomeHelper#get_filters`, `Search::Matcher#to_h`, `Wdpa::ParcelDataStandard.{standardise_table_name,standard_attributes}`, `HomePresenter#terrestrial_cover` (needs a seeded global stat). Trace each to its new home or confirm obsolete.
+- ActionView::Template (5), PageNotFound (4), RuntimeError (5), IndexError (2), URI/AbstractController (2) — per-test debug.
+- ~45 assertion diffs — mostly update-expected-to-match-app; a few may be genuine regressions to flag.
+
+- **Batch 5 (Jul 2026): 87 → 75. ES `NotFound` cluster eliminated** (−14 errors). Root was clean and code-readable: the app's `DEFAULT_INDEX_NAME` now spans **four** indices (`AREAS_INDEX` = PA + country + **region**, plus **CMS**), but the three integration search setups (`search_test`, `search_areas_test`, `search_page_test`) created only PA + country. Multi-index queries 404'd (`no such index [regions_test]`, then `[cms_test]`). Added the region + CMS index create/delete to all three setups. `search_test.rb` went 11-errors → fully green. This also cleared the "must be of type Search" cluster (those were the 404 propagating through the controller → `@search` set to a non-Search).
+
+- **⚠️ Frontend/test-env finding — vite cluster (9) is environmental, not stale test code.** ~9 page-rendering tests (`ProtectedAreaShowTest`, `SearchAreasTest`, `SearchPageTest`, …) fail with `ActionView::Template::Error: The vite binary is not available` — the frontend's `vite_typescript_tag 'entrypoints/layout'` in `app/views/layouts/partials/_head.html.erb`, hit whenever a full page renders. Cause: `config/vite.json` test has `autoBuild: true`, which shells out to `bin/vite` — absent unless `node_modules` is populated. **Jenkins runs `yarn install` so the binary exists there**; these were only red in the local run because it bypassed yarn. **Frontend-owned fix** (per the ownership split): set the test profile to `autoBuild: false` with a prebuilt/stub manifest (standard vite_ruby CI pattern) so page-rendering tests don't shell out to node. Until then, subtract ~9 from the local red count: **real backend-stale-code red ≈ 66.**
+
+**State after batches 1–5: 107 → 75 red locally (~66 excluding the frontend vite artifact).** Errors down from 65 → 28.
+
+### Efficient continuation plan (highest-leverage first)
+
+1. **WebMock/S3 (≈8–10)** — one global `Wdpa::S3.current_wdpa_identifier` stub (+ maybe `has_successful_portal_release?`).
+2. **ES `NotFound` (11, `SearchTest`)** — the ES client stub misses because client wiring changed since 2021; regenerate the expected `query_object` + fix the `Elasticsearch::Client.stubs(:new)` interception once.
+3. **`an_download` / `Download.generate` (5)** — rewrite `download_test.rb` to the new `generate(format, name, opts)` one-format-per-call API. **[S]**
+4. **mocha "unexpected invocation" (≈8)** — reconcile expectations with current `Download::Generators::*`. **[S]**
+5. **Assertion diffs + long tail (≈30)** — per-test behaviour drift; some need domain calls.
+
 ---
 
 ## Goal

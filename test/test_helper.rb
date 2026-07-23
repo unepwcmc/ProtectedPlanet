@@ -51,6 +51,14 @@ class ActionController::TestCase
 end
 
 class ActiveSupport::TestCase
+  # No test should hit real S3. Building a download filename resolves the current
+  # WDPA release via Wdpa::S3.current_wdpa_identifier, which lists the import
+  # bucket over the network. Stub it globally; a test needing a specific label
+  # (or to exercise that method) can re-stub in its own setup.
+  setup do
+    Wdpa::S3.stubs(:current_wdpa_identifier).returns('WDPA_Jan2024')
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms

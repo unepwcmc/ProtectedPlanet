@@ -1,88 +1,74 @@
 require 'test_helper'
 
 class DownloadTest < ActiveSupport::TestCase
-  test '.generate, called with a name and no PA ids, generates download
-   files for all countries' do
-    download_name = 'an_download'
+  # Download.generate(format, download_name, opts) generates ONE format per call.
+  # The zip is named <download_name>.zip (no per-format suffix) and uploaded under
+  # the current/ prefix (or import/ when for_import: true). See lib/modules/download.rb.
+  NAME = 'an_download'.freeze
 
-    shapefile_download_zip_name = 'an_download-shapefile.zip'
-    shapefile_zip_path = File.join(Rails.root, 'tmp', shapefile_download_zip_name)
-    Download::Generators::Shapefile.expects(:generate).with(shapefile_zip_path, nil).returns(true)
-    S3.expects(:upload).with(Download::CURRENT_PREFIX + shapefile_download_zip_name, shapefile_zip_path)
-
-    csv_download_zip_name = 'an_download-csv.zip'
-    csv_zip_path = File.join(Rails.root, 'tmp', csv_download_zip_name)
-    Download::Generators::Csv.expects(:generate).with(csv_zip_path, nil).returns(true)
-    S3.expects(:upload).with(Download::CURRENT_PREFIX + csv_download_zip_name, csv_zip_path)
-
-    download_success = Download.generate download_name, { site_selection: nil }
-    assert download_success, "Expected Download.generate to return true on success"
+  def zip_path
+    File.join(Rails.root, 'tmp', "#{NAME}.zip")
   end
 
-  test '.generate, called with the import option, generates downloads with the import prefix' do
-    download_name = 'an_download'
+  def teardown
+    FileUtils.rm_f(zip_path)
+  end
 
-    Download::Generators::Shapefile.stubs(:generate).returns(true)
-    S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-shapefile.zip', anything)
+  test '.generate runs the generator for the format and uploads the zip under the current prefix' do
+    # generate checks File.exist?(zip_path) after the (mocked) generator runs.
+    File.write(zip_path, '')
+    Download::Generators::Shapefile.expects(:generate).with(zip_path, nil).returns(true)
+    S3.expects(:upload).with(Download::CURRENT_PREFIX + "#{NAME}.zip", zip_path)
 
+    assert Download.generate('shp', NAME, { site_selection: nil }),
+      'Expected Download.generate to return true on success'
+  end
+
+  test '.generate with the import option uploads with the import prefix' do
+    File.write(zip_path, '')
     Download::Generators::Csv.stubs(:generate).returns(true)
-    S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-csv.zip', anything)
+    S3.expects(:upload).with(Download::IMPORT_PREFIX + "#{NAME}.zip", zip_path)
 
-    Download.generate download_name, { site_selection: nil, for_import: true }
+    Download.generate('csv', NAME, { site_selection: nil, for_import: true })
   end
 
-  test '.generate, called with an array of PA IDs, generates downloads
-   for the given IDs' do
-    download_name = 'an_download'
-    pa_ids = [1,2,3]
-
+  test '.generate passes the site_selection through to the generator' do
+    File.write(zip_path, '')
+    site_selection = { site_ids: [1, 2, 3] }
     S3.stubs(:upload)
+    Download::Generators::Shapefile.expects(:generate).with(zip_path, site_selection).returns(true)
 
-    shapefile_zip_path = File.join(Rails.root, 'tmp', 'an_download-shapefile.zip')
-    Download::Generators::Shapefile.expects(:generate).with(shapefile_zip_path, { site_ids: pa_ids })
-
-    csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
-    Download::Generators::Csv.expects(:generate).with(csv_zip_path, { site_ids: pa_ids })
-
-    download_success = Download.generate download_name, { site_selection: { site_ids: pa_ids } }  
-    assert download_success, "Expected Download.generate to return true on success"
+    assert Download.generate('shp', NAME, { site_selection: site_selection }),
+      'Expected Download.generate to return true on success'
   end
 
   test '.generate removes the zip after uploading to S3' do
+    File.write(zip_path, '')
     Download::Generators::Shapefile.stubs(:generate).returns(true)
-    Download::Generators::Csv.stubs(:generate).returns(true)
     S3.stubs(:upload)
+    FileUtils.expects(:rm_rf).with(zip_path)
 
-    shapefile_zip_path = File.join(Rails.root, 'tmp', 'an_download-shapefile.zip')
-    FileUtils.expects(:rm_rf).with(shapefile_zip_path)
-
-    csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
-    FileUtils.expects(:rm_rf).with(csv_zip_path)
-
-    Download.generate 'an_download', { site_selection: nil }
+    Download.generate('shp', NAME, { site_selection: nil })
   end
 
-  test '.generate does not upload to S3 if a Generator returns
-   false' do
-    Download::Generators::Csv.stubs(:generate).returns(true)
+  test '.generate does not upload to S3 if the generator returns false' do
     Download::Generators::Shapefile.expects(:generate).returns(false)
+    S3.expects(:upload).never
 
-    S3.expects(:upload).once
-
-    Download.generate 'an_download', { site_selection: nil }
+    assert_not Download.generate('shp', NAME, { site_selection: nil }),
+      'Expected Download.generate to return false when the generator fails'
   end
 
-  test '.request, given an hash of params, requests the router with
-   domain and params' do
-    params = {'domain' => 'general', 'id' => 'USA'}
-    Download::Router.expects(:request).with('general', {'id' => 'USA'})
+  test '.request, given a hash of params, requests the router with domain and params' do
+    params = { 'domain' => 'general', 'id' => 'USA' }
+    Download::Router.expects(:request).with('general', { 'id' => 'USA' })
 
     Download.request params
   end
 
-  test '.set_email, given an hash of params, sets email using the router' do
-    params = {'domain' => 'general', 'id' => '123', 'email' => 'test@test.com'}
-    Download::Router.expects(:set_email).with('general', {'id' => '123', 'email' => 'test@test.com'})
+  test '.set_email, given a hash of params, sets email using the router' do
+    params = { 'domain' => 'general', 'id' => '123', 'email' => 'test@test.com' }
+    Download::Router.expects(:set_email).with('general', { 'id' => '123', 'email' => 'test@test.com' })
 
     Download.set_email params
   end

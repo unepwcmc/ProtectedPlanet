@@ -176,6 +176,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
     worker.instance_variable_set(:@filters_values, [])
 
     expected_selection = {}
+    # Wdpa::S3.current_wdpa_identifier is stubbed globally in test_helper (no real S3).
     Download.expects(:generate).with('csv', anything, { site_selection: expected_selection }).returns(true)
 
     worker.send(:generate_download)

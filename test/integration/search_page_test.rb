@@ -9,12 +9,17 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     # need some data to force index/field creation but don't want it to be found in test searches
     region = FactoryGirl.create(:region, id: 999, name: 'jsdfasdf')
     country = FactoryGirl.create(:country, id: 999, iso_3: 'jsd', name: 'jsdjkjkasdhf', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, pa_or_any_its_parcels_is_greenlisted: false, has_irreplaceability_info: false)
+    pa = FactoryGirl.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, has_irreplaceability_info: false)
 
     @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
     @psi.create
     @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     @csi.create
+    # Default search also queries the region + CMS indices — they must exist or queries 404.
+    @rsi = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
+    @rsi.create
+    @cmsi = Search::Index.new Search::CMS_INDEX, Comfy::Cms::SearchablePage.all
+    @cmsi.create
 
     seed_cms
     
@@ -23,6 +28,8 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   def teardown
     @psi.delete
     @csi.delete
+    @rsi.delete
+    @cmsi.delete
     WebMock.enable!
   end
   

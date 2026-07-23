@@ -8,17 +8,27 @@ class SearchTest < ActionDispatch::IntegrationTest
     @psi.create
     @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     @csi.create
+    # The default search index set now includes the region index (Search::AREAS_INDEX);
+    # it must exist or multi-index queries 404 with "no such index [regions_test]".
+    @rsi = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
+    @rsi.create
+    # DEFAULT_INDEX_NAME also queries the CMS index; it must exist too (empty is fine).
+    @cmsi = Search::Index.new Search::CMS_INDEX, Comfy::Cms::SearchablePage.all
+    @cmsi.create
   end
 
   def teardown
     @psi.delete
     @csi.delete
+    @rsi.delete
+    @cmsi.delete
     WebMock.enable!
   end
 
   def assert_index(num_countries, num_pas)
     @psi.index
     @csi.index
+    @rsi.index
     sleep(1)
 
     # ES only creates an index if it is used
