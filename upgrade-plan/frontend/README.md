@@ -253,20 +253,15 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     rule (Jul 2026), superseding the earlier "consistency convention, not a hard requirement" note**
     — passing an imported type straight into `defineProps<T>()` can compile fine at first but the
     Vue SFC compiler surfaces errors on it later (as the type is re-exported/re-shaped across
-    changes), so alias it up front rather than fixing it under pressure later. `Search/SiteTopbar.vue`
-    is the one remaining component that skips this — fix it the next time that file is touched.
+    changes), so alias it up front rather than fixing it under pressure later.
 13. **Use `v-text`/`v-html` instead of `{{ }}` mustache interpolation** for rendering a single
     dynamic value into an element, e.g. `<span v-text="textDownload.title" />` rather than
     `<span>{{ textDownload.title }}</span>` (and `v-html` when the string contains markup, e.g. CMS
-    copy). `Download/Modal.vue` is the reference example. Existing `{{ }}` usage (e.g.
-    `NavBar/Link.vue`) should be converted the next time that file is touched.
+    copy). `Download/Modal.vue` is the reference example.
 14. **A static class always goes in a plain `class="..."` attribute, never inside a `:class="[...]"`
     array.** Only genuinely dynamic/conditional classes belong in `:class`, and when both are needed
     on the same element, split them: `class="ct-card"` `:class="{ 'ct-card--link': props.url }"` —
-    not `:class="['ct-card', { 'ct-card--link': props.url }]"`. Existing components that mix a static
-    string into the `:class` array (`NavBar/Dropdown.vue`, `NavBar/Link.vue`, `Tooltip/Index.vue`,
-    `Search/SiteInput.vue`, `ListingPageCard/Resources/{Index,Card}.vue`) should be split the next
-    time each file is touched.
+    not `:class="['ct-card', { 'ct-card--link': props.url }]"`.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend`, the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and
