@@ -110,6 +110,15 @@
 
 ---
 
+## Baseline established (Jul 2026)
+
+- **Test suite is 100% dead on Rails 5.2** — aborts at load (`mocha 1.0.0` vs `minitest 5.25`), zero tests run. Broken since 2021 per `docs/workflow.md`. Proven by a local run in the Docker stack. → **[10 is now phase 1](./10-test-suite.md)**, the gate for everything.
+- **Jenkins Test stage never ran** — `echo "rakeTest()"` instead of `rakeTest()`. Fix staged on `backend/ci-test-baseline`; must not merge to a built branch until the suite loads.
+- **The org already runs Kamal** — local docker contexts point at `new-web-supported-staging.linode.unep-wcmc.org` for the API and related projects. Evidence the Kamal 2 deploy direction ([11](./11-deploy-and-devops.md)) is already the house style; ask Leo for the existing config.
+- **Ruby 2.7.8 + Node 24 + Vite 7 + `vite_rails` 3.11.1** all live on `feat/upgrade-frontend`, running on Rails 5.2.
+
+---
+
 ## Facts still needed (blocking estimates on 11 / 12 / 13)
 
 No shell access on the backend side. Someone with server access must confirm:

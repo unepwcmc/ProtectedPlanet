@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Estimate** | 3–5 weeks · ~0.75–1.25 months |
-| **Depends on** | [01 — Gem audit](./01-gem-audit.md) · [02 — Ruby 2.7](./02-ruby-upgrade.md) |
+| **Depends on** | **[10 — Test suite green on 5.2](./10-test-suite.md) (hard gate — no safety net without it)** · [01 — Gem audit](./01-gem-audit.md) · [02 — Ruby 2.7](./02-ruby-upgrade.md) |
 | **Blocks** | [04 — Rails 7](./04-rails-7.md) (B0) |
 
 [← Back to overview](./README.md)

@@ -1,4 +1,4 @@
-Total around 6–8.5 months for backend if no major surprises (GDAL/FileGDB and the Postgres server move being the highest risks)
+Total around 6.5–10 months for backend. **The test suite is dead** (100% fails to load on Rails 5.2 — proven Jul 2026) and must be revived first; GDAL/FileGDB and the Postgres server move are the next-highest risks.
 
 # Protected Planet — Backend upgrade (summary)
 
@@ -19,31 +19,32 @@ Total around 6–8.5 months for backend if no major surprises (GDAL/FileGDB and 
 
 ## Task plan
 
-*Estimates @ 1 FTE. Phases 3–6 must run sequentially (Ruby/Rails bump order). Phases 7–11 can begin after B0. Phases 12–14 are the infrastructure track and run after B0 — 12 gates 13, 13 gates 14.*
+*Estimates @ 1 FTE. **Phase 1 (test suite) is the gate — nothing after it can be verified until it's done.** Phases 4–7 run sequentially (Ruby/Rails bump order). 8–12 begin after B0. 13–15 are the infrastructure track (13 gates 14 gates 15).*
 
 
 | #   | Phase                        | Key deliverables                                                          | Estimate                | Detail                              |
 | --- | ---------------------------- | ------------------------------------------------------------------------- | ----------------------- | ----------------------------------- |
-| 0   | Scope & shared milestones    | B0–B5 milestone ownership; shared handoffs documented                     | —                       | [00](./00-scope-and-shared-milestones.md) |
-| 1   | Gem audit & inventory        | Every gem: keep / upgrade / remove                                        | 1–2 wk (~0.25–0.5 mo)  | [01](./01-gem-audit.md)             |
-| 2   | Ruby 2.6.3 → 2.7             | Keyword arg warnings resolved; CI green on 2.7                            | 1–2 wk (~0.25–0.5 mo)  | [02](./02-ruby-upgrade.md)          |
-| 3   | Rails 5.2 → 6.0 → 6.1        | Zeitwerk; AR 6 APIs; PostGIS adapter → 7.x; Sidekiq 5→6                   | 3–5 wk (~0.75–1.25 mo) | [03](./03-rails-6.md)               |
-| 4   | Ruby 2.7 → 3.3               | Keyword arg hard-break fixed. **Moved before Rails 7** — Media Surfer needs ≥ 3.2 | 1–2 wk (~0.25–0.5 mo) | [02](./02-ruby-upgrade.md)      |
-| 5   | Rails 6.1 → 7.0 → **7.1 (B0)** | **B0 delivered**; CMS swapped to Media Surfer; Nokogiri unpinned         | 3–5 wk (~0.75–1.25 mo) | [04](./04-rails-7.md)               |
-| 6   | Rails 7.1 → 8.0 **(B4)**     | Propshaft decision; PostGIS adapter → 11.x; Rails 8 target reached        | 2–3 wk (~0.5–0.75 mo)  | [05](./05-rails-8.md)               |
-| 7   | PostGIS & database           | Adapter kept current at each Rails step; spatial regression suite         | 1–2 wk (~0.25–0.5 mo)  | [06](./06-postgis-and-database.md)  |
-| 8   | Elasticsearch client         | `elasticsearch` gem → `~> 7.17`; server stays on 7.17.24 (no infra change)| 0.5–1 wk               | [07](./07-elasticsearch.md)         |
-| 9   | Sidekiq 5 → 7                | Config DSL updated; WDPA pipeline smoke-tested end-to-end                 | 1–2 wk (~0.25–0.5 mo)  | [08](./08-sidekiq-and-workers.md)   |
-| 10  | CMS — Comfy → Media Surfer   | Gem swapped; monkey-patches, custom tags and categories ported (B3)       | 2–3 wk (~0.5–0.75 mo)  | [09](./09-cms-comfy.md)             |
-| 11  | Test suite modernisation     | `factory_bot`; capybara 3.x; webmock/timecop bumped                       | 1–2 wk (~0.25–0.5 mo)  | [10](./10-test-suite.md)            |
-| 12  | **GDAL & spatial tooling**   | ESRI FileGDB SDK dropped; distro GDAL 3.8 + OpenFileGDB; `gdal` gem removed | 1–2 wk (~0.25–0.5 mo) | [13](./13-gdal-and-spatial-tooling.md) |
-| 13  | **Deploy — Docker + Kamal 2** *(B2, B5)* | Production images; Kamal roles; Puma; cron; Capistrano removed  | 3–4 wk (~0.75–1 mo)    | [11](./11-deploy-and-devops.md)     |
-| 14  | **Infrastructure migration** | Ubuntu 24.04 web + DB hosts; Postgres → 17/18 + PostGIS 3.5/3.6           | 2–3 wk (~0.5–0.75 mo)  | [12](./12-infrastructure-migration.md) |
-|     | **Total — conservative**     |                                                                           | **23–37 wk (~5.75–9.25 mo)** |                             |
-|     | **Total — optimistic**       |                                                                           | **18–28 wk (~4.5–7 mo)** |                                   |
+| **1** | **⚠️ Test suite — load + green on Rails 5.2** | **GATE.** Suite is dead at load ([baseline](./10-test-suite.md#️-baseline-finding--the-suite-is-100-dead-on-rails-52-jul-2026)). mocha/webmock/factory_bot make-it-load ladder → L0 → green on 5.2 | **2–4+ wk (unknown depth)** | [10](./10-test-suite.md) |
+| 2   | Scope & shared milestones    | B0–B5 milestone ownership; shared handoffs documented                     | —                       | [00](./00-scope-and-shared-milestones.md) |
+| 3   | Gem audit & inventory        | Every gem: keep / upgrade / remove                                        | 1–2 wk (~0.25–0.5 mo)  | [01](./01-gem-audit.md)             |
+| 4   | Ruby 2.6.3 → 2.7             | ✓ **Done on `feat/upgrade-frontend`** (2.7.8) — inherit + verify           | (banked)                | [02](./02-ruby-upgrade.md)          |
+| 5   | Rails 5.2 → 6.0 → 6.1        | Zeitwerk; AR 6 APIs; PostGIS adapter → 7.x; Sidekiq 5→6                   | 3–5 wk (~0.75–1.25 mo) | [03](./03-rails-6.md)               |
+| 6   | Ruby 2.7 → 3.3               | Keyword arg hard-break fixed. Before Rails 7 — Media Surfer needs ≥ 3.2   | 1–2 wk (~0.25–0.5 mo)  | [02](./02-ruby-upgrade.md)          |
+| 7   | Rails 6.1 → 7.0 → **7.1 (B0)** | **B0 delivered**; CMS swapped to Media Surfer; Nokogiri unpinned         | 3–5 wk (~0.75–1.25 mo) | [04](./04-rails-7.md)               |
+| 8   | Rails 7.1 → 8.0 **(B4)**     | Propshaft decision; PostGIS adapter → 11.x; Rails 8 target reached        | 2–3 wk (~0.5–0.75 mo)  | [05](./05-rails-8.md)               |
+| 9   | PostGIS & database           | Adapter kept current at each Rails step; spatial regression suite         | 1–2 wk (~0.25–0.5 mo)  | [06](./06-postgis-and-database.md)  |
+| 10  | Elasticsearch client         | `elasticsearch` gem → `~> 7.17`; server stays on 7.17.24 (no infra change)| 0.5–1 wk               | [07](./07-elasticsearch.md)         |
+| 11  | Sidekiq 5 → 7                | Config DSL updated; WDPA pipeline smoke-tested end-to-end                 | 1–2 wk (~0.25–0.5 mo)  | [08](./08-sidekiq-and-workers.md)   |
+| 12  | CMS — Comfy → Media Surfer   | Gem swapped; monkey-patches, custom tags and categories ported (B3)       | 2–3 wk (~0.5–0.75 mo)  | [09](./09-cms-comfy.md)             |
+| 13  | **GDAL & spatial tooling**   | ESRI FileGDB SDK dropped; distro GDAL 3.8 + OpenFileGDB; `gdal` gem removed | 1–2 wk (~0.25–0.5 mo) | [13](./13-gdal-and-spatial-tooling.md) |
+| 14  | **Deploy — Docker + Kamal 2** *(B2, B5)* | Production images; Kamal roles; Puma; cron; Capistrano removed  | 3–4 wk (~0.75–1 mo)    | [11](./11-deploy-and-devops.md)     |
+| 15  | **Infrastructure migration** | Ubuntu 24.04 web + DB hosts; Postgres → 17/18 + PostGIS 3.5/3.6           | 2–3 wk (~0.5–0.75 mo)  | [12](./12-infrastructure-migration.md) |
+|     | **Total — conservative**     |                                                                           | **25–41 wk (~6.25–10.25 mo)** |                          |
+|     | **Total — optimistic**       |                                                                           | **19–30 wk (~4.75–7.5 mo)** |                            |
 
+> **Test suite is now phase 1, not last (Jul 2026).** A local run proved the suite is 100% dead at load on Rails 5.2 (`mocha 1.0.0` vs `minitest 5.25`) — see the [baseline](./10-test-suite.md#️-baseline-finding--the-suite-is-100-dead-on-rails-52-jul-2026). Every "run tests, confirm green" checkpoint in the Rails phases depends on this landing first. Test-suite work then continues *through* the Rails bumps (capybara 3, mocha 2.x, Ruby-3 gem compat) — the phase-1 estimate is only the make-it-load + green-on-5.2 portion.
 
-*Phases 12–14 replace the previous 1–2 wk "Capistrano refresh" scope. Net addition to the plan is roughly **+3–4 weeks**, not the full 6–9 weeks those three phases total.*
+*Phases 13–15 replace the previous 1–2 wk "Capistrano refresh" scope. Net addition there is ~+3–4 weeks. The +2 wk on the totals vs. the prior version is the newly-proven test-suite gate.*
 
 **B0 target (Rails 7.1)** can realistically land in **months 2–3**.
 
@@ -77,6 +78,7 @@ Total around 6–8.5 months for backend if no major surprises (GDAL/FileGDB and 
 
 | Risk | Impact | Where |
 |------|--------|-------|
+| **Test suite is dead** — 100% fails to load on Rails 5.2 (mocha 1.0.0 vs minitest 5.25), broken since 2021. **Realized, not hypothetical.** | **Critical** — no safety net for any Rails bump until fixed; depth of rot unknown | [10](./10-test-suite.md) |
 | **GDAL / ESRI FileGDB** — `.gdb` downloads depend on a proprietary SDK compiled into GDAL 2.2.3, which will not build on a modern base image | **High** — blocks dockerization; wrong output silently breaks downstream users | [13](./13-gdal-and-spatial-tooling.md) |
 | **Postgres major upgrade** — large spatial DB, PostGIS extension must move in step | **High** — data correctness + downtime | [12](./12-infrastructure-migration.md) |
 | **CMS port** — Media Surfer is the unreleased Comfy master line; our monkey-patching touches private engine API | Medium — CMS blocks B3 | [09](./09-cms-comfy.md) |
@@ -104,7 +106,7 @@ The CMS was previously the single highest risk. Adopting Media Surfer moved it f
 | [07 Elasticsearch](./07-elasticsearch.md)                        | Client gem bump; server stays on 7.17.24              |
 | [08 Sidekiq & workers](./08-sidekiq-and-workers.md)              | 5 → 7 migration, WDPA pipeline, scheduled jobs        |
 | [09 CMS — Comfy → Media Surfer](./09-cms-comfy.md)               | Gem swap, monkey-patch port, B3                       |
-| [10 Test suite](./10-test-suite.md)                              | factory_bot, capybara 3, webmock, timecop             |
+| [10 Test suite](./10-test-suite.md)                              | **Phase 1 gate** — baseline (dead at load), make-it-load ladder, factory_bot, capybara 3, webmock |
 | [11 Deploy — Docker + Kamal 2](./11-deploy-and-devops.md)        | Production images, Kamal roles, Puma, cron, B2/B5     |
 | [12 Infrastructure migration](./12-infrastructure-migration.md)  | Ubuntu 24.04 hosts, Postgres 17/18, cutover plan      |
 | [13 GDAL & spatial tooling](./13-gdal-and-spatial-tooling.md)    | Drop ESRI FileGDB SDK, OpenFileGDB, remove `gdal` gem |
