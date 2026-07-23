@@ -121,6 +121,27 @@ Grouped by root cause. **`D` = needs a domain/keep-delete decision (backend dev)
 
 **State after batches 1–5: 107 → 75 red locally (~66 excluding the frontend vite artifact).** Errors down from 65 → 28.
 
+- **Batch 6 (Jul 2026): 75 → 70. NoMethodError cluster cleared (8 → 1)**, all traced from code:
+  - `Search::Matcher#to_h` → renamed `to_matcher_hash` (updated call sites).
+  - `Wdpa::ParcelDataStandard` `standard_attributes`/`standardise_table_name` tests removed — those methods live on `Wdpa::DataStandard` (tested there); nothing calls them on the parcel class. Obsolete copies, proven by grepping app usage.
+  - `HomeHelper#get_filters` → moved to `SearchAreaLinkFilters.home_category_filters(filter:, is_green_list:)` (db_type now applied elsewhere) — rewrote the 2 tests to the current method + output.
+  - `HomePresenter#terrestrial_cover` — home page renders `GlobalStatistic` coverage %s (`.round` on nil); seeded the `GlobalStatistic` singleton in `home_controller_test`.
+
+**State after batches 1–6: 107 → 70 red (48 failures, 22 errors, 7 skips). Real backend red ≈ 61** (minus the ~9 environmental vite failures). Errors down 65 → 22.
+
+### Remaining ≈61, all code/debug-fixable (per-file assertion diffs — good to parallelize)
+
+Failures now spread thin across ~20 files (2–6 each) — the "update-expected-to-match-app" tail. Highest-count files:
+| File | ~fails | Likely root |
+|---|---|---|
+| `search_page_test` / `search_areas_test` | 9 | remaining assertions after ES-index fix (page content drift) |
+| `wdpa/data_standard_test` + `parcel_data_standard_test` | 10 | `STANDARD_ATTRIBUTES` grew (Sep-2025 migration added `governance_subtype`, `site_type`, …) — update expected hashes |
+| `download/generators/{shapefile,csv,base}_test` | 12 | mocha "unexpected invocation" — generator call patterns drifted |
+| `search/query_test` | 4 | query hash changed (same as the `SearchTest` mock) |
+| `presenters/protected_area_presenter_test`, `models/{protected_area,country}_test`, `protected_areas_controller_test`, `download/{router,utils}_test`, misc | ~26 | per-test drift |
+
+Method is identical for every one: read what the app produces now → update the test's expectation → verify. No domain decisions (bar the rare genuine regression, flagged with evidence). These are independent and parallelizable across the team.
+
 ### Efficient continuation plan (highest-leverage first)
 
 1. **WebMock/S3 (≈8–10)** — one global `Wdpa::S3.current_wdpa_identifier` stub (+ maybe `has_successful_portal_release?`).

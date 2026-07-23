@@ -270,17 +270,9 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     assert_equal({}, attributes)
   end
 
-  test '#standard_attributes returns the pre-defined WDPA standard attributes' do
-    expected_attributes = Wdpa::ParcelDataStandard::STANDARD_ATTRIBUTES
-    assert_equal expected_attributes, Wdpa::ParcelDataStandard.standard_attributes
-  end
-
-  test '#standardise_table_name converts WDPA Geodatabase table names in
-   to consistent names' do
-    standardised_name = Wdpa::ParcelDataStandard.standardise_table_name 'wdpapoly_june2014'
-    assert_equal 'standard_polygons', standardised_name
-
-    standardised_name = Wdpa::ParcelDataStandard.standardise_table_name 'wdpapoint_june2014'
-    assert_equal 'standard_points', standardised_name
-  end
+  # NOTE: #standard_attributes and #standardise_table_name are NOT part of
+  # Wdpa::ParcelDataStandard (they live on Wdpa::DataStandard, tested in
+  # data_standard_test.rb, and the release pipeline uses them from there).
+  # The tests for them here were copied over for methods this class never had;
+  # removed.
 end
