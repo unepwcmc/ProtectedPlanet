@@ -1,6 +1,6 @@
 module CmsHelper
   def get_category_filters
-    category_groups = load_categories 
+    category_groups = load_categories
 
     [
       {
@@ -14,7 +14,7 @@ module CmsHelper
           }
         end
       }
-    ].to_json
+    ]
   end
 
   def load_categories

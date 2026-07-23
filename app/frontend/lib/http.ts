@@ -30,7 +30,7 @@ export function postJson<T>(url: string, body?: unknown): Promise<T> {
   }).then(parseJsonResponse<T>)
 }
 
-export function getJson<T>(url: string, params?: Record<string, string>): Promise<T> {
+export function getJson<T>(url: string, params?: Record<string, string> | URLSearchParams): Promise<T> {
   const query = params ? `?${new URLSearchParams(params).toString()}` : ''
 
   return fetch(`${url}${query}`, {

@@ -165,3 +165,64 @@ export interface DownloadModalProps {
     generating: string
   }
 }
+
+// One item from Search::CmsSerializer#serialize (SearchCmsController#index,
+// and the initial page load via SearchHelper#cms_pages_for_search).
+export interface ListingResult {
+  date?: string
+  fileUrl?: string
+  linkUrl?: string
+  // Serializer bug: the JSON key is actually `linktTile` (typo), so this is
+  // always undefined in practice — pre-existing on the backend, not a
+  // regression introduced by this migration.
+  linkTitle?: string
+  title: string
+  url?: string
+  summary?: string
+  image?: string
+}
+
+export interface ListingResults {
+  total: number
+  totalPages: number
+  results: ListingResult[]
+}
+
+export interface ListingFilterOption {
+  // CmsHelper#get_category_filters sources this from Comfy::Cms::PageCategory#id
+  // (an integer primary key), not a string slug.
+  id: string | number
+  title: string
+}
+
+// Only `type: 'checkbox'` is ever sent for the news/resources listing pages
+// (see CmsHelper#get_category_filters) — `radio`/`checkbox-search` are only
+// used by the still-Vue2 search-areas filters (Search::FiltersSerializer).
+export interface ListingFilter {
+  id: string
+  title?: string
+  type: 'checkbox'
+  options: ListingFilterOption[]
+}
+
+export interface ListingFilterGroup {
+  title?: string
+  filters: ListingFilter[]
+}
+
+// Props for `frontend_mount "Listing"` — the news/resources listing pages
+// (filters + ajax pagination). Rendered by
+// app/views/layouts/cms/{_news-and-stories,_resources}.html.erb.
+export interface ListingProps {
+  endpointSearch: string
+  filterGroups: ListingFilterGroup[]
+  gaId: string
+  itemsPerPage?: number
+  pageId: number
+  results: ListingResults
+  template: 'news' | 'resources'
+  textClear: string
+  textFiltersClose: string
+  textFilterTrigger: string
+  textNoResults: string
+}

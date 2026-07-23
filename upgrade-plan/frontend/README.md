@@ -262,6 +262,30 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     array.** Only genuinely dynamic/conditional classes belong in `:class`, and when both are needed
     on the same element, split them: `class="ct-card"` `:class="{ 'ct-card--link': props.url }"` —
     not `:class="['ct-card', { 'ct-card--link': props.url }]"`.
+15. **List/single-item split naming extends point 3.** When a component renders a collection and each
+    item is its own SFC, the folder's `Index.vue` is the list/collection (owns shared state —
+    selection, reset keys, GA aggregation, etc.) and the per-item sibling is named plain `Item.vue`
+    (not `<Folder>Item.vue`) — e.g. `Listing/Checkboxes/{Index,Item}.vue`, mirroring how
+    `ListingPageCard/{News,Resources}/{Index,Card}.vue` is Index-owns-the-list / per-item-file (there
+    the per-item file is `Card.vue`, since that's what a single result renders as). `Item.vue` takes
+    the single data item + its own selection state as props and emits a plain `change` event — it
+    doesn't know about siblings or the overall selection array; that bookkeeping stays in `Index.vue`.
+    Root element tags must match their container (`<ul>` parent → `<li>` item root, not `<div>`/`<p>`).
+16. **Prop names are camelCase everywhere — in `defineProps` AND in every parent template's binding.**
+    Never kebab-case or snake_case, regardless of how a JSON source names the field:
+    `:groupId="id"`, `:preSelected="..."`, `:gaId="..."`, `:filterCloseText="..."` — not `:group-id`,
+    `:pre-selected`, `:ga-id`, `:filter-close-text`. This applies project-wide, not per-feature.
+    **Exception: native HTML/ARIA/`data-*` attributes on plain (lowercase) elements stay kebab-case**
+    (`:aria-expanded`, `:aria-describedby`, `:data-tab-panel`) — those are real DOM attribute names, not
+    Vue component props, and camelCasing them would render a nonstandard attribute instead of the real
+    one.
+17. **Custom event names are camelCase too — in `defineEmits`, every `emit(...)` call, and every parent
+    template's listener.** `defineEmits<{ requestMore: [page: number] }>()` /
+    `emit('requestMore', ...)` / `@requestMore="..."` — not `'request-more'`/`@request-more`. For Vue's
+    colon-namespaced event convention (`update:x`, `toggle:x`), camelCase only the part(s) after the
+    colon — the colon itself stays: `update:filterGroup`, `toggle:filterPane`, not
+    `update:filter-group`/`toggle:filter-pane`. Applies project-wide alongside point 16 — props and
+    events are both camelCase everywhere, no kebab-case left in any component-to-component binding.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend`, the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and

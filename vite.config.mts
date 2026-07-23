@@ -20,6 +20,16 @@ export default defineConfig({
     tailwindcss(),
     vue({ compiler: vue3Compiler }),
   ],
+  optimizeDeps: {
+    // @vueuse/core and pinia import Vue3-only exports (Fragment, toValue,
+    // hasInjectionContext, ...) that don't exist on the real `vue` (2.7)
+    // package. The dev-server dependency pre-bundler doesn't consistently
+    // apply the `vue` -> `vue3` alias below to their internal `import ...
+    // from 'vue'`, causing a hard crash on cold start / re-optimization.
+    // Excluding them from pre-bundling defers resolution to Vite's normal
+    // per-request transform, where the alias does apply.
+    exclude: ['@vueuse/core', 'pinia'],
+  },
   resolve: {
     alias: [
       // Vite bundles Vue 3 (runtime + compiler). Does NOT affect Webpacker's webpack.

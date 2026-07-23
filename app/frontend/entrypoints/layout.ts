@@ -39,7 +39,8 @@ registerIslands({
   NavBar: () => import('@/components/NavBar/Index.vue'),
   SearchSiteTopbar: () => import('@/components/Search/SiteTopbar.vue'),
   Download: () => import('@/components/Download/Index.vue'),
-  DownloadModal: () => import('@/components/Download/Modal.vue')
+  DownloadModal: () => import('@/components/Download/Modal.vue'),
+  Listing: () => import('@/components/Listing/Index.vue')
 })
 
 if (document.readyState === 'complete') {

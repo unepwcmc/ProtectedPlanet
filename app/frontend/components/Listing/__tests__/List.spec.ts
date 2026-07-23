@@ -1,0 +1,69 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { mount } from '@vue/test-utils'
+import List from '@/components/Listing/List.vue'
+import PaginationInfinityScroll from '@/components/Listing/PaginationInfinityScroll.vue'
+
+class FakeIntersectionObserver {
+  observe = vi.fn()
+  disconnect = vi.fn()
+  unobserve = vi.fn()
+}
+
+beforeEach(() => {
+  vi.stubGlobal('IntersectionObserver', FakeIntersectionObserver)
+})
+
+const newsResults = {
+  total: 2,
+  totalPages: 1,
+  results: [
+    { title: 'First', url: 'first', summary: 'One' },
+    { title: 'Second', url: 'second', summary: 'Two' }
+  ]
+}
+
+describe('Listing List', () => {
+  it('renders news cards for the news template', () => {
+    const wrapper = mount(List, {
+      props: { resetKey: 0, results: newsResults, template: 'news', textNoResults: 'None' }
+    })
+
+    expect(wrapper.find('.listing__cards-news').exists()).toBe(true)
+    expect(wrapper.find('.listing__cards-resources').exists()).toBe(false)
+    expect(wrapper.findAll('.card__h3')).toHaveLength(2)
+  })
+
+  it('renders resource cards for the resources template', () => {
+    const wrapper = mount(List, {
+      props: { resetKey: 0, results: newsResults, template: 'resources', textNoResults: 'None' }
+    })
+
+    expect(wrapper.find('.listing__cards-resources').exists()).toBe(true)
+    expect(wrapper.find('.listing__cards-news').exists()).toBe(false)
+  })
+
+  it('shows the no-results message when total is 0', () => {
+    const wrapper = mount(List, {
+      props: {
+        resetKey: 0,
+        results: { total: 0, totalPages: 0, results: [] },
+        template: 'news',
+        textNoResults: 'No results found'
+      }
+    })
+
+    const noResults = wrapper.find('.search__results-none')
+    expect(noResults.isVisible()).toBe(true)
+    expect(noResults.text()).toBe('No results found')
+  })
+
+  it('forwards requestMore from the pagination trigger', async () => {
+    const wrapper = mount(List, {
+      props: { resetKey: 0, results: newsResults, template: 'news', textNoResults: 'None' }
+    })
+
+    await wrapper.findComponent(PaginationInfinityScroll).vm.$emit('requestMore', 2)
+
+    expect(wrapper.emitted('requestMore')?.[0]).toEqual([2])
+  })
+})

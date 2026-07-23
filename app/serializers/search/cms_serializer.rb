@@ -24,7 +24,8 @@ class Search::CmsSerializer < Search::BaseSerializer
   }.freeze
 
   def serialize
-    return DEFAULT_OBJ.to_json unless @search 
+    return DEFAULT_OBJ unless @search
+
     DEFAULT_OBJ.merge(
       {
         total: total,
@@ -34,7 +35,7 @@ class Search::CmsSerializer < Search::BaseSerializer
             date: date(record),
             fileUrl: file(record),
             linkUrl: link(record),
-            linktTile: link_title(record), 
+            linktTile: link_title(record),
             title: strip_html(record.respond_to?(:label) ? record.label : record.name),
             url: url(record),
             summary: strip_html(record.respond_to?(:summary) ? record.summary : record.name),
@@ -42,7 +43,7 @@ class Search::CmsSerializer < Search::BaseSerializer
           }
         end
       }
-    ).to_json
+    )
   end
 
   private
