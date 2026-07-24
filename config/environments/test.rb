@@ -26,7 +26,12 @@ Rails.application.configure do
   config.action_dispatch.show_exceptions = false
 
   config.assets.compress = false
-  config.assets.compile = false
+  # Compile on demand. With this false and no precompiled manifest in test, every
+  # asset lookup failed; that was invisible only because the pre-6.0 default let
+  # asset_path silently fall back to a bare public/ path. load_defaults 6.0 sets
+  # config.assets.unknown_asset_fallback = false, which turns those into
+  # Sprockets::Rails::Helper::AssetNotFound.
+  config.assets.compile = true
 
   config.active_support.test_order = :random
 
