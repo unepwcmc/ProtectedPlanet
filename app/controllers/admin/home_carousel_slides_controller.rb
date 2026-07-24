@@ -28,7 +28,7 @@ class Admin::HomeCarouselSlidesController < Comfy::Admin::Cms::BaseController
   end
 
   def update
-    @home_carousel_slide.update_attributes!(home_carousel_slide_params)
+    @home_carousel_slide.update!(home_carousel_slide_params)
     flash[:success] = 'Home Carousel Slide updated'
     redirect_to :action => :show, :id => @home_carousel_slide
   rescue ActiveRecord::RecordInvalid

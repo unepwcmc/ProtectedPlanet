@@ -25,7 +25,7 @@ class Admin::BannersController < Comfy::Admin::Cms::BaseController
   end
 
   def update
-    @banner.update_attributes!(banner_params)
+    @banner.update!(banner_params)
     flash[:success] = 'Banner updated'
     render action: :edit
   rescue ActiveRecord::RecordInvalid

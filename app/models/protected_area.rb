@@ -340,7 +340,7 @@ class ProtectedArea < ApplicationRecord
 
   def create_slug
     updated_slug = [site_id, name, designation.try(:name)].join(' ').parameterize
-    update_attributes(slug: updated_slug)
+    update(slug: updated_slug)
   end
 
   def db

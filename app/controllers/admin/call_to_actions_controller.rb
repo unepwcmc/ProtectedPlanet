@@ -28,7 +28,7 @@ class Admin::CallToActionsController < Comfy::Admin::Cms::BaseController
   end
 
   def update
-    @cta.update_attributes!(cta_params)
+    @cta.update!(cta_params)
     flash[:success] = 'Call To Action updated'
     redirect_to action: :show, id: @cta
   rescue ActiveRecord::RecordInvalid
