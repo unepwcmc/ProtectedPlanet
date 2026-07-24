@@ -18,7 +18,9 @@ module Concerns::GreenListPageData
       overlays: MapOverlaysSerializer.new(green_list_map_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'pa_or_any_its_parcels_is_greenlisted',
-      point_query_services: green_list_point_query_services
+      point_query_services: green_list_point_query_services,
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
   end
 

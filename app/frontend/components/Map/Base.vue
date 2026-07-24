@@ -2,6 +2,7 @@
   <div class="v-map">
     <div
       :id="containerId"
+      ref="mapContainer"
       class="map__mapbox"
     />
     <MapBaselayerControls
@@ -12,13 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, useTemplateRef, watch } from 'vue'
 import MapBaselayerControls from '@/components/Map/BaselayerControls.vue'
 import { useMapStore } from '@/stores/useMapStore'
 import { useMapInstance } from '@/composables/useMapInstance'
 import { useMapLayers } from '@/composables/useMapLayers'
 import { useMapBoundingBox } from '@/composables/useMapBoundingBox'
-import { useMapPopups } from '@/composables/useMapPopups'
+import { useMapPopups, generateAttributesHtml } from '@/composables/useMapPopups'
 import { BASELAYERS_DEFAULT, CONTROLS_OPTIONS_DEFAULT, MAP_OPTIONS_DEFAULT } from '@/constants/map'
 import { transformMapboxStyle } from 'maplibregl-mapbox-request-transformer'
 import type { MapOptions, StyleSpecification } from 'maplibre-gl'
@@ -43,10 +44,22 @@ const controlsOptions = computed(() => ({ ...CONTROLS_OPTIONS_DEFAULT, ...props.
 
 const { map, initMap } = useMapInstance()
 const { executeAfterStyleLoad, setFirstForegroundLayerId, showLayers, hideLayers } = useMapLayers(map)
-const { onClick: onPopupClick } = useMapPopups(map, props.servicesForPointQuery, props.popupAttributes)
+const { onClick: onPopupClick, addPopup, popupAttributes } = useMapPopups(map, props.servicesForPointQuery, props.popupAttributes)
 // PA-search "jump to result + open its popup" flow (mixin-bounding-box's
-// addPopupFromExtent) is wired up in Wave 7 once VMapPASearch/Autocomplete land.
-const { initBounds, initBoundingBoxAndMap, zoomTo } = useMapBoundingBox(map)
+// addPopupFromExtent), rendered with the same attribute labels/markup as the
+// click-to-query popup above (generateAttributesHtml) — a search result only
+// ever has a name + id (+ site_pid for a PA), not the full point-query
+// feature attribute set, so site_id/site_pid come from the autocomplete
+// result itself rather than a second lookup.
+const { initBounds, initBoundingBoxAndMap, zoomTo } = useMapBoundingBox(map, (coords, options) => {
+  if (!options.name) return
+
+  addPopup(coords, generateAttributesHtml([
+    { title: popupAttributes.name, value: options.name, url: options.is_pa ? `/${options.id}` : undefined },
+    { title: popupAttributes.site_id, value: options.is_pa ? String(options.id) : undefined },
+    { title: popupAttributes.site_pid, value: (options.site_pid as string | null) ?? undefined }
+  ]))
+})
 
 const mapOptions = computed<MapOptions>(() => {
   // boundsUrl isn't a real MapLibre option — it's consumed by initBoundingBoxAndMap
@@ -93,11 +106,31 @@ watch(
   }
 )
 
+const resize = () => map.value?.resize()
+
+// A map mounted inside a `display: none` tab (e.g. the wdpca/Green List tab
+// extras — that container starts hidden whenever it isn't the initially
+// selected tab) initialises at 0×0; MapLibre needs an explicit resize() once
+// its container actually has a layout box. Vue 3 port of the legacy
+// TabTarget.vue's `$eventHub.emit('map:resize')` on tab activation, but
+// container-driven rather than coupled to that specific component.
+let visibilityObserver: IntersectionObserver | undefined
+const mapContainer = useTemplateRef('mapContainer')
+
 onMounted(() => {
   initBoundingBoxAndMap(props.options.map?.boundsUrl, () => {
     initMap(mapOptions.value, controlsOptions.value, onPopupClick, setFirstForegroundLayerId)
+
+    if (!mapContainer.value || typeof IntersectionObserver === 'undefined') return
+
+    visibilityObserver = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) resize()
+    })
+    visibilityObserver.observe(mapContainer.value)
   })
 })
 
-defineExpose({ zoomTo, resize: () => map.value?.resize() })
+onUnmounted(() => visibilityObserver?.disconnect())
+
+defineExpose({ zoomTo, resize })
 </script>

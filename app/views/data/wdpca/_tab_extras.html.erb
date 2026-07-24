@@ -3,8 +3,15 @@
 </section>
 
 <section class="map-section">
-  <%= render partial: "partials/maps/main", locals: {
-    map: map,
-    map_options: local_assigns[:map_options]
+  <%= frontend_mount "Map", props: {
+    options: local_assigns[:map_options] || {},
+    servicesForPointQuery: map[:point_query_services],
+    popupAttributes: map[:popup_attributes],
+    title: map[:title],
+    overlays: map[:overlays],
+    disclaimer: map[:disclaimer],
+    type: map[:type],
+    autocompleteErrorMessages: map_yml[:autocomplete_error_messages],
+    autocompletePlaceholder: map_yml[:autocomplete_placeholder]
   } %>
 </section>

@@ -48,7 +48,10 @@ function attributeHtml(elementType: 'span' | 'a', element: { title: string, valu
           </span>`
 }
 
-function generateHtml(attributes: Array<{ title: string, value?: string, url?: string }>): string {
+// Exported so other popup-opening flows (e.g. Map/Base.vue's PA-search
+// "jump to result" popup) render with the same markup/classes as the
+// click-to-query popup below, rather than growing a second HTML template.
+export function generateAttributesHtml(attributes: Array<{ title: string, value?: string, url?: string }>): string {
   const items = attributes
     .map(a => `<li class="mapboxgl-popup-content__attribute">${attributeHtml(a.url ? 'a' : 'span', a)}</li>`)
     .join('')
@@ -105,7 +108,7 @@ export function useMapPopups(
     if (!feature) return
 
     const pa = feature.attributes
-    const html = generateHtml([
+    const html = generateAttributesHtml([
       { title: popupAttributes.name, value: pa.name, url: pa.site_id ? `/${pa.site_id}` : undefined },
       { title: popupAttributes.site_id, value: pa.site_id },
       { title: popupAttributes.site_pid, value: pa.site_pid }
@@ -114,5 +117,5 @@ export function useMapPopups(
     addPopup(coords, html)
   }
 
-  return { onClick, addPopup, removeAllMarkersAndPopups }
+  return { onClick, addPopup, removeAllMarkersAndPopups, popupAttributes }
 }

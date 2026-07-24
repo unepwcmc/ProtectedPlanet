@@ -5,6 +5,7 @@
       :title
     />
     <MapBase
+      ref="mapBaseRef"
       :options
       :servicesForPointQuery
       :popupAttributes
@@ -14,11 +15,16 @@
       :overlays
       :isHidden
       :disclaimer
+      :type
+      :autocompleteErrorMessages
+      :autocompletePlaceholder
+      @zoomTo="mapBaseRef?.zoomTo($event)"
     />
   </div>
 </template>
 
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
 import MapHeader from '@/components/Map/Header.vue'
 import MapBase from '@/components/Map/Base.vue'
 import MapPanel from '@/components/Map/Panel.vue'
@@ -31,6 +37,16 @@ withDefaults(defineProps<Map>(), {
   popupAttributes: undefined,
   disclaimer: null,
   isHidden: false,
-  showHeader: true
+  showHeader: true,
+  type: undefined,
+  autocompleteErrorMessages: undefined,
+  autocompletePlaceholder: undefined
 })
+
+const mapBaseRef = useTemplateRef('mapBaseRef')
 </script>
+<style lang="css" scoped>
+.map--main{
+  @apply w-full;
+}
+</style>

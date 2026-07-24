@@ -23,8 +23,7 @@
         wdpa_national_designations_count: @wdpa_national_designations_count,
         oecm_national_designations_count: @oecm_national_designations_count
       } %>
-      <div class="page__map map--country">
-        <%= frontend_mount "Map", props: {
+      <%= frontend_mount "Map", props: {
           options: @map_options,
           servicesForPointQuery: @map[:point_query_services],
           popupAttributes: @map[:popup_attributes],
@@ -34,7 +33,6 @@
           isHidden: true,
           showHeader: false
         } %>
-      </div>
     </section>
     <section>
       <region-country-pages

@@ -88,4 +88,39 @@ describe('Map', () => {
     expect(wrapper.find(':scope > .v-map-header').exists()).toBe(false)
     expect(wrapper.find('.v-map-filters .v-map-header').exists()).toBe(true)
   })
+
+  it('renders the PA-search box when type and autocomplete copy are provided', () => {
+    const wrapper = mount(Map, {
+      props: {
+        title: 'Discover Protected Areas',
+        overlays,
+        type: 'wdpca',
+        autocompleteErrorMessages: { no_results: 'No results.', invalid_search_string: 'Too short.' },
+        autocompletePlaceholder: 'Search for a Region, Country or Area'
+      }
+    })
+
+    expect(wrapper.find('.v-map-pa-search').exists()).toBe(true)
+  })
+
+  it('omits the PA-search box when isHidden, or when type/autocomplete copy are not provided', () => {
+    const withoutSearchProps = mount(Map, {
+      props: { title: 'Protected Area', overlays, showHeader: false }
+    })
+
+    expect(withoutSearchProps.find('.v-map-pa-search').exists()).toBe(false)
+
+    const hidden = mount(Map, {
+      props: {
+        title: 'Discover Protected Areas',
+        overlays,
+        isHidden: true,
+        type: 'all',
+        autocompleteErrorMessages: { no_results: 'No results.', invalid_search_string: 'Too short.' },
+        autocompletePlaceholder: 'Search'
+      }
+    })
+
+    expect(hidden.find('.v-map-pa-search').exists()).toBe(false)
+  })
 })

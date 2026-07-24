@@ -7,7 +7,6 @@
 # The rest info in the page are still only against site_id only not taking parcel Ids into consideration 
 # If in future more info are taking parcel ids into consideration Please ADD COMMENTS here.
 %>
-
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 <div class="page--site bg--grey-xlight spacer-small--top">
   <div class="container">
@@ -20,8 +19,7 @@
         site_id: @protected_area.site_id,
         external_links: @presenter.external_links
       } %>
-      <div class="map--site">
-        <%= frontend_mount "Map", props: {
+      <%= frontend_mount "Map", props: {
           options: @map_options,
           servicesForPointQuery: @map[:point_query_services],
           popupAttributes: @map[:popup_attributes],
@@ -31,7 +29,6 @@
           isHidden: true,
           showHeader: false
         } %>
-      </div>
     </section>
     <section class="page__section--parcels-dropdown">
       <%= render partial: "partials/attributes/attributes-parcels-dropdown", locals: { 

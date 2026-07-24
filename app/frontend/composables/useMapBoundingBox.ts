@@ -1,7 +1,7 @@
 // Vue3 port of app/javascript/components/map/mixins/mixin-bounding-box.js
 import { ref, type Ref } from 'vue'
 import type { LngLatBoundsLike, Map as MapLibreMap } from 'maplibre-gl'
-import { getJson } from '@/lib/http'
+import { getJsonExternal } from '@/lib/http'
 
 export interface BoundsUrl {
   url: string
@@ -50,7 +50,9 @@ export function useMapBoundingBox(
       return
     }
 
-    const res = await getJson<{ extent: Extent }>(boundsUrl.url)
+    // These are external ArcGIS hosts, not our Rails app — sending our CSRF
+    // header fails their CORS preflight (same fix as useMapPopups.ts).
+    const res = await getJsonExternal<{ extent: Extent }>(boundsUrl.url)
 
     if (res.extent) {
       initBounds.value = getBoundsFromExtent(res.extent, boundsUrl.padding)
@@ -64,7 +66,7 @@ export function useMapBoundingBox(
   }
 
   async function zoomTo(options: ZoomToOptions) {
-    const res = await getJson<{ extent: Extent }>(options.extent_url.url)
+    const res = await getJsonExternal<{ extent: Extent }>(options.extent_url.url)
 
     if (!res.extent) return
 

@@ -21,7 +21,16 @@
 } %>
 
 <section class="map-section">
-  <%= render partial: "partials/maps/main", locals: { map: @green_list_map } %>
+  <%= frontend_mount "Map", props: {
+    servicesForPointQuery: @green_list_map[:point_query_services],
+    popupAttributes: @green_list_map[:popup_attributes],
+    title: @green_list_map[:title],
+    overlays: @green_list_map[:overlays],
+    disclaimer: @green_list_map[:disclaimer],
+    type: @green_list_map[:type],
+    autocompleteErrorMessages: map_yml[:autocomplete_error_messages],
+    autocompletePlaceholder: map_yml[:autocomplete_placeholder]
+  } %>
 </section>
 
 <section class="container spacer-large--top">

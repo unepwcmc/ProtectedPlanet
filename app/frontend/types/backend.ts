@@ -1,5 +1,6 @@
 import type { MapLayer } from '@/composables/useMapLayers'
 import type { MapOptionsPayload, PointQueryService, PopupAttributeLabels } from '@/types/map'
+import type { BoundsUrl } from '@/composables/useMapBoundingBox'
 
 export interface Banner {
   id: number
@@ -242,6 +243,12 @@ export interface MapPanelProps {
   title: string
   isHidden?: boolean
   disclaimer?: { heading: string, body: string } | null
+  // The PA-search box (`MapPaSearch`) only appears when these are provided —
+  // omitted on the header-map layout, which has no search box. See
+  // `Autocompletion.get_filters` for the `type` values.
+  type?: string
+  autocompleteErrorMessages?: AutocompleteErrorMessages
+  autocompletePlaceholder?: string
 }
 
 // Props for `frontend_mount "Map"` — the single top-level map composition
@@ -259,6 +266,41 @@ export interface MapProps {
   // Set false for the "map--header" layout (protected_areas/show, region/show,
   // country/show) — those pages show the panel toggle but no standalone map title.
   showHeader?: boolean
+  // The PA-search box (`MapPaSearch`, rendered inside `MapPanel`) only appears
+  // when these are provided — omitted on the header-map layout, which has no
+  // search box. See `Autocompletion.get_filters` for the `type` values.
+  type?: string
+  autocompleteErrorMessages?: AutocompleteErrorMessages
+  autocompletePlaceholder?: string
+}
+
+// Props for `MapPaSearch` — the "search & jump to a PA/country/region on the
+// map" box. Not its own `frontend_mount` entry: `MapPanel` renders it directly
+// (as a normal child component) when `type`/autocomplete-copy props are
+// present, threaded through `MapPanelProps`/`MapProps` above. See
+// `partials/maps/_main.html.erb`'s `<v-map-pa-search>` for the legacy Vue2 tag
+// this replaces.
+export interface MapPaSearchProps {
+  autocompleteErrorMessages: AutocompleteErrorMessages
+  autocompletePlaceholder: string
+  type: string
+}
+
+export interface AutocompleteErrorMessages {
+  no_results: string
+  invalid_search_string: string
+}
+
+// One item of `SearchController#autocomplete`'s JSON (`Autocompletion.lookup`) —
+// `POST /search/autocomplete`.
+export interface AutocompleteResult {
+  id: string | number
+  is_pa: boolean
+  // Only set when is_pa — a region/country result has no site_pid.
+  site_pid: string | null
+  extent_url: BoundsUrl
+  title: string
+  url: string
 }
 
 // Props for `frontend_mount "Listing"` — the news/resources listing pages

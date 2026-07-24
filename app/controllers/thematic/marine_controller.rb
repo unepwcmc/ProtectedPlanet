@@ -17,7 +17,9 @@ class Thematic::MarineController < ApplicationController
       overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'marine',
-      point_query_services: marine_services_for_point_query
+      point_query_services: marine_services_for_point_query,
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
     @filters = SearchAreaLinkFilters.wdpa_and_marine_is_true_filters
   end
