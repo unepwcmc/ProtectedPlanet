@@ -1,15 +1,19 @@
 class Download::Generators::Gdb < Download::Generators::Base
-  QUERY_CONDITIONS = {
-    multipolygons: {
-      select: Download::Utils.download_columns,
-      where: %("TYPE" = 'Polygon'),
-      cast_geom_to_multi: true
-    },
-    multipoints: {
-      select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
-      where: %("TYPE" = 'Point')
-    }
-  }.freeze
+  # See Download::Generators::Shapefile.query_conditions -- built per call so the
+  # column list reflects the current release rather than the one at class load.
+  def self.query_conditions
+    {
+      multipolygons: {
+        select: Download::Utils.download_columns,
+        where: %("TYPE" = 'Polygon'),
+        cast_geom_to_multi: true
+      },
+      multipoints: {
+        select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
+        where: %("TYPE" = 'Point')
+      }
+    }.freeze
+  end
 
   def initialize(zip_path, selection_entries)
     super(zip_path, selection_entries)
@@ -21,7 +25,7 @@ class Download::Generators::Gdb < Download::Generators::Base
     return false if selection_entries_empty?
 
     clean_up_after do
-      QUERY_CONDITIONS.each do |name, props|
+      self.class.query_conditions.each do |name, props|
         export_component(name, props)
       end
 

@@ -2,16 +2,22 @@ class Download::Generators::Shapefile < Download::Generators::Base
   TYPE = 'shapefile'.freeze
   SHAPEFILE_PARTS = %w[shp shx dbf prj cpg]
 
-  QUERY_CONDITIONS = {
-    polygons: {
-      select: Download::Utils.download_columns,
-      where: %("TYPE" = 'Polygon')
-    },
-    points: {
-      select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
-      where: %("TYPE" = 'Point')
-    }
-  }.freeze
+  # Built per call rather than frozen into a constant: the SELECT list comes from
+  # Download::Utils.download_columns, which queries `releases`. As a constant it
+  # ran at class-load time, so a portal release completing while the app was up
+  # left downloads emitting the previous release's column list until restart.
+  def self.query_conditions
+    {
+      polygons: {
+        select: Download::Utils.download_columns,
+        where: %("TYPE" = 'Polygon')
+      },
+      points: {
+        select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
+        where: %("TYPE" = 'Point')
+      }
+    }.freeze
+  end
 
   def initialize(zip_path, selection_entries, number_of_pieces = 3)
     super(zip_path, selection_entries)
@@ -29,7 +35,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     @number_of_pieces.times do |i|
       clean_up_after do
-        QUERY_CONDITIONS.each do |name, props|
+        self.class.query_conditions.each do |name, props|
           shapefile_paths |= export_component name, props, i
         end
 
@@ -91,7 +97,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
   end
 
   def clean_up
-    QUERY_CONDITIONS.each do |name, _|
+    self.class.query_conditions.each do |name, _|
       FileUtils.rm_rf shapefile_components(name)
     end
   end

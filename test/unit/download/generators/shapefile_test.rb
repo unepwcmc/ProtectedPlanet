@@ -7,9 +7,8 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   # column). Pin it and the release label so the SQL/filenames are deterministic
   # instead of depending on DB state. export_sources is a separate concern here.
   #
-  # NOTE: the generator freezes its column lists in QUERY_CONDITIONS at class-load
-  # time, so the SELECT list cannot be influenced by the stub — assert against the
-  # same constant the generator uses.
+  # The generator now builds its column lists per call in .query_conditions, so
+  # the stubs below do reach the SELECT list.
   setup do
     Download::Config.stubs(:has_successful_portal_release?).returns(true)
     Download::Config.stubs(:current_label).returns('Jan2024')
@@ -17,11 +16,11 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   end
 
   def poly_select
-    Download::Generators::Shapefile::QUERY_CONDITIONS[:polygons][:select]
+    Download::Generators::Shapefile.query_conditions[:polygons][:select]
   end
 
   def point_select
-    Download::Generators::Shapefile::QUERY_CONDITIONS[:points][:select]
+    Download::Generators::Shapefile.query_conditions[:points][:select]
   end
 
   def site_id_col
