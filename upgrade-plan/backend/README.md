@@ -1,4 +1,4 @@
-Total around 6.5–10 months for backend. **The test suite is dead** (100% fails to load on Rails 5.2 — proven Jul 2026) and must be revived first; GDAL/FileGDB and the Postgres server move are the next-highest risks.
+Total around 6–9.5 months for backend. **Phase 1 is complete — the test suite is revived and fully green on Rails 5.2** (624 runs, 0 failures, Jul 2026), and CI now enforces it. GDAL/FileGDB and the Postgres server move are now the highest remaining risks.
 
 # Protected Planet — Backend upgrade (summary)
 
@@ -8,7 +8,7 @@ Total around 6.5–10 months for backend. **The test suite is dead** (100% fails
 |                     |                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------ |
 | **Target**          | Rails 8 · Ruby 3.3 · Sidekiq 7 · PostGIS adapter 11.x · Postgres 17/18 · Docker + Kamal 2       |
-| **Now**             | Rails 5.2 · Ruby 2.6.3 · Sidekiq 5.2.5 · Node v10 · ES client 7.2.0 · Capistrano + Passenger    |
+| **Now**             | Rails 5.2 · **Ruby 2.7.8** · Sidekiq 5.2.5 · **Node 24** · ES client 7.2.0 · Capistrano + Passenger · **test suite green + CI enforcing** |
 | **Owner**           | Backend (+ shared deploy/DevOps tasks with frontend)                                             |
 | **Not in estimate** | Frontend Vue 3 / Vite migration · CMS content redesign · Elasticsearch server upgrade (stays 7.17) |
 | **Critical gate**   | **B0 = Rails 7.1+ boots** — sequencing pivot for backend phases 6–14. **Does not gate the frontend** (corrected Jul 2026, see below) |
@@ -24,7 +24,7 @@ Total around 6.5–10 months for backend. **The test suite is dead** (100% fails
 
 | #   | Phase                        | Key deliverables                                                          | Estimate                | Detail                              |
 | --- | ---------------------------- | ------------------------------------------------------------------------- | ----------------------- | ----------------------------------- |
-| **1** | **⚠️ Test suite — load + green on Rails 5.2** | **GATE.** Suite is dead at load ([baseline](./10-test-suite.md#️-baseline-finding--the-suite-is-100-dead-on-rails-52-jul-2026)). mocha/webmock/factory_bot make-it-load ladder → L0 → green on 5.2 | **2–4+ wk (unknown depth)** | [10](./10-test-suite.md) |
+| **1** | **✅ Test suite — green on Rails 5.2** | **DONE (Jul 2026).** 624 runs, 0 failures. Revived from not-loading; 4 real app bugs fixed en route; Jenkins Test stage now actually runs | **done** | [10](./10-test-suite.md) |
 | 2   | Scope & shared milestones    | B0–B5 milestone ownership; shared handoffs documented                     | —                       | [00](./00-scope-and-shared-milestones.md) |
 | 3   | Gem audit & inventory        | Every gem: keep / upgrade / remove                                        | 1–2 wk (~0.25–0.5 mo)  | [01](./01-gem-audit.md)             |
 | 4   | Ruby 2.6.3 → 2.7             | ✓ **Done on `feat/upgrade-frontend`** (2.7.8) — inherit + verify           | (banked)                | [02](./02-ruby-upgrade.md)          |
@@ -39,12 +39,12 @@ Total around 6.5–10 months for backend. **The test suite is dead** (100% fails
 | 13  | **GDAL & spatial tooling**   | ESRI FileGDB SDK dropped; distro GDAL 3.8 + OpenFileGDB; `gdal` gem removed | 1–2 wk (~0.25–0.5 mo) | [13](./13-gdal-and-spatial-tooling.md) |
 | 14  | **Deploy — Docker + Kamal 2** *(B2, B5)* | Production images; Kamal roles; Puma; cron; Capistrano removed  | 3–4 wk (~0.75–1 mo)    | [11](./11-deploy-and-devops.md)     |
 | 15  | **Infrastructure migration** | Ubuntu 24.04 web + DB hosts; Postgres → 17/18 + PostGIS 3.5/3.6           | 2–3 wk (~0.5–0.75 mo)  | [12](./12-infrastructure-migration.md) |
-|     | **Total — conservative**     |                                                                           | **25–41 wk (~6.25–10.25 mo)** |                          |
-|     | **Total — optimistic**       |                                                                           | **19–30 wk (~4.75–7.5 mo)** |                            |
+|     | **Total remaining — conservative** |                                                                     | **23–37 wk (~5.75–9.25 mo)** |                          |
+|     | **Total remaining — optimistic**   |                                                                     | **17–26 wk (~4.25–6.5 mo)** |                            |
 
-> **Test suite is now phase 1, not last (Jul 2026).** A local run proved the suite is 100% dead at load on Rails 5.2 (`mocha 1.0.0` vs `minitest 5.25`) — see the [baseline](./10-test-suite.md#️-baseline-finding--the-suite-is-100-dead-on-rails-52-jul-2026). Every "run tests, confirm green" checkpoint in the Rails phases depends on this landing first. Test-suite work then continues *through* the Rails bumps (capybara 3, mocha 2.x, Ruby-3 gem compat) — the phase-1 estimate is only the make-it-load + green-on-5.2 portion.
+> **Test suite was moved to phase 1 and is now complete (Jul 2026).** It was 100% dead at load (`mocha 1.0.0` vs `minitest 5.25`), which meant no "run tests, confirm green" checkpoint in any Rails phase could actually be honoured. It is now **fully green on Rails 5.2** and enforced by CI. Test work still continues *through* the Rails bumps (capybara 3, Ruby-3 gem compat, `factory_girl` → `factory_bot`), but the gate is cleared.
 
-*Phases 13–15 replace the previous 1–2 wk "Capistrano refresh" scope. Net addition there is ~+3–4 weeks. The +2 wk on the totals vs. the prior version is the newly-proven test-suite gate.*
+*Totals exclude the completed phase 1. Phases 13–15 replace the previous 1–2 wk "Capistrano refresh" scope; net addition there is ~+3–4 weeks.*
 
 **B0 target (Rails 7.1)** can realistically land in **months 2–3**.
 
@@ -78,7 +78,7 @@ Total around 6.5–10 months for backend. **The test suite is dead** (100% fails
 
 | Risk | Impact | Where |
 |------|--------|-------|
-| **Test suite is dead** — 100% fails to load on Rails 5.2 (mocha 1.0.0 vs minitest 5.25), broken since 2021. **Realized, not hypothetical.** | **Critical** — no safety net for any Rails bump until fixed; depth of rot unknown | [10](./10-test-suite.md) |
+| ~~**Test suite is dead**~~ — **RESOLVED Jul 2026.** Revived to 624 runs / 0 failures on Rails 5.2; CI enforces it | was Critical — the safety net now exists | [10](./10-test-suite.md) |
 | **GDAL / ESRI FileGDB** — `.gdb` downloads depend on a proprietary SDK compiled into GDAL 2.2.3, which will not build on a modern base image | **High** — blocks dockerization; wrong output silently breaks downstream users | [13](./13-gdal-and-spatial-tooling.md) |
 | **Postgres major upgrade** — large spatial DB, PostGIS extension must move in step | **High** — data correctness + downtime | [12](./12-infrastructure-migration.md) |
 | **CMS port** — Media Surfer is the unreleased Comfy master line; our monkey-patching touches private engine API | Medium — CMS blocks B3 | [09](./09-cms-comfy.md) |
@@ -106,7 +106,7 @@ The CMS was previously the single highest risk. Adopting Media Surfer moved it f
 | [07 Elasticsearch](./07-elasticsearch.md)                        | Client gem bump; server stays on 7.17.24              |
 | [08 Sidekiq & workers](./08-sidekiq-and-workers.md)              | 5 → 7 migration, WDPA pipeline, scheduled jobs        |
 | [09 CMS — Comfy → Media Surfer](./09-cms-comfy.md)               | Gem swap, monkey-patch port, B3                       |
-| [10 Test suite](./10-test-suite.md)                              | **Phase 1 gate** — baseline (dead at load), make-it-load ladder, factory_bot, capybara 3, webmock |
+| [10 Test suite](./10-test-suite.md)                              | **Phase 1 — DONE.** Revival log, 4 app bugs found, remaining gem work (capybara 3, factory_bot) |
 | [11 Deploy — Docker + Kamal 2](./11-deploy-and-devops.md)        | Production images, Kamal roles, Puma, cron, B2/B5     |
 | [12 Infrastructure migration](./12-infrastructure-migration.md)  | Ubuntu 24.04 hosts, Postgres 17/18, cutover plan      |
 | [13 GDAL & spatial tooling](./13-gdal-and-spatial-tooling.md)    | Drop ESRI FileGDB SDK, OpenFileGDB, remove `gdal` gem |

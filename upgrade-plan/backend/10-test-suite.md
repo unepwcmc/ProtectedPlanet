@@ -148,18 +148,15 @@ Method is identical for every one: read what the app produces now → update the
 
 **State after batches 1–7: 107 → 60 red (38 failures, 22 errors, 7 skips).** Errors 65 → 22.
 
-### ⚠️ 10 of the remaining 60 are an ENVIRONMENT gap, not test drift — and CI shares it
+### 10 of the remaining 60 were a LOCAL environment artefact (resolved)
 
-`❌ The vite binary is not available` raised from `app/views/layouts/partials/_head.html.erb:42` (`vite_client_tag` / `vite_javascript_tag`). Any test rendering the full layout (controller + integration) hits it.
+`❌ The vite binary is not available` raised from `app/views/layouts/partials/_head.html.erb:42` (`vite_client_tag` / `vite_javascript_tag`), hit by any test rendering the full layout.
 
-Cause: `node_modules` on this branch is stale from the Webpacker era — **vite is not installed** (`node_modules/.bin/vite` absent), and no vite manifest is built for `RAILS_ENV=test`.
+Cause: the local `node_modules` was stale from the Webpacker era, so `node_modules/.bin/vite` was absent. `config/vite.json` sets `autoBuild: true` for test, which shells out to `bin/vite`.
 
-**This will fail in Jenkins too.** The pipeline does `yarn install` (`prepare()`) but never builds vite assets before `rake test`. Fix belongs in CI/env, not in the tests:
-- [ ] `yarn install` so vite is actually present, then `bin/vite build` (or `RAILS_ENV=test bin/vite build`) **before** `rake test` in the Jenkinsfile
-- [ ] Alternatively, configure `config/vite.json` test mode so the tags no-op/resolve without a build
-- [ ] Coordinate with frontend — they own `config/vite.json` / vite tooling
+**Fix was simply `yarn install`.** `vite` (2.9.18) and `vite-plugin-ruby` are already in `package.json`, so installing node deps makes the binary available and autoBuild handles the rest — no Jenkinsfile change, no `config/vite.json` change, nothing for the frontend team.
 
-**So the genuinely backend-owned remainder is ≈50, not 60.**
+> **Correction:** an earlier revision of this document claimed CI shared this gap and that the Jenkinsfile needed a `bin/vite build` step. **That was wrong.** Jenkins already runs `yarn install` in `prepare()` before `rakeTest()`, so CI was never affected. The failures were purely local, a downstream effect of the wedged bundler volume that broke the `install` service (which provisions *both* bundler and yarn deps).
 
 - **Batch 8 (Jul 2026): 60 → 58.** `download/generators/base_test` now **green** (20 runs). Root: the site_id column is `Download::Config.download_view_column_names[:site_id]`, which is **`SITE_ID` only when a successful portal release exists, else `WDPAID`** — the tests hardcoded `SITE_ID`. Pinned via `Download::Config.stubs(:has_successful_portal_release?).returns(true)` in setup, which also removes a real flakiness source (expectations previously depended on whether a portal-release row happened to exist in the test DB).
 
@@ -207,7 +204,7 @@ Representative drifts (all read from the app):
 
 ### Remaining ≈26
 
-- **10 = vite/env** (see the environment-gap section above — needs `yarn install` + `bin/vite build` in CI, not a test fix).
+- **10 = vite** (local `node_modules` artefact — resolved with `yarn install`; see the section above).
 - ~16 real: `search_areas`/`search_page`/`protected_areas_controller` and other view-rendering tests, `unit/search_test` (ES client mock), `country_geometry_populator` (SQL string drift), `asset_generator` (`URI::InvalidURIError` — mapbox URL built with unescaped `{}`/`()`), `requesters/search_test` (token digest changed), `dopa_importer`, plus the two questions above.
 
 ### 🐛 Real bugs found by the revived suite (3 fixed, 1 open)
@@ -221,19 +218,21 @@ Representative drifts (all read from the app):
 
    **Known wrinkle left in place:** the CSV path (`import_stats`) still *does* create nil-country rows, so the two stats sources disagree. Harmless while nothing reads them, but worth aligning if the CSV fallback is ever revived or someone starts consuming high-seas country statistics.
 
-### ✅ COMPLETE — every backend test passes (Jul 2026)
+### ✅ COMPLETE — the suite is fully green on Rails 5.2 (Jul 2026)
 
 ```
-624 runs, 1518 assertions, 0 failures, 12 errors, 7 skips
+624 runs, 1535 assertions, 0 failures, 0 errors, 7 skips
 ```
 
-**All 12 remaining errors are the vite/CI environment gap — zero real test failures.** The suite went from *not loading at all* to fully green on Rails 5.2.
+**Zero failures, zero errors.** Verified on `upgrade-plan` after merging `backend/test-suite-revival` and `backend/ci-test-baseline`.
 
 ```
-dead (0 runs) → L0 (632) → 107 → 99 → 95 → 87 → 75 → 70 → 60 → 51 → 44 → 37 → 28 → 23 → 19 → 16 → 0 real
+dead (0 runs) → L0 (632) → 107 → 99 → 95 → 87 → 75 → 70 → 60 → 51 → 44 → 37 → 28 → 23 → 19 → 16 → 12 → 0
 ```
 
-**The one remaining blocker is not a test problem:** the layout's vite tags need `yarn install` + `bin/vite build` to run before `rake test`. The Jenkins pipeline does `yarn install` but never builds vite assets, so **CI will hit this independently of the tests**. Fix belongs in the Jenkinsfile (and touches `config/vite.json`, which is frontend-owned).
+**Nothing is outstanding.** The last 12 were the local `node_modules` artefact above, cleared by `yarn install`.
+
+**CI now enforces the suite:** the Jenkinsfile Test stage was calling `echo "rakeTest()"` instead of `rakeTest()`, so tests had never run in a build — which is why the 2021 breakage went unnoticed for years. Fixed and merged.
 
 **Milestone: the Rails upgrade now has its safety net.** Phase 1 is done; the Rails 6 → 7 → 8 bumps can proceed with a green suite to verify each step.
 
