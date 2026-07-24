@@ -5,7 +5,7 @@
       :key="option.id"
       :checked="selected.includes(option.id)"
       :groupId="id"
-      :option="option"
+      :option
       @change="onItemChange(option, $event)"
     />
   </ul>

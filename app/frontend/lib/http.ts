@@ -37,3 +37,12 @@ export function getJson<T>(url: string, params?: Record<string, string> | URLSea
     headers: { 'X-CSRF-Token': csrfToken() }
   }).then(parseJsonResponse<T>)
 }
+
+// For external (non-Rails) hosts, e.g. the ArcGIS point-query services — sending
+// our CSRF header there fails their CORS preflight (`request-helpers.js`'s
+// axiosGetWithoutCSRF was the same fix for the legacy axios-based code).
+export function getJsonExternal<T>(url: string, params?: Record<string, string> | URLSearchParams): Promise<T> {
+  const query = params ? `?${new URLSearchParams(params).toString()}` : ''
+
+  return fetch(`${url}${query}`).then(parseJsonResponse<T>)
+}

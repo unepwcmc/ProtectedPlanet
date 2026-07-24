@@ -1,6 +1,6 @@
 <template>
   <a
-    :href="href"
+    :href
     @click="click"
     v-html="text"
   />

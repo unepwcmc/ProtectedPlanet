@@ -29,8 +29,8 @@
         />
         <slot
           :name="`tab-${tab.id}`"
-          :tab="tab"
-          :selectedId="selectedId"
+          :tab
+          :selectedId
         />
       </div>
     </template>

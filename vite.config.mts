@@ -8,6 +8,14 @@ import vue from '@vitejs/plugin-vue'
 // This is what lets Vite/Vue 3 and Webpacker/Vue 2 coexist without touching Webpacker.
 import * as vue3Compiler from 'vue3/compiler-sfc'
 
+// Values set via ViteRuby.env in config/vite.rb land in process.env here;
+// only VITE_-prefixed ones are forwarded so Vite exposes them to client code
+// as import.meta.env.VITE_* — see https://vite-ruby.netlify.app/guide/plugins.html#environment
+const ViteEnvs: Record<string, unknown> = {}
+for (const envKey of Object.keys(process.env)) {
+  if (envKey.includes('VITE_')) ViteEnvs[envKey] = process.env[envKey]
+}
+
 // Vite 7 + vite-plugin-rails, paired with the vite_ruby 3.x gem.
 export default defineConfig({
   server: {
@@ -16,7 +24,7 @@ export default defineConfig({
 		allowedHosts: true
 	},
   plugins: [
-    rails(),
+    rails({ envVars: { ...ViteEnvs } }),
     tailwindcss(),
     vue({ compiler: vue3Compiler }),
   ],
@@ -28,7 +36,11 @@ export default defineConfig({
     // from 'vue'`, causing a hard crash on cold start / re-optimization.
     // Excluding them from pre-bundling defers resolution to Vite's normal
     // per-request transform, where the alias does apply.
-    exclude: ['@vueuse/core', 'pinia'],
+    // maplibre-gl ships its own worker as a separate chunk (maplibre-gl-worker.mjs)
+    // that the dev-server optimizer doesn't handle correctly — pre-bundling it
+    // produces a reference to a deps-cache file that never actually gets written,
+    // 404ing every request until excluded.
+    exclude: ['@vueuse/core', 'pinia', 'maplibre-gl'],
   },
   resolve: {
     alias: [

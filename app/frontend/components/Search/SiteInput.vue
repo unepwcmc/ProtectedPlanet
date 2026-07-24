@@ -15,7 +15,7 @@
         v-model="searchTerm"
         type="text"
         class="search__input"
-        :placeholder="placeholder"
+        :placeholder
         @keyup.enter="submit"
       >
 

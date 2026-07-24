@@ -23,7 +23,7 @@
         />
       </div>
       <ListingPaginationInfinityScroll
-        :resetKey="resetKey"
+        :resetKey
         :total="results.total"
         :totalPages="results.totalPages"
         @requestMore="emit('requestMore', $event)"

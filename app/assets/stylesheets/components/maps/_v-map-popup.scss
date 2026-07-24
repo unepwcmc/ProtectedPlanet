@@ -2,24 +2,35 @@
   @include icon-pin-map;
 }
 
+// .maplibregl-* variants are for the Vue3/MapLibre island (app/frontend); the
+// .mapboxgl-* ones are for the legacy Vue2 map, still loaded via CDN mapbox-gl.js.
+// Same class names apart from the prefix, so rules are duplicated per-selector.
 .mapboxgl-popup-anchor-top,
 .mapboxgl-popup-anchor-top-right,
-.mapboxgl-popup-anchor-top-left {
-  .mapboxgl-popup-tip {
+.mapboxgl-popup-anchor-top-left,
+.maplibregl-popup-anchor-top,
+.maplibregl-popup-anchor-top-right,
+.maplibregl-popup-anchor-top-left {
+  .mapboxgl-popup-tip,
+  .maplibregl-popup-tip {
     border-bottom-color: $grey-xdark !important;
     border-bottom-width: 6px;
   }
 }
 
-.mapboxgl-popup-anchor-right {
-  .mapboxgl-popup-tip {
+.mapboxgl-popup-anchor-right,
+.maplibregl-popup-anchor-right {
+  .mapboxgl-popup-tip,
+  .maplibregl-popup-tip {
     border-left-color: $grey-xdark !important;
     border-left-width: 6px;
   }
 }
 
-.mapboxgl-popup-anchor-left {
-  .mapboxgl-popup-tip {
+.mapboxgl-popup-anchor-left,
+.maplibregl-popup-anchor-left {
+  .mapboxgl-popup-tip,
+  .maplibregl-popup-tip {
     border-right-color: $grey-xdark !important;
     border-right-width: 6px;
   }
@@ -27,14 +38,19 @@
 
 .mapboxgl-popup-anchor-bottom,
 .mapboxgl-popup-anchor-bottom-right,
-.mapboxgl-popup-anchor-bottom-left {
-  .mapboxgl-popup-tip {
+.mapboxgl-popup-anchor-bottom-left,
+.maplibregl-popup-anchor-bottom,
+.maplibregl-popup-anchor-bottom-right,
+.maplibregl-popup-anchor-bottom-left {
+  .mapboxgl-popup-tip,
+  .maplibregl-popup-tip {
     border-top-color: $grey-xdark !important;
     border-top-width: 6px;
   }
 }
 
-.mapboxgl-popup-content {
+.mapboxgl-popup-content,
+.maplibregl-popup-content {
   background-color: $grey-xdark !important;
   color: $white !important;
   padding: 0.5rem;
@@ -57,6 +73,7 @@
   }
 }
 
-.mapboxgl-popup-close-button {
+.mapboxgl-popup-close-button,
+.maplibregl-popup-close-button {
   display: none !important;
 }

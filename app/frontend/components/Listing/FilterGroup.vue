@@ -16,8 +16,8 @@
       :id="filter.id"
       :gaId="gaIdWithFilter"
       :options="filter.options"
-      :preSelected="preSelected"
-      :resetKey="resetKey"
+      :preSelected
+      :resetKey
       @update:options="onUpdate"
     />
   </div>

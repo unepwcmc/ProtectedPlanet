@@ -153,10 +153,27 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
 "Composition API + Tailwind + composables" note above with the specifics:
 
 1. **TypeScript everywhere.** New/migrated SFCs use `<script setup lang="ts">` — no plain JS.
-2. **Types live in `app/frontend/types/`.** Shared/domain types go directly under
-   `app/frontend/types/`. Anything shaped by the backend (Rails-rendered props, API JSON) goes under
-   `app/frontend/types/backend.ts` — one file per resource/serializer shape, so a backend contract
-   change is easy to find and update in one place.
+2. **Types live in `app/frontend/types/`, not inline in components/composables.** Split by who owns
+   the shape:
+   - **Backend-shaped types → `app/frontend/types/backend.ts`.** Anything shaped by Rails (a
+     `frontend_mount` props payload, a serializer's JSON, a controller-built hash) goes here, even
+     when only one component currently reads it — a comment above each type says which
+     `frontend_mount` call / controller / serializer produces it, so a backend contract change is
+     easy to find and update in one place. Example: `MapProps`/`MapBaseProps` (props for
+     `frontend_mount "Map"`, and its inner bare-map-instance piece), `MapFilterProps` (one item of
+     `@main_map[:overlays]`, from `MapOverlaysSerializer`), `PointQueryService` (one entry of
+     `MapHelper::ALL_SERVICES_FOR_POINT_QUERY`).
+   - **Frontend-only shared types stay colocated with the module that owns them** — the composable,
+     store, or lib file that defines the behaviour around that type — and get imported (`import type
+     { X } from '@/composables/useX'`), never copy-pasted. Only promote one of these into
+     `app/frontend/types/` if it stops having a single clear owner (e.g. two unrelated features both
+     need to define it from scratch). Example: `MapControlsOptions` (`useMapInstance.ts`), `MapLayer`
+     (`useMapLayers.ts`), `BoundsUrl`/`ZoomToOptions` (`useMapBoundingBox.ts`), `MapOverlay`
+     (`useMapStore.ts`), `MapBaselayer` (`lib/mapDefaultOptions.ts`) — all Map-feature-internal, not
+     Rails-shaped, so they stay put even though several of them are imported across multiple Map
+     components/composables.
+   - **A type that's genuinely local to one component** (never imported elsewhere) can stay defined
+     in that file, per point 12 below.
 3. **Component naming = Nuxt-style flattened path.** A component's folder path becomes its tag name:
    `app/frontend/components/Chart/Circle.vue` is used as `<ChartCircle />`. Nested folders flatten to
    PascalCase in the order they nest (`Chart/Circle.vue` → `ChartCircle`, not `CircleChart`).
@@ -286,6 +303,13 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     colon — the colon itself stays: `update:filterGroup`, `toggle:filterPane`, not
     `update:filter-group`/`toggle:filter-pane`. Applies project-wide alongside point 16 — props and
     events are both camelCase everywhere, no kebab-case left in any component-to-component binding.
+18. **Use Vue 3.4+ same-name shorthand for a prop binding whose value is the identically-named
+    local variable.** `:title` rather than `:title="title"`, `:accessToken` rather than
+    `:accessToken="accessToken"` — the shorthand only applies when the bound identifier and the prop
+    name match exactly; anything else (a different expression, a renamed value, a literal) still
+    needs the full `:prop="expression"` form. Not currently caught by lint (`yarn lint` passes either
+    way) — a manual review point until/unless a rule for it is added. `Map/Index.vue` is the
+    reference example.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend`, the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and

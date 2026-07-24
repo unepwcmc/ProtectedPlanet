@@ -13,11 +13,11 @@
       <ListingFiltersPanel
         class="listing__filters"
         :filterCloseText="textFiltersClose"
-        :filterGroups="filterGroups"
-        :gaId="gaId"
+        :filterGroups
+        :gaId
         :isActive="isFilterPaneActive"
         :preSelected="preSelectedFilters"
-        :textClear="textClear"
+        :textClear
         :title="textFilterTrigger"
         @toggle:filterPane="toggleFilterPane"
         @update:filterGroup="updateFilters"
@@ -27,8 +27,8 @@
           v-show="!updatingResults"
           :resetKey="paginationResetKey"
           :results="currentResults"
-          :template="template"
-          :textNoResults="textNoResults"
+          :template
+          :textNoResults
           @requestMore="requestMore"
         />
         <span

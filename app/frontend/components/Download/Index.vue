@@ -16,7 +16,7 @@
       :class="{ active: showPopup }"
     >
       <DownloadPopup
-        :options="options"
+        :options
         @select="clickDownloadOption"
       />
     </div>

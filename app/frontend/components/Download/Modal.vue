@@ -25,9 +25,9 @@
           v-for="download in downloadStore.downloadItems"
           :key="download.id"
           class="modal__li"
-          :endpointCreate="endpointCreate"
-          :endpointPoll="endpointPoll"
-          :gaId="gaId"
+          :endpointCreate
+          :endpointPoll
+          :gaId
           :params="download"
           :text="textStatus"
         />

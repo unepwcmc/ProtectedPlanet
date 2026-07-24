@@ -40,7 +40,8 @@ registerIslands({
   SearchSiteTopbar: () => import('@/components/Search/SiteTopbar.vue'),
   Download: () => import('@/components/Download/Index.vue'),
   DownloadModal: () => import('@/components/Download/Modal.vue'),
-  Listing: () => import('@/components/Listing/Index.vue')
+  Listing: () => import('@/components/Listing/Index.vue'),
+  Map: () => import('@/components/Map/Index.vue')
 })
 
 if (document.readyState === 'complete') {

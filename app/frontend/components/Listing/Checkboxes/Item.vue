@@ -8,7 +8,7 @@
         :id="inputId"
         type="checkbox"
         class="checkbox__input"
-        :checked="checked"
+        :checked
         :value="option.id"
         @change="emit('change', ($event.target as HTMLInputElement).checked)"
       >

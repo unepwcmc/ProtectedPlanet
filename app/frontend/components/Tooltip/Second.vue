@@ -31,7 +31,7 @@
 
     <div
       v-show="isActive"
-      :id="id"
+      :id
       role="tooltip"
       class="ct-tooltip-second__target"
     >

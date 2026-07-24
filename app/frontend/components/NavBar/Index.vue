@@ -27,11 +27,11 @@
         >
           <NavBarDropdown
             v-if="hasChildren(link)"
-            :link="link"
+            :link
           />
           <NavBarLink
             v-else
-            :link="link"
+            :link
           />
         </li>
       </ul>

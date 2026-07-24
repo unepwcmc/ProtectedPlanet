@@ -19,10 +19,10 @@
         <ListingFilterGroup
           v-for="filter in group.filters"
           :key="filter.id"
-          :filter="filter"
-          :gaId="gaId"
+          :filter
+          :gaId
           :preSelected="preSelected?.[filter.id]"
-          :textClear="textClear"
+          :textClear
           @update:filter="onUpdateFilter"
         />
       </li>

@@ -1,6 +1,6 @@
-// Shape of a single row from the `banners` table, serialised via ActiveRecord's
-// default `to_json` (no custom serializer — see app/models/banner.rb). Rendered by
-// app/views/layouts/partials/_banner.html.erb through `frontend_mount "Banner"`.
+import type { MapLayer } from '@/composables/useMapLayers'
+import type { MapOptionsPayload, PointQueryService, PopupAttributeLabels } from '@/types/map'
+
 export interface Banner {
   id: number
   title: string | null
@@ -10,7 +10,6 @@ export interface Banner {
   updated_at: string
 }
 
-// Props passed to the `Banner` mount by `_banner.html.erb`.
 export interface BannerProps {
   banners: Banner[]
   // SHA1 hex digest of the visible banners' ids — used to key the "closed" cookie
@@ -18,7 +17,6 @@ export interface BannerProps {
   signature: string
 }
 
-// Props for `Counter`, a count-up-on-scroll-into-view number display.
 export interface CounterConfig {
   speed: number
   divisor: number
@@ -208,6 +206,56 @@ export interface ListingFilter {
 export interface ListingFilterGroup {
   title?: string
   filters: ListingFilter[]
+}
+
+// Props for `MapBase` (the bare MapLibre instance, no panel/disclaimer/header) —
+// see home_controller.rb.
+export interface MapBaseProps {
+  options?: MapOptionsPayload
+  servicesForPointQuery?: PointQueryService[]
+  popupAttributes?: PopupAttributeLabels
+}
+
+// One entry of MapOverlaysSerializer#serialize (MapHelper::OVERLAYS), rendered as an
+// item of `MapPanelProps['overlays']` — see home_controller.rb's `@main_map[:overlays]`.
+export interface MapFilterProps {
+  color?: string
+  title: string
+  isShownByDefault?: boolean
+  isToggleable?: boolean
+  layers: MapLayer[]
+  id: string
+  type: string
+}
+
+// `map_yml[:disclaimer]` (config/locales/map/*.yml) — passed as `disclaimer` to
+// `MapPanel`, forwarded to `MapDisclaimer` (rendered inside the panel, always in
+// the same place, for every page — no per-page slotting/placement variance).
+export interface MapDisclaimerProps {
+  disclaimer?: { heading: string, body: string } | null
+}
+
+// Props for `frontend_mount "MapPanel"` (formerly "MapFilters") — see
+// home_controller.rb's `@main_map`. Renders `MapDisclaimer` internally.
+export interface MapPanelProps {
+  overlays: MapFilterProps[]
+  title: string
+  isHidden?: boolean
+  disclaimer?: { heading: string, body: string } | null
+}
+
+// Props for `frontend_mount "Map"` — the single top-level map composition
+// (MapBase + MapPanel, MapPanel rendering MapDisclaimer internally) used by
+// every page that shows a map, identically. See partials/maps/_main.html.erb /
+// partials/maps/_header.html.erb for the legacy Vue2 equivalents this replaces.
+export interface MapProps {
+  options?: MapOptionsPayload
+  servicesForPointQuery?: PointQueryService[]
+  popupAttributes?: PopupAttributeLabels
+  title: string
+  overlays: MapFilterProps[]
+  disclaimer?: { heading: string, body: string } | null
+  isHidden?: boolean
 }
 
 // Props for `frontend_mount "Listing"` — the news/resources listing pages

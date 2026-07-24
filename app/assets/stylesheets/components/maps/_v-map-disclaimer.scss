@@ -1,14 +1,9 @@
 .v-map-disclaimer {
-  background: $white;
-  color: $grey-xdark;
+  color: $white;
   font-size: rem-calc(14);
-  padding: rem-calc(17, 17);
+  margin-top: rem-calc(24);
   
   justify-self: flex-end;
-
-  @include breakpoint($small) {
-    padding: rem-calc(12 22);
-  }
 
   .pdf & { border: solid 1px $grey; }
 

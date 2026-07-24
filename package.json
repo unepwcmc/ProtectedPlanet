@@ -26,6 +26,8 @@
     "dotenv-webpack": "^1.7.0",
     "es6-object-assign": "^1.1.0",
     "es6-promise": "^4.2.6",
+    "maplibre-gl": "^6.0.0",
+    "maplibregl-mapbox-request-transformer": "^0.0.3",
     "pinia": "^4.0.2",
     "puppeteer": "^5.2.1",
     "save": "^2.4.0",
