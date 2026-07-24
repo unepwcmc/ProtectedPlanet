@@ -39,6 +39,11 @@ module ProtectedPlanet
     # a side effect of the framework bump.
     config.active_record.belongs_to_required_by_default = false
 
+    # Rails 6.1's connection handling, required before Rails 7 (which removes the
+    # legacy path entirely). This app uses a single database, so the change is
+    # limited to which internal handler Active Record routes through.
+    config.active_record.legacy_connection_handling = false
+
     config.autoloader = :zeitwerk
 
     # app/presenters and app/serializers are NOT listed here: Rails 6 already adds

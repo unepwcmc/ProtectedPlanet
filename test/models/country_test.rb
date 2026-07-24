@@ -86,17 +86,18 @@ class CountryTest < ActiveSupport::TestCase
 
   test '#protected_areas_per_designation returns groups of pa counts per designation' do
     # The query groups by designations.name and SUMs, so the designations need
-    # distinct names (the factory default is the same for both) and the count
-    # comes back from the raw query as a string.
+    # distinct names (the factory default is the same for both). SUM() over an
+    # integer column is numeric in Postgres, and since Rails 6.1 / pg 1.x the
+    # raw result is decoded to BigDecimal rather than handed back as a string.
     designation_1 = FactoryGirl.create(:designation, name: 'Alpha')
     designation_2 = FactoryGirl.create(:designation, name: 'Beta')
     country = FactoryGirl.create(:country)
     expected_groups = [{
       'designation_name' => 'Alpha',
-      'count' => '2'
+      'count' => BigDecimal('2')
     }, {
       'designation_name' => 'Beta',
-      'count' => '3'
+      'count' => BigDecimal('3')
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_1) }
@@ -113,12 +114,13 @@ class CountryTest < ActiveSupport::TestCase
       'iucn_category_id' => iucn_category_1.id,
       'iucn_category_name' => iucn_category_1.name,
       'count' => 2,
-      'percentage' => '40.00'
+      # round(..., 2) is numeric, decoded to BigDecimal since Rails 6.1 / pg 1.x.
+      'percentage' => BigDecimal('40')
     }, {
       'iucn_category_id' => iucn_category_2.id,
       'iucn_category_name' => iucn_category_2.name,
       'count' => 3,
-      'percentage' => '60.00'
+      'percentage' => BigDecimal('60')
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_1) }
@@ -136,13 +138,14 @@ class CountryTest < ActiveSupport::TestCase
       'governance_name' => governance_1.name,
       'governance_type' => nil,
       'count' => 2,
-      'percentage' => '40.00'
+      # round(..., 2) is numeric, decoded to BigDecimal since Rails 6.1 / pg 1.x.
+      'percentage' => BigDecimal('40')
     }, {
       'governance_id' => governance_2.id,
       'governance_name' => governance_2.name,
       'governance_type' => nil,
       'count' => 3,
-      'percentage' => '60.00'
+      'percentage' => BigDecimal('60')
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], governance: governance_1) }

@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '6.0.6.1'
+gem 'rails', '6.1.7.10'
 gem 'webpacker', '~> 4.0.2'
 
 gem 'bourbon'
 gem "neat"
 
-gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '~> 6.0.0'
+gem 'pg', '~> 1.1'
+gem 'activerecord-postgis-adapter', '~> 7.0.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
