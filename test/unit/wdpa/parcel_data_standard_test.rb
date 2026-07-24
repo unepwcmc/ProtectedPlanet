@@ -3,13 +3,15 @@ require 'test_helper'
 class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    for SITE ID' do
+    # wdpa_id is set alongside site_id for compatibility (see ParcelDataStandard).
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ wdpaid: 1234 })
-    assert_equal({ site_id: 1234 }, attributes)
+    assert_equal({ site_id: 1234, wdpa_id: 1234 }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    for SITE_PID' do
-    attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ site_pid: '1234_A' })
+    # The source column is wdpa_pid; it maps to the site_pid attribute.
+    attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ wdpa_pid: '1234_A' })
     assert_equal({ site_pid: '1234_A' }, attributes)
   end
 
@@ -30,19 +32,19 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is false' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ marine: '0' })
-    assert_equal({ marine: false }, attributes)
+    assert_equal({ marine_type: 0, marine: false }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is true when coastal' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ marine: '1' })
-    assert_equal({ marine: true }, attributes)
+    assert_equal({ marine_type: 1, marine: true }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is true' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ marine: '2' })
-    assert_equal({ marine: true }, attributes)
+    assert_equal({ marine_type: 2, marine: true }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute

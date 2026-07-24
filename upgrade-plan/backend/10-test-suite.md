@@ -142,6 +142,25 @@ Failures now spread thin across ~20 files (2–6 each) — the "update-expected-
 
 Method is identical for every one: read what the app produces now → update the test's expectation → verify. No domain decisions (bar the rare genuine regression, flagged with evidence). These are independent and parallelizable across the team.
 
+- **Batch 7 (Jul 2026): 70 → 60.** Cleared the 10-failure WDPA cluster — `data_standard_test` and `parcel_data_standard_test` both now **fully green** (35 + 30 runs, 0 failures). Two clean drifts, both read from the code:
+  - `attributes_from_standards_hash` now also derives `wdpa_id` from `site_id`, and the `marine` boolean from `marine_type` — both kept in the output, so expectations needed both keys.
+  - The parcel-ID **source** column is `wdpa_pid` (→ maps to the `site_pid` attribute). The tests were passing `site_pid:` as *input*, which isn't a source key, so they got `{}`.
+
+**State after batches 1–7: 107 → 60 red (38 failures, 22 errors, 7 skips).** Errors 65 → 22.
+
+### ⚠️ 10 of the remaining 60 are an ENVIRONMENT gap, not test drift — and CI shares it
+
+`❌ The vite binary is not available` raised from `app/views/layouts/partials/_head.html.erb:42` (`vite_client_tag` / `vite_javascript_tag`). Any test rendering the full layout (controller + integration) hits it.
+
+Cause: `node_modules` on this branch is stale from the Webpacker era — **vite is not installed** (`node_modules/.bin/vite` absent), and no vite manifest is built for `RAILS_ENV=test`.
+
+**This will fail in Jenkins too.** The pipeline does `yarn install` (`prepare()`) but never builds vite assets before `rake test`. Fix belongs in CI/env, not in the tests:
+- [ ] `yarn install` so vite is actually present, then `bin/vite build` (or `RAILS_ENV=test bin/vite build`) **before** `rake test` in the Jenkinsfile
+- [ ] Alternatively, configure `config/vite.json` test mode so the tags no-op/resolve without a build
+- [ ] Coordinate with frontend — they own `config/vite.json` / vite tooling
+
+**So the genuinely backend-owned remainder is ≈50, not 60.**
+
 ### Efficient continuation plan (highest-leverage first)
 
 1. **WebMock/S3 (≈8–10)** — one global `Wdpa::S3.current_wdpa_identifier` stub (+ maybe `has_successful_portal_release?`).
