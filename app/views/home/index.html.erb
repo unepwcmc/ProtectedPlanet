@@ -34,8 +34,12 @@
 </section>
 
 <section class="map-section spacer-small--top">
-  <%= render partial: "partials/maps/main", locals: {
-    map: @main_map
+  <%= frontend_mount "Map", props: {
+    servicesForPointQuery: @main_map[:point_query_services],
+    popupAttributes: @main_map[:popup_attributes],
+    title: @main_map[:title],
+    overlays: @main_map[:overlays],
+    disclaimer: @main_map[:disclaimer]
   } %>
 </section>
 
