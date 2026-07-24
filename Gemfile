@@ -16,7 +16,7 @@ gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2'
 
 gem 'uglifier', '~> 4.1.17'
-gem 'coffee-rails', '~> 4.2.2'
+gem 'coffee-rails', '~> 5.0'
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
 gem "slack-notifier", "~> 1.5.1"
@@ -100,7 +100,7 @@ gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 5.2.5' # DRAMATIC CHANGES
+gem 'sidekiq', '~> 6.5'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
@@ -110,7 +110,6 @@ gem 'system'
 gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
 
-gem 'best_in_place', '~> 3.0.1'
 gem 'turnout', '~> 2.5.0'
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'

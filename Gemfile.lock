@@ -974,9 +974,6 @@ GEM
       aws-eventstream (~> 1.0, >= 1.0.2)
     base64 (0.3.0)
     bcrypt_pbkdf (1.1.0)
-    best_in_place (3.0.3)
-      actionpack (>= 3.2)
-      railties (>= 3.2)
     bigdecimal (4.1.2)
     bindex (0.8.1)
     bourbon (6.0.0)
@@ -1015,9 +1012,9 @@ GEM
       xpath (~> 2.0)
     childprocess (3.0.0)
     chronic (0.10.2)
-    coffee-rails (4.2.2)
+    coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
-      railties (>= 4.0.0)
+      railties (>= 5.2.0)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -1036,7 +1033,7 @@ GEM
     comfy_bootstrap_form (4.0.7)
       rails (>= 5.0.0)
     concurrent-ruby (1.3.8)
-    connection_pool (2.2.2)
+    connection_pool (2.5.5)
     crack (1.0.1)
       bigdecimal
       rexml
@@ -1225,7 +1222,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.1.3)
+    redis (4.8.1)
     rexml (3.4.4)
     rgeo (3.0.1)
     rgeo-activerecord (6.2.2)
@@ -1258,11 +1255,10 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     sexp_processor (4.13.0)
-    sidekiq (5.2.7)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (>= 1.5.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+    sidekiq (6.5.12)
+      connection_pool (>= 2.2.5, < 3)
+      rack (~> 2.0)
+      redis (>= 4.5.0, < 5)
     simplecov (0.18.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11.0)
@@ -1353,7 +1349,6 @@ DEPENDENCIES
   awesome_print
   aws-sdk (= 3.0.1)
   bcrypt_pbkdf (>= 1.0, < 2.0)
-  best_in_place (~> 3.0.1)
   bourbon
   byebug (~> 9.0, >= 9.0.5)
   bystander (= 2.0.0)!
@@ -1367,7 +1362,7 @@ DEPENDENCIES
   capistrano-service
   capistrano-sidekiq (= 1.0.2)
   capybara (~> 2.3.0)
-  coffee-rails (~> 4.2.2)
+  coffee-rails (~> 5.0)
   comfortable_mexican_sofa (~> 2.0.0)
   dalli (~> 2.7.2)
   database_cleaner
@@ -1400,7 +1395,7 @@ DEPENDENCIES
   rails-i18n (~> 6.0)
   sass-rails (~> 5.0.7)
   selenium-webdriver
-  sidekiq (~> 5.2.5)
+  sidekiq (~> 6.5)
   simplecov
   sinatra (>= 1.3.0)
   slack-notifier (~> 1.5.1)
