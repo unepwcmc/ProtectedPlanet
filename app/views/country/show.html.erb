@@ -24,9 +24,15 @@
         oecm_national_designations_count: @oecm_national_designations_count
       } %>
       <div class="page__map map--country">
-        <%= render partial: "partials/maps/header", locals: {
-          map: @map,
-          map_options: @map_options
+        <%= frontend_mount "Map", props: {
+          options: @map_options,
+          servicesForPointQuery: @map[:point_query_services],
+          popupAttributes: @map[:popup_attributes],
+          title: @map[:title],
+          overlays: @map[:overlays],
+          disclaimer: @map[:disclaimer],
+          isHidden: true,
+          showHeader: false
         } %>
       </div>
     </section>

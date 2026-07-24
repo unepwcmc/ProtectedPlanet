@@ -29,7 +29,10 @@ class CountryController < ApplicationController
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: all_services_for_point_query
+      point_query_services: all_services_for_point_query,
+      title: map_yml[:title],
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
 
     @map_options = {

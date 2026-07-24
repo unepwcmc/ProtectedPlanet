@@ -79,4 +79,13 @@ describe('Map', () => {
 
     expect(wrapper.find('.v-map-filters--hidden').exists()).toBe(true)
   })
+
+  it('omits the standalone title header when showHeader is false', () => {
+    const wrapper = mount(Map, {
+      props: { title: 'Protected Area', overlays, showHeader: false }
+    })
+
+    expect(wrapper.find(':scope > .v-map-header').exists()).toBe(false)
+    expect(wrapper.find('.v-map-filters .v-map-header').exists()).toBe(true)
+  })
 })

@@ -256,6 +256,9 @@ export interface MapProps {
   overlays: MapFilterProps[]
   disclaimer?: { heading: string, body: string } | null
   isHidden?: boolean
+  // Set false for the "map--header" layout (protected_areas/show, region/show,
+  // country/show) — those pages show the panel toggle but no standalone map title.
+  showHeader?: boolean
 }
 
 // Props for `frontend_mount "Listing"` — the news/resources listing pages

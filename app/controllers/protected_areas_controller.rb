@@ -26,7 +26,10 @@ class ProtectedAreasController < ApplicationController
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: point_query_services
+      point_query_services: point_query_services,
+      title: map_yml[:title],
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
 
     @map_options = {

@@ -21,9 +21,15 @@
         external_links: @presenter.external_links
       } %>
       <div class="map--site">
-        <%= render partial: "partials/maps/header", locals: {
-          map: @map,
-          map_options: @map_options
+        <%= frontend_mount "Map", props: {
+          options: @map_options,
+          servicesForPointQuery: @map[:point_query_services],
+          popupAttributes: @map[:popup_attributes],
+          title: @map[:title],
+          overlays: @map[:overlays],
+          disclaimer: @map[:disclaimer],
+          isHidden: true,
+          showHeader: false
         } %>
       </div>
     </section>

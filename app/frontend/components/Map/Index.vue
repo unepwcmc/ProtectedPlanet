@@ -1,6 +1,9 @@
 <template>
   <div class="map--main">
-    <MapHeader :title />
+    <MapHeader
+      v-if="showHeader"
+      :title
+    />
     <MapBase
       :options
       :servicesForPointQuery
@@ -27,6 +30,7 @@ withDefaults(defineProps<Map>(), {
   servicesForPointQuery: () => [],
   popupAttributes: undefined,
   disclaimer: null,
-  isHidden: false
+  isHidden: false,
+  showHeader: true
 })
 </script>
