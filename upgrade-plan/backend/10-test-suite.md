@@ -161,6 +161,20 @@ Cause: `node_modules` on this branch is stale from the Webpacker era — **vite 
 
 **So the genuinely backend-owned remainder is ≈50, not 60.**
 
+- **Batch 8 (Jul 2026): 60 → 58.** `download/generators/base_test` now **green** (20 runs). Root: the site_id column is `Download::Config.download_view_column_names[:site_id]`, which is **`SITE_ID` only when a successful portal release exists, else `WDPAID`** — the tests hardcoded `SITE_ID`. Pinned via `Download::Config.stubs(:has_successful_portal_release?).returns(true)` in setup, which also removes a real flakiness source (expectations previously depended on whether a portal-release row happened to exist in the test DB).
+
+### ❓ DECISION NEEDED — `download/generators/{csv,shapefile}_test` (8 failures)
+
+These assert **exact SQL strings and exact `system()` zip commands**, and they now straddle the portal-release feature. Two things drifted:
+1. The portal column list gained the Sep-2025 migration fields (`GOVSUBTYPE`, `OWNSUBTYPE`, `INLND_WTRS`, `OECM_ASMT`, `SITE_TYPE`), so the expected `create_view` SQL is stale.
+2. The generator now performs an **extra sources export** (`Ogr::Postgres.export` invoked twice, expected once) against `portal_standard_sources`.
+
+**The ambiguity:** the tests are internally inconsistent about which branch they target — the `WHERE "SITE_ID" IN (...)` assertions imply the **portal** branch, but the filename/label expectations (`WDPA_sources.csv`, `all-csv.zip`) imply the **standard** branch (under portal, `current_label` switches to `Release.current_label`, empty in test, yielding `WDPA_sources_.csv`).
+
+Pinning them to portal (as done for `base_test`) was deliberately **not** applied here — it changes filenames and would bake in a guess.
+
+**Question for the backend team:** should the csv/shapefile generator tests exercise the **portal-release** path or the **legacy/standard** path? Once that's decided, regenerating the expected SQL + zip commands is mechanical.
+
 ### Efficient continuation plan (highest-leverage first)
 
 1. **WebMock/S3 (≈8–10)** — one global `Wdpa::S3.current_wdpa_identifier` stub (+ maybe `has_successful_portal_release?`).

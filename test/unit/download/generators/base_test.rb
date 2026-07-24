@@ -1,6 +1,14 @@
 require 'test_helper'
 
 class DownloadGeneratorsBaseTest < ActiveSupport::TestCase
+  # Download::Config branches on whether a successful portal release exists:
+  # site_id column is SITE_ID (portal) vs WDPAID, plus PORTAL_* vs STANDARD_*
+  # column lists. These tests assert the portal form, so pin it here instead of
+  # depending on DB state.
+  setup do
+    Download::Config.stubs(:has_successful_portal_release?).returns(true)
+  end
+
   test '#generate, given a path and an empty selection, returns immediately' do
     Download::Generators::Base.any_instance.expects(:export).never
     Download::Generators::Base.any_instance.expects(:zip).never
