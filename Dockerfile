@@ -136,12 +136,15 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 # We need the following to avoid bundler install error
 # https://nokogiri.org/tutorials/installing_nokogiri.html#installing-using-standard-system-libraries
-# Install the locked bundler (1.17.3) BEFORE any `bundle` call: Ruby 2.7's
+# Install the locked bundler (2.4.22) BEFORE any `bundle` call: Ruby 2.7's
 # rubygems errors hard when Gemfile.lock's BUNDLED WITH version is absent
-# (Ruby 2.6.3 only warned). Pin every bundle invocation to 1.17.3.
-RUN gem install bundler -v 1.17.3
-RUN bundle _1.17.3_ config build.nokogiri --use-system-libraries
-RUN bundle _1.17.3_ install
+# (Ruby 2.6.3 only warned). Pin every bundle invocation to 2.4.22.
+# Bundler 1.17.3 cannot resolve the Rails 6 dependency graph -- it dies with
+# `undefined method 'name' for "Gemfile" String`. 2.4.22 is the last 2.x line
+# that still supports Ruby 2.7.
+RUN gem install bundler -v 2.4.22
+RUN bundle _2.4.22_ config build.nokogiri --use-system-libraries
+RUN bundle _2.4.22_ install
 
 # As it fails for not able to download r809590 during first time of yarn install so we need to skip it and install it manually later
 RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install

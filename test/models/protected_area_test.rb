@@ -6,7 +6,12 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     protected_area = ProtectedArea.create(the_geom: 'POINT (1.0 1.0)')
 
     assert_kind_of RGeo::Geos::CAPIPointImpl, protected_area.the_geom
-    assert_equal   'POINT (1.0 1.0)', protected_area.the_geom.to_s
+    # Assert the point itself rather than its WKT rendering: RGeo's WKT
+    # generator formats coordinates differently across adapter versions
+    # ("POINT (1.0 1.0)" on postgis-adapter 5.x, "POINT (1 1)" on 6.x) for the
+    # exact same geometry.
+    assert_equal 1.0, protected_area.the_geom.x
+    assert_equal 1.0, protected_area.the_geom.y
   end
 
   test ".save creates a slug attribute consisting of parameterized name

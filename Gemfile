@@ -1,24 +1,24 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.2.0'
+gem 'rails', '6.0.6.1'
 gem 'webpacker', '~> 4.0.2'
 
 gem 'bourbon'
 gem "neat"
 
 gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '5.1.0'
+gem 'activerecord-postgis-adapter', '~> 6.0.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
 #
 gem 'sass-rails', '~> 5.0.7'
-gem 'sprockets-rails', '~> 3.2.1'
+gem 'sprockets-rails', '~> 3.2'
 
 gem 'uglifier', '~> 4.1.17'
 gem 'coffee-rails', '~> 4.2.2'
 gem "autoprefixer-rails"
-gem "exception_notification", '~> 4.3.0'
+gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
 gem "slack-notifier", "~> 1.5.1"
 #
 gem 'jquery-rails', '~> 4.3.3'
@@ -82,7 +82,7 @@ group :test, :development do
   #gem 'konacha' - TODO - NOT COMPATIBLE WITH RAILS 5
   gem 'ejs'
   # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
-  gem 'minitest', '~> 5.10', '!= 5.10.2'
+  gem 'minitest', '~> 5.10', '!= 5.10.2', '< 5.26.2' # 5.26.2+ requires ruby >= 3.1
   
 
 end
@@ -116,6 +116,9 @@ gem 'turnout', '~> 2.5.0'
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'comfortable_mexican_sofa', '~> 2.0.0'
+# Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
+# rails-i18n 5.1.3, which caps railties < 6. Force the Rails 6 line.
+gem 'rails-i18n', '~> 6.0'
 # Use this in local docker file, comment out the one with v1.10.4
 # gem 'nokogiri'
 gem 'nokogiri', '~> 1.10.4'

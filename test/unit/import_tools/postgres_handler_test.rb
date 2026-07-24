@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'rake' # stubbed below, before ImportTools::PostgresHandler (which requires it) loads
 
 class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
   test '#new sets the current_conn_values properly' do
@@ -14,6 +15,12 @@ class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
     db_name = 'temp_test_db'
     ActiveRecord::Base.stubs(:establish_connection)
     ActiveRecord::Base.connection.expects(:create_database).with(db_name)
+    # create_database also invokes `db:migrate`. establish_connection is stubbed
+    # out, so the migration has no pool to use -- on Rails 6 that surfaces as
+    # "No connection pool with 'AdvisoryLockBase' found" (5.2 took no such lock).
+    # This test only covers the CREATE DATABASE call, so stub the rake side out.
+    Rails.application.stubs(:load_tasks)
+    Rake::Task.stubs(:[]).with('db:migrate').returns(stub(invoke: nil))
 
     pg_handler = ImportTools::PostgresHandler.new
     pg_handler.create_database db_name

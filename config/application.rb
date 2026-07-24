@@ -27,6 +27,12 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    # Rails 6.0 upgrade, step 1: stay on the classic autoloader and on the
+    # pre-6.0 framework defaults (no `config.load_defaults` call) so that this
+    # bump changes only the Rails version. Zeitwerk and `load_defaults 6.0` are
+    # deliberately separate follow-up steps -- see upgrade-plan/backend/03-rails-6.md.
+    config.autoloader = :classic
+
     config.autoload_paths += %W[
       #{config.root}/lib/modules
       #{config.root}/lib/cms_tags

@@ -44,7 +44,7 @@ The repo already has a **dev** `Dockerfile` and `docker-compose.yml`. They are n
 | Debian buster via `archive.debian.org` with `Check-Valid-Until "0"` | EOL distro, unverified package dates |
 | Node 12 from nodesource | EOL |
 | **GDAL 2.2.3 built from source + ESRI FileGDB SDK** | The blocker — see [13](./13-gdal-and-spatial-tooling.md) |
-| `bundler 1.17.3` | Ancient |
+| `bundler 2.4.22` | Bumped from 1.17.3 during the Rails 6.0 step; 2.5+ needs Ruby 3.0 |
 | `webpacker` service | Removed at B5 |
 
 So this phase is "make production-grade images and adopt Kamal", not greenfield.
