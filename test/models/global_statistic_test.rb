@@ -34,11 +34,11 @@ class GlobalStatisticTest < ActiveSupport::TestCase
     assert_equal 'global_statistics_2026-07-01.csv', GlobalStatistic.download_csv_filename
   end
 
-  test 'download_csv_filename falls back to the current date when there is no release label' do
+  test 'download_csv_filename has no timestamp when there is no release label' do
     Release.stubs(:current_label).returns(nil)
 
     travel_to Time.zone.local(2026, 7, 15) do
-      assert_equal 'global_statistics_2026-07-01.csv', GlobalStatistic.download_csv_filename
+      assert_equal 'global_statistics.csv', GlobalStatistic.download_csv_filename
     end
   end
 end

@@ -13,8 +13,15 @@ class ProtectedAreasControllerTest < ActionController::TestCase
   end
 
   test '#show returns a 200 HTTP code' do
-    get :show, params: {id: @protected_area.slug}
+    get :show, params: {id: @protected_area.site_id}
     assert_response :success
+  end
+
+  test '#show, given a slug, redirects to the search page' do
+    # PAs can share a name/slug across different SITE IDs, so slug lookups are
+    # redirected to search rather than rendering one arbitrary PA.
+    get :show, params: {id: @protected_area.slug}
+    assert_redirected_to search_areas_path(search_term: @protected_area.name)
   end
 
   test '#show is successful even if no jurisdiction is present' do
@@ -29,8 +36,11 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     get :show, params: {id: protected_area.site_id}
   end
 
-  test '#show, given a PA that does not exist, renders a 404 page' do
-    get :show, params: {id: 'flarglearg'}
-    assert_response :missing
+  test '#show, given a PA that does not exist, raises PageNotFound' do
+    # ApplicationController only rescues PageNotFound into a rendered 404 page in
+    # production, so in the test environment the exception propagates.
+    assert_raises(ApplicationController::PageNotFound) do
+      get :show, params: {id: 'flarglearg'}
+    end
   end
 end

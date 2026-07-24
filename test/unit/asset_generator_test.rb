@@ -2,6 +2,9 @@ require 'test_helper'
 
 class AssetGeneratorTest < ActiveSupport::TestCase
   def setup
+    # request_tile sets a Referer header from root_url, and the test env has no
+    # default host configured for route helpers.
+    Rails.application.routes.default_url_options[:host] ||= 'test.host'
     @options = {size: {x: 25, y: 25}}
     @protected_area = FactoryGirl.create(:protected_area)
     @protected_area.stubs(:geojson).returns('{}')
@@ -14,12 +17,19 @@ class AssetGeneratorTest < ActiveSupport::TestCase
     response_mock.stubs(:body).returns('the image')
     response_mock.stubs(:code).returns('200')
 
+
     Rails.application.secrets.
       stubs(:mapbox).
       returns({'base_url' => 'http://mapbox.com/', 'access_token' => '123'})
-    Net::HTTP.expects(:get_response).
-      with('mapbox.com', '/geojson({})/auto/304x138@2x.png?access_token=123').
-      returns(response_mock)
+    # The GeoJSON is URI-escaped into the path, and the request is made through a
+    # Net::HTTP instance (it sets a Referer header for Mapbox's URL restrictions).
+    http_mock = mock
+    http_mock.stubs(:use_ssl=)
+    http_mock.expects(:request).with { |req|
+      req.uri.host == 'mapbox.com' &&
+        req.uri.request_uri == '/geojson(%7B%7D)/auto/304x138@2x?access_token=123'
+    }.returns(response_mock)
+    Net::HTTP.expects(:new).with('mapbox.com', 80).returns(http_mock)
 
     pa_image = AssetGenerator.protected_area_tile(@protected_area)
     assert_equal 'the image', pa_image

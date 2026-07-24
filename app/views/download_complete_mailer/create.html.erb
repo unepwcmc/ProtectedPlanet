@@ -4,11 +4,11 @@
 
 <p>
   Your recently started download on <a href="<%= root_url %>">Protected
-  Planet</a> is now complete! You can download it instantly in the
-  following formats:
+  Planet</a> is now complete.
 </p>
 
+<%# A download is now generated for a single requested format and the zip is %>
+<%# named after the download itself, so there is one file to link to. %>
 <ul>
-  <li><%= link_to("CSV", Download.link_to(@filename, 'csv')) %></li>
-  <li><%= link_to("SHP", Download.link_to(@filename, 'shp')) %></li>
+  <li><%= link_to("Download your file", Download.link_to(@filename)) %></li>
 </ul>

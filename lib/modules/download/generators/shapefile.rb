@@ -111,11 +111,18 @@ class Download::Generators::Shapefile < Download::Generators::Base
     range = (0..@number_of_pieces - 1)
     files_paths = range.map { |i| zip_path(i) }.join(' ')
 
-    system("zip -j #{zip_path} #{files_paths}") and
-      add_sources and
-      add_attachments and
+    # Capture the result of the zip chain: it is this method's (and therefore
+    # #generate's) success value. Previously the chain's result was discarded and
+    # the trailing `range.each` (which returns the range, always truthy) was
+    # returned instead, so a failed zip was reported as a successful download.
+    zipped = system("zip -j #{zip_path} #{files_paths}") &&
+      add_sources &&
+      add_attachments &&
       add_shapefile_readme
 
+    # Always clean up the piece zips, even if the merge failed.
     range.each { |i| FileUtils.rm_rf(zip_path(i)) }
+
+    zipped
   end
 end

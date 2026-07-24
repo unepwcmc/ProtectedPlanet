@@ -41,20 +41,6 @@ class DownloadsControllerTest < ActionController::TestCase
     assert_equal(expected_json, json_response)
   end
 
-  test 'PUT :update, given a token and an email, adds a users email
-   address to the Search properties' do
-    token = '12345'
-    email = 'stephen@fakename.com'
-
-    Download.expects(:set_email).with({
-      'id' => token,
-      'email' => email,
-      'action' => 'update',
-      'controller' => 'downloads'
-    })
-
-    put :update, params: {id: token, email: email}
-
-    assert_response :success
-  end
+  # The PUT :update action (the legacy "email me when the download is ready" flow)
+  # no longer exists on DownloadsController; the stale route has been removed too.
 end

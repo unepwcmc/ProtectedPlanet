@@ -3,11 +3,6 @@ require 'test_helper'
 class SearchAggregationTest < ActiveSupport::TestCase
   test '#all returns a hash with all aggregations configurations' do
     expected_aggregations = {
-      "pa_or_any_its_parcels_is_greenlisted" => {
-        "terms" => {
-          "field" => "pa_or_any_its_parcels_is_greenlisted"
-        }
-      },
       "has_irreplaceability_info" => {
         "terms" => {
           "field" => "has_irreplaceability_info"
@@ -52,7 +47,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
           "aggregation" => {
             "terms" => {
               "field" => "designation.id",
-              "size" => 500
+              "size" => 3000
             }
           }
         }
@@ -92,6 +87,19 @@ class SearchAggregationTest < ActiveSupport::TestCase
             "terms" => {
               "field" => "categories.id",
               "size"=>500
+            }
+          }
+        }
+      },
+      "special_status" => {
+        "nested" => {
+          "path" => "special_status"
+        },
+        "aggs" => {
+          "aggregation" => {
+            "terms" => {
+              "field" => "special_status.name",
+              "size" => 500
             }
           }
         }

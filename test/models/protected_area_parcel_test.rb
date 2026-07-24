@@ -10,7 +10,7 @@ class ProtectedAreaParcelTest < ActiveSupport::TestCase
       name: 'Finn and Jake Land',
       designation: designation
     )
-    assert_equal '123-123-a-finn-and-jake-land-protected-area', parcel.slug
+    assert_equal '123-123_a-finn-and-jake-land-protected-area', parcel.slug
   end
 
   test "parcel can have green_list_status" do

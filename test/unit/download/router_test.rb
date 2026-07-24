@@ -10,7 +10,8 @@ class DownloadRouterTest < ActiveSupport::TestCase
    request to the correct requester' do
     expected_response = {'status' => 'generating', 'token' => '123'}
     domain = 'search'
-    params = {'format' => 'csv', 'q' => 'san guillermo', 'filters' => {}}
+    # the router reads the search term from params['search']
+    params = {'format' => 'csv', 'search' => 'san guillermo', 'filters' => {}}
 
     Download::Requesters::Search.expects(:request).
       with('csv', 'san guillermo', {}).
@@ -23,7 +24,8 @@ class DownloadRouterTest < ActiveSupport::TestCase
    request to the correct requester' do
     expected_response = {'status' => 'ready', 'token' => '123'}
     domain = 'general'
-    params = {'format' => 'csv', 'id' => 'USA'}
+    # the router reads the identifier from params['token']
+    params = {'format' => 'csv', 'token' => 'USA'}
 
     Download::Requesters::General.expects(:request).
       with('csv', 'USA').
@@ -35,9 +37,10 @@ class DownloadRouterTest < ActiveSupport::TestCase
   test '.set_email, called with a domain and params including an email, sets
    the email in the properties of the given token' do
     domain = 'general'
-    params = {'id' => '123', 'email' => 'test@test.com'}
+    # Download::Utils.key now includes the format segment
+    params = {'id' => '123', 'email' => 'test@test.com', 'format' => 'csv'}
 
-    $redis.expects(:set).with('downloads:general:123', regexp_matches(/test@test.com/))
+    $redis.expects(:set).with('downloads:general:csv:123', regexp_matches(/test@test.com/))
 
     Download::Router.set_email(domain, params)
   end

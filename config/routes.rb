@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
     # JSON endpoints
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-    resources :downloads, only: %i[show create update]
+    resources :downloads, only: %i[show create]
 
     ## Only CMS routes are present below
 

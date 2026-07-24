@@ -59,6 +59,18 @@ class ActiveSupport::TestCase
     Wdpa::S3.stubs(:current_wdpa_identifier).returns('WDPA_Jan2024')
   end
 
+  # The home page renders GlobalStatistic coverage percentages (HomePresenter
+  # calls .round on them). The singleton row exists but its columns are nil until
+  # seeded; in production they are always populated.
+  def seed_global_statistics
+    GlobalStatistic.instance.update!(
+      total_land_pa_coverage_percentage: 12.0,
+      total_ocean_pa_coverage_percentage: 8.0,
+      total_land_oecms_pas_coverage_percentage: 1.0,
+      total_ocean_oecms_pas_coverage_percentage: 2.0
+    )
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms

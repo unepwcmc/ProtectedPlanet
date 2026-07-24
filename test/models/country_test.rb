@@ -25,8 +25,7 @@ class CountryTest < ActiveSupport::TestCase
       "iso_3"=> 'MTX',
       "region_for_index" => {
         "name" => "North Manmerica"
-      },
-      "region_name" => "North Manmerica"
+      }
     }
 
     assert_equal expected_json, country.as_indexed_json
@@ -86,17 +85,18 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test '#protected_areas_per_designation returns groups of pa counts per designation' do
-    designation_1 = FactoryGirl.create(:designation)
-    designation_2 = FactoryGirl.create(:designation)
+    # The query groups by designations.name and SUMs, so the designations need
+    # distinct names (the factory default is the same for both) and the count
+    # comes back from the raw query as a string.
+    designation_1 = FactoryGirl.create(:designation, name: 'Alpha')
+    designation_2 = FactoryGirl.create(:designation, name: 'Beta')
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'designation_id' => designation_1.id,
-      'designation_name' => designation_1.name,
-      'count' => 2
+      'designation_name' => 'Alpha',
+      'count' => '2'
     }, {
-      'designation_id' => designation_2.id,
-      'designation_name' => designation_2.name,
-      'count' => 3
+      'designation_name' => 'Beta',
+      'count' => '3'
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_1) }

@@ -14,12 +14,10 @@ class DownloadCompleteMailerTest < ActionMailer::TestCase
 
     url = Rails.application.secrets.aws_s3_url
 
+    # A download is generated for one requested format and the zip is named after
+    # the download, so the email links to that single file.
     assert_match(
-      Regexp.new("#{url}/current/filename-csv.zip"),
-      html_body(email)
-    )
-    assert_match(
-      Regexp.new("#{url}/current/filename-shp.zip"),
+      Regexp.new("#{url}/current/filename.zip"),
       html_body(email)
     )
   end

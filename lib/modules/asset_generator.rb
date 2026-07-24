@@ -40,12 +40,17 @@ module AssetGenerator
 
     raise AssetGenerationFailedError unless geojson.present?
 
-    tile_url = base_url + "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x"
+    # The GeoJSON goes inside the URL path and always contains characters that are
+    # not legal in a URI (notably { and }), so it has to be escaped here. Escaping
+    # the whole URL afterwards is not an option: it would also escape the ? and =
+    # of the query string.
+    tile_url = base_url + "geojson(#{URI::DEFAULT_PARSER.escape(geojson)})/auto/#{size[:x]}x#{size[:y]}@2x"
     tile_url << "?access_token=#{access_token}"
   end
 
   def self.request_tile tile_url
-    uri = URI(URI.encode(tile_url, '[]'))
+    # NB: URI.encode was removed in Ruby 3.0; the URL is escaped in mapbox_url.
+    uri = URI(tile_url)
     request = Net::HTTP::Get.new(uri)
     # As we have set whitelist to only allow pp server/urls to use the mapbox token
     # so we need to set referer header so mapbox knows the request comes from pp server

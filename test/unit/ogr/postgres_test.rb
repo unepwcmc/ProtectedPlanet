@@ -48,9 +48,9 @@ class TestOgrPostgres < ActiveSupport::TestCase
     db_config = ActiveRecord::Base.connection_config
     query = 'SELECT * FROM table'
     driver = 'ESRI Shapefile'
-    export_file_name = 'export.shp'
+    export_file_name = 'WDPA_Jan2024_Public_polygons.shp'
 
-    ogr_command = "ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql \"#{query}\" -lco \"ENCODING=UTF-8\" -lco \"WRITE_BOM=YES\""
+    ogr_command = "ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql '#{query}' -lco \"ENCODING=UTF-8\" -lco \"WRITE_BOM=YES\""
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
 
@@ -62,9 +62,9 @@ class TestOgrPostgres < ActiveSupport::TestCase
     db_config = ActiveRecord::Base.connection_config
     query = 'SELECT * FROM table'
     driver = 'CSV'
-    export_file_name = 'export.csv'
+    export_file_name = 'WDPA_Jan2024_Public.csv'
 
-    ogr_command = "ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql \"#{query}\" -lco \"ENCODING=UTF-8\" -lco \"WRITE_BOM=YES\""
+    ogr_command = "ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql '#{query}' -lco \"ENCODING=UTF-8\" -lco \"WRITE_BOM=YES\""
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
 

@@ -18,9 +18,12 @@ class PameEvaluationTest < ActiveSupport::TestCase
       has_irreplaceability_info: true, has_parcc_info: false)
     FactoryGirl.create(:pame_evaluation,
       name: 'Evaluate Manbone', protected_area: pa, countries: [country])
-    # evaluation with no protected area
+    # The pame_evaluations_area_xor check constraint requires each evaluation to
+    # reference exactly one of a protected area or a parcel, so this one gets its
+    # own PA carrying the site_id.
+    other_pa = FactoryGirl.create(:protected_area, site_id: 42, countries: [country])
     FactoryGirl.create(:pame_evaluation,
-      name: 'Evaluate Thingamy', site_id: 42,
+      name: 'Evaluate Thingamy', protected_area: other_pa,
       countries: [country])
     csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
     assert_equal 3, csv_string.lines.count
@@ -49,8 +52,10 @@ class PameEvaluationTest < ActiveSupport::TestCase
       has_irreplaceability_info: true, has_parcc_info: false)
     FactoryGirl.create(:pame_evaluation,
       name: 'Evaluate Manbone', protected_area: pa, countries: [country])
+    # See pame_evaluations_area_xor: an evaluation must reference a PA or a parcel.
+    other_pa = FactoryGirl.create(:protected_area, site_id: 42, countries: [country])
     FactoryGirl.create(:pame_evaluation,
-      name: 'Evaluate Thingamy', site_id: 42,
+      name: 'Evaluate Thingamy', protected_area: other_pa,
       countries: [country])
     csv_string = PameEvaluation.to_csv('{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}],"controller":"pame","action":"download","pame":{"_json":[{"name":"method","options":[],"type":"multiple"},{"name":"country","options":[],"type":"multiple"},{"name":"year","options":[],"type":"multiple"}]}}')
     assert_equal 3, csv_string.lines.count

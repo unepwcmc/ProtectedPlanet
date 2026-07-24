@@ -59,7 +59,9 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   end
   
   # test json endpoint for ajax search
-  test 'search query that would hit country, doesnt as we dont return countries in main search' do
+  # Since "Default index to include everything and boost country index" (Sep 2020)
+  # the default search spans PAs, countries and regions, with countries boosted.
+  test 'search query matching a country returns it from the main search' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone', region: region)
     assert_index 2, 1
@@ -67,7 +69,7 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     get '/en/search-results?search_term=Manbone'
     assert_response :success
     json = JSON.parse response.body
-    assert_equal 0, json['total_items']
+    assert_equal 1, json['total_items']
   end
 
   test 'search query that returns single protected area returns success' do
@@ -83,7 +85,7 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     assert_equal 1, json['total_items']
   end
 
-  test 'search query that matches PA and country only returns PA' do
+  test 'search query matching a PA and a country returns both' do
 
     region = FactoryGirl.create(:region, id: 987, name: 'Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'North Manbone land', region: region)
@@ -94,6 +96,6 @@ class SearchPageTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     json = JSON.parse response.body
-    assert_equal 1, json['total_items']
+    assert_equal 2, json['total_items']
   end
 end

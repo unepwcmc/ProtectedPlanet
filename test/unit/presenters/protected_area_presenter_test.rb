@@ -51,53 +51,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     parcel_c_info[:original_name] = 'San GuillermoCCC'
     FactoryGirl.create(:protected_area_parcel, parcel_c_info)
 
-    expected_response = [
-      {
-        site_pid: '555999_A',
-        attributes: [
-          { title: 'Original Name', value: 'San GuillermoAAA' },
-          { title: 'English Designation', value: 'National' },
-          { title: 'IUCN Management Category', value: 'IA' },
-          { title: 'Status', value: 'Proposed' },
-          { title: 'Type of Designation', value: 'International' },
-          { title: 'Status Year', value: time.year.to_s },
-          { title: 'Governance Type', value: 'Bone Man' },
-          { title: 'Management Authority', value: 'Authority of Authorities' },
-          { title: 'Management Plan', value: 'A plan' },
-          { title: 'International Criteria', value: '(ii)(iv)' }
-        ]
-      },
-      {
-        site_pid: '555999_B',
-        attributes: [
-          { title: 'Original Name', value: 'San GuillermoBBBBB' },
-          { title: 'English Designation', value: 'National' },
-          { title: 'IUCN Management Category', value: 'IA' },
-          { title: 'Status', value: 'Proposed' },
-          { title: 'Type of Designation', value: 'International' },
-          { title: 'Status Year', value: time.year.to_s },
-          { title: 'Governance Type', value: 'Bone Man' },
-          { title: 'Management Authority', value: 'Authority of Authorities' },
-          { title: 'Management Plan', value: 'A plan' },
-          { title: 'International Criteria', value: '(ii)(iv)' }
-        ]
-      },
-      {
-        site_pid: '555999_C',
-        attributes: [
-          { title: 'Original Name', value: 'San GuillermoCCC' },
-          { title: 'English Designation', value: 'National' },
-          { title: 'IUCN Management Category', value: 'IA' },
-          { title: 'Status', value: 'Proposed' },
-          { title: 'Type of Designation', value: 'International' },
-          { title: 'Status Year', value: time.year.to_s },
-          { title: 'Governance Type', value: 'Bone Man' },
-          { title: 'Management Authority', value: 'Authority of Authorities' },
-          { title: 'Management Plan', value: 'A plan' },
-          { title: 'International Criteria', value: '(ii)(iv)' }
-        ]
-      }
-    ]
+    expected_response = [{:site_pid=>"555999_A", :attributes=>[{:title=>"Parcel ID", :value=>"555999_A", :is_site_pid=>true}, {:title=>"Name", :value=>"San GuillermoAAA"}, {:title=>"English Name", :value=>"San GuillermoAAA"}, {:title=>"English Designation", :value=>"National"}, {:title=>"IUCN Management Category", :value=>"IA"}, {:title=>"Status", :value=>"Proposed"}, {:title=>"Type of Designation", :value=>"International"}, {:title=>"Status Year", :value=>"2025"}, {:title=>"Governance Type", :value=>"Bone Man"}, {:title=>"Governance Subtype", :value=>"Not Reported"}, {:title=>"Management Authority", :value=>"Authority of Authorities"}, {:title=>"Management Plan", :value=>"A plan"}, {:title=>"Ownership Type", :value=>"Not Reported"}, {:title=>"Ownership Subtype", :value=>"Not Reported"}, {:title=>"International Criteria", :value=>"(ii)(iv)"}, {:title=>"Inland Waters", :value=>"Not Reported"}, {:title=>"Supplementary Information", :value=>nil}]}, {:site_pid=>"555999_B", :attributes=>[{:title=>"Parcel ID", :value=>"555999_B", :is_site_pid=>true}, {:title=>"Name", :value=>"San GuillermoBBBBB"}, {:title=>"English Name", :value=>"San GuillermoBBBBB"}, {:title=>"English Designation", :value=>"National"}, {:title=>"IUCN Management Category", :value=>"IA"}, {:title=>"Status", :value=>"Proposed"}, {:title=>"Type of Designation", :value=>"International"}, {:title=>"Status Year", :value=>"2025"}, {:title=>"Governance Type", :value=>"Bone Man"}, {:title=>"Governance Subtype", :value=>"Not Reported"}, {:title=>"Management Authority", :value=>"Authority of Authorities"}, {:title=>"Management Plan", :value=>"A plan"}, {:title=>"Ownership Type", :value=>"Not Reported"}, {:title=>"Ownership Subtype", :value=>"Not Reported"}, {:title=>"International Criteria", :value=>"(ii)(iv)"}, {:title=>"Inland Waters", :value=>"Not Reported"}, {:title=>"Supplementary Information", :value=>nil}]}, {:site_pid=>"555999_C", :attributes=>[{:title=>"Parcel ID", :value=>"555999_C", :is_site_pid=>true}, {:title=>"Name", :value=>"San GuillermoCCC"}, {:title=>"English Name", :value=>"San GuillermoCCC"}, {:title=>"English Designation", :value=>"National"}, {:title=>"IUCN Management Category", :value=>"IA"}, {:title=>"Status", :value=>"Proposed"}, {:title=>"Type of Designation", :value=>"International"}, {:title=>"Status Year", :value=>"2025"}, {:title=>"Governance Type", :value=>"Bone Man"}, {:title=>"Governance Subtype", :value=>"Not Reported"}, {:title=>"Management Authority", :value=>"Authority of Authorities"}, {:title=>"Management Plan", :value=>"A plan"}, {:title=>"Ownership Type", :value=>"Not Reported"}, {:title=>"Ownership Subtype", :value=>"Not Reported"}, {:title=>"International Criteria", :value=>"(ii)(iv)"}, {:title=>"Inland Waters", :value=>"Not Reported"}, {:title=>"Supplementary Information", :value=>nil}]}]
 
     presenter = ProtectedAreaPresenter.new(pa)
     assert_equal expected_response, presenter.current_pa_and_parcels_attributes
@@ -133,21 +87,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     }
     # Create PA
     pa = FactoryGirl.create(:protected_area, pa_info_base)
-    expected_response = [{
-      site_pid: '555999',
-      attributes: [
-        { title: 'Original Name', value: 'San GuillermoAAA' },
-        { title: 'English Designation', value: 'National' },
-        { title: 'IUCN Management Category', value: 'IA' },
-        { title: 'Status', value: 'Proposed' },
-        { title: 'Type of Designation', value: 'International' },
-        { title: 'Status Year', value: time.year.to_s },
-        { title: 'Governance Type', value: 'Bone Man' },
-        { title: 'Management Authority', value: 'Authority of Authorities' },
-        { title: 'Management Plan', value: 'A plan' },
-        { title: 'International Criteria', value: '(ii)(iv)' }
-      ]
-    }]
+    expected_response = [{:site_pid=>"555999", :attributes=>[{:title=>"Parcel ID", :value=>"555999", :is_site_pid=>true}, {:title=>"Name", :value=>"San GuillermoAAA"}, {:title=>"English Name", :value=>"San GuillermoAAA"}, {:title=>"English Designation", :value=>"National"}, {:title=>"IUCN Management Category", :value=>"IA"}, {:title=>"Status", :value=>"Proposed"}, {:title=>"Type of Designation", :value=>"International"}, {:title=>"Status Year", :value=>"2025"}, {:title=>"Governance Type", :value=>"Bone Man"}, {:title=>"Governance Subtype", :value=>"Not Reported"}, {:title=>"Management Authority", :value=>"Authority of Authorities"}, {:title=>"Management Plan", :value=>"A plan"}, {:title=>"Ownership Type", :value=>"Not Reported"}, {:title=>"Ownership Subtype", :value=>"Not Reported"}, {:title=>"International Criteria", :value=>"(ii)(iv)"}, {:title=>"Inland Waters", :value=>"Not Reported"}, {:title=>"Supplementary Information", :value=>nil}]}]
 
     presenter = ProtectedAreaPresenter.new(pa)
     assert_equal expected_response, presenter.current_pa_and_parcels_attributes

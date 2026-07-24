@@ -42,6 +42,8 @@ class SearchMatcherTest < ActiveSupport::TestCase
       "multi_match" => {
         "query" => "#{term}",
         "fields" => [ "name", "original_name" ],
+        "minimum_should_match" => "0%",
+        "type" => "most_fields",
         "fuzziness" => "0"
       }
     }

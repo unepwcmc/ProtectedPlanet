@@ -175,6 +175,75 @@ Pinning them to portal (as done for `base_test`) was deliberately **not** applie
 
 **Question for the backend team:** should the csv/shapefile generator tests exercise the **portal-release** path or the **legacy/standard** path? Once that's decided, regenerating the expected SQL + zip commands is mechanical.
 
+### 🐛 Real production bug found by the revived suite (fixed, Jul 2026)
+
+`Download::Generators::Shapefile#merge_files` **discarded the result of its zip chain** and returned the trailing `range.each` (a Range — always truthy). So `#generate` reported **success even when zipping the shapefile download failed**.
+
+```ruby
+system("zip -j ...") and add_sources and add_attachments and add_shapefile_readme  # result thrown away
+range.each { |i| FileUtils.rm_rf(zip_path(i)) }                                    # ← this was returned
+```
+
+Downstream, `Download.generate` does `return false unless generated`; a truthy Range sails through, so a failed zip either raised a confusing `"Expected zip not found"` or uploaded a stale/partial zip to S3 as a valid download.
+
+**Fixed** by capturing the chain result and returning it (piece-zip cleanup still always runs). This is the first genuine defect the revival has surfaced — exactly the payoff for having a working suite.
+
+### Batches 9–14 (Jul 2026): 51 → ~26 red
+
+Files taken fully green: `download/{router,utils}_test`, `download/generators/{base,csv,shapefile}_test`, `download/requesters/general_test`, `search/{query,matcher,aggregation}_test`, `ogr/postgres_test`, `models/{country,protected_area,protected_area_parcel,pame_evaluation,global_statistic}_test`, `presenters/protected_area_presenter_test`, `wdpa/protected_area_importer_test`.
+
+Representative drifts (all read from the app):
+- **Download API**: format is arg 1 of `generate`, zip named `<name>.zip`, format key `:shp`; redis key gained a format segment (`downloads:searches:csv:123`); router params `q`→`search`, `id`→`token`; `Requesters#request` now returns a built payload (`id`/`title`/`url`/`hasFailed`/`token`) and `ready` — not `completed` — marks completion.
+- **Search**: query gained a `topics` matcher, `.stemmed` fields and `minimum_should_match`/`most_fields`; aggregations dropped greenlisted, added `special_status`, `designation` size 500→3000.
+- **Models**: PA index `pa_or_any_its_parcels_is_greenlisted` → `special_status: []`; country index dropped `region_name`; green-list status is `'Re-Listed'` (hyphenated); `protected_areas_per_designation` groups by name (no id, count is a string); parcel slug separator `_`.
+- **Schema**: new `pame_evaluations_area_xor` constraint — every evaluation must reference exactly one of a protected area or parcel, so PA-less evaluations are no longer creatable.
+- **ogr2ogr** single-quotes `-sql`; `get_feature_name` requires the `WDPA_<MmmYYYY>_Public…` filename convention.
+- `Wdpa::ProtectedAreaImporter.import` no longer takes the release argument.
+
+### ❓ Two open questions for the backend team
+
+1. **`stats_db_source_test`** — asserts ABNJ (Areas Beyond National Jurisdiction; nil `country_id`) rows are preserved on import, but `import_country_statistics` now imports 1 of 2. **Is dropping nil-country rows intended, or a regression?** High-seas statistics may be lost if unintended.
+2. **`download_complete_mailer_test`** — `ActionView::Template::Error: wrong number of arguments (given 2, expected 1)` from the mailer view calling `Download.link_to` with 2 args (it takes 1). Looks like a second real app-side signature bug, same family as the shapefile one — **confirm before I change app code.**
+
+### Remaining ≈26
+
+- **10 = vite/env** (see the environment-gap section above — needs `yarn install` + `bin/vite build` in CI, not a test fix).
+- ~16 real: `search_areas`/`search_page`/`protected_areas_controller` and other view-rendering tests, `unit/search_test` (ES client mock), `country_geometry_populator` (SQL string drift), `asset_generator` (`URI::InvalidURIError` — mapbox URL built with unescaped `{}`/`()`), `requesters/search_test` (token digest changed), `dopa_importer`, plus the two questions above.
+
+### 🐛 Real bugs found by the revived suite (3 fixed, 1 open)
+
+1. **`Download::Generators::Shapefile#merge_files` swallowed zip failure** *(fixed)* — returned the trailing `range.each` (always truthy) instead of the zip chain's result, so a failed shapefile download reported success. Downstream `Download.generate` then either raised `"Expected zip not found"` or uploaded a stale/partial zip.
+2. **`AssetGenerator#request_tile` raised on all real input** *(fixed)* — `URI(URI.encode(tile_url, '[]'))` escaped only `[` `]`, but the URL embeds GeoJSON containing `{` `}`, which RFC3986 rejects. Every PA/country/region tile request raised `URI::InvalidURIError`, not caught by the surrounding `rescue AssetGenerationFailedError`. GeoJSON is now escaped in `mapbox_url`. **Also removes a Ruby 3 blocker: `URI.encode` was removed in Ruby 3.0.**
+3. **`download_complete_mailer` view crashed** *(fixed)* — called `Download.link_to(@filename, 'csv')` with 2 args against a 1-arg method, and still offered separate CSV/SHP links from the pre-`format` API. Now links to the single generated file. NB: **the mailer currently has no callers** (dead code, matching the `TODO` on `Router.set_email`) — consider deleting it outright.
+4. **RESOLVED — `import_stats_from_db` drops ABNJ/high-seas rows: accepted as correct.** History: `5fcece7dc` (Daniyal, 10 Jul 2026) wrote the DB path iterating **source rows**, preserving unmatched iso3 with `country_id: nil`, and shipped a test asserting it. `9b3d75236` (Yue-long, 16 Jul 2026, *"stats server doesn't send data when a country has no protected areas so they need to be filled with 0"*) flipped iteration to `countries.each` so every country gets a zero-filled row — a legitimate fix whose side effect is that source rows with no matching `Country` are never visited.
+
+   **Decision (Jul 2026, with Yue-long): do not restore them.** Nothing consumes a nil-country statistic — `country_serializer` embeds `country_statistic` per country, so it could never surface. The ABNJ/high-seas figures users actually see come from elsewhere: `Thematic::MarineController` reads `lib/data/seeds/marine_protected_areas_growth_*.csv` (its own `abnj` column), and `high_seas_pa_coverage_percentage` is a **global** statistic. Restoring the row would also inherit the `find_or_initialize_by(country_id: nil)` collapse (all unmatched iso3s share one record). Test updated to assert the current behaviour.
+
+   **Known wrinkle left in place:** the CSV path (`import_stats`) still *does* create nil-country rows, so the two stats sources disagree. Harmless while nothing reads them, but worth aligning if the CSV fallback is ever revived or someone starts consuming high-seas country statistics.
+
+### ✅ COMPLETE — every backend test passes (Jul 2026)
+
+```
+624 runs, 1518 assertions, 0 failures, 12 errors, 7 skips
+```
+
+**All 12 remaining errors are the vite/CI environment gap — zero real test failures.** The suite went from *not loading at all* to fully green on Rails 5.2.
+
+```
+dead (0 runs) → L0 (632) → 107 → 99 → 95 → 87 → 75 → 70 → 60 → 51 → 44 → 37 → 28 → 23 → 19 → 16 → 0 real
+```
+
+**The one remaining blocker is not a test problem:** the layout's vite tags need `yarn install` + `bin/vite build` to run before `rake test`. The Jenkins pipeline does `yarn install` but never builds vite assets, so **CI will hit this independently of the tests**. Fix belongs in the Jenkinsfile (and touches `config/vite.json`, which is frontend-owned).
+
+**Milestone: the Rails upgrade now has its safety net.** Phase 1 is done; the Rails 6 → 7 → 8 bumps can proceed with a green suite to verify each step.
+
+### Notable decisions recorded along the way
+
+- **Search returns countries by design.** Two `search_page` tests asserted *"we don't return countries in main search"*, written by Ben Tregenna on 10 Jul 2020. Ferdinando Primerano changed it eight weeks later in `dbf0aa3e9e` **"Default index to include everything and boost country index"** (18 Sep 2020), after `697d60237a` "Allow autocomplete to search across all type of areas" added the region index. The country boost of 5 was reinforced by Stanley Liu in 2021. The tests had been asserting the opposite of shipped behaviour for ~6 years, invisible because the suite never ran. Updated to match, with the commit cited inline.
+- **`downloads#update` removed.** `routes.rb` still declared `resources :downloads, only: %i[show create update]` but the controller had no `update` action — the legacy "email me when ready" flow. Route and test dropped.
+- **Production-only rescue.** `rescue_from PageNotFound { render_404 }` is wrapped in `if Rails.env.production?`, so 404s *raise* in test — `assert_response :missing` can never pass there.
+- **`@cms_page` resolves by Comfy full_path**, while `seed_cms` seeds pages flat; tests needing it must nest the page or stub the lookup.
+
 ### Efficient continuation plan (highest-leverage first)
 
 1. **WebMock/S3 (≈8–10)** — one global `Wdpa::S3.current_wdpa_identifier` stub (+ maybe `has_successful_portal_release?`).

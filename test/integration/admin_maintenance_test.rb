@@ -24,6 +24,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
    off maintenance mode' do
     key = Rails.application.secrets.maintenance_mode_key
     seed_cms_home
+    seed_global_statistics
     
     put(
       '/admin/maintenance',

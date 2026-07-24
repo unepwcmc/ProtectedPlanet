@@ -70,7 +70,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       'marine' => true,
       'has_irreplaceability_info' => true,
       'has_parcc_info' => false,
-      'pa_or_any_its_parcels_is_greenlisted' => false,
+      'special_status' => [],
       'is_oecm' => false,
       'coordinates' => [2.0, 1.0],
       'countries_for_index' => [
@@ -155,7 +155,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
   test '.pas_with_green_list_on_self_or_any_parcel returns PAs with green list on self or any parcel' do
     gl_pa = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed')
-    gl_parcel = FactoryGirl.create(:green_list_status, gl_status: 'Relisted')
+    gl_parcel = FactoryGirl.create(:green_list_status, gl_status: 'Re-Listed')
     pa_self = FactoryGirl.create(:protected_area, site_id: 801, green_list_status: gl_pa)
     pa_parcel_only = FactoryGirl.create(:protected_area, site_id: 802)
     FactoryGirl.create(:protected_area_parcel, site_id: pa_parcel_only.site_id, site_pid: '802_A', green_list_status: gl_parcel)
@@ -173,7 +173,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     pa = FactoryGirl.create(:protected_area, site_id: 701, green_list_status: gl)
     assert pa.pa_or_any_its_parcels_is_greenlisted
 
-    relisted = FactoryGirl.create(:green_list_status, gl_status: 'Relisted')
+    relisted = FactoryGirl.create(:green_list_status, gl_status: 'Re-Listed')
     pa2 = FactoryGirl.create(:protected_area, site_id: 702, green_list_status: relisted)
     assert pa2.pa_or_any_its_parcels_is_greenlisted
   end
