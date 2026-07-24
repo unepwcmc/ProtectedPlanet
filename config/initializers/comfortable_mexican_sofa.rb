@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-require 'cms_tags/date_not_null'
-require 'cms_tags/text_custom'
-require 'cms_tags/categories'
+# These define Comfy tag classes whose names don't match their paths
+# (e.g. date_not_null.rb defines ComfortableMexicanSofa::Content::Tag::DateNotNull),
+# so lib/cms_tags is deliberately NOT an autoload path -- Zeitwerk would reject it.
+# They are plain requires by absolute path instead.
+require Rails.root.join('lib/cms_tags/date_not_null')
+require Rails.root.join('lib/cms_tags/text_custom')
+require Rails.root.join('lib/cms_tags/categories')
 # encoding: utf-8
 
 ComfortableMexicanSofa.configure do |config|

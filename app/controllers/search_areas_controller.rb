@@ -1,5 +1,5 @@
 class SearchAreasController < ApplicationController
-  include Concerns::Searchable
+  include Searchable
   include MapHelper
 
   after_action :enable_caching

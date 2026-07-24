@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-  include Concerns::Searchable
+  include Searchable
   after_action :enable_caching
 
   before_action :load_search, only: [:index, :search_results]

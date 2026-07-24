@@ -1,5 +1,5 @@
 class Thematic::EffectivenessController < ApplicationController
-  include Concerns::GreenListPageData
+  include GreenListPageData
 
   def index
     prepare_green_list_tab_data

@@ -1,5 +1,5 @@
 class SearchCmsController < ApplicationController
-  include Concerns::Searchable
+  include Searchable
 
   before_action :load_sorter, only: [:index]
   before_action :load_search, only: [:index]
