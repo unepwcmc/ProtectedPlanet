@@ -65,7 +65,7 @@ Minimum happy paths:
 
 ## Analytics verification
 
-- [ ] GA4/GTM events fire for migrated components (replace `vue-analytics` / `ga-id` props audit).
+- [ ] GA4 events fire via `vue-gtag` for migrated components (replace `vue-analytics` / `ga-id` props audit).
 
 ---
 

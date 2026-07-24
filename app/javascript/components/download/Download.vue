@@ -66,8 +66,13 @@ export default {
       let item = this.selectedDownloadOption.params
 
       item.id = Math.round(Math.random(0,1)*100000)
-      
-      this.$store.dispatch('download/addNewDownloadItem', item)
+
+      // The global download modal moved to a Vue3/Pinia island (Wave 4); this
+      // component hasn't migrated yet (its :download-disabled prop is bound to
+      // SearchAreas.vue's own reactive state — Wave 7), so it feeds the shared
+      // store via a window bridge instead of Vuex — see
+      // app/frontend/stores/downloadBridge.ts.
+      window.__downloadStoreBridge?.addNewDownloadItem(item)
       this.selectedDownloadOption = {}
     },
 
@@ -90,8 +95,10 @@ export default {
 
     clickNonCommercial () {
       if(this.selectedDownloadOption.params.domain == 'search') {
-        this.selectedDownloadOption.params.filters = this.$store.state.download.searchFilters
-        this.selectedDownloadOption.params.search = this.$store.state.download.searchTerm
+        // SearchAreas.vue writes these into the Vue3/Pinia download store now
+        // (Wave 4) rather than Vuex — see app/frontend/stores/downloadBridge.ts.
+        this.selectedDownloadOption.params.filters = window.__downloadStoreBridge?.getSearchFilters()
+        this.selectedDownloadOption.params.search = window.__downloadStoreBridge?.getSearchTerm()
       }
 
       this.closeCommercialModal()

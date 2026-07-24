@@ -101,7 +101,37 @@ Vite bundles CSS referenced from JS entrypoints; for a global stylesheet, use a 
 |--------|-------------|----------------|
 | **A — Sprockets + Vite JS only** | Keep `stylesheet_link_tag 'application'`; Vite only for JS. **Default for cutover.** | `dartsass-rails` on Rails 7 |
 | **B — Incremental Vite CSS** | SCSS entries in `app/frontend/`; migrate slice by slice. | `sass` (npm) via Vite |
-| **C — Tailwind** | Product redesign only. | n/a |
+| **C — Tailwind (v4)** | **ADDED (additive)** — utilities for new/migrated components, alongside the legacy SCSS (not a redesign). See below. | Tailwind engine (via Vite) |
+
+---
+
+## Decision: Tailwind v4 — added (additive), July 2026
+
+Tailwind v4 is **installed and wired** on the Vite side so new/migrated components use utility
+classes instead of growing the ~8.8k-line legacy SCSS. It **does not replace** the SCSS — removing
+that is a separate redesign. Both run side by side during the migration.
+
+**Setup (branch `feat/upgrade-frontend`):**
+- `tailwindcss` v4 + `@tailwindcss/vite` plugin in `vite.config.mts`.
+- `app/frontend/styles/tailwind.css`, imported from `entrypoints/layout.ts` (loads on every page).
+- **Preflight (base reset) is DISABLED** — the expanded `@import "tailwindcss/theme.css" layer(theme)`
+  + `utilities.css layer(utilities)` form, omitting `preflight.css` — so Tailwind's reset does not
+  fight the global SCSS. Re-enable preflight only once the legacy SCSS is retired.
+- `@source` limited to `app/frontend` + `app/views`. **CMS DB content is NOT scanned** — utilities
+  typed into Comfy editor HTML won't be generated unless safelisted; keep CMS on existing classes.
+
+**Ops caveat:** the Tailwind `oxide` scanner made vite_ruby's on-demand `autoBuild` heavier and it
+OOM-killed the `web` container under x86 emulation. Fixed by adding `GOMAXPROCS=1` +
+`NODE_OPTIONS=--max-old-space-size=2560` to the `web` service (mirrors `vite`) — see docker-compose
+and [15](./15-docker-vite-dev.md).
+
+**Verification note:** the bundled headless Chrome (puppeteer 5.4 → Chrome 87) can't render `oklch()`
+(Tailwind v4's default color space) — verify utilities in a modern browser or with non-color/px
+utilities.
+
+**Next stage:** rewrite migrated islands/components onto Tailwind utilities, retiring matching SCSS
+piecemeal. Enabling preflight + removing the SCSS is a later, deliberate step (a redesign, not this
+tooling upgrade).
 
 ---
 

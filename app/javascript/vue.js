@@ -17,40 +17,21 @@ import 'cookieconsent/build/cookieconsent.min.css'
 import store from './store/store.js'
 
 // components
-import AmChartLine from './components/charts/am-chart-line/AmChartLine'
 import AmChartMultiline from './components/charts/am-chart-line/AmChartMultiline'
 import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
-import Carousel from './components/carousel/Carousel'
-import CarouselSlide from './components/carousel/CarouselSlide'
-import Counter from './components/counter/Counter'
-import ChartBar from './components/charts/chart-bar/ChartBar'
-import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
-import ChartDial from './components/charts/chart-dial/ChartDial'
-import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
-import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
-import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Download from './components/download/Download'
-import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
-import GaLink from './components/link/GaLink'
 import ListingPage from './components/listing/ListingPage.vue'
-import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
-import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
-import NavBurger from './components/nav/NavBurger'
 import PameModal from './components/pame/PameModal'
 import RegionCountryPages from './components/pages/RegionCountryPages'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
-import SearchSiteTopbar from './components/search/SearchSiteTopbar'
-import SelectEquity from './components/select/SelectEquity'
-import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
-import StickyNav from './components/sticky/StickyNav'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Tooltip from './components/tooltip/Tooltip'
@@ -67,7 +48,8 @@ import AttributesProtectedAreaParcelsSources from './components/attributes/Attri
 import AttributesPames from './components/attributes/AttributesPames'
 import AttributesAffiliations from './components/attributes/AttributesAffiliations'
 import AttributesParcelsDropdown from './components/attributes/AttributesParcelsDropdown'
-import BannerBanner from './components/banner/Banner'
+// BannerBanner migrated to a Vite/Vue 3 island (app/frontend/components/Banner.vue,
+// mounted via layout.ts). Kept out of the Vue 2 #v-app root so only one system compiles it.
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -102,40 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
       el: '#v-app',
       store,
       components: {
-        AmChartLine,
         AmChartMultiline,
         AmChartPie,
-        Carousel,
-        CarouselSlide,
-        Counter,
-        ChartBar,
-        ChartBarSimple,
         ChartBarStacked,
-        ChartDial,
-        ChartTreemapInteractive,
-        ChartRectangles,
         ChartRowPa,
         ChartRowStacked,
-        ChartSunburst,
         Download,
-        GaLink,
-        DownloadModal,
         FilteredTable,
         Flickity,
         ListingPage,
-        ListingPageCardNews,
-        ListingPageCardResources,
-        NavBurger,
         PameModal,
         RegionCountryPages,
         SearchAreas,
         SearchAreasHome,
         SearchSite,
-        SearchSiteTopbar,
-        SelectEquity,
-        SelectWithContent,
         StickyBar,
-        StickyNav,
         Tabs,
         TabTarget,
         Tooltip,
@@ -151,19 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         AttributesProtectedAreaParcelsSources,
         AttributesPames,
         AttributesAffiliations,
-        AttributesParcelsDropdown,
-        BannerBanner
-      },
-      beforeCreate() { 
-        this.$store.dispatch('download/initialiseStore')
-      },
-      mounted () {
-        window.addEventListener('beforeunload', e => {
-          this.$store.dispatch('download/updateLocalStorage')
-
-          // the absence of a returnValue property on the event will guarantee the browser unload happens
-          delete e['returnValue']
-        })
+        AttributesParcelsDropdown
       }
     })
   }

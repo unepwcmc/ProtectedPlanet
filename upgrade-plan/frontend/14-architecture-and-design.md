@@ -110,6 +110,30 @@ Implement `frontend_mount` + `search_areas_vue_props` in a presenter/helper (int
 
 ---
 
+## Mounting mechanism and the turbo-mount decision
+
+**Implemented** (branch `feat/upgrade-frontend`, Jul 2026):
+
+- `app/helpers/frontend_helper.rb` — `frontend_mount(name, props:, tag:, key:, **html)` emits a mount `<div data-mount>` + a `<script type="application/json">` props block. `key:` is optional and only needed when the same component is rendered more than once on a page (e.g. cards in a loop) — it namespaces the DOM id and props-script id per instance (`mount-#{name}-#{key}` / `props-#{name}-#{key}`, tracked via `data-props-id`) while `data-mount` stays the plain registry key. Omitting `key:` behaves exactly as before.
+- `app/frontend/lib/readMountProps.ts` — reads/parses that block.
+- `app/frontend/lib/islands.ts` — island registry + lazy `createApp` + a `MutationObserver`; started from `entrypoints/layout.ts`. Once a component mounts, its wrapper `<div data-mount>` is replaced with the component's own rendered root (`el.replaceWith(el.firstElementChild)`) so islands don't leave an extra empty `<div>` around their markup — the `id`/`data-*` attributes are carried over onto the new root first (and the new root is pre-registered as "already mounted") so nothing double-mounts and any code/tests that look up the mount point by id or `data-mount` after mount still finds it, just on the real root element instead of the original wrapper.
+
+**Why the `MutationObserver`:** a mount point can enter the DOM *after* first paint — inside a `v-if` region revealed later, or (today) when Webpacker's Vue 2 rebuilds `#v-app`. Observing added nodes means such mounts still mount, so **`v-if` is safe** (true unmount/remount) and we never need `v-show` to keep hidden regions in the DOM. Proven live on wdpca: a Tabs island whose search/map mounts appear only when their tab is revealed, mount once, and unmount on leave. **Transitional** — once Webpacker/`#v-app` is gone this can shrink to a one-shot scan; keep the observer only if adopting Turbo/Hotwire or CMS-injected mount points.
+
+**`frontend_mount` is the stable seam.** Views only ever call `frontend_mount`; the mount-id → component wiring lives in `layout.ts`. Swapping the *mechanism* underneath (e.g. to a library) is a ~2-file change and never touches the views or the Vue SFCs.
+
+### Decision: mounting library — homegrown now, revisit `turbo-mount` after Ruby 3 / Rails 6+
+
+[`turbo-mount`](https://github.com/skryukov/turbo-mount) (skryukov / Evil Martians, MIT, actively maintained — v0.4.4 Dec 2025) is the "batteries-included" equivalent of our mounter: a `turbo_mount(...)` Rails helper + a Stimulus controller that mounts React/Vue/Svelte components and manages their lifecycle (including Turbo navigation).
+
+**Blocked on the current stack:** the gem declares `required_ruby_version >= 3.0.0` and depends on `railties >= 6.0.0`, but we are on **Ruby 2.7.8 / Rails 5.2**, so it will not install. It also introduces **Hotwire/Stimulus**, which PP does not use today.
+
+**Decision:** stay on the homegrown mounter for now (no deps, works on 2.7 / 5.2, proven incl. `v-if`). **Revisit `turbo-mount` after the Ruby 3 + Rails 6+ upgrade.** Even then it's optional, and — thanks to the `frontend_mount` seam — reversible: swap one helper + one JS registration file; the Vue SFCs never move. Risk if abandoned is low: it's small + MIT (fork/vendor), and its real runtime dependency (Stimulus) is Basecamp-maintained.
+
+Refs: `turbo-mount.gemspec` (`required_ruby_version >= 3.0.0`, `railties >= 6.0.0`) · https://github.com/skryukov/turbo-mount
+
+---
+
 ## Entrypoint strategy
 
 | Entrypoint | Mounts | Loads on |
@@ -141,12 +165,14 @@ Use **setup stores** + composables for map layer logic (replaces mixins).
 
 Current: Mapbox GL **1.4.1** CDN, custom styles `mapbox://styles/unepwcmc/...`.
 
+**Chosen: MapLibre GL JS** — open source, no Mapbox account/licensing dependency. Requires migrating
+off `mapbox://` style URLs and re-testing layer toggles, RTL, PA search, and popups against PP's own
+acceptance criteria (not another product's MapLibre setup). Detail: [05 — Maps](./05-maps.md#decision-maplibre).
+
 | Option | When to choose |
 |--------|----------------|
-| **Mapbox GL v2+** (bundled) | Keep existing styles & team Mapbox account; accept license |
-| **MapLibre** | Need open-source GL; budget to migrate styles and re-test polygons/zoom |
-
-Evaluate against **PP** acceptance criteria (layer toggles, RTL, PA search, popups) — not another product’s MapLibre pins.
+| Mapbox GL v2+ (bundled) | Keep existing styles & team Mapbox account; accept license |
+| **MapLibre (chosen)** | Open-source GL; no licensing dependency; budget to migrate styles and re-test polygons/zoom |
 
 ---
 
@@ -200,7 +226,7 @@ PP uses **Comfortable Mexican Sofa** + ERB, not a single JSON blob that drives a
 
 ### Pattern C — CMS fragments → Vue props
 
-Example: `cms/_child_dropdown.html.erb` builds options from fragments → `<select-with-content :options="...">`.
+Example (historical — `cms/_child_dropdown.html.erb` was deleted as dead code, never wired into a live CMS page): built options from fragments → `<select-with-content :options="...">`.
 
 **Target:** `frontend_mount` + JSON props; component in `layout.ts` or page entrypoint.
 
@@ -236,7 +262,6 @@ Not a global loop over all CMS widget types.
 |---------------|------------|---------|
 | `layouts/cms/_resources` | `listing-page.ts` | Vue only; CMS in ERB hero |
 | `partials/thematic_and_data_area/_tabs` (shared) | `data-wdpca.ts` / `thematic-effectiveness.ts` | B — page SFC |
-| `partials/tabs/_tabs-equity` | `equity-tabs.ts` | B — CMS as `bodyHtml` props |
 | `data/gdpame/index` | `pame.ts` | B/C — inventory in phase 1 |
 | Country/region stats | `stats-country.ts` etc. | CMS copy in ERB; charts in Vue |
 
@@ -247,7 +272,6 @@ Not a global loop over all CMS widget types.
 | `template-thematic-area-database` (+ `page-database-areas`, `page-pame`) | `tab-title-*`, `tab-content-*` (wysiwyg), hero fields | Controllers `data/wdpca`, `data/gdpame` build tab array via `thematic_and_data_area_tabs` → mount **one** SFC; wysiwyg → `bodyHtml` |
 | `template-thematic-area-basic` | `summary`, `image`, `content` (wysiwyg) | ERB partial only — **pattern A** |
 | `template-resource` | `published_date`, `content`, resource file/link fields | ERB partial only — **pattern A** |
-| equity (`layouts/cms/_equity`, marked "to be removed") | `tab-title-*`, `tab-content-*` | **pattern B** via `tabs-equity`; `select-equity` chart currently commented out (#NC 14 May 2025) |
 | `page-resources` | listing filters via categories | `listing-page` mount; CMS for hero |
 
 `{{ cms:partial layouts/cms/... }}` in layout seed → `app/views/layouts/cms/_*.html.erb`. Those partials remain Rails; add `frontend_mount` only where Vue is needed.
@@ -296,4 +320,4 @@ Or Vitest tests with mocked DOM for composables. Do **not** require cloning othe
 - [ ] Entrypoint list matches [01](./01-discovery-and-inventory.md) inventory.
 - [ ] Map and chart choices recorded with PP-specific acceptance tests.
 - [ ] Every CMS+Vue page has pattern **A/B/C** and no mount-all-widgets design.
-- [ ] Thematic/equity tabs work without ERB inside Vue slots.
+- [x] ~~Thematic/equity tabs work without ERB inside Vue slots.~~ Moot — equity layout/tabs were dead code, deleted Jul 2026.

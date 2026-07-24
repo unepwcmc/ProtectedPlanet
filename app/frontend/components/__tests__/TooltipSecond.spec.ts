@@ -1,0 +1,81 @@
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import TooltipSecond from '@/components/Tooltip/Second.vue'
+
+describe('TooltipSecond', () => {
+  it('renders the trigger, header and content slots', () => {
+    const wrapper = mount(TooltipSecond, {
+      slots: {
+        trigger: 'Trigger',
+        header: '<span>Header</span>',
+        content: '<p>Content</p>'
+      }
+    })
+
+    expect(wrapper.find('.ct-tooltip-second__trigger').text()).toBe('Trigger')
+    expect(wrapper.find('.ct-tooltip-second__header').html()).toContain('Header')
+    expect(wrapper.find('.ct-tooltip-second__target').html()).toContain('Content')
+  })
+
+  it('toggles on mouseenter/mouseleave when onHover is true (default)', async () => {
+    const wrapper = mount(TooltipSecond)
+
+    expect(wrapper.classes()).not.toContain('ct-tooltip-second--active')
+
+    await wrapper.find('.ct-tooltip-second__trigger').trigger('mouseenter')
+    expect(wrapper.classes()).toContain('ct-tooltip-second--active')
+
+    await wrapper.find('.ct-tooltip-second__trigger').trigger('mouseleave')
+    expect(wrapper.classes()).not.toContain('ct-tooltip-second--active')
+  })
+
+  it('toggles on click and closes via the close button when onHover is false', async () => {
+    const wrapper = mount(TooltipSecond, { props: { onHover: false } })
+
+    expect(wrapper.find('.ct-tooltip-second__target').attributes('style')).toContain('display: none')
+
+    await wrapper.find('.ct-tooltip-second__trigger').trigger('click')
+    expect(wrapper.classes()).toContain('ct-tooltip-second--active')
+    expect(wrapper.find('.ct-tooltip-second__target').attributes('style')).not.toContain('display: none')
+
+    await wrapper.find('.ct-tooltip-second__close').trigger('click')
+    expect(wrapper.classes()).not.toContain('ct-tooltip-second--active')
+    expect(wrapper.find('.ct-tooltip-second__target').attributes('style')).toContain('display: none')
+  })
+
+  it('closes when clicking outside the tooltip', async () => {
+    const wrapper = mount(TooltipSecond, {
+      props: { onHover: false },
+      attachTo: document.body
+    })
+
+    await wrapper.find('.ct-tooltip-second__trigger').trigger('click')
+    expect(wrapper.classes()).toContain('ct-tooltip-second--active')
+
+    // vueuse's onClickOutside briefly guards against double-firing for the same
+    // click sequence (touch+click), so a synchronous second click right after the
+    // first is ignored — let a macrotask pass first, same as a real user would.
+    await new Promise(resolve => setTimeout(resolve, 0))
+
+    document.body.click()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.classes()).not.toContain('ct-tooltip-second--active')
+
+    wrapper.unmount()
+  })
+
+  it('closes on Escape keypress', async () => {
+    const wrapper = mount(TooltipSecond, {
+      props: { onHover: false },
+      attachTo: document.body
+    })
+
+    await wrapper.find('.ct-tooltip-second__trigger').trigger('click')
+    expect(wrapper.classes()).toContain('ct-tooltip-second--active')
+
+    await wrapper.find('.ct-tooltip-second').trigger('keydown', { key: 'Escape' })
+    expect(wrapper.classes()).not.toContain('ct-tooltip-second--active')
+
+    wrapper.unmount()
+  })
+})

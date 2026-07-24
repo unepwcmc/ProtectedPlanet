@@ -15,6 +15,25 @@ downloads, map layers and the filters that have been applied to the PAME table.
 Props for these SFCs are (against convention) piped in directly into the components
 from the backend in the various ERB view files.
 
+### Frontend migration (Vite / Vue 3 "islands")
+
+The frontend is being migrated incrementally, wave by wave, off Webpacker/Vue 2
+onto Vite/Vue 3. New components live in `app/frontend/components` and are mounted
+onto the page as standalone "islands" via the `frontend_mount` view helper
+(`app/helpers/frontend_helper.rb`) and the mounter registry in
+`app/frontend/lib/islands.ts`. Webpacker and Vite share no module graph, so a
+migrated island can only talk to remaining legacy Vue 2 code via `window` globals.
+
+State for new islands is managed with Pinia (`app/frontend/stores`), replacing
+Vuex module-by-module as each area is migrated.
+
+**Do not add `axios` to new Vue 3 code.** All new islands must use the
+`fetch`-based helpers in `app/frontend/lib/http.ts` (`getJson`/`postJson`,
+which handle the CSRF header for you) instead. `axios` remains a dependency
+only for the legacy Vue 2 components that haven't been migrated yet
+(`app/javascript/components/**`) — once the last of those is ported, the
+`axios` package can be removed from `package.json` entirely.
+
 ### Testing
 
 The application is built test-first, using TDD, but only on the backend. New features are 

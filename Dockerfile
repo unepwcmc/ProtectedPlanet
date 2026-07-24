@@ -118,7 +118,12 @@ RUN apt-get update && \
 # RUN cp ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.a ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.so ./FileGDB_API-RHEL7-64gcc83/lib/libFileGDBAPI.so /usr/local/lib  \
 #     && cp -a ./FileGDB_API-RHEL7-64gcc83/include/. /usr/local/include
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN npm install -g yarn
+
+# Yarn via Corepack (bundled with Node 24) instead of `npm install -g yarn`,
+# which only gets classic Yarn 1. Version is pinned to match package.json's
+# "packageManager" field.
+RUN corepack enable && \
+    corepack prepare yarn@4.17.1 --activate
 
 RUN mkdir /ProtectedPlanet
 WORKDIR /ProtectedPlanet

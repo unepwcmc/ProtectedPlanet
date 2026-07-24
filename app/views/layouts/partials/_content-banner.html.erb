@@ -7,7 +7,6 @@
   <div class="content-banner__container<%= ' container' unless local_assigns[:contained] %> <%= page_type_class_name %>__container">
     <div class="content-banner__content <%= page_type_class_name %>__content">
       <h2 class="content-banner__title"><%= title %></h2>
-
       <% if local_assigns.has_key? :summary %>
         <p class="content-banner__intro"><%= summary %></p>
       <% end %>
@@ -22,15 +21,18 @@
     <% if local_assigns[:stats_items].present? %>
       <div class="content-banner__stats <%= page_type_class_name %>__stats">
         <div class="content-banner__stats-content bg--grey-black content-banner-stats <%= page_type_class_name %>__stats-content">
-          <% stats_items.each do |stat_item| %>
+          <% stats_items.each_with_index do |stat_item, index| %>
             <div class="content-banner__stat-item <%= page_type_class_name %>__stat-item">
               <% small_number = stat_item[:small_number] == true %>
               <div class="<%= page_type_class_name + '__stat-number' %> <%= small_number ? 'content-banner__stat-number-small' : 'content-banner__stat-number' %>">
-                <counter
-                  :total="<%= stat_item[:total] %>"
-                  trigger="content-banner-stats"
-                  :decimal="<%= stat_item[:decimal] || 0 %>"
-                ></counter><%= stat_item[:suffix].to_s.html_safe %>
+                <%= frontend_mount "Counter",
+                      tag: :span,
+                      key: index,
+                      props: {
+                        total: stat_item[:total],
+                        trigger: "content-banner-stats",
+                        decimal: stat_item[:decimal] || 0
+                      } %><%= stat_item[:suffix].to_s.html_safe %>
               </div>
               <span class="content-banner__stat-text"><%= stat_item[:text] %></span>
             </div>

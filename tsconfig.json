@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/frontend/*"],
+      // Vite/vitest alias `vue` to the Vue 3 build (npm alias `vue3`) so Vue-2-only
+      // island files can coexist with Webpacker. Mirror that here so type-checking
+      // sees Vue 3 types, matching what actually runs. See vite.config.mts.
+      "vue": ["node_modules/vue3"]
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["app/frontend/**/*.ts", "app/frontend/**/*.vue"]
+}

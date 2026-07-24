@@ -61,7 +61,7 @@ Follow [vite_rails](https://vite-ruby.netlify.app/) current docs — not the 5.2
 
 ### npm + Vite
 
-- Bump to `vite` 5.x, `vite-plugin-ruby` 5.x, `@vitejs/plugin-vue`, `vue@3` — pin after `bundle exec vite install` on upgrade branch.
+- Bump to `vite` 5.x, **`vite-plugin-rails`** (not `vite-plugin-ruby`; confirmed — see `vite.config.mts`), `@vitejs/plugin-vue`, `vue@3` — pin after `bundle exec vite install` on upgrade branch.
 - `vite.config.ts`: `rails()` + `vue()`; `@` → `app/frontend`; Vue **runtime-only** in production ([14](./14-architecture-and-design.md)).
 - Replace `vite.config.js` (CJS) with TS config when Node 20 is in Docker.
 

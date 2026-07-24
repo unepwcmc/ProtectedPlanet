@@ -55,7 +55,7 @@ Footer: `FOOTER_LINKS_PRIMARY = [resources, wdpca]`, `FOOTER_LINKS_SECONDARY = [
 | `marine-protected-areas` | `/thematic-areas/marine-protected-areas` | `thematic/marine#index` | `chart-row-pa`, `am-chart-multiline` (via `_chart-coverage-growth`), `v-map` (`_main`), `flickity`, `counter` — **no tabs** |
 | `protected-and-conserved-area-effectiveness` | `/thematic-areas/protected-and-conserved-area-effectiveness` | `thematic/effectiveness#index` | `tabs`; **tab 2** = Green List (`chart-row-pa` + `v-map` via `_green_list_tab`) |
 | `oecms` | `/thematic-areas/oecms` | Pure CMS (comfy catch-all) — no controller | **No** (static) |
-| `equity` | `/thematic-areas/equity` | CMS layout `layouts/cms/_equity` (marked "TO be removed") | `tabs` (via `partials/tabs/_tabs-equity`). `select-equity` is **commented out** (disabled 14 May 2025) → effectively dead |
+| `equity` | — | **Removed Jul 2026** — `layouts/cms/_equity` and `partials/tabs/_tabs-equity.html.erb` were dead code (no CMS layout used them) and have been deleted along with `EquityHelper` |
 | `connectivity-conservation` | CMS content | Pure CMS | **No** (static) |
 | `indigenous-and-community-conserved-areas` | CMS content | Pure CMS | **No** (static) |
 | `territories-governed-by-indigenous-peoples-and-local-communities` | CMS content | Pure CMS | **No** (static) |
@@ -70,7 +70,7 @@ All tabbed thematic/data pages use **one** reusable pattern, not per-page tab co
 - `partials/thematic_and_data_area/_tabs.html.erb` → `<tabs>` + `<tab-target>` with `slot-scope`.
 - Tab list built by `ThematicAndDataAreaHelper#thematic_and_data_area_tabs` from CMS fragments `tab-title-N` / `tab-content-N` (max 5).
 - Per-tab "extras" (search, map, filtered-table, green list) injected via a `tab_extras` array of `{ tab_id, partial, locals, replace_content }`.
-- Equity uses a **separate** `partials/tabs/_tabs-equity.html.erb` (same `<tabs>`/`<tab-target>` components, hardcoded 2 tabs).
+- `partials/tabs/_tabs-equity.html.erb` (the equity-specific variant) was dead code and has been deleted — see the `equity` row above.
 
 This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.md)): the `slot-scope` + `<%= cms_fragment_render %>` inside `<tab-target>` must become a Vue component tree fed by props.
 
@@ -101,8 +101,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 | `thematic-marine.ts` | `/thematic-areas/marine-protected-areas` | chart-row-pa, am-chart-multiline, map |
 | `listing-page.ts` | News + resources index | listing-page |
 
-*(`equity` currently has no live interactive component — `select-equity` is commented out — so it needs only `layout.ts` until NC re-enables the chart.)*
-
 **Not separate entrypoints:** `oecms`, `about`, `legal`, `monthly-release-news`, connectivity, ICCA/indigenous, `green-list` CMS seed, equity study sites, and ~100+ CMS resource/news/article URLs (all static HTML).
 
 ---
@@ -111,7 +109,7 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 
 ### Registered in `vue.js` (46 imports) — used from ERB as root tags
 
-`nav-burger`, `search-site-topbar`, `search-site`, `search-areas`, `search-areas-home`, `tabs`, `tab-target`, `v-map`, `v-map-header`, `v-map-filters`, `v-map-disclaimer`, `v-map-pa-search`, `region-country-pages`, `attributes-*` (5), `download`, `download-modal`, `listing-page`, `listing-page-card-news`, `listing-page-card-resources`, `filtered-table`, `pame-modal`, `select-with-content`, `chart-row-pa`, `am-chart-multiline` (via partial), `counter`, `flickity`, `ga-link`, `banner-banner`, `sticky-bar`, `tooltip`, `v-select-searchable`.
+`nav-burger`, `search-site-topbar`, `search-site`, `search-areas`, `search-areas-home`, `tabs`, `tab-target`, `v-map`, `v-map-header`, `v-map-filters`, `v-map-disclaimer`, `v-map-pa-search`, `region-country-pages`, `attributes-*` (5), `download`, `download-modal`, `listing-page`, `listing-page-card-news`, `listing-page-card-resources`, `filtered-table`, `pame-modal`, `select-with-content`, `chart-row-pa`, `am-chart-multiline` (via partial), `counter`, `flickity`, `ga-link`, `banner-banner`, `sticky-bar`, `tooltip`, `tooltip-second` (country stats overview), `v-select-searchable`.
 
 ### Registered but **child-import only** — drop global registration, keep as local import
 
@@ -119,7 +117,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 |-----------|-------------|-------|
 | `ChartRowStacked` | `StatsDesignations.vue` | Live (country/region stats) |
 | `AmChartPie` | `StatsGovernance.vue`, `StatsIucnCategories.vue` | Live (country/region stats) |
-| `AmChartLine` | `StatsGrowth.vue` | **Disabled** — `StatsGrowth` is commented out in `RegionCountryPages.vue` (ticket #265) |
 
 ### Globally registered but **unused** (remove on upgrade — do not migrate)
 
@@ -130,8 +127,8 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 | `ChartBar`, `ChartBarSimple` | No template usage |
 | `ChartSunburst`, `ChartTreemapInteractive`, `ChartRectangles` | No imports from live components |
 | `ChartDial` | **Only imported in `vue.js`** — no ERB tag, no child import → **dead** |
-| `SelectEquity` | Only usage (`_tabs-equity`) is **commented out** → effectively dead until re-enabled |
-| `TooltipSecond` | Verify — no live root tag found |
+| `SelectEquity` (+ `SelectDropdown`) | **Removed** — only usage (`_tabs-equity`) was commented out (NC decision 14 May 2025); `SelectDropdown` was its only child |
+| `StatsGrowth` (+ `AmChartLine`) | **Removed** — only usage (growth chart, ticket #265) was HTML-commented in `RegionCountryPages.vue`; `AmChartLine` was its only child |
 
 ### Orphan `.vue` files (no import found — **~10**, delete or archive)
 
@@ -146,8 +143,6 @@ This is a **Pattern B** redesign target (see [14](./14-architecture-and-design.m
 
 | Item | Location |
 |------|----------|
-| `stats-growth` / growth chart (`AmChartLine`) | `RegionCountryPages.vue` (ticket #265) |
-| `select-equity` | `partials/tabs/_tabs-equity.html.erb` (NC decision 14 May 2025) |
 | Region marine stats / iucn / governance / designations | commented in `region/show.html.erb` |
 
 ---
@@ -163,7 +158,7 @@ Charts actually rendered on a live page — **4 families**:
 | `ChartRowStacked` | Country/region stats (`StatsDesignations`) | Custom |
 | `AmChartPie` | Country/region stats (`StatsGovernance`, `StatsIucnCategories`) | amCharts 4 |
 
-`AmChartLine` (growth) is present but disabled (#265). `ChartDial`, `ChartSunburst`, `ChartTreemap*`, `ChartBar*`, `ChartRectangles` are **dead**.
+`AmChartLine` (growth, #265) has been removed. `ChartDial`, `ChartSunburst`, `ChartTreemap*`, `ChartBar*`, `ChartRectangles` are **dead**.
 
 ---
 
@@ -220,7 +215,7 @@ Phase **4** estimate includes swapping these packages and retesting affected UI 
 | 3 Islands | **~12 entrypoints**, not 40+ page types |
 | 4 Vue 3 | **~110** SFCs; drop orphan/dead first |
 | 6 Charts | **4 live families**; no dial/sunburst/treemap/bar |
-| 7 Search/CMS | **Listings + wdpca/gdpame/marine/effectiveness + equity tabs**; not 127 CMS pages |
+| 7 Search/CMS | **Listings + wdpca/gdpame/marine/effectiveness**; not 127 CMS pages (equity tabs removed as dead code) |
 
 ---
 
@@ -228,5 +223,5 @@ Phase **4** estimate includes swapping these packages and retesting affected UI 
 
 - [ ] Confirm `monthly-release-news` layout (Vue or static).
 - [ ] Production Comfy check: no `<chart-bar>` / dead tags in CMS HTML.
-- [ ] Confirm with NC whether `select-equity` / `stats-growth` (#265) will be re-enabled — affects equity + stats scope.
-- [ ] PR to remove dead globals (`ChartDial`, carousel, sticky-nav, chart-bar/sunburst/treemap/rectangles) + orphan SFCs (optional prep on Rails 5.2).
+- [x] `stats-growth` (#265) is resolved: removed for good, along with `select-equity` (see below).
+- [x] PR to remove dead globals (`ChartDial`, carousel, sticky-nav, chart-bar/sunburst/treemap/rectangles, `select-equity`/`select-dropdown`, `stats-growth`/`AmChartLine`) + orphan SFCs + the orphaned `_select-equity.scss`/`_am-chart-line.scss`/`_card-stats-growth-chart.scss` — done Jul 2026 (`701f6f31` + follow-up cleanup).

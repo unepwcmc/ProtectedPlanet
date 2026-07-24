@@ -1,10 +1,6 @@
 class HomePresenter
   include ActionView::Helpers::NumberHelper
 
-  def pas_coverage_percentage
-    GlobalStatistic.global_oecms_pas_coverage_percentage
-  end
-
   def terrestrial_pas
     @terrestrial_pas ||= number_with_delimiter(GlobalStatistic.total_terrestrial_protected_areas)
   end

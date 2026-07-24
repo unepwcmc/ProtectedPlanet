@@ -37,8 +37,7 @@ yarn-debug.log*
 tmp/cache/webpacker
 .byebug_history
 
-.vscode/
-
 vendor/bundle
 /public/manifests
 /chrome
+.yarn/install-state.gz
