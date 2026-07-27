@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class Data::GdpameControllerTest < ActionController::TestCase
-  tests Data::GdpameController
+class DataPages::GdpameControllerTest < ActionController::TestCase
+  tests DataPages::GdpameController
 
   def setup
     seed_cms

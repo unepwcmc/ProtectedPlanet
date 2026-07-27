@@ -1,4 +1,4 @@
-class Data::WdpcaController < ApplicationController
+class DataPages::WdpcaController < ApplicationController
   include MapHelper
 
   def index
