@@ -3,7 +3,7 @@
     <% cards.each do |card| %>
       <div class="cards__card">
         <i class="card__pin icon--pin-<%= card[:theme] %>">
-          <%= render '/partials/svgs/pin.svg' %>
+          <%= render 'partials/svgs/pin' %>
         </i>
         <span class="card__number-large"><%= card[:percentage] %>%</span>
         <% card[:totals].each do |total| %>
