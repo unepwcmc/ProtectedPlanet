@@ -18,10 +18,25 @@ Cannot be closed locally; they need a deploy target and a decision. Track agains
 - [ ] **Staging deploy on Rails 6.1 confirmed.** Blocked: staging is Ubuntu 18.04 / Ruby 2.6.3 (no 2.7) — see [11](./11-deploy-and-devops.md) and the server audit.
 - [ ] **4 EM decisions** (from [00 "Facts still needed"](./00-scope-and-shared-milestones.md)): infra scope + budget; container registry (GHCR vs Docker Hub); WDPA release cadence (switchover window); data-team acceptance criteria for `.gdb` downloads.
 
-## 2. Ruby 2.7 → 3.3 (the NEXT phase — known blockers already surfaced)
-- [ ] **`::Data` namespace collision** — app has `Data::` (`app/controllers/data/`, `test/controllers/data/`); Ruby 3.2 introduced a built-in `Data` class. Rename the app namespace. First task of the phase.
-- [ ] **Keyword-argument hard break** — general 2.7→3 work; the deprecation warnings are the map.
-- [ ] gem-internal kwarg warning from `activerecord-postgis-adapter` (`postgresql_adapter.rb:883`) — may clear when the adapter bumps at Rails 7/8; recheck then.
+## 2. Ruby 2.7 → 3.3 — DONE (Jul 2026, Ruby 3.3.7)
+Suite green on 3.3.7 (648 runs, 0 failures), zeitwerk clean, image builds clean.
+Toolchain: ruby-build compiles 3.3.7 on the buster base (no ruby:3.3 image would
+keep the GDAL/FileGDB source build); `BUNDLE_FORCE_RUBY_PLATFORM=true` so native
+gems compile from source (precompiled x86_64-linux gems target newer glibc than
+buster 2.28). Done: `::Data`→`DataPages` rename; ~11 gem bumps; factory_girl→
+factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeController.
+
+**Stopgaps added for the Ruby-3-on-Rails-6.1 window — REMOVE at Rails 7.0:**
+- [ ] **`psych ~> 3.3` pin** (Gemfile) — Psych 4 (Ruby 3.1+) breaks `database.yml`
+      aliases under Rails 6.1. Rails 7 is Psych-4 aware; drop the pin then.
+- [ ] **Comfy routing kwarg patch** (`config/initializers/comfy_patching.rb`,
+      `ActionDispatch::Routing::Mapper#comfy_route`) — Comfy 2.0.19 is dead and
+      not Ruby-3-native. Delete when swapping to Media Surfer at Rails 7.0.
+      NOTE: this is the ONLY Comfy Ruby-3 break the test suite exercises; admin
+      paths not covered by tests may hit more — smoke-test `/admin` on 3.3.
+- [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation**
+      (`postgresql_adapter.rb:883`) — noisy but harmless on 3.3; removed in
+      Rails 7.0 / pg. Clears when the adapter bumps at Rails 7.
 
 ## 3. Test coverage — deferred deliberately to the phase that touches the code
 Writing these now, then not touching the code for months, risks staleness. Do each
