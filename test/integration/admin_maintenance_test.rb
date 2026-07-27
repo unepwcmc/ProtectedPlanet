@@ -16,7 +16,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
     assert_response(503)
 
     assert_match(/Down for Maintenance/, @response.body)
-    assert File.exists?(File.join(Rails.root, 'tmp', 'maintenance.yml')),
+    assert File.exist?(File.join(Rails.root, 'tmp', 'maintenance.yml')),
       "Expected a maintenance config file to exist when in maintenance mode"
   end
 
@@ -44,7 +44,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_no_match(/Down for Maintenance/, @response.body)
-    refute File.exists?(File.join(Rails.root, 'tmp', 'maintenance.yml')),
+    refute File.exist?(File.join(Rails.root, 'tmp', 'maintenance.yml')),
       "Expected a maintenance config file to not exist when not in
        maintenance mode"
   end

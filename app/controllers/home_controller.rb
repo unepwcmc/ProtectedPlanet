@@ -33,9 +33,10 @@ class HomeController < ApplicationController
 
   def levels
     _levels = home_yml[:pas][:levels]
+    # I18n.t returns frozen translation hashes, so build a new hash rather than
+    # mutating the level in place (raises FrozenError otherwise).
     _levels.map do |level|
-      level[:url] = search_areas_path(geo_type: level[:geo_type])
-      level
+      level.merge(url: search_areas_path(geo_type: level[:geo_type]))
     end
   end
 

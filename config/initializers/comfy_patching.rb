@@ -8,8 +8,22 @@
 # ACCOMMODATE THE NEW LAYOUT AND PAGE CATEGORY MODELS
 # ------------------------------------------------------------- #
 
+# --- Ruby 3 compatibility shim for comfortable_mexican_sofa 2.0.19 (dead gem) ---
+# Ruby 3.0 separates keyword arguments from a trailing positional Hash. Comfy's
+# `comfy_route` forwards its `options` as a positional hash to route helpers that
+# take keyword args (e.g. `comfy_route_cms_admin(path:)`), so drawing routes
+# raises "wrong number of arguments (given 1, expected 0)" on Ruby 3. Splat the
+# options as keywords. Applied at initializer-eval time so it is in place before
+# routes are drawn. REMOVE when we swap to Comfortable Media Surfer at Rails 7.0
+# (it is Ruby-3-native). See upgrade-plan/backend/09-cms-comfy.md.
+class ActionDispatch::Routing::Mapper
+  def comfy_route(identifier, options = {})
+    send("comfy_route_#{identifier}", **options)
+  end
+end
+
 Rails.configuration.to_prepare do
-  Comfy::Cms::Fragment.class_eval do 
+  Comfy::Cms::Fragment.class_eval do
     validates_with UrlValidator, if: -> { identifier == 'resource_link_url' }, fields: [:content]
   end
 

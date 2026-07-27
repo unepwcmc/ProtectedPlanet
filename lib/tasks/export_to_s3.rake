@@ -50,7 +50,7 @@ namespace :comfy do
         f2 = old_key[2..3]
         old_file = File.join(STORAGE, f1, f2, old_key)
 
-        unless File.exists?(old_file)
+        unless File.exist?(old_file)
           puts "SKIP FRAGMENT: File #{old_filename}[#{old_file}] doesn't exist. Skipping..."
           skipped_fragments_count += 1
           unmigrated_files << attachment.record.id
