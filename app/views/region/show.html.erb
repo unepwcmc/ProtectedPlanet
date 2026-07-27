@@ -25,12 +25,11 @@
         } unless @for_pdf %>
     </section>
     <section>
-      <region-country-pages
-        :data="<%= @stats_data.to_json %>"
-        :tabs="<%= @tabs.to_json %>"
-        ga-id="Region page stats"
-      >
-      </region-country-pages>
+      <%= frontend_mount "RegionCountryPages", props: {
+          data: @stats_data,
+          tabs: @tabs,
+          gaId: "Region page stats"
+        } %>
     </section>
     <section class="spacer-small--bottom">
       <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>

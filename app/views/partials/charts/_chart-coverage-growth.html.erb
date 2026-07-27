@@ -2,11 +2,9 @@
   <div class="container--component">
     <h2><%= title %></h2>
     <div><%= content %></div>
-    <div>
-      <am-chart-multiline 
-        :data="<%= chart_data %>"
-        :dots="true"
-      ></am-chart-multiline>
-    </div>
+      <%= frontend_mount "AmChartMultiline", props: {
+            data: chart_data,
+            dots: true
+      } %> 
   </div>
 </section>

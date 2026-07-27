@@ -419,3 +419,268 @@ export interface SearchAreasHomeProps {
   endpointAutocomplete: string
   endpointSearch: string
 }
+
+// Props for `ChartRowPa` — a single labelled bar (coverage % within a total %),
+// mounted directly inside partials/charts/_chart-row-pa.html.erb (marine ocean
+// coverage, Green List tab) with the surrounding title/content/legend left as
+// plain ERB since only the bar itself is dynamic/animated.
+// `coverage`/`percent` are numeric on the Rails side (GlobalStatistic-derived
+// percentages) — unlike the Vue2 original, where every ERB attribute was
+// coerced to a string, `frontend_mount` sends the Ruby value's native JSON
+// type straight through, so both callers here can produce a number.
+export interface ChartRowPaProps {
+  coverage: number | string
+  percent: number | string
+  theme?: string
+}
+
+// One row of `ChartRowStacked` — TabPresenter#designations' `designation_percentages`.
+export interface ChartRowStackedRow {
+  percent: number
+}
+
+export interface ChartRowStackedProps {
+  title?: string
+  theme?: string
+  rows: ChartRowStackedRow[]
+}
+
+// One entry of AmChartPie's `dataset` — CountryPresenter/RegionPresenter's
+// `iucn_categories_chart`/`governance_chart`.
+export interface AmChartPieDatum {
+  id: number | string
+  title: string
+  value: number
+}
+
+export interface AmChartPieProps {
+  dataset: AmChartPieDatum[]
+  doughnut?: boolean
+  spacers?: boolean
+}
+
+// One datapoint of `AmChartMultiline`'s `data.datapoints` — numeric series keys
+// ("1"/"2"/"3") are threaded straight from Thematic::MarineController's CSV
+// parse, `x` is the date axis value.
+export interface AmChartMultilineDatapoint {
+  x: string
+  [seriesIndex: string]: number | string
+}
+
+// Props for `frontend_mount "AmChartMultiline"` — mounted directly inside
+// partials/charts/_chart-coverage-growth.html.erb (marine coverage growth),
+// title/content left as plain ERB around the chart mount.
+export interface AmChartMultilineProps {
+  data: {
+    units: string
+    legend: string[]
+    datapoints: AmChartMultilineDatapoint[]
+  }
+  dots?: boolean
+  chartBackgroundColour?: string
+}
+
+// One item of TabPresenter#coverage (CountryPresenter/RegionPresenter#build_stats
+// / #build_combined_stats) — snake_case straight from Rails, remapped to
+// `StatsCoverageProps` (camelCase) by RegionCountryPages/Index.vue.
+export interface StatsCoverageDatum {
+  national_report_version?: number
+  pame_km2?: string
+  pame_percentage?: number
+  protected_km2: string
+  protected_national_report?: number
+  protected_percentage: number
+  text_coverage: string
+  text_national_report?: string
+  text_pame?: string
+  text_pame_assessments?: string
+  text_protected: string
+  text_total: string
+  title: string
+  total_km2: string
+  type: string
+}
+
+export interface StatsCoverageProps {
+  nationalReportVersion?: number
+  pameKm2?: string
+  pamePercentage?: number
+  protectedKm2: string
+  protectedNationalReport?: number
+  protectedPercentage: number
+  textCoverage: string
+  textNationalReport?: string
+  textPame?: string
+  textPameAssessments?: string
+  textProtected: string
+  textTotal: string
+  title: string
+  totalKm2: string
+  type: string
+}
+
+// TabPresenter#message.
+export interface StatsDocument {
+  name: string
+  url: string
+  type: string
+  button_text: string
+}
+
+export interface StatsMessageProps {
+  documents?: StatsDocument[]
+  link?: string
+  text: string
+}
+
+// Shared link fields CountriesHelper#chart_link merges onto iucn/governance/
+// designation-jurisdiction items — `title` here is a search-page tooltip title
+// ("View the X sites for Y"), not a display label.
+export interface StatsChartLink {
+  link: string
+  title?: string
+}
+
+export interface StatsIucnCategory extends StatsChartLink {
+  iucn_category_name: string
+  count: number
+  percentage: number
+}
+
+// TabPresenter#iucn.
+export interface StatsIucnCategoriesProps {
+  categories: StatsIucnCategory[]
+  chart: AmChartPieDatum[]
+  title: string
+}
+
+// Raw TabPresenter#iucn shape — also carries `country` (unused by the
+// component; TabPresenter builds it for every geo-entity type), picked down
+// to StatsIucnCategoriesProps by RegionCountryPages/Index.vue instead of
+// spread wholesale, so `country` doesn't fall through onto the DOM.
+export interface StatsIucnCategoriesData extends StatsIucnCategoriesProps {
+  country?: string
+}
+
+export interface StatsGovernanceType extends StatsChartLink {
+  governance_name: string
+  count: number
+}
+
+// TabPresenter#governance.
+export interface StatsGovernanceProps {
+  governance: StatsGovernanceType[]
+  chart: AmChartPieDatum[]
+  title: string
+}
+
+// Raw TabPresenter#governance shape — see StatsIucnCategoriesData above for
+// why `country` is picked out rather than spread wholesale.
+export interface StatsGovernanceData extends StatsGovernanceProps {
+  country?: string
+}
+
+// TabPresenter#sources.
+export interface StatsSourceItem {
+  title: string
+  date_updated: string
+  resp_party: string
+}
+
+export interface StatsSourcesProps {
+  count: number
+  sourceUpdated: string
+  sources: StatsSourceItem[]
+  title: string
+}
+
+export interface StatsDesignationJurisdiction extends StatsChartLink {
+  designation_name: string
+  count: number
+}
+
+export interface StatsDesignationItem {
+  title: string
+  total: number
+  has_jurisdiction?: boolean
+  jurisdictions?: StatsDesignationJurisdiction[]
+}
+
+// TabPresenter#designations.
+export interface StatsDesignationsProps {
+  chart: ChartRowStackedRow[]
+  designations: StatsDesignationItem[]
+  title: string
+}
+
+export interface StatsSiteDetail {
+  name: string
+  site_id: number | string
+  thumbnail_link: string
+}
+
+// TabPresenter#sites.
+export interface StatsSitesProps {
+  siteDetails: StatsSiteDetail[]
+  textViewAll: string
+  title: string
+  viewAll: string
+}
+
+// One entry of `frontend_mount "RegionCountryPages"`'s `data` hash — keyed by
+// database id ('wdpa'/'wdpa_oecm'), built by CountryController#build_hash /
+// TabPresenter. `growth` (TabPresenter#growth) is omitted — its only consumer,
+// StatsGrowth/AmChartLine (ticket #265), was removed as dead code.
+export interface RegionCountryPagesDatabase {
+  coverage?: StatsCoverageDatum[]
+  message: StatsMessageProps
+  iucn?: StatsIucnCategoriesData
+  governance?: StatsGovernanceData
+  sources?: StatsSourcesData
+  designations?: StatsDesignationsProps
+  sites?: StatsSitesData
+}
+
+// Raw (snake_case) shapes for the two `RegionCountryPagesDatabase` entries that
+// need remapping to camelCase component props (sources → StatsSourcesProps,
+// sites → StatsSitesProps) inside RegionCountryPages/Index.vue.
+export interface StatsSourcesData {
+  count: number
+  source_updated: string
+  sources: StatsSourceItem[]
+  title: string
+}
+
+export interface StatsSitesData {
+  site_details: StatsSiteDetail[]
+  text_view_all: string
+  title: string
+  view_all: string
+}
+
+export interface RegionCountryPagesTab {
+  id: string
+  title: string
+}
+
+// Props for `frontend_mount "RegionCountryPages"` (country#show / region#show).
+export interface RegionCountryPagesProps {
+  data: Record<string, RegionCountryPagesDatabase>
+  gaId?: string
+  // Rendered HTML of partials/stats/_stats-related-countries.html.erb (country
+  // page only) — replaces the legacy `related_countries` Vue2 slot, since
+  // `frontend_mount` has no slot-content equivalent. Trusted server-rendered
+  // markup, not user input.
+  relatedCountriesHtml?: string
+  tabs: RegionCountryPagesTab[]
+}
+
+// Props for `StatsTooltipInfo` — the WDPA/OECM info tooltip in
+// partials/stats/_stats-overview-country.html.erb, replacing the legacy
+// `<tooltip-second>` + ERB-in-slot markup (see Pattern B note in
+// 14-architecture-and-design.md) with a single props-driven island.
+export interface StatsTooltipInfoProps {
+  description: string
+  designationsLabel: string
+  designationsCount: number
+}

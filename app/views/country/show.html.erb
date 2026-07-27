@@ -35,20 +35,15 @@
         } %>
     </section>
     <section>
-      <region-country-pages
-        :data="<%= @stats_data.to_json %>"
-        :tabs="<%= @tabs.to_json %>"
-        ga-id="Country page stats"
-      >
-        <template slot="related_countries">
-          <% if has_related_countries? %>
-            <%= render partial: "partials/stats/stats-related-countries", locals: { 
-              country_children: @country.children.any? ? @country.children : nil,
-              country_parent: @country.parent.present? ? @country.parent : nil
-            } %>
-          <% end %>
-        </template>
-      </region-country-pages>
+      <%= frontend_mount "RegionCountryPages", props: {
+          data: @stats_data,
+          tabs: @tabs,
+          gaId: "Country page stats",
+          relatedCountriesHtml: has_related_countries? ? render(partial: "partials/stats/stats-related-countries", locals: {
+            country_children: @country.children.any? ? @country.children : nil,
+            country_parent: @country.parent.present? ? @country.parent : nil
+          }) : nil
+        } %>
     </section>
     <section class="spacer-small--bottom">
       <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>

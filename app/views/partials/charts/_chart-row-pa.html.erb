@@ -4,17 +4,17 @@
     <div><%= content %></div>
     <div>
 
-      <% charts.each do |chart| %>
+      <% charts.each_with_index do |chart, index| %>
         <% if chart[:title] %>
           <h3><%= chart[:title] %></h3>
         <% end %>
-        
-        <chart-row-pa 
-          coverage="<%= chart[:coverage] %>" 
-          percent="<%= chart[:total] %>" 
-          theme="<%= chart[:theme] %>"
-        ></chart-row-pa>
-      
+
+        <%= frontend_mount "ChartRowPa", key: index, props: {
+              coverage: chart[:coverage],
+              percent: chart[:total],
+              theme: chart[:theme]
+            } %>
+
         <% if chart[:legend] %>
           <ul class="chart--legend--horizontal">
             <% chart[:legend].each do |key| %>

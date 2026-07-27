@@ -63,7 +63,7 @@ class Thematic::MarineController < ApplicationController
           datapoints: marine_growth_datapoints_from_csv,
           units: "km2",
           legend: ["National", "ABNJ", "Global"]
-        }.to_json
+        }
       }
   end
 
