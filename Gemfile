@@ -3,6 +3,11 @@ source 'https://rubygems.org'
 gem 'rails', '6.1.7.10'
 gem 'webpacker', '~> 4.0.2'
 
+# Ruby 3.1+ bundles Psych 4, whose load defaults to safe-load (aliases off),
+# which breaks database.yml's `<<: *default` under Rails 6.1. Pin Psych 3 until
+# Rails 7, which is Psych-4 aware. (libyaml-dev is present in the image.)
+gem 'psych', '~> 3.3'
+
 gem 'bourbon'
 gem "neat"
 
@@ -66,7 +71,8 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl_rails', '~> 4.4.1'
+  gem 'factory_bot_rails', '~> 6.2' # was factory_girl_rails 4.4 (File.exists?, removed in Ruby 3.2)
+  gem 'webrick' # removed from Ruby 3's default gems; used by the S3 upload test
   gem 'mocha', '~> 2.7'
   gem 'webmock', '~> 3.23', require: false
   gem 'timecop', '~> 0.7.1'
@@ -107,7 +113,7 @@ gem 'whenever', require: false
 gem 'appsignal', '~> 3.3.11'
 
 gem 'system'
-gem 'dotenv', '~> 0.11.1'
+gem 'dotenv', '~> 2.8' # 0.11 used File.exists?, removed in Ruby 3.2
 gem 'dotenv-deployment'
 
 gem 'turnout', '~> 2.5.0'
@@ -118,10 +124,10 @@ gem 'comfortable_mexican_sofa', '~> 2.0.0'
 # Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
 # rails-i18n 5.1.3, which caps railties < 6. Force the Rails 6 line.
 gem 'rails-i18n', '~> 6.0'
-# Use this in local docker file, comment out the one with v1.10.4
-# gem 'nokogiri'
-gem 'nokogiri', '~> 1.10.4'
-gem 'loofah', '~> 2.19.1' # 2.21+ needs Nokogiri::HTML4 (not in nokogiri 1.10)
+# nokogiri 1.10 does not build on Ruby 3.x; 1.16+ supports Ruby 3.3. Bumping it
+# also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
+gem 'nokogiri', '~> 1.16'
+gem 'loofah', '~> 2.22'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
