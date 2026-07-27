@@ -1,9 +1,18 @@
-# require "codeclimate-test-reporter"
-# CodeClimate::TestReporter.start
-# require 'simplecov'
-# require 'simplecov-console'
-# SimpleCov.formatter = SimpleCov::Formatter::Console
-# SimpleCov.start
+# Coverage — opt-in via COVERAGE=1 so local `rake test` stays fast; CI sets it.
+# Must start before any application code is required. The floor is a ratchet:
+# CI fails if line coverage drops below it. Raise it as coverage improves;
+# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026).
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start 'rails' do
+    add_filter '/test/'
+    add_group 'Serializers', 'app/serializers'
+    add_group 'Presenters', 'app/presenters'
+    add_group 'Workers', 'app/workers'
+    add_group 'lib/modules', 'lib/modules'
+    minimum_coverage 54
+  end
+end
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)

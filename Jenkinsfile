@@ -147,8 +147,13 @@ def prepareDatabase() {
 }
 
 def rakeTest() {
-    COMMAND = "rake test"
-    sh "docker-compose --project-name=${JOB_NAME} run -e RAILS_ENV=test web ${COMMAND}"
+    // `rails test` (not `rake test`) so test_helper -- and therefore SimpleCov --
+    // loads before the app; SimpleCov must start before app code is required or it
+    // records almost nothing. Both run the same set here (no test/acceptance).
+    // COVERAGE=1 turns on SimpleCov (see test/test_helper.rb); the run fails if
+    // line coverage drops below the floor set there.
+    COMMAND = "bundle exec rails test"
+    sh "docker-compose --project-name=${JOB_NAME} run -e RAILS_ENV=test -e COVERAGE=1 web ${COMMAND}"
 }
 
 def deploy() {
