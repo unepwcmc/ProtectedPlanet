@@ -29,7 +29,7 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
       username: 'username',
       password: 'password'
     }
-    ActiveRecord::Base.stubs(:connection_config).returns(db_config)
+    ActiveRecord::Base.stubs(:connection_db_config).returns(stub(configuration_hash: db_config))
 
     CountriesGeometryImporter.any_instance.expects(:system).
       with("PGPASSWORD=password pg_restore -c -i -U username -h localhost -d database -v #{path}").

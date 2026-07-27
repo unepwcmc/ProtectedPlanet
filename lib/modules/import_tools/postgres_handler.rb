@@ -4,11 +4,12 @@ class ImportTools::PostgresHandler
   attr_reader :current_conn_values
 
   def initialize
-    self.current_conn_values = ActiveRecord::Base.configurations[Rails.env]
+    self.current_conn_values = ActiveRecord::Base.configurations
+      .configs_for(env_name: Rails.env, name: 'primary').configuration_hash
   end
 
   def connect_to db_name
-    pg_conn_values = current_conn_values.merge('database' => db_name)
+    pg_conn_values = current_conn_values.merge(database: db_name)
     ActiveRecord::Base.establish_connection pg_conn_values
     ActiveRecord::Base.connection
   end

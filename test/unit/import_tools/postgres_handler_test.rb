@@ -3,8 +3,12 @@ require 'rake' # stubbed below, before ImportTools::PostgresHandler (which requi
 
 class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
   test '#new sets the current_conn_values properly' do
-    db_hash = {'database' => 'test_db'}
-    ActiveRecord::Base.configurations.expects(:[]).with(Rails.env).returns(db_hash)
+    # Rails 6.1: configurations[env] is deprecated; configs_for(...) returns a
+    # DatabaseConfig whose configuration_hash is a symbol-keyed hash.
+    db_hash = { database: 'test_db' }
+    db_config = stub(configuration_hash: db_hash)
+    ActiveRecord::Base.configurations.expects(:configs_for)
+      .with(env_name: Rails.env, name: 'primary').returns(db_config)
 
     pg_handler = ImportTools::PostgresHandler.new
 

@@ -40,7 +40,7 @@ class Ogr::Postgres
   end
 
   def self.db_config
-    ActiveRecord::Base.connection_config
+    ActiveRecord::Base.connection_db_config.configuration_hash
   end
 
   def self.ogr_command(template, context)

@@ -46,7 +46,7 @@ class CountriesGeometryImporter
   end
 
   def restore_to_temporary_table
-    db_config = ActiveRecord::Base.connection_config
+    db_config = ActiveRecord::Base.connection_db_config.configuration_hash
     system restore_command(binding)
   end
 
