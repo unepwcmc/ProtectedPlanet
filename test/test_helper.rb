@@ -25,6 +25,12 @@ require 'webmock/minitest'
 
 require 'database_cleaner'
 
+# factory_girl was renamed factory_bot (and 4.x doesn't run on Ruby 3.2+).
+# Alias the old constant so the ~400 existing FactoryGirl.* call sites keep
+# working without a mass rename. (Factory *definitions* were converted from
+# static to block attributes, as factory_bot 5+ requires.)
+FactoryGirl = FactoryBot
+
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
 Mocha.configure do |c|
