@@ -22,11 +22,11 @@
           v-bind="result"
         />
       </div>
-      <ListingPaginationInfinityScroll
+      <FiltersPaginationInfinityScroll
         :resetKey
         :total="results.total"
         :totalPages="results.totalPages"
-        @requestMore="emit('requestMore', $event)"
+        @requestMore="onRequestMore"
       />
     </div>
     <p
@@ -41,7 +41,7 @@
 import { computed } from 'vue'
 import ListingPageCardNewsCard from '@/components/ListingPageCard/News/Card.vue'
 import ListingPageCardResourcesCard from '@/components/ListingPageCard/Resources/Card.vue'
-import ListingPaginationInfinityScroll from '@/components/Listing/PaginationInfinityScroll.vue'
+import FiltersPaginationInfinityScroll from '@/components/Filters/PaginationInfinityScroll.vue'
 import type { ListingResults } from '@/types/backend'
 
 const props = defineProps<{
@@ -54,4 +54,6 @@ const props = defineProps<{
 const emit = defineEmits<{ requestMore: [page: number] }>()
 
 const hasResults = computed(() => props.results.total > 0)
+
+const onRequestMore = (page: number) => emit('requestMore', page)
 </script>

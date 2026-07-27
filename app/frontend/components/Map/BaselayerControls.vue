@@ -5,7 +5,7 @@
       :key="`baselayer-toggle-${layer.id}`"
       class="v-map-baselayer-controls__control"
       :class="{ selected: layer.id === mapStore.selectedBaselayer.id }"
-      @click="mapStore.updateSelectedBaselayer(layer)"
+      @click="selectBaselayer(layer)"
     >
       <span v-text="layer.name" />
     </button>
@@ -26,4 +26,6 @@ const mapStore = useMapStore()
 onMounted(() => {
   mapStore.updateSelectedBaselayer(props.baselayers[0])
 })
+
+const selectBaselayer = (layer: MapBaselayer) => mapStore.updateSelectedBaselayer(layer)
 </script>

@@ -8,7 +8,7 @@
       v-if="closeable"
       class="v-map-header__close"
       :class="{ closed: !filtersShown }"
-      @click="emit('toggle')"
+      @click="toggle"
     />
   </div>
 </template>
@@ -25,4 +25,6 @@ withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ toggle: [] }>()
+
+const toggle = () => emit('toggle')
 </script>

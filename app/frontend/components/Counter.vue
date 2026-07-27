@@ -1,6 +1,6 @@
 <template>
   <span
-    v-if="props.total >= 0"
+    v-if="total >= 0"
     v-text="styledNumber"
   />
 </template>

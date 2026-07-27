@@ -2,7 +2,7 @@
   <div class="listing">
     <div class="listing__bar">
       <div class="listing__bar-content">
-        <ListingFilterTrigger
+        <FiltersTrigger
           class="listing__filters-trigger"
           :text="textFilterTrigger"
           @toggle:filterPane="toggleFilterPane"
@@ -44,7 +44,7 @@
 import { computed, ref } from 'vue'
 import { getJson } from '@/lib/http'
 import { QUERY_STRING_FILTER_IDS } from '@/constants/listing'
-import ListingFilterTrigger from '@/components/Listing/FilterTrigger.vue'
+import FiltersTrigger from '@/components/Filters/Trigger.vue'
 import ListingFiltersPanel from '@/components/Listing/FiltersPanel.vue'
 import ListingList from '@/components/Listing/List.vue'
 import type { ListingProps, ListingResults } from '@/types/backend'

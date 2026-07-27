@@ -1,54 +1,54 @@
 <template>
   <div
     class="card"
-    :class="{ 'card--link': props.url }"
+    :class="{ 'card--link': url }"
   >
     <a
-      v-if="props.url"
+      v-if="url"
       class="card__link"
-      :href="props.url"
-      :title="props.title"
+      :href="url"
+      :title
     >
       <p
         class="card__date"
-        v-html="props.date"
+        v-html="date"
       />
       <h3
         class="card__h3"
-        v-html="props.title"
+        v-html="title"
       />
       <p
         class="card__summary"
-        v-html="props.summary"
+        v-html="summary"
       />
     </a>
     <template v-else>
       <p
         class="card__date"
-        v-html="props.date"
+        v-html="date"
       />
       <h3
         class="card__h3"
-        v-html="props.title"
+        v-html="title"
       />
       <p
         class="card__summary"
-        v-html="props.summary"
+        v-html="summary"
       />
       <a
-        v-if="props.fileUrl"
+        v-if="fileUrl"
         class="button--download"
-        :href="props.fileUrl"
+        :href="fileUrl"
         target="_blank"
-        :title="props.title"
+        :title
       />
       <a
-        v-if="props.linkUrl"
+        v-if="linkUrl"
         class="button--link-external"
-        :href="props.linkUrl"
+        :href="linkUrl"
         target="_blank"
-        :title="props.title"
-        v-html="props.linkTitle"
+        :title
+        v-html="linkTitle"
       />
     </template>
   </div>
@@ -58,5 +58,5 @@
 import type { ListingPageCardResourcesProps } from '@/types/backend'
 
 type ListingPageCardResources = ListingPageCardResourcesProps
-const props = defineProps<ListingPageCardResources>()
+defineProps<ListingPageCardResources>()
 </script>

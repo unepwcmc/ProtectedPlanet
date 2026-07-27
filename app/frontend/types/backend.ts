@@ -187,12 +187,15 @@ export interface ListingResults {
   results: ListingResult[]
 }
 
-export interface ListingFilterOption {
-  // CmsHelper#get_category_filters sources this from Comfy::Cms::PageCategory#id
-  // (an integer primary key), not a string slug.
+// Shared shape for Filters/Checkboxes' options — kept broad (id can be a
+// number) because CmsHelper#get_category_filters sources ListingFilterOption
+// from Comfy::Cms::PageCategory#id (an integer primary key), not a string slug.
+export interface FilterOption {
   id: string | number
   title: string
 }
+
+export type ListingFilterOption = FilterOption
 
 // Only `type: 'checkbox'` is ever sent for the news/resources listing pages
 // (see CmsHelper#get_category_filters) — `radio`/`checkbox-search` are only
@@ -318,4 +321,101 @@ export interface ListingProps {
   textFiltersClose: string
   textFilterTrigger: string
   textNoResults: string
+}
+
+// One item of Search::AreasSerializer#serialize's `areas` array — shape
+// differs slightly per `geoType` (region/country hashes carry `countryFlag`/
+// `totalAreas`, a site hash carries neither), so every field but the shared
+// `image`/`title`/`url` is optional here rather than a discriminated union.
+export interface SearchAreaResult {
+  title: string
+  url: string
+  image?: string
+  countryFlag?: string
+  totalAreas?: string
+}
+
+// Search::AreasSerializer#serialize — one geo-type "page" of area search
+// results (site/country/region), passed as `results` to `frontend_mount
+// "SearchAreas"` and returned by SearchAreasController#search_results as
+// `{ areas: ... }`.
+export interface SearchAreasResults {
+  geoType: string
+  title: string
+  total: number
+  totalPages: number
+  areas: SearchAreaResult[]
+}
+
+// One option of a Search::FiltersSerializer filter — `autocomplete` is only
+// present on the `location` filter's `country`/`region` options (type
+// `checkbox-search`).
+export interface SearchFilterOption extends FilterOption {
+  id: string
+  autocomplete?: SearchFilterOption[]
+}
+
+// One entry of Search::FiltersSerializer#serialize's `filters` array.
+export interface SearchFilter {
+  id: string
+  name?: string
+  title?: string
+  type: 'checkbox' | 'radio' | 'checkbox-search'
+  options: SearchFilterOption[]
+  // Set by SearchAreas/Index.vue from the `?filters[...]` query string before
+  // handing filterGroups down to Filters/Index.vue — not part of the
+  // serializer's own JSON.
+  preSelected?: string[] | [{ type: string, options: string[] }]
+}
+
+export interface SearchFilterGroup {
+  title: string
+  filters: SearchFilter[]
+}
+
+// SearchAreasController#index's `@config_search_areas` / the home page's
+// `config` (partials/search/_protected-areas.html.erb) — also read directly
+// by `SearchAreasInputAutocomplete` for its POST body's `type`.
+export interface SearchAreasConfig {
+  id: string
+  placeholder: string
+}
+
+// SearchAreasController#index's `@tabs` (geo_type switcher: region/country/site).
+export interface SearchAreasTab {
+  id: string
+  title: string
+}
+
+// Props for `frontend_mount "SearchAreas"` (search_areas/index.html.erb).
+// `downloadButtonText`/`downloadTextCommercial` are new here (Wave 7) — the
+// legacy Vue2 version rendered `<Download>` via an ERB partial + `v-slot`
+// (partials/download/_download.html.erb), which read `download_text`/
+// `t('global.button.download')` itself; now that SearchAreas/Index.vue
+// composes `Download` directly as a normal child, those two need threading
+// through as props instead. See DownloadsHelper#download_text.
+export interface SearchAreasProps {
+  configAutocomplete: SearchAreasConfig
+  downloadButtonText: string
+  downloadOptions: DownloadOption[]
+  downloadTextCommercial: DownloadProps['textCommercial']
+  endpointAutocomplete: string
+  endpointSearch: string
+  filterGroups: SearchFilterGroup[]
+  gaId: string
+  noResultsText: string
+  results: SearchAreasResults
+  smTriggerElement: string
+  tabs: SearchAreasTab[]
+  textClear: string
+  textClose: string
+  textFilters: string
+}
+
+// Props for `frontend_mount "SearchAreasHome"`
+// (partials/search/_protected-areas.html.erb).
+export interface SearchAreasHomeProps {
+  config: SearchAreasConfig
+  endpointAutocomplete: string
+  endpointSearch: string
 }

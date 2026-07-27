@@ -29,7 +29,7 @@
     </ul>
     <span
       class="filter__pane-view"
-      @click="$emit('toggle:filterPane')"
+      @click="onToggleFilterPane"
       v-html="filterCloseText"
     />
   </div>
@@ -60,5 +60,9 @@ const activeFilterOptions = ref<Record<string, Array<string | number>>>({})
 function onUpdateFilter(payload: { id: string, options: Array<string | number> }) {
   activeFilterOptions.value[payload.id] = payload.options
   emit('update:filterGroup', activeFilterOptions.value)
+}
+
+function onToggleFilterPane() {
+  emit('toggle:filterPane')
 }
 </script>

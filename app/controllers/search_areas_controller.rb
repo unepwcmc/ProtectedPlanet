@@ -16,9 +16,10 @@ class SearchAreasController < ApplicationController
     @config_search_areas = {
       id: @db_type || 'all',
       placeholder: I18n.t("global.placeholder.search-#{placeholder}")
-    }.to_json
+    }
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all')
+    @download_options = JSON.parse(helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all'))
+    @download_text = helpers.download_text
 
     @tabs = []
 

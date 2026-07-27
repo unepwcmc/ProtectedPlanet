@@ -8,7 +8,7 @@
         <span
           v-if="option.isDownload"
           class="popup__link"
-          @click="emit('select', option)"
+          @click="select(option)"
           v-html="option.title"
         />
         <a
@@ -37,4 +37,6 @@ import type { DownloadOption } from '@/types/backend'
 
 defineProps<{ options: DownloadOption[] }>()
 const emit = defineEmits<{ select: [option: DownloadOption] }>()
+
+const select = (option: DownloadOption) => emit('select', option)
 </script>

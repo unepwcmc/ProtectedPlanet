@@ -1,12 +1,12 @@
 <template>
   <a
     class="card"
-    :href="props.url"
+    :href="url"
   >
     <div
-      v-if="props.image"
+      v-if="image"
       class="card__image"
-      :style="{ backgroundImage: `url(${props.image})` }"
+      :style="{ backgroundImage: `url(${image})` }"
     />
     <div
       v-else
@@ -17,17 +17,17 @@
 
     <div class="card__content">
       <p
-        v-if="props.date"
+        v-if="date"
         class="card__date"
-        v-html="props.date"
+        v-html="date"
       />
       <h3
         class="card__h3"
-        v-html="props.title"
+        v-html="title"
       />
       <p
         class="card__summary"
-        v-html="props.summary"
+        v-html="summary"
       />
     </div>
   </a>
@@ -37,5 +37,5 @@
 import type { ListingPageCardNewsProps } from '@/types/backend'
 
 type ListingPageCardNews = ListingPageCardNewsProps
-const props = defineProps<ListingPageCardNews>()
+defineProps<ListingPageCardNews>()
 </script>

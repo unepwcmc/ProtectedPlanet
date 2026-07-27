@@ -15,7 +15,7 @@
           v-model="search"
           class="autocomplete__input"
           type="text"
-          :placeholder="props.autocompletePlaceholder"
+          :placeholder="autocompletePlaceholder"
           @input="onInput"
           @keyup.enter.prevent.stop="onInputEnter"
           @keyup.esc.prevent.stop="reset"
@@ -34,12 +34,12 @@
         <div
           v-if="hasTooShortError"
           class="autocomplete__error-message"
-          v-text="props.autocompleteErrorMessages.invalid_search_string"
+          v-text="autocompleteErrorMessages.invalid_search_string"
         />
         <div
           v-if="hasNoResultsError"
           class="autocomplete__error-message"
-          v-text="props.autocompleteErrorMessages.no_results"
+          v-text="autocompleteErrorMessages.no_results"
         />
         <div class="autocomplete__results">
           <div

@@ -12,7 +12,7 @@
         v-text="textClear"
       />
     </div>
-    <ListingCheckboxes
+    <FiltersCheckboxes
       :id="filter.id"
       :gaId="gaIdWithFilter"
       :options="filter.options"
@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import ListingCheckboxes from '@/components/Listing/Checkboxes/Index.vue'
+import FiltersCheckboxes from '@/components/Filters/Checkboxes/Index.vue'
 import type { ListingFilter } from '@/types/backend'
 
 const props = defineProps<{

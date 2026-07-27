@@ -22,14 +22,10 @@ import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
-import Download from './components/download/Download'
 import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
-import ListingPage from './components/listing/ListingPage.vue'
 import PameModal from './components/pame/PameModal'
 import RegionCountryPages from './components/pages/RegionCountryPages'
-import SearchAreas from './components/search/SearchAreas'
-import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
 import StickyBar from './components/sticky/StickyBar'
 import Tabs from './components/tabs/Tabs'
@@ -84,14 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBarStacked,
         ChartRowPa,
         ChartRowStacked,
-        Download,
         FilteredTable,
         Flickity,
-        ListingPage,
         PameModal,
         RegionCountryPages,
-        SearchAreas,
-        SearchAreasHome,
         SearchSite,
         StickyBar,
         Tabs,

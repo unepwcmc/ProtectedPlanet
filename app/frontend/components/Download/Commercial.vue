@@ -9,7 +9,7 @@
     >
       <span
         class="modal__close"
-        @click="emit('close')"
+        @click="close"
       />
       <h4
         class="modal__title"
@@ -40,7 +40,7 @@
           />
           <button
             class="modal__link-button"
-            @click="emit('nonCommercial')"
+            @click="selectNonCommercial"
           >
             <span
               class="modal__link-button-text"
@@ -64,4 +64,7 @@ withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ close: [], nonCommercial: [] }>()
+
+const close = () => emit('close')
+const selectNonCommercial = () => emit('nonCommercial')
 </script>

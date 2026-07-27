@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import List from '@/components/Listing/List.vue'
-import PaginationInfinityScroll from '@/components/Listing/PaginationInfinityScroll.vue'
+import PaginationInfinityScroll from '@/components/Filters/PaginationInfinityScroll.vue'
 
 class FakeIntersectionObserver {
   observe = vi.fn()

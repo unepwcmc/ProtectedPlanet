@@ -35,7 +35,11 @@ while resolving to one registry entry — see [FrontendHelper](../../app/helpers
 
 **Status note (Jul 2026):** the prose above undersells where things actually are — Waves 4–6 are done in code even though this file hadn't caught up. `useDownloadStore`/`useMapStore` (Pinia), `Download`/`DownloadModal`, `Listing` (news/resources), and `Map` (home/PA-show/country/region + wdpca/marine/Green List) are all live via `frontend_mount`. **Wave 6 (maps) completed this session:** `MapPaSearch.vue` (Vue3 port of `VMapPASearch`+`Autocomplete`, reusing the legacy `.v-map-pa-search`/`.autocomplete__*` SCSS as-is) now renders inside `Map/Index.vue`'s panel top slot, wired to `Map/Base.vue`'s exposed `zoomTo` (jump-to-result + open a name-only popup via `useMapBoundingBox`'s `onPopupFromExtent` callback + `useMapPopups.addPopup`). This closed the last three `partials/maps/_main.html.erb` call sites (`home`, `data/wdpca` tab 1, `thematic/marine`, `thematic/effectiveness`'s Green List tab) — that partial and the entire dead `app/javascript/components/map/` Vue2 tree (`VMap*`, its mixins) are deleted, along with the now-unused Mapbox CDN `<script>`/`<link>` tags in `_head.html.erb` (MapLibre's own bundled CSS was already imported via Vite). Also fixed: a map mounted inside a CSS-hidden (`display: none`, not `v-if`) inactive tab — the wdpca/Green List `tab_extras` still render through the **legacy Vue2** `<tabs>`/`<tab-target>` slot-scope path, since `_tabs.html.erb` only uses the new Vue3 `Tabs` island when a page has no `tab_extras` — now resizes itself via an `IntersectionObserver` in `Map/Base.vue` once its container gets a real layout box, replacing the legacy `TabTarget.vue`'s `$eventHub.emit('map:resize')`. Verified via `yarn typecheck`/`vitest` (172 tests green) and a dev-server curl smoke test confirming correct props on all four pages; not yet checked in a real browser or on staging. Detail: [05 Maps](./05-maps.md).
 
-**Next:** finish Wave 3 (`search-site`, deferred); rewrite migrated components onto Tailwind; Wave 7 (`search-areas`/`search-areas-home`) — the still-Vue2 PA search widget, separate from the new map PA-search box; Webpacker removed last.
+**Wave 7 (search areas) completed this session:** `search-areas` (the full filterable/paginated PA search results page) and `search-areas-home` (the input-only autocomplete box, shared by the home page and the wdpca tab_extras) are both live via `frontend_mount`. All ~15 supporting Vue2 leaves (`FilterTrigger`, `FiltersSearch`/`vFilter`, `Checkboxes`/`RadioButtons`/`CheckboxSearch`, `TabsFake`/`TabFake`, `CardSearchResultArea`, `PaginationInfinityScroll`, plus the legacy `Download.vue`) were ported to Vue3, colocated under `app/frontend/components/SearchAreas/` — mirroring the Wave 5 `Listing/` precedent (feature-scoped copies, not a shared top-level `Filters`/`Pagination` folder) rather than the module-per-mixin split originally sketched for this wave. `$eventHub` broadcasts (`reset:filter-options`, `reset:pagination`) became a `resetKey` counter prop threaded down each tree (same pattern as `Listing/Checkboxes`); `scrollmagic` in `PaginationInfinityScroll` was replaced with `IntersectionObserver` (as in `Counter`/`Listing/PaginationInfinityScroll`); axios/`mixin-axios-helpers` replaced with `lib/http.ts`. The `v-slot:download` + `partials/download/download` ERB-slot pattern is gone — `SearchAreas/Index.vue` now composes the Vue3 `Download` island directly and calls `useDownloadStore()` itself, so the temporary `window.__downloadStoreBridge` (Wave 4) and the legacy Vue2 `Download.vue` are both deleted. `search_areas_controller.rb`/`home_controller.rb`/`data/wdpca_controller.rb` now hand `frontend_mount` plain Ruby hashes instead of pre-`.to_json`'d strings, matching every other island. Along the way, found+deleted the orphaned Vue2 `ListingPage.vue`/`ListingPageList.vue` (dead since the Wave 5 `Listing` island shipped, still imported in `vue.js` with no ERB tag left). `TabsFake.vue`/`TabFake.vue` were briefly deleted then restored — `SearchSite.vue` (deferred Wave 3) and `RegionCountryPages.vue` (Wave 8) still import the **legacy** copies, so both Vue2 and Vue3 `TabsFake` trees coexist until those waves land. Verified via `yarn typecheck`/`yarn lint`/`vitest` (210 tests green, 40 new) and dev-server curl smoke tests on `/search-areas`, `/` (home), and `/data/wdpca` confirming correct props/mounts; Webpacker recompiles clean. Not yet checked in a real browser or on staging.
+
+**Follow-up (same day): `Listing`/`SearchAreas` overlap extracted into `app/frontend/components/Filters/`.** Diffed every same-named `Listing`/`SearchAreas` sibling pair — `FilterTrigger`, `Checkboxes/{Index,Item}`, and `PaginationInfinityScroll` turned out to be byte-identical (only cosmetic style differences), so they moved to a shared `Filters/{Trigger,Checkboxes/{Index,Item},PaginationInfinityScroll}.vue` used by both `Listing/` and `SearchAreas/`. `FilterGroup.vue`/`FiltersPanel.vue` were left colocated per-feature since they genuinely differ (`Listing`'s is checkbox-only with a nested `filter` prop; `SearchAreas`'s supports checkbox/radio/checkbox-search with flat props and its own resetKey-merge logic) — merging those would mean one component juggling two feature sets via conditionals. Added a shared `FilterOption` type in `types/backend.ts`. `SearchAreas`'s `smTriggerElement` prop was renamed to `triggerClass` on the shared pagination component (it's just a CSS class). Consolidated duplicate Vitest suites into `Filters/__tests__/`; 210 tests → 201 after removing exact duplicates, all green; `yarn typecheck`/`yarn lint` clean.
+
+**Next:** finish Wave 3 (`search-site`, deferred — still on Vue2, still imports the legacy `TabsFake.vue`); rewrite migrated components onto Tailwind; Wave 8 (charts + stats / `RegionCountryPages`) — the next still-Vue2 consumer of legacy `TabsFake.vue`; Webpacker removed last.
 
 ### Decisions made
 - **Vite/Rails glue — `vite-plugin-rails`** (not `vite-plugin-ruby`) is the npm package actually wired up (`vite.config.mts`) alongside the `vite_rails` gem. [02](./02-vite-on-rails-8.md) corrected to match.
@@ -92,7 +96,7 @@ Rails 5.2 officially supports Ruby up to 2.7, so **bumping Ruby 2.6.3 → 2.7 wh
 
 ### The Node ↔ Webpacker constraint
 
-Today **one `Dockerfile` (`ruby:2.6.3`, Node 12), one `package.json`, one shared `node_modules`** serve `web` + `webpacker` + `vite`. Bumping Node to 18+ breaks Webpacker 4 (webpack 4's `md4`/OpenSSL 3 error, `ERR_OSSL_EVP_UNSUPPORTED`).
+Today **one `Dockerfile` (`ruby:2.6.3`, Node 12), one `package.json`, one shared `node_modules`** serve `weba` + `webpacker` + `vite`. Bumping Node to 18+ breaks Webpacker 4 (webpack 4's `md4`/OpenSSL 3 error, `ERR_OSSL_EVP_UNSUPPORTED`).
 
 **Good news:** this app does **not** use `node-sass` (SCSS compiles Ruby-side via `sassc`/`sass-rails`), so the only fix needed to keep Webpacker 4 alive on modern Node is one flag on the **webpacker service only**:
 
@@ -131,17 +135,17 @@ library decisions) → Webpacker removed last. Every component is rewritten to t
 |------|----------------------|--------------|
 | **0 · Delete dead code first ✓ done** | `chart-dial`, carousel/`carousel-slide`, `sticky-nav`, `chart-bar`/`chart-bar-simple`, `chart-sunburst`/`chart-treemap-*`/`chart-rectangles`, `select-equity`/`select-dropdown`, ~10 orphan `.vue` | Don't migrate the dead — shrinks phase 4. Safe on Rails 5.2. See [01](./01-live-inventory.md). |
 | **1 · Simple leaves** (zero coupling) **✓ done** | `banner-banner`, `ga-link`, `counter`, `select-with-content`, `listing-page-card-news`, `listing-page-card-resources` | Establish the Composition-API + Tailwind + composable pattern on the lowest-risk surface. |
-| **2 · Mixin-only leaves** | `tooltip`, `tooltip-second` | First mixin→composable extractions; no store/bus. |
-| **3 · Global chrome → break `#v-app`** | `nav-burger`, `search-site-topbar`, `search-site` | mixin→composable, `$eventHub`→`mitt`/emits. Once chrome is islands, **dismantle `#v-app`**. |
-| **4 · Pinia + downloads** | `useDownloadStore` (port Vuex `download`), `download`, `download-item`, `download-csv`, `download-modal` | Set up **Pinia**; downloads span pages (loaded from `layout`). |
-| **5 · Listings + tabs** | `listing-page`, `tabs`/`tab-target`/`tab-trigger` (**`Tabs.vue` proven**) | `$eventHub 'map:resize'`→composable; wire news/resources + a real tab page. |
-| **6 · Maps** (phase 5) **✓ done** | `v-map` (+ `-header`/`-filters`/`-pa-search`/`-disclaimer`/`-baselayer-controls`/`-toggler`) | **MapLibre chosen** (see decisions above) + `useMapStore` (Pinia) first. |
-| **7 · Search areas** | `search-areas`, `search-areas-home`, `search-areas-input-autocomplete` | Depends on maps + downloads; then complete `wdpca`/data pages. |
-| **8 · Charts + stats** (phase 6) | `chart-row-pa`, `chart-row-stacked`, `am-chart-multiline`, `am-chart-pie`, `region-country-pages` (+ `Stats*`) | Port custom SVG charts first; amCharts 4→5; country/region/marine/effectiveness pages. |
-| **9 · PA show** | `attributes-*` (5) | mixin→composable; protected-area page. |
-| **10 · PAME** | `usePameStore` (port Vuex `pame`), `filtered-table`, `pame-modal` (+ table subcomponents) | gdpame page. |
-| **11 · Carousel** | replace `flickity` (`vue-flickity`) → Swiper/CSS | affects home + marine hero carousels. |
-| **12 · Finish** | remove `#v-app`, `vue.js`, Vuex, `vue-analytics`/`vue2-touch-events`/`vue-lazyload`, Webpacker + packs | Webpacker removed last, once nothing is left on Vue 2. |
+| **2 · Mixin-only leaves ⚠️ component done, not wired live** | `tooltip`, `tooltip-second` | First mixin→composable extractions; no store/bus. **Note:** Vue3 `Tooltip`/`TooltipSecond` exist and are registered as islands, but their real callers (PAME table header, `_stats-overview-country.html.erb`) still render the **old Vue2** tags — nobody has swapped the ERB call sites over yet. Do that swap whenever Wave 8/10 (PAME/stats) touches those views, or as a small standalone follow-up. |
+| **3 · Global chrome → break `#v-app` ⚠️ mostly done** | `nav-burger`, `search-site-topbar`, `search-site` | mixin→composable, `$eventHub`→`mitt`/emits. Once chrome is islands, **dismantle `#v-app`**. **Note:** `nav-burger`/`search-site-topbar` are done and wired live (`_topbar.html.erb` calls `frontend_mount` directly, old Vue2 nav/search-topbar tags deleted). `search-site` (the full results page, pulls in `Pagination`/`TabsFake`) is still **deferred** — left on Vue 2 given its size; it and `RegionCountryPages.vue` (Wave 8) are now the only remaining importers of the legacy `app/javascript/components/tabs/TabsFake.vue`, which stays alongside the new Vue3 `SearchAreas/TabsFake/` tree until both land. |
+| **4 · Pinia + downloads ✓ done** | `useDownloadStore` (port Vuex `download`), `download`, `download-item`, `download-csv`, `download-modal` | Set up **Pinia**; downloads span pages (loaded from `layout`). Live via `frontend_mount`; the `window.__downloadStoreBridge` used to bridge from the legacy Vue2 `search-areas` page is gone — `SearchAreas/Index.vue` (Wave 7) calls `useDownloadStore()` directly. |
+| **5 · Listings + tabs ✓ done** | `listing-page`, `tabs`/`tab-target`/`tab-trigger` (**`Tabs.vue` proven**) | `$eventHub 'map:resize'`→composable; wire news/resources + a real tab page. Listing (news/resources) and `Tabs` are both live. **Note:** `Tabs` island only replaces `_tabs.html.erb` on pages with no `tab_extras`; pages whose tabs carry `tab_extras` (wdpca/GDPAME/Green List) still run the legacy Vue2 `<tabs>`/`<tab-target>` slot-scope path — closing that gap needs those tab_extras widgets (maps, PAME table, stats) migrated first, which is already tracked as their own waves. |
+| **6 · Maps** (phase 5) **✓ done** | `v-map` (+ `-header`/`-filters`/`-pa-search`/`-disclaimer`/`-baselayer-controls`/`-toggler`) | **MapLibre chosen** (see decisions above) + `useMapStore` (Pinia) first. Live on home/PA-show/country/region + wdpca/marine/Green List tabs; legacy `_main.html.erb` partial and the whole Vue2 `VMap*` tree deleted. |
+| **7 · Search areas ✓ done** | `search-areas`, `search-areas-home`, `search-areas-input-autocomplete` (+ filters/tabs-fake/pagination leaves) | Live via `frontend_mount`, colocated under `app/frontend/components/SearchAreas/`; separate from the Map PA-search box (Wave 6). The `download` store bridge (deferred from Wave 4) is closed out — `SearchAreas/Index.vue` calls `useDownloadStore()` directly. `search-site` (deferred from Wave 3) is **not** closed out — it's a separate page/component (`SearchSite.vue`) that still imports the legacy `TabsFake.vue`; picks up in its own pass. |
+| **8 · Charts + stats — not started** | `chart-row-pa`, `chart-row-stacked`, `am-chart-multiline`, `am-chart-pie`, `region-country-pages` (+ `Stats*`) | Port custom SVG charts first; amCharts 4→5; country/region/marine/effectiveness pages. Not begun — comes after search areas per the coupling order. |
+| **9 · PA show — not started** | `attributes-*` (5) | mixin→composable; protected-area page. The page's map/download pieces are already Vue3 (Waves 4/6); only these attribute components remain on Vue2. |
+| **10 · PAME — not started** | `usePameStore` (port Vuex `pame`), `filtered-table`, `pame-modal` (+ table subcomponents) | gdpame page. Good opportunity to also wire in the still-unwired `tooltip` from Wave 2 (PAME table header uses it). |
+| **11 · Carousel — not started** | replace `flickity` (`vue-flickity`) → Swiper/CSS | affects home + marine hero carousels. No spike done yet on the Swiper/CSS replacement approach. |
+| **12 · Finish — not started** | remove `#v-app`, `vue.js`, Vuex, `vue-analytics`/`vue2-touch-events`/`vue-lazyload`, Webpacker + packs | Webpacker removed last, once nothing is left on Vue 2 — blocked on Waves 7–11 above all landing first. |
 
 *Retrofit note: `Banner.vue` and `Tabs.vue` were migrated earlier in **Options API** with global SCSS — bring them in line with the conventions (Composition API + Tailwind) as the reference examples when Wave 1 starts.*
 
@@ -279,8 +283,8 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     copy). `Download/Modal.vue` is the reference example.
 14. **A static class always goes in a plain `class="..."` attribute, never inside a `:class="[...]"`
     array.** Only genuinely dynamic/conditional classes belong in `:class`, and when both are needed
-    on the same element, split them: `class="ct-card"` `:class="{ 'ct-card--link': props.url }"` —
-    not `:class="['ct-card', { 'ct-card--link': props.url }]"`.
+    on the same element, split them: `class="ct-card"` `:class="{ 'ct-card--link': url }"` —
+    not `:class="['ct-card', { 'ct-card--link': url }]"`.
 15. **List/single-item split naming extends point 3.** When a component renders a collection and each
     item is its own SFC, the folder's `Index.vue` is the list/collection (owns shared state —
     selection, reset keys, GA aggregation, etc.) and the per-item sibling is named plain `Item.vue`
@@ -312,6 +316,33 @@ Binding rules for every component written or migrated from Wave 1 onward. These 
     needs the full `:prop="expression"` form. Not currently caught by lint (`yarn lint` passes either
     way) — a manual review point until/unless a rule for it is added. `Map/Index.vue` is the
     reference example.
+19. **No direct function calls or inline logic in `v-on`/template expressions — only a bare handler
+    name defined in `<script setup>`.** `@click="toggle"` / `@change="onChange"`, never
+    `@click="emit('toggle')"`, `@click="$emit('toggle:filterPane')"`,
+    `@click="mapStore.updateSelectedBaselayer(layer)"`, `@toggle="show = !show"`, or an inline
+    arrow function. Wrap the call (including any `$event`/cast) in a named function in `<script
+    setup>` and reference that function bare in the template:
+    ```ts
+    const onChange = (event: Event) => emit('change', (event.target as HTMLInputElement).checked)
+    ```
+    ```html
+    <input @change="onChange">
+    ```
+    A handler that just forwards a `$event`/args still needs this wrapper — `@requestMore="onRequestMore"`
+    with `const onRequestMore = (page: number) => emit('requestMore', page)`, not
+    `@requestMore="emit('requestMore', $event)"`. Calling an existing setup function with a plain
+    argument (`@click="select(option)"`, `@click="toggleTooltip(true)"`) is already compliant — only
+    calls to `emit`/`$emit`/store methods/refs and inline assignments/arrow functions need wrapping.
+    Not currently caught by lint — a manual review point until/unless a rule for it is added.
+20. **Reference props bare in the template — never `props.xxx`.** `<span v-text="title" />`, not
+    `<span v-text="props.title" />`; `v-if="url"`, not `v-if="props.url"`. This works because `<script
+    setup>` exposes every declared prop directly to the template's render context — the `props.`
+    prefix (point 10) is only needed inside `<script setup>` itself, where destructuring would lose
+    reactivity. Combine with point 18's same-name shorthand for bindings: `:title`, not `:title="title"`
+    or `:title="props.title"`. If removing `props.` leaves `defineProps<T>()`'s return value completely
+    unused elsewhere in `<script setup>`, drop the `const props = ` assignment too rather than leaving
+    an unused variable. Not currently caught by lint — a manual review point until/unless a rule for it
+    is added.
 
 *Setup status: all of the above is built and verified (Jul 2026) — `app/frontend/types/backend`, the `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`,
 `tsconfig.json` `paths`), the `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script, and

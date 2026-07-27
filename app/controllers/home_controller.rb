@@ -5,7 +5,7 @@ class HomeController < ApplicationController
     @config_search_areas = {
       id: 'all',
       placeholder: I18n.t('global.placeholder.search-wdpca')
-    }.to_json
+    }
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]

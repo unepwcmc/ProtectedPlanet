@@ -8,7 +8,7 @@
       :title
       :filtersShown="show"
       closeable
-      @toggle="show = !show"
+      @toggle="toggleShow"
     />
     <div
       v-show="show"
@@ -19,7 +19,7 @@
         :autocompleteErrorMessages="autocompleteErrorMessages!"
         :autocompletePlaceholder="autocompletePlaceholder!"
         :type="type!"
-        @zoomTo="emit('zoomTo', $event)"
+        @zoomTo="onZoomTo"
       />
       <div class="v-map-filters__overlays">
         <div
@@ -57,6 +57,9 @@ const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
 
 const show = ref(true)
 const root = ref<HTMLElement | null>(null)
+
+const toggleShow = () => (show.value = !show.value)
+const onZoomTo = (options: ZoomToOptions) => emit('zoomTo', options)
 
 // Matches the legacy `v-if="!areFiltersHidden"` on `<v-map-pa-search>` — the
 // header-map layout (PA show, country, region) omits these props entirely
