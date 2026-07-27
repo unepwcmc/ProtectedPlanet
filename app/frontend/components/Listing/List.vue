@@ -22,7 +22,7 @@
           v-bind="result"
         />
       </div>
-      <FiltersPaginationInfinityScroll
+      <PaginationInfinityScroll
         :resetKey
         :total="results.total"
         :totalPages="results.totalPages"
@@ -41,7 +41,7 @@
 import { computed } from 'vue'
 import ListingPageCardNewsCard from '@/components/ListingPageCard/News/Card.vue'
 import ListingPageCardResourcesCard from '@/components/ListingPageCard/Resources/Card.vue'
-import FiltersPaginationInfinityScroll from '@/components/Filters/PaginationInfinityScroll.vue'
+import PaginationInfinityScroll from '@/components/PaginationInfinityScroll.vue'
 import type { ListingResults } from '@/types/backend'
 
 const props = defineProps<{

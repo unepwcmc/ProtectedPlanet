@@ -19,7 +19,7 @@
           :url="area.url"
         />
       </div>
-      <FiltersPaginationInfinityScroll
+      <PaginationInfinityScroll
         :triggerClass="smTriggerElement"
         :total="results.total"
         :totalPages="results.totalPages"
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import SearchAreasResultsItem from '@/components/SearchAreas/Results/Item.vue'
-import FiltersPaginationInfinityScroll from '@/components/Filters/PaginationInfinityScroll.vue'
+import PaginationInfinityScroll from '@/components/PaginationInfinityScroll.vue'
 import type { SearchAreasResults } from '@/types/backend'
 
 const props = defineProps<{

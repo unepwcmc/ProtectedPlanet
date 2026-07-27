@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import FiltersPaginationInfinityScroll from '@/components/Filters/PaginationInfinityScroll.vue'
+import PaginationInfinityScroll from '@/components/PaginationInfinityScroll.vue'
 
 class FakeIntersectionObserver {
   static instances: FakeIntersectionObserver[] = []
@@ -32,9 +32,9 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('FiltersPaginationInfinityScroll', () => {
+describe('PaginationInfinityScroll', () => {
   it('emits requestMore with the next page when the trigger intersects', () => {
-    const wrapper = mount(FiltersPaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
+    const wrapper = mount(PaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
 
     FakeIntersectionObserver.instances[0].trigger(true)
 
@@ -42,7 +42,7 @@ describe('FiltersPaginationInfinityScroll', () => {
   })
 
   it('does not request more once the last page has been reached', () => {
-    const wrapper = mount(FiltersPaginationInfinityScroll, { props: { total: 2, totalPages: 1 } })
+    const wrapper = mount(PaginationInfinityScroll, { props: { total: 2, totalPages: 1 } })
 
     FakeIntersectionObserver.instances[0].trigger(true)
 
@@ -51,7 +51,7 @@ describe('FiltersPaginationInfinityScroll', () => {
   })
 
   it('resets to page 1 when resetKey changes', async () => {
-    const wrapper = mount(FiltersPaginationInfinityScroll, { props: { total: 20, totalPages: 3, resetKey: 0 } })
+    const wrapper = mount(PaginationInfinityScroll, { props: { total: 20, totalPages: 3, resetKey: 0 } })
 
     FakeIntersectionObserver.instances[0].trigger(true)
     expect(wrapper.emitted('requestMore')?.[0]).toEqual([2])
@@ -63,7 +63,7 @@ describe('FiltersPaginationInfinityScroll', () => {
   })
 
   it('disconnects the observer on unmount', () => {
-    const wrapper = mount(FiltersPaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
+    const wrapper = mount(PaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
     const observer = FakeIntersectionObserver.instances[0]
 
     wrapper.unmount()
@@ -72,13 +72,13 @@ describe('FiltersPaginationInfinityScroll', () => {
   })
 
   it('defaults the trigger class to pagination__infinity-trigger', () => {
-    const wrapper = mount(FiltersPaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
+    const wrapper = mount(PaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
 
     expect(wrapper.classes()).toContain('pagination__infinity-trigger')
   })
 
   it('uses a custom triggerClass when provided', () => {
-    const wrapper = mount(FiltersPaginationInfinityScroll, {
+    const wrapper = mount(PaginationInfinityScroll, {
       props: { triggerClass: 'sm-trigger-infinite-scroll', total: 20, totalPages: 3 }
     })
 

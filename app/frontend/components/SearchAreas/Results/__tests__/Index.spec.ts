@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import SearchAreasResults from '@/components/SearchAreas/Results/Index.vue'
-import FiltersPaginationInfinityScroll from '@/components/Filters/PaginationInfinityScroll.vue'
+import PaginationInfinityScroll from '@/components/PaginationInfinityScroll.vue'
 
 class FakeIntersectionObserver {
   observe = vi.fn()
@@ -52,7 +52,7 @@ describe('SearchAreasResults', () => {
       props: { noResultsText: 'No results.', results: { ...results, totalPages: 2 }, smTriggerElement: 'sm-trigger-infinite-scroll' }
     })
 
-    await wrapper.findComponent(FiltersPaginationInfinityScroll).vm.$emit('requestMore', 2)
+    await wrapper.findComponent(PaginationInfinityScroll).vm.$emit('requestMore', 2)
 
     expect(wrapper.emitted('requestMore')).toEqual([[2]])
   })
