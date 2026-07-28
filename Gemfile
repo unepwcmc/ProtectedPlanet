@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '6.1.7.10'
+gem 'rails', '~> 7.0.8'
 gem 'webpacker', '~> 4.0.2'
 
 # Ruby 3.1+ bundles Psych 4, whose load defaults to safe-load (aliases off),
@@ -12,7 +12,7 @@ gem 'bourbon'
 gem "neat"
 
 gem 'pg', '~> 1.1'
-gem 'activerecord-postgis-adapter', '~> 7.0.0'
+gem 'activerecord-postgis-adapter', '~> 8.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
@@ -120,10 +120,10 @@ gem 'turnout', '~> 2.5.0'
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
-gem 'comfortable_mexican_sofa', '~> 2.0.0'
+gem 'comfortable_media_surfer', '~> 3.1'
 # Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
 # rails-i18n 5.1.3, which caps railties < 6. Force the Rails 6 line.
-gem 'rails-i18n', '~> 6.0'
+gem 'rails-i18n', '~> 7.0'
 # nokogiri 1.10 does not build on Ruby 3.x; 1.16+ supports Ruby 3.3. Bumping it
 # also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
 gem 'nokogiri', '~> 1.16'
