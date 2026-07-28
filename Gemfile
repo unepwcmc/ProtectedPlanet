@@ -3,9 +3,11 @@ source 'https://rubygems.org'
 gem 'rails', '~> 7.0.8'
 gem 'webpacker', '~> 4.0.2'
 
-# Ruby 3.1+ bundles Psych 4, whose load defaults to safe-load (aliases off),
-# which breaks database.yml's `<<: *default` under Rails 6.1. Pin Psych 3 until
-# Rails 7, which is Psych-4 aware. (libyaml-dev is present in the image.)
+# Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
+# its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
+# appsignal 3 call plain YAML.load on their aliased configs at boot and break.
+# Pin Psych 3 until those are gone -- webpacker at the Vite cutover (B5),
+# appsignal on a version bump. (libyaml-dev is present in the image.)
 gem 'psych', '~> 3.3'
 
 gem 'bourbon'
@@ -128,7 +130,6 @@ gem 'rails-i18n', '~> 7.0'
 # also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
 gem 'nokogiri', '~> 1.16'
 gem 'loofah', '~> 2.22'
-gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 gem 'ed25519', '>= 1.2', '< 2.0'

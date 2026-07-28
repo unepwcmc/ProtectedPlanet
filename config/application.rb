@@ -27,9 +27,9 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
-    # Opted out of one 6.0 default. Every belongs_to foreign key in this schema is
+    # Opted out of one default. Every belongs_to foreign key in this schema is
     # nullable, so nothing at the database level backs a presence validation, and
     # the WDPA importer legitimately produces NULLs -- Wdpa::Portal::Relation::
     # ProtectedArea#designation assigns a nil jurisdiction when the source row has
@@ -38,13 +38,6 @@ module ProtectedPlanet
     # integrity exercise that needs measuring against a full production dump, not
     # a side effect of the framework bump.
     config.active_record.belongs_to_required_by_default = false
-
-    # Rails 6.1's connection handling, required before Rails 7 (which removes the
-    # legacy path entirely). This app uses a single database, so the change is
-    # limited to which internal handler Active Record routes through.
-    config.active_record.legacy_connection_handling = false
-
-    config.autoloader = :zeitwerk
 
     # app/presenters and app/serializers are NOT listed here: Rails 6 already adds
     # every app/* subdirectory to both autoload and eager load paths, so naming
@@ -58,7 +51,6 @@ module ProtectedPlanet
     # boot require a reachable, migrated database.
     config.autoload_paths += %W[#{config.root}/lib/modules]
     config.eager_load_paths += %W[#{config.root}/lib/modules]
-    config.tinymce.install = :compile
 
     config.active_record.schema_format = :sql
   end

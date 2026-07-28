@@ -26,17 +26,17 @@ gems compile from source (precompiled x86_64-linux gems target newer glibc than
 buster 2.28). Done: `::Data`→`DataPages` rename; ~11 gem bumps; factory_girl→
 factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeController.
 
-**Stopgaps added for the Ruby-3-on-Rails-6.1 window — REMOVE at Rails 7.0:**
-- [ ] **`psych ~> 3.3` pin** (Gemfile) — Psych 4 (Ruby 3.1+) breaks `database.yml`
-      aliases under Rails 6.1. Rails 7 is Psych-4 aware; drop the pin then.
-- [ ] **Comfy routing kwarg patch** (`config/initializers/comfy_patching.rb`,
-      `ActionDispatch::Routing::Mapper#comfy_route`) — Comfy 2.0.19 is dead and
-      not Ruby-3-native. Delete when swapping to Media Surfer at Rails 7.0.
-      NOTE: this is the ONLY Comfy Ruby-3 break the test suite exercises; admin
-      paths not covered by tests may hit more — smoke-test `/admin` on 3.3.
-- [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation**
-      (`postgresql_adapter.rb:883`) — noisy but harmless on 3.3; removed in
-      Rails 7.0 / pg. Clears when the adapter bumps at Rails 7.
+**Stopgaps from the Ruby-3 / Rails-6.1 window:**
+- [ ] **`psych ~> 3.3` pin** (Gemfile) — Psych 4/5 (Ruby 3.1+) is safe-load
+      (aliases off). Rails 7 loads its OWN configs alias-aware, but **webpacker 4
+      and appsignal 3 call plain `YAML.load` on their aliased configs at boot** and
+      break — so the pin **cannot be removed at Rails 7.0** (tried; boots red).
+      Remove when webpacker is dropped at the Vite cutover (B5) and appsignal is
+      bumped to a Psych-5-safe version.
+- [x] ~~Comfy routing kwarg patch~~ — **removed at Rails 7.0** (Media Surfer's
+      `comfy_route` is Ruby-3-native).
+- [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation** — still
+      noisy on adapter 8.x / Rails 7.0; recheck at the 9.x/11.x bumps.
 
 ## 3. Test coverage — deferred deliberately to the phase that touches the code
 Writing these now, then not touching the code for months, risks staleness. Do each
