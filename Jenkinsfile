@@ -139,6 +139,10 @@ def buildProject() {
 
 def prepare() {
     sh "docker-compose --project-name=${JOB_NAME} run web yarn install"
+    // Media Surfer ships no prebuilt admin assets; build them (esbuild + dart-sass
+    // -> app/assets/builds) so Sprockets serves the built files instead of failing
+    // to compile the source sass (codemirror npm @import). See CARRYOVER / plan 09.
+    sh "docker-compose --project-name=${JOB_NAME} run web bundle exec rails comfy:compile_assets"
 }
 
 def prepareDatabase() {

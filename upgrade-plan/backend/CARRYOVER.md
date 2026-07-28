@@ -56,6 +56,23 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
 - [ ] **capybara 2.3 → 3 + selenium 4** — currently rack-test only, no drivers in use; Capybara 3 text-matching changes need per-assertion review. Do in the test phase, no rush.
 - [ ] **`rails app:update` never run** — its main artifact (`new_framework_defaults_6_x.rb`) is redundant since we adopted `load_defaults` directly. If run later, don't let it clobber hand-tuned `config/`.
 
+## 4b. Media Surfer admin assets (Rails 7.0 CMS swap)
+Media Surfer 3.1 ships **no prebuilt admin assets** — `app/assets/builds/` is empty.
+Its admin JS is esbuild/ES-modules and its CSS is dart-sass (`@import "codemirror/lib/codemirror"` from npm). Sprockets cannot compile the source, so the build must run first.
+- **Fix (Option 1):** `rails comfy:compile_assets` (esbuild + dart-sass → the gem's
+  `app/assets/builds/comfy/admin/cms/application.{js,css}`); Sprockets/Propshaft
+  then serve the built files. Wired into the `install` service (docker-compose) and
+  CI `prepare()` (Jenkinsfile).
+- [ ] **Production/deploy must run `comfy:compile_assets` before `assets:precompile`**
+  (Capistrano now; Docker/Kamal later). The build lands in the gem dir, which is
+  not version-controlled, so every fresh environment must run it.
+- [ ] **Optional refinement:** build into our own `app/assets/builds/` from the gem
+  source instead of the gem dir, to fully decouple from the read-only bundle. Not
+  required — the current approach works in dev/CI.
+- Rails 8 / Propshaft serves the same `builds/` files — no rework expected.
+- [ ] **B3 not yet done:** manual `/admin` smoke on Rails 7 (login, edit via
+  Redactor, CodeMirror, upload) — admin is thin on automated tests.
+
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
