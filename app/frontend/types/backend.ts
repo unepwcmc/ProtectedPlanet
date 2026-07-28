@@ -684,3 +684,97 @@ export interface StatsTooltipInfoProps {
   designationsLabel: string
   designationsCount: number
 }
+
+// PA show `attributes-*` family (Wave 9). Shared `forPdf` flag switches every
+// island between "current selected parcel only" (site view) and "every
+// parcel, one section each" (PDF export) — selection itself is read from the
+// `site_pid` URL param via `useParcelSelection`, not passed as a prop.
+
+// ProtectedAreasHelper#attributes_parcels_dropdown_descriptions.
+export interface AttributesParcelsDropdownProps {
+  title: string
+  description?: string
+  dropdownTitle?: string
+  sitePids: string[]
+  forPdf: boolean
+}
+
+// ProtectedAreaPresenter#current_pa_and_parcels_attributes entry.
+export interface AttributesAttributeItem {
+  title: string
+  value: string
+  is_site_pid?: boolean
+}
+
+export interface AttributesParcelAttributeSet {
+  site_pid: string
+  attributes: AttributesAttributeItem[]
+}
+
+export interface AttributesProtectedAreaProps {
+  title: string
+  forPdf: boolean
+  attributesList: AttributesParcelAttributeSet[]
+}
+
+// ProtectedAreasHelper#current_pa_and_all_parcels_pame_evaluations_attributes:
+// { site_pid => { method => [years...] } }.
+export type AttributesPameYearsByMethod = Record<string, (string | number)[]>
+
+export interface AttributesPameListTranslations {
+  no_information: string
+}
+
+export interface AttributesPameListProps {
+  pamesAttributesList: Record<string, AttributesPameYearsByMethod>
+  title: string
+  subTitle?: string
+  forPdf: boolean
+  translations: AttributesPameListTranslations
+}
+
+// ProtectedAreaPresenter#affiliations entry.
+export interface AttributesAffiliationLink {
+  site_pid: string
+  affiliation: string
+  image_url: string
+  image_alt?: string
+  link_url: string
+  link_title: string
+  type?: string
+  date?: string
+  url?: string
+}
+
+export interface AttributesAffiliationsTranslations {
+  green_list_intro: string
+  green_list_type: string
+  green_list_date: string
+  green_list_title: string
+  green_list_url: string
+  no_information: string
+  more: string
+}
+
+export interface AttributesAffiliationsProps {
+  affiliations: AttributesAffiliationLink[]
+  title: string
+  subTitle?: string
+  forPdf: boolean
+  translations: AttributesAffiliationsTranslations
+}
+
+// ProtectedArea#sources_attributes_for_current_pa_and_all_parcels:
+// { site_pid => StatsSourceItem[] }.
+export interface AttributesProtectedAreaSourcesTranslations {
+  title: string
+  total: string
+  updated: string
+}
+
+export interface AttributesProtectedAreaSourcesProps {
+  sourcesAttributesList: Record<string, StatsSourceItem[]>
+  forPdf: boolean
+  subTitle?: string
+  translations: AttributesProtectedAreaSourcesTranslations
+}

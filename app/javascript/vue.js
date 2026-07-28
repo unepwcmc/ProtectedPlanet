@@ -34,11 +34,6 @@ import Tooltip from './components/tooltip/Tooltip'
 import TooltipSecond from './components/tooltip/TooltipSecond'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import IconExclamationCircle from './components/icon/ExclamationCircle'
-import AttributesProtectedAreaParcels from './components/attributes/AttributesProtectedAreaParcels'
-import AttributesProtectedAreaParcelsSources from './components/attributes/AttributesProtectedAreaParcelsSources'
-import AttributesPames from './components/attributes/AttributesPames'
-import AttributesAffiliations from './components/attributes/AttributesAffiliations'
-import AttributesParcelsDropdown from './components/attributes/AttributesParcelsDropdown'
 // BannerBanner migrated to a Vite/Vue 3 island (app/frontend/components/Banner.vue,
 // mounted via layout.ts). Kept out of the Vue 2 #v-app root so only one system compiles it.
 
@@ -56,20 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     Vue.use(Vue2TouchEvents)
 
     Vue.use(VueLazyload)
-
-    Vue.directive('click-outside', {
-      bind: function (el, binding, vnode) {
-        el.clickOutsideEvent = function (event) {
-          if (!(el == event.target || el.contains(event.target))) {
-            vnode.context[binding.expression](event)
-          }
-        }
-        document.body.addEventListener('click', el.clickOutsideEvent)
-      },
-      unbind: function (el) {
-        document.body.removeEventListener('click', el.clickOutsideEvent)
-      },
-    })
 
     new Vue({
       el: '#v-app',
@@ -91,12 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Tooltip,
         TooltipSecond,
         VSelectSearchable,
-        IconExclamationCircle,
-        AttributesProtectedAreaParcels,
-        AttributesProtectedAreaParcelsSources,
-        AttributesPames,
-        AttributesAffiliations,
-        AttributesParcelsDropdown
+        IconExclamationCircle
       }
     })
   }

@@ -41,7 +41,12 @@ registerIslands({
   RegionCountryPages: () => import('@/components/RegionCountryPages/Index.vue'),
   StatsTooltipInfo: () => import('@/components/Stats/TooltipInfo.vue'),
   ChartRowPa: () => import('@/components/Chart/RowPa.vue'),
-  AmChartMultiline: () => import('@/components/AmChart/Multiline.vue')
+  AmChartMultiline: () => import('@/components/AmChart/Multiline.vue'),
+  AttributesParcelsDropdown: () => import('@/components/Dropdown/ParcelsDropdown.vue'),
+  AttributesProtectedArea: () => import('@/components/Attributes/ProtectedArea/Index.vue'),
+  AttributesPameList: () => import('@/components/Attributes/Pame/List.vue'),
+  AttributesAffiliations: () => import('@/components/Attributes/Affiliations/Index.vue'),
+  AttributesProtectedAreaSources: () => import('@/components/Attributes/ProtectedArea/Source/List.vue')
 })
 
 if (document.readyState === 'complete') {

@@ -31,21 +31,20 @@
         } %>
     </section>
     <section class="page__section--parcels-dropdown">
-      <%= render partial: "partials/attributes/attributes-parcels-dropdown", locals: { 
-          parcel_id_param: ProtectedAreasHelper::URL_PARAMS[:parcel].to_json,
-          site_pids: @presenter.parcels_site_pids.to_json,
+      <%= render partial: "partials/attributes/attributes-parcels-dropdown", locals: {
+          site_pids: @presenter.parcels_site_pids,
           for_pdf: @for_pdf
         } %>
     </section>
     <div class="page__col-wrapper pdf-break-after">
       <div class="page__col-1">
-        <%= render partial: "partials/attributes/attributes-protected-area-parcels", locals: { 
+        <%= render partial: "partials/attributes/attributes-protected-area", locals: {
           current_pa_and_parcels_attributes: @presenter.current_pa_and_parcels_attributes, 
           for_pdf: @for_pdf
        } %>
       </div>
       <div class="page__col-2">
-        <%= render partial: "partials/attributes/attributes-pames" , locals: { 
+        <%= render partial: "partials/attributes/attributes-pame-list" , locals: { 
           classes: 'page__col-child',
           for_pdf: @for_pdf 
           } %>
@@ -56,8 +55,8 @@
         } %>
       </div>
     </div>
-    <%= render partial: "partials/attributes/attributes-protected-area-parcels-sources", locals: {
-      sources_attributes_for_current_pa_and_all_parcels: @protected_area.sources_attributes_for_current_pa_and_all_parcels.to_json,
+    <%= render partial: "partials/attributes/attributes-protected-area-sources", locals: {
+      sources_attributes_for_current_pa_and_all_parcels: @protected_area.sources_attributes_for_current_pa_and_all_parcels,
       for_pdf: @for_pdf
     } %>
     <section class="spacer-large--top">

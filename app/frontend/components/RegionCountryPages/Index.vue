@@ -7,7 +7,7 @@
       <SearchAreasTabStrip
         class="tabs--rounded"
         :children="tabs"
-        :gaId="gaId"
+        :gaId
         @click:tab="onSelectDatabase"
       />
     </div>
