@@ -117,6 +117,25 @@ is sound. Two real (pre-existing, not upgrade) bugs found + fixed:
 - The local dev/test DBs (from the `db` submodule seed) start half-migrated;
   rebuild the test DB with `db:drop db:create db:migrate` for full-app local testing.
 
+## 4d. Download pipeline — local end-to-end verified via MinIO (Jul 2026)
+Added **MinIO** (S3-compatible) to docker-compose and an ENV-guarded S3 endpoint in
+`lib/modules/s3.rb` (`AWS_S3_ENDPOINT`; also skips the public-read ACL against a
+custom endpoint since MinIO doesn't implement per-object ACLs — real AWS unchanged).
+**Result:** `Download.generate(:csv, general)` runs fully on Rails 7.0 / Ruby 3.3 —
+downloads view query → `ogr2ogr` export → source CSV → zip → **aws-sdk 3.0.1 upload
+to S3** (an 11.4 MB zip landed in MinIO). Confirms GDAL download-gen, the download
+generators, and **aws-sdk 3.0.1 works on Ruby 3.3** (the pinned-2017 gem was a risk).
+
+How to run locally:
+1. `docker compose up -d minio db redis`
+2. Create buckets once (via `Aws::S3::Client#create_bucket` with the MinIO creds):
+   `pp-downloads-development`, `pp-import-development`.
+3. `docker compose run --rm -e AWS_S3_ENDPOINT=http://minio:9000 -e AWS_ACCESS_KEY_ID=minioadmin -e AWS_SECRET_ACCESS_KEY=minioadmin -e AWS_S3_REGION=us-east-1 web bash -lc "bundle exec rails runner '...Download.generate...'"`
+   NOTE: dotenv **overloads** `.env`, so `-e` AWS creds don't reach `Rails.application.secrets`. Either set them in `.env`/`.env.<env>`, or override `Rails.application.secrets.aws_*` at the top of the runner.
+- [ ] **Tier 2 (import half)** still not run locally — needs a small WDPA-format `.gdb`
+      in the MinIO `import/` bucket to exercise `Wdpa::Importer.import` (FileGDB read).
+- [ ] **Tier 3 (full real end-to-end)** — real WDPA release + real S3 on staging (deploy-gated).
+
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
