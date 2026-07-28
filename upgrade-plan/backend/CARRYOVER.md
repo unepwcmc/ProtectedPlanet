@@ -70,8 +70,21 @@ Its admin JS is esbuild/ES-modules and its CSS is dart-sass (`@import "codemirro
   source instead of the gem dir, to fully decouple from the read-only bundle. Not
   required — the current approach works in dev/CI.
 - Rails 8 / Propshaft serves the same `builds/` files — no rework expected.
-- [ ] **B3 not yet done:** manual `/admin` smoke on Rails 7 (login, edit via
-  Redactor, CodeMirror, upload) — admin is thin on automated tests.
+- [x] **B3 admin smoke (Rails 7.0) — mostly PASS (Jul 2026):** login (HTTP Basic
+  401→200), `/admin/sites`, pages index, and page **edit** all 200; custom CMS
+  tags render (form_fragments + fragment fields); compiled admin CSS+JS serve 200
+  with the full editor stack bundled (CodeMirror, Redactor, Flatpickr, plupload,
+  Sortable). Option 1 asset build validated end-to-end.
+- [ ] **B3 gap — /admin files & uploads 500 (ActiveStorage schema behind).**
+  NOT a Media Surfer regression. The app only ever ran the Rails-5.2-era
+  `create_active_storage_tables` migration; the 6.0 `service_name` column and 6.1
+  `active_storage_variant_records` table were never added (missing in dev, test,
+  and structure.sql). Media Surfer files use ActiveStorage, so the files UI 500s.
+  **Fix:** generate + run the ActiveStorage update migrations (`rails
+  active_storage:update`) — add_service_name_to_active_storage_blobs,
+  create_active_storage_variant_records — in ALL envs. **db/migrate is in the
+  `db` submodule (unepwcmc/protectedplanet-db)**, so this is a cross-repo change.
+  Also masked in CI (no test exercises AS blobs/variants) — add coverage.
 
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
