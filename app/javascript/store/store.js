@@ -7,11 +7,9 @@ import Vuex from 'vuex/dist/vuex.esm'
 Vue.use(Vuex)
 
 import { storeMap } from './_store-map.js'
-import { storePame } from './_store-pame.js'
 
 export default new Vuex.Store({
   modules: {
-    map: storeMap,
-    pame: storePame
+    map: storeMap
   }
 })

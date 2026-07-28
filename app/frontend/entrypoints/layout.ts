@@ -46,7 +46,8 @@ registerIslands({
   AttributesProtectedArea: () => import('@/components/Attributes/ProtectedArea/Index.vue'),
   AttributesPameList: () => import('@/components/Attributes/Pame/List.vue'),
   AttributesAffiliations: () => import('@/components/Attributes/Affiliations/Index.vue'),
-  AttributesProtectedAreaSources: () => import('@/components/Attributes/ProtectedArea/Source/List.vue')
+  AttributesProtectedAreaSources: () => import('@/components/Attributes/ProtectedArea/Source/List.vue'),
+  PameTable: () => import('@/components/Pame/Table/Index.vue')
 })
 
 if (document.readyState === 'complete') {

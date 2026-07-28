@@ -7,9 +7,9 @@ class Data::GdpameController < ApplicationController
   }.to_json
 
   def index
-    @table_attributes = PameEvaluation::TABLE_ATTRIBUTES.to_json
-    @filters = PameEvaluation.filters_to_json
-    @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
+    @table_attributes = PameEvaluation::TABLE_ATTRIBUTES
+    @filters = PameEvaluation.filters
+    @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS)
 
     @tabs_list = helpers.thematic_and_data_area_tabs(@cms_page)
   end

@@ -23,15 +23,11 @@ import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import Flickity from 'vue-flickity'
-import FilteredTable from './components/pame/FilteredTable'
-import PameModal from './components/pame/PameModal'
 import RegionCountryPages from './components/pages/RegionCountryPages'
 import SearchSite from './components/search/SearchSite'
 import StickyBar from './components/sticky/StickyBar'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
-import Tooltip from './components/tooltip/Tooltip'
-import TooltipSecond from './components/tooltip/TooltipSecond'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import IconExclamationCircle from './components/icon/ExclamationCircle'
 // BannerBanner migrated to a Vite/Vue 3 island (app/frontend/components/Banner.vue,
@@ -61,16 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBarStacked,
         ChartRowPa,
         ChartRowStacked,
-        FilteredTable,
         Flickity,
-        PameModal,
         RegionCountryPages,
         SearchSite,
         StickyBar,
         Tabs,
         TabTarget,
-        Tooltip,
-        TooltipSecond,
         VSelectSearchable,
         IconExclamationCircle
       }

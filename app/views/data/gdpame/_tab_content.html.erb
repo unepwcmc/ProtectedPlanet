@@ -1,9 +1,9 @@
 <div class="container--pame">
-  <filtered-table
-    :attributes="<%= table_attributes %>"
-    endpoint="/pame/list"
-    :filters="<%= filters %>"
-    :json="<%= json %>"
-  >
-  </filtered-table>
+  <%= frontend_mount "PameTable", props: {
+    endpoint: "/pame/list",
+    filters: filters,
+    attributes: table_attributes,
+    json: json,
+    modalText: t('thematic_area.pame.modal')
+  } %>
 </div>

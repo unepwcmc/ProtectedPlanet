@@ -38,6 +38,34 @@ export function getJson<T>(url: string, params?: Record<string, string> | URLSea
   }).then(parseJsonResponse<T>)
 }
 
+export interface BlobDownload {
+  filename: string
+  blob: Blob
+}
+
+// For endpoints that return a file (e.g. CSV export) rather than JSON —
+// reads the filename back out of Content-Disposition, same contract the
+// legacy axios-based PAME download used.
+export async function postBlob(url: string, body?: unknown): Promise<BlobDownload> {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken()
+    },
+    body: JSON.stringify(body ?? {})
+  })
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`)
+  }
+
+  const disposition = response.headers.get('content-disposition') ?? ''
+  const match = disposition.match(/filename="?([^"]+)"?/)
+
+  return { filename: match ? match[1] : 'download.csv', blob: await response.blob() }
+}
+
 // For external (non-Rails) hosts, e.g. the ArcGIS point-query services — sending
 // our CSRF header there fails their CORS preflight (`request-helpers.js`'s
 // axiosGetWithoutCSRF was the same fix for the legacy axios-based code).

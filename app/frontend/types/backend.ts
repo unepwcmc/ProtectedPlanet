@@ -778,3 +778,89 @@ export interface AttributesProtectedAreaSourcesProps {
   subTitle?: string
   translations: AttributesProtectedAreaSourcesTranslations
 }
+
+// PameEvaluation::TABLE_ATTRIBUTES entry (column definitions for the gdpame
+// filtered table — `title` is the header, `tooltip` only present on one column).
+export interface PameTableAttribute {
+  title: string
+  field: string
+  tooltip?: string
+}
+
+// PameEvaluation.filters_to_json entry — plain string options, unlike
+// ListingFilter/SearchFilter's `{id, title}` shape, since the values here ARE
+// the filter values sent back in `PameFilterSelection.options` (method names,
+// country names, years-as-strings, etc.).
+export interface PameFilter {
+  name: string
+  title: string
+  options: string[]
+  type: string
+}
+
+// One entry of the `filters` array sent to/from `/pame/list` and `/pame/download`
+// (PameEvaluation.parse_filters reads `name`/`options`).
+export interface PameFilterSelection {
+  name: string
+  options: Array<string | number>
+  type?: string
+}
+
+// PameEvaluation.serialise entry (one row of the gdpame table / PameModal detail).
+export interface PameEvaluationItem {
+  id: number
+  asmt_id: string
+  site_id: number | null
+  site_pid: string | null
+  pa_site_url: string
+  country: string[]
+  method: string | null
+  asmt_year: string
+  asmt_url: string
+  eff_metaid: number | null
+  source_id: number | null
+  name: string
+  designation: string
+  data_title: string | null
+  resp_party: string | null
+  language: string | null
+  source_year: number | null
+}
+
+// PameEvaluation.structure_data — shape returned by `/pame/list` and the
+// initial `@json` prop from Data::GdpameController#index.
+export interface PameTablePage {
+  current_page: number
+  per_page: number
+  total_entries: number
+  total_pages: number
+  items: PameEvaluationItem[]
+}
+
+// I18n `thematic_area.pame.modal` — Data::GdpameController#index /
+// views/data/gdpame/_tab_content.html.erb.
+export interface PameModalTranslations {
+  modal_title: string
+  id: string
+  title: string
+  responsible: string
+  year: string
+  language: string
+}
+
+// Props for `Pame/Modal.vue`, rendered by `Pame/Table/Index.vue` as a normal
+// child (not its own `frontend_mount` — it only ever appears alongside the
+// table, and shares `usePameStore` with it).
+export interface PameModalProps {
+  text: PameModalTranslations
+}
+
+// Props for `frontend_mount "PameTable"` (Data::GdpameController#index, via
+// partials/data/gdpame/_tab_content).
+export interface PameTableProps {
+  endpoint: string
+  filters: PameFilter[]
+  attributes: PameTableAttribute[]
+  json: PameTablePage
+  modalText: PameModalTranslations
+}
