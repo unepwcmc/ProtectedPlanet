@@ -1,6 +1,6 @@
-<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
+<%= render partial: "partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
-<%= render partial: "./layouts/partials/hero-area-types", locals: {
+<%= render partial: "layouts/partials/hero-area-types", locals: {
   button_search_text: cms_fragment_render("button-text"),
   button_search_url: @wdpca_view_all_url,
   image: cms_fragment_render(:image, @cms_page),
