@@ -92,6 +92,31 @@ Its admin JS is esbuild/ES-modules and its CSS is dart-sass (`@import "codemirro
   - `db/structure.sql` is gitignored in the submodule (schema comes from
     `db:migrate`, per Jenkinsfile) — nothing to commit there.
 
+## 4c. Rails 7.0 broader smoke (Jul 2026) — PASS, 2 bugs fixed
+Drove a running server on Rails 7.0: home, `/search`, `/search-areas`,
+`/search-results`, country pages, PA show, and `/admin` all render 200; ES search,
+`ogr2ogr` (2.2.3), and the WDPA importer load fine; 651 tests green. Rails 7 code
+is sound. Two real (pre-existing, not upgrade) bugs found + fixed:
+- `StatisticPresenter#geometry_ratio` 500'd on a nil statistic (country/search/PA
+  pages for any geo entity without a stat) — now returns zeros (+ regression test).
+- `ApplicationController#record_invalid_error` (rescue for ALL `StatementInvalid`)
+  assumed `params[:page]` present and crashed on any other error, masking it — now
+  guards nil and logs the underlying exception.
+
+**DB-setup findings (environment, not code):**
+- [ ] **`pg_cron` in `db/structure.sql` breaks structure-based test setup.**
+  `db:test:prepare` / `db:schema:load` into `pp_test` fail: "can only create
+  extension pg_cron in database pp_development". CI is unaffected (it uses
+  `db:create db:migrate`, per Jenkinsfile). For local test DB use
+  `db:drop db:create db:migrate`, not `db:test:prepare`. Consider excluding
+  pg_cron from the schema dump, or scheduling pg_cron per-DB.
+- **Good news:** a fresh `db:migrate` creates PostGIS via the existing
+  `create_extension_postgis` migration — so **adapter 8.x needs no manual
+  `CREATE EXTENSION postgis`** for a migrate-based setup (the plan feared it would).
+  Still confirm for a structure.sql/schema-load-based deploy.
+- The local dev/test DBs (from the `db` submodule seed) start half-migrated;
+  rebuild the test DB with `db:drop db:create db:migrate` for full-app local testing.
+
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
