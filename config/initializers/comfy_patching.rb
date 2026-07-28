@@ -105,7 +105,7 @@ Rails.configuration.to_prepare do
     end
   end
 
-  ComfortableMexicanSofa::Seeds::Page::Exporter.class_eval do
+  ComfortableMediaSurfer::Seeds::Page::Exporter.class_eval do
     def fragments_data(record, page_path)
       record.fragments.collect do |frag|
         header = "#{frag.tag} #{frag.identifier}"
@@ -139,7 +139,7 @@ Rails.configuration.to_prepare do
 
   end
 
-  ComfortableMexicanSofa::Seeds::Page::Importer.class_eval do 
+  ComfortableMediaSurfer::Seeds::Page::Importer.class_eval do 
     def import_page(path, parent)
       slug = path.split("/").last
 
@@ -203,7 +203,7 @@ Rails.configuration.to_prepare do
 
         if page.save
           message = "[CMS SEEDS] Imported Page \t #{page.full_path}"
-          ComfortableMexicanSofa.logger.info(message)
+          ComfortableMediaSurfer.logger.info(message)
 
           # defering target page linking
           if target_page.present?
@@ -216,7 +216,7 @@ Rails.configuration.to_prepare do
 
         else
           message = "[CMS SEEDS] Failed to import Page \n#{page.errors.inspect}"
-          ComfortableMexicanSofa.logger.warn(message)
+          ComfortableMediaSurfer.logger.warn(message)
         end
       end
 

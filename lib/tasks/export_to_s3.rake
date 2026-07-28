@@ -2,7 +2,7 @@
 
 namespace :comfy do
   TO    = Rails.application.secrets.aws_files_bucket
-  FILES = File.join(ComfortableMexicanSofa.config.seeds_path, 'protected-planet', 'files')
+  FILES = File.join(ComfortableMediaSurfer.config.seeds_path, 'protected-planet', 'files')
   STORAGE = Rails.root.join('storage').freeze
 
   def check_for_identifiers(attachment)

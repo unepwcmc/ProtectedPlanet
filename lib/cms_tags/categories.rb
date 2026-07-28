@@ -1,4 +1,4 @@
-class Categories < ComfortableMexicanSofa::Content::Tag::Fragment
+class Categories < ComfortableMediaSurfer::Content::Tags::Fragment
   def initialize(context:, params: [], source: nil)
     super
     @group_name = params.first
@@ -17,7 +17,7 @@ class Categories < ComfortableMexicanSofa::Content::Tag::Fragment
   end
 end
 
-ComfortableMexicanSofa::Content::Renderer.register_tag(
+ComfortableMediaSurfer::Content::Renderer.register_tag(
     :categories, Categories
 )
   

@@ -5,7 +5,7 @@ class Admin::CallToActionsControllerTest < ActionController::TestCase
   def setup
     @cta = FactoryGirl.create(:call_to_action)
     @site = ::Comfy::Cms::Site.create(label: 'test', identifier: 'test', hostname: 'localhost')
-    @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("#{ComfortableMexicanSofa::AccessControl::AdminAuthentication.username}:#{ComfortableMexicanSofa::AccessControl::AdminAuthentication.password}")
+    @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("#{ComfortableMediaSurfer::AccessControl::AdminAuthentication.username}:#{ComfortableMediaSurfer::AccessControl::AdminAuthentication.password}")
   end
 
   def test_get_index

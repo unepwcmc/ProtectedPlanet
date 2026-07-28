@@ -1,4 +1,4 @@
-class ComfortableMexicanSofa::Content::Tag::DateNotNull < ComfortableMexicanSofa::Content::Tag::Datetime
+class ComfortableMediaSurfer::Content::Tags::DateNotNull < ComfortableMediaSurfer::Content::Tags::Datetime
 
   def form_field(object_name, view, index)
     name    = "#{object_name}[fragments_attributes][#{index}][datetime]"
@@ -11,6 +11,6 @@ class ComfortableMexicanSofa::Content::Tag::DateNotNull < ComfortableMexicanSofa
 
 end
 
-ComfortableMexicanSofa::Content::Renderer.register_tag(
-  :date_not_null, ComfortableMexicanSofa::Content::Tag::DateNotNull
+ComfortableMediaSurfer::Content::Renderer.register_tag(
+  :date_not_null, ComfortableMediaSurfer::Content::Tags::DateNotNull
 )
