@@ -81,13 +81,16 @@ Its admin JS is esbuild/ES-modules and its CSS is dart-sass (`@import "codemirro
   missing, so Media Surfer's files UI 500'd. Added the three update migrations to
   the `db` submodule (service_name, variant_records, nullable checksum), migrated
   dev + test, added `test/unit/active_storage_schema_test.rb`. Files UI now 200.
-  **Remaining git steps (shared db repo — needs owner sign-off):**
-  - [ ] Push submodule branch `backend/rails-7-activestorage` (commit `7ac04d8`)
-        to `unepwcmc/protectedplanet-db`, PR → develop/master.
-  - [ ] Bump the `db` submodule pointer in the app repo once that lands (until
-        then a fresh clone of `backend/rails-7.0` still gets the old submodule).
-  - Note: `db/structure.sql` is gitignored in the submodule (schema comes from
-    `db:migrate`, per Jenkinsfile), so nothing to commit there.
+  **db submodule workflow (set up Jul 2026):** all upgrade-related db commits go
+  on the long-lived branch **`backend/rails-upgrade`** in `unepwcmc/protectedplanet-db`
+  (NOT develop — the db changes must land in develop together with the app's Rails
+  upgrade, not before). The app upgrade branches point their submodule at commits
+  on `backend/rails-upgrade`; `.gitmodules` tracks it (`submodule update --remote`).
+  - App `backend/rails-7.0` points at db `1df2706` (AS migrations). Pushed.
+  - [ ] **When the Rails upgrade merges to develop/staging:** merge db
+        `backend/rails-upgrade` → db `develop` at the same time, then repoint.
+  - `db/structure.sql` is gitignored in the submodule (schema comes from
+    `db:migrate`, per Jenkinsfile) — nothing to commit there.
 
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
