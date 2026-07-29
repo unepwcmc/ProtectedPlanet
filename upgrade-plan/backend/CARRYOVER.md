@@ -153,6 +153,30 @@ the **DB host** `192.168.176.65:9200`.
       7.17 keeps. (ES server 7→8 is a separate, deferred project.)
 - [ ] **redis-rb 4.8.1 → 5.x** when we do Sidekiq 7 (minor; 4.8 works on Ruby 3.3 for now).
 
+## 4f. CMS (Media Surfer) port verification (Jul 2026)
+Audited the ~280-line `comfy_patching.rb` + custom tags against Media Surfer 3.1.7.
+All 7 overridden methods exist with matching signatures and our bodies are rebased
+onto Media Surfer's current versions (incl. their `target_page` + `import_translations`).
+Verified working: admin loads, page-edit renders custom tags, files/upload (B3);
+public CMS pages render; **page save + `assign_layout_categories` run clean (#3)**.
+- [x] Fixed: `import_page` page lookup now `where(slug:, parent_id:)` (matched Media Surfer).
+- [ ] **HIGH — CMS seed import breaks on Ruby 3 (Psych safe_load).** Media Surfer's
+      importers call bare `YAML.safe_load(attributes_yaml)` in **5 places** — page attrs
+      (page/importer :49, **patched in our override**), page-translations (:117), and the
+      **layout / file / snippet** importers. Any seed whose attributes contain a datetime/
+      symbol raises `Psych::DisallowedClass: ActiveSupport::TimeWithZone`. `sync_seeds`
+      builds `ComfortableMediaSurfer::Seeds::#{type}::Importer` dynamically, so **all types
+      are affected** → this breaks CMS content deploy in prod, not just dev. Fix: pass
+      `permitted_classes: [Symbol, Date, Time, ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, BigDecimal]`
+      at each site (override the importers in `comfy_patching.rb`, and/or upstream a PR to
+      shakacode) **and add a seed round-trip test** (currently zero coverage — only factories).
+- [ ] **Seed export aborts on a missing blob** — `fragments_data` calls `attachment.download`,
+      which raises `ActiveStorage::FileNotFoundError` if the blob file is absent (dev only;
+      prod S3 has them). Consider rescuing per-attachment so one missing file doesn't kill
+      the whole export.
+- Note: the seed pipeline has **zero automated test coverage** — the above was found by a
+  manual export→import round-trip (#2), which is not repeatable in CI without fixtures.
+
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
