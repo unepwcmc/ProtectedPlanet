@@ -140,13 +140,18 @@ How to run locally:
 Infra reality: **Rails cache = Memcached** (dalli, local on web box) · **Redis** = Sidekiq +
 visit analytics (`$redis.zincrby`, local, db /2) · **Elasticsearch 7.17.24** self-hosted on
 the **DB host** `192.168.176.65:9200`.
-- [ ] **HIGH — `:dalli_store` → `:mem_cache_store`.** prod.rb + staging.rb set
+- [x] **FIXED — `:dalli_store` → `:mem_cache_store`.** prod.rb + staging.rb had
       `config.cache_store = :dalli_store`; **dalli 3.x removed that symbol** (needed for
-      Ruby 3 / Rails 7). Switch to `:mem_cache_store` (Rails built-in, dalli-backed) and
-      bump `dalli` 2.7 → 3.x. Also re-verify `staging.rb`'s direct `Dalli::Client.new(...)`.
-      **Not caught by tests** (dev = `:memory_store`, test = `:null_store`) — a prod/staging-
-      only break; validate on staging. `load_defaults 7.0` bumps cache_format_version, so
-      **flush Memcached on that deploy**.
+      Ruby 3 / Rails 7). Switched to `config.cache_store = :mem_cache_store,
+      Rails.application.secrets.memcache_servers, { value_max_bytes: 10_485_760 }` (Rails
+      built-in, dalli-backed) and bumped `dalli` 2.7 → ~> 3.2 (locked 3.2.8). The direct
+      `Dalli::Client.new(servers, {value_max_bytes:})` rack_cache line is API-compatible
+      with 3.x — left as-is. **Not caught by tests** (dalli is a `production,staging`-group
+      gem; dev = `:memory_store`, test = `:null_store`) so verified out-of-band: added a
+      `memcached` service to docker-compose and confirmed on dalli 3.2.8 that `:dalli_store`
+      now raises, `:mem_cache_store` + servers + `value_max_bytes` round-trips (incl. a 2MB
+      value), and `Dalli::Client.new` works. **Still validate on staging.**
+      ⚠️ `load_defaults 7.0` bumps cache_format_version, so **flush Memcached on that deploy**.
 - [ ] **`elasticsearch` gem 7.2.1 → ~7.17** (match server 7.17.24) + **faraday 1.0 → 1.10**
       (Ruby 3.3). **Stay on the ES 7.x client** — 8.x is a client rewrite (elastic-transport,
       namespace changes); code uses `Elasticsearch::Transport::Transport::Errors::*` which

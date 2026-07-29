@@ -1060,7 +1060,7 @@ GEM
     css_parser (3.0.0)
       addressable
       ssrf_filter (~> 1.5)
-    dalli (2.7.10)
+    dalli (3.2.8)
     database_cleaner (1.8.0)
     date (3.5.1)
     dbf (2.0.13)
@@ -1388,7 +1388,7 @@ DEPENDENCIES
   capybara (~> 2.3.0)
   coffee-rails (~> 5.0)
   comfortable_media_surfer (~> 3.1)
-  dalli (~> 2.7.2)
+  dalli (~> 3.2)
   database_cleaner
   dbf (~> 2.0.7)
   dotenv (~> 2.8)
