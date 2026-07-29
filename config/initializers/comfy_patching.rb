@@ -132,7 +132,9 @@ Rails.configuration.to_prepare do
       # setting page record
       page =
         if parent.present?
-          child = site.pages.where(slug: slug).first_or_initialize
+          # Scope by parent_id (matches Media Surfer) so identical slugs under
+          # different parents don't collide.
+          child = site.pages.where(slug: slug, parent_id: parent.id).first_or_initialize
           child.parent = parent
           child
         else
@@ -149,7 +151,15 @@ Rails.configuration.to_prepare do
 
         # parsing attributes section
         attributes_yaml = fragments_hash.delete("attributes")
-        attrs           = YAML.safe_load(attributes_yaml)
+        # Page attributes can include datetime values (e.g. TimeWithZone), which
+        # Psych's safe_load rejects by default under Ruby 3 — permit the classes
+        # the seed attributes legitimately contain, or CMS seed import raises
+        # Psych::DisallowedClass.
+        attrs           = YAML.safe_load(
+          attributes_yaml,
+          permitted_classes: [Symbol, Date, Time, ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, BigDecimal],
+          aliases: true
+        )
 
         # applying attributes
         layout = site.layouts.find_by(identifier: attrs.delete("layout")) || parent.try(:layout)
