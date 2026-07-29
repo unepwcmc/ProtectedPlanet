@@ -17,7 +17,13 @@ gem 'pg', '~> 1.1'
 gem 'activerecord-postgis-adapter', '~> 8.0'
 gem 'dbf', '~> 2.0.7'
 #
-gem 'elasticsearch', '~> 7.2.0'
+# Match the 7.17.24 server. Stay on the ES 7.x client — 8.x is a client rewrite
+# (elastic-transport gem, namespace changes) and the code uses
+# Elasticsearch::Transport::Transport::Errors::*, which 7.17 keeps and 8.x drops.
+gem 'elasticsearch', '~> 7.17'
+# elasticsearch-transport 7.17 rides on Faraday; pin the 1.x line (2.x split the
+# adapters into separate gems). 1.10 is the last 1.x and Ruby 3.3-clean.
+gem 'faraday', '~> 1.10'
 #
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2'

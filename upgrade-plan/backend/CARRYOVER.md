@@ -152,10 +152,20 @@ the **DB host** `192.168.176.65:9200`.
       now raises, `:mem_cache_store` + servers + `value_max_bytes` round-trips (incl. a 2MB
       value), and `Dalli::Client.new` works. **Still validate on staging.**
       ⚠️ `load_defaults 7.0` bumps cache_format_version, so **flush Memcached on that deploy**.
-- [ ] **`elasticsearch` gem 7.2.1 → ~7.17** (match server 7.17.24) + **faraday 1.0 → 1.10**
-      (Ruby 3.3). **Stay on the ES 7.x client** — 8.x is a client rewrite (elastic-transport,
-      namespace changes); code uses `Elasticsearch::Transport::Transport::Errors::*` which
-      7.17 keeps. (ES server 7→8 is a separate, deferred project.)
+- [x] **FIXED — `elasticsearch` gem 7.2.1 → ~7.17 (locked 7.17.11) + faraday 1.0 → ~1.10
+      (locked 1.10.6).** Stayed on the ES 7.x client (matches server 7.17.24) — 8.x is a
+      client rewrite (elastic-transport, namespace changes) and the code uses
+      `Elasticsearch::Transport::Transport::Errors::NotFound`, which 7.17 keeps. **No code
+      changes needed**: `Elasticsearch::Client.new(url:)`, `.indices.create/delete`, `.index`,
+      `.bulk`, `.search`, and the `NotFound` rescue all unchanged across 7.x. Verified out-of-
+      band with a live round-trip (ping/create/index/search=1 hit/delete + NotFound rescue).
+      faraday pinned to the 1.x line (2.x split adapters into separate gems). Suite 653/0.
+      (ES server 7→8 is a separate, deferred project.)
+      ⚠️ **Dev/prod ES parity gap:** `docker-compose.yml` runs `elasticsearch:8.6.0` while
+      prod is 7.17.24. The 7.17 client talks to the 8.6 dev box fine (8.x returns the product
+      header), so local dev is unblocked, but dev ≠ prod. Not downgraded here because the
+      `protectedplanet_es_data` volume holds 8.6-format indices 7.17 can't read (would force a
+      wipe + reindex). Align dev to 7.17.x (with a volume reset) as its own task when convenient.
 - [ ] **redis-rb 4.8.1 → 5.x** when we do Sidekiq 7 (minor; 4.8 works on Ruby 3.3 for now).
 
 ## 4f. CMS (Media Surfer) port verification (Jul 2026)
