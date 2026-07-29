@@ -864,3 +864,28 @@ export interface PameTableProps {
   json: PameTablePage
   modalText: PameModalTranslations
 }
+
+// One card in the "themes" carousel (partials/carousels/_themes), built from
+// ThematicAreasPresenter#all_cards. `pasNo` is -1 when the theme has no
+// protected-area count to show (ribbon is hidden in that case).
+export interface CarouselThemeCard {
+  url: string
+  linkTitle: string
+  label: string
+  imageUrl: string
+  summary: string
+  pasNo: number | string
+  slug: string
+}
+
+// Props for `frontend_mount "CarouselThemes"`.
+export interface CarouselThemesProps {
+  cards: CarouselThemeCard[]
+  areaTypeLabel: string
+}
+
+// Props for Carousel/Themes/Card.vue — a single card plus the list-level
+// `areaTypeLabel` forwarded down by Carousel/Themes/Index.vue.
+export interface CarouselThemesCardProps extends CarouselThemeCard {
+  areaTypeLabel: string
+}

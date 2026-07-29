@@ -87,7 +87,7 @@ tmux new -s pp-release
 
 
 # Step 1: Dry run (stops after validation, does not swap tables), can do this as soon as NC completes all drafts approval on all needed data
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Jul2026"]
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Aug2026"]
 
 # Detach without stopping the process
 Ctrl-b then d

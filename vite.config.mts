@@ -40,7 +40,9 @@ export default defineConfig({
     // that the dev-server optimizer doesn't handle correctly — pre-bundling it
     // produces a reference to a deps-cache file that never actually gets written,
     // 404ing every request until excluded.
-    exclude: ['@vueuse/core', 'pinia', 'maplibre-gl'],
+    // swiper/vue is the same "Vue3-only imports from 'vue'" case as
+    // @vueuse/core/pinia above (Carousel/Themes/Index.vue).
+    exclude: ['@vueuse/core', 'pinia', 'maplibre-gl', 'swiper/vue'],
   },
   resolve: {
     alias: [

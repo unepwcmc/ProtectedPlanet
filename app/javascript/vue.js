@@ -22,7 +22,6 @@ import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
-import Flickity from 'vue-flickity'
 import RegionCountryPages from './components/pages/RegionCountryPages'
 import SearchSite from './components/search/SearchSite'
 import StickyBar from './components/sticky/StickyBar'
@@ -57,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBarStacked,
         ChartRowPa,
         ChartRowStacked,
-        Flickity,
         RegionCountryPages,
         SearchSite,
         StickyBar,

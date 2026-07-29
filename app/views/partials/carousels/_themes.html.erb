@@ -2,14 +2,18 @@
 
 <h2 class="text-center"><%= @items[:title] %></h2>
 
-<flickity 
-  class="flickity--themes"
-  :options="<%= get_config_carousel_themes %>"
-  ref="flickity"
->
-  <% @items[:cards].each do |slide| %>
-    <div class="carousel-cell">
-      <%= render partial: 'partials/sub_partials/themes', locals: { theme: slide } %>
-    </div>
-  <% end %>
-</flickity>
+<%= frontend_mount "CarouselThemes", props: {
+      areaTypeLabel: t('global.area-types.wdpca'),
+      cards: @items[:cards].map do |slide|
+        page = slide[:obj]
+        {
+          url: root_url + page[:full_path],
+          linkTitle: "View the #{page[:label]} page",
+          label: page[:label],
+          imageUrl: cms_fragment_render(:image, page),
+          summary: cms_fragment_content(:summary, page),
+          pasNo: slide[:pas_no],
+          slug: page[:slug]
+        }
+      end
+    } %>

@@ -219,12 +219,6 @@ module ApplicationHelper
     end.compact
   end
 
-  def get_config_carousel_themes
-    {
-      wrapAround: true
-    }.to_json
-  end
-
   def map_page(slug, map_children = false)
     cms_page = Comfy::Cms::Page.find_by_slug(slug)
     return nil if cms_page.nil?

@@ -5724,13 +5724,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"desandro-matches-selector@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "desandro-matches-selector@npm:2.0.2"
-  checksum: 10c0/f4b1f42e6ccd6c97e93e3f99a64461eef2722075b03d8a9e349e31766436f8b385d1fd50802b024dae951dc69399f13de20a139c1187000fd5e2fcf11cb5eb00
-  languageName: node
-  linkType: hard
-
 "destroy@npm:~1.0.4":
   version: 1.0.4
   resolution: "destroy@npm:1.0.4"
@@ -6647,13 +6640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ev-emitter@npm:^1.0.1, ev-emitter@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "ev-emitter@npm:1.1.1"
-  checksum: 10c0/332dcb444de2b1d81035fb22a10dd33926311baa7ea6fc24f1de7b60c6eff5b7e133611000fce740471f0c8f95259d3914d49b4201af2d85a51f0aeb8cb1ceda
-  languageName: node
-  linkType: hard
-
 "event-emitter@npm:~0.3.5":
   version: 0.3.5
   resolution: "event-emitter@npm:0.3.5"
@@ -7118,15 +7104,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fizzy-ui-utils@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "fizzy-ui-utils@npm:2.0.7"
-  dependencies:
-    desandro-matches-selector: "npm:^2.0.0"
-  checksum: 10c0/4c36d45db4e2e0cf1507aa9633af6710a12bdc047146fa89505e10aedc5bfb16cbfb0da686d5dfd89a37e1da4bce86bbee365e22be88705ab4ffccd530b4902a
-  languageName: node
-  linkType: hard
-
 "flat-cache@npm:^4.0.0":
   version: 4.0.1
   resolution: "flat-cache@npm:4.0.1"
@@ -7166,20 +7143,6 @@ __metadata:
   version: 1.0.3
   resolution: "flatten@npm:1.0.3"
   checksum: 10c0/9f9b1f3dcd05be057bb83ec27f2513da5306e7bfc0cf8bd839ab423eb1b0f99683a25c97b48fafd5959819159659ce9f1397623a46f89a8577ba095fcf5fb753
-  languageName: node
-  linkType: hard
-
-"flickity@npm:^2.2.0":
-  version: 2.2.1
-  resolution: "flickity@npm:2.2.1"
-  dependencies:
-    desandro-matches-selector: "npm:^2.0.0"
-    ev-emitter: "npm:^1.1.1"
-    fizzy-ui-utils: "npm:^2.0.7"
-    get-size: "npm:^2.0.3"
-    unidragger: "npm:^2.3.0"
-    unipointer: "npm:^2.3.0"
-  checksum: 10c0/9d1c34da0c1ab635bdf4c5fc9d25a4a7be1e2c25d9daf352556c1ebfbf35ef0c4f9d198fc34e9f0f6b2cd3ff78ded742007f8c51f614697c662d4b8aac51f170
   languageName: node
   linkType: hard
 
@@ -7500,13 +7463,6 @@ __metadata:
     dunder-proto: "npm:^1.0.1"
     es-object-atoms: "npm:^1.0.0"
   checksum: 10c0/9224acb44603c5526955e83510b9da41baf6ae73f7398875fba50edc5e944223a89c4a72b070fcd78beb5f7bdda58ecb6294adc28f7acfc0da05f76a2399643c
-  languageName: node
-  linkType: hard
-
-"get-size@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "get-size@npm:2.0.3"
-  checksum: 10c0/c9703caa61b4d38385eab34aa5068f3a25ab40f6d9cda6dac3f0dc4dcd8da38f7b0283035e71c9f52a47b670b9315372cae46f58d66ad709a4939e57c1fdc6cc
   languageName: node
   linkType: hard
 
@@ -13174,6 +13130,7 @@ __metadata:
     stylelint-config-standard: "npm:39.0.0"
     stylelint-config-standard-vue: "npm:^1.0.0"
     stylelint-config-tailwindcss: "npm:^1.0.0"
+    swiper: "npm:^14.0.7"
     tailwindcss: "npm:^4.3.3"
     typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.65.0"
@@ -13185,7 +13142,6 @@ __metadata:
     vue-analytics: "npm:^5.17.2"
     vue-demi: "npm:^0.13.1"
     vue-eslint-parser: "npm:^10.2.0"
-    vue-flickity: "npm:^1.2.1"
     vue-lazyload: "npm:^1.3.3"
     vue-loader: "npm:^15.11.1"
     vue-tsc: "npm:^2.2.12"
@@ -14417,6 +14373,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swiper@npm:^14.0.7":
+  version: 14.0.7
+  resolution: "swiper@npm:14.0.7"
+  checksum: 10c0/f8a7e42855ffc71929c5903da9146dd45d096c3f2b4aa0706aea9355c8caa145c646072f5dcbd5f76edabae069a45e5a3482f9ed3804f389abbf59f3c8f2267f
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -15025,15 +14988,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unidragger@npm:^2.3.0":
-  version: 2.3.1
-  resolution: "unidragger@npm:2.3.1"
-  dependencies:
-    unipointer: "npm:^2.3.0"
-  checksum: 10c0/627b1758532fc3155af1e5cf4910becd72eb3e709dc62fba8a33b0de748f03578de92f7e8b8450fbf9f4c55db4c9e21de52c893f7fa9c96f72238edbc610c1fa
-  languageName: node
-  linkType: hard
-
 "union-value@npm:^1.0.0":
   version: 1.0.1
   resolution: "union-value@npm:1.0.1"
@@ -15043,15 +14997,6 @@ __metadata:
     is-extendable: "npm:^0.1.1"
     set-value: "npm:^2.0.1"
   checksum: 10c0/8758d880cb9545f62ce9cfb9b791b2b7a206e0ff5cc4b9d7cd6581da2c6839837fbb45e639cf1fd8eef3cae08c0201b614b7c06dd9f5f70d9dbe7c5fe2fbf592
-  languageName: node
-  linkType: hard
-
-"unipointer@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "unipointer@npm:2.3.0"
-  dependencies:
-    ev-emitter: "npm:^1.0.1"
-  checksum: 10c0/bb595eaade5777048a755effacb9b395c0d7499a59b86d67b1aa8808350afc896923593875ff593af05f55494bac29d35e06134e92116fe92290ede858f40b63
   languageName: node
   linkType: hard
 
@@ -15499,15 +15444,6 @@ __metadata:
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
   checksum: 10c0/f6181b4d4ac17a5c06484aed40022997f65622a037ccc21797c88e55ab93f4ad21c95c93c466777f7a139ffb8bf750c889ef48e1ea16882e6617f6405c1d2013
-  languageName: node
-  linkType: hard
-
-"vue-flickity@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "vue-flickity@npm:1.2.1"
-  dependencies:
-    flickity: "npm:^2.2.0"
-  checksum: 10c0/3e090f33543c27df79b136a0fd354ce8c12aa11b7a075146c37da509d209a1ccfa6fa8763324fe65a3b36b9ed54f809f297d351b8384400ae22ca0a121647314
   languageName: node
   linkType: hard
 
