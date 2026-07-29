@@ -160,22 +160,21 @@ onto Media Surfer's current versions (incl. their `target_page` + `import_transl
 Verified working: admin loads, page-edit renders custom tags, files/upload (B3);
 public CMS pages render; **page save + `assign_layout_categories` run clean (#3)**.
 - [x] Fixed: `import_page` page lookup now `where(slug:, parent_id:)` (matched Media Surfer).
-- [ ] **HIGH — CMS seed import breaks on Ruby 3 (Psych safe_load).** Media Surfer's
-      importers call bare `YAML.safe_load(attributes_yaml)` in **5 places** — page attrs
-      (page/importer :49, **patched in our override**), page-translations (:117), and the
-      **layout / file / snippet** importers. Any seed whose attributes contain a datetime/
-      symbol raises `Psych::DisallowedClass: ActiveSupport::TimeWithZone`. `sync_seeds`
-      builds `ComfortableMediaSurfer::Seeds::#{type}::Importer` dynamically, so **all types
-      are affected** → this breaks CMS content deploy in prod, not just dev. Fix: pass
-      `permitted_classes: [Symbol, Date, Time, ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, BigDecimal]`
-      at each site (override the importers in `comfy_patching.rb`, and/or upstream a PR to
-      shakacode) **and add a seed round-trip test** (currently zero coverage — only factories).
+- [x] **FIXED — CMS seed import on Ruby 3 (Psych safe_load).** Media Surfer's importers
+      call bare `YAML.safe_load` in 5 places (page attrs, page-translations, layout, file,
+      snippet), which rejected datetime/symbol attrs (`Psych::DisallowedClass`) and broke
+      `sync_seeds`. Fixed with a `CmsSeedYaml` shim in `comfy_patching.rb`: a thread-local
+      flag set for the duration of any importer's `import!`, and a guarded `YAML.safe_load`/
+      `safe_load_file` prepend that permits `[Symbol, Date, Time, TimeWithZone, TimeZone,
+      BigDecimal]` **only while importing** (normal app YAML unchanged). Covers all 5 sites
+      + future ones without re-copying gem method bodies. Also fixed two nil crashes on
+      **empty file/category fragments** (guards in our `construct_fragments_attributes` /
+      category code). Verified: 140-page real round-trip green + new regression test
+      `test/integration/cms_seed_roundtrip_test.rb` (datetime + empty file/category frags).
 - [ ] **Seed export aborts on a missing blob** — `fragments_data` calls `attachment.download`,
       which raises `ActiveStorage::FileNotFoundError` if the blob file is absent (dev only;
-      prod S3 has them). Consider rescuing per-attachment so one missing file doesn't kill
-      the whole export.
-- Note: the seed pipeline has **zero automated test coverage** — the above was found by a
-  manual export→import round-trip (#2), which is not repeatable in CI without fixtures.
+      prod S3 has them). Low priority — consider rescuing per-attachment so one missing file
+      doesn't kill the whole export.
 
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
