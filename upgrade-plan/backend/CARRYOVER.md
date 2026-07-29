@@ -136,6 +136,23 @@ How to run locally:
       in the MinIO `import/` bucket to exercise `Wdpa::Importer.import` (FileGDB read).
 - [ ] **Tier 3 (full real end-to-end)** — real WDPA release + real S3 on staging (deploy-gated).
 
+## 4e. Cache / search / redis clients (surfaced in the devops research, Jul 2026)
+Infra reality: **Rails cache = Memcached** (dalli, local on web box) · **Redis** = Sidekiq +
+visit analytics (`$redis.zincrby`, local, db /2) · **Elasticsearch 7.17.24** self-hosted on
+the **DB host** `192.168.176.65:9200`.
+- [ ] **HIGH — `:dalli_store` → `:mem_cache_store`.** prod.rb + staging.rb set
+      `config.cache_store = :dalli_store`; **dalli 3.x removed that symbol** (needed for
+      Ruby 3 / Rails 7). Switch to `:mem_cache_store` (Rails built-in, dalli-backed) and
+      bump `dalli` 2.7 → 3.x. Also re-verify `staging.rb`'s direct `Dalli::Client.new(...)`.
+      **Not caught by tests** (dev = `:memory_store`, test = `:null_store`) — a prod/staging-
+      only break; validate on staging. `load_defaults 7.0` bumps cache_format_version, so
+      **flush Memcached on that deploy**.
+- [ ] **`elasticsearch` gem 7.2.1 → ~7.17** (match server 7.17.24) + **faraday 1.0 → 1.10**
+      (Ruby 3.3). **Stay on the ES 7.x client** — 8.x is a client rewrite (elastic-transport,
+      namespace changes); code uses `Elasticsearch::Transport::Transport::Errors::*` which
+      7.17 keeps. (ES server 7→8 is a separate, deferred project.)
+- [ ] **redis-rb 4.8.1 → 5.x** when we do Sidekiq 7 (minor; 4.8 works on Ruby 3.3 for now).
+
 ## 5. Deploy / CI notes
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
