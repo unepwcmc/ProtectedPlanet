@@ -25,17 +25,15 @@ describe('Carousel/Themes/Card', () => {
     expect(wrapper.find('.ct-theme-card__summary').html()).toContain('Ocean coverage')
   })
 
-  it('shows the ribbon with the pin icon and pa count when pasNo is present', () => {
+  it('forwards every prop to the ribbon, including the areaTypeLabel Card.vue itself has no other use for', () => {
     const wrapper = mount(CarouselThemesCard, { props: BASE_PROPS })
 
-    expect(wrapper.find('.ct-theme-card__ribbon').exists()).toBe(true)
-    expect(wrapper.find('.ct-theme-card__ribbon-number').text()).toBe('1234')
-    expect(wrapper.find('.ct-theme-card__ribbon-label').text()).toBe('protected areas')
-  })
-
-  it('hides the ribbon when pasNo is -1', () => {
-    const wrapper = mount(CarouselThemesCard, { props: { ...BASE_PROPS, pasNo: -1 } })
-
-    expect(wrapper.find('.ct-theme-card__ribbon').exists()).toBe(false)
+    // Ribbon.vue's own spec covers the pasNo/-1 hide behaviour and internal
+    // markup in detail — this just confirms Card.vue wires it up at all,
+    // with the card-level `ct-theme-card__ribbon` class layered on top.
+    const ribbon = wrapper.find('.ct-theme-card__ribbon')
+    expect(ribbon.exists()).toBe(true)
+    expect(ribbon.text()).toContain('1234')
+    expect(ribbon.text()).toContain('protected areas')
   })
 })

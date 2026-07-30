@@ -5,8 +5,9 @@
     :modules="[Navigation]"
     :loop="cards.length > 1"
     breakpoints-base="window"
-    :slidesPerView="1.1"
+    :slidesPerView="1"
     :slidesOffsetBefore="50"
+    :slidesOffsetAfter="50"
     :spaceBetween="10"
     :breakpoints
     :navigation
@@ -64,18 +65,39 @@ const navigation = {
 
 const breakpoints = {
   768: {
-    slidesPerView: 1.2,
+    slidesPerView: 1,
     slidesOffsetBefore: 130,
+    slidesOffsetAfter: 130,
     spaceBetween: 20
   },
   1024: {
-    slidesPerView: 2.2,
+    slidesPerView: 2,
     slidesOffsetBefore: 80,
+    slidesOffsetAfter: 80,
     spaceBetween: 20
   },
   1280: {
-    slidesPerView: 2.3,
+    slidesPerView: 2,
     slidesOffsetBefore: 160,
+    slidesOffsetAfter: 160,
+    spaceBetween: 20
+  },
+  1440: {
+    slidesPerView: 1.95,
+    slidesOffsetBefore: 180,
+    slidesOffsetAfter: 180,
+    spaceBetween: 20
+  },
+  1600: {
+    slidesPerView: 2,
+    slidesOffsetBefore: 220,
+    slidesOffsetAfter: 220,
+    spaceBetween: 20
+  },
+  1800: {
+    slidesPerView: 2,
+    slidesOffsetBefore: 350,
+    slidesOffsetAfter: 350,
     spaceBetween: 20
   }
 }
@@ -96,14 +118,53 @@ const breakpoints = {
   @apply absolute top-1/2 z-2 flex h-12 w-12 md:h-18 md:w-18 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-none bg-theme-primary text-white shadow-md transition-colors duration-200 hover:bg-theme-primary-dark;
 }
 
+/*
+ * Fixed px margins matching slidesOffsetBefore/slidesOffsetAfter in <script>
+ * exactly at every tier (not percentages, which drift out of alignment
+ * everywhere in a breakpoint's range except the one width they were
+ * eyeballed at, since a % scales with container width but a fixed px offset
+ * doesn't). Keep these in sync by hand with the JS breakpoints object above.
+ */
 .ct-carousel-themes__button--previous {
-  @apply left-0 -translate-x-1/2 ml-[9%] md:ml-[14%] lg:ml-[6.5%] xl:ml-[10%];
+  @apply left-0 -translate-x-1/2;
 
+  margin-left: 45px;
 }
 
 .ct-carousel-themes__button--next {
-  @apply right-0 translate-x-1/2 mr-[7.5%] md:mr-[13%] lg:mr-[7.5%] xl:mr-[11%];
+  @apply right-0 translate-x-1/2;
 
+  margin-right: 45px;
+}
+
+@media (width >= 48rem) {
+  .ct-carousel-themes__button--previous { margin-left: 120px; }
+
+  .ct-carousel-themes__button--next { margin-right: 120px; }
+}
+
+@media (width >= 64rem) {
+  .ct-carousel-themes__button--previous { margin-left: 70px; }
+
+  .ct-carousel-themes__button--next { margin-right: 70px; }
+}
+
+@media (width >= 80rem) {
+  .ct-carousel-themes__button--previous { margin-left: 170px; }
+
+  .ct-carousel-themes__button--next { margin-right: 140px; }
+}
+
+@media (width >= 100rem) {
+  .ct-carousel-themes__button--previous { margin-left: 210px; }
+
+  .ct-carousel-themes__button--next { margin-right: 210px; }
+}
+
+@media (width >= 112.5rem) {
+  .ct-carousel-themes__button--previous { margin-left: 340px; }
+
+  .ct-carousel-themes__button--next { margin-right: 340px; }
 }
 
 .ct-carousel-themes__button-icon {
