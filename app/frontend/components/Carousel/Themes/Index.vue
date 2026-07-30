@@ -2,15 +2,7 @@
   <Swiper
     v-if="cards.length"
     class="ct-carousel-themes"
-    :modules="[Navigation]"
-    :loop="cards.length > 1"
-    breakpoints-base="window"
-    :slidesPerView="1"
-    :slidesOffsetBefore="50"
-    :slidesOffsetAfter="50"
-    :spaceBetween="10"
-    :breakpoints
-    :navigation
+    v-bind="swiperSettings"
   >
     <SwiperSlide
       v-for="card in cards"
@@ -58,47 +50,55 @@ import IconArrow from '@/components/Icon/Arrow.vue'
 type CarouselThemes = CarouselThemesProps
 defineProps<CarouselThemes>()
 
-const navigation = {
-  prevEl: '.ct-carousel-themes__button--previous',
-  nextEl: '.ct-carousel-themes__button--next'
-}
-
-const breakpoints = {
-  768: {
-    slidesPerView: 1,
-    slidesOffsetBefore: 130,
-    slidesOffsetAfter: 130,
-    spaceBetween: 20
+const swiperSettings = {
+  modules: [Navigation],
+  slidesPerView: 1,
+  slidesOffsetBefore: 50,
+  slidesOffsetAfter: 50,
+  spaceBetween: 10,
+  loop: true,
+  breakpointsBase: 'window',
+  navigation: {
+    prevEl: '.ct-carousel-themes__button--previous',
+    nextEl: '.ct-carousel-themes__button--next'
   },
-  1024: {
-    slidesPerView: 2,
-    slidesOffsetBefore: 80,
-    slidesOffsetAfter: 80,
-    spaceBetween: 20
-  },
-  1280: {
-    slidesPerView: 2,
-    slidesOffsetBefore: 160,
-    slidesOffsetAfter: 160,
-    spaceBetween: 20
-  },
-  1440: {
-    slidesPerView: 1.95,
-    slidesOffsetBefore: 180,
-    slidesOffsetAfter: 180,
-    spaceBetween: 20
-  },
-  1600: {
-    slidesPerView: 2,
-    slidesOffsetBefore: 220,
-    slidesOffsetAfter: 220,
-    spaceBetween: 20
-  },
-  1800: {
-    slidesPerView: 2,
-    slidesOffsetBefore: 350,
-    slidesOffsetAfter: 350,
-    spaceBetween: 20
+  breakpoints: {
+    768: {
+      slidesPerView: 1,
+      slidesOffsetBefore: 130,
+      slidesOffsetAfter: 130,
+      spaceBetween: 20
+    },
+    1024: {
+      slidesPerView: 2,
+      slidesOffsetBefore: 80,
+      slidesOffsetAfter: 80,
+      spaceBetween: 20
+    },
+    1280: {
+      slidesPerView: 2,
+      slidesOffsetBefore: 160,
+      slidesOffsetAfter: 160,
+      spaceBetween: 20
+    },
+    1440: {
+      slidesPerView: 1.95,
+      slidesOffsetBefore: 180,
+      slidesOffsetAfter: 180,
+      spaceBetween: 20
+    },
+    1600: {
+      slidesPerView: 2,
+      slidesOffsetBefore: 220,
+      slidesOffsetAfter: 220,
+      spaceBetween: 20
+    },
+    1800: {
+      slidesPerView: 2,
+      slidesOffsetBefore: 350,
+      slidesOffsetAfter: 350,
+      spaceBetween: 20
+    }
   }
 }
 </script>
