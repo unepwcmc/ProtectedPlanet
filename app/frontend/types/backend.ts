@@ -420,6 +420,43 @@ export interface SearchAreasHomeProps {
   endpointSearch: string
 }
 
+// One entry of Search::FullSerializer#serialize's `results` array.
+export interface SearchSiteResult {
+  title: string
+  url: string
+  summary?: string
+  image?: string
+}
+
+// Search::FullSerializer#serialize — passed as `dataPageLoad` to `frontend_mount
+// "SearchSite"` and returned by SearchController#search_results.
+export interface SearchSiteResultsData {
+  searchTerm: string
+  currentPage: number
+  pageItemsStart: number
+  pageItemsEnd: number
+  totalItems: number
+  results: SearchSiteResult[]
+}
+
+// SearchController#index's `@categories` (site-wide search category tabs).
+export interface SearchSiteCategory {
+  id: string
+  title: string
+}
+
+// Props for `frontend_mount "SearchSite"` (search/index.html.erb).
+export interface SearchSiteProps {
+  categories: SearchSiteCategory[]
+  dataPageLoad: SearchSiteResultsData
+  endpoint: string
+  gaId?: string
+  itemsPerPage?: number
+  noResultsText: string
+  placeholder: string
+  resultsText: string
+}
+
 // Props for `ChartRowPa` — a single labelled bar (coverage % within a total %),
 // mounted directly inside partials/charts/_chart-row-pa.html.erb (marine ocean
 // coverage, Green List tab) with the surrounding title/content/legend left as

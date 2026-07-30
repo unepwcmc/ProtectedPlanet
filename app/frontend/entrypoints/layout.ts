@@ -48,7 +48,8 @@ registerIslands({
   AttributesAffiliations: () => import('@/components/Attributes/Affiliations/Index.vue'),
   AttributesProtectedAreaSources: () => import('@/components/Attributes/ProtectedArea/Source/List.vue'),
   PameTable: () => import('@/components/Pame/Table/Index.vue'),
-  CarouselThemes: () => import('@/components/Carousel/Themes/Index.vue')
+  CarouselThemes: () => import('@/components/Carousel/Themes/Index.vue'),
+  SearchSite: () => import('@/components/Search/Index.vue')
 })
 
 if (document.readyState === 'complete') {

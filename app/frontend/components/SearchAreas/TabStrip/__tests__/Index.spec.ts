@@ -52,4 +52,15 @@ describe('SearchAreasTabStrip', () => {
       event_label: 'Component: search areas - Tab: Country'
     })
   })
+
+  it('marks tabs aria-disabled and ignores clicks when disabled', async () => {
+    const wrapper = mount(SearchAreasTabStrip, { props: { children, disabled: true } })
+
+    expect(wrapper.findAll('li')[1].attributes('aria-disabled')).toBe('true')
+
+    await wrapper.findAll('li')[1].trigger('click')
+
+    expect(wrapper.emitted('click:tab')).toBeUndefined()
+    expect(wrapper.findAll('li')[0].classes()).toContain('active')
+  })
 })

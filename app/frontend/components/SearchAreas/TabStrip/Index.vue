@@ -4,6 +4,7 @@
       v-for="child in children"
       :id="child.id"
       :key="child.id"
+      :disabled
       :gaId="googleAnalyticsId(child)"
       :selectedId
       :title="child.title"
@@ -25,6 +26,7 @@ interface TabStripChild {
 const props = withDefaults(defineProps<{
   children: TabStripChild[]
   defaultSelectedId?: string
+  disabled?: boolean
   gaId?: string
   preSelectedId?: string
 }>(), {

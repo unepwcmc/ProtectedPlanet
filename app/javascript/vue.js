@@ -23,7 +23,6 @@ import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import RegionCountryPages from './components/pages/RegionCountryPages'
-import SearchSite from './components/search/SearchSite'
 import StickyBar from './components/sticky/StickyBar'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
@@ -57,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowPa,
         ChartRowStacked,
         RegionCountryPages,
-        SearchSite,
         StickyBar,
         Tabs,
         TabTarget,

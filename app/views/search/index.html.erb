@@ -1,12 +1,11 @@
 <div class="container--medium spacer-large--top spacer-medium--bottom">
-  <search-site
-    :categories="<%= @categories.to_json %>"
-    :data-page-load="<%= @results.to_json %>"
-    endpoint="<%= search_results_path %>"
-    ga-id="Component: search site"
-    placeholder="<%= t('global.placeholder.search-site') %>"
-    query="<%= @query %>"
-    no-results-text="<%= t('search.no-results') %>"
-    results-text="<%= t('search.results') %>"
-  ></search-site>
+  <%= frontend_mount "SearchSite", props: {
+    categories: @categories,
+    dataPageLoad: @results,
+    endpoint: search_results_path,
+    gaId: "Component: search site",
+    placeholder: t('global.placeholder.search-site'),
+    noResultsText: t('search.no-results'),
+    resultsText: t('search.results')
+  } %>
 </div>
