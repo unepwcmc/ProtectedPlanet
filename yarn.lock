@@ -3471,15 +3471,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.19.0":
-  version: 0.19.2
-  resolution: "axios@npm:0.19.2"
-  dependencies:
-    follow-redirects: "npm:1.5.10"
-  checksum: 10c0/b775abf2db44ea4f182f4c2bfa4bf84a723b86f5aa001f222f12193fa45ba243b7e3f27b66289c6afa51d696402b05c82715fd621a34add5b538e850adcdbce1
-  languageName: node
-  linkType: hard
-
 "babel-loader@npm:^8.0.6":
   version: 8.0.6
   resolution: "babel-loader@npm:8.0.6"
@@ -5520,15 +5511,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:=3.1.0":
-  version: 3.1.0
-  resolution: "debug@npm:3.1.0"
-  dependencies:
-    ms: "npm:2.0.0"
-  checksum: 10c0/5bff34a352d7b2eaa31886eeaf2ee534b5461ec0548315b2f9f80bd1d2533cab7df1fa52e130ce27bc31c3945fbffb0fc72baacdceb274b95ce853db89254ea4
-  languageName: node
-  linkType: hard
-
 "debug@npm:^3.0.0, debug@npm:^3.1.1, debug@npm:^3.2.5":
   version: 3.2.6
   resolution: "debug@npm:3.2.6"
@@ -6286,13 +6268,6 @@ __metadata:
   version: 1.1.0
   resolution: "es6-object-assign@npm:1.1.0"
   checksum: 10c0/11c165ae16866aca897dee9b689402f0e871589e859809343ef9e0fdd067133684db16fd15abdba2a99e7319222b9f43e6b747baabb909cee9d0ecbac8deebee
-  languageName: node
-  linkType: hard
-
-"es6-promise@npm:^4.2.6":
-  version: 4.2.8
-  resolution: "es6-promise@npm:4.2.8"
-  checksum: 10c0/2373d9c5e9a93bdd9f9ed32ff5cb6dd3dd785368d1c21e9bbbfd07d16345b3774ae260f2bd24c8f836a6903f432b4151e7816a7fa8891ccb4e1a55a028ec42c3
   languageName: node
   linkType: hard
 
@@ -7166,15 +7141,6 @@ __metadata:
     tape: "npm:^4.5.1"
     uglify-js: "npm:^2.6.2"
   checksum: 10c0/c5634318c883c7f9ff5f2e538fcd554b7c9d98824cdd96e00d32bac8fc9cacf44c76ef1da00e6bc4617d2602b9083f27df02232e56ba0acdb4b7cc0c00b40c74
-  languageName: node
-  linkType: hard
-
-"follow-redirects@npm:1.5.10":
-  version: 1.5.10
-  resolution: "follow-redirects@npm:1.5.10"
-  dependencies:
-    debug: "npm:=3.1.0"
-  checksum: 10c0/f56ca26dcf3c9996a6cf8868b61e369a35d4000ade0292bdd27b5e0934902681b037060b9fabe58e7042bb8b85166d5db8bbcf027f1825c1577e4cffd904fd3f
   languageName: node
   linkType: hard
 
@@ -13108,13 +13074,11 @@ __metadata:
     "@vue/devtools-api": "npm:^8.1.5"
     "@vue/test-utils": "npm:^2.4.11"
     "@vueuse/core": "npm:^14.3.0"
-    axios: "npm:^0.19.0"
     babel-polyfill: "npm:^6.26.0"
     cookieconsent: "npm:^3.1.1"
     d3: "npm:^5.9.2"
     dotenv-webpack: "npm:^1.7.0"
     es6-object-assign: "npm:^1.1.0"
-    es6-promise: "npm:^4.2.6"
     eslint: "npm:^10.7.0"
     eslint-plugin-vue: "npm:^10.4.0"
     globals: "npm:^17.7.0"
@@ -13147,7 +13111,6 @@ __metadata:
     vue-tsc: "npm:^2.2.12"
     vue2-touch-events: "npm:^2.0.0"
     vue3: "npm:vue@^3.5.40"
-    vuex: "npm:^3.1.0"
     webpack-dev-server: "npm:^3.8.2"
   languageName: unknown
   linkType: soft
@@ -15547,13 +15510,6 @@ __metadata:
     "@vue/compiler-sfc": "npm:2.7.16"
     csstype: "npm:^3.1.0"
   checksum: 10c0/15bf536c131a863d03c42386a4bbc82316262129421ef70e88d1758bcf951446ef51edeff42e3b27d026015330fe73d90155fca270eb5eadd30b0290735f2c3e
-  languageName: node
-  linkType: hard
-
-"vuex@npm:^3.1.0":
-  version: 3.1.2
-  resolution: "vuex@npm:3.1.2"
-  checksum: 10c0/02835512c608b752977904431702bc8ac5fa3f76aa72b50a96a37ff29f0dac29264687ef74cd34d90737482dd02795ae553cf2350d8acceb2907683a54330607
   languageName: node
   linkType: hard
 

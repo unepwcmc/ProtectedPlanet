@@ -13,21 +13,10 @@ import VueLazyload from 'vue-lazyload'
 import 'cookieconsent'
 import 'cookieconsent/build/cookieconsent.min.css'
 
-// store
-import store from './store/store.js'
-
 // components
-import AmChartMultiline from './components/charts/am-chart-line/AmChartMultiline'
-import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
-import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
-import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
-import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
-import RegionCountryPages from './components/pages/RegionCountryPages'
 import StickyBar from './components/sticky/StickyBar'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
-import VSelectSearchable from './components/select/VSelectSearchable'
-import IconExclamationCircle from './components/icon/ExclamationCircle'
 // BannerBanner migrated to a Vite/Vue 3 island (app/frontend/components/Banner.vue,
 // mounted via layout.ts). Kept out of the Vue 2 #v-app root so only one system compiles it.
 
@@ -48,19 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new Vue({
       el: '#v-app',
-      store,
       components: {
-        AmChartMultiline,
-        AmChartPie,
-        ChartBarStacked,
-        ChartRowPa,
-        ChartRowStacked,
-        RegionCountryPages,
         StickyBar,
         Tabs,
-        TabTarget,
-        VSelectSearchable,
-        IconExclamationCircle
+        TabTarget
       }
     })
   }
