@@ -1,0 +1,46 @@
+@utility vw-topbar {
+  @apply bg-white;
+}
+
+@utility vw-topbar__container {
+  @apply 
+  tw-shared-base-container 
+  flex
+  items-center
+  justify-between
+  gap-6;
+}
+
+@utility vw-topbar__logo {
+  @apply
+  flex
+  h-13
+  items-center
+  justify-center
+  bg-theme-primary
+  px-4
+  md:h-14
+  md:px-5
+  lg:h-16.75
+  lg:px-7.5;
+}
+
+@utility vw-topbar__right {
+  @apply
+  flex
+  items-center
+  gap-1
+  lg:gap-6;
+}
+
+@utility vw-topbar__nav {
+  @apply 
+  order-2 
+  md:order-1;
+}
+
+@utility vw-topbar__search {
+  @apply 
+  order-1
+  md:order-2;
+}

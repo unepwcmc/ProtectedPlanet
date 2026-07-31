@@ -1,0 +1,3 @@
+@utility tw-shared-base-container {
+    @apply w-full max-w-300 mx-auto px-5 md:px-6.25 lg:px-7.5;
+}

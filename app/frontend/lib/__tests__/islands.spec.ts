@@ -12,8 +12,24 @@ const Mini = defineComponent({
   }
 })
 
+let unmountCount = 0
+// Same shape as Mini, but counts its own teardown — used to prove a removed
+// mount point's app instance actually gets unmounted, not just detached.
+const CountsUnmount = defineComponent({
+  props: { msg: { type: String, default: '' } },
+  unmounted() {
+    unmountCount++
+  },
+  render() {
+    return h('span', { class: 'counts-unmount' }, `mini:${this.msg}`)
+  }
+})
+
 // Register once; the registry is module-global (same as in the real app).
-registerIslands({ mini: () => Promise.resolve({ default: Mini }) })
+registerIslands({
+  'mini': () => Promise.resolve({ default: Mini }),
+  'counts-unmount': () => Promise.resolve({ default: CountsUnmount })
+})
 
 // MutationObserver callbacks and the mounter's dynamic imports resolve async;
 // give both a few ticks to settle.
@@ -41,6 +57,7 @@ function mountPoint(id: string, props?: Record<string, unknown>, wrapperClass?: 
 
 beforeEach(() => {
   document.body.innerHTML = ''
+  unmountCount = 0
 })
 
 afterEach(() => {
@@ -133,6 +150,62 @@ describe('island mounter', () => {
     // The observer picked up the newly-inserted mount point and mounted it.
     expect(document.querySelector('[data-mount="mini"]')).not.toBeNull()
     expect(document.querySelector('.mini')?.textContent).toBe('mini:revealed')
+
+    wrapper.unmount()
+  })
+
+  it('unmounts the island app when its root is removed from the document', async () => {
+    const el = mountPoint('counts-unmount', { msg: 'gone' })
+
+    startIslands()
+    await flush()
+    expect(document.querySelector('.counts-unmount')).not.toBeNull()
+
+    // The wrapper is swapped for the component's own root on mount (see
+    // islands.ts) — look the live node up rather than reusing `el`.
+    document.querySelector('.counts-unmount')?.remove()
+    await flush()
+
+    expect(unmountCount).toBe(1)
+    expect(el.isConnected).toBe(false)
+  })
+
+  it('unmounts a nested island when its Tabs panel is torn down by v-if, and re-mounts fresh on return', async () => {
+    const tabs = [
+      { id: 1, title: 'One', bodyHtml: '<p>plain</p>' },
+      {
+        id: 2,
+        title: 'Two',
+        bodyHtml:
+          '<div data-mount="counts-unmount"></div>'
+          + '<script type="application/json" id="props-counts-unmount">{"msg":"revealed"}</script>'
+      }
+    ]
+
+    const wrapper = mount(Tabs, { props: { tabs }, attachTo: document.body })
+    startIslands()
+    await flush()
+
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
+    await flush()
+    expect(document.querySelector('.counts-unmount')).not.toBeNull()
+    expect(unmountCount).toBe(0)
+
+    // Switch back to tab 1 — Tabs' own v-if tears down tab 2's panel, taking
+    // the nested island's DOM with it.
+    await wrapper.findAll('.ct-tabs__trigger')[0].trigger('click')
+    await flush()
+
+    expect(document.querySelector('.counts-unmount')).toBeNull()
+    expect(unmountCount).toBe(1)
+
+    // Switching back to tab 2 re-inserts the same bodyHtml — must mount a
+    // fresh app rather than silently no-op'ing (which would happen if the old
+    // element's mounted-tracking entries weren't cleared on removal).
+    await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
+    await flush()
+
+    expect(document.querySelector('.counts-unmount')?.textContent).toBe('mini:revealed')
 
     wrapper.unmount()
   })

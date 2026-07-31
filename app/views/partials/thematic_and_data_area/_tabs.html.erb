@@ -1,32 +1,13 @@
 <% show_tab_triggers = thematic_and_data_area_show_tab_triggers?(tabs_list) %>
 <% tab_extras = local_assigns[:tab_extras] %>
-<% panel_locals = { tab_extras: tab_extras } %>
-
-<% if show_tab_triggers && tab_extras.blank? %>
-  <%# No tab_extras means no live Vue2 widget embedded in any tab, so this can
-      run as a Vue3 island — see [[tabs-wiring-blocked-on-vapp]] memory. %>
+<% if show_tab_triggers %>
   <%= frontend_mount "Tabs", props: {
-    tabs: thematic_and_data_area_vue_tabs(tabs_list),
+    tabs: thematic_and_data_area_vue_tabs(tabs_list, tab_extras),
     preselectedTab: params[:tab],
     gaId: ga_id
   } %>
-<% elsif show_tab_triggers %>
-  <tabs
-    class="tabs--hero"
-    ga-id="<%= ga_id %>"
-    preselected-tab="<%= params[:tab] %>"
-    :tab-triggers="<%= tabs_list.to_json %>"
-  >
-    <template slot-scope="slotProps">
-      <% tabs_list.each do |tab| %>
-        <tab-target :id=<%= tab[:id].to_json %> :selected-id="slotProps.selectedId">
-          <%= render partial: 'partials/thematic_and_data_area/panel_content', locals: panel_locals.merge(tab: tab) %>
-        </tab-target>
-      <% end %>
-    </template>
-  </tabs>
 <% else %>
   <% tabs_list.each do |tab| %>
-    <%= render partial: 'partials/thematic_and_data_area/panel_content', locals: panel_locals.merge(tab: tab) %>
+    <%= render partial: 'partials/thematic_and_data_area/panel_content', locals: { tab_extras: tab_extras, tab: tab } %>
   <% end %>
 <% end %>

@@ -1,21 +1,14 @@
-<div class="topbar--secondary">
-  <sticky-bar 
-    class="sticky-bar--slide-in"
-    trigger-element=".sm-trigger-sticky-bar"
-  >
-    <div class="topbar__container container">
-      <%= render "partials/social/social-share" %>
-
-      <%= frontend_mount "Download",
-        class: "download--small",
-        props: {
-          buttonText: t('global.button.download'),
-          options: JSON.parse(download_options),
-          textCommercial: download_text[:commercial],
-          downloadDisabled: local_assigns.has_key?(:download_disabled) ? download_disabled : false,
-          gaId: 'download'
-        } %>
-    </div>
-  </sticky-bar>
+<div class="vw-topbar-secondary">
+  <div class="vw-topbar-secondary__container">
+    <%= render "partials/social/social-share" %>
+    <%= frontend_mount "Download",
+            class: "download--small",
+            props: {
+              buttonText: t('global.button.download'),
+              options: JSON.parse(download_options),
+              textCommercial: download_text[:commercial],
+              downloadDisabled: local_assigns.has_key?(:download_disabled) ? download_disabled : false,
+              gaId: 'download'
+            } %>
+  </div>
 </div>
-<span class="sm-trigger-sticky-bar"></span>

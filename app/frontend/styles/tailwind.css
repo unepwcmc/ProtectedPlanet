@@ -41,4 +41,8 @@
 @source "../";
 @source "../../views";
 
-@import './shared/base.css';
+
+@import './shared.css';
+/** shared.css must be first one to import as rest below might use some utility declared in shared **/
+@import './views/topbar.css';
+@import './views/topbar-secondary.css';

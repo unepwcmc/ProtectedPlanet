@@ -13089,7 +13089,6 @@ __metadata:
     postcss-html: "npm:^1.8.0"
     puppeteer: "npm:^5.2.1"
     save: "npm:^2.4.0"
-    scrollmagic: "npm:^2.0.6"
     stylelint: "npm:^16.23.1"
     stylelint-config-standard: "npm:39.0.0"
     stylelint-config-standard-vue: "npm:^1.0.0"
@@ -13274,13 +13273,6 @@ __metadata:
     estree-is-function: "npm:^1.0.0"
     get-assigned-identifiers: "npm:^1.1.0"
   checksum: 10c0/5412e0e8655946623dd8206a584e1c69ea8094a575b0f1a8ee2adedaea60294f68894643b19e100d311b15ba0e7b238e24e3bbc5a208a85ef0c68c108b2e2e79
-  languageName: node
-  linkType: hard
-
-"scrollmagic@npm:^2.0.6":
-  version: 2.0.7
-  resolution: "scrollmagic@npm:2.0.7"
-  checksum: 10c0/c33997919024d526c65293deb04c1b65c89fbbd6bf1ea0d7bc04ba739474bc0d0ad90c84dda6c1cf6b8040b07a174742c01f17fdfa3772e0167a038955a6766f
   languageName: node
   linkType: hard
 

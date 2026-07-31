@@ -12,16 +12,32 @@
 // such region in the DOM with `v-show`. Observing added nodes means a mount
 // point that appears later still mounts, so `v-if` (true unmount/remount) is
 // safe to use freely.
+//
+// The observer also watches removedNodes and calls `.unmount()` on any island
+// whose root leaves the document — e.g. a Tabs panel with a nested
+// frontend_mount island (Map, PameTable, ...) being torn down by the outer
+// component's own `v-if` when the user switches tabs. Without this, the old
+// app instance (its IntersectionObserver/ResizeObserver/MapLibre GL context,
+// etc.) would keep running detached from the document, leaking on every
+// switch — Vue never calls unmount()/onUnmounted for a node that just gets
+// removed by other means.
 
 import { readMountProps } from './readMountProps'
 import { pinia } from '@/stores/pinia'
 
 export type IslandLoader = () => Promise<{ default: unknown }>
 
+interface MountedApp {
+  unmount: () => void
+}
+
 const registry: Record<string, IslandLoader> = {}
 // Elements already mounted — guards against double-mounting when the initial
 // scan and the observer both see the same node.
 const mountedEls = new WeakSet<HTMLElement>()
+// The live app instance behind each mounted element, so it can be unmounted
+// when the element is removed from the document (see the file header).
+const mountedApps = new WeakMap<HTMLElement, MountedApp>()
 let observer: MutationObserver | null = null
 let createAppPromise: Promise<(typeof import('vue'))['createApp']> | null = null
 
@@ -53,6 +69,7 @@ export async function mountEl(el: HTMLElement): Promise<void> {
   )
   app.use(pinia)
   app.mount(el)
+  mountedApps.set(el, app)
   // Vue 3 mounts INTO el rather than replacing it (Vue 2's behaviour), leaving a
   // redundant `<div data-mount>` wrapper around every island's real root. Swap it
   // out for the rendered root so the wrapper doesn't ship to the page. Only safe
@@ -76,8 +93,32 @@ export async function mountEl(el: HTMLElement): Promise<void> {
     // childList mutation. Mark it mounted up front so that re-scan is a no-op
     // instead of mounting a second Vue app onto the same node.
     mountedEls.add(root)
+    mountedApps.set(root, app)
+    mountedApps.delete(el)
     el.replaceWith(root)
   }
+}
+
+/** Unmount the app behind `el` (if any) and forget it, so a later re-insertion re-mounts fresh. */
+function unmountOne(el: HTMLElement): void {
+  const app = mountedApps.get(el)
+  if (!app) return
+  app.unmount()
+  mountedApps.delete(el)
+  mountedEls.delete(el)
+}
+
+/** Unmount `node` itself (if it's a mounted island) and any mounted islands beneath it. */
+function unmountRemoved(node: Node): void {
+  if (!(node instanceof HTMLElement)) return
+  // The observer's callback runs once per batch of mutations, not synchronously
+  // per mutation — mountEl's own wrapper->root swap (el.replaceWith(root)) moves
+  // `root` out of `el` and back into the document within the same synchronous
+  // block, which shows up here as a "removal" even though `root` is still in the
+  // document by the time this callback fires. Only unmount if it's genuinely gone.
+  if (node.isConnected) return
+  unmountOne(node)
+  node.querySelectorAll<HTMLElement>('[data-mount]').forEach(unmountOne)
 }
 
 /** Mount `root` itself (if it's a mount point) and any mount points beneath it. */
@@ -95,6 +136,7 @@ export function startIslands(): void {
       mutation.addedNodes.forEach((node) => {
         if (node instanceof HTMLElement) mountAll(node)
       })
+      mutation.removedNodes.forEach(unmountRemoved)
     }
   })
   observer.observe(document.body, { childList: true, subtree: true })
