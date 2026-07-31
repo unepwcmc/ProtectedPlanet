@@ -33,9 +33,11 @@
 import { ref } from 'vue'
 import DownloadCommercial from '@/components/Download/Commercial.vue'
 import DownloadPopup from '@/components/Download/Popup.vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
 import type { DownloadOption, DownloadProps } from '@/types/backend'
+
+const { trackEvent } = useAnalytics()
 
 type Download = DownloadProps
 const props = withDefaults(defineProps<Download>(), {

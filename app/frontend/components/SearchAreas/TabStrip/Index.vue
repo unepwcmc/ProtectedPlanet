@@ -15,8 +15,10 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import SearchAreasTabStripTab from '@/components/SearchAreas/TabStrip/Tab.vue'
+
+const { trackEvent } = useAnalytics()
 
 interface TabStripChild {
   id: string

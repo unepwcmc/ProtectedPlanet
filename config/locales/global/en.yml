@@ -11,6 +11,10 @@ en:
       link: Link
       more: More info
       pdf: PDF
+    cookie_consent:
+      description: "We use the necessary cookies to make our site work. We'd also like to set optional cookies that help us improve by measuring how you use the site and offering optional functionalities. These will be set only if you accept. For more detailed information about our cookies, see our <a href=\"%{url}\">Privacy policy</a> page."
+      accept: Accept
+      reject: Reject
     footer:
       copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
       title1: Explore

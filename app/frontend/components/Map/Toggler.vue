@@ -15,7 +15,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
+
+const { trackEvent } = useAnalytics()
 
 const props = withDefaults(defineProps<{
   active: boolean

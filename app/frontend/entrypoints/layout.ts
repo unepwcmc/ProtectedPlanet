@@ -20,9 +20,15 @@
 import '@/styles/tailwind.css'
 
 import { registerIslands, startIslands } from '@/lib/islands'
+import { useAnalytics } from '@/composables/useAnalytics'
+
+// Resumes optional tracking (GA4/Hotjar) for visitors who already accepted cookies
+// on a previous visit — the CookieConsent island only fires on the first decision.
+useAnalytics().initAnalytics()
 
 registerIslands({
   Banner: () => import('@/components/Banner/Index.vue'),
+  CookieConsent: () => import('@/components/CookieConsent.vue'),
   Tabs: () => import('@/components/Tabs.vue'),
   GaLink: () => import('@/components/GaLink.vue'),
   Counter: () => import('@/components/Counter.vue'),

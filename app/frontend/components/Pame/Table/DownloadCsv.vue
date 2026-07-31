@@ -16,9 +16,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { postBlob } from '@/lib/http'
 import { usePameStore } from '@/stores/usePameStore'
+
+const { trackEvent } = useAnalytics()
 
 const props = defineProps<{
   totalItems: number

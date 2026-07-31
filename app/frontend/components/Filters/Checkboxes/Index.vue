@@ -13,9 +13,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import FiltersCheckboxesItem from '@/components/Filters/Checkboxes/Item.vue'
 import type { FilterOption } from '@/types/backend'
+
+const { trackEvent } = useAnalytics()
 
 const props = defineProps<{
   id: string

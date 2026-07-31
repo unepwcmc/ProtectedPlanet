@@ -43,9 +43,11 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { getJson, postJson } from '@/lib/http'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
 import type { DownloadModalProps } from '@/types/backend'
+
+const { trackEvent } = useAnalytics()
 
 const props = defineProps<{
   endpointCreate: string

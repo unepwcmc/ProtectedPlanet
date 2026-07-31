@@ -48,8 +48,6 @@ export default defineConfig({
     alias: [
       // Vite bundles Vue 3 (runtime + compiler). Does NOT affect Webpacker's webpack.
       { find: 'vue', replacement: 'vue3/dist/vue.esm-bundler.js' },
-      // Component code imports as `@/components/...`, never relative `../../`.
-      { find: '@', replacement: fileURLToPath(new URL('./app/frontend', import.meta.url)) },
       // Lets any SFC <style> block write `@reference "tailwindcss";` and have it
       // resolve to OUR customised entry (preflight disabled, see that file) instead
       // of the npm package's default CSS. Documented Tailwind v4 + Vite pattern.

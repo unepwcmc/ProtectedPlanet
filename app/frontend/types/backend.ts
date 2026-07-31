@@ -33,12 +33,23 @@ export interface CounterProps {
 }
 
 // Props for `GaLink`, rendered wherever a link needs a GA click event
-// (see app/frontend/lib/analytics.ts). `text` carries the link's HTML label since
+// (see app/frontend/composables/useAnalytics.ts). `text` carries the link's HTML label since
 // a `frontend_mount` island has no server-rendered slot content to project into.
 export interface GaLinkProps {
   gaId?: string
   href: string
   text: string
+}
+
+// Props for `CookieConsent` (app/frontend/components/CookieConsent.vue), sourced
+// from config/locales/global/en.yml so the copy lives in the same place as the
+// rest of the site's i18n strings. `description` carries the Privacy policy
+// link as HTML since a `frontend_mount` island has no server-rendered slot
+// content to project into.
+export interface CookieConsentProps {
+  description: string
+  accept: string
+  reject: string
 }
 
 // Props for `listing-page-card-news`, rendered by

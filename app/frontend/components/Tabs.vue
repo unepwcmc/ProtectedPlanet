@@ -39,8 +39,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import type { TabsProps } from '@/types/backend'
+
+const { trackEvent } = useAnalytics()
 
 type Tabs = TabsProps
 // Match by id or by title (mirrors the legacy ?tab= param behaviour).

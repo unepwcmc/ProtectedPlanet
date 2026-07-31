@@ -56,8 +56,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import PameFiltersFilterOptions from '@/components/Pame/Filters/Filter/Options.vue'
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { usePameStore } from '@/stores/usePameStore'
+
+const { trackEvent } = useAnalytics()
 
 const props = defineProps<{
   name: string

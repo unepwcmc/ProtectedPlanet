@@ -7,8 +7,10 @@
 </template>
 
 <script setup lang="ts">
-import { trackEvent } from '@/lib/analytics'
+import { useAnalytics } from '@/composables/useAnalytics'
 import type { GaLinkProps } from '@/types/backend'
+
+const { trackEvent } = useAnalytics()
 
 type GaLink = GaLinkProps
 const props = defineProps<GaLink>()

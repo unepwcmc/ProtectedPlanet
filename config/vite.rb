@@ -7,3 +7,4 @@ require_relative 'application'
 # https://vite-ruby.netlify.app/guide/plugins.html#environment
 # If you add any envs here, also add a type to app/frontend/composables/useEnvs.ts
 ViteRuby.env['VITE_MAPBOX_TOKEN'] = Rails.application.secrets.mapbox[:access_token]
+ViteRuby.env['VITE_RAILS_ENV'] = Rails.env

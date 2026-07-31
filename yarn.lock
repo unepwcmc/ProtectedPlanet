@@ -4604,13 +4604,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookieconsent@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "cookieconsent@npm:3.1.1"
-  checksum: 10c0/ada43b26e7368702130fe98b278ea05550a426b954784ae92467de9ee618ae1029c02441f7e2204cd05b4d441bc1a5126791539bc7d55c3b43fb8b4840f0884c
-  languageName: node
-  linkType: hard
-
 "copy-concurrently@npm:^1.0.0":
   version: 1.0.5
   resolution: "copy-concurrently@npm:1.0.5"
@@ -13075,7 +13068,6 @@ __metadata:
     "@vue/test-utils": "npm:^2.4.11"
     "@vueuse/core": "npm:^14.3.0"
     babel-polyfill: "npm:^6.26.0"
-    cookieconsent: "npm:^3.1.1"
     d3: "npm:^5.9.2"
     dotenv-webpack: "npm:^1.7.0"
     es6-object-assign: "npm:^1.1.0"
@@ -13102,7 +13094,6 @@ __metadata:
     vite-plugin-rails: "npm:^0.6.0"
     vitest: "npm:^4.1.10"
     vue: "npm:^2.7.16"
-    vue-analytics: "npm:^5.17.2"
     vue-demi: "npm:^0.13.1"
     vue-eslint-parser: "npm:^10.2.0"
     vue-lazyload: "npm:^1.3.3"
@@ -15353,13 +15344,6 @@ __metadata:
   version: 3.1.0
   resolution: "vscode-uri@npm:3.1.0"
   checksum: 10c0/5f6c9c10fd9b1664d71fab4e9fbbae6be93c7f75bb3a1d9d74399a88ab8649e99691223fd7cef4644376cac6e94fa2c086d802521b9a8e31c5af3e60f0f35624
-  languageName: node
-  linkType: hard
-
-"vue-analytics@npm:^5.17.2":
-  version: 5.22.1
-  resolution: "vue-analytics@npm:5.22.1"
-  checksum: 10c0/b3b7023b65b6920d0a7a152f0fb589977f5aeaed07a3b6d9ed81ec4543289b511fde2642261718d2be280e5def503c7ae6afd636558f54ca756a19d1437f28ce
   languageName: node
   linkType: hard
 
