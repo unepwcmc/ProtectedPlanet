@@ -3,10 +3,6 @@ import { defineConfig } from 'vite'
 import rails from 'vite-plugin-rails'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
-// Force plugin-vue to use Vue 3's compiler even though the main `vue` package is
-// still 2.7 (Webpacker/vue-loader 15 needs 2.7). `vue3` is an npm alias for vue@3.
-// This is what lets Vite/Vue 3 and Webpacker/Vue 2 coexist without touching Webpacker.
-import * as vue3Compiler from 'vue3/compiler-sfc'
 
 // Values set via ViteRuby.env in config/vite.rb land in process.env here;
 // only VITE_-prefixed ones are forwarded so Vite exposes them to client code
@@ -26,28 +22,17 @@ export default defineConfig({
   plugins: [
     rails({ envVars: { ...ViteEnvs } }),
     tailwindcss(),
-    vue({ compiler: vue3Compiler }),
+    vue(),
   ],
   optimizeDeps: {
-    // @vueuse/core and pinia import Vue3-only exports (Fragment, toValue,
-    // hasInjectionContext, ...) that don't exist on the real `vue` (2.7)
-    // package. The dev-server dependency pre-bundler doesn't consistently
-    // apply the `vue` -> `vue3` alias below to their internal `import ...
-    // from 'vue'`, causing a hard crash on cold start / re-optimization.
-    // Excluding them from pre-bundling defers resolution to Vite's normal
-    // per-request transform, where the alias does apply.
     // maplibre-gl ships its own worker as a separate chunk (maplibre-gl-worker.mjs)
     // that the dev-server optimizer doesn't handle correctly — pre-bundling it
     // produces a reference to a deps-cache file that never actually gets written,
     // 404ing every request until excluded.
-    // swiper/vue is the same "Vue3-only imports from 'vue'" case as
-    // @vueuse/core/pinia above (Carousel/Themes/Index.vue).
-    exclude: ['@vueuse/core', 'pinia', 'maplibre-gl', 'swiper/vue'],
+    exclude: ['maplibre-gl'],
   },
   resolve: {
     alias: [
-      // Vite bundles Vue 3 (runtime + compiler). Does NOT affect Webpacker's webpack.
-      { find: 'vue', replacement: 'vue3/dist/vue.esm-bundler.js' },
       // Lets any SFC <style> block write `@reference "tailwindcss";` and have it
       // resolve to OUR customised entry (preflight disabled, see that file) instead
       // of the npm package's default CSS. Documented Tailwind v4 + Vite pattern.

@@ -2,7 +2,6 @@ secrets = Rails.application.secrets.mailer
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  # config.webpacker.check_yarn_integrity = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true

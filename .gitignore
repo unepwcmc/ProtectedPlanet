@@ -23,8 +23,6 @@ dump.rdb
 
 coverage
 node_modules
-/public/packs
-/public/packs-test
 /public/vite-dev
 /public/vite-test
 /public/vite
@@ -34,7 +32,6 @@ node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-tmp/cache/webpacker
 .byebug_history
 
 vendor/bundle

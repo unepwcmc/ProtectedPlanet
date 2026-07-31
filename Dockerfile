@@ -11,8 +11,6 @@ deb https://archive.debian.org/debian-security buster/updates main\n' > /etc/apt
  && apt-get -o Acquire::Check-Valid-Until=false update
 # Node 24 LTS via official binary tarball. NodeSource dropped Debian buster apt
 # support, but the official build targets glibc 2.28 (buster) and runs fine here.
-# Vite 5 requires Node 18+; Webpacker 4 (webpack 4) still runs on Node 24 with
-# NODE_OPTIONS=--openssl-legacy-provider set on the webpacker service (compose).
 ENV NODE_VERSION=24.4.1
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
     && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \

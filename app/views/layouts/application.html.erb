@@ -14,7 +14,7 @@
 
     <%= render "layouts/partials/topbar" %>
 
-    <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
+    <div class="<%= if @for_pdf then 'pdf' end %>">
       <%= yield %>
 
       <%= render "layouts/partials/footer" %>

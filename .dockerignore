@@ -20,7 +20,5 @@ storage/
 public/vite-dev/
 public/vite-test/
 public/vite/
-public/packs/
-public/packs-test/
 public/assets/
 coverage/

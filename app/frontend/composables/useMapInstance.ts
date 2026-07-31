@@ -11,7 +11,7 @@ import {
 } from 'maplibre-gl'
 import { isMapboxURL, transformMapboxUrl } from 'maplibregl-mapbox-request-transformer'
 import { RTL_TEXT_PLUGIN_URL } from '@/constants/map'
-import { useEnvs } from '@/composables/useEnvs'
+import useEnvs from '@/composables/useEnvs'
 // Base positioning CSS for controls/popups/markers (.maplibregl-ctrl, .maplibregl-popup,
 // ...). The legacy Vue2 map gets the mapbox-gl equivalent from a CDN <link> in
 // _head.html.erb; this island needs its own since it's a different library/prefix

@@ -1,16 +1,15 @@
 // Global entrypoint — loaded on every page (see layouts/partials/_head.html.erb).
 //
-// Registers the Vue 3 "islands" available during the Webpacker->Vite migration and
-// starts the mounter. The mounter (app/frontend/lib/islands.ts) lazily loads Vue
-// only when a `frontend_mount` element is present, and keeps watching the DOM so a
-// mount point revealed later (e.g. inside a `v-if` region) still mounts — so we are
-// never forced to keep hidden regions alive with `v-show`.
+// Registers the Vue 3 "islands" and starts the mounter. The mounter
+// (app/frontend/lib/islands.ts) lazily loads Vue only when a `frontend_mount`
+// element is present, and keeps watching the DOM so a mount point revealed later
+// (e.g. inside a `v-if` region) still mounts — so we are never forced to keep
+// hidden regions alive with `v-show`.
 //
-// To migrate a component (island-by-island):
+// To add a new component:
 //   1. Add its Vue 3 SFC under app/frontend/components/.
 //   2. Register a lazy loader below.
-//   3. In the ERB, render `<%= frontend_mount "<id>", props: {...} %>` and remove the
-//      old <tag> from Webpacker's #v-app (so exactly one system compiles it).
+//   3. In the ERB, render `<%= frontend_mount "<id>", props: {...} %>`.
 //
 // See: app/helpers/frontend_helper.rb, app/frontend/lib/readMountProps.ts,
 //      app/frontend/lib/islands.ts, upgrade-plan/frontend/14-architecture-and-design.md

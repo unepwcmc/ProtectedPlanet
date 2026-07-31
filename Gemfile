@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '5.2.0'
-gem 'webpacker', '~> 4.0.2'
 
 gem 'bourbon'
 gem "neat"
