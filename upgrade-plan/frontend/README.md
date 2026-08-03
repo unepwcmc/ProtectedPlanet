@@ -45,9 +45,10 @@ verified — lives in **[CHANGELOG.md](./CHANGELOG.md)**; this table is just the
 | 11 | Carousel (flickity → Swiper/CSS) | not started — next up |
 | 12 | Finish (remove `#v-app`, Webpacker) | not started, blocked on 3 and 11 landing |
 
-**Next:** finish Wave 3 (`search-site`, deferred); rewrite migrated components onto Tailwind
-(including the Wave 8/9/10 "reuse legacy SCSS" exceptions, once a rewrite is deliberately scheduled);
-amCharts 4→5 (deferred out of Wave 8); **Wave 11 (carousel)**; Webpacker removed last.
+**Next:** the entire Vue 2→3 migration (Waves 0–12) and Webpacker removal are done. Remaining frontend
+work: **[16 — SCSS → Tailwind migration](./16-scss-to-tailwind-migration.md)** (retire the ~8.1k-line
+legacy SCSS pipeline in waves T0–T10, closing the CODE-CONVENTIONS.md rule-4 exceptions along the way)
+and amCharts 4→5 (deferred out of Wave 8, still not started).
 
 ### Decisions made
 - **Vite/Rails glue — `vite-plugin-rails`** (not `vite-plugin-ruby`) is the npm package actually wired up (`vite.config.mts`) alongside the `vite_rails` gem. [02](./02-vite-on-rails-8.md) corrected to match.
@@ -180,6 +181,7 @@ or migrating a component: **[CODE-CONVENTIONS.md](./CODE-CONVENTIONS.md)**.
 | [14 Architecture](./14-architecture-and-design.md)           | Islands, CMS patterns, mounts                        |
 | [12 Gems & assets](./12-gemfile-frontend-dependencies.md)    | Gemfile / npm / Sprockets / Comfy admin              |
 | [15 Docker Vite dev](./15-docker-vite-dev.md)                | Replace webpacker container with vite (phased)       |
+| [16 SCSS → Tailwind](./16-scss-to-tailwind-migration.md)     | Wave-by-wave plan to retire legacy SCSS entirely      |
 
 
 *Updated July 2026*

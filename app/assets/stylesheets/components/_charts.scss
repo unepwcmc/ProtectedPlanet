@@ -59,7 +59,7 @@ $chart-target-stroke-width: rem-calc(3);
 
 @mixin chart-tooltip($arrow, $bg-colour: $black, $text-color: $white) {
   @extend .flex;
-  @extend .flex-center;
+  @include flex-center;
   background-color: $bg-colour;
   border: solid rem-calc(2) $bg-colour;
   border-radius: $radius-global;

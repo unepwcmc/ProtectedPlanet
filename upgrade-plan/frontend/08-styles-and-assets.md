@@ -131,7 +131,8 @@ utilities.
 
 **Next stage:** rewrite migrated islands/components onto Tailwind utilities, retiring matching SCSS
 piecemeal. Enabling preflight + removing the SCSS is a later, deliberate step (a redesign, not this
-tooling upgrade).
+tooling upgrade) — full wave-by-wave plan for that cutover: **[16 — SCSS → Tailwind migration]
+(./16-scss-to-tailwind-migration.md)**.
 
 ---
 

@@ -50,13 +50,3 @@ $circle-large-desktop: rem-calc(344);
   @include circle-basic;
   @include circle-small;
 }
-
-//--------------------------------------------------
-// classes
-//--------------------------------------------------
-.circle--grey-black {
-  @include circle-basic;
-  @include circle-large;
-  background-color: $grey-black;
-  color: $white;
-}

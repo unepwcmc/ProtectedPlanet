@@ -23,11 +23,6 @@
 // display
 //--------------------------------------------------
 .block { display: block; }
-.inline-block { display: inline-block; }
-
-.full-height {
-  height: 100vh;
-}
 
 @mixin flex-stack-mobile {
   display: flex;
@@ -46,10 +41,7 @@
 //--------------------------------------------------
 // font
 //--------------------------------------------------
-.red { color: red; }
-.white { color: white; }
 .bold { font-weight: $bold; }
-.thin { font-weight: $thin; }
 .p-larger { font-size: rem-calc(18); }
 
 //--------------------------------------------------
@@ -61,11 +53,10 @@
   padding: 0;
 }
 
-@mixin ul-inline { 
+@mixin ul-inline {
   li { display: inline-block; }
 }
 
-.ul-inline { @include ul-inline; }
 .ul-unstyled { @include ul-unstyled; }
 
 //--------------------------------------------------
@@ -79,30 +70,6 @@
   transform: translate(-50%, -50%);
 }
 .text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
-
-.relative { position: relative; }
-
-.bottom-right {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.center-right {
-  position: absolute;
-  top: 50%;
-  right: 0;
-
-  transform: translate(0, -50%);
-}
-
-.top-right {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
 
 //--------------------------------------------------
 // margin & padding
@@ -114,11 +81,8 @@
   margin-left: auto; 
 }
 
-.margin-space--right { margin-right: rem-calc(14); }
 .margin-space--bottom { margin-bottom: rem-calc(14); }
 .margin-space--left { margin-left: rem-calc(14); }
-
-.no-padding { padding: 0; }
 
 //--------------------------------------------------
 // shapes
@@ -173,14 +137,6 @@
 //--------------------------------------------------
 // user interaction
 //--------------------------------------------------
-.no-select {
-  -webkit-touch-callout: none; 
-  -webkit-user-select: none; 
-  -moz-user-select: none; 
-  -ms-user-select: none; 
-  user-select: none; 
-}
-
 .hover--pointer {
   &:hover {
     cursor: pointer;

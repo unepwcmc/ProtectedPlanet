@@ -460,3 +460,63 @@ but the actual CMS-routed path is `PageSlugs::Data::GDPAME` = `global-database-o
 management-effectiveness`, per `config/routes.rb`/`app/models/page_slugs.rb`) — the correct URL
 `/en/data/global-database-on-protected-area-management-effectiveness` returns 200 with a single
 `data-mount="PameTable"` (no separate `PameModal` mount) and `modalText` present in its props JSON.
+
+---
+
+## Wave T0 — SCSS→Tailwind cleanup & convention fixes (done)
+
+Re-verified [16](./16-scss-to-tailwind-migration.md)'s August "confirmed dead SCSS" baseline with a
+precise `class=`-usage grep (not raw-token match, which false-positives on Tailwind composites like
+`text-white` containing "white") before deleting anything — **the baseline had drifted more than
+expected**:
+
+- `_popup.scss` and `_social.scss` were listed as 0-consumer dead code. Both are actively live:
+  `Download/Popup.vue` renders `.popup--download`/`.popup__ul`/`.popup__link` (with passing Vitest
+  coverage), and `.social--media`/`.social__icon` are used by `_footer.html.erb`, `_head.html.erb`,
+  `_topbar-secondary.html.erb`, `_social-share.html.erb`, `_social-follow.html.erb`, and two Comfy
+  CMS partials. Neither was deleted — moved into Wave T4 (Download family) and Wave T2 (views-only
+  chrome) respectively for proper rewrite-and-delete treatment.
+- Most of `helpers/_helpers.scss` and `utilities/_flexbox.scss`'s classes were also assumed dead but
+  turned out to have real consumers (`.block`, `.bold`, `.p-larger`, `.ul-unstyled`, `.text-center`,
+  `.no-margin`/`.no-margin--top`, `.margin-center`, `.margin-space--bottom`/`--left`,
+  `.hover--pointer`; `.flex`, `.flex-inline`, `.flex-row`, `.flex-column`, `.flex-wrap`,
+  `.flex-no-shrink`, `.flex-h-center`, `.flex-h-between`, `.flex-v-start`, `.flex-v-center`) — left in
+  place, deferred to T3/T4's real migration rather than deleted here.
+
+**Actually deleted** (confirmed zero real consumers): `components/select/_selector.scss` (whole
+file), `.circle--grey-black` from `base/_circles.scss`, the `.screen-reader{}` class rule from
+`helpers/_accessibility.scss` (its `@mixin screen-reader` stays — still `@include`d by
+`_v-map-filters.scss`, so that file could not be deleted outright as the original plan assumed), the
+4 `.breakpoint-*-up/down` classes from `utilities/_media-queries.scss`, and the confirmed-zero subset
+of `_helpers.scss`/`_flexbox.scss` (`.inline-block`, `.full-height`, `.red`, `.white`, `.thin`,
+`.ul-inline`, `.text-right`, `.text-left`, `.relative`, `.bottom-right`, `.center-right`, `.top-right`,
+`.margin-space--right`, `.no-padding`, `.no-select`; `.flex-1` + all 47 `.flex-*` column/alignment
+variants). All mixins/functions in the touched files were left untouched — still ported in Wave T1,
+not deleted here.
+
+Also added **rule 4b (`vw-` prefix)** to CODE-CONVENTIONS.md for ERB-view-owned chrome with no single
+owning Vue component, and fixed rule 5 + the "Setup status" section's stale `styles/shared/base.css`
+reference to the real flat `styles/shared.css` (no `shared/` subfolder exists).
+
+[16](./16-scss-to-tailwind-migration.md)'s baseline section, T0 checklist, and T2/T4 wave file lists
+updated in place to reflect the corrected findings — not left as a silent scope drop.
+
+Two live breakages found and fixed while verifying the deletions (grepping `app/views`/
+`app/frontend/components` alone misses SCSS-internal dependencies — `@import`/`@extend` cross-file
+references and Sprockets don't show up in a template-only search):
+- `components/_select.scss` still had `@import './select/selector';` pointing at the deleted file —
+  removed the import line (the `select-searchable` import in the same file is untouched).
+- `components/_charts.scss`'s `chart-tooltip` mixin did `@extend .flex-center;`, which no longer
+  resolved once that class was deleted — swapped to `@include flex-center;` (the mixin was always
+  kept; identical compiled output, no dependency on the class).
+
+Verified: `yarn vite:build` clean. Forced a full Sprockets `application.css` compile
+(`Sprockets::Railtie.build_environment(...)['application.css']`) — caught both breakages above via
+`SassC::SyntaxError`, clean after the two fixes (417,246 bytes compiled, confirmed also served live at
+`/assets/application.css`). Live-curled home (`/en`), gdpame, a country page (`/en/country/KEN`),
+resources listing, and news listing — all 200. (`/en/marine` 500s in this environment, but it's an
+`ApplicationController::PageNotFound` from a missing CMS page in the local DB, unrelated to any CSS
+change.) Real-browser visual diffing was skipped for this wave — every class actually removed was
+independently confirmed to have zero template consumers, so there is nothing left to render
+differently; the two SCSS-internal breakages above are believed to be the only regression surface,
+and both are now fixed and covered by the successful full-CSS compile.

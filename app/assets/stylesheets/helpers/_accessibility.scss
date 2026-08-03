@@ -9,7 +9,3 @@
 	white-space: nowrap;
 	width: rem-calc(1);
 }
-
-.screen-reader {
-  @include screen-reader;
-}

@@ -32,8 +32,13 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
    4a. Sub-component root gets its OWN top-level BEM block, never nested under the parent's: `Banner/Content.vue` root = `ct-banner-content`, NOT `ct-banner__content`.
    4b. Test-only hook classes may skip the `ct-` namespace: add a second, plain class purely for stable test/JS selection when two elements are visually identical — `class="ct-banner__nav banner__nav--prev"` (`ct-banner__nav` carries all `@apply` styling; `banner__nav--prev` exists only so a spec can distinguish prev/next). INVALID: putting Tailwind/`@apply` rules on the unnamespaced class.
 
+4b. CSS = `vw-` PREFIX FOR VIEW-OWNED CHROME.
+   RULE: ERB view chrome with no single owning Vue component (page shells, nav/footer wrappers, hero blocks, CTAs) → `vw-block__element--modifier` classes, backed by `app/frontend/styles/views/<name>.css` (e.g. `vw-topbar__container` in `styles/views/topbar.css`).
+   WHY: distinguishes view-level chrome from component-scoped `ct-` (rule 4) and cross-cutting `tw-shared-` (rule 5) — was in use before this was written down; codified during [16 SCSS→Tailwind](./16-scss-to-tailwind-migration.md) Wave T0.
+   REF: `styles/views/topbar.css`, `styles/views/topbar-secondary.css`.
+
 5. SHARED TAILWIND CLASSES.
-   RULE: reusable `@apply`-built utility/component classes needed by >1 component → `app/frontend/styles/shared/<name>.css`, declared via `@utility tw-shared-<name>` (e.g. `tw-shared-base-container` in `styles/shared/base.css`). Never duplicated per-component or inlined ad hoc.
+   RULE: reusable `@apply`-built utility/component classes needed by >1 component → `app/frontend/styles/shared.css` (split into `styles/shared/<name>.css` per concern once it grows — see [16](./16-scss-to-tailwind-migration.md) Wave T1), declared via `@utility tw-shared-<name>` (e.g. `tw-shared-base-container`). Never duplicated per-component or inlined ad hoc.
 
 6. IMPORTS = `@/` ALIAS ONLY.
    RULE: never relative paths (`../../../`). `import ChartCircle from "@/components/Chart/Circle.vue"`, `import { ProtectedArea } from "@/types/backend"`.
@@ -141,4 +146,4 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
 ## Setup status
 
 VERIFIED BUILT: `app/frontend/types/backend`; `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`, `tsconfig.json` `paths`); `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script; `tailwindcss` bare-specifier alias (rule 7).
-REFERENCE IMPLEMENTATIONS: `Banner/Index.vue` + `Banner/Content.vue`, `Tabs.vue` (incl. rule 8 — Tailwind moved out of templates into `<style scoped>` via `@apply`). `app/frontend/styles/shared/base.css` provides `tw-shared-base-container` (rule 5) to both.
+REFERENCE IMPLEMENTATIONS: `Banner/Index.vue` + `Banner/Content.vue`, `Tabs.vue` (incl. rule 8 — Tailwind moved out of templates into `<style scoped>` via `@apply`). `app/frontend/styles/shared.css` provides `tw-shared-base-container` (rule 5) to both.
