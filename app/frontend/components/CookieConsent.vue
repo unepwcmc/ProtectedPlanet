@@ -66,7 +66,7 @@ function reject() {
 }
 
 .ct-cookie-consent__description {
-  @apply text-sm leading-[1.4] text-white;
+  @apply text-base font-bold leading-[1.4] text-white;
 
   a {
     @apply underline;
