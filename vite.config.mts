@@ -29,7 +29,15 @@ export default defineConfig({
     // that the dev-server optimizer doesn't handle correctly — pre-bundling it
     // produces a reference to a deps-cache file that never actually gets written,
     // 404ing every request until excluded.
-    exclude: ['maplibre-gl'],
+    //
+    // pinia's dev-server pre-bundle statically resolves its devtools-api import
+    // even though pinia only actually calls it behind a dev-only guard — the
+    // rolldown-vite optimizer fails to resolve that import from within its own
+    // .vite/deps cache dir, 500ing every page load. Confirmed this persists even
+    // after the Vue 2/3 coexistence alias hack was fully removed (2026-07-31
+    // Webpacker teardown), so it isn't the alias-resolution bug documented for
+    // the other excludes here — it's pinia's own optimizer interaction.
+    exclude: ['maplibre-gl', 'pinia'],
   },
   resolve: {
     alias: [

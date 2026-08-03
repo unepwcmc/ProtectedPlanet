@@ -9,9 +9,9 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-import * as am4core from '@amcharts/amcharts4/core'
-import * as am4charts from '@amcharts/amcharts4/charts'
-import { LINE_COLOURS } from '@/constants/charts'
+import * as am5 from '@amcharts/amcharts5'
+import * as am5xy from '@amcharts/amcharts5/xy'
+import { CHART_FONT_FAMILY, LINE_COLOURS } from '@/constants/charts'
 import type { AmChartMultilineProps } from '@/types/backend'
 
 type AmChartMultiline = AmChartMultilineProps
@@ -21,79 +21,121 @@ const props = withDefaults(defineProps<AmChartMultiline>(), {
 })
 
 const chartEl = ref<HTMLElement | null>(null)
-let chart: am4charts.XYChart | null = null
+let root: am5.Root | null = null
 
 onMounted(createChart)
-onUnmounted(() => chart?.dispose())
+onUnmounted(() => root?.dispose())
 
 function createChart() {
   if (!chartEl.value) return
 
-  am4core.options.autoSetClassName = true
+  root = am5.Root.new(chartEl.value)
+  root.setThemes([])
 
-  chart = am4core.create(chartEl.value, am4charts.XYChart)
-  chart.data = props.data.datapoints
-  chart.paddingTop = 70
-  chart.paddingRight = 40
-  chart.paddingLeft = -20
-  chart.background.fill = am4core.color(props.chartBackgroundColour)
+  const chart = root.container.children.push(am5xy.XYChart.new(root, {
+    layout: root.verticalLayout,
+    paddingTop: 70,
+    paddingRight: 20,
+    paddingLeft: 10,
+    paddingBottom: 20
+  }))
+  chart.set('background', am5.Rectangle.new(root, {
+    fill: am5.color(props.chartBackgroundColour),
+    fillOpacity: 1
+  }))
 
-  const yAxis = createAxis(chart)
-  createSeries(chart, yAxis)
+  // Data comes from a yearly CSV (Thematic::MarineController#marine_growth_datapoints_from_csv),
+  // so a fixed 1-year base interval is correct for this chart's only real caller.
+  const data = props.data.datapoints.map(datapoint => ({
+    ...datapoint,
+    x: new Date(datapoint.x).getTime()
+  }))
+
+  const yAxis = createAxes(chart)
+  createSeries(chart, yAxis, data)
   createLegend(chart)
 }
 
-function createAxis(chart: am4charts.XYChart) {
-  const xAxis = chart.xAxes.push(new am4charts.DateAxis())
-  xAxis.renderer.grid.template.disabled = true
-  xAxis.renderer.line.strokeOpacity = 1
-  xAxis.renderer.line.strokeWidth = 1
-  xAxis.renderer.line.stroke = am4core.color('#c8c8c8')
-  xAxis.renderer.minGridDistance = 50
-  xAxis.renderer.ticks.template.disabled = false
-  xAxis.renderer.ticks.template.strokeOpacity = 1
-  xAxis.renderer.ticks.template.stroke = am4core.color('#c8c8c8')
-  xAxis.renderer.ticks.template.length = 6
+function createAxes(chart: am5xy.XYChart) {
+  const xAxis = chart.xAxes.push(am5xy.DateAxis.new(root!, {
+    baseInterval: { timeUnit: 'year', count: 1 },
+    renderer: am5xy.AxisRendererX.new(root!, { minGridDistance: 50 })
+  }))
+  const xRenderer = xAxis.get('renderer')
+  xRenderer.grid.template.set('visible', false)
+  xRenderer.setAll({ strokeOpacity: 1, strokeWidth: 1, stroke: am5.color('#c8c8c8') })
+  xRenderer.ticks.template.setAll({
+    visible: true,
+    strokeOpacity: 1,
+    stroke: am5.color('#c8c8c8'),
+    length: 6
+  })
+  xRenderer.labels.template.setAll({ fontFamily: CHART_FONT_FAMILY, paddingTop: 10 })
 
-  const yAxis = chart.yAxes.push(new am4charts.ValueAxis())
-  yAxis.title.text = `[bold]${props.data.units}[/]`
-  yAxis.title.rotation = 0
-  yAxis.title.valign = 'top'
-  yAxis.title.dy = -50
-  yAxis.title.dx = 40
-  yAxis.renderer.grid.template.disabled = true
-  yAxis.renderer.line.strokeOpacity = 1
-  yAxis.renderer.line.strokeWidth = 1
-  yAxis.renderer.line.stroke = am4core.color('#c8c8c8')
+  const yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root!, {
+    renderer: am5xy.AxisRendererY.new(root!, {})
+  }))
+  const yRenderer = yAxis.get('renderer')
+  yRenderer.grid.template.set('visible', false)
+  yRenderer.setAll({
+    strokeOpacity: 1,
+    strokeWidth: 1,
+    stroke: am5.color('#c8c8c8')
+  })
+  yRenderer.labels.template.setAll({ fontFamily: CHART_FONT_FAMILY, paddingRight: 4 })
+
+  yAxis.children.unshift(am5.Label.new(root!, {
+    text: `[bold]${props.data.units}[/]`,
+    fontFamily: CHART_FONT_FAMILY,
+    fontSize: 14,
+    position: 'absolute',
+    x: am5.p0,
+    centerY: am5.p100,
+    dy: -10,
+    dx: 40
+  }))
 
   return yAxis
 }
 
-function createSeries(chart: am4charts.XYChart, yAxis: am4charts.ValueAxis) {
+function createSeries(chart: am5xy.XYChart, yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>, data: { x: number }[]) {
   const totalSeries = Object.keys(props.data.datapoints[0] ?? {}).length - 1
 
   for (let i = 0; i < totalSeries; i++) {
-    const series = chart.series.push(new am4charts.LineSeries())
-    series.dataFields.valueY = `${i + 1}`
-    series.dataFields.dateX = 'x'
-    series.name = props.data.legend[i]
-    series.stroke = am4core.color(LINE_COLOURS[i])
-    series.strokeWidth = 3
-    series.yAxis = yAxis
+    const fieldName = `${i + 1}`
+    const series = chart.series.push(am5xy.LineSeries.new(root!, {
+      name: props.data.legend[i],
+      xAxis: chart.xAxes.getIndex(0)!,
+      yAxis,
+      valueXField: 'x',
+      valueYField: fieldName,
+      stroke: am5.color(LINE_COLOURS[i]),
+      fill: am5.color(LINE_COLOURS[i])
+    }))
+    series.strokes.template.set('strokeWidth', 4)
+    series.data.setAll(data)
 
     if (props.dots) createDots(series, i)
   }
 }
 
-function createDots(series: am4charts.LineSeries, index: number) {
-  const bullet = series.bullets.push(new am4charts.CircleBullet())
-  bullet.fill = am4core.color(LINE_COLOURS[index])
+function createDots(series: am5xy.LineSeries, index: number) {
+  series.bullets.push(() => am5.Bullet.new(root!, {
+    sprite: am5.Circle.new(root!, {
+      radius: 6,
+      fill: am5.color(LINE_COLOURS[index])
+    })
+  }))
 }
 
-function createLegend(chart: am4charts.XYChart) {
-  // No maxWidth override — am4charts.Legend has no default width cap to undo.
-  const legend = new am4charts.Legend()
-  chart.legend = legend
+function createLegend(chart: am5xy.XYChart) {
+  const legend = chart.children.push(am5.Legend.new(root!, {
+    x: am5.percent(25),
+    y: am5.percent(96),
+    layout: root!.horizontalLayout
+  }))
+  legend.labels.template.setAll({ fontFamily: CHART_FONT_FAMILY })
+  legend.data.setAll(chart.series.values)
 }
 </script>
 

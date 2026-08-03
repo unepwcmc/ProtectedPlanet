@@ -1,25 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import RegionCountryPages from '@/components/RegionCountryPages/Index.vue'
 
-vi.mock('@amcharts/amcharts4/core', () => ({
-  create: vi.fn(() => ({ data: null, radius: null, series: { push: vi.fn((s: unknown) => s) }, dispose: vi.fn() })),
-  percent: vi.fn((v: number) => v),
-  color: vi.fn((v: string) => v)
-}))
-
-vi.mock('@amcharts/amcharts4/charts', () => ({
-  PieChart: class {},
-  PieSeries: class {
-    dataFields = {}
-    slices = { template: { states: { getKey: () => ({ properties: {} }) }, tooltipText: '' } }
-    labels = { template: { disabled: false } }
-    ticks = { template: { disabled: false } }
-    colors = { list: [] }
-    tooltip = { background: {}, label: { padding: vi.fn() } }
-  }
-}))
-
-const { default: RegionCountryPages } = await import('@/components/RegionCountryPages/Index.vue')
+// AmChartPie's own chart-building behaviour is covered by AmChart/__tests__/Pie.spec.ts;
+// stubbed here since a real amCharts5 Root needs a canvas jsdom doesn't implement.
+const global = { stubs: { AmChartPie: true } }
 
 function buildDatabase(overrides: Record<string, unknown> = {}) {
   return {
@@ -41,7 +26,8 @@ function buildDatabase(overrides: Record<string, unknown> = {}) {
 describe('RegionCountryPages', () => {
   it('does not render the tab strip when there is only one tab', () => {
     const wrapper = mount(RegionCountryPages, {
-      props: { data: { wdpa: buildDatabase() }, tabs: [{ id: 'wdpa', title: 'WDPA' }] }
+      props: { data: { wdpa: buildDatabase() }, tabs: [{ id: 'wdpa', title: 'WDPA' }] },
+      global
     })
 
     expect(wrapper.find('.card--stats-toggle').exists()).toBe(false)
@@ -55,7 +41,8 @@ describe('RegionCountryPages', () => {
           wdpa_oecm: buildDatabase({ message: { text: 'WDPA+OECM message' } })
         },
         tabs: [{ id: 'wdpa', title: 'WDPA' }, { id: 'wdpa_oecm', title: 'WDPA+OECM' }]
-      }
+      },
+      global
     })
 
     expect(wrapper.text()).toContain('WDPA message')
@@ -67,7 +54,8 @@ describe('RegionCountryPages', () => {
 
   it('remaps snake_case coverage fields to StatsCoverage props', () => {
     const wrapper = mount(RegionCountryPages, {
-      props: { data: { wdpa: buildDatabase() }, tabs: [{ id: 'wdpa', title: 'WDPA' }] }
+      props: { data: { wdpa: buildDatabase() }, tabs: [{ id: 'wdpa', title: 'WDPA' }] },
+      global
     })
 
     expect(wrapper.text()).toContain('1,000km²')
@@ -88,7 +76,8 @@ describe('RegionCountryPages', () => {
           })
         },
         tabs: [{ id: 'wdpa', title: 'WDPA' }]
-      }
+      },
+      global
     })
 
     // hasCoverageStats requires > 1 entries, so no per-coverage cards render —
@@ -104,7 +93,8 @@ describe('RegionCountryPages', () => {
         data: { wdpa: buildDatabase() },
         tabs: [{ id: 'wdpa', title: 'WDPA' }],
         relatedCountriesHtml: '<div class="card--stats-related">Related</div>'
-      }
+      },
+      global
     })
 
     expect(wrapper.find('.card--stats-related').text()).toBe('Related')

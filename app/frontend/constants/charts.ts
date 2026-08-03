@@ -8,3 +8,8 @@ export const PIE_COLOURS = [
 // first 3 entries of PIE_COLOURS, kept separate since AmChartMultiline only
 // ever has up to 3 line series (national/ABNJ/global).
 export const LINE_COLOURS = ['#64BAD9', '#A54897', '#65C9B2']
+
+// Matches $body-font in app/assets/stylesheets/_settings.scss. amCharts5
+// renders to SVG/canvas and doesn't inherit page CSS, so this must be set
+// explicitly on every chart text element.
+export const CHART_FONT_FAMILY = 'Hind Siliguri, sans-serif'

@@ -1,9 +1,6 @@
 {
   "license": "MIT",
   "packageManager": "yarn@4.17.1",
-  "resolutions": {
-    "node-sass": "npm:sass@^1.77.0"
-  },
   "scripts": {
     "lint": "eslint app/frontend",
     "lint:fix": "eslint app/frontend --fix",
@@ -15,45 +12,39 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@amcharts/amcharts4": "^4.9.28",
-    "@vue/devtools-api": "^8.1.5",
-    "@vueuse/core": "^14.3.0",
-    "babel-polyfill": "^6.26.0",
-    "d3": "^5.9.2",
-    "es6-object-assign": "^1.1.0",
-    "maplibre-gl": "^6.0.0",
+    "@amcharts/amcharts5": "^5.20.0",
+    "@vueuse/core": "^14.4.0",
+    "maplibre-gl": "^6.1.0",
     "maplibregl-mapbox-request-transformer": "^0.0.3",
     "pinia": "^4.0.2",
-    "puppeteer": "^5.2.1",
-    "save": "^2.4.0",
+    "puppeteer": "^5.5.0",
     "swiper": "^14.0.7",
-    "url-search-params-polyfill": "^8.1.0",
-    "vue": "^3.5.40",
-    "vue-demi": "^0.13.1"
+    "vue": "^3.5.40"
   },
   "devDependencies": {
-    "@namics/stylelint-bem": "^10.1.0",
-    "@stylistic/eslint-plugin": "^5.2.3",
+    "@namics/stylelint-bem": "^11.1.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.1.2",
     "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/devtools-api": "^8.2.1",
     "@vue/test-utils": "^2.4.11",
-    "eslint": "^10.7.0",
-    "eslint-plugin-vue": "^10.4.0",
-    "globals": "^17.7.0",
-    "jsdom": "^25.0.1",
-    "postcss-html": "^1.8.0",
-    "stylelint": "^16.23.1",
-    "stylelint-config-standard": "39.0.0",
+    "eslint": "^10.8.0",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.8.0",
+    "jsdom": "^30.0.1",
+    "postcss-html": "^1.8.1",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "40.0.0",
     "stylelint-config-standard-vue": "^1.0.0",
-    "stylelint-config-tailwindcss": "^1.0.0",
+    "stylelint-config-tailwindcss": "^1.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0",
-    "vite": "^8.1.5",
+    "vite": "^8.2.0",
     "vite-plugin-rails": "^0.6.0",
     "vitest": "^4.1.10",
-    "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^2.2.12"
+    "vue-eslint-parser": "^10.4.1",
+    "vue-tsc": "^3.3.9"
   }
 }
