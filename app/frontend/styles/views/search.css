@@ -1,0 +1,7 @@
+/*
+ * Site-search results page (Wave T3). Single ERB consumer: app/views/search/index.html.erb.
+ */
+
+@utility vw-search-site {
+  @apply tw-shared-base-container--medium tw-shared-base-spacer-large--top tw-shared-base-spacer-medium--bottom;
+}

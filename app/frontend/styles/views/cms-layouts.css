@@ -1,0 +1,90 @@
+/*
+ * CMS page-type layout templates (Wave T3) — app/views/layouts/cms/_*.html.erb. Each CMS-authored
+ * page picks one of these layout templates; the template itself is developer-authored ERB (only
+ * the content *inside* `cms_fragment_render`/`.cms-wysiwyg` is CMS rich text with no class to add
+ * to it — everything below targets developer-controlled wrapper elements, one class each).
+ */
+
+/* _data-areas.html.erb */
+@utility vw-cms-data-areas__themes {
+  @apply tw-shared-base-spacer-small--top tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-cms-data-areas__resources {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--bottom;
+}
+
+/* _thematic-and-data-area-default.html.erb */
+@utility vw-cms-thematic-and-data-area-default__tabs {
+  @apply tw-shared-base-spacer-medium--bottom;
+}
+
+/* _basic.html.erb */
+@utility vw-cms-basic__content {
+  @apply tw-shared-base-container tw-shared-base-spacer-medium--top;
+}
+
+@utility vw-cms-basic__news {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+}
+
+/* _about.html.erb */
+@utility vw-cms-about__content {
+  @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top;
+}
+
+@utility vw-cms-about__carousel {
+  @apply tw-shared-base-spacer-small--top;
+}
+
+@utility vw-cms-about__resources {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+}
+
+/* _resource.html.erb — `page--resource` (app/assets/stylesheets/pages/_resource.scss) stays: its
+   `.page__date`/`.page__h1` rules are real and untouched by this wave. */
+@utility vw-cms-resource {
+  @apply tw-shared-base-spacer-small--top;
+}
+
+@utility vw-cms-resource__header {
+  @apply tw-shared-base-container--medium;
+}
+
+@utility vw-cms-resource__content {
+  @apply tw-shared-base-container--medium;
+}
+
+@utility vw-cms-resource__links {
+  @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top tw-shared-base-spacer-large--bottom;
+}
+
+@utility vw-cms-resource__social {
+  @apply tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-cms-resource__resources {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--bottom;
+}
+
+/* _thematic-areas.html.erb */
+@utility vw-cms-thematic-areas__themes {
+  @apply tw-shared-base-spacer-small--top tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-cms-thematic-areas__resources {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--bottom;
+}
+
+/* _news-and-stories-article.html.erb */
+@utility vw-cms-news-and-stories-article__content {
+  @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-cms-news-and-stories-article__social {
+  @apply tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-cms-news-and-stories-article__news {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--bottom;
+}

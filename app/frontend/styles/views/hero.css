@@ -1,0 +1,97 @@
+@utility vw-hero--area-type {
+  @apply min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 z-0;
+}
+
+@utility vw-hero--basic {
+  @apply tw-shared-bg-image-overlay--white min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 flex items-center z-0;
+}
+
+@utility vw-hero--home {
+  @apply tw-shared-bg-image-overlay--white bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7 pb-12 md:pt-8.75 md:pb-20 lg:pt-25 lg:pb-41.5 z-0;
+  background-image: url('../../assets/hero/home.jpg');
+}
+
+@utility vw-hero--small {
+  @apply tw-shared-bg-image-overlay--white flex items-center bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 md:pt-10 bg-white min-h-37.5 md:min-h-52.5 lg:min-h-78.75;
+}
+
+@utility vw-hero--thematic {
+  @apply tw-shared-bg-image-overlay--white min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10;
+}
+
+/* Base: switches column->row at medium (1025px, lg:) — used bare by --basic/--thematic. */
+@utility vw-hero__container {
+  @apply tw-shared-base-container flex justify-between flex-col lg:flex-row;
+}
+
+/* --area-type and --home both re-declare flex-direction:row at the small (768px, md:)
+   breakpoint too, one tier earlier than the shared mixin's own lg: default (the redundant
+   lg:flex-row from the base is harmless) — one combined class per variant, no separate
+   modifier classes stacked in the markup. */
+@utility vw-hero__container--area-type {
+  @apply vw-hero__container md:flex-row mb-5 lg:mb-0;
+}
+
+@utility vw-hero__container--home {
+  @apply vw-hero__container md:flex-row;
+}
+
+@utility vw-hero__content--area-type {
+  @apply md:w-1/2 lg:mr-[20%] lg:w-[58%];
+}
+
+@utility vw-hero__content--basic {
+  @apply md:w-4/5 lg:w-[63%];
+}
+
+@utility vw-hero__content--small {
+  @apply md:w-[70%] lg:w-1/2;
+}
+
+@utility vw-hero__content--thematic {
+  @apply md:pr-8.75 md:pl-20 lg:mr-[10%] lg:pr-0 lg:pl-0;
+}
+
+/* Legacy hero-home uses breakpoint($large) (1201px) here, not $medium — kept as its own
+   2xl: step rather than lg: so it doesn't collide with the md:/lg: tiers used everywhere
+   else in this file. */
+@utility vw-hero__text {
+  @apply md:w-1/2 2xl:w-[58%];
+}
+
+@utility vw-hero__intro {
+  @apply text-[1.125rem] md:text-[1.25rem] mb-[1.2em] md:mb-[1.7em];
+}
+
+/* Not @utility — same cascade-layer reason as vw-cta__title: has to beat the bare `h1` rule, and
+   `@apply` can't reference a plain class, so it's inlined directly rather than composed. Moved in
+   from shared/base.css's `tw-shared-base-h1-home` (Wave T3) — that class only ever had this one
+   consumer (`_hero-home.html.erb`), so it never really met the ">1 view" bar for living in shared/. */
+.vw-hero__title--home {
+  @apply text-[2.5rem] md:text-[4.375rem] font-bold mt-0;
+  margin-bottom: 0.35em;
+}
+
+@utility vw-hero__small-text {
+  @apply font-bold mt-6 block;
+}
+
+@utility vw-hero__stats {
+  @apply flex shrink-0 pr-0 pl-0 w-full md:pr-8.75 md:pl-8.75 lg:pr-0 lg:pl-0 lg:w-[33%];
+}
+
+@utility vw-hero__stats-content {
+  @apply tw-shared-bg--grey-black tw-shared-border-radius flex flex-col justify-between mt-5 md:mt-7 lg:mt-0 p-8 w-full;
+}
+
+@utility vw-hero__stat-number {
+  @apply text-theme-primary text-[1.875rem] md:text-[3.75rem] font-bold leading-none;
+}
+
+@utility vw-hero__stat-number--small {
+  @apply text-theme-primary text-[1.875rem] md:text-[2.5rem] font-bold leading-none pt-5 block;
+}
+
+@utility vw-hero__stat-text {
+  @apply text-white font-bold leading-none mb-0 block md:text-[1.25rem];
+}

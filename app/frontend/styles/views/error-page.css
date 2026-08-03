@@ -1,0 +1,16 @@
+/*
+ * 404/500 error pages (Wave T3) — identical markup shape, two ERB consumers:
+ * app/views/layouts/404.html.erb, app/views/layouts/500.html.erb.
+ */
+
+@utility vw-error-page__news {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-error-page__resources {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+}
+
+@utility vw-error-page__carousel {
+  @apply tw-shared-base-spacer-small--bottom;
+}

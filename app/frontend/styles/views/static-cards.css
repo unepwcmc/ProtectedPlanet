@@ -1,0 +1,15 @@
+/*
+ * Static content-page card grids (Wave T3) — `cards--themes`/`cards--circles` (from
+ * app/assets/stylesheets/components/cards/_cards-*.scss) are untouched legacy classes with real
+ * content, kept as-is; only each partial's `tw-shared-*` sibling class is wrapped here. Full
+ * migration of the card-grid family itself is T7 scope. Consumers:
+ * app/views/partials/cards/_themes.html.erb, .../cards/_circles.html.erb.
+ */
+
+@utility vw-cards-themes {
+  @apply tw-shared-base-container;
+}
+
+@utility vw-cards-circles {
+  @apply tw-shared-base-spacer-small--top;
+}

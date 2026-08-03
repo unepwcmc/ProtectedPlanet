@@ -1,8 +1,10 @@
 /*
  * Ported from app/assets/stylesheets/helpers/mixins/_text.scss (Wave T1).
  * Legacy responsive() calls (mobile, tablet-portrait, tablet-landscape[, laptop]) become
- * base + small:/medium:/large: variants, using the --breakpoint-* tokens added to
- * tailwind.css's @theme (mirroring the legacy $small/$medium/$large breakpoint() values).
+ * base + md:/lg: variants — the legacy $small/$medium breakpoints (768px/1025px) map onto
+ * Tailwind's own md:/lg: (768px exact, 1024px ~1px off) rather than custom tokens. Where
+ * tablet-portrait and tablet-landscape shared the same value, only md: is written (the
+ * would-be identical lg: repeat is dropped as dead weight).
  */
 
 @utility tw-shared-text-1 {
@@ -17,48 +19,48 @@
 }
 
 @utility tw-shared-text-3 {
-  @apply tw-shared-text-2 text-[0.875rem] small:text-[0.875rem] medium:text-[0.9375rem];
+  @apply tw-shared-text-2 text-[0.875rem] md:text-[0.875rem] lg:text-[0.9375rem];
 }
 
 @utility tw-shared-h1 {
-  @apply tw-shared-text-1 font-bold text-[1.875rem] small:text-[2.5rem] medium:text-[2.5rem];
+  @apply tw-shared-text-1 font-bold text-[1.875rem] md:text-[2.5rem];
 }
 
 @utility tw-shared-h1-home {
-  @apply tw-shared-text-1 font-bold mt-0 mb-[0.35em] text-[2.5rem] small:text-[2.5rem] medium:text-[4.375rem];
+  @apply tw-shared-text-1 font-bold mt-0 mb-[0.35em] text-[2.5rem] md:text-[2.5rem] lg:text-[4.375rem];
 }
 
 @utility tw-shared-h1-landing {
-  @apply tw-shared-text-1 font-bold text-[1.875rem] small:text-[3.125rem] medium:text-[3.125rem];
+  @apply tw-shared-text-1 font-bold text-[1.875rem] md:text-[3.125rem];
 }
 
 @utility tw-shared-h1-resource {
-  @apply tw-shared-text-1 font-bold text-[1.25rem] small:text-[1.25rem] medium:text-[1.5625rem];
+  @apply tw-shared-text-1 font-bold text-[1.25rem] md:text-[1.25rem] lg:text-[1.5625rem];
 }
 
 @utility tw-shared-h2 {
   color: var(--color-theme-grey-black);
-  @apply tw-shared-text-1 text-[1.25rem] small:text-[1.5625rem] medium:text-[1.5625rem];
+  @apply tw-shared-text-1 text-[1.25rem] md:text-[1.5625rem];
 }
 
 @utility tw-shared-h2-wysiwyg {
   font-family: 'Hind Siliguri', sans-serif;
   line-height: 1.1;
-  @apply text-[1.125rem] small:text-[1.25rem] medium:text-[1.25rem];
+  @apply text-[1.125rem] md:text-[1.25rem];
 }
 
 @utility tw-shared-h3 {
-  @apply tw-shared-text-2 font-bold mt-0 mb-[0.5em] text-[1.125rem] small:text-[1.25rem] medium:text-[1.25rem];
+  @apply tw-shared-text-2 font-bold mt-0 mb-[0.5em] text-[1.125rem] md:text-[1.25rem];
 }
 
 @utility tw-shared-h3-wysiwyg {
   font-family: 'Hind Siliguri', sans-serif;
   line-height: 1.1;
-  @apply text-[1rem] small:text-[1.125rem] medium:text-[1.125rem];
+  @apply text-[1rem] md:text-[1.125rem];
 }
 
 @utility tw-shared-h4 {
-  @apply tw-shared-text-2 text-[1.125rem] small:text-[1.125rem] medium:text-[1rem];
+  @apply tw-shared-text-2 text-[1.125rem] md:text-[1.125rem] lg:text-[1rem];
   margin: 1.5em 0 0.8em 0;
 }
 
@@ -69,13 +71,13 @@
 }
 
 @utility tw-shared-h-big {
-  @apply tw-shared-text-1 font-normal text-[1.5625rem] small:text-[2.5rem] medium:text-[2.5rem];
+  @apply tw-shared-text-1 font-normal text-[1.5625rem] md:text-[2.5rem];
   color: inherit;
   margin: 0 0 0.5em 0;
 }
 
 @utility tw-shared-text-accent {
-  @apply font-bold text-[1.875rem] small:text-[3.75rem] leading-none;
+  @apply font-bold text-[1.875rem] md:text-[3.75rem] leading-none;
   color: var(--color-theme-primary);
 }
 
@@ -98,23 +100,23 @@
 }
 
 @utility tw-shared-text-footer-links {
-  @apply tw-shared-text-2 no-underline text-[1rem] small:text-[1rem] medium:text-[1.125rem];
+  @apply tw-shared-text-2 no-underline text-[1rem] md:text-[1rem] lg:text-[1.125rem];
 }
 
 @utility tw-shared-text-intro {
-  @apply tw-shared-text-2 leading-[1.35] text-[1.125rem] small:text-[1.25rem] medium:text-[1.25rem];
+  @apply tw-shared-text-2 leading-[1.35] text-[1.125rem] md:text-[1.25rem];
 }
 
 @utility tw-shared-text-nav-link {
-  @apply font-medium no-underline text-[1rem] small:text-[1rem] medium:text-[1.125rem];
+  @apply font-medium no-underline text-[1rem] md:text-[1rem] lg:text-[1.125rem];
 }
 
 @utility tw-shared-text-pagination {
-  @apply tw-shared-text-2 text-[1rem] small:text-[1rem] medium:text-[1.125rem];
+  @apply tw-shared-text-2 text-[1rem] md:text-[1rem] lg:text-[1.125rem];
 }
 
 @utility tw-shared-text-pagination-no-results {
-  @apply tw-shared-text-2 text-[1.125rem] small:text-[1.25rem] medium:text-[1.25rem];
+  @apply tw-shared-text-2 text-[1.125rem] md:text-[1.25rem];
 }
 
 @utility tw-shared-text-small {
@@ -123,11 +125,11 @@
 }
 
 @utility tw-shared-text-tabs-fake {
-  @apply tw-shared-text-2 text-[1.125rem] small:text-[1.25rem] medium:text-[1.25rem];
+  @apply tw-shared-text-2 text-[1.125rem] md:text-[1.25rem];
 }
 
 @utility tw-shared-text-theme-cards {
-  @apply tw-shared-text-1 font-normal text-[1.5625rem] small:text-[2.5rem] medium:text-[2.5rem] mb-3.5 small:mb-1 medium:mb-1;
+  @apply tw-shared-text-1 font-normal text-[1.5625rem] md:text-[2.5rem] mb-3.5 md:mb-1;
   color: #fff;
 }
 

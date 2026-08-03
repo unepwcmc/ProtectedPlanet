@@ -1,0 +1,21 @@
+/*
+ * "Chart row" wrapper block (Wave T3) — reused, not a single page. Two ERB consumers:
+ * app/views/partials/charts/_chart-row-pa.html.erb, .../charts/_chart-coverage-growth.html.erb.
+ *
+ * `vw-chart-row__title` replaces the old `shared/base.css` rule
+ * `.tw-shared-base-container--component h2 { margin-top: 0; }` — that was a descendant selector
+ * reaching into a developer-authored `<h2><%= title %></h2>` from the parent, when the h2 itself
+ * (not CMS content, fully ERB-owned) could just carry its own class directly.
+ */
+
+@utility vw-chart-row {
+  @apply tw-shared-base-container;
+}
+
+@utility vw-chart-row__inner {
+  @apply tw-shared-base-container--component;
+}
+
+@utility vw-chart-row__title {
+  margin-top: 0;
+}

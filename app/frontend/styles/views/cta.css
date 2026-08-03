@@ -1,0 +1,94 @@
+/*
+ * Ported from app/assets/stylesheets/components/_cta.scss (Wave T2). 3 ERB consumers under
+ * app/views/partials/ctas/{_api,_live-report,_mpa-guide}.html.erb.
+ *
+ * `.cta--live-report`/`.cta--mpa`'s dark overlays came from `helpers/_background.scss`'s
+ * `bg-image-overlay`/`bg-gradient-overlay` MIXINS (invoked directly, not via the `.bg-image-
+ * overlay--white`/`.bg-gradient-overlay--white` shared CLASSES that wave's own background.css
+ * ports) — reproduced here as `before:` pseudo-element utilities local to this file rather than
+ * a shared vw-/tw-shared- utility, since nothing else in this wave's scope needs the bare
+ * (non-white) black/gradient variant.
+ *
+ * `.cta__intro` is only ever paired with `vw-text-intro` on the `--api`/`--mpa` variants (no
+ * `.cta__intro` width rule is defined for those two in the legacy source either) — only
+ * `--live-report`'s `.cta__intro` gets real width rules here, matching the source exactly.
+ */
+
+@utility vw-cta--api {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top text-white;
+}
+
+@utility vw-cta--live-report {
+  @apply tw-shared-bg--grey-xdark relative z-0 before:content-[''] before:absolute before:inset-0 before:bg-black/40 before:z-[-1];
+  background-position: center;
+  background-size: cover;
+  color: white;
+}
+
+@utility vw-cta--mpa {
+  @apply tw-shared-base-container relative z-0 before:content-[''] before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:from-60% before:to-black/60 before:z-[-1];
+  background-position: center;
+  background-size: cover;
+  color: white;
+}
+
+/* Base: relative + padding only — used bare by --mpa. */
+@utility vw-cta__container {
+  @apply relative pt-7.5 pr-6 pb-8.5 pl-8.5;
+}
+
+@utility vw-cta__container--live-report {
+  @apply tw-shared-base-container;
+}
+
+/* --api needs the same base padding plus its own margin-top + dark background — one combined
+   class (composing the base via @apply) rather than two classes stacked in the markup. */
+@utility vw-cta__container--api {
+  @apply vw-cta__container tw-shared-bg--grey-black mt-7.5;
+}
+
+@utility vw-cta__bg {
+  @apply hidden md:h-[122%] md:block md:absolute md:top-[-6%] md:right-0 lg:top-[-11%];
+}
+
+@utility vw-cta__content--api-mpa {
+  @apply md:w-[70%] lg:w-[64%];
+}
+
+@utility vw-cta__content--live-report {
+  @apply flex pt-16.5 pb-10 h-full items-start flex-col justify-normal relative md:p-0 md:items-center md:flex-row md:justify-between;
+}
+
+@utility vw-cta__intro--live-report {
+  @apply tw-shared-base-text-intro md:w-3/4 lg:w-[90%];
+}
+
+/* `.vw-cta__intro` (base, no width modifier) is used bare by `--api`/`--mpa`. */
+@utility vw-cta__intro {
+  @apply tw-shared-base-text-intro;
+}
+
+@utility vw-cta__ribbon {
+  @apply text-[1.125rem] md:text-[1.25rem] bg-[#fa3232] text-white font-bold py-3.5 px-5 absolute top-0 left-0;
+  line-height: 1.35;
+}
+
+@utility vw-cta__text {
+  @apply md:pt-15 md:pb-5 lg:pt-17.5 lg:pb-10;
+}
+
+/* Not @utility — same cascade-layer reason as shared/base.css's tw-shared-base-h2-big: this is an h2, so
+   the font-size/color override has to be a plain (unlayered) selector to beat the bare `h2` rule.
+   `@apply` can't reference `tw-shared-base-h2-big` either, since a plain class isn't a registered
+   utility — so its declarations are inlined here directly rather than composed. */
+.vw-cta__title {
+  @apply text-[1.5625rem] md:text-[2.5rem] font-normal text-inherit md:w-92.5;
+  margin: 0 0 0.5em 0;
+}
+
+/* Same cascade-layer reason, white variant for `--api`/`--mpa` (was the bare `tw-shared-base-h2-
+   big-white` class directly in the ERB — wrapped here, Wave T3). */
+.vw-cta__title--white {
+  @apply text-[1.5625rem] md:text-[2.5rem] font-normal text-white;
+  margin: 0 0 0.5em 0;
+}

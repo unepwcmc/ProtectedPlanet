@@ -34,9 +34,11 @@
 }
 
 @utility vw-topbar__nav {
-  @apply 
-  order-2 
-  md:order-1;
+  @apply
+  order-2
+  md:order-1
+  flex
+  self-stretch;
 }
 
 @utility vw-topbar__search {

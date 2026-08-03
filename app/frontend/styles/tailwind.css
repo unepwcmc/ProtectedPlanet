@@ -30,8 +30,12 @@
   --color-theme-grey-light: #c8c8c8;
   --color-theme-grey: #919191;
   --color-theme-grey-dark: #666666;
+  --color-theme-grey-xdark: #404040;
   --color-theme-grey-black: #242424;
   --color-theme-bright-green: #38A800;
+  --color-theme-green-dark: #527B19;
+  --color-theme-chart-purple: #A54897;
+  --color-theme-chart-green: #71A22B;
 }
 
 /*
@@ -42,7 +46,36 @@
 @source "../../views";
 
 
-@import './shared.css';
-/** shared.css must be first one to import as rest below might use some utility declared in shared **/
+/**
+ * shared/*.css must be imported before views/*.css (below) as those might use a
+ * utility declared in shared. shared/icons.css is ERB-view-chrome-only (rule 5b) —
+ * a Vue component renders an Icon/*.vue instead, never a tw-shared-icon-* class.
+ */
+@import './shared/base.css';
+@import './shared/background.css';
+@import './shared/icons.css';
+@import './shared/typography.css';
+@import './shared/shadows.css';
+@import './shared/forms.css';
+@import './shared/images.css';
+@import './shared/scrollbar.css';
+
+/* All styles used in views */
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';
+@import './views/footer.css';
+@import './views/hero.css';
+@import './views/cta.css';
+@import './views/content-banner.css';
+@import './views/social.css';
+@import './views/country.css';
+@import './views/region.css';
+@import './views/site.css';
+@import './views/chart-row.css';
+@import './views/cms-layouts.css';
+@import './views/error-page.css';
+@import './views/home.css';
+@import './views/search.css';
+@import './views/search-areas-home.css';
+@import './views/static-cards.css';
+@import './views/thematic-pages.css';

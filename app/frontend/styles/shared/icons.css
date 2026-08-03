@@ -117,12 +117,12 @@
 }
 
 @utility tw-shared-icon-circle-chevron-green-large-left {
-  @apply tw-shared-icon-base w-[3.125rem] h-[3.125rem] small:w-18 small:h-18 medium:w-18 medium:h-18;
+  @apply tw-shared-icon-base w-[3.125rem] h-[3.125rem] md:w-18 md:h-18;
   background-image: url('../../assets/icons/circle-chevron-green-left.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-green-large-right {
-  @apply tw-shared-icon-base w-[3.125rem] h-[3.125rem] small:w-18 small:h-18 medium:w-18 medium:h-18;
+  @apply tw-shared-icon-base w-[3.125rem] h-[3.125rem] md:w-18 md:h-18;
   background-image: url('../../assets/icons/circle-chevron-green-right.svg');
 }
 
@@ -219,7 +219,7 @@
 }
 
 @utility tw-shared-icon-shield {
-  @apply tw-shared-icon-base w-[1.4375rem] h-[1.6875rem] small:w-10 small:h-12 medium:w-10 medium:h-12;
+  @apply tw-shared-icon-base w-[1.4375rem] h-[1.6875rem] md:w-10 md:h-12;
   background-image: url('../../assets/icons/shield.svg');
 }
 

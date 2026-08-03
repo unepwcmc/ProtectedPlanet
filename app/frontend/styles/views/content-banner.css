@@ -1,0 +1,64 @@
+/*
+ * Ported from app/assets/stylesheets/components/_content-banner.scss +
+ * content-banner/_content-banner-basic.scss (Wave T2). Single ERB consumer:
+ * app/views/layouts/partials/_content-banner.html.erb.
+ *
+ * .content-banner__container already used `gap-*` in the legacy source (not margin-based
+ * sibling spacing) — carried straight through, no restructuring needed for rule 6.
+ */
+
+@utility vw-content-banner--basic {
+  @apply tw-shared-bg-image-overlay--white tw-shared-border-radius bg-theme-grey-light bg-center bg-no-repeat bg-cover mb-7.5 md:mb-10 overflow-hidden;
+}
+
+@utility vw-content-banner__container {
+  @apply flex flex-col items-stretch gap-5 p-6 md:flex-row md:items-center md:gap-8 md:p-8;
+}
+
+/* `contained: false` callers (the default) also need the shared page-container width — this used
+   to be a literal ` tw-shared-base-container` string interpolated straight into the ERB's
+   class="..." attribute; moved into its own variant here so the shared class stays out of the
+   ERB (Wave T3). */
+@utility vw-content-banner__container--full {
+  @apply vw-content-banner__container tw-shared-base-container;
+}
+
+@utility vw-content-banner__content {
+  @apply flex-1 min-w-0 md:flex-[1_1_0%];
+}
+
+@utility vw-content-banner__title {
+  @apply mt-0;
+}
+
+@utility vw-content-banner__intro {
+  @apply text-[1.125rem] md:text-[1.25rem] mb-[1.2em] md:mb-[1.4em];
+}
+
+@utility vw-content-banner__small-text {
+  @apply font-bold mt-4 block;
+}
+
+@utility vw-content-banner__stats {
+  @apply flex-initial min-w-0 w-full md:flex-[0_0_20rem] md:max-w-[38%] md:w-auto;
+}
+
+@utility vw-content-banner__stats-content {
+  @apply tw-shared-bg--grey-black tw-shared-border-radius flex flex-col gap-4 box-border p-5 w-full md:p-6;
+}
+
+@utility vw-content-banner__stat-item {
+  @apply min-w-0;
+}
+
+@utility vw-content-banner__stat-number {
+  @apply text-theme-primary text-[1.75rem] md:text-[2.625rem] font-bold leading-[1.1] mb-1;
+}
+
+@utility vw-content-banner__stat-number--small {
+  @apply text-theme-primary text-[1.5rem] md:text-[2rem] font-bold leading-[1.1] mb-1;
+}
+
+@utility vw-content-banner__stat-text {
+  @apply text-white font-bold leading-[1.2] mb-0 break-words block text-base;
+}

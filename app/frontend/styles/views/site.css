@@ -1,0 +1,32 @@
+/*
+ * Protected-area ("site") page shell (Wave T3). Single ERB consumer:
+ * app/views/protected_areas/show.html.erb.
+ *
+ * Unlike country/region, `.page--site` (app/assets/stylesheets/pages/_site.scss) is NOT fully
+ * retired here — `.page__col-wrapper`/`__col-1`/`__col-2` have real, PDF-width-conditional content
+ * beyond the `flex-stack-mobile` rule this wave touches, so `page--site` stays in the ERB as the
+ * ancestor hook those still need. Only `.page__section--overview-map`'s rule moved out (to
+ * `vw-site__overview` below, backed by the same `tw-shared-country-region-site-basic-overview` as country/
+ * region) since it's independent of the column-wrapper rules — `_site.scss`'s own
+ * `&__section--overview-map { flex-stack-mobile }` line was deleted as its one consumer moved.
+ */
+
+@utility vw-site {
+  @apply tw-shared-bg--grey-xlight tw-shared-base-spacer-small--top;
+}
+
+@utility vw-site__container {
+  @apply tw-shared-base-container;
+}
+
+@utility vw-site__overview {
+  @apply tw-shared-country-region-site-basic-overview;
+}
+
+@utility vw-site__related-sites {
+  @apply tw-shared-base-spacer-large--top;
+}
+
+@utility vw-site__citation {
+  @apply tw-shared-base-spacer-small--bottom;
+}

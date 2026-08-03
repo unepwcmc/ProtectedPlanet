@@ -1,0 +1,91 @@
+/*
+ * Thematic / data-area content pages (Wave T3) — one class per section, each composing the
+ * `tw-shared-*` ingredients it needs. Consumers: app/views/thematic/marine/index.html.erb,
+ * app/views/thematic/effectiveness/index.html.erb, .../thematic/effectiveness/_green_list_tab.html.erb,
+ * app/views/data/gdpame/index.html.erb, .../data/gdpame/_tab_content.html.erb,
+ * app/views/data/wdpca/_tab_extras.html.erb, app/views/partials/thematic_and_data_area/_footer.html.erb,
+ * .../partials/thematic_and_data_area/_panel_content.html.erb.
+ */
+
+/* marine/index.html.erb */
+@utility vw-marine__distribution {
+  @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top;
+}
+
+@utility vw-marine__bbnj {
+  @apply tw-shared-base-container--medium;
+}
+
+@utility vw-marine__beyond-coverage {
+  @apply tw-shared-base-container--medium;
+}
+
+@utility vw-marine__mpa-guide {
+  @apply tw-shared-base-spacer-small--top tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-marine__sites {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+}
+
+@utility vw-marine__carousel {
+  @apply tw-shared-base-spacer-small--top tw-shared-base-spacer-small--bottom;
+}
+
+/* effectiveness/index.html.erb — the `classes:` local is currently dead code (hero-basic only
+   reads `get_local_classes` on the no-`:image` branch, and thematic_and_data_area_hero_locals
+   always sets `:image`) — a pre-existing bug, out of scope to fix here; renamed for source hygiene
+   only, behaviour (none) unchanged. */
+@utility vw-effectiveness__hero-overlay {
+  @apply tw-shared-bg-image-overlay--white;
+}
+
+@utility vw-effectiveness__tabs {
+  @apply tw-shared-base-spacer-medium--bottom;
+}
+
+/* effectiveness/_green_list_tab.html.erb */
+@utility vw-green-list__banner {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+}
+
+@utility vw-green-list__about {
+  @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top;
+}
+
+@utility vw-green-list__examples {
+  @apply tw-shared-base-container tw-shared-base-spacer-large--top;
+}
+
+/* gdpame/index.html.erb — same dead-code caveat as effectiveness__hero-overlay above. */
+@utility vw-gdpame__hero-overlay {
+  @apply tw-shared-bg-image-overlay--white;
+}
+
+@utility vw-gdpame__tabs {
+  @apply tw-shared-base-spacer-medium--bottom;
+}
+
+/* gdpame/_tab_content.html.erb */
+@utility vw-gdpame__pame-table {
+  @apply tw-shared-base-container--pame;
+}
+
+/* wdpca/_tab_extras.html.erb */
+@utility vw-wdpca__search-areas {
+  @apply tw-shared-base-spacer-large--bottom;
+}
+
+/* partials/thematic_and_data_area/_footer.html.erb */
+@utility vw-thematic-and-data-area__resources {
+  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+}
+
+@utility vw-thematic-and-data-area__carousel {
+  @apply tw-shared-base-spacer-small--bottom;
+}
+
+/* partials/thematic_and_data_area/_panel_content.html.erb */
+@utility vw-thematic-and-data-area__panel-content {
+  @apply tw-shared-base-container--medium;
+}

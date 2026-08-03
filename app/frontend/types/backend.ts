@@ -243,39 +243,40 @@ export interface MapFilterProps {
   type: string
 }
 
+export type DisclaimerText = { heading: string, body: string } | null
 // `map_yml[:disclaimer]` (config/locales/map/*.yml) — passed as `disclaimer` to
-// `MapPanel`, forwarded to `MapDisclaimer` (rendered inside the panel, always in
-// the same place, for every page — no per-page slotting/placement variance).
+// `Map`, forwarded to `MapDisclaimer` (rendered directly below the map, always
+// in the same place, for every page — no per-page slotting/placement variance).
 export interface MapDisclaimerProps {
-  disclaimer?: { heading: string, body: string } | null
+  disclaimer?: DisclaimerText
 }
 
 // Props for `frontend_mount "MapPanel"` (formerly "MapFilters") — see
-// home_controller.rb's `@main_map`. Renders `MapDisclaimer` internally.
+// home_controller.rb's `@main_map`.
 export interface MapPanelProps {
   overlays: MapFilterProps[]
   title: string
   isHidden?: boolean
-  disclaimer?: { heading: string, body: string } | null
   // The PA-search box (`MapPaSearch`) only appears when these are provided —
   // omitted on the header-map layout, which has no search box. See
   // `Autocompletion.get_filters` for the `type` values.
   type?: string
   autocompleteErrorMessages?: AutocompleteErrorMessages
   autocompletePlaceholder?: string
+  disclaimer: DisclaimerText
 }
 
 // Props for `frontend_mount "Map"` — the single top-level map composition
-// (MapBase + MapPanel, MapPanel rendering MapDisclaimer internally) used by
-// every page that shows a map, identically. See partials/maps/_main.html.erb /
-// partials/maps/_header.html.erb for the legacy Vue2 equivalents this replaces.
+// (MapBase + MapDisclaimer + MapPanel) used by every page that shows a map,
+// identically. See partials/maps/_main.html.erb / partials/maps/_header.html.erb
+// for the legacy Vue2 equivalents this replaces.
 export interface MapProps {
   options?: MapOptionsPayload
   servicesForPointQuery?: PointQueryService[]
   popupAttributes?: PopupAttributeLabels
   title: string
   overlays: MapFilterProps[]
-  disclaimer?: { heading: string, body: string } | null
+  disclaimer?: DisclaimerText
   isHidden?: boolean
   // Set false for the "map--header" layout (protected_areas/show, region/show,
   // country/show) — those pages show the panel toggle but no standalone map title.

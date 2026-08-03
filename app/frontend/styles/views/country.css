@@ -1,0 +1,21 @@
+@utility vw-country {
+  @apply tw-shared-bg--grey-xlight 
+  tw-shared-base-spacer-small--top 
+  tw-shared-base-spacer-small--bottom;
+}
+
+@utility vw-country__container {
+  @apply tw-shared-base-container
+  flex
+  flex-col
+  gap-4
+  lg:gap-9;
+}
+
+@utility vw-country__overview {
+  @apply tw-shared-country-region-site-basic-overview;
+}
+
+@utility vw-country__restricted-message {
+  @apply bg-theme-grey-light text-sm py-1.5 px-5 md:px-6.25 lg:px-7.5;
+}

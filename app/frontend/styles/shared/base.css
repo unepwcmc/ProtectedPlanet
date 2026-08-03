@@ -28,7 +28,20 @@
  * Verified against the actual compiled `application.css`, not the SCSS source, given this
  * exact kind of drift already burned a prior wave (T0's `_popup.scss`/`_social.scss` baseline
  * correction). `.container--component`'s own `responsive()` padding/margin calls are NOT
- * shadowed (only `gutters()` is duplicated) and correctly use `small:`/`medium:`.
+ * shadowed (only `gutters()` is duplicated) and correctly use the same two tiers.
+ *
+ * No custom `small:`/`medium:`/`large:`/`xlarge:` breakpoint tokens — those got dropped
+ * (they duplicated Tailwind's own `md:`/`lg:` almost exactly and, worse, collided with them:
+ * a previous pass had left native `md:` utilities mixed in on top of the custom `small:` token,
+ * and since legacy `$small` (768px) is numerically identical to Tailwind's own `md:` (768px),
+ * every one of those turned into a same-breakpoint conflict — the later rule in generation
+ * order silently always won, so several intended two-step (tablet→desktop) transitions in
+ * hero.css/cta.css/social.css/footer.css collapsed into one and the smaller-tier value never
+ * rendered. Fixed by mapping every legacy tier onto the nearest *distinct* native breakpoint:
+ * `$small` (768px) → `md:` (exact), `$medium` (1025px) → `lg:` (1024px, 1px off, immaterial),
+ * `$large`/`$xlarge` (1201px/1441px, rare — just container padding + `.container--pame`'s
+ * width) → `2xl:` (1536px) rather than `xl:`, collapsing the two into one top tier per this
+ * codebase no longer needing a distinct step between them.
  *
  * `.site-width`, `.site-width-medium`, `.gutter-left`/`.gutter-right`, `.container--desktop-up`,
  * `.h3-big-white` had zero live consumers (confirmed via repo-wide grep) — deleted outright,
@@ -36,43 +49,43 @@
  */
 
 @utility tw-shared-base-container {
-  @apply w-full max-w-300 mx-auto px-5 medium:px-6.25 large:px-7.5;
+  @apply w-full max-w-300 mx-auto px-5 lg:px-6.25 2xl:px-7.5;
 }
 
 @utility tw-shared-base-container--pame {
-  @apply m-0 py-0 px-5 xlarge:w-[82%] xlarge:p-0 xlarge:mx-auto;
+  @apply m-0 py-0 px-5 2xl:w-[82%] 2xl:p-0 2xl:mx-auto;
 }
 
 @utility tw-shared-base-container--medium {
-  @apply w-full mx-auto px-5 medium:px-6.25 large:px-7.5 small:max-w-187.5 medium:w-187.5;
+  @apply w-full mx-auto px-5 lg:px-6.25 2xl:px-7.5 md:max-w-187.5 lg:w-187.5;
 }
 
 @utility tw-shared-base-container--component {
-  @apply tw-shared-border-radius bg-theme-grey-xlight p-5 mt-6.5 mb-6.5 small:py-7.5 small:px-6.25 small:mt-7.5 small:mb-7.5 medium:py-10 medium:px-[calc((100%-46.875rem)/2)] medium:mt-9 medium:mb-9;
+  @apply tw-shared-border-radius bg-theme-grey-xlight p-5 mt-6.5 mb-6.5 md:py-7.5 md:px-6.25 md:mt-7.5 md:mb-7.5 lg:py-10 lg:px-[calc((100%-46.875rem)/2)] lg:mt-9 lg:mb-9;
 }
 
 @utility tw-shared-base-spacer-small--top {
-  @apply pt-4 small:pt-6 medium:pt-9;
+  @apply pt-4 md:pt-6 lg:pt-9;
 }
 
 @utility tw-shared-base-spacer-small--bottom {
-  @apply pb-4 small:pb-6 medium:pb-9;
+  @apply pb-4 md:pb-6 lg:pb-9;
 }
 
 @utility tw-shared-base-spacer-medium--top {
-  @apply pt-6 small:pt-8.5 medium:pt-12.5;
+  @apply pt-6 md:pt-8.5 lg:pt-12.5;
 }
 
 @utility tw-shared-base-spacer-medium--bottom {
-  @apply pb-6 small:pb-8.5 medium:pb-12.5;
+  @apply pb-6 md:pb-8.5 lg:pb-12.5;
 }
 
 @utility tw-shared-base-spacer-large--top {
-  @apply pt-7.5 small:pt-15 medium:pt-20;
+  @apply pt-7.5 md:pt-15 lg:pt-20;
 }
 
 @utility tw-shared-base-spacer-large--bottom {
-  @apply pb-7.5 small:pb-15 medium:pb-20;
+  @apply pb-7.5 md:pb-15 lg:pb-20;
 }
 
 /* Shared by country/region/site page shells' `.page__section--overview-map` (identical
@@ -95,16 +108,16 @@
    consumer, `_hero-home.html.erb`, so it never actually met the ">1 view" bar for staying here.) */
 
 .tw-shared-base-h2-big {
-  @apply text-[1.5625rem] small:text-[2.5rem] font-normal text-inherit;
+  @apply text-[1.5625rem] md:text-[2.5rem] font-normal text-inherit;
   margin: 0 0 0.5em 0;
 }
 
 .tw-shared-base-h2-big-white {
-  @apply text-[1.5625rem] small:text-[2.5rem] font-normal text-white;
+  @apply text-[1.5625rem] md:text-[2.5rem] font-normal text-white;
   margin: 0 0 0.5em 0;
 }
 
 @utility tw-shared-base-text-intro {
-  @apply text-[1.125rem] small:text-[1.25rem];
+  @apply text-[1.125rem] md:text-[1.25rem];
   line-height: 1.35;
 }

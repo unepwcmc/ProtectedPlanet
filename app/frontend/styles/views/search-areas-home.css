@@ -1,0 +1,9 @@
+/*
+ * "SearchAreasHome" widget wrapper (Wave T3). Reused chrome block, not a single page — two ERB
+ * consumers: app/views/partials/search/_protected-areas.html.erb, rendered from both
+ * app/views/home/index.html.erb and app/views/data/wdpca/_tab_extras.html.erb.
+ */
+
+@utility vw-search-areas-home__container {
+  @apply tw-shared-base-container tw-shared-base-spacer-large--top;
+}
