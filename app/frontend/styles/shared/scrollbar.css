@@ -1,0 +1,44 @@
+/*
+ * Ported from app/assets/stylesheets/helpers/_beautify-scrollbar.scss (Wave T1).
+ * Feeds Wave T7/T8's scrollable cards/tables. The legacy mixin's `.pdf &` override
+ * (unsets max-height/overflow inside the Puppeteer PDF render) is intentionally NOT
+ * ported — pdf.scss is on its own separate Sprockets-only pipeline (see Wave T10) and
+ * isn't touched by Tailwind/Vite at all.
+ */
+
+@utility tw-shared-scrollbar {
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-button {
+    @apply w-2.25 h-2.25;
+  }
+
+  &::-webkit-scrollbar-thumb,
+  &::-webkit-scrollbar-track {
+    background-clip: padding-box;
+    border-radius: 0.5625rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-theme-grey-black);
+
+    &:hover {
+      background: var(--color-theme-grey-black);
+    }
+
+    &:active {
+      background-color: #fff;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--color-theme-grey-xlight);
+
+    &:hover {
+      background-color: var(--color-theme-grey-xlight);
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}

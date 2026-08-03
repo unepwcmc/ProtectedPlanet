@@ -1,0 +1,20 @@
+/*
+ * Ported from app/assets/stylesheets/helpers/_images.scss (Wave T1).
+ *
+ * The legacy mixin's ::after fallback icon is NOT included in this shell — its real
+ * consumers (components/cards/cards/_cards-search-results(-areas).scss, via
+ * helpers/mixins/_cards.scss) turn out to be Vue components (Search/Results/Item,
+ * SearchAreas/Results/Item, Wave T7). Per CODE-CONVENTIONS.md rule 5b, a Vue-rendered icon
+ * is an `Icon/*.vue` component, not CSS — so Wave T7 renders its own placeholder icon
+ * (e.g. `<IconPlaceholderImage class="ct-card__placeholder-icon" />` at `width: 30%`)
+ * directly in the template, inside an element carrying this shell utility, rather than
+ * `@apply`-ing an icon onto a `::after` pseudo-element the way the legacy mixin did.
+ */
+
+@utility tw-shared-image-placeholder {
+  @apply flex items-center justify-center w-full;
+  background-color: var(--color-theme-grey-light);
+  background-position: center;
+  background-size: cover;
+  height: 16.5625rem;
+}

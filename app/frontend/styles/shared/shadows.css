@@ -1,0 +1,40 @@
+/*
+ * Ported from app/assets/stylesheets/helpers/_border-and-shadows.scss (Wave T1).
+ * border-radius-top($radius) and border-radius-bottom($radius) are NOT ported here.
+ * Tailwind's native rounded-t / rounded-b utilities (plus arbitrary values) already cover
+ * the parametrized case 1:1, same as the _flexbox.scss finding below.
+ */
+
+@utility tw-shared-border-radius {
+  @apply rounded-[0.3125rem];
+}
+
+@utility tw-shared-border-grey-xlight {
+  @apply border border-solid;
+  border-color: var(--color-theme-grey-xlight);
+}
+
+@utility tw-shared-border-grey-light {
+  @apply border border-solid;
+  border-color: var(--color-theme-grey-light);
+}
+
+@utility tw-shared-shadow-grey-xlight {
+  box-shadow: 2px 2px 6px var(--color-theme-grey-xlight);
+}
+
+@utility tw-shared-shadow-grey-light {
+  box-shadow: 2px 2px 6px var(--color-theme-grey-light);
+}
+
+@utility tw-shared-shadow-grey {
+  box-shadow: 2px 2px 6px var(--color-theme-grey);
+}
+
+@utility tw-shared-shadow-bottom-grey-light {
+  box-shadow: 0 3px 3px var(--color-theme-grey-light);
+}
+
+@utility tw-shared-shadow-bottom-grey {
+  box-shadow: 0 3px 3px var(--color-theme-grey);
+}

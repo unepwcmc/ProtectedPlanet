@@ -1,0 +1,110 @@
+/*
+ * Ported from app/assets/stylesheets/base/_base.scss's "site structure" + typography-modifier
+ * classes (Wave T2, corrected during T3). Originally landed as `vw-base-*` in
+ * views/base.css, then moved here: these classes are consumed by many unrelated views/components
+ * (page shells, hero, cta, footer, cards, charts, tabs, banner, ...), which is exactly the
+ * `tw-shared-` criterion (rule 5) — `vw-` is reserved for chrome owned by a single page/view.
+ *
+ * This also fixes a real pre-existing duplicate: `tw-shared-base-container` already existed here
+ * (consumed by views/topbar.css, views/topbar-secondary.css, Tabs.vue, Banner/Index.vue) with
+ * `md:`/`lg:` (native 768px/1024px) breakpoints, written before this migration's own investigation
+ * into the legacy `.container` class's real compiled breakpoints. That investigation (see below)
+ * found the legacy class actually switches at `medium:`/`large:` (1025px/1201px) via a shadowed
+ * `gutters()` mixin — this file now uses that verified value as the single definition, so the
+ * pre-existing topbar/Tabs/Banner consumers pick up the corrected breakpoints too. Re-check their
+ * padding step visually between 768-1024px (tablet) after this change — that's the one behaviour
+ * difference this consolidation introduces for those 3 consumers.
+ *
+ * The file's BARE element rules (`h1`, `h2`, `h3`, `p,a`, `body`, etc.) are NOT touched here —
+ * they're a site-wide typography baseline every page (and every not-yet-migrated Vue island,
+ * since Tailwind preflight is off) still depends on, not "shared utility" scope. `base/_base.scss`
+ * stays alive with just those bare-element rules until a later wave gives them a real home.
+ *
+ * Breakpoint note: `.container`/`.container--medium`'s padding steps come from
+ * `helpers/_helpers.scss`'s `gutters()` mixin (imported AFTER, and so shadowing,
+ * `helpers/mixins/_layout.scss`'s same-named mixin) — that shadowed version uses
+ * `breakpoint($medium)`/`breakpoint($large)` (1025px/1201px), not `breakpoint($small)`/
+ * `breakpoint($large)` as `_layout.scss`'s (dead, never-called) definition would suggest.
+ * Verified against the actual compiled `application.css`, not the SCSS source, given this
+ * exact kind of drift already burned a prior wave (T0's `_popup.scss`/`_social.scss` baseline
+ * correction). `.container--component`'s own `responsive()` padding/margin calls are NOT
+ * shadowed (only `gutters()` is duplicated) and correctly use `small:`/`medium:`.
+ *
+ * `.site-width`, `.site-width-medium`, `.gutter-left`/`.gutter-right`, `.container--desktop-up`,
+ * `.h3-big-white` had zero live consumers (confirmed via repo-wide grep) — deleted outright,
+ * not ported.
+ */
+
+@utility tw-shared-base-container {
+  @apply w-full max-w-300 mx-auto px-5 medium:px-6.25 large:px-7.5;
+}
+
+@utility tw-shared-base-container--pame {
+  @apply m-0 py-0 px-5 xlarge:w-[82%] xlarge:p-0 xlarge:mx-auto;
+}
+
+@utility tw-shared-base-container--medium {
+  @apply w-full mx-auto px-5 medium:px-6.25 large:px-7.5 small:max-w-187.5 medium:w-187.5;
+}
+
+@utility tw-shared-base-container--component {
+  @apply tw-shared-border-radius bg-theme-grey-xlight p-5 mt-6.5 mb-6.5 small:py-7.5 small:px-6.25 small:mt-7.5 small:mb-7.5 medium:py-10 medium:px-[calc((100%-46.875rem)/2)] medium:mt-9 medium:mb-9;
+}
+
+@utility tw-shared-base-spacer-small--top {
+  @apply pt-4 small:pt-6 medium:pt-9;
+}
+
+@utility tw-shared-base-spacer-small--bottom {
+  @apply pb-4 small:pb-6 medium:pb-9;
+}
+
+@utility tw-shared-base-spacer-medium--top {
+  @apply pt-6 small:pt-8.5 medium:pt-12.5;
+}
+
+@utility tw-shared-base-spacer-medium--bottom {
+  @apply pb-6 small:pb-8.5 medium:pb-12.5;
+}
+
+@utility tw-shared-base-spacer-large--top {
+  @apply pt-7.5 small:pt-15 medium:pt-20;
+}
+
+@utility tw-shared-base-spacer-large--bottom {
+  @apply pb-7.5 small:pb-15 medium:pb-20;
+}
+
+/* Shared by country/region/site page shells' `.page__section--overview-map` (identical
+   `flex-stack-mobile` mixin call in all three legacy pages/*.scss files) — consumed by
+   `vw-country__overview`, `vw-region__overview`, `vw-site__overview`. */
+@utility tw-shared-country-region-site-basic-overview {
+  @apply flex flex-col md:flex-row md:gap-7;
+}
+
+/* h1/h2/p/a base typography (family, line-height) is inherited from the untouched bare-element
+   rules in _base.scss — these only override what the modifier actually changes.
+   NOT written as @utility: Tailwind's utilities land in `@layer utilities`, and per the CSS
+   cascade spec ANY unlayered rule beats ANY layered rule regardless of specificity — so a
+   layered `@utility` here would silently lose its font-size/color overrides to the still-alive,
+   unlayered bare `h1`/`h2` rules in the legacy Sprockets stylesheet (confirmed via computed
+   styles in a real headless-browser check: h1-home rendered at the bare h1's 40px instead of
+   its own 70px at medium:, and h2-big-white rendered #242424 instead of white). Writing them as
+   plain selectors (still using @apply) keeps them unlayered so they cascade correctly.
+   (h1-home moved out to views/hero.css's `vw-hero__title--home` during T3 — it only ever had one
+   consumer, `_hero-home.html.erb`, so it never actually met the ">1 view" bar for staying here.) */
+
+.tw-shared-base-h2-big {
+  @apply text-[1.5625rem] small:text-[2.5rem] font-normal text-inherit;
+  margin: 0 0 0.5em 0;
+}
+
+.tw-shared-base-h2-big-white {
+  @apply text-[1.5625rem] small:text-[2.5rem] font-normal text-white;
+  margin: 0 0 0.5em 0;
+}
+
+@utility tw-shared-base-text-intro {
+  @apply text-[1.125rem] small:text-[1.25rem];
+  line-height: 1.35;
+}
