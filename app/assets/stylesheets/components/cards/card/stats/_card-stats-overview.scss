@@ -35,13 +35,11 @@
   width: 100%;
 
   @include breakpoint($small) {
-    @include flex-no-shrink;
-    margin-right: rem-calc(30);
+    @include flex-no-shrink; 
     width: calc(50% - 15px);
   }
 
   @include breakpoint($medium) {
-    margin-right: rem-calc(30);
     width: 33%;
   }
 

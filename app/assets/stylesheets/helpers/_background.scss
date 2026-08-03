@@ -1,9 +1,3 @@
-
-//--------------------------------------------------
-// variables
-//--------------------------------------------------
-$image-placeholder: black;
-
 //--------------------------------------------------
 // mixins - shared
 //--------------------------------------------------
@@ -75,21 +69,8 @@ $image-placeholder: black;
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.bg--primary { @include bg-colour($primary, $white); }
-.bg--grey-xlight { @include bg-grey-xlight; }
-.bg--grey-light { @include bg-grey-light; }
-.bg--grey { @include bg-grey; }
-.bg--grey-dark { @include bg-grey-dark; }
-.bg--grey-xdark { @include bg-grey-xdark; }
-.bg--grey-black { @include bg-grey-black; }
-
-.bg-img {
-  background-color: $image-placeholder;
-  background-size: cover;
-  background-position: center;
-}
-
-.bg-image-overlay { @include bg-image-overlay; }
-.bg-image-overlay--white { @include bg-image-overlay(rgba($white, 0.8)); }
-
-.bg-gradient-overlay--white { @include bg-gradient-overlay; }
+// .bg--primary, .bg--grey-xlight, .bg--grey-black, .bg--grey-xdark, .bg-image-overlay--white
+// moved to app/frontend/styles/views/background.css (Wave T2). .bg--grey-light, .bg--grey,
+// .bg--grey-dark, .bg-img, .bg-gradient-overlay--white, and the bare .bg-image-overlay had zero
+// ERB consumers and were deleted outright. The mixins above stay — still @include'd by
+// still-legacy files (T4/T7 scope).

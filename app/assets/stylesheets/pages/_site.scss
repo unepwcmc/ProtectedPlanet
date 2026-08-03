@@ -3,10 +3,7 @@
 //--------------------------------------------------
 .page--site {
   .page {
-    &__section--overview-map {
-      @include flex-stack-mobile;
-    }
-
+    // __section--overview-map moved to views/site.css's `vw-site__overview` (Wave T3)
     &__col-wrapper {
       @include flex;
       @include flex-wrap;

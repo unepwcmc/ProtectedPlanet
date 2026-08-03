@@ -28,10 +28,10 @@ $pane-side-padding: 42px;
 //--------------------------------------------------
 // primary
 //--------------------------------------------------
+  // Own display:flex/align-self:stretch moved to views/topbar.css's vw-topbar__nav
+  // utility (Wave T2) — this selector stays only as a hook so the nested .nav__*
+  // rules below keep matching Vue-rendered NavBar children until Wave T4.
   &--primary {
-    @include flex;
-    @include flex-vs-stretch;
-
     .nav {
       &__burger {
         @include button-burger;

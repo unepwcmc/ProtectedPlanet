@@ -1,9 +1,16 @@
 .v-map-disclaimer {
+  background-color: $grey-xdark;
   color: $white;
   font-size: rem-calc(14);
   margin-top: rem-calc(24);
-  
-  justify-self: flex-end;
+
+  @include responsive(
+    padding,
+    rem-calc(18 18),
+    rem-calc(18 18),
+    rem-calc(18 18),
+    rem-calc(25 25),
+  );
 
   .pdf & { border: solid 1px $grey; }
 

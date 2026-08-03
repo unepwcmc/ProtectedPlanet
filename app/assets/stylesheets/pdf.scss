@@ -15,9 +15,9 @@
   .pdf-break-before { page-break-before: always; }
   .pdf-break-inside-avoid { page-break-inside: avoid; }
 
-  .page--country,
+  .vw-country,
   .page--site,
-  .page--region { background-color: transparent; }
+  .vw-region { background-color: transparent; }
   
   &--protected-area {
     .flex-2-fiths,
