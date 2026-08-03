@@ -1,5 +1,5 @@
 @utility vw-topbar-secondary {
-  @apply sticky top-0 z-2 shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)] bg-white;
+  @apply sticky top-0 z-2 shadow-[0_3px_3px_#919191] bg-white;
 }
 
 @utility vw-topbar-secondary__container {
