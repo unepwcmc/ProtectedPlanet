@@ -10,7 +10,12 @@
       :servicesForPointQuery
       :popupAttributes
     />
+    <MapDisclaimer
+      v-if="isHidden"
+      :disclaimer
+    />
     <MapPanel
+      v-else
       :title
       :overlays
       :isHidden
@@ -27,6 +32,7 @@
 import { useTemplateRef } from 'vue'
 import MapHeader from '@/components/Map/Header.vue'
 import MapBase from '@/components/Map/Base.vue'
+import MapDisclaimer from '@/components/Map/Disclaimer.vue'
 import MapPanel from '@/components/Map/Panel.vue'
 import type { MapProps } from '@/types/backend'
 import type { ZoomToOptions } from '@/composables/useMapBoundingBox'
@@ -48,8 +54,3 @@ const mapBaseRef = useTemplateRef('mapBaseRef')
 
 const onZoomTo = (options: ZoomToOptions) => mapBaseRef.value?.zoomTo(options)
 </script>
-<style lang="css" scoped>
-.map--main{
-  @apply w-full;
-}
-</style>
