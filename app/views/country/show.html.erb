@@ -2,16 +2,16 @@
   download_options: @download_options,
   download_disabled: @total_wdpa == 0
 } %>
-<div class="page--country bg--grey-xlight spacer-small--top">
-  <div class="container">
+<div class="vw-country">
+  <div class="vw-country__container">
     <% if (restricted_message = get_restricted_message) %>
-      <section class="spacer-small--bottom">
-        <%= render partial: "partials/messages/message-country-restricted", locals: { 
-          message: restricted_message
-        } %>
-      </section>
+      <div class="vw-country__restricted-message">
+        <p>
+          <%= restricted_message %>
+        </p>
+      </div> 
     <% end %>
-    <section class="page__section--overview-map">
+    <section class="vw-country__overview">
       <%= render partial: "partials/stats/stats-overview-country", locals: { 
         flag: @flag_path,
         chart_point_poly: @country_presenter.chart_point_poly,
@@ -45,8 +45,6 @@
           }) : nil
         } %>
     </section>
-    <section class="spacer-small--bottom">
-      <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
-    </section>
+    <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
   </div>
 </div>
