@@ -167,6 +167,35 @@ the **DB host** `192.168.176.65:9200`.
       `protectedplanet_es_data` volume holds 8.6-format indices 7.17 can't read (would force a
       wipe + reindex). Align dev to 7.17.x (with a volume reset) as its own task when convenient.
 - [ ] **redis-rb 4.8.1 → 5.x** when we do Sidekiq 7 (minor; 4.8 works on Ruby 3.3 for now).
+- [ ] **DECISION (devops, Jul 2026) — drop Memcached; move Rails cache to Redis. Two Redis
+      instances, NOT one.** Devops wants everything standardized on Redis (Kamal accessories),
+      Memcached gone. Doable, but PP's Redis is **not** a throwaway store — `$redis` (same
+      `REDIS_URL` as Sidekiq) holds **non-rebuildable** data that must never be evicted:
+        - **visit/popularity analytics** — per-`MM-YYYY` sorted sets, write `zincrby`
+          [protected_areas_controller.rb:88], read `zrevrangebyscore` [protected_area.rb:91].
+          Not in Postgres.
+        - **active auth tokens** [lib/modules/active_token.rb] (+ properties).
+        - (also transient: download job state/locks [lib/modules/download/*], import
+          locks/counters [lib/modules/import_tools/redis_handler.rb], Sidekiq queues.)
+      A cache needs `maxmemory-policy allkeys-lru` (evict under pressure); the above must be
+      `noeviction`. **maxmemory-policy is server-wide**, so cache + durable data CANNOT safely
+      share one instance. → Provision **two** Redis accessories:
+        - **redis-cache** — `:redis_cache_store`, `allkeys-lru`, no persistence, no volume.
+        - **redis-data** — Sidekiq + analytics + tokens + downloads, `noeviction`, AOF +
+          persistent volume + backups (this is today's Redis, unchanged).
+      **Dev work when we do it (bundle with redis-rb 5 / Sidekiq 7):**
+        1. prod.rb + staging.rb: `config.cache_store = :redis_cache_store, { url: <cache url>,
+           namespace: "cache", expires_in: … }` (replaces the `:mem_cache_store` line).
+        2. Remove `dalli` gem + the `Dalli::Client.new` rack_cache lines + Memcached (compose +
+           the memcached service added for the dalli fix). Decide rack_cache's fate (drop or
+           point at redis-cache).
+        3. **Fix [lib/tasks/cache.rake:19]** — currently `$redis.keys.each { |k| $redis.del(k) }`
+           flushes the WHOLE data Redis (would wipe analytics/tokens). Change to
+           `Rails.cache.clear` (namespaced redis_cache_store → only cache keys). Latent bug today.
+        4. Two `REDIS_URL`s now (cache vs data) — update secrets/env + the `$redis` initializer
+           stays pointed at redis-data.
+      Not caught by tests (cache is prod/staging-group only) → validate on staging.
+      ⚠️ Still flush the cache Redis on the `load_defaults` cache-format cutover.
 
 ## 4f. CMS (Media Surfer) port verification (Jul 2026)
 Audited the ~280-line `comfy_patching.rb` + custom tags against Media Surfer 3.1.7.
