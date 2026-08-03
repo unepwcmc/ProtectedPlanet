@@ -1,15 +1,17 @@
 @utility vw-region {
-  @apply tw-shared-bg--grey-xlight tw-shared-base-spacer-small--top;
+  @apply tw-shared-bg--grey-xlight 
+  tw-shared-base-spacer-small--top
+  tw-shared-base-spacer-small--bottom;
 }
 
 @utility vw-region__container {
-  @apply tw-shared-base-container;
+  @apply tw-shared-base-container
+  flex
+  flex-col
+  gap-4
+  lg:gap-9;
 }
 
 @utility vw-region__overview {
   @apply tw-shared-country-region-site-basic-overview;
-}
-
-@utility vw-region__citation {
-  @apply tw-shared-base-spacer-small--bottom;
 }

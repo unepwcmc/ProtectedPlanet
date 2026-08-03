@@ -88,9 +88,6 @@
   @apply pb-7.5 md:pb-15 lg:pb-20;
 }
 
-/* Shared by country/region/site page shells' `.page__section--overview-map` (identical
-   `flex-stack-mobile` mixin call in all three legacy pages/*.scss files) — consumed by
-   `vw-country__overview`, `vw-region__overview`, `vw-site__overview`. */
 @utility tw-shared-country-region-site-basic-overview {
   @apply flex flex-col md:flex-row md:gap-7;
 }

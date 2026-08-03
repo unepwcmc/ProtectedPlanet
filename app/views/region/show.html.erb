@@ -1,7 +1,7 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
-<div class="page--region bg--grey-xlight spacer-small--top">
-  <div class="container">
-    <section class="page__section--overview-map">
+<div class="vw-region">
+  <div class="vw-region__container">
+    <section class="vw-region__overview">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         chart_point_poly: @presenter.chart_point_poly,
         legend_map: map_legend,
@@ -31,8 +31,6 @@
           gaId: "Region page stats"
         } %>
     </section>
-    <section class="spacer-small--bottom">
-      <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
-    </section>
+    <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
   </div>
 </div>
