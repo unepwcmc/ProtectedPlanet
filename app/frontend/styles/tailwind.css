@@ -51,21 +51,22 @@
  * utility declared in shared. shared/icons.css is ERB-view-chrome-only (rule 5b) —
  * a Vue component renders an Icon/*.vue instead, never a tw-shared-icon-* class.
  */
-@import './shared/base.css';
 @import './shared/background.css';
-@import './shared/icons.css';
-@import './shared/typography.css';
-@import './shared/shadows.css';
+@import './shared/base.css';
 @import './shared/forms.css';
+@import './shared/hero.css';
+@import './shared/icons.css';
 @import './shared/images.css';
 @import './shared/scrollbar.css';
+@import './shared/shadows.css';
+@import './shared/typography.css';
 
 /* All styles used in views */
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';
 @import './views/footer.css';
 @import './views/hero.css';
-@import './views/hero/basic.css';
+@import './views/partials/hero/basic.css';
 @import './views/cta.css';
 @import './views/content-banner.css';
 @import './views/social.css';

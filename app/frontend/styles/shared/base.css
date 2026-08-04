@@ -76,6 +76,13 @@
   lg:gap-9;
 }
 
+@utility tw-shared-base-container-flex-gap-3 {
+  @apply
+  flex 
+  flex-col 
+  gap-3;
+}
+
 @utility tw-shared-base-container--pame {
   @apply m-0 py-0 px-5 2xl:w-[82%] 2xl:p-0 2xl:mx-auto;
 }

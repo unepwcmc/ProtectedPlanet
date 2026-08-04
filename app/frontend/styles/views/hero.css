@@ -1,6 +1,4 @@
-@utility vw-hero--area-type {
-  @apply min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 z-0;
-}
+
 
 @utility vw-hero--home {
   @apply tw-shared-bg-image-overlay--white bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7 pb-12 md:pt-8.75 md:pb-20 lg:pt-25 lg:pb-41.5 z-0;

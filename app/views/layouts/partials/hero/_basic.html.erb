@@ -1,0 +1,13 @@
+<header class="vw-partials-hero-basic <%= 'vw-partials-hero-basic--items-centre' if local_assigns[:items_centre] %>"
+  <% if local_assigns[:image].present? %>style="background-image: url('<%= image %>')"<% end %>
+>
+  <div class="vw-partials-hero-basic__container <%= 'vw-partials-hero-basic__container--centre-text' if local_assigns[:centre_text] %>">
+    <h1 class="vw-partials-hero-basic__title"><%= title %></h1>
+    <% if local_assigns[:summary].present? %>
+      <p class="vw-partials-hero-basic__intro"><%= summary %></p>
+    <% end %>
+    <% if local_assigns[:button_link].present? && local_assigns[:button_text].present? %>
+      <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'vw-partials-hero-basic__link button--external' %>
+    <% end %> 
+  </div>
+</header>
