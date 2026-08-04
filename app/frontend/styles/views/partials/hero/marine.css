@@ -1,0 +1,61 @@
+.vw-partials-hero-marine {
+  @apply tw-shared-hero-wrapper;
+}
+
+.vw-partials-hero-marine__container {
+  @apply tw-shared-base-container
+  flex
+  justify-between
+  flex-col
+  lg:flex-row
+  gap-3
+  md:px-16
+  lg:px-6.25
+  md:gap-12
+  lg:gap-24;
+}
+
+.vw-partials-hero-marine__content {
+  @apply tw-shared-base-flex-gap-3;
+}
+
+.vw-partials-hero-marine__intro {
+  @apply text-lg;
+}
+
+.vw-partials-hero-marine__button {
+  @apply self-start;
+}
+
+.vw-partials-hero-marine__small-text {
+  @apply font-bold;
+}
+
+.vw-partials-hero-marine__stats {
+  @apply 
+  tw-shared-bg--grey-black 
+  tw-shared-border-radius 
+  flex 
+  flex-col
+  gap-4
+  justify-between 
+  p-8
+  w-full
+  lg:w-1/3
+  shrink-0;
+}
+
+.vw-partials-hero-marine__stat-number {
+  @apply text-theme-primary 
+  text-3xl
+  md:text-4xl
+  font-bold
+  leading-none;
+}
+
+.vw-partials-hero-marine__stat-text {
+  @apply text-white 
+  font-bold 
+  leading-none
+  md:text-xl;
+}

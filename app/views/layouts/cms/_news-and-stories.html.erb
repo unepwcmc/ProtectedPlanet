@@ -1,6 +1,5 @@
 <div class="page--news">
-  <%= render partial: "./layouts/partials/hero-small", locals: { 
-    classes: @cms_page[:slug],
+  <%= render partial: "./layouts/partials/hero/small", locals: {
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label
   } %>
@@ -16,6 +15,5 @@
     textFilterTrigger: t('search.filters'),
     textNoResults: "No Results"
   } %>
-
   <%= render "partials/ctas/live-report" %>
 </div>

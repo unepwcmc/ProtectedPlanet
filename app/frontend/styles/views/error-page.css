@@ -13,5 +13,5 @@
 }
 
 @utility vw-error-page__container {
-  @apply tw-shared-base-container tw-shared-base-container-flex;
+  @apply tw-shared-base-container tw-shared-base-flex-6-and-9;
 }

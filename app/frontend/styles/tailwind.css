@@ -67,6 +67,8 @@
 @import './views/footer.css';
 @import './views/hero.css';
 @import './views/partials/hero/basic.css';
+@import './views/partials/hero/small.css';
+@import './views/partials/hero/marine.css';
 @import './views/cta.css';
 @import './views/content-banner.css';
 @import './views/social.css';

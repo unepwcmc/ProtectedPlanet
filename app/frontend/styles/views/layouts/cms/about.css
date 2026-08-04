@@ -1,12 +1,13 @@
-@utility vw-layouts-cms-about {
+.vw-layouts-cms-about {
   @apply tw-shared-base-wrapper;
 }
 
-@utility vw-layouts-cms-about__container {
+.vw-layouts-cms-about__container {
   @apply tw-shared-base-container
-  tw-shared-base-container-flex;
+  tw-shared-base-flex-6-and-9;
 }
-@utility vw-layouts-cms-about__container--medium {
+
+.vw-layouts-cms-about__container--medium {
   @apply tw-shared-base-container--medium
-  tw-shared-base-container-flex;
+  tw-shared-base-flex-6-and-9;
 }

@@ -1,0 +1,14 @@
+.vw-partials-hero-small {
+  @apply
+  tw-shared-hero-wrapper-common
+  flex
+  items-center
+  bg-white
+  min-h-37.5
+  md:min-h-52.5
+  lg:min-h-78.75;
+}
+
+.vw-partials-hero-small__container {
+  @apply tw-shared-base-container;
+}
