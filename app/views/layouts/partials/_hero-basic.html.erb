@@ -1,17 +1,15 @@
 <% if local_assigns.has_key? :image %>
-  <header class="hero--basic bg-image-overlay--white" style="background-image: url('<%= image %>')">
+  <header class="vw-hero-basic" style="background-image: url('<%= image %>')">
 <% else %>
-  <header class="hero--basic bg-image-overlay--white <%= get_local_classes local_assigns %>">
+  <header class="vw-hero-basic <%= get_local_classes local_assigns %>">
 <% end %>
 
-  <div class="hero__container container">
-    <div class="hero__content">
-      <h1><%= title %></h1>
-
+  <div class="vw-hero-basic__container">
+    <div class="vw-hero-basic__content <%= 'vw-hero-basic__content--centre-text' if local_assigns[:centre_text] %>">
+      <h1 class="vw-hero-basic__title"><%= title %></h1>
       <% if local_assigns[:summary].present? %>
-        <p class="hero__intro"><%= summary %></p>
+        <p class="vw-hero-basic__intro"><%= summary %></p>
       <% end %>
-
       <% if local_assigns[:button_link].present? && local_assigns[:button_text].present? %>
         <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
       <% end %>

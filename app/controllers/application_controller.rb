@@ -66,14 +66,12 @@ class ApplicationController < ActionController::Base
     raise PageNotFound
   end
 
-  if Rails.env.production?
-    rescue_from PageNotFound do
-      render_404
-    end
+  rescue_from PageNotFound do
+    render_error_page(404)
+  end
 
-    rescue_from StandardError do
-      render_500
-    end
+  rescue_from StandardError do
+    render_error_page(500)
   end
 
   def enable_caching
@@ -132,12 +130,15 @@ class ApplicationController < ActionController::Base
     params[:controller] == 'comfy/admin/cms/pages' && params[:action] == 'update'
   end
 
-  def render_404
-    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
-  end
-
-  def render_500
-    render file: Rails.root.join("/app/views/layouts/500.html.erb"), layout: true, status: :internal_server_error
+  def render_error_page(status)
+    path = "/app/views/layouts/error_page.html.erb"
+    
+    case status
+    when 404
+       render file: Rails.root.join(path), layout: true, status: :not_found, locals: { error_status: status }
+    else
+      render file: Rails.root.join(path), layout: true, status: :internal_server_error, locals: { error_status: status }
+    end
   end
 
   def check_for_pdf

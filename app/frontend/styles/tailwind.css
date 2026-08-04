@@ -65,6 +65,7 @@
 @import './views/topbar-secondary.css';
 @import './views/footer.css';
 @import './views/hero.css';
+@import './views/hero/basic.css';
 @import './views/cta.css';
 @import './views/content-banner.css';
 @import './views/social.css';
@@ -76,6 +77,6 @@
 @import './views/error-page.css';
 @import './views/home.css';
 @import './views/search.css';
-@import './views/search-areas-home.css';
+@import './views/search-protected-areas.css';
 @import './views/static-cards.css';
 @import './views/thematic-pages.css';

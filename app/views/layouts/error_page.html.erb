@@ -1,0 +1,30 @@
+
+<div class="vw-error-page">
+  <% if Rails.env.development? %>
+    <p class="vw-error-page__dev-notice">
+      Dev mode: comment out <code>rescue_from StandardError</code> or <code>rescue_from PageNotFound</code> in
+      <code>application_controller.rb</code> temporarily to see Rails' real error page instead of this one.
+    </p>
+  <% end %>
+  <% if error_status == 404 %>
+    <%= render partial: "./layouts/partials/hero-basic", locals: {
+      title: t('global.redirect.title'),
+      summary: t('global.redirect.text', url: root_url).html_safe,
+      centre_text: true
+    } %>
+  <% else %>
+    <%= render partial: "./layouts/partials/hero-basic", locals: {
+      title: t('global.redirect.alt_title'),
+      summary: t('global.redirect.text', url: root_url).html_safe,
+      centre_text: true
+    } %>
+  <% end %>
+  <div class="vw-error-page__container">
+    <div class="vw-error-page__content"> 
+      <%= render "partials/cards/news" %> 
+      <%= render "partials/cards/resources" %>
+    </div>
+    <%= render "partials/carousels/themes" %>
+  </div>
+  <%= render "partials/ctas/live-report" %>
+</div>

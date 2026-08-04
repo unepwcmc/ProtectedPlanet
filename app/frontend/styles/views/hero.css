@@ -2,10 +2,6 @@
   @apply min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 z-0;
 }
 
-@utility vw-hero--basic {
-  @apply tw-shared-bg-image-overlay--white min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 flex items-center z-0;
-}
-
 @utility vw-hero--home {
   @apply tw-shared-bg-image-overlay--white bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7 pb-12 md:pt-8.75 md:pb-20 lg:pt-25 lg:pb-41.5 z-0;
   background-image: url('../../assets/hero/home.jpg');
@@ -40,10 +36,6 @@
   @apply md:w-1/2 lg:mr-[20%] lg:w-[58%];
 }
 
-@utility vw-hero__content--basic {
-  @apply md:w-4/5 lg:w-[63%];
-}
-
 @utility vw-hero__content--small {
   @apply md:w-[70%] lg:w-1/2;
 }
@@ -52,9 +44,6 @@
   @apply md:pr-8.75 md:pl-20 lg:mr-[10%] lg:pr-0 lg:pl-0;
 }
 
-/* Legacy hero-home uses breakpoint($large) (1201px) here, not $medium — kept as its own
-   2xl: step rather than lg: so it doesn't collide with the md:/lg: tiers used everywhere
-   else in this file. */
 @utility vw-hero__text {
   @apply md:w-1/2 2xl:w-[58%];
 }

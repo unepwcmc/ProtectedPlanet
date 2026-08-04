@@ -1,16 +1,25 @@
 /*
- * 404/500 error pages (Wave T3) — identical markup shape, two ERB consumers:
- * app/views/layouts/404.html.erb, app/views/layouts/500.html.erb.
+ * 404/500 error page (Wave T3) — one ERB consumer: app/views/layouts/error_page.html.erb.
  */
 
-@utility vw-error-page__news {
-  @apply tw-shared-base-container tw-shared-base-spacer-small--bottom;
+@utility vw-error-page {
+  @apply flex
+  flex-col
+  gap-9;
 }
 
-@utility vw-error-page__resources {
-  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+/* Dev-only notice (development env + non-404 status, see error_page.html.erb) — never renders
+   in production, so it's fine for this to look like an unmissable warning banner. */
+@utility vw-error-page__dev-notice {
+  @apply bg-yellow-200 text-yellow-900 text-center font-bold p-4;
 }
 
-@utility vw-error-page__carousel {
-  @apply tw-shared-base-spacer-small--bottom;
+@utility vw-error-page__container {
+  @apply flex
+  flex-col
+  gap-9;
+}
+
+@utility vw-error-page__content {
+  @apply tw-shared-base-container;
 }
