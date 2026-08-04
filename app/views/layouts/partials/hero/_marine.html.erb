@@ -1,33 +1,33 @@
-<header class="vw-partials-hero-marine"
+<header class="vw-layouts-partials-hero-marine"
   <% if local_assigns.has_key? :image %>
     style="background-image: url('<%= image %>')"
   <% end %>
 >
-  <div class="vw-partials-hero-marine__container">
-    <div class="vw-partials-hero-marine__content">
-      <h1 class="vw-partials-hero-marine__title"><%= title %></h1>
+  <div class="vw-layouts-partials-hero-marine__container">
+    <div class="vw-layouts-partials-hero-marine__content">
+      <h1 class="vw-layouts-partials-hero-marine__title"><%= title %></h1>
       <% if local_assigns.has_key? :summary %>
-        <p class="vw-partials-hero-marine__intro"><%= summary %></p>
+        <p class="vw-layouts-partials-hero-marine__intro"><%= summary %></p>
       <% end %>
-      <%= link_to button_text, button_url, title: button_text, class: 'vw-partials-hero-marine__button button--primary' %>
+      <%= link_to button_text, button_url, title: button_text, class: 'vw-layouts-partials-hero-marine__button button--primary' %>
       <% if (local_assigns.has_key? :hero_small_text) && (local_assigns.has_key? :hero_small_text_url) %>
-        <%= link_to hero_small_text, hero_small_text_url, class: 'vw-partials-hero-marine__small-text', title: 'hero_small_text' %>
+        <%= link_to hero_small_text, hero_small_text_url, class: 'vw-layouts-partials-hero-marine__small-text', title: 'hero_small_text' %>
       <% end %>
     </div>
-    <div class="vw-partials-hero-marine__stats">
+    <div class="vw-layouts-partials-hero-marine__stats">
       <% stats_items.each_with_index do |stat_item, index| %>
-        <div class="vw-partials-hero-marine__stat-item">
-          <div class="vw-partials-hero-marine__stat-number">
+        <div class="vw-layouts-partials-hero-marine__stat-item">
+          <div class="vw-layouts-partials-hero-marine__stat-number">
             <%= frontend_mount "Counter",
                     tag: :span,
                     key: index,
                     props: {
                       total: stat_item[:total],
-                      trigger: "vw-partials-hero-marine__stats",
+                      trigger: "vw-layouts-partials-hero-marine__stats",
                       decimal: stat_item[:decimal] || 0
                     } %><%= stat_item[:suffix].to_s.html_safe %>
           </div>
-          <span class="vw-partials-hero-marine__stat-text">
+          <span class="vw-layouts-partials-hero-marine__stat-text">
             <%= stat_item[:text] %>
           </span>
         </div>

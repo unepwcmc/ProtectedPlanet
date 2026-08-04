@@ -1,8 +1,8 @@
-.vw-partials-hero-marine {
+.vw-layouts-partials-hero-marine {
   @apply tw-shared-hero-wrapper;
 }
 
-.vw-partials-hero-marine__container {
+.vw-layouts-partials-hero-marine__container {
   @apply tw-shared-base-container
   flex
   justify-between
@@ -15,23 +15,23 @@
   lg:gap-24;
 }
 
-.vw-partials-hero-marine__content {
+.vw-layouts-partials-hero-marine__content {
   @apply tw-shared-base-flex-gap-3;
 }
 
-.vw-partials-hero-marine__intro {
+.vw-layouts-partials-hero-marine__intro {
   @apply text-lg;
 }
 
-.vw-partials-hero-marine__button {
+.vw-layouts-partials-hero-marine__button {
   @apply self-start;
 }
 
-.vw-partials-hero-marine__small-text {
+.vw-layouts-partials-hero-marine__small-text {
   @apply font-bold;
 }
 
-.vw-partials-hero-marine__stats {
+.vw-layouts-partials-hero-marine__stats {
   @apply 
   tw-shared-bg--grey-black 
   tw-shared-border-radius 
@@ -45,7 +45,11 @@
   shrink-0;
 }
 
-.vw-partials-hero-marine__stat-number {
+.vw-layouts-partials-hero-marine__stat-item {
+  @apply flex flex-col gap-1;
+}
+
+.vw-layouts-partials-hero-marine__stat-number {
   @apply text-theme-primary 
   text-3xl
   md:text-4xl
@@ -53,7 +57,7 @@
   leading-none;
 }
 
-.vw-partials-hero-marine__stat-text {
+.vw-layouts-partials-hero-marine__stat-text {
   @apply text-white 
   font-bold 
   leading-none

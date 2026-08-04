@@ -1,11 +1,8 @@
 module Thematic::Effectiveness::GreenListHelper
   def green_list_banner_locals(page = @cms_page)
     locals = {
-      page_type_class_name: 'green-list',
       button_text: t('thematic_area.green_list.hero.button_text'),
       button_url: @green_list_view_all_url,
-      classes: 'green-list',
-      contained: true,
       stats_items: green_list_banner_stats_items
     }
 

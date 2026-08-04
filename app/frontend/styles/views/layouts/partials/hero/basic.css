@@ -1,0 +1,27 @@
+.vw-layouts-partials-hero-basic {
+  @apply 
+  tw-shared-hero-wrapper
+  flex;
+}
+
+.vw-layouts-partials-hero-basic--items-centre {
+  @apply 
+  items-center;
+}
+
+.vw-layouts-partials-hero-basic__container {
+  @apply tw-shared-base-container 
+  tw-shared-base-flex-gap-3;
+}
+
+.vw-layouts-partials-hero-basic__container--centre-text {
+  @apply grow text-center;
+}
+
+.vw-layouts-partials-hero-basic__intro {
+  @apply text-lg;
+}
+
+.vw-layouts-partials-hero-basic__link {
+  @apply self-start;
+}

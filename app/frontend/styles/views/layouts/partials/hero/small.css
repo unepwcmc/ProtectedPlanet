@@ -1,4 +1,4 @@
-.vw-partials-hero-small {
+.vw-layouts-partials-hero-small {
   @apply
   tw-shared-hero-wrapper-common
   flex
@@ -9,6 +9,6 @@
   lg:min-h-78.75;
 }
 
-.vw-partials-hero-small__container {
+.vw-layouts-partials-hero-small__container {
   @apply tw-shared-base-container;
 }
