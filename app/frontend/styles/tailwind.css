@@ -75,6 +75,7 @@
 @import './views/chart-row.css';
 @import './views/cms-layouts.css';
 @import './views/layouts/cms/basic.css';
+@import './views/layouts/cms/about.css';
 @import './views/error-page.css';
 @import './views/home.css';
 @import './views/search.css';

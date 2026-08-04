@@ -58,6 +58,16 @@
   2xl:px-7.5;
 }
 
+@utility tw-shared-base-container--medium {
+  @apply w-full 
+  mx-auto 
+  px-5 
+  lg:px-6.25 
+  2xl:px-7.5 
+  md:max-w-187.5 
+  lg:w-187.5;
+}
+
 @utility tw-shared-base-container-flex {
   @apply
   flex 
@@ -66,13 +76,8 @@
   lg:gap-9;
 }
 
-
 @utility tw-shared-base-container--pame {
   @apply m-0 py-0 px-5 2xl:w-[82%] 2xl:p-0 2xl:mx-auto;
-}
-
-@utility tw-shared-base-container--medium {
-  @apply w-full mx-auto px-5 lg:px-6.25 2xl:px-7.5 md:max-w-187.5 lg:w-187.5;
 }
 
 @utility tw-shared-base-container--component {

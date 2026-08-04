@@ -19,19 +19,6 @@
   @apply tw-shared-base-spacer-medium--bottom;
 }
 
-/* _about.html.erb */
-@utility vw-cms-about__content {
-  @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top;
-}
-
-@utility vw-cms-about__carousel {
-  @apply tw-shared-base-spacer-small--top;
-}
-
-@utility vw-cms-about__resources {
-  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
-}
-
 /* _resource.html.erb — `page--resource` (app/assets/stylesheets/pages/_resource.scss) stays: its
    `.page__date`/`.page__h1` rules are real and untouched by this wave. */
 @utility vw-cms-resource {
