@@ -3,9 +3,7 @@
  */
 
 @utility vw-error-page {
-  @apply flex
-  flex-col
-  gap-9;
+  @apply tw-shared-base-wrapper;
 }
 
 /* Dev-only notice (development env + non-404 status, see error_page.html.erb) — never renders
@@ -15,11 +13,5 @@
 }
 
 @utility vw-error-page__container {
-  @apply flex
-  flex-col
-  gap-9;
-}
-
-@utility vw-error-page__content {
-  @apply tw-shared-base-container;
+  @apply tw-shared-base-container tw-shared-base-container-flex;
 }

@@ -19,15 +19,6 @@
   @apply tw-shared-base-spacer-medium--bottom;
 }
 
-/* _basic.html.erb */
-@utility vw-cms-basic__content {
-  @apply tw-shared-base-container tw-shared-base-spacer-medium--top;
-}
-
-@utility vw-cms-basic__news {
-  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
-}
-
 /* _about.html.erb */
 @utility vw-cms-about__content {
   @apply tw-shared-base-container--medium tw-shared-base-spacer-small--top;

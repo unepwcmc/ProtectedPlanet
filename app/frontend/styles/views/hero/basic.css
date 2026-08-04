@@ -1,5 +1,17 @@
 @utility vw-hero-basic {
-  @apply tw-shared-bg-image-overlay--white min-h-50 md:min-h-87.5 lg:min-h-126.25 bg-theme-grey-light bg-center bg-no-repeat bg-cover pt-7.5 pb-10 flex items-center z-0;
+  @apply tw-shared-bg-image-overlay--white 
+  min-h-50 
+  md:min-h-87.5 
+  lg:min-h-126.25 
+  bg-theme-grey-light 
+  bg-center 
+  bg-no-repeat
+  bg-cover
+  pt-7.5 
+  pb-10 
+  flex 
+  items-center 
+  z-0;
 }
 
 @utility vw-hero-basic__content {
@@ -7,9 +19,9 @@
 }
 
 @utility vw-hero-basic__container {
-  @apply tw-shared-base-container flex justify-between flex-col lg:flex-row;
+  @apply tw-shared-base-container tw-shared-base-container-flex;
 }
 
-@utility vw-hero-basic__content--centre-text {
+@utility vw-hero-basic__container--centre-text {
   @apply grow text-center;
 }

@@ -49,8 +49,23 @@
  */
 
 @utility tw-shared-base-container {
-  @apply w-full max-w-300 mx-auto px-5 lg:px-6.25 2xl:px-7.5;
+  @apply 
+  w-full 
+  max-w-300
+  mx-auto
+  px-5
+  lg:px-6.25
+  2xl:px-7.5;
 }
+
+@utility tw-shared-base-container-flex {
+  @apply
+  flex 
+  flex-col 
+  gap-6
+  lg:gap-9;
+}
+
 
 @utility tw-shared-base-container--pame {
   @apply m-0 py-0 px-5 2xl:w-[82%] 2xl:p-0 2xl:mx-auto;
@@ -117,4 +132,16 @@
 @utility tw-shared-base-text-intro {
   @apply text-[1.125rem] md:text-[1.25rem];
   line-height: 1.35;
+}
+
+@utility tw-shared-base-wrapper {
+  @apply flex
+  flex-col
+  gap-9;
+}
+
+@utility tw-shared-base-page-container {
+  @apply flex
+  flex-col
+  gap-9;
 }

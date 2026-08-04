@@ -47,7 +47,6 @@ module ThematicAndDataAreaHelper
 
   def thematic_and_data_area_hero_locals(page = @cms_page)
     locals = {
-      classes: "#{page.slug} thematic-area",
       image: cms_fragment_render(:image, page),
       summary: cms_fragment_render('summary', page),
       title: page.fragments.find_by(identifier: 'short_title')&.content.presence || page.label
