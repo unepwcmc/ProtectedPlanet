@@ -2,10 +2,10 @@
   <%= link_to 'New Call To Action', new_admin_call_to_action_path, class: 'btn btn-secondary float-right', title: 'Create new call to action' %>
   <h2>Call To Actions</h2>
 </div>
-
 <table class="table table-hover table-bordered wrap">
   <tr>
-    <th class="wrap">Class (Max characters: 75)</th>
+    <%# Although it is called Class here but it is used as a slug/id for some reason%>
+    <th class="wrap">Class Name (Max characters: 75)</th>
     <th class="wrap">Title (Max characters: 75)</th>
     <th class="wrap">Summary (Max characters: 150)</th>
     <th class="wrap">Url</th>

@@ -1,28 +1,7 @@
-/*
- * Ported from app/assets/stylesheets/components/_cta.scss (Wave T2). 3 ERB consumers under
- * app/views/partials/ctas/{_api,_live-report,_mpa-guide}.html.erb.
- *
- * `.cta--live-report`/`.cta--mpa`'s dark overlays came from `helpers/_background.scss`'s
- * `bg-image-overlay`/`bg-gradient-overlay` MIXINS (invoked directly, not via the `.bg-image-
- * overlay--white`/`.bg-gradient-overlay--white` shared CLASSES that wave's own background.css
- * ports) — reproduced here as `before:` pseudo-element utilities local to this file rather than
- * a shared vw-/tw-shared- utility, since nothing else in this wave's scope needs the bare
- * (non-white) black/gradient variant.
- *
- * `.cta__intro` is only ever paired with `vw-text-intro` on the `--api`/`--mpa` variants (no
- * `.cta__intro` width rule is defined for those two in the legacy source either) — only
- * `--live-report`'s `.cta__intro` gets real width rules here, matching the source exactly.
- */
+
 
 @utility vw-cta--api {
   @apply tw-shared-base-container tw-shared-base-spacer-small--top text-white;
-}
-
-@utility vw-cta--live-report {
-  @apply tw-shared-bg--grey-xdark relative z-0 before:content-[''] before:absolute before:inset-0 before:bg-black/40 before:z-[-1];
-  background-position: center;
-  background-size: cover;
-  color: white;
 }
 
 @utility vw-cta--mpa {
@@ -37,9 +16,6 @@
   @apply relative pt-7.5 pr-6 pb-8.5 pl-8.5;
 }
 
-@utility vw-cta__container--live-report {
-  @apply tw-shared-base-container;
-}
 
 /* --api needs the same base padding plus its own margin-top + dark background — one combined
    class (composing the base via @apply) rather than two classes stacked in the markup. */
@@ -55,13 +31,6 @@
   @apply md:w-[70%] lg:w-[64%];
 }
 
-@utility vw-cta__content--live-report {
-  @apply flex pt-16.5 pb-10 h-full items-start flex-col justify-normal relative md:p-0 md:items-center md:flex-row md:justify-between;
-}
-
-@utility vw-cta__intro--live-report {
-  @apply tw-shared-base-text-intro md:w-3/4 lg:w-[90%];
-}
 
 /* `.vw-cta__intro` (base, no width modifier) is used bare by `--api`/`--mpa`. */
 @utility vw-cta__intro {

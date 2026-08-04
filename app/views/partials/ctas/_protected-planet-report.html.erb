@@ -1,0 +1,26 @@
+<% if cta_protected_planet_report %>
+  <section class="vw-partials-ctas-protected-planet-report">
+    <div class="vw-partials-ctas-protected-planet-report__container">
+      <% if cta_protected_planet_report.updated %>
+        <span class="vw-partials-ctas-protected-planet-report__ribbon">
+          <%= t('global.status.updated') %>
+        </span>
+      <% end %>
+      <div class="vw-partials-ctas-protected-planet-report__content">
+        <div class="vw-partials-ctas-protected-planet-report__text">
+          <h2 class="vw-partials-ctas-protected-planet-report__title">
+            <%= cta_protected_planet_report.title %>
+          </h2>
+          <p class="vw-partials-ctas-protected-planet-report__intro">
+            <%= cta_protected_planet_report.summary %>
+          </p>
+        </div>
+        <%= link_to t('ctas.live_report.button'), 
+        cta_protected_planet_report.url, 
+        target: '_blank', 
+        class: 'vw-partials-ctas-protected-planet-report__button button--accent' 
+        %>
+      </div>
+    </div>
+  </section>
+<% end %>

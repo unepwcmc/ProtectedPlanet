@@ -72,7 +72,7 @@ class ActiveSupport::TestCase
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
     # and the CTAs
     FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::API)
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::LIVE_REPORT)
+    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::PROTECTED_PLANET_REPORT)
 
   end
 end

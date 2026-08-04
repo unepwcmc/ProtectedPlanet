@@ -69,6 +69,7 @@
 @import './views/layouts/partials/hero/marine.css';
 @import './views/layouts/partials/hero/small.css';
 @import './views/layouts/partials/content-banner.css';
+@import './views/layouts/partials/ctas/protected-planet-report.css';
 
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';

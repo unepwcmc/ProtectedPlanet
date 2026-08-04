@@ -33,3 +33,7 @@
 @utility tw-shared-bg-image-overlay--white {
   @apply relative z-1 before:content-[''] before:absolute before:inset-0 before:bg-white/80 before:z-[-1];
 }
+
+@utility tw-shared-bg-image-overlay--black {
+  @apply relative z-1 before:content-[''] before:absolute before:inset-0 before:bg-black/40 before:z-[-1];
+}

@@ -61,8 +61,8 @@ module CmsHelper
     @cta_api ||= CallToAction.find_by_css_class(PageSlugs::Cta::API)
   end
 
-  def cta_live_report
-    @cta_live_report ||= CallToAction.find_by_css_class(PageSlugs::Cta::LIVE_REPORT)
+  def cta_protected_planet_report
+    @cta_protected_planet_report ||= CallToAction.find_by_css_class(PageSlugs::Cta::PROTECTED_PLANET_REPORT)
   end
 
   def cta_mpa 

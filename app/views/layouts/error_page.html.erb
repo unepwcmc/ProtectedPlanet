@@ -1,4 +1,3 @@
-
 <div class="vw-error-page">
   <% if Rails.env.development? %>
     <p class="vw-error-page__dev-notice">
@@ -13,9 +12,9 @@
       centre_text: true
   } %>
   <div class="vw-error-page__container">
-      <%= render "partials/cards/news" %> 
-      <%= render "partials/cards/resources" %>
+    <%= render "partials/cards/news" %>
+    <%= render "partials/cards/resources" %>
   </div>
-   <%= render "partials/carousels/themes" %>
-  <%= render "partials/ctas/live-report" %>
+  <%= render "partials/carousels/themes" %>
+  <%= render "partials/ctas/protected-planet-report" %>
 </div>
