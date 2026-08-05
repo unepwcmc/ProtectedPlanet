@@ -1,14 +1,16 @@
 <div class="vw-thematic-effectiveness">
-  <%= render partial: "./layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page) %>
-  <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
-    ga_id: "Slug: #{@cms_page.slug}",
-    tabs_list: @tabs_list,
-    tab_extras: [
-      {
-        tab_id: 2,
-        partial: 'thematic/effectiveness/green_list_tab'
-      }
-    ]
-  } %>
+  <% tabs_html = capture do %>
+    <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
+      ga_id: "Slug: #{@cms_page.slug}",
+      tabs_list: @tabs_list,
+      tab_extras: [
+        {
+          tab_id: 2,
+          partial: 'thematic/effectiveness/green_list_tab'
+        }
+      ]
+    } %>
+  <% end %>
+  <%= render partial: "./layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page).merge(tabs: tabs_html) %>
 </div>
 <%= render "partials/thematic_and_data_area/footer", locals: { show_resources: false } %>
