@@ -1,0 +1,13 @@
+.vw-data-wdpca-tab-extras {
+  @apply tw-shared-base-wrapper;
+}
+
+.vw-data-wdpca-tab-extras__container {
+  @apply 
+  tw-shared-base-container--medium
+  tw-shared-base-flex-col-gap-6-and-9;
+}
+
+.vw-data-wdpca-tab-extras__map {
+  @apply tw-shared-base-container--px;
+}

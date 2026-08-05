@@ -1,15 +1,15 @@
 @utility tw-shared-base-container--px {
   @apply 
   px-5
-  lg:px-6.25
-  2xl:px-7.5;
+  md:px-6.25
+  lg:px-7.5;
 }
 
 @utility tw-shared-base-container--py {
   @apply 
   py-5
-  lg:py-6.25
-  2xl:py-7.5;
+  md:py-6.25
+  lg:py-7.5;
 }
 
 @utility tw-shared-base-container {

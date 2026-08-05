@@ -1,33 +1,3 @@
-/*
- * Ported from app/assets/stylesheets/helpers/mixins/_icons.scss (Wave T1).
- * SVGs duplicated into app/frontend/assets/icons/ so Vite can process/fingerprint them
- * (no Vue island referenced an image asset through Vite before this wave) — the legacy
- * copies under app/assets/images/icons/ stay in place until Wave T10 deletes the SCSS
- * pipeline that still serves them via Sprockets' image_url().
- *
- * SCOPE (added after Wave T1 shipped, see CODE-CONVENTIONS.md rule 5b): these utilities are
- * for ERB view chrome only (rule 4b `vw-` classes, e.g. Wave T2/T3). A Vue component NEVER
- * applies a `tw-shared-icon-*` class — it renders an `app/frontend/components/Icon/<Name>.vue`
- * instead (already-established precedent: `Icon/{Search,Close,Arrow,Pin,ExclamationCircle}.vue`,
- * predates this wave). `_icons.scss`'s real consumers were a mix of ERB and Vue when this wave
- * audited it; several of the utilities below may end up used by NO ERB view once T2/T3 land,
- * because their only real caller turns out to be a Vue component that should get its own
- * `Icon/*.vue` instead — that's expected, not a bug. Prune any utility here that ends up with
- * zero ERB consumers once T2/T3/T4 land, same mark-and-sweep discipline as legacy SCSS deletion.
- *
- * NOT ported here at all (kept as legacy SCSS, superseded by an existing Vue component instead
- * of a future CSS utility):
- *   - icon-pin($circle, $outline) and its icon-pin-marine/-oecm/-terrestrial(-light) variants —
- *     these color an INLINE <svg>'s child .circle/.outline/.tick fills, not a background-image;
- *     not expressible as a plain @utility. This is already solved by `Icon/Pin.vue` (per-part
- *     `@apply fill-*` in its own scoped style, rule 5b) — Wave T5 (`_v-map-popup.scss`) and T7
- *     (`card/_card-theme.scss`) reuse/extend that component when their consumers migrate, they
- *     don't need to design a new solution.
- *   - icon-pin-outline / icon-pin-map ARE ported below — distinct, plain background-image uses
- *     of pin.svg/pin-outline.svg at different fixed sizes than the colored family, and (per the
- *     scope note above) only valid if an ERB view — not a Vue component — turns out to need them.
- */
-
 @utility tw-shared-icon-base {
   @apply bg-center bg-no-repeat bg-contain block;
 }
