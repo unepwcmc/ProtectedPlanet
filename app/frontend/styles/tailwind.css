@@ -77,12 +77,11 @@
 @import './views/partials/ctas/api.css';
 @import './views/partials/ctas/mpa.css';
 @import './views/partials/social/follow.css';
+@import './views/partials/social/share.css';
 
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';
 @import './views/footer.css';
-@import './views/hero.css';
-@import './views/social.css';
 @import './views/country.css';
 @import './views/region.css';
 @import './views/site.css';

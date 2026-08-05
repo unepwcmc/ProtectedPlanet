@@ -17,17 +17,17 @@
 }
 
 .vw-partials-social-follow__icon--email {
-  background-image: url('../../../../assets/icons/email-email.svg');
+  background-image: url('../../../../assets/social/email.svg');
 }
 
 .vw-partials-social-follow__icon--facebook {
-  background-image: url('../../../../assets/icons/facebook-white.svg');
+  background-image: url('../../../../assets/social/facebook-white.svg');
 }
 
 .vw-partials-social-follow__icon--linkedin {
-  background-image: url('../../../../assets/icons/linkedin-white.svg');
+  background-image: url('../../../../assets/social/linkedin-white.svg');
 }
 
 .vw-partials-social-follow__icon--twitter {
-  background-image: url('../../../../assets/icons/twitter-white.svg');
+  background-image: url('../../../../assets/social/twitter-white.svg');
 }
