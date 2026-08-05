@@ -1,35 +1,5 @@
-
-
-@utility tw-shared-base-container--pame {
-  @apply m-0 py-0 px-5 2xl:w-[82%] 2xl:p-0 2xl:mx-auto;
-}
-
 @utility tw-shared-base-container--component {
   @apply tw-shared-border-radius bg-theme-grey-xlight p-5 mt-6.5 mb-6.5 md:py-7.5 md:px-6.25 md:mt-7.5 md:mb-7.5 lg:py-10 lg:px-[calc((100%-46.875rem)/2)] lg:mt-9 lg:mb-9;
-}
-
-@utility tw-shared-base-spacer-small--top {
-  @apply pt-4 md:pt-6 lg:pt-9;
-}
-
-@utility tw-shared-base-spacer-small--bottom {
-  @apply pb-4 md:pb-6 lg:pb-9;
-}
-
-@utility tw-shared-base-spacer-medium--top {
-  @apply pt-6 md:pt-8.5 lg:pt-12.5;
-}
-
-@utility tw-shared-base-spacer-medium--bottom {
-  @apply pb-6 md:pb-8.5 lg:pb-12.5;
-}
-
-@utility tw-shared-base-spacer-large--top {
-  @apply pt-7.5 md:pt-15 lg:pt-20;
-}
-
-@utility tw-shared-base-spacer-large--bottom {
-  @apply pb-7.5 md:pb-15 lg:pb-20;
 }
 
 @utility tw-shared-country-region-site-basic-overview {
