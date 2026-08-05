@@ -1,3 +1,9 @@
+.vw-thematic-effectiveness-green-list-tab__container {
+  @apply tw-shared-base-container
+  tw-shared-base-flex-col-gap-6-and-9;
+}
+
+
 .vw-thematic-effectiveness-green-list-tab__banner {
   @apply tw-shared-base-container;
 }

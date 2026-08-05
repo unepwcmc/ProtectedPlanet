@@ -2,7 +2,4 @@
   @apply tw-shared-base-wrapper;
 }
 
-.vw-thematic-effectiveness__container {
-  @apply tw-shared-base-container
-  tw-shared-base-flex-col-gap-6-and-9;
-}
+ 

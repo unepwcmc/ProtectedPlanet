@@ -78,6 +78,8 @@
 @import './views/partials/social/share.css';
 @import './views/partials/footer/index.css';
 @import './views/partials/footer/social-follow.css';
+@import './views/partials/thematic_and_data_area/footer.css';
+@import './views/partials/thematic_and_data_area/panel_content.css';
 
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';
@@ -92,4 +94,10 @@
 @import './views/search.css';
 @import './views/search-protected-areas.css';
 @import './views/static-cards.css';
-@import './views/thematic-pages.css';
+
+@import './views/data/gdpame/index.css';
+@import './views/data/gdpame/tab-content.css';
+@import './views/data/wdpca/tab-extras.css';
+@import './views/thematic/marine.css';
+@import './views/thematic/effectiveness/index.css';
+@import './views/thematic/effectiveness/green-list-tab.css';

@@ -1,8 +1,8 @@
 <% extras = thematic_and_data_area_tab_extras_config(tab, tab_extras) %>
 <% unless extras&.fetch(:replace_content, false) %>
-  <section class="container--medium">
+  <div class="vw-thematic-and-data-area-panel-content__container">
     <%= cms_fragment_render(tab[:content_id]) %>
-  </section>
+  </div>
 <% end %>
 <% if extras %>
   <%= render partial: extras[:partial], locals: extras.fetch(:locals, {}) %>
