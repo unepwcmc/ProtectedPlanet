@@ -97,7 +97,9 @@
 
 @import './views/data/gdpame/index.css';
 @import './views/data/gdpame/tab-content.css';
+@import './views/data/wdpca/index.css';
 @import './views/data/wdpca/tab-extras.css';
+
 @import './views/thematic/marine.css';
 @import './views/thematic/effectiveness/index.css';
 @import './views/thematic/effectiveness/green-list-tab.css';

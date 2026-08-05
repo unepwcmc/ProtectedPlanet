@@ -1,20 +1,20 @@
-<header class="vw-layouts-partials-hero-basic <%= 'vw-layouts-partials-hero-basic--items-centre' if local_assigns[:items_centre] %>"
+<header class="vw-layouts-partials-hero-basic"
   <% if local_assigns[:image].present? %>style="background-image: url('<%= image %>')"<% end %>
 >
-  <div class="vw-layouts-partials-hero-basic__container <%= 'vw-layouts-partials-hero-basic__container--centre-text' if local_assigns[:centre_text] %>">
-    <h1 class="vw-layouts-partials-hero-basic__title">
-      <%= title %>
-    </h1>
-    <% if local_assigns[:summary].present? %>
-      <p class="vw-layouts-partials-hero-basic__intro">
-        <%= summary %>
-      </p>
-    <% end %>
-    <% if local_assigns[:button_link].present? && local_assigns[:button_text].present? %>
-      <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'vw-layouts-partials-hero-basic__link button--external' %>
-    <% end %>
+  <div class="vw-layouts-partials-hero-basic__container <%= 'vw-layouts-partials-hero-basic__container--items-centre' if local_assigns[:items_centre]%>">
+    <div class="vw-layouts-partials-hero-basic__content <%= 'vw-layouts-partials-hero-basic__content--centre-text' if local_assigns[:centre_text] %>">
+      <h1 class="vw-layouts-partials-hero-basic__title">
+        <%= title %>
+      </h1>
+      <% if local_assigns[:summary].present? %>
+        <p class="vw-layouts-partials-hero-basic__intro">
+          <%= summary %>
+        </p>
+      <% end %>
+      <% if local_assigns[:button_link].present? && local_assigns[:button_text].present? %>
+        <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'vw-layouts-partials-hero-basic__link button--external' %>
+      <% end %>
+    </div>
   </div>
-  <% if local_assigns[:tabs].present? %>
-    <%= tabs %>
-  <% end %>
+  <div id="vw-hero-tabs-target" class="vw-layouts-partials-hero-basic__tabs"></div>
 </header>

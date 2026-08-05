@@ -1,24 +1,29 @@
 <template>
   <div class="ct-tabs">
-    <ul class="ct-tabs__triggers">
-      <li
-        v-for="tab in tabs"
-        :key="tab.id"
-        class="ct-tabs__trigger"
-        :class="{ active: tab.id === selectedId }"
-        role="tab"
-        :ariaSelected="tab.id === selectedId"
-        @click="select(tab.id)"
-        v-html="tab.title"
-      />
-    </ul>
+    <Teleport
+      to="#vw-hero-tabs-target"
+      :disabled="!heroTabsTargetExists"
+    >
+      <ul class="ct-tabs__triggers">
+        <li
+          v-for="tab in tabs"
+          :key="tab.id"
+          class="ct-tabs__trigger"
+          :class="{ 'ct-tabs__trigger--active': tab.id === selectedId }"
+          role="tab"
+          :ariaSelected="tab.id === selectedId"
+          @click="select(tab.id)"
+          v-html="tab.title"
+        />
+      </ul>
+    </Teleport>
     <template
       v-for="tab in tabs"
       :key="`panel-${tab.id}`"
     >
       <div
         v-if="tab.id === selectedId"
-        class="ct-tabs__target ct-tabs__target--active"
+        class="ct-tabs__target"
         :data-tab-panel="tab.id"
         role="tabpanel"
       >
@@ -38,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAnalytics } from '@/composables/useAnalytics'
 import type { TabsProps } from '@/types/backend'
 
@@ -48,6 +53,15 @@ type Tabs = TabsProps
 // Match by id or by title (mirrors the legacy ?tab= param behaviour).
 const props = defineProps<Tabs>()
 const emit = defineEmits<{ change: [id: number] }>()
+
+// Hero partials render an empty #vw-hero-tabs-target for the trigger row to teleport
+// into, so it visually sits at the bottom of the hero while panel content (this
+// component's actual mount point) stays where it was rendered. Falls back to
+// rendering triggers in place when no hero target exists (e.g. component tests).
+const heroTabsTargetExists = ref(false)
+onMounted(() => {
+  heroTabsTargetExists.value = document.querySelector('#vw-hero-tabs-target') !== null
+})
 
 function initialTabId() {
   const preset = props.tabs.find(
@@ -89,11 +103,11 @@ if (selectedId.value !== undefined) updateTabParam(selectedId.value)
 @reference "tailwindcss";
 
 .ct-tabs__triggers {
-  @apply m-0 flex list-none gap-8 overflow-x-auto p-0 md:flex-wrap;
+  @apply tw-shared-base-container m-0 flex list-none gap-8 overflow-x-auto p-0 md:flex-wrap;
 }
 
 .ct-tabs__trigger {
-  @apply tw-shared-base-container shrink-0 cursor-pointer border-b-2 border-transparent pb-1 text-[1.125rem] leading-[1.3] text-theme-grey-dark transition-colors hover:border-theme-primary md:text-[1.25rem];
+  @apply shrink-0 cursor-pointer border-b-2 border-transparent pb-1 text-[1.125rem] leading-[1.3] text-theme-grey-dark transition-colors hover:border-theme-primary md:text-[1.25rem];
 }
 
 .ct-tabs__trigger--active {

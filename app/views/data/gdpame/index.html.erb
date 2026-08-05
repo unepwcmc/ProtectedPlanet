@@ -1,21 +1,19 @@
 <div class="vw-data-gdpame">
-  <% tabs_html = capture do %>
-    <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
-      ga_id: "Slug: #{@cms_page.slug}",
-      tabs_list: @tabs_list,
-      tab_extras: [
-        {
-          tab_id: 1,
-          partial: 'data/gdpame/tab_content',
-          locals: {
-            table_attributes: @table_attributes,
-            filters: @filters,
-            json: @json
-          }
+  <%= render partial: "./layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page) %>
+  <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
+    ga_id: "Slug: #{@cms_page.slug}",
+    tabs_list: @tabs_list,
+    tab_extras: [
+      {
+        tab_id: 1,
+        partial: 'data/gdpame/tab_content',
+        locals: {
+          table_attributes: @table_attributes,
+          filters: @filters,
+          json: @json
         }
-      ]
-    } %>
-  <% end %>
-  <%= render partial: "./layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page).merge(tabs: tabs_html) %>
+      }
+    ]
+  } %>
   <%= render "partials/ctas/protected-planet-report" %>
 </div>

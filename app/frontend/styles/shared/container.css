@@ -14,7 +14,7 @@
 
 @utility tw-shared-base-container {
   @apply 
-  w-full 
+  w-full
   max-w-300
   mx-auto
   tw-shared-base-container--px;

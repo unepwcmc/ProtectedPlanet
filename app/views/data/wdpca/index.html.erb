@@ -1,26 +1,26 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
-<% tabs_html = capture do %>
-  <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
-    ga_id: "Slug: #{@cms_page.slug}",
-    tabs_list: @tabs_list,
-    tab_extras: [
-      {
-        tab_id: 1,
-        partial: 'data/wdpca/tab_extras',
-        locals: {
-          config_search: @config_search_areas,
-          map: @map
-        }
-      }
-    ]
-  } %>
-<% end %>
-<%= render partial: "./layouts/partials/hero/basic", locals: {
+<div class="vw-data-wdpca">
+  <%= render partial: "./layouts/partials/hero/basic", locals: {
   button_text: cms_fragment_render("button-text"),
   button_link: @wdpca_view_all_url,
   image: cms_fragment_render(:image, @cms_page),
   summary: cms_fragment_render("summary"),
   title: @cms_page.label,
-  tabs: tabs_html
+  items_centre: true
 } %>
-<%= render "partials/thematic_and_data_area/footer" %>
+  <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
+  ga_id: "Slug: #{@cms_page.slug}",
+  tabs_list: @tabs_list,
+  tab_extras: [
+    {
+      tab_id: 1,
+      partial: 'data/wdpca/tab_extras',
+      locals: {
+        config_search: @config_search_areas,
+        map: @map
+      }
+    }
+  ]
+} %>
+  <%= render "partials/thematic_and_data_area/footer" %>
+</div>
