@@ -7,14 +7,14 @@
 
 .vw-partials-ctas-mpa__container {
   @apply
-  tw-shared-base-container--px
-  tw-shared-base-container--py;
+  p-6
+  md:p-12;
 }
 
 .vw-partials-ctas-mpa__content {
   @apply 
   tw-shared-base-flex-col-gap-6
-  md:w-173;
+  md:max-w-173;
 }
 
 .vw-partials-ctas-mpa__title {

@@ -1,0 +1,22 @@
+.vw-thematic-marine {
+  @apply tw-shared-base-wrapper;
+}
+
+.vw-thematic-marine__container {
+  @apply tw-shared-base-container 
+  tw-shared-base-flex-col-gap-6-and-9;
+}
+
+.vw-thematic-marine__container--mpa {
+  @apply
+  tw-shared-base-container
+  px-0;
+}
+
+.vw-thematic-marine__distribution {
+  @apply tw-shared-base-container--medium;
+}
+
+.vw-thematic-marine__medium {
+  @apply tw-shared-base-container--medium;
+}
