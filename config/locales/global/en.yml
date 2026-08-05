@@ -18,9 +18,9 @@ en:
     footer:
       copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
       title1: Explore
-      title2: General Info
+      general-info: General Info
       follow-us: Follow us
-      title4: Get in touch
+      get-in-touch: Get in touch
     geo-types:
       countries: Countries
       regions: Regions

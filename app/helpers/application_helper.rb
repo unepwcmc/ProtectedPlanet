@@ -181,11 +181,11 @@ module ApplicationHelper
   end
 
   def get_footer_links
-    @links = { 'links1' => [], 'links2' => [] }
+    @links = { 'explore_links' => [], 'general_info_links' => [] }
     return @links if @cms_site.nil?
 
-    @links['links1'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
-    @links['links2'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
+    @links['explore_links'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
+    @links['general_info_links'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
   end
 
   def get_local_classes(local_assigns)

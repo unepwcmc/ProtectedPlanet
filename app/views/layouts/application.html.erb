@@ -17,7 +17,7 @@
     <div class="<%= if @for_pdf then 'pdf' end %>">
       <%= yield %>
 
-      <%= render "layouts/partials/footer" %>
+      <%= render "layouts/partials/footer/index" %>
     </div>
 
     <%= frontend_mount "DownloadModal", props: {

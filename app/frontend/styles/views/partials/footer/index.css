@@ -1,0 +1,50 @@
+.vw-partials-footer {
+  @apply tw-shared-bg--primary
+  tw-shared-base-spacer-large--top
+  tw-shared-base-spacer-medium--bottom
+  border-b-16
+  border-solid 
+  border-theme-green-dark;
+}
+
+.vw-partials-footer__container {
+  @apply tw-shared-base-container 
+  flex
+  flex-wrap
+  gap-1
+  md:gap-12
+  md:justify-between
+  lg:flex-nowrap;
+}
+
+.vw-partials-footer__col {
+  @apply tw-shared-base-flex-col-gap-3 grow;
+}
+
+.vw-partials-footer__col--more-gap {
+  @apply tw-shared-base-flex-col-gap-6;
+}
+
+.vw-partials-footer__col--hide-below-desktop {
+  @apply hidden lg:block
+}
+
+.vw-partials-footer__get-in-touch {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.vw-partials-footer__link {
+  @apply no-underline mb-1.5 block lg:text-[1.125rem];
+}
+
+.vw-partials-footer__link-partner {
+  @apply no-underline;
+}
+
+.vw-partials-footer__logo-partner {
+  @apply mb-3 w-auto h-7.5;
+}
+
+.vw-partials-footer__logo-site {
+  @apply w-auto h-10;
+}
