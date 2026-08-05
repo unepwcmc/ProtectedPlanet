@@ -1,12 +1,13 @@
-<div class="vw-thematic-effectiveness-green-list-tab__banner">
-  <%= render partial: "./layouts/partials/hero/green-list", 
+<div class="vw-thematic-effectiveness-green-list-tab__container">
+  <div class="vw-thematic-effectiveness-green-list-tab__banner">
+    <%= render partial: "./layouts/partials/hero/green-list", 
   locals: green_list_banner_locals(@cms_page) %>
-</div>
-<section class="vw-thematic-effectiveness-green-list-tab__about">
-  <h2><%= cms_fragment_render(:green_list_about_title, @cms_page) %></h2>
-  <div><%= cms_fragment_render(:green_list_about_content, @cms_page) %></div>
-</section>
-<%= render partial: "partials/charts/chart-row-pa", locals: {
+  </div>
+  <section class="vw-thematic-effectiveness-green-list-tab__about">
+    <h2><%= cms_fragment_render(:green_list_about_title, @cms_page) %></h2>
+    <div><%= cms_fragment_render(:green_list_about_content, @cms_page) %></div>
+  </section>
+  <%= render partial: "partials/charts/chart-row-pa", locals: {
   charts: [
     {
       coverage: @greenlisted_pas_percent,
@@ -18,6 +19,7 @@
   title: cms_fragment_render(:green_list_percentage_chart_title, @cms_page),
   content: cms_fragment_render(:green_list_percentage_chart_description, @cms_page)
 } %>
+</div>
 <section class="map-section">
   <%= frontend_mount "Map", props: {
     servicesForPointQuery: @green_list_map[:point_query_services],
@@ -29,12 +31,14 @@
     autocompleteErrorMessages: map_yml[:autocomplete_error_messages],
     autocompletePlaceholder: map_yml[:autocomplete_placeholder]
   } %>
-</section>
-<section class="vw-thematic-effectiveness-green-list-tab__examples">
-  <%= cms_fragment_render("content") %>
-  <%= render partial: "partials/cards/sites", locals: {
+</div>
+<div class="vw-thematic-effectiveness-green-list-tab__container">
+  <section class="vw-thematic-effectiveness-green-list-tab__examples">
+    <%= cms_fragment_render("content") %>
+    <%= render partial: "partials/cards/sites", locals: {
     cards: @example_greenlist,
     title: t('thematic_area.green_list.card_text') + " (#{@greenlisted_pas_total_count})",
     url: @green_list_view_all_url
   } %>
-</section>
+  </section>
+</div>

@@ -24,17 +24,10 @@ module ThematicAndDataAreaHelper
 
   def thematic_and_data_area_vue_tabs(tabs_list, tab_extras = nil)
     tabs_list.map do |tab|
-      extras = thematic_and_data_area_tab_extras_config(tab, tab_extras)
-      body_html = "".html_safe
-      unless extras&.fetch(:replace_content, false)
-        body_html << content_tag(:section, cms_fragment_render(tab[:content_id]), class: "container--medium")
-      end
-      body_html << render(partial: extras[:partial], locals: extras.fetch(:locals, {})) if extras
-
       {
         id: tab[:id],
         title: tab[:title],
-        bodyHtml: body_html
+        bodyHtml: render(partial: 'partials/thematic_and_data_area/panel_content', locals: { tab_extras: tab_extras, tab: tab })
       }
     end
   end
