@@ -1,0 +1,40 @@
+@utility tw-shared-base-flex-gap-3 {
+  @apply
+  flex
+  gap-3;
+}
+
+@utility tw-shared-base-flex-col-gap-3 {
+  @apply
+  flex 
+  flex-col 
+  gap-3;
+}
+
+@utility tw-shared-base-flex-col-gap-6 {
+  @apply
+  flex 
+  flex-col 
+  gap-6;
+}
+
+@utility tw-shared-base-flex-col-gap-9 {
+  @apply flex
+  flex-col
+  gap-9;
+} 
+
+@utility tw-shared-base-flex-col-gap-6-and-9 {
+  @apply
+  flex 
+  flex-col 
+  gap-6
+  lg:gap-9;
+}
+
+@utility tw-shared-base-flex-col-gap-12 {
+  @apply
+  flex
+  flex-col 
+  gap-12;
+}

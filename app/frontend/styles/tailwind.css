@@ -53,6 +53,9 @@
  */
 @import './shared/background.css';
 @import './shared/base.css';
+@import './shared/container.css';
+@import './shared/flex.css';
+@import './shared/footer.css';
 @import './shared/forms.css';
 @import './shared/hero.css';
 @import './shared/icons.css';
@@ -73,6 +76,7 @@
 @import './views/partials/ctas/protected-planet-report.css';
 @import './views/partials/ctas/api.css';
 @import './views/partials/ctas/mpa.css';
+@import './views/partials/social/follow.css';
 
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';

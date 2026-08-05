@@ -1,0 +1,30 @@
+@utility tw-shared-base-container--px {
+  @apply 
+  px-5
+  lg:px-6.25
+  2xl:px-7.5;
+}
+
+@utility tw-shared-base-container--py {
+  @apply 
+  py-5
+  lg:py-6.25
+  2xl:py-7.5;
+}
+
+@utility tw-shared-base-container {
+  @apply 
+  w-full 
+  max-w-300
+  mx-auto
+  tw-shared-base-container--px;
+}
+
+@utility tw-shared-base-container--medium {
+  @apply 
+  w-full 
+  mx-auto 
+  tw-shared-base-container--px
+  md:max-w-187.5 
+  lg:w-187.5;
+}

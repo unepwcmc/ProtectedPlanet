@@ -1,0 +1,33 @@
+.vw-partials-social-follow {
+  @apply tw-shared-footer-elemenet-wrapper;
+}
+
+.vw-partials-social-follow__icons {
+  @apply tw-shared-base-flex-gap-3;
+}
+
+.vw-partials-social-follow__icon {
+  @apply
+  w-6.5
+  h-7.5
+  bg-center
+  bg-no-repeat
+  bg-contain
+  hover:opacity-75;
+}
+
+.vw-partials-social-follow__icon--email {
+  background-image: url('../../../../assets/icons/email-email.svg');
+}
+
+.vw-partials-social-follow__icon--facebook {
+  background-image: url('../../../../assets/icons/facebook-white.svg');
+}
+
+.vw-partials-social-follow__icon--linkedin {
+  background-image: url('../../../../assets/icons/linkedin-white.svg');
+}
+
+.vw-partials-social-follow__icon--twitter {
+  background-image: url('../../../../assets/icons/twitter-white.svg');
+}

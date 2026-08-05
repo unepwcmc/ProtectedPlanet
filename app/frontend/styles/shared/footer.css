@@ -1,0 +1,3 @@
+@utility tw-shared-footer-elemenet-wrapper {
+  @apply tw-shared-base-flex-col-gap-3;
+}
