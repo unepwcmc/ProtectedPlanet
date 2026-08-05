@@ -13,7 +13,7 @@
 }
 
 .vw-layouts-partials-content-banner__content {
-  @apply tw-shared-base-flex-gap-6;
+  @apply tw-shared-base-flex-col-gap-6;
 }
 
 .vw-layouts-partials-content-banner__title {

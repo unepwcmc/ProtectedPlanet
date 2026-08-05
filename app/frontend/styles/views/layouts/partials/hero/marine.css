@@ -16,7 +16,7 @@
 }
 
 .vw-layouts-partials-hero-marine__content {
-  @apply tw-shared-base-flex-gap-3;
+  @apply tw-shared-base-flex-col-gap-3;
 }
 
 .vw-layouts-partials-hero-marine__intro {

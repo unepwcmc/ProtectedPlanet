@@ -69,13 +69,14 @@
 @import './views/layouts/partials/hero/marine.css';
 @import './views/layouts/partials/hero/small.css';
 @import './views/layouts/partials/content-banner.css';
-@import './views/layouts/partials/ctas/protected-planet-report.css';
+
+@import './views/partials/ctas/protected-planet-report.css';
+@import './views/partials/ctas/api.css';
 
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';
 @import './views/footer.css';
 @import './views/hero.css';
-@import './views/cta.css';
 @import './views/social.css';
 @import './views/country.css';
 @import './views/region.css';

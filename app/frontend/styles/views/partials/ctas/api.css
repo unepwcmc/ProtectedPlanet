@@ -1,0 +1,44 @@
+.vw-partials-ctas-api {
+  @apply
+  relative
+  tw-shared-bg--grey-black;
+}
+
+.vw-partials-ctas-api__container {
+  @apply
+  tw-shared-base-container--px
+  tw-shared-base-container--py;
+}
+
+.vw-partials-ctas-api__content {
+  @apply 
+  tw-shared-base-flex-col-gap-3 
+  md:w-173;
+}
+
+.vw-partials-ctas-api__title {
+  @apply 
+  text-2xl
+  md:text-4xl 
+  text-white;
+}
+
+
+.vw-partials-ctas-api__button {
+  @apply self-start;
+}
+
+.vw-partials-ctas-api__key {
+  @apply
+  hidden
+  md:block
+  md:absolute
+  md:top-[-6%]
+  md:right-0
+  md:h-[122%]
+  lg:top-[-11%];
+}
+
+/* @utility vw-partials-ctas-api__content {
+  
+} */

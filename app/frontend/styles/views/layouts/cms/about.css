@@ -4,10 +4,10 @@
 
 .vw-layouts-cms-about__container {
   @apply tw-shared-base-container
-  tw-shared-base-flex-6-and-9;
+  tw-shared-base-flex-col-gap-6-and-9;
 }
 
 .vw-layouts-cms-about__container--medium {
   @apply tw-shared-base-container--medium
-  tw-shared-base-flex-6-and-9;
+  tw-shared-base-flex-col-gap-6-and-9;
 }

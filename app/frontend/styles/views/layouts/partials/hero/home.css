@@ -4,21 +4,22 @@
     flex
     flex-col
     justify-center
-    h-[25.9rem]
-    md:h-[51.6rem]
-    lg:h-180;
+    min-h-[25.9rem]
+    md:min-h-[51.6rem]
+    lg:min-h-180;
     
-    background-image: url('../../../../assets/hero/home.jpg');
+    background-image: url('../../../../../assets/hero/home.jpg');
 }
 
 .vw-layouts-partials-hero-home__container {
     @apply
-    tw-shared-base-container;
+    tw-shared-base-container
+    tw-shared-base-container--py;
 }
 
 .vw-layouts-partials-hero-home__content{
     @apply
-    tw-shared-base-flex-gap-3
+    tw-shared-base-flex-col-gap-3
     md:w-119
     lg:w-164;
 }

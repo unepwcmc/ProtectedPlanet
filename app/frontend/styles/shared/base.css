@@ -1,69 +1,30 @@
-/*
- * Ported from app/assets/stylesheets/base/_base.scss's "site structure" + typography-modifier
- * classes (Wave T2, corrected during T3). Originally landed as `vw-base-*` in
- * views/base.css, then moved here: these classes are consumed by many unrelated views/components
- * (page shells, hero, cta, footer, cards, charts, tabs, banner, ...), which is exactly the
- * `tw-shared-` criterion (rule 5) — `vw-` is reserved for chrome owned by a single page/view.
- *
- * This also fixes a real pre-existing duplicate: `tw-shared-base-container` already existed here
- * (consumed by views/topbar.css, views/topbar-secondary.css, Tabs.vue, Banner/Index.vue) with
- * `md:`/`lg:` (native 768px/1024px) breakpoints, written before this migration's own investigation
- * into the legacy `.container` class's real compiled breakpoints. That investigation (see below)
- * found the legacy class actually switches at `medium:`/`large:` (1025px/1201px) via a shadowed
- * `gutters()` mixin — this file now uses that verified value as the single definition, so the
- * pre-existing topbar/Tabs/Banner consumers pick up the corrected breakpoints too. Re-check their
- * padding step visually between 768-1024px (tablet) after this change — that's the one behaviour
- * difference this consolidation introduces for those 3 consumers.
- *
- * The file's BARE element rules (`h1`, `h2`, `h3`, `p,a`, `body`, etc.) are NOT touched here —
- * they're a site-wide typography baseline every page (and every not-yet-migrated Vue island,
- * since Tailwind preflight is off) still depends on, not "shared utility" scope. `base/_base.scss`
- * stays alive with just those bare-element rules until a later wave gives them a real home.
- *
- * Breakpoint note: `.container`/`.container--medium`'s padding steps come from
- * `helpers/_helpers.scss`'s `gutters()` mixin (imported AFTER, and so shadowing,
- * `helpers/mixins/_layout.scss`'s same-named mixin) — that shadowed version uses
- * `breakpoint($medium)`/`breakpoint($large)` (1025px/1201px), not `breakpoint($small)`/
- * `breakpoint($large)` as `_layout.scss`'s (dead, never-called) definition would suggest.
- * Verified against the actual compiled `application.css`, not the SCSS source, given this
- * exact kind of drift already burned a prior wave (T0's `_popup.scss`/`_social.scss` baseline
- * correction). `.container--component`'s own `responsive()` padding/margin calls are NOT
- * shadowed (only `gutters()` is duplicated) and correctly use the same two tiers.
- *
- * No custom `small:`/`medium:`/`large:`/`xlarge:` breakpoint tokens — those got dropped
- * (they duplicated Tailwind's own `md:`/`lg:` almost exactly and, worse, collided with them:
- * a previous pass had left native `md:` utilities mixed in on top of the custom `small:` token,
- * and since legacy `$small` (768px) is numerically identical to Tailwind's own `md:` (768px),
- * every one of those turned into a same-breakpoint conflict — the later rule in generation
- * order silently always won, so several intended two-step (tablet→desktop) transitions in
- * hero.css/cta.css/social.css/footer.css collapsed into one and the smaller-tier value never
- * rendered. Fixed by mapping every legacy tier onto the nearest *distinct* native breakpoint:
- * `$small` (768px) → `md:` (exact), `$medium` (1025px) → `lg:` (1024px, 1px off, immaterial),
- * `$large`/`$xlarge` (1201px/1441px, rare — just container padding + `.container--pame`'s
- * width) → `2xl:` (1536px) rather than `xl:`, collapsing the two into one top tier per this
- * codebase no longer needing a distinct step between them.
- *
- * `.site-width`, `.site-width-medium`, `.gutter-left`/`.gutter-right`, `.container--desktop-up`,
- * `.h3-big-white` had zero live consumers (confirmed via repo-wide grep) — deleted outright,
- * not ported.
- */
+@utility tw-shared-base-container--px {
+  @apply 
+  px-5
+  lg:px-6.25
+  2xl:px-7.5;
+}
+
+@utility tw-shared-base-container--py {
+  @apply 
+  py-5
+  lg:py-6.25
+  2xl:py-7.5;
+}
 
 @utility tw-shared-base-container {
   @apply 
   w-full 
   max-w-300
   mx-auto
-  px-5
-  lg:px-6.25
-  2xl:px-7.5;
+  tw-shared-base-container--px;
 }
 
 @utility tw-shared-base-container--medium {
-  @apply w-full 
+  @apply 
+  w-full 
   mx-auto 
-  px-5 
-  lg:px-6.25 
-  2xl:px-7.5 
+  tw-shared-base-container--px
   md:max-w-187.5 
   lg:w-187.5;
 }
@@ -143,14 +104,29 @@
   gap-9;
 }
 
-@utility tw-shared-base-flex-12 {
+
+
+@utility tw-shared-base-flex-gap-3 {
+  @apply
+  flex
+  gap-3;
+}
+
+@utility tw-shared-base-flex-col-gap-3 {
   @apply
   flex 
   flex-col 
-  gap-12;
+  gap-3;
 }
 
-@utility tw-shared-base-flex-6-and-9 {
+@utility tw-shared-base-flex-col-gap-6 {
+  @apply
+  flex 
+  flex-col 
+  gap-6;
+}
+
+@utility tw-shared-base-flex-col-gap-6-and-9 {
   @apply
   flex 
   flex-col 
@@ -158,16 +134,9 @@
   lg:gap-9;
 }
 
-@utility tw-shared-base-flex-gap-3 {
+@utility tw-shared-base-flex-col-gap-12 {
   @apply
-  flex 
+  flex
   flex-col 
-  gap-3;
-}
-
-@utility tw-shared-base-flex-gap-6 {
-  @apply
-  flex 
-  flex-col 
-  gap-6;
+  gap-12;
 }
