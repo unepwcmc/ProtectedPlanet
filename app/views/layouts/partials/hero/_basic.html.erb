@@ -14,4 +14,7 @@
       <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'vw-layouts-partials-hero-basic__link button--external' %>
     <% end %>
   </div>
+  <% if local_assigns[:tabs].present? %>
+    <%= tabs %>
+  <% end %>
 </header>
