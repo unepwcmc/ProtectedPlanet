@@ -1,12 +1,11 @@
-<div class="container spacer-small--top">
-  <%= render partial: "./layouts/partials/content-banner", locals: green_list_banner_locals(@cms_page) %>
+<div class="vw-thematic-effectiveness-green-list-tab__banner">
+  <%= render partial: "./layouts/partials/hero/green-list", 
+  locals: green_list_banner_locals(@cms_page) %>
 </div>
-
-<section class="container--medium spacer-small--top">
+<section class="vw-thematic-effectiveness-green-list-tab__about">
   <h2><%= cms_fragment_render(:green_list_about_title, @cms_page) %></h2>
   <div><%= cms_fragment_render(:green_list_about_content, @cms_page) %></div>
 </section>
-
 <%= render partial: "partials/charts/chart-row-pa", locals: {
   charts: [
     {
@@ -19,7 +18,6 @@
   title: cms_fragment_render(:green_list_percentage_chart_title, @cms_page),
   content: cms_fragment_render(:green_list_percentage_chart_description, @cms_page)
 } %>
-
 <section class="map-section">
   <%= frontend_mount "Map", props: {
     servicesForPointQuery: @green_list_map[:point_query_services],
@@ -32,8 +30,7 @@
     autocompletePlaceholder: map_yml[:autocomplete_placeholder]
   } %>
 </section>
-
-<section class="container spacer-large--top">
+<section class="vw-thematic-effectiveness-green-list-tab__examples">
   <%= cms_fragment_render("content") %>
   <%= render partial: "partials/cards/sites", locals: {
     cards: @example_greenlist,
