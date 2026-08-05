@@ -2,9 +2,7 @@
     @apply
     tw-shared-bg-image-overlay--white
     bg-theme-grey-light
-    bg-center
-    bg-no-repeat
-    bg-cover;
+    tw-shared-bg-center-no-repeat-cover;
 }
 
 @utility tw-shared-hero-wrapper {

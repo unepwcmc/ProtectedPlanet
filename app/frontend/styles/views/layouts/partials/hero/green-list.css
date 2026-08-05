@@ -1,4 +1,4 @@
-.vw-layouts-partials-content-banner {
+.vw-layouts-partials-hero-green-list {
   @apply tw-shared-hero-wrapper-common
   flex
   justify-center
@@ -7,32 +7,32 @@
   lg:flex-row
   p-6
   md:p-16
-  lg:p-6.25
+  lg:p-10
   gap-6
   lg:gap-24;
 }
 
-.vw-layouts-partials-content-banner__content {
+.vw-layouts-partials-hero-green-list__content {
   @apply tw-shared-base-flex-col-gap-6;
 }
 
-.vw-layouts-partials-content-banner__title {
+.vw-layouts-partials-hero-green-list__title {
   @apply text-3xl;
 }
 
-.vw-layouts-partials-content-banner__intro {
+.vw-layouts-partials-hero-green-list__intro {
   @apply text-lg lg:text-xl;
 }
 
-.vw-layouts-partials-content-banner__small-text {
+.vw-layouts-partials-hero-green-list__small-text {
   @apply font-bold mt-4 block;
 }
 
-.vw-layouts-partials-content-banner__button {
+.vw-layouts-partials-hero-green-list__button {
   @apply self-start;
 }
 
-.vw-layouts-partials-content-banner__stats {
+.vw-layouts-partials-hero-green-list__stats {
   @apply tw-shared-bg--grey-black
   tw-shared-border-radius 
   flex 
@@ -45,11 +45,11 @@
   lg:max-w-[33%];
 } 
 
-.vw-layouts-partials-content-banner__stat-item {
+.vw-layouts-partials-hero-green-list__stat-item {
   @apply flex flex-col gap-1;
 }
 
-.vw-layouts-partials-content-banner__stat-number {
+.vw-layouts-partials-hero-green-list__stat-number {
   @apply 
   text-theme-primary 
   text-3xl
@@ -58,13 +58,13 @@
   leading-none;
 }
 
-.vw-layouts-partials-content-banner__stat-number--small {
+.vw-layouts-partials-hero-green-list__stat-number--small {
   @apply
   text-2xl
   md:text-3xl;
 }
 
-.vw-layouts-partials-content-banner__stat-text {
+.vw-layouts-partials-hero-green-list__stat-text {
   @apply text-white 
   font-bold
   leading-none

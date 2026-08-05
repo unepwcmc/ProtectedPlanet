@@ -68,10 +68,11 @@
 @import './views/layouts/partials/hero/home.css';
 @import './views/layouts/partials/hero/marine.css';
 @import './views/layouts/partials/hero/small.css';
-@import './views/layouts/partials/content-banner.css';
+@import './views/layouts/partials/hero/green-list.css';
 
 @import './views/partials/ctas/protected-planet-report.css';
 @import './views/partials/ctas/api.css';
+@import './views/partials/ctas/mpa.css';
 
 @import './views/topbar.css';
 @import './views/topbar-secondary.css';

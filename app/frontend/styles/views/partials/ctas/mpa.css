@@ -1,0 +1,36 @@
+.vw-partials-ctas-mpa {
+  @apply 
+  tw-shared-bg-image-overlay--black
+  tw-shared-bg-center-no-repeat-cover;
+  background-image: url('../../../../assets/ctas/mpa-guide.jpg');
+}
+
+.vw-partials-ctas-mpa__container {
+  @apply
+  tw-shared-base-container--px
+  tw-shared-base-container--py;
+}
+
+.vw-partials-ctas-mpa__content {
+  @apply 
+  tw-shared-base-flex-col-gap-6
+  md:w-173;
+}
+
+.vw-partials-ctas-mpa__title {
+  @apply 
+  text-2xl
+  md:text-4xl
+  text-white;
+}
+
+.vw-partials-ctas-mpa__intro {
+  @apply 
+  text-lg
+  md:text-xl 
+  text-white;
+}
+
+.vw-partials-ctas-mpa__button {
+  @apply self-start;
+}

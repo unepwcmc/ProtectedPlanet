@@ -1,0 +1,40 @@
+<section
+  class="vw-layouts-partials-hero-green-list"
+  <% if local_assigns.has_key? :image %>
+    style="background-image: url('<%= image %>')"
+  <% end %>
+>
+  <div class="vw-layouts-partials-hero-green-list__content">
+    <h2 class="vw-layouts-partials-hero-green-list__title">
+      <%= title %>
+    </h2>
+    <% if local_assigns.has_key? :summary %>
+      <p class="vw-layouts-partials-hero-green-list__intro">
+        <%= summary %>
+      </p>
+    <% end %>
+    <%= link_to button_text, button_url, title: button_text, class: 'vw-layouts-partials-hero-green-list__button button--primary' %>
+  </div>
+  <% if local_assigns[:stats_items].present? %>
+    <div class="vw-layouts-partials-hero-green-list__stats">
+      <% stats_items.each_with_index do |stat_item, index| %>
+        <div class="vw-layouts-partials-hero-green-list__stat-item">
+          <% small_number = stat_item[:small_number] == true %>
+          <div class="vw-layouts-partials-hero-green-list__stat-number <%= 'vw-layouts-partials-hero-green-list__stat-number--small' if small_number%>">
+            <%= frontend_mount "Counter",
+                        tag: :span,
+                        key: index,
+                        props: {
+                          total: stat_item[:total],
+                          trigger: "vw-layouts-partials-hero-green-list__stats",
+                          decimal: stat_item[:decimal] || 0
+                        } %><%= stat_item[:suffix].to_s.html_safe %>
+          </div>
+          <span class="vw-layouts-partials-hero-green-list__stat-text">
+            <%= stat_item[:text] %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</section>

@@ -3,10 +3,8 @@
 .vw-ctas-protected-planet-report {
   @apply tw-shared-bg--grey-xdark 
   tw-shared-bg-image-overlay--black
-  min-h-73
-  bg-center
-  bg-no-repeat
-  bg-cover; 
+  tw-shared-bg-center-no-repeat-cover
+  min-h-73; 
   background-image: url('../../../../assets/ctas/protected-planet-report.jpg');
 }
 
