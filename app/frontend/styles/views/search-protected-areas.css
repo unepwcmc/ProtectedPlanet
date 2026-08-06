@@ -1,0 +1,9 @@
+/*
+ * partials/search/_protected-areas.html.erb — shared partial, rendered from both
+ * app/views/home/index.html.erb and app/views/data/wdpca/_tab_extras.html.erb (rule 4c: block
+ * name follows the owning file, `partials/search/_protected-areas`, not the mounted widget name).
+ */
+
+@utility vw-search-protected-areas__container {
+  @apply tw-shared-base-container;
+}
