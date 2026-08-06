@@ -45,13 +45,16 @@
 .vw-ctas-protected-planet-report__title {
   @apply text-2xl
   md:text-4xl 
-  text-white;
+  text-white
+  md:w-92.5;
 }
 
 .vw-ctas-protected-planet-report__intro {
   @apply text-lg 
   md:text-xl 
-  text-white;
+  text-white
+  md:w-[75%]
+  lg:w-[90%];
 }
 
 .vw-ctas-protected-planet-report__button{

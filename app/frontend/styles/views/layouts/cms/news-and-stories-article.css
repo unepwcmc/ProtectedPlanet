@@ -1,11 +1,11 @@
-@utility vw-cms-news-and-stories-article {
+.vw-cms-news-and-stories-article {
   @apply tw-shared-base-wrapper;
 }
 
-@utility vw-cms-news-and-stories-article__content {
+.vw-cms-news-and-stories-article__content {
   @apply tw-shared-base-container--medium;
 }
 
-@utility vw-cms-news-and-stories-article__news {
+.vw-cms-news-and-stories-article__news {
   @apply tw-shared-base-container;
 }
