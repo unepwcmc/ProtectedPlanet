@@ -1,0 +1,7 @@
+.vw-partials-carousels-themes {
+    @apply tw-shared-base-flex-col-gap-6;
+}
+
+.vw-partials-carousels-themes__title {
+    @apply text-center;
+}

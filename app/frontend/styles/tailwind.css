@@ -49,6 +49,8 @@
 @import './views/layouts/partials/hero/marine.css';
 @import './views/layouts/partials/hero/small.css';
 
+@import './views/partials/carousels/theme.css';
+
 @import './views/partials/charts/chart-section.css';
 
 @import './views/partials/ctas/api.css';
