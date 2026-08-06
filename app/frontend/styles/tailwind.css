@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 @theme {
+
+  --font-hindSiliguri: 'Hind Siliguri', sans-serif, system-ui;
+  --font-playfairDisplay: "Playfair Display", serif, system-ui;
+
   --color-theme-primary: #71a32b;
   --color-theme-primary-dark: #415519;
   --color-theme-grey-xlight: #f4f4f4;
