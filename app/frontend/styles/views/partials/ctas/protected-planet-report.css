@@ -19,7 +19,7 @@
   flex-col
   gap-3
   pt-16.5 
-  pb-10 
+  pb-10
   md:p-0 
   items-start
   md:items-center
@@ -43,9 +43,8 @@
 }
 
 .vw-ctas-protected-planet-report__title {
-  @apply text-2xl
-  md:text-4xl 
-  text-white
+  @apply 
+  tw-shared-font-family-playfair__h2--protected-planet-report
   md:w-92.5;
 }
 

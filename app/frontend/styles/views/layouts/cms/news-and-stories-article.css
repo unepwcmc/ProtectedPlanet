@@ -3,7 +3,15 @@
 }
 
 .vw-cms-news-and-stories-article__content {
-  @apply tw-shared-base-container--medium;
+  @apply 
+  tw-shared-base-container--medium
+  tw-shared-cms-wysiwyg;
+}
+
+.vw-cms-news-and-stories-article__socials {
+  @apply
+  flex
+  justify-center;
 }
 
 .vw-cms-news-and-stories-article__news {

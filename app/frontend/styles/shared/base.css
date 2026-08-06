@@ -2,28 +2,7 @@
   @apply flex flex-col md:flex-row md:gap-7;
 }
 
-/* h1/h2/p/a base typography (family, line-height) is inherited from the untouched bare-element
-   rules in _base.scss — these only override what the modifier actually changes.
-   NOT written as @utility: Tailwind's utilities land in `@layer utilities`, and per the CSS
-   cascade spec ANY unlayered rule beats ANY layered rule regardless of specificity — so a
-   layered `@utility` here would silently lose its font-size/color overrides to the still-alive,
-   unlayered bare `h1`/`h2` rules in the legacy Sprockets stylesheet (confirmed via computed
-   styles in a real headless-browser check: h1-home rendered at the bare h1's 40px instead of
-   its own 70px at medium:, and h2-big-white rendered #242424 instead of white). Writing them as
-   plain selectors (still using @apply) keeps them unlayered so they cascade correctly.
-   (h1-home moved out to views/hero.css's `vw-hero__title--home` during T3 — it only ever had one
-   consumer, `_hero-home.html.erb`, so it never actually met the ">1 view" bar for staying here.) */
-
-.tw-shared-base-h2-big {
-  @apply text-[1.5625rem] md:text-[2.5rem] font-normal text-inherit;
-  margin: 0 0 0.5em 0;
-}
-
-.tw-shared-base-h2-big-white {
-  @apply text-[1.5625rem] md:text-[2.5rem] font-normal text-white;
-  margin: 0 0 0.5em 0;
-}
-
+ 
 @utility tw-shared-base-text-intro {
   @apply text-[1.125rem] md:text-[1.25rem];
   line-height: 1.35;

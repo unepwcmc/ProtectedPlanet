@@ -43,8 +43,10 @@
 @import './views/layouts/cms/about.css';
 @import './views/layouts/cms/basic.css';
 @import './views/layouts/cms/news-and-stories-article.css';
+@import './views/layouts/cms/news-and-stories.css';
 @import './views/layouts/cms/resource.css';
 @import './views/layouts/cms/resources.css';
+
 
 @import './views/layouts/partials/hero/basic.css';
 @import './views/layouts/partials/hero/green-list.css';

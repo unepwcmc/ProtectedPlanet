@@ -5,9 +5,9 @@
   md:text-[1rem];
 
   h1,
-  h2 { @apply tw-shared-font-family-playfair--h2-wysiwyg; }
-  h3 { @apply tw-shared-font-family-hind-siliguri--h3-wysiwyg; }
-  h4 { @apply tw-shared-font-family-hind-siliguri--h4-wysiwyg; }
+  h2 { @apply tw-shared-font-family-playfair__h2--wysiwyg; }
+  h3 { @apply tw-shared-font-family-hind-siliguri__h3--wysiwyg; }
+  h4 { @apply tw-shared-font-family-hind-siliguri__h4--wysiwyg; }
 
   a,
   p,
