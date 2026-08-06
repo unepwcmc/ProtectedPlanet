@@ -118,20 +118,4 @@ if (selectedId.value !== undefined) updateTabParam(selectedId.value)
   @apply pt-4;
 }
 
-.ct-tabs__body {
-  @apply text-base leading-[1.3] text-theme-grey-black;
-}
-
-/* v-html content has no classes to hook Tailwind onto directly, so it's styled here. */
-.ct-tabs__body :deep(p) {
-  margin: 0;
-}
-
-.ct-tabs__body :deep(a) {
-  @apply text-theme-primary underline;
-}
-
-.ct-tabs__body :deep(a):hover {
-  @apply text-theme-primary-dark no-underline;
-}
 </style>

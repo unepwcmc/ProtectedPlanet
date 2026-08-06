@@ -1,55 +1,55 @@
-//--------------------------------------------------
-// html elements
-//--------------------------------------------------
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-}
+// //--------------------------------------------------
+// // html elements
+// //--------------------------------------------------
+// * {
+//   box-sizing: border-box;
+//   -webkit-font-smoothing: antialiased;
+// }
 
-body {
-  @include text-body;
-  color: $body-font-colour;
-  font-family: $body-font;
-  margin: 0;
-}
+// body {
+//   @include text-body;
+//   color: $body-font-colour;
+//   font-family: $body-font;
+//   margin: 0;
+// }
 
-h1 {
-  @include h1;
-}
+// h1 {
+//   @include h1;
+// }
 
-h2 {
-  @include h2;
-}
+// h2 {
+//   @include h2;
+// }
 
-h3 {
-  @include h3;
-}
+// h3 {
+//   @include h3;
+// }
 
-h4 {
-  @include h4;
-}
+// h4 {
+//   @include h4;
+// }
 
-p,a {
-  color: inherit;
-  line-height: $p-font-line-height;
-}
+// p,a {
+//   color: inherit;
+//   line-height: $p-font-line-height;
+// }
 
-a {
-  text-decoration: underline; 
+// a {
+//   text-decoration: underline; 
 
-  &:hover { text-decoration: none; }
-}
+//   &:hover { text-decoration: none; }
+// }
 
-label { cursor: pointer; }
+// label { cursor: pointer; }
 
-em { font-style: italic; }
+// em { font-style: italic; }
 
-img { max-width: 100%; }
+// img { max-width: 100%; }
 
-sup {
-  font-size: .6em;
-}
+// sup {
+//   font-size: .6em;
+// }
 
-input {
-  &:focus { @include input-custom-focus; }
-}
+// input {
+//   &:focus { @include input-custom-focus; }
+// }

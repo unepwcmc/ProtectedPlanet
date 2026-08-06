@@ -1,26 +1,31 @@
 @utility tw-shared-cms-wysiwyg {
   @apply 
-  tw-shared-base-flex-col-gap-3 
-  text-[0.875rem] 
-  md:text-[1rem];
+  tw-shared-base-flex-col-gap-3;
 
   h1,
-  h2 { @apply tw-shared-font-family-playfair__h2--wysiwyg; }
-  h3 { @apply tw-shared-font-family-hind-siliguri__h3--wysiwyg; }
-  h4 { @apply tw-shared-font-family-hind-siliguri__h4--wysiwyg; }
+  h2 {
+    @apply tw-shared-font-family-hind-siliguri__h2--wysiwyg;
+  }
+  
+  h3 {
+    @apply tw-shared-font-family-hind-siliguri__h3--wysiwyg;
+  }
+  
+  h4 {
+    @apply tw-shared-font-family-hind-siliguri__h4--wysiwyg;
+  }
 
   a,
   p,
   ul,
   li {
-    font-size: inherit;
+    @apply tw-shared-font-family-hind-siliguri__text--wysiwyg;
   }
 
   table,
   th,
   td {
-    @apply 
-    border 
+    @apply border
     border-solid 
     p-1.25;
     border-collapse: collapse;
@@ -43,4 +48,14 @@
     mbe-4
     ps-4;
   }
+
+  a {
+    @apply underline;
+
+    
+  }
+
+  a:hover {
+      @apply no-underline;
+    }
 }

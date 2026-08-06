@@ -30,7 +30,7 @@
         autocompletePlaceholder: map_yml[:autocomplete_placeholder]
     } %>
   </section>
-  <div class="vw-thematic-effectiveness-green-list-tab__container">
+  <div class="vw-thematic-effectiveness-green-list-tab__container--gap-3">
     <%= render partial: "partials/cards/sites", locals: {
           cards: @example_greenlist,
           title: t('thematic_area.green_list.card_text') + " (#{@greenlisted_pas_total_count})",

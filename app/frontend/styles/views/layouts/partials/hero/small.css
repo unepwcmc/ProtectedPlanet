@@ -12,3 +12,7 @@
 .vw-layouts-partials-hero-small__container {
   @apply tw-shared-base-container;
 }
+
+.vw-layouts-partials-hero-small__title {
+  @apply tw-shared-font-family-playfair__h1--default;
+}
