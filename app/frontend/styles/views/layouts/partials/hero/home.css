@@ -29,7 +29,7 @@
 }
 
 .vw-layouts-partials-hero-home__intro {
-    @apply tw-shared-font-family-hind-siliguri__h2--home-intro;
+    @apply tw-shared-font-family-hind-siliguri__h2--intro;
 }
 
 .vw-layouts-partials-hero-home__button {

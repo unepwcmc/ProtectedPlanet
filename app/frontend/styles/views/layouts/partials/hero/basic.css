@@ -22,7 +22,7 @@
   @apply
   md:max-w-[50%]
   lg:max-w-[58%]
-  tw-shared-base-flex-col-gap-3;
+  tw-shared-base-flex-col-gap-6-and-9;
 }
 
 .vw-layouts-partials-hero-basic__content--centre-text {
@@ -31,8 +31,12 @@
   text-center;
 }
 
+.vw-layouts-partials-hero-basic__title{
+  @apply tw-shared-font-family-playfair__h1--default;
+}
+
 .vw-layouts-partials-hero-basic__intro {
-  @apply text-lg;
+  @apply tw-shared-font-family-hind-siliguri__h2--intro;
 }
 
 .vw-layouts-partials-hero-basic__link {

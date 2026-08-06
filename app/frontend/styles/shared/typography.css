@@ -79,7 +79,7 @@
   lg:text-[0.9375rem];
 }
 
-@utility tw-shared-font-family-hind-siliguri__h2--home-intro {
+@utility tw-shared-font-family-hind-siliguri__h2--intro {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1
   text-theme-grey-black

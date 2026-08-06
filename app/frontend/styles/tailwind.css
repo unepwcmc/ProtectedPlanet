@@ -47,10 +47,13 @@
 
 @import './views/layouts/cms/about.css';
 @import './views/layouts/cms/basic.css';
+@import './views/layouts/cms/data-areas.css';
 @import './views/layouts/cms/news-and-stories-article.css';
 @import './views/layouts/cms/news-and-stories.css';
 @import './views/layouts/cms/resource.css';
 @import './views/layouts/cms/resources.css';
+@import './views/layouts/cms/thematic-and-data-area-default.css';
+@import './views/layouts/cms/thematic-areas.css';
 
 
 @import './views/layouts/partials/hero/basic.css';
@@ -91,8 +94,7 @@
 
 @import './views/country.css';
 @import './views/region.css';
-@import './views/site.css';
-@import './views/cms-layouts.css';
+@import './views/site.css'; 
 @import './views/error-page.css';
 @import './views/home.css';
 @import './views/search.css';

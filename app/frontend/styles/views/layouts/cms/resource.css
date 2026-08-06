@@ -1,5 +1,8 @@
 .vw-layouts-cms-resource {
-  @apply tw-shared-base-wrapper mt-6 md:mt-12;
+  @apply 
+  tw-shared-base-wrapper
+  mt-6 
+  md:mt-12;
 }
 
 .vw-layouts-cms-resource__header {
