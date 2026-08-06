@@ -32,7 +32,7 @@ function click() {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-tab-strip-tab--disabled {
   @apply text-theme-grey cursor-not-allowed;

@@ -19,16 +19,7 @@
   tw-shared-font-family-playfair--black-leading-1 
   font-bold
   text-[2.5rem]
-  md:text-[2.5rem]
   lg:text-[4.375rem];
-}
-
-@utility tw-shared-font-family-playfair__h1--landing {
-  @apply 
-  tw-shared-font-family-playfair--black-leading-1 
-  font-bold 
-  text-[1.875rem] 
-  md:text-[3.125rem];
 }
 
 @utility tw-shared-font-family-playfair__h1--resource {
@@ -88,11 +79,20 @@
   lg:text-[0.9375rem];
 }
 
+@utility tw-shared-font-family-hind-siliguri__h2--home-intro {
+  @apply 
+  tw-shared-font-family-hind-siliguri--leading-1
+  text-theme-grey-black
+  text-lg
+  md:text-[1.25rem]
+  font-normal;
+}
+
 @utility tw-shared-font-family-hind-siliguri__h2--wysiwyg {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1
   text-theme-grey-black
-  text-[1.125rem] 
+  text-lg
   md:text-[1.25rem]
   font-bold;
 }
@@ -103,7 +103,7 @@
   tw-shared-font-family-hind-siliguri--leading-1-6
   leading-[1.6]
   text-[1rem] 
-  md:text-[1.125rem];
+  md:text-lg;
 }
 
 @utility tw-shared-font-family-hind-siliguri__h4--wysiwyg {
@@ -146,29 +146,29 @@
 }
 
 @utility tw-shared-text-footer-links {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 no-underline text-[1rem] md:text-[1rem] lg:text-[1.125rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1 no-underline text-[1rem] md:text-[1rem] lg:text-lg;
 }
 
 @utility tw-shared-text-intro {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 leading-[1.35] text-[1.125rem] md:text-[1.25rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1 leading-[1.35] text-lg md:text-[1.25rem];
 }
 
 @utility tw-shared-text-nav-link {
-  @apply font-medium no-underline text-[1rem] md:text-[1rem] lg:text-[1.125rem];
+  @apply font-medium no-underline text-[1rem] md:text-[1rem] lg:text-lg;
 }
 
 @utility tw-shared-text-pagination {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[1rem] md:text-[1rem] lg:text-[1.125rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[1rem] md:text-[1rem] lg:text-lg;
 }
 
 @utility tw-shared-text-pagination-no-results {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[1.125rem] md:text-[1.25rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1 text-lg md:text-[1.25rem];
 }
 
 
 
 @utility tw-shared-text-tabs-fake {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[1.125rem] md:text-[1.25rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1 text-lg md:text-[1.25rem];
 }
 
 @utility tw-shared-text-theme-cards {

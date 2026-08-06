@@ -166,7 +166,7 @@ function toggleInput() {
 }
 
 .ct-search__input {
-  @apply grow w-full border-none bg-transparent;
+  @apply grow w-full border-none bg-transparent focus:outline-none;
 }
 
 .ct-search__submit {
