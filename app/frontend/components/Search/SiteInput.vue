@@ -107,7 +107,7 @@ function toggleInput() {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-search--main {
   @apply relative;

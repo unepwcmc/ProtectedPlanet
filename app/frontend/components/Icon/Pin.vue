@@ -24,7 +24,7 @@
 </template>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-icon-pin__outline {
   @apply fill-white;

@@ -1,0 +1,12 @@
+/* The classes here are used directly from rails to frontend */
+.tw-shared-chart-legend-colour-aqua {
+  @apply bg-theme-chart-aqua;
+}
+
+.tw-shared-chart-legend-colour-blue {
+  @apply bg-theme-chart-blue;
+}
+
+.tw-shared-chart-legend-colour-purple {
+  @apply bg-theme-chart-purple;
+}

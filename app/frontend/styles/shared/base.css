@@ -1,7 +1,3 @@
-@utility tw-shared-base-container--component {
-  @apply tw-shared-border-radius bg-theme-grey-xlight p-5 mt-6.5 mb-6.5 md:py-7.5 md:px-6.25 md:mt-7.5 md:mb-7.5 lg:py-10 lg:px-[calc((100%-46.875rem)/2)] lg:mt-9 lg:mb-9;
-}
-
 @utility tw-shared-country-region-site-basic-overview {
   @apply flex flex-col md:flex-row md:gap-7;
 }

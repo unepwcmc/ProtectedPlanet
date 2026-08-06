@@ -1,0 +1,10 @@
+<%= render layout: "partials/charts/chart-section", locals: { title: title, content: content } do %>
+  <% charts.each_with_index do |chart, index| %>
+    <% if chart[:title] %>
+      <h3 class="vw-partials-charts-total-coverage-chart__chart-title">
+        <%= chart[:title] %>
+      </h3>
+    <% end %>
+    <%= frontend_mount "ChartTotalCoverageChart", key: index, props: chart[:charts_data] %>
+  <% end %>
+<% end %>

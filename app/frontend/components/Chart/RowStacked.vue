@@ -31,5 +31,5 @@ import type { ChartRowStackedProps } from '@/types/backend'
 type ChartRowStacked = ChartRowStackedProps
 const props = defineProps<ChartRowStacked>()
 
-const themeClass = computed(() => props.theme ? `theme--${props.theme}` : '')
+const themeClass = computed(() => props.theme ? `tw-shared-chart-legend-colour-${props.theme}` : '')
 </script>

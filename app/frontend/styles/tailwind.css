@@ -1,28 +1,5 @@
-/*
- * Tailwind v4 entrypoint (imported from app/frontend/entrypoints/layout.ts, so it
- * loads on every page during the migration).
- *
- * PREFLIGHT (Tailwind's base reset) IS INTENTIONALLY OMITTED. The site is still
- * styled by ~8.7k lines of global SCSS (Bourbon/Neat era) that assume browser
- * defaults; enabling Tailwind's reset would fight those styles. We import only the
- * `theme` (design tokens / CSS vars) and `utilities` layers, so Tailwind utility
- * classes work WITHOUT touching existing pages. Re-enable preflight (add the
- * `preflight.css` import below) once the legacy SCSS is retired.
- *
- * See upgrade-plan/frontend/08-styles-and-assets.md and 14-architecture-and-design.md.
- */
-@layer theme, base, components, utilities;
+@import "tailwindcss";
 
-@import "tailwindcss/theme.css" layer(theme);
-/* @import "tailwindcss/preflight.css" layer(base);  <-- deliberately disabled for now */
-@import "tailwindcss/utilities.css" layer(utilities);
-
-/*
- * Design tokens mirrored from the legacy SCSS palette (app/assets/stylesheets/_settings.scss),
- * so migrated components can use e.g. `bg-theme-primary`, `text-theme-grey-dark`, `border-theme-grey-light`
- * instead of arbitrary hex values, and stay visually consistent with pages still on the
- * legacy stylesheet. Add tokens here as more components migrate; don't duplicate per-file.
- */
 @theme {
   --color-theme-primary: #71a32b;
   --color-theme-primary-dark: #415519;
@@ -36,21 +13,13 @@
   --color-theme-green-dark: #527B19;
   --color-theme-chart-purple: #A54897;
   --color-theme-chart-green: #71A22B;
+  --color-theme-chart-blue: #5F81CB;
+  --color-theme-chart-aqua: #65C9B2;
 }
 
-/*
- * Where Tailwind scans for class names. CMS content lives in the DB and is NOT
- * scanned — developer-authored views/components only. Paths are relative to this file.
- */
 @source "../";
 @source "../../views";
 
-
-/**
- * shared/*.css must be imported before views/*.css (below) as those might use a
- * utility declared in shared. shared/icons.css is ERB-view-chrome-only (rule 5b) —
- * a Vue component renders an Icon/*.vue instead, never a tw-shared-icon-* class.
- */
 @import './shared/background.css';
 @import './shared/base.css';
 @import './shared/container.css';
@@ -61,6 +30,7 @@
 @import './shared/images.css';
 @import './shared/scrollbar.css';
 @import './shared/shadows.css';
+@import './shared/themes.css';
 @import './shared/typography.css';
 
 /* All styles used in views */
@@ -78,6 +48,8 @@
 @import './views/layouts/partials/hero/home.css';
 @import './views/layouts/partials/hero/marine.css';
 @import './views/layouts/partials/hero/small.css';
+
+@import './views/partials/charts/chart-section.css';
 
 @import './views/partials/ctas/api.css';
 @import './views/partials/ctas/mpa.css';
@@ -106,7 +78,6 @@
 @import './views/country.css';
 @import './views/region.css';
 @import './views/site.css';
-@import './views/chart-row.css';
 @import './views/cms-layouts.css';
 @import './views/error-page.css';
 @import './views/home.css';

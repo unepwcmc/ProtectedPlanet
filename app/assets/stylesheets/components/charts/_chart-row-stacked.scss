@@ -67,10 +67,10 @@ $chart-row-stacked-height-tablet: rem-calc(82);
 &--row-stacked--basic {
   @include chart-row-stacked;
 
-  &.theme--aqua { @include chart-theme($chart-aqua); }
-  &.theme--blue { @include chart-theme($chart-blue); }
+  &.tw-shared-chart-legend-colour-aqua { @include chart-theme($chart-aqua); }
+  &.tw-shared-chart-legend-colour-blue { @include chart-theme($chart-blue); }
   &.theme--green { @include chart-theme($chart-green); }
-  &.theme--purple { @include chart-theme($chart-purple); }
+  &.tw-shared-chart-legend-colour-purple { @include chart-theme($chart-purple); }
 
   .chart__percent {
     @include chart-tooltip('bottom'); 

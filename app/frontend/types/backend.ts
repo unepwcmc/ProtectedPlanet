@@ -469,18 +469,28 @@ export interface SearchSiteProps {
   resultsText: string
 }
 
-// Props for `ChartRowPa` — a single labelled bar (coverage % within a total %),
-// mounted directly inside partials/charts/_chart-row-pa.html.erb (marine ocean
-// coverage, Green List tab) with the surrounding title/content/legend left as
-// plain ERB since only the bar itself is dynamic/animated.
-// `coverage`/`percent` are numeric on the Rails side (GlobalStatistic-derived
-// percentages) — unlike the Vue2 original, where every ERB attribute was
-// coerced to a string, `frontend_mount` sends the Ruby value's native JSON
-// type straight through, so both callers here can produce a number.
-export interface ChartRowPaProps {
-  coverage: number | string
-  percent: number | string
-  theme?: string
+// One bar of `ChartTotalCoverageChart`. `legend_colour_class` is a
+// `tw-shared-chart-legend-colour-*` class (see
+// app/frontend/styles/shared/themes.css) sent straight from the Rails
+// helper. `title` doubles as this bar's legend label. `value` is numeric on
+// the Rails side (GlobalStatistic-derived percentages) — unlike the Vue2
+// original, where every ERB attribute was coerced to a string,
+// `frontend_mount` sends the Ruby value's native JSON type straight through,
+// so callers here can produce a number.
+export interface ChartTotalCoverageChartBar {
+  legend_colour_class: string
+  title: string
+  value: number | string
+}
+
+// Props for `ChartTotalCoverageChart` — a total-vs-coverage bar pair (an
+// outer "total" bar with a narrower "coverage" bar drawn inside it), mounted
+// directly inside partials/charts/_total-coverage-chart.html.erb (marine
+// ocean coverage, Green List tab) with the surrounding chart title/content
+// left as plain ERB since those aren't dynamic/animated.
+export interface ChartTotalCoverageChartProps {
+  total: ChartTotalCoverageChartBar
+  coverage: ChartTotalCoverageChartBar
 }
 
 // One row of `ChartRowStacked` — TabPresenter#designations' `designation_percentages`.

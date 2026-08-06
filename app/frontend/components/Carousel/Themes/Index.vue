@@ -104,7 +104,7 @@ const swiperSettings = {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-carousel-themes {
   @apply relative overflow-hidden;

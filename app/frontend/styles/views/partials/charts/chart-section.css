@@ -1,0 +1,15 @@
+.vw-partials-charts-chart-section {
+  @apply
+  tw-shared-border-radius
+  tw-shared-bg--grey-xlight
+  p-5
+  md:py-7.5
+  md:px-6.25
+  lg:py-10
+  lg:px-48
+  tw-shared-base-flex-col-gap-3;
+}
+
+.vw-partials-charts-chart-section__charts {
+  @apply tw-shared-base-flex-col-gap-3;
+}

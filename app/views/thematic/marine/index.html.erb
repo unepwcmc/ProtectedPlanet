@@ -20,21 +20,15 @@
           high_seas_pa_coverage_percentage: '%.2f' % marine_stats('high_seas_pa_coverage_percentage')).html_safe %>
       </div>
     </section>
-    <%= render partial: "partials/charts/chart-row-pa", locals: {
+    <%= render partial: "partials/charts/total-coverage-chart", locals: {
         charts: [
           {
-            coverage: marine_stats('national_waters_pa_coverage_percentage'),
-            legend: chart_row_pa_legend_national,
-            theme: 'theme--purple',
             title: t('thematic_area.marine.ocean.national-title'),
-            total: marine_stats('national_waters_percentage')
+            charts_data: total_coverage_chart_national_data
           },
           {
-            coverage: marine_stats('high_seas_pa_coverage_percentage'),
-            legend: chart_row_pa_legend_high_seas,
-            theme: 'theme--blue',
             title: t('thematic_area.marine.ocean.high-title'),
-            total: marine_stats('global_ocean_percentage')
+            charts_data: total_coverage_chart_high_seas_data
           }
         ],
         content: cms_fragment_render(:section_ocean_content, @cms_page),

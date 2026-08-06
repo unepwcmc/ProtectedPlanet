@@ -36,7 +36,7 @@ const props = defineProps<CarouselThemesCard>()
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-theme-card {
   @apply
@@ -46,7 +46,7 @@ const props = defineProps<CarouselThemesCard>()
   h-120
   lg:h-190
   justify-start
-  rounded-[5px]
+  tw-shared-border-radius
   bg-theme-grey-dark
   bg-cover
   bg-center
@@ -57,7 +57,7 @@ const props = defineProps<CarouselThemesCard>()
 }
 
 .ct-theme-card__overlay {
-  @apply absolute inset-0 rounded-[5px] bg-black/35 transition-colors duration-200;
+  @apply absolute inset-0 tw-shared-border-radius bg-black/35 transition-colors duration-200;
 }
 
 .ct-theme-card:hover .ct-theme-card__overlay {

@@ -41,16 +41,18 @@ module Thematic::Effectiveness::GreenListHelper
     ]
   end
 
-  def chart_row_pa_legend
-    [
-      {
-        theme: 'theme--aqua',
-        title: I18n.t('thematic_area.green_list.chart_row_pa.legend_text_1')
+  def total_coverage_chart_data
+    {
+      total: {
+        title: I18n.t('thematic_area.green_list.chart_row_pa.legend_text_2'),
+        legend_colour_class: 'tw-shared-chart-legend-colour-blue',
+        value: @global_oecms_pas_coverage_percentage
       },
-      {
-        theme: 'theme--blue',
-        title: I18n.t('thematic_area.green_list.chart_row_pa.legend_text_2')
+      coverage: {
+        title: I18n.t('thematic_area.green_list.chart_row_pa.legend_text_1'),
+        legend_colour_class: 'tw-shared-chart-legend-colour-aqua',
+        value: @greenlisted_pas_percent
       }
-    ]
+    }
   end
 end

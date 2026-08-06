@@ -55,7 +55,7 @@ function reject() {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-cookie-consent {
   @apply lg:flex lg:items-center;

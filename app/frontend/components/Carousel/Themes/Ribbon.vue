@@ -30,7 +30,7 @@ defineProps<CarouselThemesCard>()
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-carousel-themes-ribbon {
   @apply z-1 flex flex-col gap-3 h-37.5 w-37.5 items-center justify-between bg-theme-grey-black px-3 py-5 text-center;

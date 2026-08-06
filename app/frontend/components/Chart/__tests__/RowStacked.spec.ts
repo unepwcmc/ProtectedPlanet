@@ -19,7 +19,7 @@ describe('ChartRowStacked', () => {
     const withTheme = mount(ChartRowStacked, { props: { rows: [], theme: 'aqua' } })
     const withoutTheme = mount(ChartRowStacked, { props: { rows: [] } })
 
-    expect(withTheme.classes()).toContain('theme--aqua')
+    expect(withTheme.classes()).toContain('tw-shared-chart-legend-colour-aqua')
     expect(withoutTheme.classes().some(className => className.startsWith('theme--'))).toBe(false)
   })
 

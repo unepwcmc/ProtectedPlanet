@@ -41,13 +41,13 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      // Lets any SFC <style> block write `@reference "tailwindcss";` and have it
+      // Lets any SFC <style> block write `@reference "#importtailwindcss";` and have it
       // resolve to OUR customised entry (preflight disabled, see that file) instead
       // of the npm package's default CSS. Documented Tailwind v4 + Vite pattern.
       // Exact-match regex only — subpaths like "tailwindcss/theme.css", which
       // app/frontend/styles/tailwind.css itself imports, must stay untouched.
       {
-        find: /^tailwindcss$/,
+        find: /^#importtailwindcss$/,
         replacement: fileURLToPath(new URL('./app/frontend/styles/tailwind.css', import.meta.url)),
       },
     ],
