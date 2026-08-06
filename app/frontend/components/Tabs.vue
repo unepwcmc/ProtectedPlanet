@@ -100,7 +100,7 @@ if (selectedId.value !== undefined) updateTabParam(selectedId.value)
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-tabs__triggers {
   @apply tw-shared-base-container m-0 flex list-none gap-8 overflow-x-auto p-0 md:flex-wrap;

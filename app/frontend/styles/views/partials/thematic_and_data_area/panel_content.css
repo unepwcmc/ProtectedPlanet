@@ -1,4 +1,4 @@
 .vw-thematic-and-data-area-panel-content__container {
   @apply tw-shared-base-container--medium
-  tw-shared-base-flex-col-gap-6-and-9;
+  tw-shared-cms-wysiwyg;
 }

@@ -20,10 +20,6 @@
 @import 'maps/v-map-toggler';
 
 
-.map-section {
-  @include gutters;
-}
-
 .map {
   &--main {
     @include breakpoint($small) {

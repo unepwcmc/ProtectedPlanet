@@ -53,6 +53,14 @@
   font-normal;
 }
 
+@utility tw-shared-font-family-playfair__h2--green-list-about {
+  @apply 
+  tw-shared-font-family-playfair--black-leading-1
+  text-xl 
+  md:text-2xl
+  font-semibold;
+}
+
 @utility tw-shared-font-family-playfair__h2--wysiwyg {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1

@@ -1,3 +1,7 @@
+.vw-thematic-effectiveness-green-list-tab {
+  @apply tw-shared-base-flex-col-gap-6-and-9;
+}
+
 .vw-thematic-effectiveness-green-list-tab__container {
   @apply tw-shared-base-container
   tw-shared-base-flex-col-gap-6-and-9;
@@ -9,9 +13,21 @@
 }
 
 .vw-thematic-effectiveness-green-list-tab__about {
-  @apply tw-shared-base-container--medium;
+  @apply 
+  tw-shared-base-container--medium
+  tw-shared-base-flex-col-gap-6;
 }
 
-.vw-thematic-effectiveness-green-list-tab__examples {
-  @apply tw-shared-base-container;
+.vw-thematic-effectiveness-green-list-tab__about-title {
+  @apply tw-shared-font-family-playfair__h2--green-list-about;
 }
+
+.vw-thematic-effectiveness-green-list-tab__about-content {
+  @apply
+  tw-shared-cms-wysiwyg;
+}
+
+.vw-thematic-effectiveness-green-list-tab__map {
+  @apply tw-shared-map-section;
+}
+
