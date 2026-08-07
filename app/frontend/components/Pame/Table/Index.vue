@@ -99,7 +99,7 @@ function fetchItems() {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 /* Only the table body gets an overlay/busy treatment — filters and pagination
    disable themselves independently (see PameFiltersFilter/PameTablePagination),

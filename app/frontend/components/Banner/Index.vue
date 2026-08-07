@@ -84,7 +84,7 @@ function closeBanner() {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-banner {
   @apply flex items-center justify-center border-b border-b-theme-grey-light bg-theme-grey-xlight py-1;

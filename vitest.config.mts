@@ -10,10 +10,10 @@ export default defineConfig({
     alias: [
       // Mirror vite.config.mts so specs can import components/types via `@/...`.
       { find: '@', replacement: fileURLToPath(new URL('./app/frontend', import.meta.url)) },
-      // Mirror vite.config.mts so a component's `@reference "tailwindcss";` resolves
+      // Mirror vite.config.mts so a component's `@reference "#importtailwindcss";` resolves
       // the same way under vitest as it does in the real Vite build.
       {
-        find: /^tailwindcss$/,
+        find: /^#importtailwindcss$/,
         replacement: fileURLToPath(new URL('./app/frontend/styles/tailwind.css', import.meta.url)),
       },
     ],

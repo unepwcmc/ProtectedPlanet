@@ -26,7 +26,7 @@ defineProps<{
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-banner-content {
   @apply hidden;

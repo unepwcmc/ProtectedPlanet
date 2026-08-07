@@ -44,7 +44,7 @@ describe('SearchAreasInputAutocomplete', () => {
     const [url, init] = vi.mocked(fetch).mock.calls[0]
     expect(url).toBe('/search/autocomplete')
     expect(JSON.parse((init as RequestInit).body as string)).toEqual({ search_term: 'yos', type: 'all' })
-    await vi.waitFor(() => expect(wrapper.find('.search__a').text()).toBe('Yosemite'))
+    await vi.waitFor(() => expect(wrapper.find('.ct-search-areas-autocomplete__link').text()).toBe('Yosemite'))
   })
 
   it('resets the dropdown and does not fetch on Enter', async () => {
@@ -69,7 +69,7 @@ describe('SearchAreasInputAutocomplete', () => {
     const wrapper = mountAutocomplete()
 
     await wrapper.find('input').setValue('yosemite')
-    await wrapper.find('.search__search-icon--delete').trigger('click')
+    await wrapper.find('.ct-search-areas-autocomplete__delete').trigger('click')
 
     expect((wrapper.find('input').element as HTMLInputElement).value).toBe('')
   })
@@ -80,12 +80,12 @@ describe('SearchAreasInputAutocomplete', () => {
 
     await wrapper.find('input').setValue('yos')
     await wrapper.find('input').trigger('keyup', { key: 'y' })
-    await vi.waitFor(() => expect(wrapper.find('.search__li').exists()).toBe(true))
+    await vi.waitFor(() => expect(wrapper.find('.ct-search-areas-autocomplete__item').exists()).toBe(true))
 
     document.body.click()
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('.search__li').exists()).toBe(false)
+    expect(wrapper.find('.ct-search-areas-autocomplete__item').exists()).toBe(false)
     wrapper.unmount()
   })
 })

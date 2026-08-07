@@ -54,7 +54,7 @@ defineProps<{
   isActive: boolean
   textClear: string
   title: string
-  // Bumped by SearchAreas/Index.vue whenever a new search term is submitted —
+  // Bumped by SearchAreas/Page.vue whenever a new search term is submitted —
   // replaces the legacy $eventHub 'reset:filter-options' broadcast.
   resetKey?: number
 }>()

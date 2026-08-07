@@ -75,7 +75,7 @@ usePopupCloseListeners(rootEl, {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-tooltip {
   @apply relative inline-block;

@@ -1,40 +1,42 @@
 <template>
   <div
     ref="root"
-    class="search--autocomplete"
+    class="ct-search-areas-autocomplete"
   >
-    <div class="search__search">
-      <i class="search__search-icon" />
+    <div class="ct-search-areas-autocomplete__search-bar">
+      <IconSearch class="ct-search-areas-autocomplete__icon" />
       <input
         v-model="searchTerm"
-        class="search__search-input"
+        class="ct-search-areas-autocomplete__input"
         type="text"
         :placeholder="config.placeholder"
         @keyup="onKeyup"
         @keyup.enter="submit"
       >
+      <button
+        v-show="showResetIcon"
+        class="ct-search-areas-autocomplete__delete"
+        @click="resetSearchTerm"
+      >
+        <IconClose class="ct-search-areas-autocomplete__delete-icon" />
+      </button>
     </div>
-    <button
-      v-show="showResetIcon"
-      class="search__search-icon--delete"
-      @click="resetSearchTerm"
-    />
     <div
       v-show="autocomplete.length > 0"
-      class="search__dropdown"
+      class="ct-search-areas-autocomplete__dropdown"
     >
       <ul
-        class="search__ul"
+        class="ct-search-areas-autocomplete__list"
         role="listbox"
       >
         <li
           v-for="option in autocomplete"
           :key="option.id"
-          class="search__li"
+          class="ct-search-areas-autocomplete__item"
           role="option"
         >
           <a
-            class="search__a"
+            class="ct-search-areas-autocomplete__link"
             :href="option.url"
             v-html="option.title"
           />
@@ -47,6 +49,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
+import IconClose from '@/components/Icon/Close.vue'
+import IconSearch from '@/components/Icon/Search.vue'
 import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
 import { postJson } from '@/lib/http'
 import type { SearchAreasConfig, AutocompleteResult } from '@/types/backend'
@@ -105,3 +109,98 @@ watch(() => props.prePopulatedSearchTerm, () => {
   searchTerm.value = props.prePopulatedSearchTerm ?? ''
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-areas-autocomplete {
+  @apply relative;
+}
+
+.ct-search-areas-autocomplete__search-bar {
+  @apply relative
+  z-2
+  tw-shared-base-flex-gap-3
+  justify-between
+  items-center
+  rounded-full
+  border-2
+  border-theme-grey
+  bg-white
+  py-1
+  px-4;
+}
+
+.ct-search-areas-autocomplete__icon {
+  @apply
+  size-5.25
+  text-black;
+}
+
+.ct-search-areas-autocomplete__input {
+  @apply
+  tw-shared-font-hind-siliguri__text-input
+  h-11.5
+  md:h-18.75
+  grow;
+}
+
+.ct-search-areas-autocomplete__input:focus {
+  @apply
+  outline-none;
+}
+
+.ct-search-areas-autocomplete__delete {
+  @apply cursor-pointer;
+}
+
+.ct-search-areas-autocomplete__delete-icon {
+  @apply
+  size-4
+  text-black;
+}
+
+.ct-search-areas-autocomplete__dropdown {
+  @apply
+  absolute
+  top-1/2
+  right-0
+  z-1
+  w-full
+  rounded-b-[2.3rem]
+  border-x-2
+  border-x-theme-grey
+  border-b-2
+  border-b-theme-grey
+  bg-white
+  pt-9
+  pb-7;
+}
+
+.ct-search-areas-autocomplete__list {
+  @apply
+  max-h-72
+  overflow-y-scroll
+  pt-6
+  tw-shared-base-flex-col;
+}
+
+.ct-search-areas-autocomplete__item {
+  @apply
+  flex
+  cursor-pointer;
+}
+
+.ct-search-areas-autocomplete__item:hover {
+  @apply bg-theme-grey-light;
+}
+
+.ct-search-areas-autocomplete__link {
+  @apply
+  w-full
+  px-10
+  py-2.5
+  tw-shared-font-hind-siliguri__text-input
+  no-underline;
+}
+</style>

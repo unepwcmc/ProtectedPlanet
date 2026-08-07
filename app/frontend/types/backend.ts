@@ -374,7 +374,7 @@ export interface SearchFilter {
   title?: string
   type: 'checkbox' | 'radio' | 'checkbox-search'
   options: SearchFilterOption[]
-  // Set by SearchAreas/Index.vue from the `?filters[...]` query string before
+  // Set by SearchAreas/Page.vue from the `?filters[...]` query string before
   // handing filterGroups down to Filters/Index.vue — not part of the
   // serializer's own JSON.
   preSelected?: string[] | [{ type: string, options: string[] }]
@@ -399,14 +399,14 @@ export interface SearchAreasTab {
   title: string
 }
 
-// Props for `frontend_mount "SearchAreas"` (search_areas/index.html.erb).
+// Props for `frontend_mount "SearchAreasPage"` (search_areas/index.html.erb).
 // `downloadButtonText`/`downloadTextCommercial` are new here (Wave 7) — the
 // legacy Vue2 version rendered `<Download>` via an ERB partial + `v-slot`
 // (partials/download/_download.html.erb), which read `download_text`/
-// `t('global.button.download')` itself; now that SearchAreas/Index.vue
+// `t('global.button.download')` itself; now that SearchAreas/Page.vue
 // composes `Download` directly as a normal child, those two need threading
 // through as props instead. See DownloadsHelper#download_text.
-export interface SearchAreasProps {
+export interface SearchAreasPageProps {
   configAutocomplete: SearchAreasConfig
   downloadButtonText: string
   downloadOptions: DownloadOption[]
@@ -424,9 +424,9 @@ export interface SearchAreasProps {
   textFilters: string
 }
 
-// Props for `frontend_mount "SearchAreasHome"`
+// Props for `frontend_mount "SearchAreas"`
 // (partials/search/_protected-areas.html.erb).
-export interface SearchAreasHomeProps {
+export interface SearchAreasProps {
   config: SearchAreasConfig
   endpointAutocomplete: string
   endpointSearch: string

@@ -140,7 +140,7 @@ function createLegend(chart: am5xy.XYChart) {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-am-chart-multiline {
   @apply overflow-x-auto overflow-y-hidden md:overflow-hidden;
