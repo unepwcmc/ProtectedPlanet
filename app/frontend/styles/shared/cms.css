@@ -4,22 +4,22 @@
 
   h1,
   h2 {
-    @apply tw-shared-font-hind-siliguri__h2--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-black;
   }
   
   h3 {
-    @apply tw-shared-font-hind-siliguri__h3--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__normal-base-md-lg-leading-1-6-grey-black;
   }
   
   h4 {
-    @apply tw-shared-font-hind-siliguri__h4--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
   }
 
   a,
   p,
   ul,
   li {
-    @apply tw-shared-font-hind-siliguri__text--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__normal-sm-md-base-leading-1-6-grey-black;
   }
 
   table,

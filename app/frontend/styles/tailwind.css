@@ -21,6 +21,7 @@
   --color-theme-chart-green: #71A22B;
   --color-theme-chart-blue: #5F81CB;
   --color-theme-chart-aqua: #65C9B2;
+  --color-theme-purple: #7B1977;
 }
 
 @source "../";
@@ -28,6 +29,7 @@
 
 @import './shared/background.css';
 @import './shared/base.css';
+@import './shared/buttons.css';
 @import './shared/cms.css';
 @import './shared/container.css';
 @import './shared/flex.css';

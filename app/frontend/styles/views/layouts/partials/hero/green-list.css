@@ -17,19 +17,17 @@
 }
 
 .vw-layouts-partials-hero-green-list__title {
-  @apply text-3xl;
+  @apply tw-shared-font-playfair__font-bold-3xl-md-4xl;
 }
 
 .vw-layouts-partials-hero-green-list__intro {
-  @apply text-lg lg:text-xl;
-}
-
-.vw-layouts-partials-hero-green-list__small-text {
-  @apply font-bold mt-4 block;
+  @apply tw-shared-font-hind-siliguri__normal-lg-grey-black-md-xl-grey-black;
 }
 
 .vw-layouts-partials-hero-green-list__button {
-  @apply self-start;
+  @apply 
+  tw-shared-button--primary 
+  self-start;
 }
 
 .vw-layouts-partials-hero-green-list__stats {
@@ -46,27 +44,22 @@
 } 
 
 .vw-layouts-partials-hero-green-list__stat-item {
-  @apply flex flex-col gap-1;
+  @apply 
+  flex
+  flex-col 
+  gap-1;
 }
 
 .vw-layouts-partials-hero-green-list__stat-number {
-  @apply 
-  text-theme-primary 
-  text-3xl
-  md:text-5xl
-  font-bold
-  leading-none;
+  @apply tw-shared-font-hind-siliguri__bold-md-3xl-lg-6xl-green;
 }
 
 .vw-layouts-partials-hero-green-list__stat-number--small {
-  @apply
-  text-2xl
-  md:text-3xl;
+  @apply tw-shared-font-hind-siliguri__bold-md-3xl-lg-4xl-green;
 }
 
 .vw-layouts-partials-hero-green-list__stat-text {
-  @apply text-white 
-  font-bold
-  leading-none
-  md:text-xl;
+  @apply 
+  text-white
+  tw-shared-font-hind-siliguri__bold-base-md-xl;
 }

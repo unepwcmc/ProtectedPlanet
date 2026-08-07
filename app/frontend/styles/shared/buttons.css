@@ -1,0 +1,17 @@
+@utility tw-shared-button--primary {
+  @apply
+  inline-flex
+  items-center
+  h-11.5
+  md:h-14
+  px-5
+  md:px-6.75
+  rounded-[0.1875rem]
+  tw-shared-font-hind-siliguri__normal-base-lg-lg
+  bg-theme-purple
+  text-white
+  no-underline
+  hover:no-underline
+  focus:outline-none
+  cursor-pointer;
+}

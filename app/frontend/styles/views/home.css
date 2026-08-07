@@ -12,11 +12,15 @@
 }
 
 @utility vw-home__pas {
-  @apply tw-shared-base-container tw-shared-base-flex-col-gap-9;
+  @apply 
+  tw-shared-base-container 
+  tw-shared-base-flex-col-gap-9;
 }
 
 @utility vw-home__search {
-   @apply tw-shared-base-container;
+   @apply 
+   tw-shared-base-container 
+   lg:w-3xl;
 }
 
 @utility vw-home__resources {

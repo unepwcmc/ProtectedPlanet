@@ -24,7 +24,7 @@
 }
 
 .vw-layouts-partials-hero-marine__button {
-  @apply self-start;
+  @apply tw-shared-button--primary self-start;
 }
 
 .vw-layouts-partials-hero-marine__small-text {
@@ -46,20 +46,18 @@
 }
 
 .vw-layouts-partials-hero-marine__stat-item {
-  @apply flex flex-col gap-1;
+  @apply 
+  flex 
+  flex-col
+  gap-1;
 }
 
 .vw-layouts-partials-hero-marine__stat-number {
-  @apply text-theme-primary 
-  text-3xl
-  md:text-4xl
-  font-bold
-  leading-none;
+  @apply tw-shared-font-hind-siliguri__bold-md-3xl-lg-6xl-green;
 }
 
 .vw-layouts-partials-hero-marine__stat-text {
-  @apply text-white 
-  font-bold 
-  leading-none
-  md:text-xl;
+  @apply 
+  text-white
+  tw-shared-font-hind-siliguri__bold-base-md-xl;
 }

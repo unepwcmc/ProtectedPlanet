@@ -9,7 +9,7 @@
       <% if local_assigns.has_key? :summary %>
         <p class="vw-layouts-partials-hero-marine__intro"><%= summary %></p>
       <% end %>
-      <%= link_to button_text, button_url, title: button_text, class: 'vw-layouts-partials-hero-marine__button button--primary' %>
+      <%= link_to button_text, button_url, title: button_text, class: 'vw-layouts-partials-hero-marine__button' %>
       <% if (local_assigns.has_key? :hero_small_text) && (local_assigns.has_key? :hero_small_text_url) %>
         <%= link_to hero_small_text, hero_small_text_url, class: 'vw-layouts-partials-hero-marine__small-text', title: 'hero_small_text' %>
       <% end %>

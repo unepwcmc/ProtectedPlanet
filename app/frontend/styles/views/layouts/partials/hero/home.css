@@ -25,13 +25,13 @@
 }
 
 .vw-layouts-partials-hero-home__title {
-    @apply tw-shared-font-playfair__h1--home;
+    @apply tw-shared-font-playfair__font-bold-4xl-lg-4-375;
 }
 
 .vw-layouts-partials-hero-home__intro {
-    @apply tw-shared-font-hind-siliguri__h2--intro;
+    @apply tw-shared-font-hind-siliguri__normal-lg-grey-black-md-xl-grey-black;
 }
 
 .vw-layouts-partials-hero-home__button {
-    @apply self-start;
+    @apply tw-shared-button--primary self-start;
 }

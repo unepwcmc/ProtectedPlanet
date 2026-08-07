@@ -52,7 +52,7 @@
 .vw-partials-cards-squares__title {
   @apply
   z-1
-  tw-shared-font-hind-siliguri__circle-square-title
+  tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-black
   wrap-break-word
   text-white
   text-center;

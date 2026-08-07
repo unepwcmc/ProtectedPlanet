@@ -44,7 +44,7 @@
 
 .vw-ctas-protected-planet-report__title {
   @apply 
-  tw-shared-font-playfair__h2--title
+  tw-shared-font-playfair__normal-2xl-md-4xl
   md:w-92.5;
 }
 

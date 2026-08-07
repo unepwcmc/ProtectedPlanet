@@ -4,7 +4,7 @@
 
 .vw-partials-cards-circles__title {
   @apply 
-  tw-shared-font-playfair__h2--default 
+  tw-shared-font-playfair__bold-xl-md-2xl 
   text-center;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .vw-partials-cards-circles__card-title {
-  @apply tw-shared-font-hind-siliguri__circle-square-title;
+  @apply tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-black;
 }
 
 .vw-partials-cards-circles__chevron {
