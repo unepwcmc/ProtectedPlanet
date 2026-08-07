@@ -32,11 +32,11 @@
 }
 
 .vw-layouts-partials-hero-basic__title{
-  @apply tw-shared-font-family-playfair__h1--default;
+  @apply tw-shared-font-playfair__h1--default;
 }
 
 .vw-layouts-partials-hero-basic__intro {
-  @apply tw-shared-font-family-hind-siliguri__h2--intro;
+  @apply tw-shared-font-hind-siliguri__h2--intro;
 }
 
 .vw-layouts-partials-hero-basic__link {

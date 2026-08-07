@@ -4,22 +4,22 @@
 
   h1,
   h2 {
-    @apply tw-shared-font-family-hind-siliguri__h2--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__h2--wysiwyg;
   }
   
   h3 {
-    @apply tw-shared-font-family-hind-siliguri__h3--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__h3--wysiwyg;
   }
   
   h4 {
-    @apply tw-shared-font-family-hind-siliguri__h4--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__h4--wysiwyg;
   }
 
   a,
   p,
   ul,
   li {
-    @apply tw-shared-font-family-hind-siliguri__text--wysiwyg;
+    @apply tw-shared-font-hind-siliguri__text--wysiwyg;
   }
 
   table,

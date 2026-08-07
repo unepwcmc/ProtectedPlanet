@@ -107,7 +107,9 @@ const swiperSettings = {
 @reference "#importtailwindcss";
 
 .ct-carousel-themes {
-  @apply relative overflow-hidden;
+  @apply
+  relative
+  overflow-hidden;
 }
 
 .ct-carousel-themes__cell {
@@ -115,7 +117,25 @@ const swiperSettings = {
 }
 
 .ct-carousel-themes__button {
-  @apply absolute top-1/2 z-2 flex h-12 w-12 md:h-18 md:w-18 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-none bg-theme-primary text-white shadow-md transition-colors duration-200 hover:bg-theme-primary-dark;
+  @apply
+  absolute
+  top-1/2
+  z-2
+  flex
+  items-center
+  justify-center
+  size-12
+  md:size-18
+  -translate-y-1/2
+  cursor-pointer
+  rounded-full
+  border-none
+  bg-theme-primary
+  text-white
+  shadow-md
+  transition-colors
+  duration-200
+  hover:bg-theme-primary-dark;
 }
 
 /*
@@ -126,49 +146,76 @@ const swiperSettings = {
  * doesn't). Keep these in sync by hand with the JS breakpoints object above.
  */
 .ct-carousel-themes__button--previous {
-  @apply left-0 -translate-x-1/2;
+  @apply
+  left-0
+  -translate-x-1/2;
 
   margin-left: 45px;
 }
 
 .ct-carousel-themes__button--next {
-  @apply right-0 translate-x-1/2;
+  @apply
+  right-0
+  translate-x-1/2;
 
   margin-right: 45px;
 }
 
 @media (width >= 48rem) {
-  .ct-carousel-themes__button--previous { margin-left: 120px; }
+  .ct-carousel-themes__button--previous {
+    margin-left: 120px;
+  }
 
-  .ct-carousel-themes__button--next { margin-right: 120px; }
+  .ct-carousel-themes__button--next {
+    margin-right: 120px;
+  }
 }
 
 @media (width >= 64rem) {
-  .ct-carousel-themes__button--previous { margin-left: 70px; }
+  .ct-carousel-themes__button--previous {
+    margin-left: 70px;
+  }
 
-  .ct-carousel-themes__button--next { margin-right: 70px; }
+  .ct-carousel-themes__button--next {
+     margin-right: 70px;
+    }
 }
 
 @media (width >= 80rem) {
-  .ct-carousel-themes__button--previous { margin-left: 170px; }
+  .ct-carousel-themes__button--previous {
+    margin-left: 170px;
+  }
 
-  .ct-carousel-themes__button--next { margin-right: 140px; }
+  .ct-carousel-themes__button--next {
+     margin-right: 140px;
+    }
 }
 
 @media (width >= 100rem) {
-  .ct-carousel-themes__button--previous { margin-left: 210px; }
+  .ct-carousel-themes__button--previous {
+    margin-left: 210px;
+  }
 
-  .ct-carousel-themes__button--next { margin-right: 210px; }
+  .ct-carousel-themes__button--next {
+    margin-right: 210px;
+  }
 }
 
 @media (width >= 112.5rem) {
-  .ct-carousel-themes__button--previous { margin-left: 340px; }
+  .ct-carousel-themes__button--previous {
+    margin-left: 340px;
+  }
 
-  .ct-carousel-themes__button--next { margin-right: 340px; }
+  .ct-carousel-themes__button--next {
+    margin-right: 340px;
+   }
 }
 
 .ct-carousel-themes__button-icon {
-  @apply h-3 w-3 md:h-6 md:w-6;
+  @apply
+  size-8
+  md:h-6
+  md:w-6;
 }
 
 .ct-carousel-themes__button-icon--previous {

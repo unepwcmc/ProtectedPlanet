@@ -6,7 +6,7 @@
   leading-[1.1]
 }
 
-@utility tw-shared-font-family-playfair__h1--default {
+@utility tw-shared-font-playfair__h1--default {
   @apply 
   tw-shared-font-family-playfair--black-leading-1 
   font-bold
@@ -14,7 +14,7 @@
   md:text-[2.5rem];
 }
 
-@utility tw-shared-font-family-playfair__h1--home {
+@utility tw-shared-font-playfair__h1--home {
   @apply 
   tw-shared-font-family-playfair--black-leading-1 
   font-bold
@@ -22,7 +22,7 @@
   lg:text-[4.375rem];
 }
 
-@utility tw-shared-font-family-playfair__h1--resource {
+@utility tw-shared-font-playfair__h1--resource {
   @apply 
   tw-shared-font-family-playfair--black-leading-1
   font-bold 
@@ -31,7 +31,7 @@
   lg:text-[1.5625rem];
 }
 
-@utility tw-shared-font-family-playfair__h2--default {
+@utility tw-shared-font-playfair__h2--default {
   @apply 
   tw-shared-font-family-playfair--black-leading-1
   text-xl
@@ -39,7 +39,15 @@
   font-bold;
 }
 
-@utility tw-shared-font-family-playfair__h2--protected-planet-report {
+@utility tw-shared-font-playfair__h2--default-semi-bold {
+  @apply 
+  tw-shared-font-family-playfair--black-leading-1
+  text-xl 
+  md:text-2xl
+  font-semibold;
+}
+
+@utility tw-shared-font-playfair__h2--title {
   @apply
   tw-shared-font-family-playfair--black-leading-1
   text-2xl
@@ -48,20 +56,12 @@
   font-normal;
 }
 
-@utility tw-shared-font-family-playfair__h2--green-list-about {
-  @apply 
-  tw-shared-font-family-playfair--black-leading-1
-  text-xl 
-  md:text-2xl
-  font-semibold;
-}
-
 /* hind-siliguri */
 @utility tw-shared-font-family-hind-siliguri--leading-1 {
   @apply
   font-hindSiliguri
   text-theme-grey-black
-  leading-[1.3];
+  leading-none;
 }
 
 @utility tw-shared-font-family-hind-siliguri--leading-1-6 {
@@ -71,7 +71,7 @@
   leading-[1.6];
 }
 
-@utility tw-shared-font-family-hind-siliguri__text-1 {
+@utility tw-shared-font-hind-siliguri__text-1 {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1
   text-[0.875rem] 
@@ -79,7 +79,7 @@
   lg:text-[0.9375rem];
 }
 
-@utility tw-shared-font-family-hind-siliguri__h2--intro {
+@utility tw-shared-font-hind-siliguri__h2--intro {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1
   text-theme-grey-black
@@ -88,7 +88,7 @@
   font-normal;
 }
 
-@utility tw-shared-font-family-hind-siliguri__h2--wysiwyg {
+@utility tw-shared-font-hind-siliguri__h2--wysiwyg {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1
   text-theme-grey-black
@@ -97,8 +97,7 @@
   font-bold;
 }
 
-@utility tw-shared-font-family-hind-siliguri__h3--wysiwyg { 
-
+@utility tw-shared-font-hind-siliguri__h3--wysiwyg { 
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1-6
   leading-[1.6]
@@ -106,14 +105,20 @@
   md:text-lg;
 }
 
-@utility tw-shared-font-family-hind-siliguri__h4--wysiwyg {
-  
+@utility tw-shared-font-hind-siliguri__h4--wysiwyg {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1
   text-[1rem];
 }
 
-@utility tw-shared-font-family-hind-siliguri__text--wysiwyg {
+@utility tw-shared-font-hind-siliguri__text--default {
+  @apply
+    tw-shared-font-family-hind-siliguri--leading-1-6
+    text-base
+    font-normal;
+}
+
+@utility tw-shared-font-hind-siliguri__text--wysiwyg {
   @apply 
   tw-shared-font-family-hind-siliguri--leading-1-6
   text-[0.875rem] 
@@ -121,7 +126,27 @@
   text-theme-grey-black
   font-normal; 
 }
- 
+
+@utility tw-shared-font-hind-siliguri__text--card-ribbon {
+  @apply
+    tw-shared-font-family-hind-siliguri--leading-1
+    text-base
+    font-normal
+    lg:text-lg;
+}
+
+@utility tw-shared-font-hind-siliguri__number--card-ribbon {
+  @apply 
+  tw-shared-font-family-hind-siliguri--leading-1
+  font-bold
+  text-xl
+  md:text-[1.875rem] 
+  lg:text-[2.5rem]
+  text-theme-chart-green;
+}
+
+
+
 
 @utility tw-shared-text-small {
   @apply 
@@ -171,13 +196,8 @@
   @apply tw-shared-font-family-hind-siliguri--leading-1 text-lg md:text-[1.25rem];
 }
 
-@utility tw-shared-text-theme-cards {
-  @apply tw-shared-font-family-playfair--black-leading-1 font-normal text-[1.5625rem] md:text-[2.5rem] mb-3.5 md:mb-1;
-  color: #fff;
-}
-
 @utility tw-shared-text-tooltip {
-  @apply tw-shared-font-family-hind-siliguri__text-1;
+  @apply tw-shared-font-hind-siliguri__text-1;
 }
 
 

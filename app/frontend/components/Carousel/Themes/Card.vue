@@ -6,13 +6,11 @@
     :style="{ backgroundImage: `url('${imageUrl}')` }"
   >
     <div class="ct-theme-card__overlay" />
-
     <CarouselThemesRibbon
       v-bind="props"
       class="ct-theme-card__ribbon"
     />
-
-    <h3
+    <h2
       class="ct-theme-card__title"
       v-text="label"
     />
@@ -40,12 +38,10 @@ const props = defineProps<CarouselThemesCard>()
 
 .ct-theme-card {
   @apply
-  flex
-  flex-col
-  gap-3
+  tw-shared-base-flex-col-gap-6-and-9
+  justify-start
   h-120
   lg:h-190
-  justify-start
   tw-shared-border-radius
   bg-theme-grey-dark
   bg-cover
@@ -57,7 +53,13 @@ const props = defineProps<CarouselThemesCard>()
 }
 
 .ct-theme-card__overlay {
-  @apply absolute inset-0 tw-shared-border-radius bg-black/35 transition-colors duration-200;
+  @apply
+  absolute
+  inset-0
+  tw-shared-border-radius
+  bg-black/35
+  transition-colors
+  duration-200;
 }
 
 .ct-theme-card:hover .ct-theme-card__overlay {
@@ -69,18 +71,35 @@ const props = defineProps<CarouselThemesCard>()
 }
 
 .ct-theme-card__title {
-  @apply z-1 text-xl leading-tight font-bold;
+  @apply
+  z-1
+  tw-shared-font-playfair__h2--title;
 }
 
 .ct-theme-card__summary {
-  @apply z-1 hidden md:block text-base leading-normal;
+  @apply
+  z-1
+  hidden
+  md:block
+  tw-shared-font-hind-siliguri__text--default
+  text-white;
 }
 
 .ct-theme-card__arrow {
-  @apply z-1 flex h-9 w-9 items-center justify-center rounded-full bg-white/90;
+  @apply
+  z-1
+  size-9
+  flex
+  items-center
+  justify-center
+  rounded-full
+  bg-white/50;
 }
 
 .ct-theme-card__arrow-icon {
-  @apply h-2.5 w-2.5 -rotate-90 text-theme-grey-black;
+  @apply
+  size-3.5
+  -rotate-90
+  text-theme-grey-black;
 }
 </style>

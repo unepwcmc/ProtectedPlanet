@@ -16,7 +16,7 @@
 }
 
 .vw-layouts-cms-resource__title {
-  @apply tw-shared-font-family-playfair__h1--resource;
+  @apply tw-shared-font-playfair__h1--resource;
 }
 
 .vw-layouts-cms-resource__content {

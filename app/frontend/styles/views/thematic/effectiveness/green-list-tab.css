@@ -24,7 +24,7 @@
 }
 
 .vw-thematic-effectiveness-green-list-tab__about-title {
-  @apply tw-shared-font-family-playfair__h2--green-list-about;
+  @apply tw-shared-font-playfair__h2--default-semi-bold;
 }
 
 .vw-thematic-effectiveness-green-list-tab__about-content {

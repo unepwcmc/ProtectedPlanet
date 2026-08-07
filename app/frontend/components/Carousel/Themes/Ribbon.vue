@@ -33,7 +33,18 @@ defineProps<CarouselThemesCard>()
 @reference "#importtailwindcss";
 
 .ct-carousel-themes-ribbon {
-  @apply z-1 flex flex-col gap-3 h-37.5 w-37.5 items-center justify-between bg-theme-grey-black px-3 py-5 text-center;
+  @apply
+  flex
+  flex-col
+  gap-3
+  h-37.5
+  w-37.5
+  items-center
+  justify-between
+  bg-theme-grey-black
+  px-3
+  py-5
+  text-center;
 }
 
 .ct-carousel-themes-ribbon--hide {
@@ -49,11 +60,13 @@ defineProps<CarouselThemesCard>()
 }
 
 .ct-carousel-themes-ribbon__number {
-  @apply text-3xl leading-none font-bold text-theme-primary;
+  @apply tw-shared-font-hind-siliguri__number--card-ribbon;
 }
 
 .ct-carousel-themes-ribbon__label {
-  @apply text-base leading-none;
+  @apply
+  tw-shared-font-hind-siliguri__text--card-ribbon
+  text-white;
 }
 
 </style>

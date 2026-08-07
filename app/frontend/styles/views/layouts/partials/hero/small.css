@@ -14,5 +14,5 @@
 }
 
 .vw-layouts-partials-hero-small__title {
-  @apply tw-shared-font-family-playfair__h1--default;
+  @apply tw-shared-font-playfair__h1--default;
 }

@@ -1,0 +1,85 @@
+.vw-cards-themes-card {
+  @apply
+  tw-shared-border-radius
+  relative
+  flex
+  flex-col
+  items-start
+  justify-start
+  overflow-hidden
+  w-full
+  mb-5
+  h-120
+  bg-theme-grey-dark
+  bg-cover
+  bg-center
+  px-7.5
+  py-8
+  text-white
+  no-underline
+  hover:no-underline
+  md:pr-[20%]
+  lg:w-[calc(50%-10px)]
+  lg:h-190
+  lg:pr-0;
+}
+
+.vw-cards-themes-card:nth-child(3n) {
+  @apply h-130 lg:pr-[50%];
+}
+
+.vw-cards-themes-card__overlay {
+  @apply absolute inset-0 tw-shared-border-radius bg-black/40 transition-colors duration-200;
+}
+
+.vw-cards-themes-card:hover .vw-cards-themes-card__overlay {
+  @apply bg-black/70;
+}
+
+.vw-cards-themes-card__ribbon {
+  @apply z-1 absolute top-0 left-0 flex h-37.5 w-37.5 flex-col items-center justify-between bg-theme-grey-black px-2.5 py-5 text-center;
+}
+
+.vw-cards-themes-card__pin {
+  @apply block h-9.5 w-7 shrink-0;
+
+  .outline,
+  .tick {
+    @apply fill-white;
+  }
+
+  .circle {
+    @apply fill-theme-bright-green;
+  }
+}
+
+.vw-cards-themes-card__ribbon-details {
+  @apply flex flex-col gap-1;
+}
+
+.vw-cards-themes-card__number {
+  @apply tw-shared-font-hind-siliguri__number--card-ribbon;
+}
+
+.vw-cards-themes-card__number-text {
+  @apply tw-shared-font-hind-siliguri__text--card-ribbon;
+}
+
+.vw-cards-themes-card__title {
+  @apply 
+  tw-shared-font-hind-siliguri__text--card-ribbon
+  mt-30
+  lg:mt-37.5;
+}
+
+.vw-cards-themes-card__summary {
+  @apply
+  tw-shared-font-hind-siliguri__text--default
+  hidden 
+  md:block;
+}
+
+.vw-cards-themes-card__arrow {
+  @apply
+  tw-shared-icon-circle-chevron-white;
+}

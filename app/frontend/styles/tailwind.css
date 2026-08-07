@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Hind+Siliguri:400,700|Playfair+Display:400,700&display=swap');
+
 @import "tailwindcss";
 
 @theme {
@@ -63,6 +65,8 @@
 @import './views/layouts/partials/hero/small.css';
 
 @import './views/partials/cards/sites.css';
+@import './views/partials/cards/themes/index.css';
+@import './views/partials/cards/themes/card.css';
 
 @import './views/partials/carousels/theme.css';
 

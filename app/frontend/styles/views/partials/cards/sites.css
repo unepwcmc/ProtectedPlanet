@@ -3,7 +3,7 @@
 }
 
 .vw-cards-sites__title {
-  @apply tw-shared-font-family-playfair__h2--default;
+  @apply tw-shared-font-playfair__h2--default;
 }
 
 .vw-cards-sites__grid {
