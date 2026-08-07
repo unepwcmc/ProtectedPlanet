@@ -1,22 +1,17 @@
-<div class="cards--squares">
-  <h2 class="cards__title"></h2>
-  
-  <div class="cards__cards">
+<div class="vw-partials-cards-squares">
+  <div class="vw-partials-cards-squares__sqaures">
     <% cards.each do |card| %>
-      <div class="card">
-        <%= link_to card[:url], 
-          title: '', 
-          class: 'card__link',
-          style: "background-image: url('#{card[:image]}')" do 
-        %>
-          <h3 class="card__title"><%= card[:title] %></h3>
-          <i class="icon--circle-chevron-white"></i>
-        <% end %>
-      </div>
+      <%= link_to card[:url],
+      title: "Explore Protected Areas by #{card[:title]}",
+      class: 'vw-partials-cards-squares__card',
+      style: "background-image: url('#{card[:image]}')" do %>
+        <div class="vw-partials-cards-squares__overlay"></div>
+        <h3 class="vw-partials-cards-squares__title">
+          <%= card[:title] %>
+        </h3>
+        <i class="vw-partials-cards-squares__chevron"></i>
+      <% end %>
     <% end %>
-    
-    <div class="cards__button-wrapper">
-      <%= link_to @pas_button, @pas_link, title: @pas_button, class: 'cards__button button--accent' %>
-    </div>
   </div>
+  <%= link_to @pas_button, @pas_link, title: @pas_button, class: 'vw-partials-cards-squares__button vw-partials-cards-squares__button button--accent' %>
 </div>

@@ -1,5 +1,5 @@
 /* playfair */
-@utility tw-shared-font-family-playfair--black-leading-1 {
+@utility tw-shared-font-family-playfair--black-leading-1-1 {
   @apply
   font-playfairDisplay
   text-theme-grey-black
@@ -8,7 +8,7 @@
 
 @utility tw-shared-font-playfair__h1--default {
   @apply 
-  tw-shared-font-family-playfair--black-leading-1 
+  tw-shared-font-family-playfair--black-leading-1-1 
   font-bold
   text-[1.875rem] 
   md:text-[2.5rem];
@@ -16,7 +16,7 @@
 
 @utility tw-shared-font-playfair__h1--home {
   @apply 
-  tw-shared-font-family-playfair--black-leading-1 
+  tw-shared-font-family-playfair--black-leading-1-1 
   font-bold
   text-[2.5rem]
   lg:text-[4.375rem];
@@ -24,7 +24,7 @@
 
 @utility tw-shared-font-playfair__h1--resource {
   @apply 
-  tw-shared-font-family-playfair--black-leading-1
+  tw-shared-font-family-playfair--black-leading-1-1
   font-bold 
   text-[1.25rem]
   md:text-[1.25rem]
@@ -33,7 +33,7 @@
 
 @utility tw-shared-font-playfair__h2--default {
   @apply 
-  tw-shared-font-family-playfair--black-leading-1
+  tw-shared-font-family-playfair--black-leading-1-1
   text-xl
   md:text-2xl
   font-bold;
@@ -41,7 +41,7 @@
 
 @utility tw-shared-font-playfair__h2--default-semi-bold {
   @apply 
-  tw-shared-font-family-playfair--black-leading-1
+  tw-shared-font-family-playfair--black-leading-1-1
   text-xl 
   md:text-2xl
   font-semibold;
@@ -49,7 +49,7 @@
 
 @utility tw-shared-font-playfair__h2--title {
   @apply
-  tw-shared-font-family-playfair--black-leading-1
+  tw-shared-font-family-playfair--black-leading-1-1
   text-2xl
   md:text-[2.5rem]
   text-white
@@ -57,31 +57,42 @@
 }
 
 /* hind-siliguri */
-@utility tw-shared-font-family-hind-siliguri--leading-1 {
-  @apply
+
+@utility tw-shared-font-family-hind-siliguri {
+  @apply 
   font-hindSiliguri
-  text-theme-grey-black
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-family-hind-siliguri--leading-1-0 {
+  @apply
+  tw-shared-font-family-hind-siliguri
   leading-none;
+}
+
+@utility tw-shared-font-family-hind-siliguri--leading-1-3 {
+  @apply
+  tw-shared-font-family-hind-siliguri
+  leading-[1.3];
 }
 
 @utility tw-shared-font-family-hind-siliguri--leading-1-6 {
   @apply
-  font-hindSiliguri
-  text-theme-grey-black
+  tw-shared-font-family-hind-siliguri
   leading-[1.6];
 }
 
 @utility tw-shared-font-hind-siliguri__text-1 {
   @apply 
-  tw-shared-font-family-hind-siliguri--leading-1
+  tw-shared-font-family-hind-siliguri--leading-1-3
   text-[0.875rem] 
-  md:text-[0.875rem] 
+  md:text-[0.875rem]
   lg:text-[0.9375rem];
 }
 
 @utility tw-shared-font-hind-siliguri__h2--intro {
   @apply 
-  tw-shared-font-family-hind-siliguri--leading-1
+  tw-shared-font-family-hind-siliguri--leading-1-3
   text-theme-grey-black
   text-lg
   md:text-[1.25rem]
@@ -90,7 +101,7 @@
 
 @utility tw-shared-font-hind-siliguri__h2--wysiwyg {
   @apply 
-  tw-shared-font-family-hind-siliguri--leading-1
+  tw-shared-font-family-hind-siliguri--leading-1-3
   text-theme-grey-black
   text-lg
   md:text-[1.25rem]
@@ -107,7 +118,7 @@
 
 @utility tw-shared-font-hind-siliguri__h4--wysiwyg {
   @apply 
-  tw-shared-font-family-hind-siliguri--leading-1
+  tw-shared-font-family-hind-siliguri--leading-1-3
   text-[1rem];
 }
 
@@ -129,7 +140,7 @@
 
 @utility tw-shared-font-hind-siliguri__text--card-ribbon {
   @apply
-    tw-shared-font-family-hind-siliguri--leading-1
+    tw-shared-font-family-hind-siliguri--leading-1-3
     text-base
     font-normal
     lg:text-lg;
@@ -137,7 +148,7 @@
 
 @utility tw-shared-font-hind-siliguri__number--card-ribbon {
   @apply 
-  tw-shared-font-family-hind-siliguri--leading-1
+  tw-shared-font-family-hind-siliguri--leading-1-3
   font-bold
   text-xl
   md:text-[1.875rem] 
@@ -145,12 +156,19 @@
   text-theme-chart-green;
 }
 
-
+@utility tw-shared-font-hind-siliguri__circle-square-title {
+  @apply 
+  tw-shared-font-family-hind-siliguri--leading-1-3
+  text-theme-grey-black
+  text-lg
+  md:text-[1.25rem]
+  font-bold;
+}
 
 
 @utility tw-shared-text-small {
   @apply 
-  tw-shared-font-family-hind-siliguri--leading-1 
+  tw-shared-font-family-hind-siliguri--leading-1-3
   text-[0.875rem]
   text-theme-grey;
 }
@@ -163,19 +181,19 @@
 }
 
 @utility tw-shared-text-body {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[1rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 text-[1rem];
 }
 
 @utility tw-shared-text-filter {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[0.875rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 text-[0.875rem];
 }
 
 @utility tw-shared-text-footer-links {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 no-underline text-[1rem] md:text-[1rem] lg:text-lg;
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 no-underline text-[1rem] md:text-[1rem] lg:text-lg;
 }
 
 @utility tw-shared-text-intro {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 leading-[1.35] text-lg md:text-[1.25rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 leading-[1.35] text-lg md:text-[1.25rem];
 }
 
 @utility tw-shared-text-nav-link {
@@ -183,17 +201,17 @@
 }
 
 @utility tw-shared-text-pagination {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-[1rem] md:text-[1rem] lg:text-lg;
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 text-[1rem] md:text-[1rem] lg:text-lg;
 }
 
 @utility tw-shared-text-pagination-no-results {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-lg md:text-[1.25rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 text-lg md:text-[1.25rem];
 }
 
 
 
 @utility tw-shared-text-tabs-fake {
-  @apply tw-shared-font-family-hind-siliguri--leading-1 text-lg md:text-[1.25rem];
+  @apply tw-shared-font-family-hind-siliguri--leading-1-3 text-lg md:text-[1.25rem];
 }
 
 @utility tw-shared-text-tooltip {

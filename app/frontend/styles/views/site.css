@@ -2,17 +2,21 @@
  * Protected-area ("site") page shell (Wave T3). Single ERB consumer:
  * app/views/protected_areas/show.html.erb.
  *
- * Unlike country/region, `.page--site` (app/assets/stylesheets/pages/_site.scss) is NOT fully
- * retired here — `.page__col-wrapper`/`__col-1`/`__col-2` have real, PDF-width-conditional content
- * beyond the `flex-stack-mobile` rule this wave touches, so `page--site` stays in the ERB as the
- * ancestor hook those still need. Only `.page__section--overview-map`'s rule moved out (to
- * `vw-site__overview` below, backed by the same `tw-shared-country-region-site-basic-overview` as country/
- * region) since it's independent of the column-wrapper rules — `_site.scss`'s own
- * `&__section--overview-map { flex-stack-mobile }` line was deleted as its one consumer moved.
+ * `page--site` stays in the ERB (not renamed/removed) as `pdf.scss` selects it directly
+ * (`.pdf .page--site { background-color: transparent; }`) — that file is on a separate,
+ * still-active Sprockets pipeline out of scope for this migration.
+ *
+ * `app/assets/stylesheets/pages/_site.scss` is now fully retired — its `&__col-wrapper`/
+ * `__col-1`/`__col-2` rules (incl. the `.pdf &` width overrides that make the two attribute
+ * columns render at a fixed 555px side-by-side for the Puppeteer PDF export) are ported below
+ * as `vw-site__col-wrapper`/`__col-1`/`__col-2`. `pdf-break-after` stays as a bare class in the
+ * ERB — it's defined in `pdf.scss`, not `_site.scss`, so it's untouched by this port.
  */
 
 @utility vw-site {
-  @apply tw-shared-bg--grey-xlight tw-shared-base-spacer-small--top;
+  @apply tw-shared-bg--grey-xlight
+  pt-4 md:pt-6 lg:pt-9
+  pb-4 md:pb-6 lg:pb-9;
 }
 
 @utility vw-site__container {
@@ -23,10 +27,31 @@
   @apply tw-shared-country-region-site-basic-overview;
 }
 
-@utility vw-site__related-sites {
-  @apply tw-shared-base-spacer-large--top;
+@utility vw-site__col-wrapper {
+  @apply flex flex-wrap lg:flex-nowrap;
 }
 
-@utility vw-site__citation {
-  @apply tw-shared-base-spacer-small--bottom;
+@utility vw-site__col-1 {
+  @apply w-full lg:w-[calc(50%_-_15px)];
+}
+
+@utility vw-site__col-2 {
+  @apply w-full lg:ml-auto lg:w-[calc(50%_-_15px)] lg:block;
+}
+
+/*
+ * Unlayered (plain selectors, not @utility) so they beat the layered utilities above
+ * regardless of specificity — only active inside the `.pdf` wrapper div that
+ * layouts/application.html.erb renders around the whole page when `@for_pdf`.
+ */
+.pdf .vw-site__col-1 {
+  @apply mr-[30px] w-[555px];
+}
+
+.pdf .vw-site__col-2 {
+  @apply w-[555px];
+}
+
+@utility vw-site__sources-and-related {
+  @apply tw-shared-base-wrapper;
 }

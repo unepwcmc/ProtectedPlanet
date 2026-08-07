@@ -1,0 +1,67 @@
+.vw-partials-cards-squares {
+  @apply
+  flex
+  gap-3
+  flex-col
+  items-center;
+}
+
+.vw-partials-cards-squares__sqaures{
+  @apply
+  flex
+  gap-3
+  flex-col
+  md:flex-row
+  justify-between;
+}
+
+.vw-partials-cards-squares__card {
+  @apply
+  tw-shared-border-radius
+  relative
+  tw-shared-base-flex-col-gap-3
+  items-center
+  justify-center
+  p-6
+  w-full
+  md:w-[48%]
+  lg:w-[31%]
+  aspect-square
+  bg-theme-grey-dark
+  bg-cover
+  bg-center
+  text-white
+  no-underline
+  hover:no-underline;
+}
+
+.vw-partials-cards-squares__overlay {
+  @apply 
+  absolute 
+  inset-0
+  tw-shared-border-radius 
+  bg-black/40 
+  transition-colors 
+  duration-200;
+}
+
+.vw-partials-cards-squares__card:hover .vw-partials-cards-squares__overlay {
+  @apply bg-black/70;
+}
+
+.vw-partials-cards-squares__title {
+  @apply
+  z-1
+  tw-shared-font-hind-siliguri__circle-square-title
+  wrap-break-word
+  text-white
+  text-center;
+}
+
+.vw-partials-cards-squares__chevron {
+  @apply z-1 tw-shared-icon-circle-chevron-white;
+}
+
+.vw-partials-cards-squares__button {
+  @apply justify-self-center;
+}

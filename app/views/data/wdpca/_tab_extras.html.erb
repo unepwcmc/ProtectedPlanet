@@ -2,7 +2,9 @@
   <div class="vw-data-wdpca-tab-extras__container">
     <%= cms_fragment_render(tab[:content_id]) %>
   </div>
-  <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+  <div class="vw-data-wdpca-tab-extras__search">
+    <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+  </div>
   <section class="vw-data-wdpca-tab-extras__map">
     <%= frontend_mount "Map", props: {
       options: local_assigns[:map_options] || {},

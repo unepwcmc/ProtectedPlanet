@@ -8,6 +8,10 @@
   tw-shared-base-flex-col-gap-6-and-9;
 }
 
+.vw-data-wdpca-tab-extras__search {
+  @apply tw-shared-base-container;
+}
+
 .vw-data-wdpca-tab-extras__map {
   @apply tw-shared-map-section;
 }

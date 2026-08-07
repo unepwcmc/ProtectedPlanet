@@ -1,0 +1,57 @@
+.vw-partials-cards-circles {
+  @apply tw-shared-base-flex-col-gap-9;
+}
+
+.vw-partials-cards-circles__title {
+  @apply 
+  tw-shared-font-playfair__h2--default 
+  text-center;
+}
+
+.vw-partials-cards-circles__circles {
+  @apply 
+  flex 
+  flex-col 
+  md:flex-row
+  items-center 
+  md:justify-around
+  gap-3.5
+  md:gap-0;
+}
+
+.vw-partials-cards-circles__card {
+  @apply 
+  tw-shared-base-flex-col-gap-3
+  items-center 
+  justify-center 
+  rounded-full
+  size-54.25
+  lg:size-62.25
+  bg-theme-grey-xlight 
+  border-2 
+  border-solid 
+  border-theme-grey-xlight
+  no-underline 
+  hover:no-underline 
+  hover:border-theme-primary;
+}
+
+.vw-partials-cards-circles__icon--region {
+  @apply tw-shared-icon-earth;
+}
+
+.vw-partials-cards-circles__icon--country {
+  @apply tw-shared-icon-country;
+}
+
+.vw-partials-cards-circles__icon--area {
+  @apply tw-shared-icon-area;
+}
+
+.vw-partials-cards-circles__card-title {
+  @apply tw-shared-font-hind-siliguri__circle-square-title;
+}
+
+.vw-partials-cards-circles__chevron {
+  @apply tw-shared-icon-circle-chevron-black;
+}

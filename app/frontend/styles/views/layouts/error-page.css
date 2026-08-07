@@ -1,0 +1,17 @@
+@utility vw-layouts-error-page {
+  @apply tw-shared-base-wrapper;
+}
+
+@utility vw-layouts-error-page__dev-notice {
+  @apply bg-yellow-200 
+  text-yellow-900 
+  text-center 
+  font-bold 
+  p-4;
+}
+
+@utility vw-layouts-error-page__container {
+  @apply 
+  tw-shared-base-container 
+  tw-shared-base-flex-col-gap-6-and-9;
+}

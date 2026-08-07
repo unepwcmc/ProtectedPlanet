@@ -3,26 +3,30 @@
  * One class per section, each composing the `tw-shared-*` ingredients it needs.
  */
 
+@utility vw-home {
+  @apply tw-shared-base-wrapper;
+}
+
 @utility vw-home__facts {
-  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+  @apply tw-shared-base-container;
 }
 
 @utility vw-home__pas {
-  @apply tw-shared-base-container tw-shared-base-spacer-small--top;
+  @apply tw-shared-base-container tw-shared-base-flex-col-gap-9;
 }
 
-@utility vw-home__map {
-  @apply tw-shared-base-spacer-small--top;
-}
-
-@utility vw-home__carousel {
-  @apply tw-shared-base-spacer-small--top;
+@utility vw-home__search {
+   @apply tw-shared-base-container;
 }
 
 @utility vw-home__resources {
-  @apply tw-shared-base-container tw-shared-base-spacer-medium--top;
+  @apply tw-shared-base-container;
 }
 
 @utility vw-home__news {
-  @apply tw-shared-base-container tw-shared-base-spacer-medium--bottom;
+  @apply tw-shared-base-container;
+}
+
+@utility vw-home__map {
+  @apply tw-shared-map-section;
 }

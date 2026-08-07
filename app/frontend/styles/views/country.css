@@ -1,7 +1,7 @@
 @utility vw-country {
-  @apply tw-shared-bg--grey-xlight 
-  tw-shared-base-spacer-small--top 
-  tw-shared-base-spacer-small--bottom;
+  @apply tw-shared-bg--grey-xlight
+  pt-4 md:pt-6 lg:pt-9
+  pb-4 md:pb-6 lg:pb-9;
 }
 
 @utility vw-country__container {

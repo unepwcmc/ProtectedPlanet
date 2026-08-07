@@ -1,7 +1,5 @@
-<section class="vw-search-protected-areas__container">
-  <%= frontend_mount "SearchAreasHome", props: {
+<%= frontend_mount "SearchAreasHome", props: {
     config: config,
     endpointAutocomplete: search_autocomplete_path,
     endpointSearch: search_areas_path(search_term: "SEARCHTERM", filters: @filters)
-  } %>
-</section>
+} %> 

@@ -1,6 +1,6 @@
-<div class="vw-error-page">
+<div class="vw-layouts-error-page">
   <% if Rails.env.development? %>
-    <p class="vw-error-page__dev-notice">
+    <p class="vw-layouts-error-page__dev-notice">
       Dev mode: comment out <code>rescue_from StandardError</code> or <code>rescue_from PageNotFound</code> in
       <code>application_controller.rb</code> temporarily to see Rails' real error page instead of this one.
     </p>
@@ -11,7 +11,7 @@
       items_centre: true,
       centre_text: true
   } %>
-  <div class="vw-error-page__container">
+  <div class="vw-layouts-error-page__container">
     <%= render "partials/cards/news" %>
     <%= render "partials/cards/resources" %>
   </div>
