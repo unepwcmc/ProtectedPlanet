@@ -1,36 +1,34 @@
-/*
- * Home page (Wave T3). Single ERB consumer: app/views/home/index.html.erb.
- * One class per section, each composing the `tw-shared-*` ingredients it needs.
- */
-
-@utility vw-home {
-  @apply tw-shared-base-wrapper;
-}
-
-@utility vw-home__facts {
-  @apply tw-shared-base-container;
-}
-
-@utility vw-home__pas {
+.vw-home {
   @apply 
-  tw-shared-base-container 
+  tw-shared-base-wrapper
+  tw-shared-base-flex-col-gap-6-and-9;
+}
+
+.vw-home__container {
+  @apply
+  tw-shared-base-container
   tw-shared-base-flex-col-gap-9;
 }
 
-@utility vw-home__search {
-   @apply 
-   tw-shared-base-container 
-   lg:w-3xl;
+.vw-home__download {
+  @apply
+  tw-shared-font-hind-siliguri__normal-lg-grey-black
+  mt-0
+  mb-4.5;
 }
 
-@utility vw-home__resources {
-  @apply tw-shared-base-container;
+.vw-home__download-label {
+  @apply font-bold;
 }
 
-@utility vw-home__news {
-  @apply tw-shared-base-container;
+.vw-home__download-link {
+  @apply ml-3.5;
 }
 
-@utility vw-home__map {
+.vw-home__search {
+   @apply lg:w-3xl;
+}
+
+.vw-home__map {
   @apply tw-shared-map-section;
 }
