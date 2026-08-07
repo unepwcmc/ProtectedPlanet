@@ -4,9 +4,13 @@
     <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
     <p class="vw-home__download">
       <span class="vw-home__download-label">
-        <%= t('home.download.label') %>:
+        <span class="vw-home__download-label-title">
+          <%= t('home.download.label') %>:
+        </span>
+        <span class="vw-home__update-date">
+          <%= @update_date %>
+        </span>
       </span>
-      <%= @update_date %>
       <%= frontend_mount "GaLink",
             tag: :span,
             class: "vw-home__download-link",
@@ -16,7 +20,9 @@
               text: t('home.download.link')
       } %>
     </p>
-    <%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
+    <div class="vw-home__search">
+      <%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
+    </div>
     <%= render partial: "partials/cards/circles", locals: { cards: @pas_levels, title: @pas_title } %>
     <%= render partial: "partials/cards/squares", locals: { cards: pas_categories } %>
   </div>

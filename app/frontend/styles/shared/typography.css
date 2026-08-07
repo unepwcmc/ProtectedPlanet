@@ -6,22 +6,6 @@
   leading-[1.1]
 }
 
-@utility tw-shared-font-playfair__font-bold-3xl-md-4xl {
-  @apply 
-  tw-shared-font-family-playfair--black-leading-1-1 
-  font-bold
-  text-3xl
-  md:text-4xl;
-}
-
-@utility tw-shared-font-playfair__font-bold-4xl-lg-4-375 {
-  @apply 
-  tw-shared-font-family-playfair--black-leading-1-1 
-  font-bold
-  text-5xl
-  lg:text-7xl;
-}
-
 @utility tw-shared-font-playfair__bold-xl-lg-2xl {
   @apply 
   tw-shared-font-family-playfair--black-leading-1-1
@@ -55,6 +39,22 @@
   font-normal;
 }
 
+@utility tw-shared-font-playfair__font-bold-3xl-md-4xl {
+  @apply 
+  tw-shared-font-family-playfair--black-leading-1-1 
+  font-bold
+  text-3xl
+  md:text-4xl;
+}
+
+@utility tw-shared-font-playfair__font-bold-4xl-lg-4-375 {
+  @apply 
+  tw-shared-font-family-playfair--black-leading-1-1 
+  font-bold
+  text-5xl
+  lg:text-7xl;
+}
+
 /* hind-siliguri */
 
 @utility tw-shared-font-family-hind-siliguri-grey-black {
@@ -77,6 +77,14 @@
   font-bold;
 }
 
+@utility tw-shared-font-hind-siliguri__normal-lg-md-xl {
+  @apply 
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  text-lg
+  md:text-xl
+  font-normal;
+}
+
 @utility tw-shared-font-family-hind-siliguri__leading-1-3-grey-black {
   @apply
   tw-shared-font-family-hind-siliguri-grey-black
@@ -87,6 +95,18 @@
   @apply
   tw-shared-font-family-hind-siliguri-grey-black
   leading-[1.6];
+}
+
+@utility tw-shared-font-family-hind-siliguri__leading-1-2 {
+  @apply
+  font-hindSiliguri
+  leading-[1.2];
+}
+
+@utility tw-shared-font-family-hind-siliguri__leading-1-2-grey-black {
+  @apply
+  tw-shared-font-family-hind-siliguri-grey-black
+  leading-[1.2];
 }
 
 @utility tw-shared-font-hind-siliguri__normal-sm-lg-base-grey-black {
@@ -135,6 +155,40 @@
   text-base
   font-normal
   lg:text-lg;
+}
+
+@utility tw-shared-font-hind-siliguri__bold-base-md-xl-primary {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  text-theme-primary
+  text-base
+  md:text-xl
+  font-bold;
+}
+
+@utility tw-shared-font-hind-siliguri_normal-4xl-md-7xl-primary {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-2
+  text-theme-primary
+  font-normal
+  text-4xl
+  md:text-7xl;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-base-md-lg-leading-1-2-grey-black {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-2-grey-black
+  text-base
+  md:text-lg
+  font-normal;
+}
+
+@utility tw-shared-font-hind-siliguri__bold-base-md-xl-leading-1-2-grey-black {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-2-grey-black
+  text-base
+  md:text-xl
+  font-bold;
 }
 
 @utility tw-shared-font-hind-siliguri__bold-md-3xl-lg-6xl-green {

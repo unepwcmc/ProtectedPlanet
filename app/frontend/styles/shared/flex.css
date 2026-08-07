@@ -1,3 +1,9 @@
+@utility tw-shared-base-flex-gap-1 {
+  @apply
+  flex
+  gap-1;
+}
+
 @utility tw-shared-base-flex-gap-3 {
   @apply
   flex

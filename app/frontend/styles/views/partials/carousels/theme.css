@@ -3,5 +3,7 @@
 }
 
 .vw-partials-carousels-themes__title {
-    @apply text-center;
+    @apply 
+    tw-shared-font-playfair__bold-xl-lg-2xl
+    text-center;
 }

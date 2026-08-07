@@ -12,17 +12,21 @@
 
 .vw-partials-ctas-api__content {
   @apply 
-  tw-shared-base-flex-col-gap-3 
+  tw-shared-base-flex-col-gap-6 
   md:w-173;
 }
 
 .vw-partials-ctas-api__title {
   @apply 
-  text-2xl
-  md:text-4xl 
+  tw-shared-font-playfair__normal-2xl-md-4xl 
   text-white;
 }
 
+.vw-partials-ctas-api__intro {
+  @apply 
+  tw-shared-font-hind-siliguri__normal-lg-md-xl
+  text-white;
+}
 
 .vw-partials-ctas-api__button {
   @apply self-start;

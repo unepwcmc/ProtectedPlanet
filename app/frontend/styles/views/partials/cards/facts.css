@@ -1,0 +1,63 @@
+.vw-partials-cards-facts {
+  @apply
+  tw-shared-base-flex-gap-3
+  overflow-x-scroll 
+  lg:overflow-x-hidden;
+}
+
+.vw-partials-cards-facts__card {
+  @apply 
+  shrink-0
+  tw-shared-base-flex-col-gap-1
+  bg-theme-grey-xlight
+  size-60
+  md:w-68.5
+  md:h-73.5
+  py-6
+  px-4.5
+  md:p-5.5;
+}
+
+.vw-partials-cards-facts__pin {
+  @apply
+  mx-auto
+  w-7.25 
+  h-9.5;
+}
+
+.vw-partials-cards-facts__pin--terrestrial .circle { 
+  @apply fill-theme-bright-green;
+}
+.vw-partials-cards-facts__pin--marine .circle { 
+  @apply fill-theme-blue;
+}
+.vw-partials-cards-facts__pin--oecm .circle { 
+  @apply fill-theme-orange;
+}
+
+.vw-partials-cards-facts__pin .outline {
+  @apply fill-black;
+}
+
+.vw-partials-cards-facts__pin .tick {
+  @apply fill-white;
+}
+
+.vw-partials-cards-facts__number-large {
+  @apply
+  tw-shared-font-hind-siliguri_normal-4xl-md-7xl-primary
+  text-center;
+}
+
+.vw-partials-cards-facts__number {
+  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-primary;
+}
+
+.vw-partials-cards-facts__text {
+  @apply tw-shared-font-hind-siliguri__normal-base-md-lg-leading-1-2-grey-black;
+}
+
+.vw-partials-cards-facts__title {
+  @apply
+  tw-shared-font-hind-siliguri__bold-base-md-xl-leading-1-2-grey-black;
+}

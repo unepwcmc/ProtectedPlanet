@@ -22,6 +22,8 @@
   --color-theme-chart-blue: #5F81CB;
   --color-theme-chart-aqua: #65C9B2;
   --color-theme-purple: #7B1977;
+  --color-theme-blue: #004DA8;
+  --color-theme-orange: #D9B143;
 }
 
 @source "../";
@@ -69,6 +71,7 @@
 @import './views/layouts/error-page.css';
 
 @import './views/partials/cards/circles.css';
+@import './views/partials/cards/facts.css';
 @import './views/partials/cards/squares.css';
 @import './views/partials/cards/sites.css';
 @import './views/partials/cards/themes/index.css';
