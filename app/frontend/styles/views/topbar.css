@@ -27,22 +27,21 @@
 
 @utility vw-topbar__right {
   @apply
-  flex
+  tw-shared-base-flex-gap-6
   items-center
-  gap-1
-  lg:gap-6;
+  justify-center;
 }
 
 @utility vw-topbar__nav {
   @apply
   order-2
-  md:order-1
+  lg:order-1
   flex
   self-stretch;
 }
 
 @utility vw-topbar__search {
-  @apply 
+  @apply
   order-1
-  md:order-2;
+  lg:order-2;
 }

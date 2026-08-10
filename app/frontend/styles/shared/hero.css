@@ -8,7 +8,7 @@
 @utility tw-shared-hero-wrapper {
     @apply
     tw-shared-hero-wrapper-common
-    min-h-50 
+    min-h-50
     md:min-h-87.5 
     lg:min-h-126.25
     pt-7.5

@@ -114,7 +114,18 @@ function toggleInput() {
 }
 
 .ct-search__trigger {
-  @apply flex size-8.75 shrink-0 cursor-pointer items-center justify-center rounded-[3px] border-0 bg-theme-primary p-0 md:size-11.75;
+  @apply flex
+  size-8
+  md:size-9
+  lg:size-12
+  shrink-0
+  cursor-pointer
+  items-center
+  justify-center
+  rounded-[3px]
+  border-0
+  bg-theme-primary
+  p-0;
 }
 
 .ct-search__trigger-icon {

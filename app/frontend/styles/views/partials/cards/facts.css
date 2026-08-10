@@ -21,7 +21,7 @@
 .vw-partials-cards-facts__pin {
   @apply
   mx-auto
-  w-7.25 
+  w-7.25
   h-9.5;
 }
 
@@ -36,7 +36,9 @@
 }
 
 .vw-partials-cards-facts__pin .outline {
-  @apply fill-black;
+  @apply 
+  fill-black
+  outline-0;
 }
 
 .vw-partials-cards-facts__pin .tick {

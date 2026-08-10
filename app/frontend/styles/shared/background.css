@@ -38,8 +38,7 @@
 
 @utility tw-shared-bg-image-overlay--white {
   @apply 
-  relative 
-  z-1 
+  z-[-1]
   before:content-[''] 
   before:absolute 
   before:inset-0 
@@ -50,10 +49,10 @@
 @utility tw-shared-bg-image-overlay--black {
   @apply 
   relative 
-  z-1 
+  z-[-1]
   before:content-[''] 
   before:absolute 
   before:inset-0 
-  before:bg-black/40 
+  before:bg-black/40
   before:z-[-1];
 }

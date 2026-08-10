@@ -3,7 +3,7 @@
     <%= render '/partials/global/site-logo' %>
     <div class="vw-topbar__right">
       <% unless @for_pdf %>
-        <%= frontend_mount "NavBar", props: { links: get_nav_primary }, class: "vw-topbar__nav nav--primary" %>
+        <%= frontend_mount "NavBar", props: { links: get_nav_primary }, class: "vw-topbar__nav" %>
       <% end %>
       <%= frontend_mount "SearchSiteTopbar", props: {
       endpoint: "/#{locale}/search?search_term=",
