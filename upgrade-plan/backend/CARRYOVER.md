@@ -1,12 +1,30 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-07-27 (end of Rails 6.1 phase,
-before Ruby 2.7 → 3.3).
+Keep this current as phases land. Last updated: 2026-08-10 (Rails 7.1 phase / B0).
 
-Status at this point: Rails 6.1.7.10, Zeitwerk, `load_defaults 6.1`,
-`legacy_connection_handling = false`. Suite **648 runs, 0 failures, 7 skips**.
-SimpleCov gate in CI (floor 54%, baseline ~55.6%).
+Status at this point: **Rails 7.1.6**, Ruby 3.3.7, Zeitwerk, `load_defaults 7.1`,
+postgis-adapter 9.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+
+### Rails 7.1 phase (B0) — DONE
+- rails ~> 7.1.5 (7.1.6), `load_defaults 7.1`, activerecord-postgis-adapter 8 → 9.0.2.
+- **Fixed:** `add_autoload_paths_to_load_path` defaults to **false** under `load_defaults 7.1`,
+  so `lib/modules` subdirs left `$LOAD_PATH` and two bare requires broke (`LoadError`):
+  `ogr/split.rb` (`require 'shapefile'`) and `wdpa/source_importer.rb`
+  (`require 'wdpa/data_standard/source'`). Converted both to `require_relative`.
+- **Fixed test:** `protected_area_show_test` slug case — Rails 7.1 drops the default
+  "You are being redirected" HTML body, so the old `assert_match(/Killbear/, body)` (which
+  matched the name inside that redirect body) broke. App is correct (slug → 302 to search);
+  test now asserts the redirect + `search_term=` location.
+
+### ⚠️ Rails 7.2 headline blocker — `Rails.application.secrets`
+`load_defaults 7.1` **deprecates** `Rails.application.secrets` (removed in **7.2**). PP uses
+it **~48 times across 23 files** (`config/initializers/redis.rb`, `secrets.yml`,
+env configs, `search/index.rb`, `countries_geometry_importer.rb`, etc.) plus
+`secret_key_base` itself. **This is the main 7.2 task.** Migration path: move `secrets.yml`
+→ `Rails.application.config_for(:secrets)` (keeps the ENV-driven `secrets.yml` + dotenv flow,
+minimal churn) rather than encrypted credentials. Do it as the first step of the 7.2 phase.
+Works fine on 7.1 (deprecation warnings only) — deferred deliberately.
 
 ---
 

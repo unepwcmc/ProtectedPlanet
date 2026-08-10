@@ -14,9 +14,14 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
     seed_cms
   end
 
-  test 'renders the Protected Area name' do
+  test 'redirects a slug lookup to the search page for that name' do
+    # A slug hit intentionally redirects to search (see ProtectedAreasController#show;
+    # guards against duplicate slugs across SITE IDs). Assert the redirect itself --
+    # Rails 7.1 dropped the default "You are being redirected" HTML body, so matching
+    # the name in @response.body (as this test used to) no longer works.
     get "/#{@protected_area.slug}"
-    assert_match(/Killbear/, @response.body)
+    assert_response :redirect
+    assert_match(/search_term=Killbear/, @response.location)
   end
 
   test 'renders the Protected Area name given a SITE ID' do

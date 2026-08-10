@@ -27,7 +27,7 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Opted out of one default. Every belongs_to foreign key in this schema is
     # nullable, so nothing at the database level backs a presence validation, and
