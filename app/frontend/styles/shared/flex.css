@@ -52,3 +52,15 @@
   tw-shared-base-flex-col
   gap-12;
 }
+
+@utility tw-shared-base-flex-col-md-row-gap-1 {
+  @apply
+  tw-shared-base-flex-col-gap-1
+  md:flex-row;
+}
+
+@utility tw-shared-base-flex-col-md-row-gap-3 {
+  @apply
+  tw-shared-base-flex-col-gap-3
+  md:flex-row;
+}

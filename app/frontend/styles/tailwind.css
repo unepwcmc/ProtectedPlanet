@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Hind+Siliguri:400,700|Playfair+Display:400,700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -72,6 +71,7 @@
 
 @import './views/partials/cards/circles.css';
 @import './views/partials/cards/facts.css';
+@import './views/partials/cards/resources.css';
 @import './views/partials/cards/squares.css';
 @import './views/partials/cards/sites.css';
 @import './views/partials/cards/themes/index.css';

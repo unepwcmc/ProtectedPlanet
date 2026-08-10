@@ -1,62 +1,57 @@
 <template>
   <div
-    class="card"
-    :class="{ 'card--link': url }"
+    class="ct-listing-page-card-resources-card"
+    :class="{ 'ct-listing-page-card-resources-card--link': url }"
   >
     <a
       v-if="url"
-      class="card__link"
+      class="ct-listing-page-card-resources-card__link"
       :href="url"
       :title
     >
-      <p
-        class="card__date"
-        v-html="date"
-      />
-      <h3
-        class="card__h3"
-        v-html="title"
-      />
-      <p
-        class="card__summary"
-        v-html="summary"
-      />
+      <ListingPageCardInfo v-bind="props" />
     </a>
-    <template v-else>
-      <p
-        class="card__date"
-        v-html="date"
-      />
-      <h3
-        class="card__h3"
-        v-html="title"
-      />
-      <p
-        class="card__summary"
-        v-html="summary"
-      />
-      <a
-        v-if="fileUrl"
-        class="button--download"
-        :href="fileUrl"
-        target="_blank"
-        :title
-      />
-      <a
-        v-if="linkUrl"
-        class="button--link-external"
-        :href="linkUrl"
-        target="_blank"
-        :title
-        v-html="linkTitle"
-      />
-    </template>
+    <ListingPageCardInfo
+      v-else
+      v-bind="props"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ListingPageCardResourcesProps } from '@/types/backend'
+import ListingPageCardInfo from '@/components/ListingPageCard/Resources/Info.vue'
 
 type ListingPageCardResources = ListingPageCardResourcesProps
-defineProps<ListingPageCardResources>()
+const props = defineProps<ListingPageCardResources>()
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-listing-page-card-resources-card {
+  @apply
+  tw-shared-base-flex-col-gap-3
+  p-3
+  w-full
+  md:w-1/2
+  lg:w-1/4
+  lg:min-h-50;
+}
+
+.ct-listing-page-card-resources-card--link {
+  @apply
+  border
+  border-solid
+  border-white
+  cursor-pointer
+  hover:border-theme-grey-dark;
+}
+
+.ct-listing-page-card-resources-card__link {
+  @apply
+  tw-shared-base-flex-col-gap-3
+  no-underline;
+}
+
+</style>

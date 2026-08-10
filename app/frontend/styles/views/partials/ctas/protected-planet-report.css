@@ -56,6 +56,8 @@
   lg:w-[90%];
 }
 
-.vw-ctas-protected-planet-report__button{
-@apply shrink-0 ;
+.vw-ctas-protected-planet-report__button {
+  @apply
+  tw-shared-button--theme-purple
+  shrink-0;
 }

@@ -64,5 +64,7 @@
 }
 
 .vw-partials-cards-squares__button {
-  @apply justify-self-center;
+  @apply
+  tw-shared-button--theme-purple
+  justify-self-center;
 }

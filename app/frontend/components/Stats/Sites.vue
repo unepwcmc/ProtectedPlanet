@@ -3,11 +3,13 @@
     <div class="flex flex-v-center flex-h-between">
       <h2 v-text="title" />
       <a
-        class="margin-space--left button--all"
+        class="ct-stats-sites__view-all"
         :href="viewAll"
         :title="textViewAll"
-        v-text="textViewAll"
-      />
+      >
+        {{ textViewAll }}
+        <IconCircleChevron class="ct-stats-sites__view-all-icon" />
+      </a>
     </div>
 
     <div class="cards--search-results-areas preview">
@@ -38,7 +40,22 @@
 
 <script setup lang="ts">
 import type { StatsSitesProps } from '@/types/backend'
+import IconCircleChevron from '@/components/Icon/CircleChevron.vue'
 
 type StatsSites = StatsSitesProps
 defineProps<StatsSites>()
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-stats-sites__view-all {
+  @apply
+  tw-shared-button--all
+  ml-3.5;
+}
+
+.ct-stats-sites__view-all-icon {
+  @apply size-8.5 ml-2.5;
+}
+</style>

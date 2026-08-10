@@ -30,7 +30,7 @@
           rel="noopener noreferrer"
         >
           <p v-text="translations.green_list_url" />
-          <span class="button--external-link" />
+          <IconCircleChevron class="ct-attributes-affiliations-affiliation__external-link-icon" />
         </a>
       </template>
     </template>
@@ -48,6 +48,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { AttributesAffiliationLink, AttributesAffiliationsTranslations } from '@/types/backend'
+import IconCircleChevron from '@/components/Icon/CircleChevron.vue'
 
 const props = defineProps<{
   link: AttributesAffiliationLink
@@ -56,3 +57,11 @@ const props = defineProps<{
 
 const imageAltFallback = computed(() => props.link.affiliation === 'greenlist' ? 'Green List' : 'PARCC')
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-attributes-affiliations-affiliation__external-link-icon {
+  @apply size-5.25;
+}
+</style>

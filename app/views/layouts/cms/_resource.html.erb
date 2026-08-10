@@ -15,11 +15,19 @@
       <ul class="list--links">
         <% get_resource_links.each do |link| %>
           <% unless link[:url].blank? %>
+            <% is_download = link[:classes] == 'button--download' %>
             <li class="list__li">
               <span>
                 <%= link[:text] %>
               </span>
-              <%= link_to link[:button], link[:url], title: link[:text], class: "list__a #{link[:classes]}", target: '_blank' %>
+              <%= link_to link[:url], title: link[:text], target: '_blank', class: "list__a #{is_download ? 'tw-shared-button--download' : 'tw-shared-button--link-external'}" do %>
+                <%= link[:button] %>
+                <% if is_download %>
+                  <i class="tw-shared-icon-download-black ml-2.5"></i>
+                <% else %>
+                  <i class="tw-shared-icon-arrow-external"></i>
+                <% end %>
+              <% end %>
             </li>
           <% end %>
         <% end %>

@@ -42,7 +42,9 @@
 }
 
 .vw-layouts-partials-hero-basic__link {
-  @apply self-start;
+  @apply
+  tw-shared-button--external
+  self-start;
 }
 
 .vw-layouts-partials-hero-basic__tabs {

@@ -1,6 +1,6 @@
 <template>
   <button
-    class="button--download"
+    class="ct-pame-table-download-csv__button"
     :class="{ 'ct-pame-table-download-csv__button--disabled': isDisabled }"
     :disabled="isDisabled"
     title="Download CSV file of filtered protected area management effectiveness evaluations"
@@ -11,6 +11,7 @@
       :class="['icon--loading-spinner', 'margin-center', { 'icon-visible': isDownloading }]"
     />
     <span v-else>CSV</span>
+    <IconDownload class="ct-pame-table-download-csv__button-icon" />
   </button>
 </template>
 
@@ -19,6 +20,7 @@ import { computed, ref } from 'vue'
 import { useAnalytics } from '@/composables/useAnalytics'
 import { postBlob } from '@/lib/http'
 import { usePameStore } from '@/stores/usePameStore'
+import IconDownload from '@/components/Icon/Download.vue'
 
 const { trackEvent } = useAnalytics()
 
@@ -64,6 +66,14 @@ async function onDownload() {
 </script>
 <style scoped lang="css">
 @reference "#importtailwindcss";
+
+.ct-pame-table-download-csv__button {
+  @apply tw-shared-button--download;
+}
+
+.ct-pame-table-download-csv__button-icon {
+  @apply w-5 h-4.75 ml-2.5 text-black;
+}
 
 .ct-pame-table-download-csv__button--disabled {
   @apply tw-shared-button--disabled;
