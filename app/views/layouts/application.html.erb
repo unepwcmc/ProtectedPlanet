@@ -1,25 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <%= render "layouts/partials/head" %>
-  </head>
-
+  <%= render "layouts/partials/head" %>
   <body>
-
     <%= render "layouts/partials/cookie_consent" %>
-
     <% unless @for_pdf %>
       <%= render "layouts/partials/banner" %>
     <% end %>
-
     <%= render "layouts/partials/topbar" %>
-
     <div class="<%= if @for_pdf then 'pdf' end %>">
       <%= yield %>
-
       <%= render "layouts/partials/footer/index" %>
     </div>
-
     <%= frontend_mount "DownloadModal", props: {
       endpointCreate: '/downloads',
       endpointPoll: '/downloads/poll',

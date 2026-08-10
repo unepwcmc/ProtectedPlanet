@@ -7,13 +7,13 @@
       <span class="bold">{{ firstItem }} - {{ lastItem }} of {{ totalItems }}</span>
       <button
         class="pagination__button--previous"
-        :class="{ 'button--disabled': !isPreviousActive || pameStore.isFetching }"
+        :class="{ 'ct-pame-table-pagination__button--disabled': !isPreviousActive || pameStore.isFetching }"
         :disabled="!isPreviousActive || pameStore.isFetching"
         @click="onChangePage('previous')"
       />
       <button
         class="pagination__button--next"
-        :class="{ 'button--disabled': !isNextActive || pameStore.isFetching }"
+        :class="{ 'ct-pame-table-pagination__button--disabled': !isNextActive || pameStore.isFetching }"
         :disabled="!isNextActive || pameStore.isFetching"
         @click="onChangePage('next')"
       />
@@ -63,3 +63,10 @@ function onChangePage(direction: 'previous' | 'next') {
   emit('requestItems')
 }
 </script>
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-table-pagination__button--disabled {
+  @apply tw-shared-button--disabled;
+}
+</style>

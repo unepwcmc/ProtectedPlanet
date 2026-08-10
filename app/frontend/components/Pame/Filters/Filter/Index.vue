@@ -8,7 +8,7 @@
       :class="{
         'filter__button--active': isOpen,
         'filter__button--has-selected': hasSelected,
-        'button--disabled': pameStore.isFetching
+        'ct-pame-filter__button--disabled': pameStore.isFetching
       }"
       @click="onToggle"
     >
@@ -116,3 +116,11 @@ function onApply() {
   trackEvent('click', { event_label: `Page: PAME - Filter title: ${props.title} - Button: Apply` })
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-filter__button--disabled {
+  @apply tw-shared-button--disabled;
+}
+</style>

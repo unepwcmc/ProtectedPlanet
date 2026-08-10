@@ -2,7 +2,7 @@
   <div class="ct-download">
     <button
       class="download__trigger"
-      :class="{ 'button--disabled': downloadDisabled }"
+      :class="{ 'ct-download__trigger--disabled': downloadDisabled }"
       :disabled="downloadDisabled"
       @click="toggleDownloadPane"
     >
@@ -101,3 +101,11 @@ function toggleDownloadPane() {
   showPopup.value = !showPopup.value
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-download__trigger--disabled {
+  @apply tw-shared-button--disabled;
+}
+</style>

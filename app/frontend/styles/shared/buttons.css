@@ -1,5 +1,20 @@
-@utility tw-shared-button--primary {
+/* shared across every button: legacy `button-basic` mixin */
+@utility tw-shared-button-basic {
   @apply
+  bg-transparent
+  cursor-pointer
+  font-hindSiliguri
+  no-underline
+  hover:no-underline
+  focus:outline-none
+  disabled:cursor-not-allowed
+  disabled:opacity-20;
+}
+
+/* shared across the fixed-height buttons only: `button-basic` + `button-height` + `button-font` + `button-padding` + `button-radius` */
+@utility tw-shared-button-sized {
+  @apply
+  tw-shared-button-basic
   inline-flex
   items-center
   h-11.5
@@ -8,10 +23,52 @@
   md:px-6.75
   rounded-[0.1875rem]
   tw-shared-font-hind-siliguri__normal-base-lg-lg
+  disabled:cursor-not-allowed
+  disabled:opacity-20;
+}
+
+@utility tw-shared-button--theme-purple {
+  @apply
+  tw-shared-button-sized
   bg-theme-purple
-  text-white
-  no-underline
-  hover:no-underline
-  focus:outline-none
-  cursor-pointer;
+  text-white;
+}
+
+@utility tw-shared-button--outline-black {
+  @apply
+  tw-shared-button-sized
+  border
+  border-black
+  text-black;
+}
+
+@utility tw-shared-button--outline-white {
+  @apply
+  tw-shared-button-sized
+  border
+  border-white
+  text-white;
+}
+
+@utility tw-shared-button--theme-primary {
+  @apply
+  tw-shared-button-basic
+  flex
+  justify-between
+  gap-2
+  w-full
+  rounded-[0.1875rem]
+  border
+  border-theme-primary
+  py-3
+  px-4
+  text-sm;
+}
+
+@utility tw-shared-button--disabled {
+  @apply
+  cursor-not-allowed
+  opacity-20
+  disabled:cursor-not-allowed
+  disabled:opacity-20;
 }

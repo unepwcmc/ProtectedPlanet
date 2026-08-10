@@ -29,7 +29,9 @@
 }
 
 .vw-partials-ctas-api__button {
-  @apply self-start;
+  @apply
+  tw-shared-button--outline-white
+  self-start;
 }
 
 .vw-partials-ctas-api__key {

@@ -1,7 +1,7 @@
 <template>
   <button
     class="button--download"
-    :class="{ 'button--disabled': isDisabled }"
+    :class="{ 'ct-pame-table-download-csv__button--disabled': isDisabled }"
     :disabled="isDisabled"
     title="Download CSV file of filtered protected area management effectiveness evaluations"
     @click="onDownload"
@@ -62,3 +62,10 @@ async function onDownload() {
   }
 }
 </script>
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-table-download-csv__button--disabled {
+  @apply tw-shared-button--disabled;
+}
+</style>

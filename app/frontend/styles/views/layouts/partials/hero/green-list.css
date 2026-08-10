@@ -26,7 +26,7 @@
 
 .vw-layouts-partials-hero-green-list__button {
   @apply 
-  tw-shared-button--primary 
+  tw-shared-button--theme-purple 
   self-start;
 }
 

@@ -24,7 +24,7 @@
 }
 
 .vw-layouts-partials-hero-marine__button {
-  @apply tw-shared-button--primary self-start;
+  @apply tw-shared-button--theme-purple self-start;
 }
 
 .vw-layouts-partials-hero-marine__small-text {

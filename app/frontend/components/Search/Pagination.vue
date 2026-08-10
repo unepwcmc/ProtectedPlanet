@@ -7,12 +7,14 @@
       <span v-text="text" />
       <button
         :disabled="!previousIsActive || loading"
-        :class="['pagination__button--previous', { 'button--disabled': !previousIsActive || loading }]"
+        :class="['pagination__button--previous', {
+          'ct-search-pagination__button--disabled': !previousIsActive || loading }]"
         @click="changePage(previousIsActive, 'previous')"
       />
       <button
         :disabled="!nextIsActive || loading"
-        :class="['pagination__button--next', { 'button--disabled': !nextIsActive || loading }]"
+        :class="['pagination__button--next', {
+          'ct-search-pagination__button--disabled': !nextIsActive || loading }]"
         @click="changePage(nextIsActive, 'next')"
       />
     </div>
@@ -50,3 +52,10 @@ function changePage(isActive: boolean, direction: 'previous' | 'next') {
   emit('update:page', direction === 'next' ? props.currentPage + 1 : props.currentPage - 1)
 }
 </script>
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-pagination__button--disabled {
+  @apply tw-shared-button--disabled;
+}
+</style>

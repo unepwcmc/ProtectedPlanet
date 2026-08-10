@@ -13,10 +13,10 @@ describe('ListingPageCardResources', () => {
       }
     })
 
-    const cards = wrapper.findAll('.card')
+    const cards = wrapper.findAll('.ct-listing-page-card-resources-card')
     expect(cards).toHaveLength(2)
-    expect(cards[0].find('.card__h3').text()).toBe('First')
-    expect(cards[1].find('.card__h3').text()).toBe('Second')
+    expect(cards[0].find('.ct-listing-page-card-resources-card__title').text()).toBe('First')
+    expect(cards[1].find('.ct-listing-page-card-resources-card__title').text()).toBe('Second')
   })
 
   it('adds the preview modifier when preview is true', () => {
@@ -24,7 +24,7 @@ describe('ListingPageCardResources', () => {
       props: { cards: [], preview: true }
     })
 
-    expect(wrapper.classes()).toContain('preview')
+    expect(wrapper.classes()).toContain('ct-listing-page-card-resources--preview')
   })
 
   it('omits the preview modifier when preview is false or absent', () => {
@@ -32,6 +32,6 @@ describe('ListingPageCardResources', () => {
       props: { cards: [] }
     })
 
-    expect(wrapper.classes()).not.toContain('preview')
+    expect(wrapper.classes()).not.toContain('ct-listing-page-card-resources--preview')
   })
 })

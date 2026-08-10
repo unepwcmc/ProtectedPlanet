@@ -33,5 +33,5 @@
 }
 
 .vw-layouts-partials-hero-home__button {
-    @apply tw-shared-button--primary self-start;
+    @apply tw-shared-button--theme-purple self-start;
 }
