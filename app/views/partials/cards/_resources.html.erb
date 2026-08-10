@@ -1,15 +1,17 @@
 <% get_all = false if local_assigns[:get_all].nil? %>
 <% get_resource_cards get_all %>
-
-<div class="cards--resources">
-  <div class="flex flex-v-center flex-h-between">
-    <h2><%= @items[:title] %></h2>
-    
+<div class="vw-partials-cards-resources">
+  <div class="vw-partials-cards-resources__header">
+    <h2 class="vw-partials-cards-resources__title">
+      <%= @items[:title] %>
+    </h2>
     <% if @items[:url] && !get_all %>
-      <%= link_to t('global.button.all'), @items[:url], title: t('global.button.all'), class: 'button--all' %>
+      <%= link_to @items[:url], title: t('global.button.all'), class: 'vw-partials-cards-resources__all' do %>
+        <%= t('global.button.all') %>
+        <i class="vw-partials-cards-resources__all-icon"></i>
+      <% end %>
     <% end %>
   </div>
-
   <%= frontend_mount "ListingPageCardResources", props: {
         cards: @items[:cards].map do |card|
           {

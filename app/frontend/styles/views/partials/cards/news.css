@@ -1,19 +1,20 @@
-.vw-partials-cards-resources {
-@apply tw-shared-base-flex-col-gap-3;
+.vw-partials-cards-news {
+  @apply tw-shared-base-flex-col-gap-3;
 }
-.vw-partials-cards-resources__header {
-  @apply 
-  flex 
+
+.vw-partials-cards-news__header {
+  @apply
+  flex
   gap-3
-  items-center 
+  items-center
   justify-between;
 }
 
-.vw-partials-cards-resources__title {
+.vw-partials-cards-news__title {
   @apply tw-shared-font-playfair__bold-xl-md-2xl;
 }
 
-.vw-partials-cards-resources__all {
+.vw-partials-cards-news__all {
   @apply
   flex
   gap-3
@@ -26,6 +27,6 @@
   focus:outline-none;
 }
 
-.vw-partials-cards-resources__all-icon {
+.vw-partials-cards-news__all-icon {
   @apply tw-shared-icon-circle-chevron-black;
 }

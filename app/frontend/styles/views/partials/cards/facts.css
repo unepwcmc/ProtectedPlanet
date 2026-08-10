@@ -45,7 +45,7 @@
 
 .vw-partials-cards-facts__number-large {
   @apply
-  tw-shared-font-hind-siliguri_normal-4xl-md-7xl-primary
+  tw-shared-font-hind-siliguri__light-4xl-md-7xl-leading-1-2-primary
   text-center;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .vw-partials-cards-facts__text {
-  @apply tw-shared-font-hind-siliguri__normal-base-md-lg-leading-1-2-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-2-grey-black;
 }
 
 .vw-partials-cards-facts__title {

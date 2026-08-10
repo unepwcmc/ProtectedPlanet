@@ -73,7 +73,7 @@ const props = defineProps<CarouselThemesCard>()
 .ct-theme-card__title {
   @apply
   z-1
-  tw-shared-font-playfair__normal-2xl-md-4xl;
+  tw-shared-font-playfair__light-2xl-md-4xl;
 }
 
 .ct-theme-card__summary {
@@ -81,7 +81,7 @@ const props = defineProps<CarouselThemesCard>()
   z-1
   hidden
   md:block
-  tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black 
+  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black 
   text-white;
 }
 

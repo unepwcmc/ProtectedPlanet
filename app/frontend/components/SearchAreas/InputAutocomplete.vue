@@ -139,7 +139,7 @@ watch(() => props.prePopulatedSearchTerm, () => {
 
 .ct-search-areas-autocomplete__input {
   @apply
-  tw-shared-font-hind-siliguri__normal-lg-grey-black
+  tw-shared-font-hind-siliguri__light-lg-grey-black
   h-11.5
   md:h-18.75
   grow;
@@ -200,7 +200,7 @@ watch(() => props.prePopulatedSearchTerm, () => {
   w-full
   px-10
   py-2.5
-  tw-shared-font-hind-siliguri__normal-lg-grey-black
+  tw-shared-font-hind-siliguri__light-lg-grey-black
   no-underline;
 }
 </style>

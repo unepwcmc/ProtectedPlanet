@@ -22,7 +22,7 @@
   px-5
   md:px-6.75
   rounded-[0.1875rem]
-  tw-shared-font-hind-siliguri__normal-base-lg-lg
+  tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-2-white
   disabled:cursor-not-allowed
   disabled:opacity-20;
 }
@@ -91,7 +91,7 @@ bg-theme-primary
 @utility tw-shared-button--all {
   @apply
   tw-shared-button-basic
-  tw-shared-font-hind-siliguri__normal-base-lg-lg
+  tw-shared-font-hind-siliguri__light-base-lg-lg
   flex
   items-center
   shrink-0;

@@ -48,7 +48,7 @@ defineProps<ListingPageCardInfo>()
 
 .ct-listing-page-card-resources-card-info__date {
   @apply
-  tw-shared-font-hind-siliguri__normal-xm-grey-black
+  tw-shared-font-hind-siliguri__light-xm-grey-black
   mt-0;
 }
 
@@ -58,7 +58,7 @@ defineProps<ListingPageCardInfo>()
 }
 
 .ct-listing-page-card-resources-card-info__summary {
-  @apply tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
 }
 
 .ct-listing-page-card-resources-card-info__download {
@@ -78,7 +78,7 @@ defineProps<ListingPageCardInfo>()
   @apply
   flex
   items-center
-  tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black
+  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black
   underline
   hover:no-underline;
 }

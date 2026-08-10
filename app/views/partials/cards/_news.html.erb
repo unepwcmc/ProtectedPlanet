@@ -1,18 +1,17 @@
 <% get_all = false if local_assigns[:get_all].nil? %>
 <% get_news_items get_all %>
-
-<div class="cards--articles">
-
+<div class="vw-partials-cards-news">
   <% unless get_all %>
-    <div class="flex flex-v-center flex-h-between">
-      <h2><%= @items[:title] %></h2>
-      <%= link_to @items[:url], title: t('global.button.all'), class: 'tw-shared-button--all' do %>
+    <div class="vw-partials-cards-news__header">
+      <h2 class="vw-partials-cards-news__title">
+        <%= @items[:title] %>
+      </h2>
+      <%= link_to @items[:url], title: t('global.button.all'), class: 'vw-partials-cards-news__all' do %>
         <%= t('global.button.all') %>
-        <i class="tw-shared-icon-circle-chevron-black ml-2.5"></i>
+        <i class="vw-partials-cards-news__all-icon"></i>
       <% end %>
     </div>
   <% end %>
-
   <%= frontend_mount "ListingPageCardNews", props: {
         cards: @items[:cards].map do |card|
           {
