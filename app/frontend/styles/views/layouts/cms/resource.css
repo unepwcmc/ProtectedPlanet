@@ -12,7 +12,7 @@
 }
 
 .vw-layouts-cms-resource__date {
-  @apply tw-shared-font-hind-siliguri__light-xm-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-xm-grey;
 }
 
 .vw-layouts-cms-resource__title {
@@ -27,6 +27,32 @@
 
 .vw-layouts-cms-resource__links {
   @apply tw-shared-base-container--medium;
+}
+
+.vw-layouts-cms-resource__links-list {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.vw-layouts-cms-resource__links-item {
+  @apply
+  flex
+  justify-between
+  items-center
+  text-base
+  md:text-lg
+  bg-theme-grey-xlight
+  px-5
+  py-3.5
+  max-w-175
+  max-h-14;
+}
+
+.vw-layouts-cms-resource__external-link {
+  @apply tw-shared-button--link-external ml-3.5 max-h-11.5;
+}
+
+.vw-layouts-cms-resource__external-link--icon {
+  @apply tw-shared-icon-arrow-external;
 }
 
 .vw-layouts-cms-resource__resources {

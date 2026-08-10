@@ -7,129 +7,213 @@
 }
 
 @utility tw-shared-icon-button-reset {
-  @apply bg-transparent border-none cursor-pointer p-0;
+  @apply 
+  bg-transparent 
+  border-none 
+  cursor-pointer 
+  p-0;
 }
 
 @utility tw-shared-icon-area {
-  @apply tw-shared-icon-base w-13 h-13;
+  @apply 
+  tw-shared-icon-base 
+  size-13;
+
   background-image: url('../../assets/icons/area.svg');
 }
 
 @utility tw-shared-icon-arrow-external {
-  @apply tw-shared-icon-base w-6.25 h-3;
+  @apply 
+  tw-shared-icon-base 
+  w-6.25 
+  h-3;
+
   background-image: url('../../assets/icons/arrow-external.svg');
 }
 
 @utility tw-shared-icon-arrow-external-white {
-  @apply tw-shared-icon-base w-4.25 h-3;
+  @apply 
+  tw-shared-icon-base 
+  w-4.25 
+  h-3;
+
   background-image: url('../../assets/icons/arrow-external-white.svg');
 }
 
 @utility tw-shared-icon-burger {
-  @apply tw-shared-icon-base w-6 h-3.75;
+  @apply 
+  tw-shared-icon-base 
+  w-6 
+  h-3.75;
+
   background-image: url('../../assets/icons/burger.svg');
 }
 
 @utility tw-shared-icon-close {
-  @apply tw-shared-icon-base size-7.25;
+  @apply 
+  tw-shared-icon-base 
+  size-7.25;
+
   background-image: url('../../assets/icons/close.svg');
 }
 
 @utility tw-shared-icon-cross {
-  @apply tw-shared-icon-base w-5 h-5;
+  @apply 
+  tw-shared-icon-base 
+  size-5;
+
   background-image: url('../../assets/icons/cross.svg');
 }
 
 @utility tw-shared-icon-cross-small {
-  @apply tw-shared-icon-base size-2.75;
+  @apply 
+  tw-shared-icon-base 
+  size-2.75;
+
   background-image: url('../../assets/icons/cross.svg');
 }
 
 @utility tw-shared-icon-cross-white {
-  @apply tw-shared-icon-base w-5 h-5;
+  @apply 
+  tw-shared-icon-base 
+  size-5;
+
   background-image: url('../../assets/icons/cross-white.svg');
 }
 
 @utility tw-shared-icon-chevron-black-down {
-  @apply tw-shared-icon-base w-3.5 h-2;
+  @apply
+  tw-shared-icon-base
+  w-3.5
+  h-2;
+
   background-image: url('../../assets/icons/chevron-black-down.svg');
 }
 
 @utility tw-shared-icon-chevron-black-up {
-  @apply tw-shared-icon-base w-3.5 h-2;
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-2;
+
   background-image: url('../../assets/icons/chevron-black-up.svg');
 }
 
 @utility tw-shared-icon-chevron-white-down {
-  @apply tw-shared-icon-base w-3.5 h-2;
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-2;
+
   background-image: url('../../assets/icons/chevron-white-down.svg');
 }
 
 @utility tw-shared-icon-chevron-white-up {
-  @apply tw-shared-icon-base w-3.5 h-2;
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-2;
+
   background-image: url('../../assets/icons/chevron-white-up.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-black {
-  @apply tw-shared-icon-base size-8.5;
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+  
   background-image: url('../../assets/icons/circle-chevron-black.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-white {
-  @apply tw-shared-icon-base size-8.5;
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+
   background-image: url('../../assets/icons/circle-chevron-white.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-green-left {
-  @apply tw-shared-icon-base size-8.5;
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+
   background-image: url('../../assets/icons/circle-chevron-green-left.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-green-right {
-  @apply tw-shared-icon-base size-8.5;
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+
   background-image: url('../../assets/icons/circle-chevron-green-right.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-green-large-left {
-  @apply tw-shared-icon-base size-12.5 md:size-18;
+  @apply 
+  tw-shared-icon-base 
+  size-12.5 
+  md:size-18;
+
   background-image: url('../../assets/icons/circle-chevron-green-left.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-green-large-right {
-  @apply tw-shared-icon-base size-12.5 md:size-18;
+  @apply 
+  tw-shared-icon-base 
+  size-12.5 
+  md:size-18;
+
   background-image: url('../../assets/icons/circle-chevron-green-right.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-grey-left {
-  @apply tw-shared-icon-base size-8.5;
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+
   background-image: url('../../assets/icons/circle-chevron-grey-left.svg');
 }
 
 @utility tw-shared-icon-circle-chevron-grey-right {
-  @apply tw-shared-icon-base size-8.5;
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+
   background-image: url('../../assets/icons/circle-chevron-grey-right.svg');
 }
 
 @utility tw-shared-icon-country {
-  @apply tw-shared-icon-base w-16.25 h-12.5;
+  @apply 
+  tw-shared-icon-base 
+  w-16.25 
+  h-12.5;
+
   background-image: url('../../assets/icons/country.svg');
 }
 
 @utility tw-shared-icon-download {
-  @apply tw-shared-icon-base w-5 h-4.75;
+  @apply 
+  tw-shared-icon-base 
+  w-5 
+  h-4.75;
+
   background-image: url('../../assets/icons/download.svg');
 }
 
 @utility tw-shared-icon-download-black {
-  @apply tw-shared-icon-base w-5 h-4.75;
+  @apply 
+  tw-shared-icon-base 
+  w-5 
+  h-4.75;
+
   background-image: url('../../assets/icons/download-black.svg');
 }
 
 @utility tw-shared-icon-earth {
   @apply 
   tw-shared-icon-base 
-  w-15 
-  h-15;
+  size-15;
 
   background-image: url('../../assets/icons/earth.svg');
 }
@@ -144,16 +228,26 @@
 }
 
 @utility tw-shared-icon-flag {
-  @apply tw-shared-icon-base shrink-0 rounded-full size-8.75;
+  @apply 
+  tw-shared-icon-base 
+  shrink-0 
+  rounded-full 
+  size-8.75;
 }
 
 @utility tw-shared-icon-info {
-  @apply tw-shared-icon-base size-5.75;
+  @apply 
+  tw-shared-icon-base 
+  size-5.75;
+
   background-image: url('../../assets/icons/info.svg');
 }
 
 @utility tw-shared-icon-loading-spinner {
-  @apply tw-shared-icon-base w-10 h-10;
+  @apply 
+  tw-shared-icon-base 
+  size-10;
+
   background-image: url('../../assets/icons/loading-spinner.svg');
 }
 
@@ -162,22 +256,38 @@
 }
 
 @utility tw-shared-icon-minus-white {
-  @apply tw-shared-icon-base w-3.5 h-5;
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-5;
+
   background-image: url('../../assets/icons/minus-white.svg');
 }
 
 @utility tw-shared-icon-pin-outline {
-  @apply tw-shared-icon-base w-3.5 h-5;
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-5;
+
   background-image: url('../../assets/icons/pin-outline.svg');
 }
 
 @utility tw-shared-icon-pin-map {
-  @apply tw-shared-icon-base w-3.5 h-8;
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-8;
+
   background-image: url('../../assets/icons/pin.svg');
 }
 
 @utility tw-shared-icon-placeholder-image {
-  @apply tw-shared-icon-base w-28.5 h-22.75;
+  @apply 
+  tw-shared-icon-base 
+  w-28.5 
+  h-22.75;
+
   background-image: url('../../assets/icons/image.svg');
 }
 
@@ -186,22 +296,42 @@
 }
 
 @utility tw-shared-icon-search {
-  @apply tw-shared-icon-base tw-shared-icon-button-reset w-5.25 h-5.75;
+  @apply 
+  tw-shared-icon-base 
+  tw-shared-icon-button-reset
+  w-5.25 
+  h-5.75;
+
   background-image: url('../../assets/icons/search.svg');
 }
 
 @utility tw-shared-icon-search-green {
-  @apply tw-shared-icon-base w-5.25 h-5.75;
+  @apply 
+  tw-shared-icon-base 
+  w-5.25 
+  h-5.75;
+
   background-image: url('../../assets/icons/search-green.svg');
 }
 
 @utility tw-shared-icon-search-white {
-  @apply tw-shared-icon-base tw-shared-icon-button-reset w-5.25 h-5.75;
+  @apply 
+  tw-shared-icon-base 
+  tw-shared-icon-button-reset
+  w-5.25 
+  h-5.75;
+
   background-image: url('../../assets/icons/search-white.svg');
 }
 
 @utility tw-shared-icon-shield {
-  @apply tw-shared-icon-base w-5.75 h-6.75 md:w-10 md:h-12;
+  @apply 
+  tw-shared-icon-base 
+  w-5.75 
+  h-6.75 
+  md:w-10 
+  md:h-12;
+
   background-image: url('../../assets/icons/shield.svg');
 }
 
@@ -228,10 +358,14 @@
 
 @utility tw-shared-icon-tick {
   @apply tw-shared-icon-base;
+  
   background-image: url('../../assets/icons/tick.svg');
 }
 
 @utility tw-shared-icon-warning {
-  @apply tw-shared-icon-base w-3.5 h-4.75;
+  @apply tw-shared-icon-base 
+  w-3.5 
+  h-4.75;
+  
   background-image: url('../../assets/icons/warning.svg');
 }

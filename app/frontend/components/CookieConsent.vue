@@ -58,15 +58,31 @@ function reject() {
 @reference "#importtailwindcss";
 
 .ct-cookie-consent {
-  @apply lg:flex lg:items-center;
+  @apply
+  lg:flex
+  lg:items-center;
 }
 
 .ct-cookie-consent__container {
-  @apply fixed bottom-0 z-50 flex w-full flex-col gap-1 bg-theme-primary p-3 md:p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-4;
+  @apply
+  fixed
+  bottom-0
+  z-10
+  flex
+  lg:flex-row
+  w-full
+  flex-col
+  gap-1
+  lg:gap-4
+  lg:items-center
+  lg:justify-between
+  bg-theme-primary
+  p-3
+  md:p-6 ;
 }
 
 .ct-cookie-consent__description {
-  @apply text-base font-bold leading-[1.4] text-white;
+  @apply tw-shared-font-hind-siliguri__bold-base-white;
 
   a {
     @apply underline;
@@ -85,11 +101,8 @@ function reject() {
   items-center
   gap-3
   p-3
-  text-sm
-  font-bold
-  uppercase
-  leading-none
-  text-white;
+  tw-shared-font-hind-siliguri__light-xm-white
+  uppercase;
 }
 
 .ct-cookie-consent__button--accept {

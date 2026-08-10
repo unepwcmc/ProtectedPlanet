@@ -10,6 +10,12 @@
   gap-3;
 }
 
+@utility tw-shared-base-flex-gap-6 {
+  @apply
+  flex
+  gap-3;
+}
+
 @utility tw-shared-base-flex-col {
   @apply
   flex 

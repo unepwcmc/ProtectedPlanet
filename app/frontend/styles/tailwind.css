@@ -89,6 +89,10 @@
 @import './views/partials/footer/index.css';
 @import './views/partials/footer/social-follow.css';
 
+@import './views/partials/global/site-logo.css';
+
+@import './views/partials/messages/message-citation.css';
+
 @import './views/partials/social/share.css';
 
 @import './views/partials/thematic_and_data_area/footer.css';

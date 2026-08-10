@@ -22,6 +22,13 @@
   text-white;
 }
 
+@utility tw-shared-bg--white-border-grey {
+  @apply 
+  border-theme-grey
+  bg-white;
+}
+  
+
 @utility tw-shared-bg-center-no-repeat-cover {
   @apply 
   bg-center
