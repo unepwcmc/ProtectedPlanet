@@ -1,44 +1,26 @@
-<meta charset="utf-8">
-<title><%= page_title %></title>
-<meta name="description" content="<%= t('meta.site.description') %>">
-
-<!-- social meta tags -->
-<%== opengraph %>
-<!-- end social meta tags -->
-
-<!-- IE stuff -->
-<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-<!-- end IE stuff -->
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-
-<!-- Mixed content issue for downloads -->
-<% unless Rails.env.development? %>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<% end %>
-
-
-<link rel="manifest" href="/manifest.json">
-<%= csrf_meta_tags %>
-
-<!-- stylesheets -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-
-<% # Legacy SCSS pipeline: kept loading only for PDF export, which still relies on
+ <head>
+  <meta charset="utf-8">
+  <title>
+    <%= page_title %>
+  </title>
+  <meta name="description" content="<%= t('meta.site.description') %>">
+  <%== opengraph %>
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  <% unless Rails.env.development? %>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <% end %>
+  <link rel="manifest" href="/manifest.json">
+  <%= csrf_meta_tags %>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <% # Legacy SCSS pipeline: kept loading only for PDF export, which still relies on
    # it (pdf.scss only overrides on top of it) and hasn't been migrated to Tailwind yet. %>
-<% if @for_pdf %>
-  <%= stylesheet_link_tag 'pdf', media: 'all' %>
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-<% end %>
-<!-- end stylesheets -->
-
-<!-- scripts -->
-<%= vite_client_tag %>
-<%= vite_javascript_tag 'entrypoints/application' %>
-<%= vite_typescript_tag 'entrypoints/layout' %>
-
-<!-- Google Analytics (GA4) and Hotjar only load once the visitor accepts optional
-     cookies — see app/frontend/composables/useAnalytics.ts and the CookieConsent island. -->
-
-<!-- end scripts -->
+  <% if @for_pdf %>
+    <%= stylesheet_link_tag 'pdf', media: 'all' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+  <% end %>
+  <%= vite_client_tag %>
+  <%= vite_javascript_tag 'entrypoints/application' %>
+  <%= vite_typescript_tag 'entrypoints/layout' %>
+</head>
