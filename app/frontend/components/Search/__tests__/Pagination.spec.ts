@@ -8,9 +8,9 @@ describe('SearchSitePagination', () => {
   it('renders the item range and enables both buttons mid-range', () => {
     const wrapper = mount(SearchSitePagination, { props: baseProps })
 
-    expect(wrapper.find('.pagination__content').text()).toBe('16 - 30 of 45')
-    expect(wrapper.find('.pagination__button--previous').attributes('disabled')).toBeUndefined()
-    expect(wrapper.find('.pagination__button--next').attributes('disabled')).toBeUndefined()
+    expect(wrapper.find('.ct-search-pagination').text()).toBe('16 - 30 of 45')
+    expect(wrapper.find('.ct-search-pagination__button--previous').attributes('disabled')).toBeUndefined()
+    expect(wrapper.find('.ct-search-pagination__button--next').attributes('disabled')).toBeUndefined()
   })
 
   it('disables previous on the first page and next on the last page', () => {
@@ -18,15 +18,15 @@ describe('SearchSitePagination', () => {
       props: { ...baseProps, currentPage: 1, pageItemsStart: 1, pageItemsEnd: 45, totalItems: 45 }
     })
 
-    expect(wrapper.find('.pagination__button--previous').attributes('disabled')).toBeDefined()
-    expect(wrapper.find('.pagination__button--next').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-search-pagination__button--previous').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-search-pagination__button--next').attributes('disabled')).toBeDefined()
   })
 
   it('emits update:page with the next/previous page number', async () => {
     const wrapper = mount(SearchSitePagination, { props: baseProps })
 
-    await wrapper.find('.pagination__button--next').trigger('click')
-    await wrapper.find('.pagination__button--previous').trigger('click')
+    await wrapper.find('.ct-search-pagination__button--next').trigger('click')
+    await wrapper.find('.ct-search-pagination__button--previous').trigger('click')
 
     expect(wrapper.emitted('update:page')).toEqual([[3], [1]])
   })
@@ -36,17 +36,17 @@ describe('SearchSitePagination', () => {
       props: { ...baseProps, totalItems: 0, pageItemsStart: 1, pageItemsEnd: 1 }
     })
 
-    expect(wrapper.find('.pagination__content').exists()).toBe(false)
-    expect(wrapper.find('.pagination__no-results').text()).toBe('No results.')
+    expect(wrapper.find('.ct-search-pagination').exists()).toBe(false)
+    expect(wrapper.find('.ct-search-pagination__no-results').text()).toBe('No results.')
   })
 
   it('disables both buttons and does not emit update:page while loading', async () => {
     const wrapper = mount(SearchSitePagination, { props: { ...baseProps, loading: true } })
 
-    expect(wrapper.find('.pagination__button--previous').attributes('disabled')).toBeDefined()
-    expect(wrapper.find('.pagination__button--next').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-search-pagination__button--previous').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-search-pagination__button--next').attributes('disabled')).toBeDefined()
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-search-pagination__button--next').trigger('click')
 
     expect(wrapper.emitted('update:page')).toBeUndefined()
   })

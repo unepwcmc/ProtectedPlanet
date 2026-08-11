@@ -23,7 +23,7 @@ describe('Pame Table Pagination', () => {
     })
     const store = usePameStore()
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-pame-table-pagination__button--next').trigger('click')
 
     expect(store.requestedPage).toBe(2)
     expect(wrapper.emitted('requestItems')).toHaveLength(1)
@@ -35,7 +35,7 @@ describe('Pame Table Pagination', () => {
     })
     const store = usePameStore()
 
-    await wrapper.find('.pagination__button--previous').trigger('click')
+    await wrapper.find('.ct-pame-table-pagination__button--previous').trigger('click')
 
     expect(store.requestedPage).toBe(1)
     expect(wrapper.emitted('requestItems')).toBeUndefined()
@@ -47,10 +47,10 @@ describe('Pame Table Pagination', () => {
       props: { currentPage: 2, itemsPerPage: 50, totalItems: 120, totalPages: 3 }
     })
 
-    expect(wrapper.find('.pagination__button--next').attributes('disabled')).toBeDefined()
-    expect(wrapper.find('.pagination__button--previous').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-pame-table-pagination__button--next').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-pame-table-pagination__button--previous').attributes('disabled')).toBeDefined()
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-pame-table-pagination__button--next').trigger('click')
 
     expect(wrapper.emitted('requestItems')).toBeUndefined()
   })

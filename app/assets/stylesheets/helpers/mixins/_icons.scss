@@ -119,26 +119,6 @@ $icon-search-width: rem-calc(21);
   background-image: image_url('icons/circle-chevron-green-right.svg');
 }
 
-@mixin icon-circle-chevron-green-left() {
-  @include icon-circle-chevron;
-  background-image: image_url('icons/circle-chevron-green-left.svg');
-}
-
-@mixin icon-circle-chevron-green-right() {
-  @include icon-circle-chevron;
-  background-image: image_url('icons/circle-chevron-green-right.svg');
-}
-
-@mixin icon-circle-chevron-grey-left() {
-  @include icon-circle-chevron;
-  background-image: image_url('icons/circle-chevron-grey-left.svg');
-}
-
-@mixin icon-circle-chevron-grey-right() {
-  @include icon-circle-chevron;
-  background-image: image_url('icons/circle-chevron-grey-right.svg');
-}
-
 @mixin icon-circle-chevron-white() {
   @include icon-basic;
   @include icon-image('circle-chevron-white.svg', rem-calc(34), rem-calc(34));

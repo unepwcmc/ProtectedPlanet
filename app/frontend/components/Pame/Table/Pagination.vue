@@ -1,34 +1,48 @@
 <template>
-  <div class="pagination right">
-    <div
-      v-if="hasResults"
-      class="pagination__content"
+  <div
+    v-if="hasResults"
+    class="ct-pame-table-pagination"
+  >
+    <span
+      class="ct-pame-table-pagination__text"
+      v-text="`${firstItem} - ${lastItem} of ${totalItems}`"
+    />
+    <button
+      class="ct-pame-table-pagination__button
+      ct-pame-table-pagination__button--previous"
+      :class="{ 'ct-pame-table-pagination__button--disabled': isPreviousDisabled }"
+      :disabled="isPreviousDisabled"
+      @click="onChangePage('previous')"
     >
-      <span class="bold">{{ firstItem }} - {{ lastItem }} of {{ totalItems }}</span>
-      <button
-        class="pagination__button--previous"
-        :class="{ 'ct-pame-table-pagination__button--disabled': !isPreviousActive || pameStore.isFetching }"
-        :disabled="!isPreviousActive || pameStore.isFetching"
-        @click="onChangePage('previous')"
+      <IconCircleChevron
+        direction="left"
+        circleColor="green"
+        class="ct-pame-table-pagination__icon"
       />
-      <button
-        class="pagination__button--next"
-        :class="{ 'ct-pame-table-pagination__button--disabled': !isNextActive || pameStore.isFetching }"
-        :disabled="!isNextActive || pameStore.isFetching"
-        @click="onChangePage('next')"
-      />
-    </div>
-    <div
-      v-else
-      class="left"
+    </button>
+    <button
+      class="ct-pame-table-pagination__button
+      ct-pame-table-pagination__button--next"
+      :class="{ 'ct-pame-table-pagination__button--disabled': isNextDisabled }"
+      :disabled="isNextDisabled"
+      @click="onChangePage('next')"
     >
-      <p>There are no records matching the selected filters</p>
-    </div>
+      <IconCircleChevron
+        circleColor="green"
+        class="ct-pame-table-pagination__icon"
+      />
+    </button>
   </div>
+  <p
+    v-else
+    class="ct-pame-table-pagination__no-results"
+    v-text="'There are no records matching the selected filters'"
+  />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import IconCircleChevron from '@/components/Icon/CircleChevron.vue'
 import { usePameStore } from '@/stores/usePameStore'
 
 const props = defineProps<{
@@ -45,6 +59,8 @@ const pameStore = usePameStore()
 const isNextActive = computed(() => props.currentPage < props.totalPages)
 const isPreviousActive = computed(() => props.currentPage > 1)
 const hasResults = computed(() => props.totalItems > 0)
+const isNextDisabled = computed(() => !isNextActive.value || pameStore.isFetching)
+const isPreviousDisabled = computed(() => !isPreviousActive.value || pameStore.isFetching)
 
 const firstItem = computed(() => {
   if (props.totalItems === 0) return 0
@@ -66,7 +82,40 @@ function onChangePage(direction: 'previous' | 'next') {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-pame-table-pagination {
+  @apply
+  tw-shared-base-flex-gap-3
+  justify-end
+  items-center;
+}
+
+.ct-pame-table-pagination__text {
+  @apply tw-shared-font-hind-siliguri__bold-base-lg-lg;
+}
+
+.ct-pame-table-pagination__button {
+  @apply
+  flex
+  items-center
+  justify-center
+  border-none
+  cursor-pointer
+  no-underline
+  outline-none;
+}
+
 .ct-pame-table-pagination__button--disabled {
   @apply tw-shared-button--disabled;
+}
+
+.ct-pame-table-pagination__icon {
+  @apply size-8.5;
+}
+
+.ct-pame-table-pagination__no-results {
+  @apply
+  tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-dark
+  text-center
+  my-15;
 }
 </style>

@@ -95,7 +95,7 @@ describe('Pame Table Index', () => {
       props: { ...props, json: { ...props.json, total_entries: 120, total_pages: 3 } }
     })
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-pame-table-pagination__button--next').trigger('click')
     await flushPromises()
 
     expect(fetch).toHaveBeenCalledTimes(1)
@@ -112,7 +112,7 @@ describe('Pame Table Index', () => {
       props: { ...props, json: { ...props.json, total_entries: 120, total_pages: 3 } }
     })
 
-    const nextButton = wrapper.find('.pagination__button--next')
+    const nextButton = wrapper.find('.ct-pame-table-pagination__button--next')
     await nextButton.trigger('click')
     // The button disables itself once the store's isFetching flips, but the guard
     // in fetchItems is what actually matters here — assert the network effect,
@@ -139,7 +139,7 @@ describe('Pame Table Index', () => {
 
     expect(wrapper.find('.ct-pame-table__overlay').exists()).toBe(false)
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-pame-table-pagination__button--next').trigger('click')
 
     expect(wrapper.find('.ct-pame-table__overlay').exists()).toBe(true)
     expect(wrapper.find('.ct-pame-table__body').attributes('aria-busy')).toBe('true')

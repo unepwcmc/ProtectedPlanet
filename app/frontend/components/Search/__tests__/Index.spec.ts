@@ -101,11 +101,11 @@ describe('SearchSite', () => {
     }))
     const wrapper = mountSearchSite({ dataPageLoad: { ...baseProps.dataPageLoad, pageItemsEnd: 1, totalItems: 3 } })
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-search-pagination__button--next').trigger('click')
 
     expect(wrapper.find('.ct-search__input').attributes('disabled')).toBeDefined()
     expect(wrapper.findAll('.tabs--search-main li')[1].attributes('aria-disabled')).toBe('true')
-    expect(wrapper.find('.pagination__button--next').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-search-pagination__button--next').attributes('disabled')).toBeDefined()
 
     resolveFetch(jsonResponse({
       searchTerm: '', currentPage: 2, pageItemsStart: 2, pageItemsEnd: 2, totalItems: 3, results: []
@@ -119,7 +119,7 @@ describe('SearchSite', () => {
     }))
     const wrapper = mountSearchSite({ dataPageLoad: { ...baseProps.dataPageLoad, pageItemsEnd: 1, totalItems: 3 } })
 
-    await wrapper.find('.pagination__button--next').trigger('click')
+    await wrapper.find('.ct-search-pagination__button--next').trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
