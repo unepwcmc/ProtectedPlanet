@@ -1,33 +1,33 @@
 <template>
-  <ul class="ct-listing-filters-panel-desktop__groups">
-    <li
-      v-for="(group, index) in filterGroups"
-      :key="index"
-      class="ct-listing-filters-panel-desktop__group"
-    >
-      <h3
-        class="ct-listing-filters-panel-desktop__group-title"
-        v-text="group.title"
-      />
-      <ListingFilterGroup
-        v-for="filter in group.filters"
+  <div class="ct-listing-filters-panel-desktop">
+    <h3
+      class="ct-listing-filters-panel-desktop__title"
+      v-text="filtersTitle"
+    />
+    <ul class="ct-listing-filters-panel-desktop__list">
+      <li
+        v-for="filter in filters"
         :key="filter.id"
-        :filter
-        :gaId
-        :preSelected="preSelected?.[filter.id]"
-        :textClear
-        @update:filter="onUpdateFilter"
-      />
-    </li>
-  </ul>
+      >
+        <ListingFilterGroup
+          :filter
+          :gaId
+          :preSelected="preSelected?.[filter.id]"
+          :textClear
+          @update:filter="onUpdateFilter"
+        />
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup lang="ts">
 import ListingFilterGroup from '@/components/Listing/FilterGroup.vue'
-import type { ListingFilterGroup as ListingFilterGroupType } from '@/types/backend'
+import type { ListingFilter } from '@/types/backend'
 
 defineProps<{
-  filterGroups: ListingFilterGroupType[]
+  filters: ListingFilter[]
+  filtersTitle?: string
   gaId?: string
   preSelected?: Record<string, Array<string | number>>
   textClear: string
@@ -43,7 +43,7 @@ function onUpdateFilter(payload: { id: string, options: Array<string | number> }
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-listing-filters-panel-desktop__groups {
+.ct-listing-filters-panel-desktop {
   @apply
   grow
   pt-6
@@ -53,11 +53,14 @@ function onUpdateFilter(payload: { id: string, options: Array<string | number> }
   overflow-y-auto;
 }
 
-.ct-listing-filters-panel-desktop__group {
-  @apply tw-shared-base-flex-col-gap-6;
+.ct-listing-filters-panel-desktop__title {
+  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black;
 }
 
-.ct-listing-filters-panel-desktop__group-title {
-  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black;
+.ct-listing-filters-panel-desktop__list {
+  @apply
+  tw-shared-base-flex-col-gap-6
+  m-0
+  p-0;
 }
 </style>

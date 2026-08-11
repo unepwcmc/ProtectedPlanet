@@ -2,9 +2,10 @@
   @apply tw-shared-base-wrapper;
 }
 
-.vw-layouts-cms-about__container {
-  @apply tw-shared-base-container
-  tw-shared-base-flex-col-gap-6-and-9;
+.vw-layouts-cms-about__content {
+  @apply
+  tw-shared-base-container--medium
+  tw-shared-cms-wysiwyg;
 }
 
 .vw-layouts-cms-about__container--medium {

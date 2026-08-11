@@ -101,7 +101,7 @@ function reject() {
   items-center
   gap-3
   p-3
-  tw-shared-font-hind-siliguri__light-xm-white
+  tw-shared-font-hind-siliguri__light-sm-white
   uppercase;
 }
 

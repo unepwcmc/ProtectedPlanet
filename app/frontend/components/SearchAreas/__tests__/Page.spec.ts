@@ -72,7 +72,7 @@ describe('SearchAreasPage', () => {
   it('shows the no-results message when total is zero', () => {
     const wrapper = mountSearchAreas({ results: { ...baseProps.results, total: 0, areas: [] } })
 
-    expect(wrapper.find('.search__results-none').text()).toBe('No results.')
+    expect(wrapper.find('.ct-search-areas-results__none').text()).toBe('No results.')
   })
 
   it('disables the download button when there are no results', () => {
@@ -88,7 +88,7 @@ describe('SearchAreasPage', () => {
     }))
     const wrapper = mountSearchAreas()
 
-    await wrapper.findAll('.tabs--search-areas li')[1].trigger('click')
+    await wrapper.findAll('.ct-search-areas-tab-strip li')[1].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
@@ -104,7 +104,7 @@ describe('SearchAreasPage', () => {
     }))
     const wrapper = mountSearchAreas()
 
-    await wrapper.findAll('.tabs--search-areas li')[0].trigger('click')
+    await wrapper.findAll('.ct-search-areas-tab-strip li')[0].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     expect(wrapper.find('.ct-filters-trigger').classes()).toContain('ct-filters-trigger--disabled')

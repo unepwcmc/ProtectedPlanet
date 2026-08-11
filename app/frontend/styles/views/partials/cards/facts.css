@@ -12,7 +12,7 @@
   bg-theme-grey-xlight
   size-60
   md:w-68.5
-  md:h-73.5
+  md:h-75
   py-6
   px-4.5
   md:p-5.5;
@@ -47,7 +47,7 @@
 
 .vw-partials-cards-facts__number-large {
   @apply
-  tw-shared-font-hind-siliguri__light-4xl-md-7xl-leading-1-2-primary
+  tw-shared-font-hind-siliguri__light-4xl-md-7xl-leading-1-1-primary
   text-center;
 }
 
@@ -56,10 +56,10 @@
 }
 
 .vw-partials-cards-facts__text {
-  @apply tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-2-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-md-lg-grey-black;
 }
 
 .vw-partials-cards-facts__title {
   @apply
-  tw-shared-font-hind-siliguri__bold-base-md-xl-leading-1-2-grey-black;
+  tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black;
 }

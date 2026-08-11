@@ -1,12 +1,13 @@
 <template>
-  <ul>
-    <SearchAreasTabStripTab
+  <ul class="ct-tab-strip">
+    <TabStripTab
       v-for="child in children"
       :id="child.id"
       :key="child.id"
       :disabled
       :gaId="googleAnalyticsId(child)"
       :selectedId
+      size="default"
       :title="child.title"
       @click:tab="click"
     />
@@ -16,7 +17,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import useAnalytics from '@/composables/useAnalytics'
-import SearchAreasTabStripTab from '@/components/SearchAreas/TabStrip/Tab.vue'
+import TabStripTab from '@/components/TabStrip/Tab.vue'
 
 const { trackEvent } = useAnalytics()
 
@@ -67,3 +68,14 @@ watch(() => props.preSelectedId, () => {
   click(props.preSelectedId)
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-tab-strip {
+  @apply
+  tw-shared-base-flex-gap-3
+  overflow-x-auto;
+}
+
+</style>

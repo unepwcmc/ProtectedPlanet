@@ -68,7 +68,10 @@ onMounted(() => {
 }
 
 .ct-listing-filter-group__header {
-  @apply flex items-center;
+  @apply
+  flex
+  justify-between
+  items-center;
 }
 
 .ct-listing-filter-group__title {
@@ -80,8 +83,8 @@ onMounted(() => {
   tw-shared-button-basic
   flex
   items-center
-  ml-auto
-  text-sm;
+  tw-shared-font-hind-siliguri__light-sm
+  tw-shared-base-flex-gap-2;
 }
 
 .ct-listing-filter-group__clear-icon {
@@ -89,13 +92,14 @@ onMounted(() => {
   flex
   items-center
   justify-center
-  ml-1.5
-  size-4.5
+  p-1
   rounded-full
   bg-black;
 }
 
 .ct-listing-filter-group__clear-icon-svg {
-  @apply size-2.5 text-white;
+  @apply
+  size-2
+text-white;
 }
 </style>

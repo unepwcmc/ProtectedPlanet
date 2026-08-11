@@ -12,11 +12,11 @@
 }
 
 .vw-layouts-cms-resource__date {
-  @apply tw-shared-font-hind-siliguri__light-xm-grey;
+  @apply tw-shared-font-hind-siliguri__light-sm-grey;
 }
 
 .vw-layouts-cms-resource__title {
-  @apply tw-shared-font-playfair__bold-xl-lg-2xl;
+  @apply tw-shared-font-playfair__bold-xl-lg-2xl-grey-black;
 }
 
 .vw-layouts-cms-resource__content {

@@ -4,8 +4,7 @@
       v-if="tabs.length > 1"
       class="card--stats-toggle"
     >
-      <SearchAreasTabStrip
-        class="tabs--rounded"
+      <TabStrip
         :children="tabs"
         :gaId
         @click:tab="onSelectDatabase"
@@ -54,7 +53,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import SearchAreasTabStrip from '@/components/SearchAreas/TabStrip/Index.vue'
+import TabStrip from '@/components/TabStrip/Index.vue'
 import StatsCoverage from '@/components/Stats/Coverage.vue'
 import StatsDesignations from '@/components/Stats/Designations.vue'
 import StatsGovernance from '@/components/Stats/Governance.vue'

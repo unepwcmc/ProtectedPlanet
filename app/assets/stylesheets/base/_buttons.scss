@@ -112,21 +112,6 @@ $padding-medium: rem-calc(27);
   @include button-basic;
   @include icon-cross;
 }
-@mixin button-clear {
-  @include button-basic;
-  @include flex;
-  @include flex-v-center;
-
-  &::after {
-    @include icon-cross-white;
-    background-color: $black;
-    background-size: 54%;
-    border-radius: 100%;
-    content: '';
-    margin-left: rem-calc(6);
-    width: rem-calc(18); height: rem-calc(18);
-  }
-}
 @mixin button-dropdown {
   @include button-with-icon;
   &::after { @include icon-chevron-black-down; }
@@ -204,24 +189,6 @@ $padding-medium: rem-calc(27);
   }
   @include breakpoint($small) {
     width: rem-calc(47); height: rem-calc(47);
-  }
-}
-@mixin button-tab-rounded($size: default) {
-  @include button-basic;
-  border: solid transparent 1px;
-  border-radius: rem-calc(20);
-  @if $size == 'small' {
-    font-size: rem-calc(14);
-    padding: rem-calc(6 16);
-  } @else {
-    @include text-tabs-fake;
-    padding: rem-calc(5 26);
-  }
-  &:hover,
-  .active { border-color: $primary; }
-  &.active {
-    background-color: $primary;
-    color: $white;
   }
 }
 //--------------------------------------------------

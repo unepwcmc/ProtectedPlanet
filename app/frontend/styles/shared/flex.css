@@ -4,10 +4,23 @@
   gap-1;
 }
 
+@utility tw-shared-base-flex-gap-2 {
+  @apply
+  flex
+  gap-2;
+}
+
 @utility tw-shared-base-flex-gap-3 {
   @apply
   flex
   gap-3;
+}
+
+@utility tw-shared-base-flex-gap-1-md-gap-3 {
+  @apply
+  flex
+  gap-1
+  md:gap-3;
 }
 
 @utility tw-shared-base-flex-gap-6 {
@@ -21,6 +34,13 @@
   flex
   gap-9;
 }
+
+@utility tw-shared-base-flex-gap-3-md-gap-6 {
+  @apply
+  flex
+  gap-3
+  md:gap-6;
+} 
 
 @utility tw-shared-base-flex-gap-3-lg-gap-9 {
   @apply
@@ -39,6 +59,12 @@
   @apply
   tw-shared-base-flex-col
   gap-1;
+}
+
+@utility tw-shared-base-flex-col-gap-2 {
+  @apply
+  tw-shared-base-flex-col
+  gap-2;
 }
 
 @utility tw-shared-base-flex-col-gap-3 {

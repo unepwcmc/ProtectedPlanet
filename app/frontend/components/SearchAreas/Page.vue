@@ -1,19 +1,25 @@
 <template>
-  <div class="search--results-areas">
-    <div class="search__bar">
-      <div class="search__bar-content">
-        <FiltersTrigger
-          :isDisabled="isFilterPaneDisabled"
-          :text="textFilters"
-          @toggle:filterPane="toggleFilterPane"
-        />
-        <SearchAreasInputAutocomplete
-          :config="configAutocomplete"
-          :endpoint="endpointAutocomplete"
-          :prePopulatedSearchTerm="searchTerm"
-          @submit:search="updateSearchTerm"
-        />
+  <div class="ct-search-areas-page">
+    <Teleport
+      to="#vw-hero-search-target"
+      :disabled="!heroSearchTargetExists"
+    >
+      <div class="ct-search-areas-page__bar">
+        <div class="ct-search-areas-page__bar--left">
+          <FiltersTrigger
+            :isDisabled="isFilterPaneDisabled"
+            :text="textFilters"
+            @toggle:filterPane="toggleFilterPane"
+          />
+          <SearchAreasInputAutocomplete
+            :config="configAutocomplete"
+            :endpoint="endpointAutocomplete"
+            :prePopulatedSearchTerm="searchTerm"
+            @submit:search="updateSearchTerm"
+          />
+        </div>
         <Download
+          class="ct-search-areas-page__bar--right"
           :buttonText="downloadButtonText"
           :downloadDisabled
           :gaId
@@ -21,12 +27,13 @@
           :textCommercial="downloadTextCommercial"
         />
       </div>
-    </div>
-    <div class="search__main">
+    </Teleport>
+    <div class="ct-search-areas-page__main">
       <SearchAreasFiltersPanel
-        class="search__filters"
+        class="ct-search-areas-page__filters"
         :filterCloseText="textClose"
-        :filterGroups="filterGroupsWithPreSelected"
+        :filters
+        :filtersTitle
         :gaId
         :isActive="isFilterPaneActive"
         :textClear
@@ -35,26 +42,26 @@
         @update:filterGroup="updateFilters"
         @toggle:filterPane="toggleFilterPane"
       />
-      <div class="search__results">
-        <SearchAreasTabStrip
+      <div class="ct-search-areas-page__results">
+        <TabStrip
+          class="ct-search-areas-page__strips"
           :children="tabs"
-          class="tabs--search-areas"
           :defaultSelectedId="tabIdDefault"
           :gaId
           :preSelectedId="tabIdSelected"
           @click:tab="updateSelectedTab"
         />
         <SearchAreasResults
-          v-show="!loadingResults"
+          v-if="!loadingResults"
           :noResultsText
           :results="newResults"
           :smTriggerElement
           :resetKey="paginationResetKey"
           @requestMore="requestMore"
         />
-        <span
-          class="icon--loading-spinner margin-center search__spinner"
-          :class="{ 'icon-visible': loadingResults }"
+        <IconLoadingSpinner
+          v-if="loadingResults"
+          class="ct-search-areas-page__spinner"
         />
       </div>
     </div>
@@ -62,16 +69,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import FiltersTrigger from '@/components/Filters/Trigger.vue'
-import SearchAreasFiltersPanel from '@/components/SearchAreas/FiltersPanel.vue'
+import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
+import SearchAreasFiltersPanel from '@/components/SearchAreas/FiltersPanel/Index.vue'
 import SearchAreasInputAutocomplete from '@/components/SearchAreas/InputAutocomplete.vue'
 import SearchAreasResults from '@/components/SearchAreas/Results/Index.vue'
-import SearchAreasTabStrip from '@/components/SearchAreas/TabStrip/Index.vue'
+import TabStrip from '@/components/TabStrip/Index.vue'
 import Download from '@/components/Download/Index.vue'
 import { getJson } from '@/lib/http'
 import { useDownloadStore } from '@/stores/useDownloadStore'
-import type { SearchAreasPageProps, SearchAreasResults as SearchAreasResultsData, SearchFilterGroup } from '@/types/backend'
+import type { SearchAreasPageProps, SearchAreasResults as SearchAreasResultsData, SearchFilter, SearchFilterGroup } from '@/types/backend'
 
 type SearchAreasPage = SearchAreasPageProps
 const props = defineProps<SearchAreasPage>()
@@ -81,8 +89,21 @@ const QUERY_STRING_PARAMS_FILTERS = ['db_type', 'is_type', 'special_status', 'de
 
 const downloadStore = useDownloadStore()
 
+// The hero partial renders an empty #vw-hero-search-target for this bar to teleport
+// into, so it visually sits inside the hero while the rest of this component's tree
+// (filters panel, tabs, results) stays at its own mount point below. Falls back to
+// rendering the bar in place when no hero target exists (e.g. component tests).
+const heroSearchTargetExists = ref(false)
+onMounted(() => {
+  heroSearchTargetExists.value = document.querySelector('#vw-hero-search-target') !== null
+})
+
 const activeFilterOptions = ref<Record<string, unknown>>({})
-const filterGroupsWithPreSelected = ref<SearchFilterGroup[]>(props.filterGroups)
+// The backend always returns at most one filter group (Search::FiltersSerializer#serialize
+// is a hardcoded single-element array, never a real multi-group structure) — flatten it here
+// once so the rest of this component and the FiltersPanel tree work with a plain filter list.
+const filtersTitle = props.filterGroups[0]?.title ?? ''
+const filters = ref<SearchFilter[]>(props.filterGroups[0]?.filters ?? [])
 const isFilterPaneActive = ref(false)
 const isFilterPaneDisabled = ref(false)
 const loadingResults = ref(false)
@@ -168,27 +189,24 @@ function handleQueryString() {
   if (paramsFromUrl.has('filters[location][type]')) filterParams.push('location[type]')
   if (paramsFromUrl.has('filters[location][options][]')) filterParams.push('location[options]')
 
-  filterGroupsWithPreSelected.value = props.filterGroups.map(filterGroup => ({
-    ...filterGroup,
-    filters: filterGroup.filters.map((filter) => {
-      const updatedFilter = { ...filter }
-      delete updatedFilter.preSelected
+  filters.value = (props.filterGroups[0]?.filters ?? []).map((filter) => {
+    const updatedFilter = { ...filter }
+    delete updatedFilter.preSelected
 
-      filterParams.forEach((key) => {
-        if (filter.id === key) {
-          updatedFilter.preSelected = paramsFromUrl.getAll(`filters[${key}][]`)
-        }
-        if (filter.id === 'location' && key === 'location[type]') {
-          updatedFilter.preSelected = [{
-            type: paramsFromUrl.get('filters[location][type]') ?? '',
-            options: paramsFromUrl.getAll('filters[location][options][]')
-          }]
-        }
-      })
-
-      return updatedFilter
+    filterParams.forEach((key) => {
+      if (filter.id === key) {
+        updatedFilter.preSelected = paramsFromUrl.getAll(`filters[${key}][]`)
+      }
+      if (filter.id === 'location' && key === 'location[type]') {
+        updatedFilter.preSelected = [{
+          type: paramsFromUrl.get('filters[location][type]') ?? '',
+          options: paramsFromUrl.getAll('filters[location][options][]')
+        }]
+      }
     })
-  }))
+
+    return updatedFilter
+  })
 }
 
 function updateDisabledComponents(selectedTabId: string) {
@@ -211,7 +229,7 @@ function updateFilters(filters: Record<string, unknown>) {
 
 function updateProperties(response: SearchAreasResultsResponse, resetFilters: boolean) {
   newResults.value = response.areas
-  if (resetFilters) filterGroupsWithPreSelected.value = response.filters
+  if (resetFilters) filters.value = response.filters[0]?.filters ?? []
 }
 
 type QueryStringUpdate = { filters: Record<string, unknown> } | { search_term: string } | { geo_type: string }
@@ -297,3 +315,63 @@ function toggleFilterPane() {
 
 handleQueryString()
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-areas-page {
+  @apply bg-theme-grey-xlight text-theme-grey-black;
+}
+
+.ct-search-areas-page__bar {
+  @apply
+  py-2
+  tw-shared-base-container
+  tw-shared-base-flex-gap-3-md-gap-6
+  items-center
+  justify-between;
+}
+
+.ct-search-areas-page__bar--left{
+  @apply
+  tw-shared-base-flex-gap-3-md-gap-6
+  grow
+  md:grow-0
+  items-center
+  md:justify-between
+  md:w-4/5;
+}
+
+.ct-search-areas-page__main {
+  @apply
+  tw-shared-base-container
+  tw-shared-base-flex-gap-6
+  items-start;
+}
+
+.ct-search-areas-page__filters {
+  @apply
+  shrink-0
+  pr-0
+  md:w-1/3
+  lg:w-[27.5%];
+}
+
+.ct-search-areas-page__results {
+  @apply
+  pt-6
+  grow
+  w-full
+  min-h-75
+  md:min-h-150
+  tw-shared-base-flex-col-gap-6;
+}
+
+.ct-search-areas-page__strips {
+  @apply self-center;
+}
+
+.ct-search-areas-page__spinner {
+  @apply mx-auto my-13.75 size-10 text-black;
+}
+</style>

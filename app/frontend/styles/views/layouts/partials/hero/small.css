@@ -1,8 +1,8 @@
 .vw-layouts-partials-hero-small {
   @apply
   tw-shared-hero-wrapper-common
-  flex
-  items-center
+  tw-shared-base-flex-col
+  justify-between
   bg-white
   min-h-37.5
   md:min-h-52.5
@@ -10,9 +10,16 @@
 }
 
 .vw-layouts-partials-hero-small__container {
-  @apply tw-shared-base-container;
+  @apply 
+  grow
+  tw-shared-base-container
+  h-full
+  tw-shared-base-flex-col
+  justify-center;
 }
 
 .vw-layouts-partials-hero-small__title {
-  @apply tw-shared-font-playfair__font-bold-3xl-md-4xl;
+  @apply  
+  tw-shared-font-playfair__bold-3xl-md-4xl-grey-black 
+  md:w-1/2;
 }

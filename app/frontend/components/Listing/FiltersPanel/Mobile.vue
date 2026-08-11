@@ -6,27 +6,26 @@
         v-text="title"
       />
     </div>
-    <ul class="ct-listing-filters-panel-mobile__groups">
-      <li
-        v-for="(group, index) in filterGroups"
-        :key="index"
-        class="ct-listing-filters-panel-mobile__group"
-      >
-        <h3
-          class="ct-listing-filters-panel-mobile__group-title"
-          v-text="group.title"
-        />
-        <ListingFilterGroup
-          v-for="filter in group.filters"
+    <div class="ct-listing-filters-panel-mobile__groups">
+      <h3
+        class="ct-listing-filters-panel-mobile__group-title"
+        v-text="filtersTitle"
+      />
+      <ul class="ct-listing-filters-panel-mobile__list">
+        <li
+          v-for="filter in filters"
           :key="filter.id"
-          :filter
-          :gaId
-          :preSelected="preSelected?.[filter.id]"
-          :textClear
-          @update:filter="onUpdateFilter"
-        />
-      </li>
-    </ul>
+        >
+          <ListingFilterGroup
+            :filter
+            :gaId
+            :preSelected="preSelected?.[filter.id]"
+            :textClear
+            @update:filter="onUpdateFilter"
+          />
+        </li>
+      </ul>
+    </div>
     <span
       class="ct-listing-filters-panel-mobile__footer"
       @click="onToggleFilterPane"
@@ -39,11 +38,12 @@
 import { toRef } from 'vue'
 import ListingFilterGroup from '@/components/Listing/FilterGroup.vue'
 import useFreezeBackground from '@/composables/useFreezeBackground'
-import type { ListingFilterGroup as ListingFilterGroupType } from '@/types/backend'
+import type { ListingFilter } from '@/types/backend'
 
 const props = defineProps<{
   filterCloseText: string
-  filterGroups: ListingFilterGroupType[]
+  filters: ListingFilter[]
+  filtersTitle?: string
   gaId?: string
   isActive: boolean
   preSelected?: Record<string, Array<string | number>>
@@ -89,30 +89,34 @@ function onToggleFilterPane() {
   border-b
   border-solid
   border-theme-grey
-  px-6
+  p-6
   h-13.5;
 }
 
 .ct-listing-filters-panel-mobile__title {
-  @apply tw-shared-font-hind-siliguri__light-lg-md-xl;
+  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
 }
 
 .ct-listing-filters-panel-mobile__groups {
   @apply
+  h-[85%]
   w-full
   overflow-y-auto
   pr-5.5
   pb-6
   pl-5.5
-  h-[calc(100vh-3.375rem-4.375rem)];
-}
-
-.ct-listing-filters-panel-mobile__group {
-  @apply tw-shared-base-flex-col-gap-9;
+  tw-shared-base-flex-col-gap-6;
 }
 
 .ct-listing-filters-panel-mobile__group-title {
   @apply tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-black;
+}
+
+.ct-listing-filters-panel-mobile__list {
+  @apply
+  tw-shared-base-flex-col-gap-9
+  m-0
+  p-0;
 }
 
 .ct-listing-filters-panel-mobile__footer {
@@ -127,7 +131,6 @@ function onToggleFilterPane() {
   bg-theme-grey-xdark
   text-white
   text-xl
-  font-bold
-  cursor-pointer;
+  font-bold;
 }
 </style>

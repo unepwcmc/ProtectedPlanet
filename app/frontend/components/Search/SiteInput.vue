@@ -1,7 +1,7 @@
 <template>
   <div
     ref="rootEl"
-    class="ct-search ct-search--main"
+    class="ct-search"
     :disabled
   >
     <button
@@ -33,7 +33,7 @@
       <div
         class="ct-search__wrapper"
         :class="{
-          'ct-search__wrapper--popout':popout,
+          'ct-search__wrapper--popout': popout,
           'ct-search__wrapper--disabled': disabled
         }"
       >
@@ -109,7 +109,7 @@ function toggleInput() {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-search--main {
+.ct-search {
   @apply relative;
 }
 
@@ -129,15 +129,38 @@ function toggleInput() {
 }
 
 .ct-search__trigger-icon {
-  @apply size-3.75 text-white md:h-5.75 md:w-5.25;
+  @apply
+  text-white
+  size-3.75
+  md:size-5.25;
 }
 
 .ct-search__pane {
-  @apply w-full;
+  @apply
+  w-full
+  tw-shared-base-flex-gap-9;
 }
 
 .ct-search__pane--popout {
-  @apply fixed inset-0 z-20 hidden h-screen w-full flex-col bg-white px-5 pt-5 md:inset-auto md:absolute md:top-0 md:right-0 md:h-auto md:w-150 md:bg-transparent md:p-0;
+  @apply
+  fixed
+  inset-0
+  z-20
+  hidden
+  h-screen
+  w-full
+  flex-col
+  bg-white
+  px-5
+  pt-5
+  md:inset-auto
+  md:absolute
+  md:top-0
+  md:right-0
+  md:h-auto
+  md:w-150
+  md:bg-transparent
+  md:p-0;
 }
 
 .ct-search__pane--popout-active {
@@ -145,19 +168,40 @@ function toggleInput() {
 }
 
 .ct-search__header {
-  @apply mb-6 flex justify-end md:hidden;
+  @apply
+  flex
+  justify-end
+  items-center
+  md:hidden;
 }
 
 .ct-search__close {
-  @apply flex size-9 cursor-pointer items-center justify-center rounded-[3px] border-0 bg-transparent p-0;
+  @apply
+  flex
+  items-center
+  justify-center;
 }
 
 .ct-search__close-icon {
-  @apply size-4 text-theme-grey-black;
+  @apply
+  size-5
+  text-theme-grey-black;
 }
 
 .ct-search__wrapper {
-  @apply w-full p-1 md:px-3 flex gap-1 items-center justify-between border-b border-b-black md:rounded md:border md:border-black;
+  @apply
+  w-full
+  p-2
+  md:px-4
+  tw-shared-base-flex-gap-3
+  items-center
+  justify-between
+  border-b
+  h-12
+  border-b-theme-grey
+  md:rounded
+  md:border
+  md:border-theme-grey;
 }
 
 .ct-search__wrapper--popout {
@@ -165,7 +209,11 @@ function toggleInput() {
 }
 
 .ct-search__wrapper--disabled {
-   @apply bg-theme-grey/10 text-theme-grey/10 cursor-not-allowed pointer-events-none;
+   @apply
+   bg-theme-grey/10
+   text-theme-grey/10
+   cursor-not-allowed
+   pointer-events-none;
 }
 
 .ct-search__wrapper--disabled * {
@@ -173,18 +221,37 @@ function toggleInput() {
 }
 
 .ct-search__icon {
-  @apply h-5.75 w-5.25 text-theme-primary;
+  @apply
+  size-5.75
+  text-theme-primary
+  shrink-0;
 }
 
 .ct-search__input {
-  @apply grow w-full border-none bg-transparent focus:outline-none;
+  @apply
+  grow
+  w-full
+  border-none
+  bg-transparent
+  focus:outline-none;
 }
 
 .ct-search__submit {
-  @apply size-8.75 flex justify-center items-center rounded border-0 bg-theme-primary disabled:bg-theme-grey/10 p-0;
+  @apply
+  shrink-0
+  size-8.75
+  flex
+  justify-center
+  items-center
+  rounded
+  bg-theme-primary
+  disabled:bg-theme-grey/10 p-0;
 }
 
 .ct-search__submit-icon {
-  @apply h-2.5 w-3.5 -rotate-90 text-white;
+  @apply
+  size-3.5
+  -rotate-90
+  text-white;
 }
 </style>

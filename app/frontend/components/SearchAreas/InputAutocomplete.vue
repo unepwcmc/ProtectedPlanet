@@ -114,7 +114,9 @@ watch(() => props.prePopulatedSearchTerm, () => {
 @reference "#importtailwindcss";
 
 .ct-search-areas-autocomplete {
-  @apply relative;
+  @apply
+  relative
+  w-full;
 }
 
 .ct-search-areas-autocomplete__search-bar {
@@ -140,8 +142,8 @@ watch(() => props.prePopulatedSearchTerm, () => {
 .ct-search-areas-autocomplete__input {
   @apply
   tw-shared-font-hind-siliguri__light-lg-grey-black
-  h-11.5
-  md:h-18.75
+  h-8
+  md:h-10
   grow;
 }
 

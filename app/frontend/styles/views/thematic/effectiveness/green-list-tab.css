@@ -24,7 +24,7 @@
 }
 
 .vw-thematic-effectiveness-green-list-tab__about-title {
-  @apply tw-shared-font-playfair__bold-xl-md-2xl-semi-bold;
+  @apply tw-shared-font-playfair__semi-bold-xl-md-2xl-grey-black;
 }
 
 .vw-thematic-effectiveness-green-list-tab__about-content {

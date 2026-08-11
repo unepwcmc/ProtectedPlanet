@@ -1,5 +1,5 @@
 <template>
-  <div class="search--main">
+  <div class="ct-search-site">
     <SearchSiteInput
       :disabled="loadingResults"
       :placeholder
@@ -8,7 +8,6 @@
     />
     <SearchSiteTabStrip
       :children="categories"
-      class="tabs--search-main"
       :defaultSelectedId="defaultCategoryId"
       :disabled="loadingResults"
       :gaId
@@ -21,9 +20,9 @@
       :resultsText
       :totalItems
     />
-    <span
-      class="icon--loading-spinner margin-center search__spinner"
-      :class="{ 'icon-visible': loadingResults }"
+    <IconLoadingSpinner
+      class="ct-search-site__spinner"
+      :class="{ 'ct-search-site__spinner--visible': loadingResults }"
     />
     <SearchSitePagination
       :currentPage
@@ -39,10 +38,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
 import SearchSiteInput from '@/components/Search/SiteInput.vue'
 import SearchSitePagination from '@/components/Search/Pagination.vue'
 import SearchSiteResults from '@/components/Search/Results/Index.vue'
-import SearchSiteTabStrip from '@/components/SearchAreas/TabStrip/Index.vue'
+import SearchSiteTabStrip from '@/components/TabStrip/Index.vue'
 import { getJson } from '@/lib/http'
 import type { SearchSiteProps, SearchSiteResultsData } from '@/types/backend'
 
@@ -121,3 +121,23 @@ function handleQueryString() {
 }
 handleQueryString()
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-site {
+  @apply tw-shared-base-flex-col-gap-6;
+}
+
+.ct-search-site__spinner {
+  @apply
+  invisible
+  mx-auto
+  my-13.75
+  size-10 text-black;
+}
+
+.ct-search-site__spinner--visible {
+  @apply visible;
+}
+</style>

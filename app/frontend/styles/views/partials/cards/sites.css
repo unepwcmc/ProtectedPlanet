@@ -3,7 +3,17 @@
 }
 
 .vw-cards-sites__title {
-  @apply tw-shared-font-playfair__bold-xl-md-2xl;
+  @apply tw-shared-font-playfair__bold-xl-md-2xl-grey-black;
+}
+
+.vw-cards-sites__view-all {
+  @apply
+  tw-shared-font-hind-siliguri__light-base-md-lg-grey-black
+  shrink-0
+  cursor-pointer
+  no-underline
+  hover:no-underline
+  focus:outline-none;
 }
 
 .vw-cards-sites__grid {

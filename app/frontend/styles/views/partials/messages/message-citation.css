@@ -9,7 +9,7 @@
 }
 
 .vw-partials-messages-message-citation__title {
-  @apply tw-shared-font-playfair__bold-xl-md-2xl;
+  @apply tw-shared-font-playfair__bold-xl-md-2xl-grey-black;
 }
 
 .vw-partials-messages-message-citation__text {

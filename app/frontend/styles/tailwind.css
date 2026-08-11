@@ -82,6 +82,7 @@
 @import './views/partials/carousels/theme.css';
 
 @import './views/partials/charts/chart-section.css';
+@import './views/partials/charts/total-coverage-chart.css';
 
 @import './views/partials/ctas/api.css';
 @import './views/partials/ctas/mpa.css';

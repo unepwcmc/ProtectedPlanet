@@ -18,7 +18,9 @@
 }
 
 .vw-thematic-marine__medium {
-  @apply tw-shared-base-container--medium;
+  @apply
+  tw-shared-base-container--medium
+  tw-shared-cms-wysiwyg;
 }
 
 .vw-thematic-marine__map {

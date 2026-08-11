@@ -25,7 +25,7 @@
 }
 
 .vw-layouts-partials-hero-home__title {
-    @apply tw-shared-font-playfair__font-bold-4xl-lg-4-375;
+    @apply tw-shared-font-playfair__bold-4xl-lg-7xl-grey-black;
 }
 
 .vw-layouts-partials-hero-home__intro {

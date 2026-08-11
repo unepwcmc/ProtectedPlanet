@@ -1,21 +1,21 @@
 <template>
-  <div>
-    <SearchAreasTabStrip
+  <div class="ct-search-areas-checkbox-search">
+    <TabStrip
       :children="tabs"
-      class="tabs--rounded-small"
       :gaId
       :preSelectedId="selectedTabId"
       @click:tab="updateSelectedTab"
     />
     <input
       v-model="searchTerm"
-      class="input--search margin-space--bottom"
+      class="ct-search-areas-checkbox-search__input"
       type="text"
     >
     <FiltersCheckboxes
       :id
       ref="checkboxesEl"
       :gaId
+      class="ct-search-areas-checkbox-search__options"
       :options="autocompleteOptions"
       :preSelected="preSelectedCheckboxes ?? undefined"
       :resetKey
@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import SearchAreasTabStrip from '@/components/SearchAreas/TabStrip/Index.vue'
+import TabStrip from '@/components/TabStrip/Index.vue'
 import FiltersCheckboxes from '@/components/Filters/Checkboxes/Index.vue'
 import type { SearchFilterOption } from '@/types/backend'
 
@@ -80,3 +80,34 @@ watch(() => props.resetKey, () => {
   reset()
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-areas-checkbox-search {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.ct-search-areas-checkbox-search__input {
+  @apply
+  block
+  w-full
+  h-11.75
+  mb-3.5
+  rounded-[0.1875rem]
+  border
+  border-solid
+  border-theme-grey
+  px-2
+  py-1.5
+  font-hindSiliguri
+  text-lg
+  text-theme-grey-black;
+}
+
+.ct-search-areas-checkbox-search__options {
+  @apply
+  overflow-y-auto
+  max-h-62.5;
+}
+</style>

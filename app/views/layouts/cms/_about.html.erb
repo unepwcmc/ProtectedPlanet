@@ -4,10 +4,8 @@
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label,  
   } %>
-  <div class="vw-layouts-cms-about__container--medium">
-    <section class="vw-layouts-cms-about__content">
-      <%= cms_fragment_render("content") %>
-    </section>
+  <div class="vw-layouts-cms-about__content">
+    <%= cms_fragment_render("content") %>
   </div>
   <%= render "partials/carousels/themes" %>
   <div class="vw-layouts-cms-about__container">

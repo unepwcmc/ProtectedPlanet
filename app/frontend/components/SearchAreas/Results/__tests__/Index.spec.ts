@@ -35,7 +35,7 @@ describe('SearchAreasResults', () => {
     })
 
     expect(wrapper.find('h2').text()).toBe('Protected areas (2)')
-    expect(wrapper.findAll('.card__link')).toHaveLength(2)
+    expect(wrapper.findAll('.ct-search-areas-results-item')).toHaveLength(2)
   })
 
   it('shows the no-results message when total is zero', () => {
@@ -43,8 +43,8 @@ describe('SearchAreasResults', () => {
       props: { noResultsText: 'No results.', results: { ...results, total: 0, areas: [] }, smTriggerElement: 'sm-trigger-infinite-scroll' }
     })
 
-    expect(wrapper.find('.search__results-none').text()).toBe('No results.')
-    expect(wrapper.findAll('.card__link')).toHaveLength(0)
+    expect(wrapper.find('.ct-search-areas-results__none').text()).toBe('No results.')
+    expect(wrapper.findAll('.ct-search-areas-results-item')).toHaveLength(0)
   })
 
   it('re-emits requestMore from the pagination trigger', async () => {

@@ -2,17 +2,12 @@ import { describe, it, expect, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FiltersPanel from '@/components/Listing/FiltersPanel/Index.vue'
 
-const filterGroups = [
+const filters = [
   {
-    title: 'Filter by',
-    filters: [
-      {
-        id: 'topics',
-        title: 'Topics',
-        type: 'checkbox' as const,
-        options: [{ id: 'wdpa', title: 'WDPA' }]
-      }
-    ]
+    id: 'topics',
+    title: 'Topics',
+    type: 'checkbox' as const,
+    options: [{ id: 'wdpa', title: 'WDPA' }]
   }
 ]
 
@@ -28,7 +23,8 @@ describe('Listing FiltersPanel', () => {
     const wrapper = mount(FiltersPanel, {
       props: {
         filterCloseText: 'View results',
-        filterGroups,
+        filters,
+        filtersTitle: 'Filter by',
         isActive: false,
         preSelected: { topics: ['wdpa'] },
         textClear: 'Clear',
@@ -44,7 +40,8 @@ describe('Listing FiltersPanel', () => {
     const wrapper = mount(FiltersPanel, {
       props: {
         filterCloseText: 'View results',
-        filterGroups,
+        filters,
+        filtersTitle: 'Filter by',
         isActive: true,
         textClear: 'Clear',
         title: 'Filters'
@@ -60,7 +57,8 @@ describe('Listing FiltersPanel', () => {
     const wrapper = mount(FiltersPanel, {
       props: {
         filterCloseText: 'View results',
-        filterGroups,
+        filters,
+        filtersTitle: 'Filter by',
         isActive: true,
         textClear: 'Clear',
         title: 'Filters'
@@ -76,14 +74,15 @@ describe('Listing FiltersPanel', () => {
     const wrapper = mount(FiltersPanel, {
       props: {
         filterCloseText: 'View results',
-        filterGroups,
+        filters,
+        filtersTitle: 'Filter by',
         isActive: true,
         textClear: 'Clear',
         title: 'Filters'
       }
     })
 
-    expect(wrapper.find('.ct-listing-filters-panel-desktop__groups').exists()).toBe(true)
+    expect(wrapper.find('.ct-listing-filters-panel-desktop').exists()).toBe(true)
     expect(wrapper.find('.ct-listing-filters-panel-mobile').exists()).toBe(true)
   })
 
@@ -91,7 +90,8 @@ describe('Listing FiltersPanel', () => {
     const wrapper = mount(FiltersPanel, {
       props: {
         filterCloseText: 'View results',
-        filterGroups,
+        filters,
+        filtersTitle: 'Filter by',
         isActive: false,
         textClear: 'Clear',
         title: 'Filters'
@@ -111,7 +111,8 @@ describe('Listing FiltersPanel', () => {
     const wrapper = mount(FiltersPanel, {
       props: {
         filterCloseText: 'View results',
-        filterGroups,
+        filters,
+        filtersTitle: 'Filter by',
         isActive: true,
         textClear: 'Clear',
         title: 'Filters'

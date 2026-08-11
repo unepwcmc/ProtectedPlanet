@@ -90,7 +90,7 @@ function onChangePage(direction: 'previous' | 'next') {
 }
 
 .ct-pame-table-pagination__text {
-  @apply tw-shared-font-hind-siliguri__bold-base-lg-lg;
+  @apply tw-shared-font-hind-siliguri__bold-base-lg-lg-grey-black;
 }
 
 .ct-pame-table-pagination__button {

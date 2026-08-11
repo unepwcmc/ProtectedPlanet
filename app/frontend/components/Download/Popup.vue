@@ -68,7 +68,7 @@ const select = (option: DownloadOption) => emit('select', option)
 .ct-download-popup__link {
   @apply
   py-1.25
-  tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-2-white
+  tw-shared-font-hind-siliguri__light-base-md-lg-white
   no-underline
   cursor-pointer
   hover:underline

@@ -3,18 +3,12 @@
     v-show="isActive"
     class="ct-listing-filters-panel"
   >
-    <ListingFiltersPanelDesktop
-      class="ct-listing-filters-panel--desktop"
-      :filterGroups
-      :gaId
-      :preSelected
-      :textClear
-      @update:filterGroup="onUpdateFilterGroup"
-    />
     <ListingFiltersPanelMobile
+      v-if="isSmall||isMedium"
       class="ct-listing-filters-panel--mobile"
       :filterCloseText
-      :filterGroups
+      :filters
+      :filtersTitle
       :gaId
       :isActive
       :preSelected
@@ -23,17 +17,29 @@
       @toggle:filterPane="onToggleFilterPane"
       @update:filterGroup="onUpdateFilterGroup"
     />
+    <ListingFiltersPanelDesktop
+      v-else
+      class="ct-listing-filters-panel--desktop"
+      :filters
+      :filtersTitle
+      :gaId
+      :preSelected
+      :textClear
+      @update:filterGroup="onUpdateFilterGroup"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import ListingFiltersPanelDesktop from '@/components/Listing/FiltersPanel/Desktop.vue'
 import ListingFiltersPanelMobile from '@/components/Listing/FiltersPanel/Mobile.vue'
-import type { ListingFilterGroup as ListingFilterGroupType } from '@/types/backend'
+import type { ListingFilter } from '@/types/backend'
+import useBreakpoint from '@/composables/useBreakpoint'
 
 defineProps<{
   filterCloseText: string
-  filterGroups: ListingFilterGroupType[]
+  filters: ListingFilter[]
+  filtersTitle?: string
   gaId?: string
   isActive: boolean
   preSelected?: Record<string, Array<string | number>>
@@ -53,6 +59,8 @@ function onToggleFilterPane() {
 function onUpdateFilterGroup(payload: { id: string, options: Array<string | number> }) {
   emit('update:filterGroup', payload)
 }
+
+const { isSmall, isMedium } = useBreakpoint()
 </script>
 <style scoped lang="css">
 @reference "#importtailwindcss";

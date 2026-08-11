@@ -48,7 +48,7 @@ defineProps<ListingPageCardInfo>()
 
 .ct-listing-page-card-resources-card-info__date {
   @apply
-  tw-shared-font-hind-siliguri__light-xm-grey
+  tw-shared-font-hind-siliguri__light-sm-grey
   mt-0;
 }
 

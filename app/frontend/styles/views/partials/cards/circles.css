@@ -4,7 +4,7 @@
 
 .vw-partials-cards-circles__title {
   @apply 
-  tw-shared-font-playfair__bold-xl-md-2xl 
+  tw-shared-font-playfair__bold-xl-md-2xl-grey-black 
   text-center;
 }
 

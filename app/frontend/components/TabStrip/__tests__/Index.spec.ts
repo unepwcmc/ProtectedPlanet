@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import SearchAreasTabStrip from '@/components/SearchAreas/TabStrip/Index.vue'
+import TabStrip from '@/components/TabStrip/Index.vue'
 
 const children = [
   { id: 'region', title: 'Region' },
@@ -8,43 +8,47 @@ const children = [
   { id: 'site', title: 'Site' }
 ]
 
-describe('SearchAreasTabStrip', () => {
+function mountTabStrip(props: Record<string, unknown> = {}) {
+  return mount(TabStrip, { props: { children, ...props } })
+}
+
+describe('TabStrip', () => {
   beforeEach(() => {
     window.gtag = vi.fn()
   })
 
   it('selects the first child by default', () => {
-    const wrapper = mount(SearchAreasTabStrip, { props: { children } })
+    const wrapper = mountTabStrip()
 
-    expect(wrapper.findAll('li')[0].classes()).toContain('active')
+    expect(wrapper.findAll('li')[0].classes()).toContain('ct-search-areas-tab-strip-tab--active')
   })
 
   it('honours defaultSelectedId over the first child', () => {
-    const wrapper = mount(SearchAreasTabStrip, { props: { children, defaultSelectedId: 'site' } })
+    const wrapper = mountTabStrip({ defaultSelectedId: 'site' })
 
-    expect(wrapper.findAll('li')[2].classes()).toContain('active')
+    expect(wrapper.findAll('li')[2].classes()).toContain('ct-search-areas-tab-strip-tab--active')
   })
 
   it('emits click:tab and updates the active tab on click', async () => {
-    const wrapper = mount(SearchAreasTabStrip, { props: { children } })
+    const wrapper = mountTabStrip()
 
     await wrapper.findAll('li')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')?.[0]).toEqual(['country'])
-    expect(wrapper.findAll('li')[1].classes()).toContain('active')
+    expect(wrapper.findAll('li')[1].classes()).toContain('ct-search-areas-tab-strip-tab--active')
   })
 
   it('follows preSelectedId when it changes externally', async () => {
-    const wrapper = mount(SearchAreasTabStrip, { props: { children, preSelectedId: 'region' } })
+    const wrapper = mountTabStrip({ preSelectedId: 'region' })
 
     await wrapper.setProps({ preSelectedId: 'site' })
 
-    expect(wrapper.findAll('li')[2].classes()).toContain('active')
+    expect(wrapper.findAll('li')[2].classes()).toContain('ct-search-areas-tab-strip-tab--active')
     expect(wrapper.emitted('click:tab')?.at(-1)).toEqual(['site'])
   })
 
   it('fires a GA4 event with the tab title when gaId is set', async () => {
-    const wrapper = mount(SearchAreasTabStrip, { props: { children, gaId: 'Component: search areas' } })
+    const wrapper = mountTabStrip({ gaId: 'Component: search areas' })
 
     await wrapper.findAll('li')[1].trigger('click')
 
@@ -54,13 +58,13 @@ describe('SearchAreasTabStrip', () => {
   })
 
   it('marks tabs aria-disabled and ignores clicks when disabled', async () => {
-    const wrapper = mount(SearchAreasTabStrip, { props: { children, disabled: true } })
+    const wrapper = mountTabStrip({ disabled: true })
 
     expect(wrapper.findAll('li')[1].attributes('aria-disabled')).toBe('true')
 
     await wrapper.findAll('li')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')).toBeUndefined()
-    expect(wrapper.findAll('li')[0].classes()).toContain('active')
+    expect(wrapper.findAll('li')[0].classes()).toContain('ct-search-areas-tab-strip-tab--active')
   })
 })

@@ -12,7 +12,8 @@
       <ListingFiltersPanel
         class="ct-listing__filters"
         :filterCloseText="textFiltersClose"
-        :filterGroups
+        :filters
+        :filtersTitle
         :gaId
         :isActive="isFilterPaneActive"
         :preSelected="activeFilterOptions"
@@ -51,6 +52,12 @@ import type { ListingProps, ListingResults } from '@/types/backend'
 
 type Listing = ListingProps
 const props = defineProps<Listing>()
+
+// The backend always returns at most one filter group (CmsHelper#get_category_filters is a
+// hardcoded single-element array, never a real multi-group structure) — flatten it here once
+// so the FiltersPanel tree works with a plain filter list instead of looping over groups.
+const filters = props.filterGroups[0]?.filters ?? []
+const filtersTitle = props.filterGroups[0]?.title ?? ''
 
 const currentResults = ref<ListingResults>(props.results)
 // The URL query string is the single source of truth for active filters.

@@ -39,7 +39,7 @@ describe('SearchAreasFilterGroup', () => {
       props: { id: 'db_type', type: 'checkbox', options: checkboxOptions, preSelected: ['wdpa'], textClear: 'Clear' }
     })
 
-    await wrapper.find('.filter__button-clear').trigger('click')
+    await wrapper.find('.ct-search-areas-filter-group__clear').trigger('click')
 
     expect((wrapper.find('input[value="wdpa"]').element as HTMLInputElement).checked).toBe(false)
   })

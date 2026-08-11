@@ -19,6 +19,10 @@
   @apply tw-shared-base-flex-col-gap-3;
 }
 
+.vw-layouts-partials-hero-marine__title {
+  @apply tw-shared-font-playfair__bold-3xl-md-4xl-grey-black;
+}
+
 .vw-layouts-partials-hero-marine__intro {
   @apply text-lg;
 }

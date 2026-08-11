@@ -1,28 +1,28 @@
 <template>
   <div
     v-show="options.length > 0"
-    class="flex flex-wrap flex-column"
+    class="ct-search-areas-radio-buttons"
   >
     <p
       v-for="option in options"
       :key="radioId(option)"
-      class="radio no-margin"
+      class="ct-search-areas-radio-buttons__option"
     >
       <label
         :for="radioId(option)"
-        class="radio__label no-margin flex flex-v-center"
+        class="ct-search-areas-radio-buttons__label"
       >
         <input
           :id="radioId(option)"
           v-model="input"
           required
           type="radio"
-          class="radio__input"
+          class="ct-search-areas-radio-buttons__input"
           :value="option.id"
           :name
           @click="changeInput(option.id)"
         >
-        <span class="radio__input-fake" />
+        <span class="ct-search-areas-radio-buttons__input-fake" />
         <span v-text="option.title" />
       </label>
     </p>
@@ -69,3 +69,62 @@ watch(() => props.resetKey, () => {
 
 changeInput(props.preSelected)
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-areas-radio-buttons {
+  @apply flex flex-col flex-wrap;
+}
+
+.ct-search-areas-radio-buttons__option {
+  @apply m-0;
+}
+
+.ct-search-areas-radio-buttons__label {
+  @apply
+  relative
+  flex
+  items-center
+  tw-shared-font-family-hind-siliguri__leading-1-3-grey-black
+  text-sm;
+}
+
+.ct-search-areas-radio-buttons__input {
+  @apply sr-only;
+}
+
+.ct-search-areas-radio-buttons__input-fake {
+  @apply
+  inline-block
+  relative
+  shrink-0
+  size-5
+  mt-1
+  mr-2
+  mb-1
+  ml-1
+  rounded-full
+  border
+  border-solid
+  border-theme-grey;
+}
+
+.ct-search-areas-radio-buttons__input:checked + .ct-search-areas-radio-buttons__input-fake::before {
+  @apply
+  content-['']
+  block
+  absolute
+  top-1/2
+  left-1/2
+  size-3.5
+  -translate-x-1/2
+  -translate-y-1/2
+  rounded-full
+  bg-theme-primary;
+}
+
+.ct-search-areas-radio-buttons__input:focus + .ct-search-areas-radio-buttons__input-fake {
+  @apply outline-none;
+}
+</style>

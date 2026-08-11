@@ -1,21 +1,25 @@
 <template>
-  <div class="filter">
-    <div class="filter__header">
+  <li class="ct-search-areas-filter-group">
+    <div class="ct-search-areas-filter-group__header">
       <h4
-        v-if="title"
-        class="filter__title"
+        class="ct-search-areas-filter-group__title"
         v-text="title"
       />
       <button
-        class="filter__button-clear"
+        class="ct-search-areas-filter-group__clear"
         @click="clear"
-        v-text="textClear"
-      />
+      >
+        <span v-text="textClear" />
+        <span class="ct-search-areas-filter-group__clear-icon">
+          <IconClose class="ct-search-areas-filter-group__clear-icon-svg" />
+        </span>
+      </button>
     </div>
 
     <FiltersCheckboxes
       v-if="type === 'checkbox'"
       :id
+      class="ct-search-areas-filter-group__options"
       :gaId="gaIdWithFilter"
       :options
       :preSelected="preSelectedArray"
@@ -24,7 +28,7 @@
     />
     <div
       v-if="type === 'radio'"
-      class="filter__options"
+      class="ct-search-areas-filter-group__options"
     >
       <SearchAreasRadioButtons
         :id
@@ -45,12 +49,13 @@
       :resetKey="combinedResetKey"
       @update:options="updateFilter"
     />
-  </div>
+  </li>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import FiltersCheckboxes from '@/components/Filters/Checkboxes/Index.vue'
+import IconClose from '@/components/Icon/Close.vue'
 import SearchAreasRadioButtons from '@/components/SearchAreas/RadioButtons.vue'
 import SearchAreasCheckboxSearch from '@/components/SearchAreas/CheckboxSearch.vue'
 import type { SearchFilter, SearchFilterOption } from '@/types/backend'
@@ -105,3 +110,54 @@ onMounted(() => {
   }
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-search-areas-filter-group {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.ct-search-areas-filter-group__header {
+  @apply
+  flex
+  justify-between
+  items-center;
+}
+
+.ct-search-areas-filter-group__title {
+  @apply tw-shared-font-hind-siliguri__bold-lg-lg-base-grey-black;
+}
+
+.ct-search-areas-filter-group__clear {
+  @apply
+  tw-shared-button-basic
+  flex
+  items-center
+  tw-shared-font-hind-siliguri__light-sm
+  tw-shared-base-flex-gap-2;
+}
+
+.ct-search-areas-filter-group__clear-icon {
+  @apply
+  flex
+  items-center
+  justify-center
+  rounded-full
+  p-1
+  bg-black;
+}
+
+.ct-search-areas-filter-group__clear-icon-svg {
+  @apply
+  size-2
+  text-white;
+}
+
+.ct-search-areas-filter-group__options {
+  @apply
+  overflow-y-auto
+  max-h-62.5
+  tw-shared-font-hind-siliguri__light-sm;
+}
+</style>

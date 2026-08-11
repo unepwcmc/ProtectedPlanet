@@ -36,16 +36,6 @@
 
 .ul-unstyled { @include ul-unstyled; }
 
-//--------------------------------------------------
-// positioning
-//--------------------------------------------------
-@mixin item-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  transform: translate(-50%, -50%);
-}
 
 //--------------------------------------------------
 // margin & padding
@@ -55,8 +45,6 @@
   margin-right: auto;
   margin-left: auto;
 }
-
-.margin-space--bottom { margin-bottom: rem-calc(14); }
 
 //--------------------------------------------------
 // shapes

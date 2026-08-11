@@ -10,7 +10,7 @@
 }
 
 .vw-partials-cards-resources__title {
-  @apply tw-shared-font-playfair__bold-xl-md-2xl;
+  @apply tw-shared-font-playfair__bold-xl-md-2xl-grey-black;
 }
 
 .vw-partials-cards-resources__all {
@@ -19,7 +19,7 @@
   gap-3
   items-center
   shrink-0
-  tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-2-grey-black
+  tw-shared-font-hind-siliguri__light-base-md-lg-grey-black
   cursor-pointer
   no-underline
   hover:no-underline
