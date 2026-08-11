@@ -63,4 +63,32 @@ describe('FiltersCheckboxes', () => {
 
     expect(window.gtag).not.toHaveBeenCalled()
   })
+
+  // Filter ids from Comfy::Cms::PageCategory are numbers, but preSelected
+  // comes back from the URL query string as strings (e.g. after Listing/Index
+  // re-reads it post round-trip) — checked state and toggling must still work.
+  it('reflects checked state and toggles off correctly when option ids are numbers but preSelected is stringified', async () => {
+    const numericOptions = [
+      { id: 1, title: 'WDPA' },
+      { id: 2, title: 'OECM' }
+    ]
+    const wrapper = mount(FiltersCheckboxes, {
+      props: { id: 'topics', options: numericOptions, preSelected: ['1'] }
+    })
+
+    expect((wrapper.find('input[value="1"]').element as HTMLInputElement).checked).toBe(true)
+
+    await wrapper.find('input[value="1"]').setValue(false)
+
+    expect((wrapper.find('input[value="1"]').element as HTMLInputElement).checked).toBe(false)
+    expect(wrapper.emitted('update:options')?.at(-1)).toEqual([[]])
+  })
+
+  it('does not re-emit when resetKey changes but the group is already empty', async () => {
+    const wrapper = mount(FiltersCheckboxes, { props: { id: 'topics', options, resetKey: 0 } })
+
+    await wrapper.setProps({ resetKey: 1 })
+
+    expect(wrapper.emitted('update:options')).toBeUndefined()
+  })
 })

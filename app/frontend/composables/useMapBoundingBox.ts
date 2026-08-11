@@ -22,7 +22,7 @@ interface Extent {
   ymax: number
 }
 
-export function useMapBoundingBox(
+export default function (
   map: Ref<MapLibreMap | null>,
   onPopupFromExtent?: (coords: { lng: number, lat: number }, options: ZoomToOptions) => void
 ) {

@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useAnalytics } from '@/composables/useAnalytics'
+import useAnalytics from '@/composables/useAnalytics'
 import SearchAreasTabStripTab from '@/components/SearchAreas/TabStrip/Tab.vue'
 
 const { trackEvent } = useAnalytics()

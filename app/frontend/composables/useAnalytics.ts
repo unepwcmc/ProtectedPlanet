@@ -45,7 +45,7 @@ function loadHotjar() {
   document.head.appendChild(script)
 }
 
-export function useAnalytics() {
+export default function () {
   const env = useEnv()
 
   function getGaMeasurementId(): string {
@@ -100,5 +100,3 @@ export function useAnalytics() {
 
   return { acceptAnalytics, rejectAnalytics, initAnalytics, trackEvent }
 }
-
-export default useAnalytics

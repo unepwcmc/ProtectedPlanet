@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { defineComponent, ref } from 'vue'
 import { mount } from '@vue/test-utils'
-import { useFreezeBackground } from '@/composables/useFreezeBackground'
+import useFreezeBackground from '@/composables/useFreezeBackground'
 
 describe('useFreezeBackground', () => {
   it('locks and restores body scroll as the ref toggles, and restores on unmount', async () => {

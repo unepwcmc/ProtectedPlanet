@@ -1,28 +1,27 @@
 <template>
-  <div class="listing">
-    <div class="listing__bar">
-      <div class="listing__bar-content">
+  <div class="ct-listing">
+    <div class="ct-listing__bar">
+      <div class="ct-listing__bar-content">
         <FiltersTrigger
-          class="listing__filters-trigger"
           :text="textFilterTrigger"
           @toggle:filterPane="toggleFilterPane"
         />
       </div>
     </div>
-    <div class="listing__main">
+    <div class="ct-listing__main">
       <ListingFiltersPanel
-        class="listing__filters"
+        class="ct-listing__filters"
         :filterCloseText="textFiltersClose"
         :filterGroups
         :gaId
         :isActive="isFilterPaneActive"
-        :preSelected="preSelectedFilters"
+        :preSelected="activeFilterOptions"
         :textClear
         :title="textFilterTrigger"
         @toggle:filterPane="toggleFilterPane"
         @update:filterGroup="updateFilters"
       />
-      <div class="listing__results-wrapper">
+      <div class="ct-listing__results-wrapper">
         <ListingList
           v-show="!updatingResults"
           :resetKey="paginationResetKey"
@@ -31,9 +30,9 @@
           :textNoResults
           @requestMore="requestMore"
         />
-        <span
-          class="icon--loading-spinner margin-center listing__spinner"
-          :class="{ 'icon-visible': loadingResults }"
+        <IconLoadingSpinner
+          class="ct-listing__spinner"
+          :class="{ 'ct-listing__spinner--visible': loadingResults }"
         />
       </div>
     </div>
@@ -45,7 +44,8 @@ import { computed, ref } from 'vue'
 import { getJson } from '@/lib/http'
 import { QUERY_STRING_FILTER_IDS } from '@/constants/listing'
 import FiltersTrigger from '@/components/Filters/Trigger.vue'
-import ListingFiltersPanel from '@/components/Listing/FiltersPanel.vue'
+import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
+import ListingFiltersPanel from '@/components/Listing/FiltersPanel/Index.vue'
 import ListingList from '@/components/Listing/List.vue'
 import type { ListingProps, ListingResults } from '@/types/backend'
 
@@ -53,7 +53,10 @@ type Listing = ListingProps
 const props = defineProps<Listing>()
 
 const currentResults = ref<ListingResults>(props.results)
-const activeFilterOptions = ref<Record<string, Array<string | number>>>({})
+// The URL query string is the single source of truth for active filters.
+// activeFilterOptions is never mutated directly — it's always reassigned by
+// re-reading the URL, so Vue state can't drift from what's in the address bar.
+const activeFilterOptions = ref<Record<string, Array<string | number>>>(readFiltersFromUrl())
 const isFilterPaneActive = ref(false)
 const loadingMoreResults = ref(false)
 const updatingResults = ref(false)
@@ -62,18 +65,27 @@ let ajaxRequests = 0
 
 const loadingResults = computed(() => loadingMoreResults.value || updatingResults.value)
 
-const preSelectedFilters = readPreSelectedFiltersFromUrl()
-
-function readPreSelectedFiltersFromUrl(): Record<string, string[]> {
+function readFiltersFromUrl(): Record<string, string[]> {
   const params = new URLSearchParams(window.location.search)
-  const preSelected: Record<string, string[]> = {}
+  const filters: Record<string, string[]> = {}
 
   QUERY_STRING_FILTER_IDS.forEach((id) => {
     const values = params.getAll(`filters[${id}][]`)
-    if (values.length) preSelected[id] = values
+    if (values.length) filters[id] = values
   })
 
-  return preSelected
+  return filters
+}
+
+function writeFilterToUrl(id: string, options: Array<string | number>) {
+  const searchParams = new URLSearchParams(window.location.search)
+  const queryKey = `filters[${id}][]`
+
+  searchParams.delete(queryKey)
+  options.forEach(value => searchParams.append(queryKey, String(value)))
+
+  const newUrl = `${window.location.pathname}?${searchParams.toString()}`
+  window.history.replaceState({ page: 1 }, '', newUrl)
 }
 
 function toggleFilterPane() {
@@ -125,23 +137,71 @@ function requestMore(requestedPage: number) {
   requestSearch(true, requestedPage)
 }
 
-function updateFilters(filters: Record<string, Array<string | number>>) {
+function updateFilters(payload: { id: string, options: Array<string | number> }) {
   paginationResetKey.value++
-  activeFilterOptions.value = filters
+  writeFilterToUrl(payload.id, payload.options)
+  activeFilterOptions.value = readFiltersFromUrl()
   requestSearch()
-  updateQueryString(filters)
-}
-
-function updateQueryString(filters: Record<string, Array<string | number>>) {
-  const searchParams = new URLSearchParams(window.location.search)
-
-  Object.entries(filters).forEach(([key, values]) => {
-    const queryKey = `filters[${key}][]`
-    searchParams.delete(queryKey)
-    values.forEach(value => searchParams.append(queryKey, String(value)))
-  })
-
-  const newUrl = `${window.location.pathname}?${searchParams.toString()}`
-  window.history.replaceState({ page: 1 }, '', newUrl)
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-listing{
+  @apply tw-shared-base-flex-col-gap-9-lg-no-gap;
+}
+
+.ct-listing__bar {
+  @apply
+  tw-shared-shadow-bottom-grey-light
+  bg-white
+  border-b
+  border-solid
+  border-theme-grey-light
+  py-3
+  tw-shared-base-flex-col-gap-3;
+}
+
+.ct-listing__bar-content {
+  @apply
+  tw-shared-base-container
+  flex
+  items-center;
+}
+
+.ct-listing__main {
+  @apply
+  tw-shared-base-container
+  md:flex
+  min-h-25
+  md:min-h-150
+  tw-shared-base-flex-gap-9;
+}
+
+.ct-listing__filters{
+  @apply
+  md:border-r
+  md:w-1/4;
+}
+
+.ct-listing__results-wrapper {
+  @apply
+  grow
+  md:pt-9
+  md:w-3/4;
+}
+
+.ct-listing__spinner {
+  @apply
+  invisible
+  mx-auto
+  my-13.75
+  size-10
+  text-black;
+}
+
+.ct-listing__spinner--visible {
+  @apply visible;
+}
+</style>

@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AttributesAffiliationsList from '@/components/Attributes/Affiliations/List.vue'
-import { useParcelSelection } from '@/composables/useParcelSelection'
+import useParcelSelection from '@/composables/useParcelSelection'
 import type { AttributesAffiliationLink, AttributesAffiliationsProps } from '@/types/backend'
 
 type AttributesAffiliations = AttributesAffiliationsProps

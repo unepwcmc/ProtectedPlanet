@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useAnalytics } from '@/composables/useAnalytics'
+import useAnalytics from '@/composables/useAnalytics'
 
 const { trackEvent } = useAnalytics()
 

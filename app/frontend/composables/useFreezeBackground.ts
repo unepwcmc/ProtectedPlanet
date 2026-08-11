@@ -3,7 +3,7 @@
 import type { Ref } from 'vue'
 import { watchEffect } from 'vue'
 
-export function useFreezeBackground(active: Ref<boolean>): void {
+export default function (active: Ref<boolean>): void {
   watchEffect((onCleanup) => {
     if (active.value) {
       document.body.style.overflow = 'hidden'
@@ -13,5 +13,3 @@ export function useFreezeBackground(active: Ref<boolean>): void {
     }
   })
 }
-
-export default useFreezeBackground

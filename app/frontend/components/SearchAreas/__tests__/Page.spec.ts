@@ -107,7 +107,7 @@ describe('SearchAreasPage', () => {
     await wrapper.findAll('.tabs--search-areas li')[0].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
-    expect(wrapper.find('.search__filter-trigger').classes()).toContain('disabled')
+    expect(wrapper.find('.ct-filters-trigger').classes()).toContain('ct-filters-trigger--disabled')
   })
 
   it('submits a new search term, resets filters, and writes it to the shared download store', async () => {

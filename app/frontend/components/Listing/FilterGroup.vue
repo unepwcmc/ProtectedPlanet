@@ -1,16 +1,20 @@
 <template>
-  <div class="filter">
-    <div class="filter__header">
+  <div class="ct-listing-filter-group">
+    <div class="ct-listing-filter-group__header">
       <h4
         v-if="filter.title"
-        class="filter__title"
+        class="ct-listing-filter-group__title"
         v-text="filter.title"
       />
       <button
-        class="filter__button-clear"
+        class="ct-listing-filter-group__clear"
         @click="clear"
-        v-text="textClear"
-      />
+      >
+        <span v-text="textClear" />
+        <span class="ct-listing-filter-group__clear-icon">
+          <IconClose class="ct-listing-filter-group__clear-icon-svg" />
+        </span>
+      </button>
     </div>
     <FiltersCheckboxes
       :id="filter.id"
@@ -26,6 +30,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import FiltersCheckboxes from '@/components/Filters/Checkboxes/Index.vue'
+import IconClose from '@/components/Icon/Close.vue'
 import type { ListingFilter } from '@/types/backend'
 
 const props = defineProps<{
@@ -54,3 +59,43 @@ onMounted(() => {
   if (props.preSelected?.length) onUpdate(props.preSelected)
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-listing-filter-group {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.ct-listing-filter-group__header {
+  @apply flex items-center;
+}
+
+.ct-listing-filter-group__title {
+  @apply tw-shared-font-hind-siliguri__bold-lg-lg-base-grey-black;
+}
+
+.ct-listing-filter-group__clear {
+  @apply
+  tw-shared-button-basic
+  flex
+  items-center
+  ml-auto
+  text-sm;
+}
+
+.ct-listing-filter-group__clear-icon {
+  @apply
+  flex
+  items-center
+  justify-center
+  ml-1.5
+  size-4.5
+  rounded-full
+  bg-black;
+}
+
+.ct-listing-filter-group__clear-icon-svg {
+  @apply size-2.5 text-white;
+}
+</style>

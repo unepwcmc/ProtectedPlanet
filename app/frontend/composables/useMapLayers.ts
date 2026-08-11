@@ -11,7 +11,7 @@ export interface MapLayer {
   color?: string
 }
 
-export function useMapLayers(map: Ref<MapLibreMap | null>) {
+export default function (map: Ref<MapLibreMap | null>) {
   const firstForegroundLayerId = ref('')
 
   function executeAfterStyleLoad(callback: () => void) {

@@ -54,8 +54,8 @@ import NavBarDropdownMobile from '@/components/NavBar/Dropdown/Mobile.vue'
 import NavBarLink from '@/components/NavBar/Link.vue'
 import IconBurger from '@/components/Icon/Burger.vue'
 import IconClose from '@/components/Icon/Close.vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
-import { useFreezeBackground } from '@/composables/useFreezeBackground'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
+import useFreezeBackground from '@/composables/useFreezeBackground'
 
 defineProps<{ links: NavLinkType[] }>()
 

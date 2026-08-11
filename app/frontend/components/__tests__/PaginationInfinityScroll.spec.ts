@@ -71,10 +71,10 @@ describe('PaginationInfinityScroll', () => {
     expect(observer.disconnect).toHaveBeenCalled()
   })
 
-  it('defaults the trigger class to pagination__infinity-trigger', () => {
+  it('defaults the trigger class to ct-pagination-infinity-scroll__trigger', () => {
     const wrapper = mount(PaginationInfinityScroll, { props: { total: 20, totalPages: 3 } })
 
-    expect(wrapper.classes()).toContain('pagination__infinity-trigger')
+    expect(wrapper.classes()).toContain('ct-pagination-infinity-scroll__trigger')
   })
 
   it('uses a custom triggerClass when provided', () => {

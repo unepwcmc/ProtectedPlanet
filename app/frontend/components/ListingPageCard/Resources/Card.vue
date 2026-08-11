@@ -34,8 +34,6 @@ const props = defineProps<ListingPageCardResources>()
   tw-shared-base-flex-col-gap-3
   p-3
   w-full
-  md:w-1/2
-  lg:w-1/4
   lg:min-h-50;
 }
 

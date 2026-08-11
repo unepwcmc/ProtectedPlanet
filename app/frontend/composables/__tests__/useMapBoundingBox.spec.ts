@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { ref } from 'vue'
-import { useMapBoundingBox } from '@/composables/useMapBoundingBox'
+import useMapBoundingBox from from '@/composables/useMapBoundingBox'
 
 function jsonResponse(data: unknown) {
   return { ok: true, status: 200, json: () => Promise.resolve(data) } as Response

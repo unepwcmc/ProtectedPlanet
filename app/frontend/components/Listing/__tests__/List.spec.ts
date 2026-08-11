@@ -28,9 +28,9 @@ describe('Listing List', () => {
       props: { resetKey: 0, results: newsResults, template: 'news', textNoResults: 'None' }
     })
 
-    expect(wrapper.find('.listing__cards-news').exists()).toBe(true)
-    expect(wrapper.find('.listing__cards-resources').exists()).toBe(false)
-    expect(wrapper.findAll('.card__h3')).toHaveLength(2)
+    expect(wrapper.findAll('.ct-listing-page-card-news-card')).toHaveLength(2)
+    expect(wrapper.find('.ct-listing-page-card-resources-card').exists()).toBe(false)
+    expect(wrapper.findAll('.ct-listing-page-card-news-card__title')).toHaveLength(2)
   })
 
   it('renders resource cards for the resources template', () => {
@@ -38,8 +38,8 @@ describe('Listing List', () => {
       props: { resetKey: 0, results: newsResults, template: 'resources', textNoResults: 'None' }
     })
 
-    expect(wrapper.find('.listing__cards-resources').exists()).toBe(true)
-    expect(wrapper.find('.listing__cards-news').exists()).toBe(false)
+    expect(wrapper.findAll('.ct-listing-page-card-resources-card')).toHaveLength(2)
+    expect(wrapper.find('.ct-listing-page-card-news-card').exists()).toBe(false)
   })
 
   it('shows the no-results message when total is 0', () => {
@@ -52,7 +52,7 @@ describe('Listing List', () => {
       }
     })
 
-    const noResults = wrapper.find('.search__results-none')
+    const noResults = wrapper.find('.ct-listing-list__no-results')
     expect(noResults.isVisible()).toBe(true)
     expect(noResults.text()).toBe('No results found')
   })

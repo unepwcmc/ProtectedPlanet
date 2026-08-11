@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AttributesPame from '@/components/Attributes/Pame/Pame.vue'
-import { useParcelSelection } from '@/composables/useParcelSelection'
+import useParcelSelection from '@/composables/useParcelSelection'
 import type { AttributesPameListProps } from '@/types/backend'
 
 type AttributesPameList = AttributesPameListProps

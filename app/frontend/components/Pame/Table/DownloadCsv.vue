@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useAnalytics } from '@/composables/useAnalytics'
+import useAnalytics from '@/composables/useAnalytics'
 import { postBlob } from '@/lib/http'
 import { usePameStore } from '@/stores/usePameStore'
 import IconDownload from '@/components/Icon/Download.vue'

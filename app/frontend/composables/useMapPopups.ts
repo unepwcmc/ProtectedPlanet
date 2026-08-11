@@ -48,18 +48,7 @@ function attributeHtml(elementType: 'span' | 'a', element: { title: string, valu
           </span>`
 }
 
-// Exported so other popup-opening flows (e.g. Map/Base.vue's PA-search
-// "jump to result" popup) render with the same markup/classes as the
-// click-to-query popup below, rather than growing a second HTML template.
-export function generateAttributesHtml(attributes: Array<{ title: string, value?: string, url?: string }>): string {
-  const items = attributes
-    .map(a => `<li class="mapboxgl-popup-content__attribute">${attributeHtml(a.url ? 'a' : 'span', a)}</li>`)
-    .join('')
-
-  return `<ul class="mapboxgl-popup-content__attributes">${items}</ul>`
-}
-
-export function useMapPopups(
+export default function (
   map: Ref<MapLibreMap | null>,
   servicesForPointQuery: PointQueryService[],
   popupAttributes: PopupAttributeLabels = { name: 'Name', site_id: 'ID', site_pid: 'SITE_PID (Parcel ID)' }
@@ -99,6 +88,14 @@ export function useMapPopups(
     markers.value.push(marker)
   }
 
+  function generateAttributesHtml(attributes: Array<{ title: string, value?: string, url?: string }>): string {
+    const items = attributes
+      .map(a => `<li class="mapboxgl-popup-content__attribute">${attributeHtml(a.url ? 'a' : 'span', a)}</li>`)
+      .join('')
+
+    return `<ul class="mapboxgl-popup-content__attributes">${items}</ul>`
+  }
+
   async function onClick(e: MapMouseEvent) {
     removeAllMarkersAndPopups()
 
@@ -117,5 +114,11 @@ export function useMapPopups(
     addPopup(coords, html)
   }
 
-  return { onClick, addPopup, removeAllMarkersAndPopups, popupAttributes }
+  return {
+    onClick,
+    addPopup,
+    removeAllMarkersAndPopups,
+    generateAttributesHtml,
+    popupAttributes
+  }
 }

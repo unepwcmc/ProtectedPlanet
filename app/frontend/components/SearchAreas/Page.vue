@@ -3,7 +3,6 @@
     <div class="search__bar">
       <div class="search__bar-content">
         <FiltersTrigger
-          class="search__filter-trigger"
           :isDisabled="isFilterPaneDisabled"
           :text="textFilters"
           @toggle:filterPane="toggleFilterPane"

@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
-import { useParcelSelection } from '@/composables/useParcelSelection'
+import useParcelSelection from '@/composables/useParcelSelection'
 
 function withHash(fn: () => void) {
   const TestComponent = defineComponent({

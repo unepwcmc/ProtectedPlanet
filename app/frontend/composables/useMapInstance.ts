@@ -27,7 +27,7 @@ export interface MapControlsOptions {
 
 let rtlPluginRegistered = false
 
-export function useMapInstance() {
+export default function () {
   const { VITE_MAPBOX_TOKEN: accessToken } = useEnvs()
   const map = ref<MapLibreMap | null>(null) as Ref<MapLibreMap | null>
 

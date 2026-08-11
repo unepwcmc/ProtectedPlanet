@@ -9,7 +9,7 @@ describe('FiltersCheckboxesItem', () => {
     const wrapper = mount(FiltersCheckboxesItem, { props: { checked: true, groupId: 'topics', option } })
 
     expect(wrapper.find('input').element.checked).toBe(true)
-    expect(wrapper.find('.checkbox__text').text()).toBe('WDPA')
+    expect(wrapper.find('.ct-filters-checkboxes-item__text').text()).toBe('WDPA')
   })
 
   it('emits click with the new checked value', async () => {

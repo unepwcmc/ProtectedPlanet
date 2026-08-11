@@ -66,7 +66,7 @@ import { computed, ref } from 'vue'
 import IconArrow from '@/components/Icon/Arrow.vue'
 import IconClose from '@/components/Icon/Close.vue'
 import IconSearch from '@/components/Icon/Search.vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 
 const props = defineProps<{
   disabled?: boolean

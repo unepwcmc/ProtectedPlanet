@@ -36,7 +36,7 @@ describe('Listing FilterGroup', () => {
   it('clears the checkboxes when the clear button is clicked', async () => {
     const wrapper = mount(FilterGroup, { props: { filter, preSelected: ['wdpa'], textClear: 'Clear' } })
 
-    await wrapper.find('.filter__button-clear').trigger('click')
+    await wrapper.find('.ct-listing-filter-group__clear').trigger('click')
 
     expect((wrapper.find('input[value="wdpa"]').element as HTMLInputElement).checked).toBe(false)
   })

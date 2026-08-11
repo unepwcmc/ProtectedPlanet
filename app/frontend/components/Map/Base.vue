@@ -16,10 +16,10 @@
 import { computed, onMounted, onUnmounted, useTemplateRef, watch } from 'vue'
 import MapBaselayerControls from '@/components/Map/BaselayerControls.vue'
 import { useMapStore } from '@/stores/useMapStore'
-import { useMapInstance } from '@/composables/useMapInstance'
-import { useMapLayers } from '@/composables/useMapLayers'
-import { useMapBoundingBox } from '@/composables/useMapBoundingBox'
-import { useMapPopups, generateAttributesHtml } from '@/composables/useMapPopups'
+import useMapInstance from '@/composables/useMapInstance'
+import useMapLayers from '@/composables/useMapLayers'
+import useMapBoundingBox from '@/composables/useMapBoundingBox'
+import useMapPopups from '@/composables/useMapPopups'
 import { BASELAYERS_DEFAULT, CONTROLS_OPTIONS_DEFAULT, MAP_OPTIONS_DEFAULT } from '@/constants/map'
 import { transformMapboxStyle } from 'maplibregl-mapbox-request-transformer'
 import type { MapOptions, StyleSpecification } from 'maplibre-gl'
@@ -44,7 +44,7 @@ const controlsOptions = computed(() => ({ ...CONTROLS_OPTIONS_DEFAULT, ...props.
 
 const { map, initMap } = useMapInstance()
 const { executeAfterStyleLoad, setFirstForegroundLayerId, showLayers, hideLayers } = useMapLayers(map)
-const { onClick: onPopupClick, addPopup, popupAttributes } = useMapPopups(map, props.servicesForPointQuery, props.popupAttributes)
+const { onClick: onPopupClick, addPopup, popupAttributes, generateAttributesHtml } = useMapPopups(map, props.servicesForPointQuery, props.popupAttributes)
 // PA-search "jump to result + open its popup" flow (mixin-bounding-box's
 // addPopupFromExtent), rendered with the same attribute labels/markup as the
 // click-to-query popup above (generateAttributesHtml) — a search result only

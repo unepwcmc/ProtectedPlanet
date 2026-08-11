@@ -30,8 +30,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getConsent } from '@/lib/cookieConsent'
-import { useAnalytics } from '@/composables/useAnalytics'
-import { useFreezeBackground } from '@/composables/useFreezeBackground'
+import useAnalytics from '@/composables/useAnalytics'
+import useFreezeBackground from '@/composables/useFreezeBackground'
 import type { CookieConsentProps } from '@/types/backend'
 
 const props = defineProps<CookieConsentProps>()

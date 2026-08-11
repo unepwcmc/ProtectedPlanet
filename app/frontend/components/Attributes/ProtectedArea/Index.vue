@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AttributesProtectedAreaAttributeList from '@/components/Attributes/ProtectedArea/AttributeList.vue'
-import { useParcelSelection } from '@/composables/useParcelSelection'
+import useParcelSelection from '@/composables/useParcelSelection'
 import type { AttributesProtectedAreaProps } from '@/types/backend'
 
 type AttributesProtectedArea = AttributesProtectedAreaProps

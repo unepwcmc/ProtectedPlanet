@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useAnalytics } from '@/composables/useAnalytics'
+import useAnalytics from '@/composables/useAnalytics'
 import type { TabsProps } from '@/types/backend'
 
 const { trackEvent } = useAnalytics()

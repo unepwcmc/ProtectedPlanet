@@ -40,7 +40,7 @@ import { ref } from 'vue'
 import type { NavLink } from '@/types/backend'
 import NavBarLink from '@/components/NavBar/Link.vue'
 import IconArrow from '@/components/Icon/Arrow.vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 
 const props = defineProps<{ link: NavLink }>()
 

@@ -218,15 +218,6 @@
   background-image: url('../../assets/icons/earth.svg');
 }
 
-@utility tw-shared-icon-filters {
-  @apply 
-  tw-shared-icon-base 
-  w-4.75 
-  h-3.25;
-
-  background-image: url('../../assets/icons/filter.svg');
-}
-
 @utility tw-shared-icon-flag {
   @apply 
   tw-shared-icon-base 

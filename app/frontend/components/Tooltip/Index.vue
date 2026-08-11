@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { ref, useId } from 'vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 
 interface TooltipProps {
   text: string

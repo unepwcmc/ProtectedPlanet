@@ -48,7 +48,6 @@ defineProps<ListingPageCardNews>()
   block
   bg-theme-grey-xlight
   w-full
-  md:w-[48.5%]
   no-underline
   hover:no-underline;
 }

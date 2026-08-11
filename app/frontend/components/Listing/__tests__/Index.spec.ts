@@ -71,18 +71,18 @@ describe('Listing Index', () => {
   it('renders the initial server-provided results with no fetch', () => {
     const wrapper = mount(Listing, { props: baseProps })
 
-    expect(wrapper.find('.card__h3').text()).toBe('First')
+    expect(wrapper.find('.ct-listing-page-card-news-card__title').text()).toBe('First')
     expect(fetch).not.toHaveBeenCalled()
   })
 
   it('toggles the filter pane on trigger click', async () => {
     const wrapper = mount(Listing, { props: baseProps })
 
-    expect(wrapper.find('.filters--sidebar').attributes('style')).toContain('display: none')
+    expect(wrapper.find('[class*="ct-listing-filters-panel"]').attributes('style')).toContain('display: none')
 
-    await wrapper.find('.listing__filters-trigger').trigger('click')
+    await wrapper.find('.ct-filters-trigger').trigger('click')
 
-    expect(wrapper.find('.filters--sidebar').attributes('style')).not.toContain('display: none')
+    expect(wrapper.find('[class*="ct-listing-filters-panel"]').attributes('style')).not.toContain('display: none')
   })
 
   it('requests search results with the selected filters and syncs the URL', async () => {
@@ -108,7 +108,7 @@ describe('Listing Index', () => {
     expect(query.get('search_index')).toBe('cms')
     expect((options as RequestInit).headers).toMatchObject({ 'X-CSRF-Token': 'test-token' })
 
-    expect(wrapper.find('.card__h3').text()).toBe('Filtered')
+    expect(wrapper.find('.ct-listing-page-card-news-card__title').text()).toBe('Filtered')
     expect(window.location.search).toContain('filters%5Btopics%5D%5B%5D=wdpa')
   })
 
@@ -137,7 +137,7 @@ describe('Listing Index', () => {
     const query = new URL(String(url), 'http://localhost').searchParams
     expect(query.get('requested_page')).toBe('2')
 
-    const titles = wrapper.findAll('.card__h3').map(el => el.text())
+    const titles = wrapper.findAll('.ct-listing-page-card-news-card__title').map(el => el.text())
     expect(titles).toEqual(['First', 'Second'])
   })
 })

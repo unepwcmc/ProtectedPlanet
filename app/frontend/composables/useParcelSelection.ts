@@ -5,7 +5,7 @@ function readParcelIdFromUrl(): string | null {
   return new URLSearchParams(window.location.search).get(PARCEL_ID_PARAM)
 }
 
-export function useParcelSelection() {
+export default function () {
   const selectedParcelId = ref(readParcelIdFromUrl())
 
   function refresh() {

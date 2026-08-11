@@ -1,20 +1,22 @@
 <template>
-  <li class="checkbox no-margin">
+  <li class="ct-filters-checkboxes-item">
     <label
       :for="inputId"
-      class="checkbox__label no-margin flex flex-v-center"
+      class="ct-filters-checkboxes-item__label"
+      :class="{
+        'ct-filters-checkboxes-item__label--active': checked
+      }"
     >
       <input
         :id="inputId"
         type="checkbox"
-        class="checkbox__input"
+        class="ct-filters-checkboxes-item__input"
         :checked
         :value="option.id"
         @change="onChange"
       >
-      <span class="checkbox__input-fake" />
       <span
-        class="checkbox__text"
+        class="ct-filters-checkboxes-item__text"
         v-text="option.title"
       />
     </label>
@@ -22,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { useId } from 'vue'
 import type { FilterOption } from '@/types/backend'
 
 const props = defineProps<{
@@ -31,8 +33,49 @@ const props = defineProps<{
   option: FilterOption
 }>()
 
-const inputId = computed(() => `${props.groupId}-${props.option.title}`)
+// The desktop and mobile filter panels render the same options
+// simultaneously (visibility toggled by CSS), so a plain groupId+title id
+// would collide across the two trees and mis-associate label clicks.
+const inputId = `${props.groupId}-${props.option.title}-${useId()}`
 
 const emit = defineEmits<{ click: [checked: boolean] }>()
-const onChange = (event: Event) => emit('click', (event.target as HTMLInputElement).checked)
+function onChange() {
+  emit('click', !props.checked)
+}
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-filters-checkboxes-item {
+  @apply flex;
+}
+
+.ct-filters-checkboxes-item__label {
+  @apply
+  flex
+  items-center
+  tw-shared-border-grey-light
+  tw-shared-border-radius
+  bg-white
+  min-h-8
+  px-1.5
+  py-2.5
+  w-full
+  cursor-pointer;
+}
+
+.ct-filters-checkboxes-item__label--active {
+  @apply
+  bg-theme-primary
+  outline-none;
+}
+
+.ct-filters-checkboxes-item__text {
+  @apply tw-shared-font-hind-siliguri__light-xm;
+}
+
+.ct-filters-checkboxes-item__input {
+  @apply sr-only;
+}
+</style>

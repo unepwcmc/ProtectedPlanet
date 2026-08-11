@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<{
   totalPages?: number
   resetKey?: number
 }>(), {
-  triggerClass: 'pagination__infinity-trigger',
+  triggerClass: 'ct-pagination-infinity-scroll__trigger',
   total: 0,
   totalPages: 0,
   resetKey: 0

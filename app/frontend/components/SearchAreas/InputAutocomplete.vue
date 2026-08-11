@@ -51,7 +51,7 @@ import { ref, computed, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import IconClose from '@/components/Icon/Close.vue'
 import IconSearch from '@/components/Icon/Search.vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 import { postJson } from '@/lib/http'
 import type { SearchAreasConfig, AutocompleteResult } from '@/types/backend'
 

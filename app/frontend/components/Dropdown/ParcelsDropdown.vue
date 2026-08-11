@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import DropdownBase from '@/components/Dropdown/Base.vue'
-import { useParcelSelection } from '@/composables/useParcelSelection'
+import useParcelSelection from '@/composables/useParcelSelection'
 import type { AttributesParcelsDropdownProps } from '@/types/backend'
 
 type AttributesParcelsDropdown = AttributesParcelsDropdownProps

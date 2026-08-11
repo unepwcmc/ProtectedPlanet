@@ -31,7 +31,7 @@
 import { ref } from 'vue'
 import IconArrow from '@/components/Icon/Arrow.vue'
 import DropdownOptions from '@/components/Dropdown/Options.vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 
 defineProps<{
   title?: string
