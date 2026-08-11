@@ -1,10 +1,20 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-10 (Rails 7.1 phase / B0).
+Keep this current as phases land. Last updated: 2026-08-10 (Rails 7.2 phase).
 
-Status at this point: **Rails 7.1.6**, Ruby 3.3.7, Zeitwerk, `load_defaults 7.1`,
-postgis-adapter 9.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+Status at this point: **Rails 7.2.3**, Ruby 3.3.7, Zeitwerk, `load_defaults 7.2`,
+postgis-adapter 10.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+
+### Rails 7.2 phase — DONE
+- rails ~> 7.2.2 (7.2.3.2), `load_defaults 7.2`, activerecord-postgis-adapter 9 → 10.0.3.
+- **`Rails.application.secrets` → `config_for(:app_secrets)`** (the 7.2 blocker) done first as
+  its own commit: renamed `config/secrets.yml` → `config/app_secrets.yml`, added
+  `config/initializers/00_app_secrets.rb` (`AppSecrets = config_for(:app_secrets)`), set
+  `config.secret_key_base` explicitly. Boot-time spots (env files, `storage.yml`,
+  `export_to_s3.rake` load-time constant) use `config_for` directly; app/lib/test use the
+  `AppSecrets` constant (mutable, so tests that set config still work). Zero deprecations.
+- Version bump itself was clean: **0 failures, 0 new deprecations** after the secrets prep.
 
 ### Rails 7.1 phase (B0) — DONE
 - rails ~> 7.1.5 (7.1.6), `load_defaults 7.1`, activerecord-postgis-adapter 8 → 9.0.2.
@@ -17,14 +27,9 @@ postgis-adapter 9.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in 
   matched the name inside that redirect body) broke. App is correct (slug → 302 to search);
   test now asserts the redirect + `search_term=` location.
 
-### ⚠️ Rails 7.2 headline blocker — `Rails.application.secrets`
-`load_defaults 7.1` **deprecates** `Rails.application.secrets` (removed in **7.2**). PP uses
-it **~48 times across 23 files** (`config/initializers/redis.rb`, `secrets.yml`,
-env configs, `search/index.rb`, `countries_geometry_importer.rb`, etc.) plus
-`secret_key_base` itself. **This is the main 7.2 task.** Migration path: move `secrets.yml`
-→ `Rails.application.config_for(:secrets)` (keeps the ENV-driven `secrets.yml` + dotenv flow,
-minimal churn) rather than encrypted credentials. Do it as the first step of the 7.2 phase.
-Works fine on 7.1 (deprecation warnings only) — deferred deliberately.
+### ✅ Rails 7.2 headline blocker — `Rails.application.secrets` — DONE
+Was the main 7.2 task (deprecated in 7.1, removed in 7.2; ~48 uses / 23 files + test/).
+Migrated to `config_for(:app_secrets)` — see the "Rails 7.2 phase — DONE" note above.
 
 ---
 

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 7.1.5'
+gem 'rails', '~> 7.2.2'
 gem 'webpacker', '~> 4.0.2'
 
 # Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
@@ -14,7 +14,7 @@ gem 'bourbon'
 gem "neat"
 
 gem 'pg', '~> 1.1'
-gem 'activerecord-postgis-adapter', '~> 9.0'
+gem 'activerecord-postgis-adapter', '~> 10.0'
 gem 'dbf', '~> 2.0.7'
 #
 # Match the 7.17.24 server. Stay on the ES 7.x client — 8.x is a client rewrite
