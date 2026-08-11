@@ -4,7 +4,7 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
   test '#import downloads the geometries from S4, imports to postgres
    and updates each Country with the matching geometries' do
     #skip("skipping broken S3 tests")
-    bucket = Rails.application.secrets.aws_datasets_bucket
+    bucket = AppSecrets.aws_datasets_bucket
 
     filename = 'countries_geometries_dump.tar.gz'
     path = Rails.root.join('tmp', filename).to_s

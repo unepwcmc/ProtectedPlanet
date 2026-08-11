@@ -14,7 +14,7 @@ module ProtectedAreasHelper
 
   def map_bounds(protected_area = nil)
     unless protected_area
-      return Rails.application.secrets.default_map_bounds.stringify_keys
+      return AppSecrets.default_map_bounds.stringify_keys
     end
 
     {

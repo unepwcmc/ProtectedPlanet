@@ -18,7 +18,7 @@ class AssetGeneratorTest < ActiveSupport::TestCase
     response_mock.stubs(:code).returns('200')
 
 
-    Rails.application.secrets.
+    AppSecrets.
       stubs(:mapbox).
       returns({'base_url' => 'http://mapbox.com/', 'access_token' => '123'})
     # The GeoJSON is URI-escaped into the path, and the request is made through a

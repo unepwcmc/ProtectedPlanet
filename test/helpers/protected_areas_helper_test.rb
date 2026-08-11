@@ -12,7 +12,7 @@ class ProtectedAreasHelperTest < ActionView::TestCase
 
   test '#map_bounds, given no arguments, returns a hash containing
    the default bounds' do
-    Rails.application.secrets.default_map_bounds = {'from' =>  [1,1], 'to' => [1,2]}
+    AppSecrets.default_map_bounds = {'from' =>  [1,1], 'to' => [1,2]}
 
     assert_equal map_bounds, {'from' => [1,1], 'to' => [1,2]}
   end

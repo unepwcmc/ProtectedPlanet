@@ -3,7 +3,7 @@ require 'test_helper'
 class AdminMaintenanceTest < ActionDispatch::IntegrationTest
   test 'PUT /admin/maintenance, given an authentication code, turns on
    maintenance mode so that the site is unavailable' do
-    key = Rails.application.secrets.maintenance_mode_key
+    key = AppSecrets.maintenance_mode_key
 
     put(
       '/admin/maintenance',
@@ -22,7 +22,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
 
   test 'PUT /admin/maintenance mode, given a false mode status, turns
    off maintenance mode' do
-    key = Rails.application.secrets.maintenance_mode_key
+    key = AppSecrets.maintenance_mode_key
     seed_cms_home
     seed_global_statistics
     
@@ -59,7 +59,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
     cache_key = 'test_key'
     Rails.cache.write(cache_key, 'value')
 
-    key = Rails.application.secrets.maintenance_mode_key
+    key = AppSecrets.maintenance_mode_key
     put '/admin/clear_cache', params: {}, headers: {"X-Auth-Key" => key}
 
     assert_response :success

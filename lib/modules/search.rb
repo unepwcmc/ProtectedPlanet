@@ -77,7 +77,7 @@ class Search
 
   def elastic_search
     @elastic_search ||= Elasticsearch::Client.new(
-      url: Rails.application.secrets.elasticsearch[:url]
+      url: AppSecrets.elasticsearch[:url]
     )
   end
 

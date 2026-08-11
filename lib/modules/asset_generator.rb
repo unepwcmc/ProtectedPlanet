@@ -33,7 +33,7 @@ module AssetGenerator
   private
 
   def self.mapbox_url geojson
-    mapbox_config = Rails.application.secrets.mapbox
+    mapbox_config = AppSecrets.mapbox
     access_token = mapbox_config[:access_token] || mapbox_config['access_token']
     base_url = mapbox_config[:base_url] || mapbox_config['base_url']
     size = {y: 138, x: 304}
