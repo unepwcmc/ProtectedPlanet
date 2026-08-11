@@ -1,19 +1,19 @@
 @utility vw-topbar-secondary {
   @apply 
-  sticky 
-  top-0 
-  z-2 
-  shadow-[0_3px_3px_#919191] 
+  sticky
+  top-0
+  z-2
+  shadow-[0_3px_3px_#919191]
   bg-white;
 }
 
 @utility vw-topbar-secondary__container {
   @apply 
   tw-shared-base-container 
-  flex 
-  items-center 
-  justify-end 
-  py-1.5 
-  md:py-2.5 
+  tw-shared-base-flex-gap-3-lg-gap-9
+  items-center
+  justify-end
+  py-1.5
+  md:py-2.5
   lg:py-3.5;
 }

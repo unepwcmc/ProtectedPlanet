@@ -12,7 +12,7 @@ describe('DownloadPopup', () => {
   it('renders a download option as a clickable span and emits select on click', async () => {
     const wrapper = mount(DownloadPopup, { props: { options } })
 
-    const links = wrapper.findAll('.popup__link')
+    const links = wrapper.findAll('.ct-download-popup__link')
     expect(links).toHaveLength(3)
     expect(links[0].element.tagName).toBe('SPAN')
 
@@ -22,7 +22,7 @@ describe('DownloadPopup', () => {
 
   it('renders a map option as a downloadable link', () => {
     const wrapper = mount(DownloadPopup, { props: { options } })
-    const link = wrapper.findAll('.popup__link')[1]
+    const link = wrapper.findAll('.ct-download-popup__link')[1]
 
     expect(link.element.tagName).toBe('A')
     expect(link.attributes('href')).toBe('/MPA_Map.pdf')
@@ -31,7 +31,7 @@ describe('DownloadPopup', () => {
 
   it('renders any other option as an external link', () => {
     const wrapper = mount(DownloadPopup, { props: { options } })
-    const link = wrapper.findAll('.popup__link')[2]
+    const link = wrapper.findAll('.ct-download-popup__link')[2]
 
     expect(link.element.tagName).toBe('A')
     expect(link.attributes('target')).toBe('_blank')

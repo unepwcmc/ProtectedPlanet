@@ -154,6 +154,9 @@ export interface DownloadProps {
   }
   downloadDisabled?: boolean
   gaId: string
+  // Shrinks the trigger to a fixed-size icon-only square below the `md:` breakpoint
+  // (the secondary topbar's tighter layout) instead of the default auto-width button.
+  compact?: boolean
 }
 
 // Props for `DownloadModal` (`frontend_mount "DownloadModal"`, mounted once

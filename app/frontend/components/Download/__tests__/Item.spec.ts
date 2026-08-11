@@ -46,9 +46,9 @@ describe('DownloadItem', () => {
       headers: expect.objectContaining({ 'X-CSRF-Token': 'test-token' }),
       body: JSON.stringify(params)
     }))
-    expect(wrapper.find('.modal__li-title').text()).toBe('PA.csv')
-    expect(wrapper.find('.modal__li-generating').isVisible()).toBe(true)
-    expect(wrapper.find('.modal__li-download').isVisible()).toBe(false)
+    expect(wrapper.find('.ct-download-item__title').text()).toBe('PA.csv')
+    expect(wrapper.find('.ct-download-item__status--generating').isVisible()).toBe(true)
+    expect(wrapper.find('.ct-download-item__link').isVisible()).toBe(false)
   })
 
   it('shows the ready download link once a url is present', async () => {
@@ -60,8 +60,8 @@ describe('DownloadItem', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('.modal__li-download').isVisible()).toBe(true)
-    expect(wrapper.find('.modal__li-download').attributes('href')).toBe('/files/pa.csv')
+    expect(wrapper.find('.ct-download-item__link').isVisible()).toBe(true)
+    expect(wrapper.find('.ct-download-item__link').attributes('href')).toBe('/files/pa.csv')
   })
 
   it('shows the failed state and stops polling when the create request errors', async () => {
@@ -74,7 +74,7 @@ describe('DownloadItem', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('.modal__li-failed').isVisible()).toBe(true)
+    expect(wrapper.find('.ct-download-item__status--failed').isVisible()).toBe(true)
 
     const callsBeforePoll = vi.mocked(fetch).mock.calls.length
     await vi.advanceTimersByTimeAsync(15000)
@@ -92,7 +92,7 @@ describe('DownloadItem', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    await wrapper.find('.modal__li-delete').trigger('click')
+    await wrapper.find('.ct-download-item__delete').trigger('click')
 
     expect(store.downloadItems).toEqual([])
   })

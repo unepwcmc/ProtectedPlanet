@@ -54,23 +54,6 @@ $padding-medium: rem-calc(27);
   background-color: $bg;
   color: $text;
 }
-@mixin button-download {
-  @include button-basic;
-  @include button-height;
-  @include button-radius;
-  @include flex-center;
-
-  background-color: $primary;
-  font-size: rem-calc(18);
-  padding: 0 $padding-medium;
-
-  &::after {
-    @include icon-download-black;
-    content: '';
-    margin-left: rem-calc(10);
-    display: inline-block;
-  }
-}
 @mixin button-green {
   @include button-basic;
   @include button-radius;
@@ -142,20 +125,6 @@ $padding-medium: rem-calc(27);
     content: '';
     margin-left: rem-calc(6);
     width: rem-calc(18); height: rem-calc(18);
-  }
-}
-@mixin button-download-trigger {
-  @include button-download;
-}
-@mixin button-download-trigger-small {
-  @include button-download;
-  @include responsive(padding, 0, 0 $padding-medium, 0 $padding-medium);
-  @include responsive(width, $height-small, auto, auto);
-  &::after {
-    @include responsive(margin-left, 0, rem-calc(10), rem-calc(10));
-  }
-  .download__trigger-text {
-    @include responsive(display, none, initial, initial);
   }
 }
 @mixin button-dropdown {
@@ -261,9 +230,6 @@ $padding-medium: rem-calc(27);
 .button {
   &--accent { @include button-block; }
   &--all { @include button-all; }
-  &--download {
-    @include button-download;
-  }
   &--pdf {
     @include button-with-icon;
     color: $primary;

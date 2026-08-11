@@ -1,27 +1,27 @@
 <template>
   <div class="ct-download">
     <button
-      class="download__trigger"
-      :class="{ 'ct-download__trigger--disabled': downloadDisabled }"
+      class="ct-download__trigger"
+      :class="{
+        'ct-download__trigger--compact': compact,
+        'ct-download__trigger--disabled': downloadDisabled
+      }"
       :disabled="downloadDisabled"
       @click="toggleDownloadPane"
     >
       <span
-        class="download__trigger-text"
+        class="ct-download__trigger-text"
         v-text="buttonText"
       />
+      <IconDownload class="ct-download__trigger-icon" />
     </button>
-    <div
-      class="download__target"
-      :class="{ active: showPopup }"
-    >
-      <DownloadPopup
-        :options
-        @select="clickDownloadOption"
-      />
-    </div>
+    <DownloadPopup
+      v-if="showPopup"
+      :options
+      @select="clickDownloadOption"
+    />
     <DownloadCommercial
-      :isActive="showCommercialModal"
+      v-if="showCommercialModal"
       :text="textCommercial"
       @close="closeCommercialModal"
       @nonCommercial="clickNonCommercial"
@@ -33,6 +33,7 @@
 import { ref } from 'vue'
 import DownloadCommercial from '@/components/Download/Commercial.vue'
 import DownloadPopup from '@/components/Download/Popup.vue'
+import IconDownload from '@/components/Icon/Download.vue'
 import useAnalytics from '@/composables/useAnalytics'
 import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
 import type { DownloadOption, DownloadProps } from '@/types/backend'
@@ -41,6 +42,7 @@ const { trackEvent } = useAnalytics()
 
 type Download = DownloadProps
 const props = withDefaults(defineProps<Download>(), {
+  compact: false,
   downloadDisabled: false
 })
 
@@ -105,7 +107,40 @@ function toggleDownloadPane() {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-download {
+  @apply relative;
+}
+
+.ct-download__trigger {
+  @apply
+  tw-shared-button--download
+  gap-2.5
+  w-11.5
+  px-0
+  md:w-auto
+  md:px-6.75;
+}
+
+.ct-download__trigger--compact {
+  @apply
+  size-9.5
+  md:h-14
+  md:w-auto;
+}
+
 .ct-download__trigger--disabled {
   @apply tw-shared-button--disabled;
+}
+
+.ct-download__trigger-text {
+  @apply
+  hidden
+  md:inline;
+}
+
+.ct-download__trigger-icon {
+  @apply
+  w-5
+  h-4.75;
 }
 </style>

@@ -5,7 +5,7 @@
 | **Estimate** | 10–14 wk (~2.5–3.5 months) · 1 FTE with AI assistance |
 | **Depends on** | [08](./08-styles-and-assets.md) (Tailwind v4 added additive, July 2026 — done) |
 | **Blocks** | Enabling Tailwind preflight; deleting `sassc`/`sass-rails`/Bourbon/Neat; final "one styling system" exit criteria for [08](./08-styles-and-assets.md) |
-| **Status** | Wave T0 done (2026-08-03) — cleanup/convention fixes landed, see [CHANGELOG](./CHANGELOG.md#wave-t0--scsstailwind-cleanup--convention-fixes-done). T1 next. |
+| **Status** | **Re-audited 2026-08-10 against real file state — this doc had drifted badly.** Between 2026-08-04 and 2026-08-10 a large amount of real migration work landed via ~45 direct small commits ("feat: migrate resources", "feat: migrate cards, add cms text style", etc.) that were never logged back into this doc or CHANGELOG.md, whose last entry still describes T3 as "in progress." Reconciled findings: **T0-T2 done** (as before). **T3 is now fully done** — every item in its old "remaining scope" list (error-page, news, resource, `_site.scss` col-wrapper, static card grids, all 4 thematic/data-area page shells: marine/effectiveness/gdpame/wdpca, all 9 CMS layout templates, all 5 hero variants) is migrated and verified on disk; only `helpers/_cms.scss` remains, now fully orphaned (zero ERB consumers) and just needs deleting. **T7 (cards/carousel) is partially done** — the ERB-only static card grids, `ListingPageCard/*`, and `Carousel/Themes/Card.vue` are fully migrated (closes that rule-4 exception); `Search/Results/Item`, `SearchAreas/Results/Item`, `Attributes/ProtectedArea/*`, and `Dropdown/ParcelsDropdown.vue` are still 100% legacy. **T6 has one component done**: `Chart/RowPa` was renamed to `TotalCoverageChart.vue` during a "migrate coverage chart" commit and is fully `ct-`/`@apply`-based; the rest of T6 (Stats/*, RowStacked, AmChart/*) is untouched. **T4 is started** (`NavBar/*`, `Listing/{Index,List}.vue` + shared `Filters/Trigger.vue`, `Listing/FiltersPanel`+`FilterGroup`, `Filters/Checkboxes/{Index,Item}`, `Pame/Table/Pagination`+`Search/Pagination`, and `Download/{Index,Modal,Commercial,Popup,Item}` slices all done as of 2026-08-11 — see the T4 section and CHANGELOG for detail, including a dating correction: several of these were previously mis-attributed to 2026-08-10 same-day slices but actually landed in one commit the next morning). **T5, T8, T9 are confirmed still 100% untouched** (re-verified via fresh grep against current Vue component consumers, not just trusted from the old baseline). **Two new findings**: `shared/forms.css` and `shared/scrollbar.css` (from T1) are wired into `tailwind.css` but have zero live consumers anywhere — dead weight, flag for removal or reuse when T4/T8 land. The CMS layout files (`views/layouts/cms/*.css`) use three inconsistent `vw-` prefix schemes (`vw-layouts-cms-*`, `vw-cms-*`, mixed `@utility`/plain-class syntax) — violates rule 4c's path-mirroring rule (added 2026-08-05) but works today; worth a small consistency pass. Custom breakpoint tokens were reverted 2026-08-03 — every consumer uses native `md:`/`lg:`/`2xl:` — see CODE-CONVENTIONS.md rule 21. |
 
 [← Summary](./README.md)
 
@@ -28,7 +28,19 @@ independent of whether the *content* is SCSS or Tailwind. If both land, do the c
 
 ## Baseline (audited August 2026)
 
-- **131 files, 8,119 lines** under `app/assets/stylesheets/` (the ~100/~8.7k estimates in
+- **Current state (re-audited 2026-08-11): 86 legacy `.scss` files remain** (`components/_download.scss`,
+  `components/modal/_modal-download.scss`, `components/modal/_modal-download-commercial.scss`, and
+  `components/_popup.scss` all deleted this session, down from the same day's earlier count of 90)
+  — down from the 131-file original baseline below (45 files deleted so far: T0's confirmed-dead sweep
+  plus T2/T3's full retirement of nav/footer/hero/cta/content-banner/social chrome, all page shells
+  (country/region/site/home/search/error-page/news/resource), all thematic/data-area shells (marine/
+  effectiveness/gdpame/wdpca), all 9 CMS layout templates, the static ERB card grids + carousel + CTA
+  partials, and T4's `NavBar`/`Listing`/`Filters/Checkboxes`/`Pagination`/`Download` Vue slices). See
+  the Status line above and CHANGELOG's T4 section for the full reconciliation against this doc's stale
+  wave checklists — this count has drifted from hands-on commits outpacing doc updates more than once
+  already, re-verify with `find app/assets/stylesheets -name "*.scss" | wc -l` before trusting it in a
+  future session.
+- **Original baseline — 131 files, 8,119 lines** under `app/assets/stylesheets/` (the ~100/~8.7k estimates in
   [08](./08-styles-and-assets.md) undercounted nested `card/`, `cards/`, `attributes/`, `stats/`
   sub-partials).
 - **Only 15 of ~100 Vue3 islands have any `<style>` block at all.** The other **~85 are 100%
@@ -102,6 +114,68 @@ Fix the stale `styles/shared/base.css` reference in README.md's "Setup status" s
 CODE-CONVENTIONS.md rule 5 to match the real flat `styles/shared.css` filename in the same pass that
 adds rule 4b.
 
+**Correction (T3, 2026-08-03): no bare utility classes in ERB markup, not even cross-cutting ones.**
+T2 shipped an exception to the "one combined class per element" rule (below) for genuinely
+cross-cutting utilities — e.g. `<div class="page--country vw-bg--grey-xlight vw-base-spacer-small--top">`
+was left as three stacked classes, on the reasoning that `vw-base-*`/`vw-bg--*` "are the
+shared-utility tier doing exactly what it's for" (see CHANGELOG's T2 entry). **That exception is
+retracted.** Every element in ERB markup gets exactly **one** class, full stop — a page/view still
+gets its own single `vw-<page>`/`vw-<page>__<part>` class (in `views/<page>.css`) even when all it
+does is `@apply` a handful of `tw-shared-*` ingredients with no page-specific tweaks of its own.
+Reasons: (1) it's the same rule Vue SFCs already follow (one template class, ingredients composed
+in `<style scoped>`) — views shouldn't get a different rule just because they lack a component
+boundary; (2) it keeps a page's styling changeable from one file (`views/<page>.css`) without
+touching the ERB; (3) it gives every page shell a natural home for page-specific overrides later,
+instead of "add a 4th stacked class" creeping back in. Applied retroactively to `country/show.html.erb`
+(see T3 below) as the reference example; every remaining T3 page-shell file (region, protected-area/
+site, error, news, resource, CMS static pages) gets the same treatment, not just new work.
+
+**Correction (T3, 2026-08-03): `vw-base-*`/`vw-bg--*` were never `vw-` in the first place.**
+Both are consumed standalone by many *unrelated* views (T2's own baseline already listed `hero.css`/
+`cta.css`/`footer.css` plus 30+ ERB page templates) — that's the literal `tw-shared-` definition
+above ("needed by >1 component or view"), not `vw-`'s ("chrome with no owning component" — singular,
+one page). T2 misnamed and mis-homed the whole family in `views/base.css`/`views/background.css`.
+Fixed in T3: moved wholesale to `shared/base.css`/`shared/background.css` as `tw-shared-base-*`/
+`tw-shared-bg--*`, all ~40 consumers repointed. This also surfaced a real duplicate: `tw-shared-
+base-container` already existed in `shared/base.css` (added in T1, consumed by `views/topbar.css`,
+`views/topbar-secondary.css`, `Tabs.vue`, `Banner/Index.vue`) using native `md:`/`lg:` (768px/1024px)
+breakpoints, written *before* T2's investigation into the legacy `.container` class's real compiled
+breakpoints (`medium:`/`large:`, 1025px/1201px, see T2's own file-header comment on the shadowed
+`gutters()` mixin). The two were never reconciled. Resolved by keeping one definition — the
+legacy-verified `medium:`/`large:` version — so `topbar`/`Tabs`/`Banner` now inherit the corrected
+breakpoints too. **This is a real, if narrow, behaviour change for those 3 pre-existing consumers**
+(container padding now steps up at 1025px/1201px instead of 768px/1024px) — needs a live check on
+tablet-width viewports for the topbar and any Tabs/Banner-bearing page, not just the pages this wave
+already touches.
+
+**Correction (T3, 2026-08-03, second pass): the retracted-exception fix above was only actually
+applied to `country/show.html.erb` — every other file in the 40-consumer rename list was given a
+purely mechanical `vw-base-*` → `tw-shared-base-*` / `vw-bg--*` → `tw-shared-bg--*` prefix swap,
+which left every one of them with `tw-shared-*` classes exposed directly in ERB markup (often still
+stacked 2-3 deep), the exact thing the rule above forbids. Tightened and made explicit:**
+- **No `tw-shared-*` class (or any shared-tier class) may appear directly in a `class="..."`
+  attribute in ERB, ever — not even a single one, not even with no page-specific tweaks.** Every
+  element gets its own `vw-<page>`/`vw-<page>__<part>` class, defined in that page's
+  `views/<page>.css`, whose `@apply` body is where `tw-shared-*` ingredients actually get consumed.
+  `country/show.html.erb`/`views/country.css` is the reference shape. This is stricter than the
+  first correction above (which only explicitly barred *stacking multiple* classes) — a page
+  showing exactly one bare `tw-shared-base-container` is just as wrong as showing three stacked
+  classes; the failure mode either way is the ERB depending on shared-tier naming directly instead
+  of through its own page-owned indirection layer.
+- **Default every rule to a real `@utility` (or, when the cascade-layer bug applies, a plain
+  selector — see the existing pattern) applied *directly to the element that needs it*, never to a
+  descendant reached via a parent class (`.parent h2 { ... }`), *unless* that descendant is
+  CMS-authored rich-text content the developer cannot add a class to** (e.g. `.cms-wysiwyg`'s
+  database-sourced `h1`/`h2`/`p`/`a` output — the one legitimate case for a bare-tag descendant
+  selector, since there's no ERB `class="..."` to edit). Any element rendered by an ERB
+  `<tag>...</tag>` — even one holding a CMS *value* like `<h2><%= title %></h2>` — is
+  developer-controlled markup: give it its own class directly rather than reaching for it from the
+  parent. Caught one real violation of this while fixing the above:
+  `shared/base.css`'s `.tw-shared-base-container--component h2 { margin-top: 0; }` targets a plain
+  ERB-authored `<h2>` (in `_chart-row-pa.html.erb`/`_chart-coverage-growth.html.erb`, both fully
+  developer-controlled, no CMS content) — fixed by giving that `h2` its own class directly instead
+  of a descendant selector.
+
 ### Decision: preflight stays off until the final wave
 
 Tailwind's base reset (`preflight.css`) stays disabled (per [08](./08-styles-and-assets.md)) through
@@ -140,19 +214,19 @@ often share one legacy partial (e.g. `_lists.scss` styles both `Attributes/*` an
 
 ## Wave overview
 
-| Wave | Scope | Depends on | Touches |
-|---|---|---|---|
-| **T0** | Delete confirmed-dead SCSS; fix stale doc refs; codify `vw-` (rule 4b) | — | docs only + 8 files deleted |
-| **T1** | Shared Tailwind foundation — port mixins/functions to `@theme`/`@utility`, split `shared.css` | T0 | `styles/shared.css` → `styles/shared/*.css`, `tailwind.css` `@theme` |
-| **T2** | Views-only global chrome (nav/footer/hero/cta/content-banner/custom) | T1 | ERB only, 0 Vue |
-| **T3** | Views-only page shells + static card grids + form + CMS wysiwyg | T1 | ERB only, 0 Vue |
-| **T4** | Vue-only leaves with no existing coupling (NavBar, Listing, Pagination, Search/SearchAreas non-exception, Download, form checkboxes) | T1 | Vue templates + new `ct-` styles |
-| **T5** | Maps (`Map/*` — 8 sub-islands, `_map.scss` views wrapper) | T1, T4 | Vue + 1 ERB wrapper |
-| **T6** | Charts + Stats (closes Wave-8 rule-4 exceptions) | T1 | Vue only |
-| **T7** | Cards family + Listing cards + Carousel (closes `ListingPageCard` exception) | T1, T4 | Vue + a few ERB card grids |
-| **T8** | PAME + Dropdown + Select (closes Wave-9/10 rule-4 exceptions) | T1 | Vue only |
-| **T9** | Residual tabs/filters coupling (`_tabs.scss`, `_filters-sidebar.scss`) | T4, T5, T7 | Vue only |
-| **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide |
+| Wave | Scope | Depends on | Touches | Status (re-audited 2026-08-10) |
+|---|---|---|---|---|
+| **T0** | Delete confirmed-dead SCSS; fix stale doc refs; codify `vw-` (rule 4b) | — | docs only + 8 files deleted | ✅ done |
+| **T1** | Shared Tailwind foundation — port mixins/functions to `@theme`/`@utility`, split `shared.css` | T0 | `styles/shared.css` → `styles/shared/*.css`, `tailwind.css` `@theme` | ✅ done (+ 7 more shared files added post-hoc, see T1 addendum) |
+| **T2** | Views-only global chrome (nav/footer/hero/cta/content-banner/custom) | T1 | ERB only, 0 Vue | **✅ done** |
+| **T3** | Views-only page shells + static card grids + form + CMS wysiwyg | T1 | ERB only, 0 Vue | **✅ done** (only `helpers/_cms.scss` deletion + `_helpers.scss` cleanup + a live-browser check left) |
+| **T4** | Vue-only leaves with no existing coupling (NavBar, Listing, Pagination, Search/SearchAreas non-exception, Download, form checkboxes) | T1 | Vue templates + new `ct-` styles | started — `NavBar/*` + `Listing/*` + `Filters/Checkboxes` + `Pagination` done |
+| **T5** | Maps (`Map/*` — 8 sub-islands, `_map.scss` views wrapper) | T1, T4 | Vue + 1 ERB wrapper | not started |
+| **T6** | Charts + Stats (closes Wave-8 rule-4 exceptions) | T1 | Vue only | 1/~13 components done (`TotalCoverageChart.vue`, formerly `Chart/RowPa`) |
+| **T7** | Cards family + Listing cards + Carousel (closes `ListingPageCard` exception) | T1, T4 | Vue + a few ERB card grids | **partially done** — ERB card grids, `ListingPageCard/*`, `Carousel/Themes/Card.vue` done; `Search/Results/Item`, `SearchAreas/Results/Item`, `Attributes/ProtectedArea/*`, `Dropdown/ParcelsDropdown.vue` remain |
+| **T8** | PAME + Dropdown + Select (closes Wave-9/10 rule-4 exceptions) | T1 | Vue only | not started (`Dropdown/Base.vue`/`Options.vue` already render `ct-dropdown*` markup, but still styled by legacy `_dropdown.scss`, not `@apply` — see T8 below) |
+| **T9** | Residual tabs/filters coupling (`_tabs.scss`, `_filters-sidebar.scss`) | T4, T5, T7 | Vue only | not started |
+| **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide | not started |
 
 *Estimates below assume the same "AI-assisted, 1 FTE, verify live in browser every wave" cadence used
 throughout the Vue migration (see CHANGELOG.md) — screenshots before/after, not just Vitest/typecheck,
@@ -193,35 +267,100 @@ since this is a pure-visual risk surface.*
 **Goal:** give every later wave the shared primitives it needs, so T2+ is "apply an existing utility",
 not "invent one per component."
 
-- [ ] Split `app/frontend/styles/shared.css` into `app/frontend/styles/shared/{base,buttons,icons,
-      forms,typography,shadows}.css` (one `@utility tw-shared-<name>` group per concern), per rule 5 —
-      only split where >1 real consumer already exists; don't pre-create empty buckets.
-- [ ] Port `utilities/_media-queries.scss`'s `breakpoint()` mixin usage to Tailwind's native
-      `sm:`/`md:`/`lg:`/`xl:` breakpoints — confirm the legacy breakpoint pixel values match Tailwind's
-      defaults or add matching values to `@theme` (`--breakpoint-*`) if they diverge.
-- [ ] Port `utilities/_flexbox.scss`'s `flex()`/`flex-h-between` etc. mixins to Tailwind's native
-      `flex`/`justify-*`/`items-*` utilities (1:1, no shared utility needed — these are Tailwind's own
-      bread and butter).
-- [ ] Port `utilities/_rem-calc.scss` — Tailwind's spacing scale is already rem-based; confirm existing
-      `@theme` spacing (if customized) matches the legacy scale's actual pixel outputs before assuming
-      arbitrary-value replacement is unnecessary.
-- [ ] Turn `helpers/mixins/_text.scss` and `helpers/mixins/_icons.scss` (SVG icon mixins) into shared
-      `@utility tw-shared-icon-*` classes — these back a large fraction of both views' and components'
-      icon rendering (`_icons.scss` has 25 direct consumers across Views+Vue).
-      `helpers/_border-and-shadows.scss` similarly → `tw-shared-shadow-*`.
-      `helpers/_form-fields.scss` → `tw-shared-input-*` (feeds Wave T4's form work).
-      `helpers/_images.scss` (`image-placeholder` mixin) → `tw-shared-image-placeholder`.
-      `helpers/_beautify-scrollbar.scss` → `tw-shared-scrollbar` (feeds T7/T8's scrollable
-      cards/tables).
-- [ ] Extend the `@theme` color tokens in `tailwind.css` beyond the 8 already added if `_settings.scss`
-      has more variables in active use (audit `_settings.scss`'s full variable list against what's
-      actually still referenced once T0's dead code is gone).
-- [ ] `yarn typecheck` / `yarn lint` / `yarn vite:build` clean. No visual change expected this wave
-      (pure infrastructure) — spot-check anyway.
+- [x] Split `app/frontend/styles/shared.css` into `app/frontend/styles/shared/{base,icons,typography,
+      shadows,forms,images,scrollbar}.css` (one `@utility tw-shared-<name>` group per concern), per
+      rule 5. **`buttons.css` was NOT created** — nothing in this wave's own scope needed
+      `tw-shared-button-*` yet (base/_buttons.scss's mixins have real consumers, but none of them are
+      migrated this wave), so per "don't pre-create empty buckets" it's deferred to whichever wave
+      first migrates a button-heavy component. **`images.css` and `scrollbar.css` were added beyond
+      the originally-named 6 buckets** — `image-placeholder` and the webkit-scrollbar mixin are their
+      own concerns that don't fit `base`/`icons`/`typography`/`shadows`/`forms`; both have real
+      consumers (3 and 2 respectively), so this isn't an empty-bucket violation, just a bucket-list
+      correction — logged here per cross-cutting rule 5.
+- [x] ~~Ported `utilities/_media-queries.scss`'s breakpoint *values* to `@theme` as new, distinctly-named
+      breakpoints (`--breakpoint-small/medium/large/xlarge`) rather than overriding `sm:`/`md:`/`lg:`/`xl:`.~~
+      **REVERTED (2026-08-03, see CHANGELOG's T3-correction entry and CODE-CONVENTIONS.md rule 21).**
+      The custom tokens duplicated Tailwind's own `md:`/`lg:` almost exactly and, worse, collided with
+      them — legacy `$small` (768px) is numerically identical to Tailwind's native `md:` (768px), so any
+      call site mixing the custom `small:` token with a native `md:` utility (several did, meaning to
+      express "the tier after small") silently collapsed both to one breakpoint. Current, correct
+      mapping — legacy `$small`(768px)→`md:` (exact), `$medium`(1025px)→`lg:` (1024px, ~1px off,
+      immaterial), `$large`/`$xlarge`(1201px/1441px, rare)→`2xl:` (1536px, collapsing the two rather
+      than adding an `xl:` step). Actual component call sites (`@include breakpoint($small)` → `md:`)
+      get migrated per-file in T2+, not here.
+- [x] Confirmed `utilities/_flexbox.scss`'s mixins map 1:1 to Tailwind's native `flex`/`flex-row`/
+      `flex-wrap`/`justify-*`/`items-*` utilities — no shared utility created, per-file call-site
+      migration happens in T2+.
+- [x] Confirmed `utilities/_rem-calc.scss` matches Tailwind's rem-based spacing scale exactly — Foundation's
+      `$global-font-size: 100%` (=16px) is never overridden in `_settings.scss`, so `rem-calc(N)` and
+      Tailwind's `N/16` rem arbitrary-value math agree with no drift. No `@theme` spacing changes needed.
+- [x] Ported `helpers/mixins/_text.scss` → `shared/typography.css` (`tw-shared-text-*`/`tw-shared-h*`).
+      `helpers/mixins/_icons.scss` → `shared/icons.css` (`tw-shared-icon-*`), backed by 36 SVGs duplicated
+      into new `app/frontend/assets/icons/` (Vite-processed/fingerprinted; legacy copies under
+      `app/assets/images/icons/` untouched until T10).
+      `helpers/_border-and-shadows.scss` → `shared/shadows.css` (`tw-shared-shadow-*`/`tw-shared-border-*`;
+      `border-radius-top`/`-bottom` skipped — native `rounded-t`/`rounded-b` cover them 1:1).
+      `helpers/_form-fields.scss` → `shared/forms.css` (`tw-shared-input-*`; `input-hidden`/
+      `input-custom-focus` skipped — native `sr-only`/`outline-none` cover them 1:1). Width/height stay
+      the consuming component's own `w-*`/`h-*` rather than baked in, since the legacy mixins took a
+      `$width` arg per call site.
+      `helpers/_images.scss` → `shared/images.css` (`tw-shared-image-placeholder`).
+      `helpers/_beautify-scrollbar.scss` → `shared/scrollbar.css` (`tw-shared-scrollbar`).
+- [x] **Post-wave correction (2026-08-03): added CODE-CONVENTIONS.md rule 5b** after discovering this
+      wave had missed an already-established precedent — `app/frontend/components/Icon/{Search,Close,
+      Arrow,Pin,ExclamationCircle}.vue` already exist (used by `Search/SiteInput.vue`,
+      `Carousel/Themes/Ribbon.vue`, `Stats/TooltipInfo.vue`) and render icons as inline
+      `<svg fill="currentColor">` Vue components sized/colored by the *consumer's* own scoped
+      `@apply`, not as `tw-shared-icon-*` CSS background-image classes. Rule 5b now codifies: a
+      Vue-rendered icon is always an `Icon/*.vue` component; `shared/icons.css`'s `tw-shared-icon-*`
+      utilities are for ERB view chrome (rule 4b) only. Three follow-on fixes to this wave's own
+      output:
+      - `icon-pin($circle, $outline)` (+ `-marine`/`-oecm`/`-terrestrial`/`-light` variants) was
+        originally logged above as "not portable to a CSS utility, decide later" — it's already
+        solved, by `Icon/Pin.vue`'s existing per-part `@apply fill-*` pattern. T5 (`_v-map-popup.scss`)
+        and T7 (`card/_card-theme.scss`) reuse/extend that component rather than inventing a solution.
+        `icon-pin-outline`/`icon-pin-map` stay in `shared/icons.css` as before (plain background-image,
+        valid *if* an ERB view — not a Vue component — turns out to need them).
+      - `forms.css`'s `tw-shared-input-custom-checkbox-selected` (`@apply tw-shared-icon-tick`) was
+        removed — its only real consumers (`Filters/Checkboxes/Item`, `SearchAreas/{RadioButtons,
+        CheckboxSearch,FilterGroup}`) are Vue/T4. T4 adds `Icon/Tick.vue` and renders it in the
+        checkbox's own `:checked` markup instead.
+      - `images.css`'s `tw-shared-image-placeholder` dropped its `::after` icon overlay — its real
+        consumers (`Search/Results/Item`, `SearchAreas/Results/Item`, via `_cards.scss`) are Vue/T7.
+        The utility now provides only the non-icon shell (flex-center, grey background, sizing); T7
+        renders its own placeholder icon component inside it.
+      `shared/icons.css` itself keeps its full ~30-icon set for now (pruning which ones truly have an
+      ERB consumer vs. only a Vue one that should use `Icon/*.vue` instead is deferred to T2/T3/T4,
+      per the same mark-and-sweep discipline as legacy SCSS deletion — see file header comment).
+- [x] Extended the `@theme` color tokens: `--color-theme-grey-xdark`, `--color-theme-green-dark`,
+      `--color-theme-chart-purple`, `--color-theme-chart-green` — audited against actual usage across
+      T2/T3's file scope (`$white`/`$black` also appear there but need no token, Tailwind ships
+      `white`/`black` natively already).
+- [x] `yarn typecheck` / `yarn lint` / `yarn vite:build` / `yarn test` (Vitest) all clean in the
+      `protectedplanet-web` container — one bug caught by the build itself: a doc comment in
+      `shadows.css` containing a literal `*/` (inside "rounded-t-*/rounded-b-*") closed its CSS comment
+      early, flagged by Vite's CSS optimizer as "Unexpected token Delim('*')"; fixed by rewording. The
+      pre-existing `SearchSiteInput.spec.ts` lint error (1) and 4 Vitest failures are unrelated to this
+      wave — reproduced identically on a stash of this wave's changes (i.e. present on `master`/this
+      branch beforehand). No visual change from this wave (pure infrastructure, nothing consumes the new
+      utilities yet) — spot-check deferred to T2, the first wave that actually applies them.
+- [x] **Post-hoc addition (found during 2026-08-10 re-audit, not logged at the time):** 7 more
+      `shared/*.css` files were created between T2 and T3 that this checklist never listed —
+      `container.css` (the `tw-shared-base-container*` family, actually landed here instead of staying
+      in `base.css` as T3's narrative describes), `flex.css` (the widest-reused shared file of all, 38
+      consumers — the `gap-*` spacing primitives Decision above calls for), `buttons.css` (ported
+      `base/_buttons.scss`'s mixins, ~16 consumers), `hero.css`, `map.css`, `themes.css` (chart-legend
+      colour swatches, Rails-rendered), and `cms.css` (`tw-shared-cms-wysiwyg`, replacing
+      `helpers/_cms.scss`'s `.cms-wysiwyg` — see T3 below, that legacy file is now fully orphaned).
+      All are wired into `tailwind.css` and have real consumers except two: **`forms.css`**
+      (`tw-shared-input-custom-{radio,radio-selected,checkbox}`) and **`scrollbar.css`**
+      (`tw-shared-scrollbar`) are imported but currently have **zero live consumers anywhere** — they
+      were pre-built for T4/T8 components (checkboxes, PAME table horizontal-scroll) that haven't
+      landed yet. Not a bug, just noting so a future "unused CSS" sweep doesn't flag them as dead.
 
 ---
 
-## Wave T2 — Global chrome, views-only (~1 wk)
+## Wave T2 — Global chrome, views-only (~1 wk) — **DONE**
 
 **Goal:** the site-wide chrome every page shares, zero Vue coupling, lowest risk.
 
@@ -234,63 +373,265 @@ T0 baseline's mistaken "dead" list — real consumers: `_footer.html.erb`, `_hea
 `_topbar-secondary.html.erb`, `_social-share.html.erb`, `_social-follow.html.erb`, plus two Comfy CMS
 partials, all views-only).
 
-- [ ] Rewrite each `.erb` partial's markup to `vw-`-prefixed classes (rule 4b), backed by
+- [x] Rewrite each `.erb` partial's markup to `vw-`-prefixed classes (rule 4b), backed by
       `app/frontend/styles/views/<name>.css` per file/section (e.g. `views/hero.css`, `views/footer.css`).
-- [ ] Delete the corresponding legacy SCSS file once its last ERB consumer is switched (confirm via
-      grep, same discipline as the Wave 12 Vue dead-code sweep).
-- [ ] Live-verify: home, a hero-bearing thematic page, footer on any page, a CTA-bearing static page,
+      `custom.scss` had zero live consumers anywhere (not even compiled into `application.css`) —
+      deleted outright instead. `_nav.scss` couldn't be fully rewritten-and-deleted — only
+      `.nav--primary`'s own 2 declarations are ERB-owned; the file stays alive for T4. Full detail,
+      including a cascade-layer bug found via real-browser check (5 classes needed to be plain CSS,
+      not `@utility`, to correctly override retained bare `h1`/`h2`/`a` element rules): see
+      [CHANGELOG](./CHANGELOG.md#wave-t2--global-chrome-views-only-done).
+- [x] Delete the corresponding legacy SCSS file once its last ERB consumer is switched (confirm via
+      grep, same discipline as the Wave 12 Vue dead-code sweep). `helpers/_background.scss` kept its
+      mixins alive (still `@include`d by T4/T7 files) — only the classes section was removed.
+- [x] Live-verify: home, a hero-bearing thematic page, footer on any page, a CTA-bearing static page,
       effectiveness green-list tab (content-banner). Screenshot before/after (desktop + mobile), not
-      just curl — this is a pure-visual wave.
+      just curl — this is a pure-visual wave. `chromium-cli` wasn't available in this environment;
+      used `playwright-core` directly instead (chromium already cached locally).
 
 ---
 
-## Wave T3 — Page shells & static card grids, views-only (~1 wk)
+## Wave T3 — Page shells & static card grids, views-only (~1 wk) — **DONE** (re-confirmed 2026-08-10)
 
-Files: `pages/_country.scss`, `_error-page.scss`, `_news.scss`, `_region.scss`, `_resource.scss`,
-`_site.scss` (all `.page--*`, 0 Vue), `cards/_cards-circles.scss`, `_cards-facts.scss`,
-`_cards-scrollable.scss`, `_cards-squares.scss`, `_cards-message.scss` (static content-page card
-grids, not the Vue-rendered card families — those are T7), `components/_form.scss` + `form/*`
-overlap-check (confirm `_checkbox`/`_input`/`_radio` really are Vue-only per baseline before assuming
-0 views work here), `helpers/_cms.scss` (`.cms-wysiwyg` CMS rich-text wrapper).
+Files (as originally scoped — several names below never matched real files, see the re-audit note
+at the end of this wave): `pages/_country.scss` (**deleted**), `_error-page.scss`, `_news.scss`,
+`_region.scss`, `_resource.scss`, `_site.scss` (all `.page--*`, 0 Vue), `cards/_cards-circles.scss`,
+`_cards-facts.scss`, `_cards-scrollable.scss`, `_cards-squares.scss`, `_cards-message.scss` (static
+content-page card grids, not the Vue-rendered card families — those are T7), `components/_form.scss`
++ `form/*` overlap-check (confirm `_checkbox`/`_input`/`_radio` really are Vue-only per baseline
+before assuming 0 views work here), `helpers/_cms.scss` (`.cms-wysiwyg` CMS rich-text wrapper).
 
-- [ ] Same `vw-` treatment as T2.
+- [x] **Shared foundation correction (2026-08-03, done ahead of the rest of this wave):** moved
+      `views/base.css` + `views/background.css` wholesale into `shared/base.css`/
+      `shared/background.css` as `tw-shared-base-*`/`tw-shared-bg--*` (see the two Decisions
+      corrections above), repointed all ~40 consumers (`hero.css`/`cta.css`/`footer.css`/
+      `content-banner.css` plus every ERB page template that had them). Added
+      `tw-shared-country-region-site-basic-overview` to `shared/base.css` for the `flex-stack-mobile` mixin shared
+      by country/region/site's identical `.page__section--overview-map` rule (country is its first
+      consumer; region/site pick it up when their own rows below land).
+- [x] **`country/show.html.erb` done** — one class per element per the retracted-exception
+      Decision above: `page--country vw-bg--grey-xlight vw-base-spacer-small--top` → `vw-country`,
+      `vw-base-container` → `vw-country__container`, `page__section--overview-map` →
+      `vw-country__overview` (`@apply tw-shared-country-region-site-basic-overview`), all in new
+      `views/country.css`. `pages/_country.scss` deleted (its only rule is now the
+      `tw-shared-country-region-site-basic-overview` application above); `pdf.scss`'s `.page--country` selector
+      repointed to `.vw-country` so the PDF-export transparent-background override keeps matching.
+- [x] **Second pass (2026-08-03): every remaining `tw-shared-*` class exposed directly in ERB
+      markup wrapped in its own `vw-*` class.** The first pass above only fully applied the
+      retracted-exception fix to `country/show.html.erb` — every other one of the ~40 consumers got
+      a purely mechanical prefix rename, leaving `tw-shared-*` classes (often still stacked 2-3
+      deep) directly in `class="..."` attributes across the rest of the site. Fixed exhaustively —
+      `grep -rn "tw-shared-" --include="*.erb" app/views/` now returns zero matches. New/extended
+      `views/*.css` files, one per page or reused block (see file header comments for the exact
+      class-per-element mapping):
+      - `region.css` — `region/show.html.erb` fully retired like country (`.page--region`'s only
+        real rule was the same `flex-stack-mobile` on `.page__section--overview-map`, now
+        `vw-region__overview`); `pages/_region.scss` deleted (`.page__2cols` was already dead,
+        confirmed via grep), `pdf.scss`'s `.page--region` repointed to `.vw-region`.
+      - `site.css` — `protected_areas/show.html.erb`'s `tw-shared-*` usages wrapped in `vw-site*`
+        classes, but `.page--site` itself **stays** in the ERB (unlike country/region) since
+        `_site.scss`'s `.page__col-wrapper`/`__col-1`/`__col-2` have real PDF-width-conditional
+        content this wave doesn't touch — only the now-independent `.page__section--overview-map`
+        rule was deleted from `_site.scss` and replaced by `vw-site__overview`.
+      - `home.css`, `search.css`, `search-areas-home.css` (the `SearchAreasHome` widget wrapper,
+        reused by `home/index.html.erb` and `data/wdpca/_tab_extras.html.erb`), `error-page.css`
+        (identical `layouts/404.html.erb`/`500.html.erb` markup shares one file),
+        `cms-layouts.css` (all `layouts/cms/_*.html.erb` page-type templates — each CMS layout
+        template counts as one "view" even though many CMS-authored pages instantiate it, same as
+        a Vue component template being reused by many instances still getting one `ct-` class),
+        `thematic-pages.css` (marine/effectiveness/gdpame/wdpca + the `thematic_and_data_area`
+        shared footer/panel partials), `chart-row.css` (the chart-row wrapper block reused by
+        `_chart-row-pa.html.erb`/`_chart-coverage-growth.html.erb`), `static-cards.css`
+        (`cards/_themes.html.erb`/`_circles.html.erb` — their own `cards--themes`/`cards--circles`
+        legacy classes are untouched, T7 scope; only the `tw-shared-*` sibling was wrapped).
+      - Extended existing `cta.css` (`vw-partials-ctas-api__container--live-report`, `vw-partials-ctas-api__intro`,
+        `vw-partials-ctas-api__title--white` for the `_api`/`_mpa-guide` partials that were still using bare
+        `tw-shared-base-h2-big-white`/`tw-shared-base-text-intro`) and `hero.css`
+        (`vw-hero__title--home`, moved in from `shared/base.css`'s `tw-shared-base-h1-home` — that
+        class only ever had one consumer, so it never actually met the `tw-shared-`'s own ">1 view"
+        bar for living in `shared/` to begin with) and `content-banner.css`
+        (`vw-layouts-partials-hero-green-list__container--full`, replacing a literal `' tw-shared-base-container'`
+        string that `_content-banner.html.erb` interpolated straight into its `class="..."`
+        attribute for non-`contained:` callers).
+      - **Also fixed a descendant-selector violation of the *other* new rule** (prefer a real
+        utility applied directly to the element, only fall back to a bare-tag descendant selector
+        for CMS-uncontrolled rich text): `shared/base.css` had
+        `.tw-shared-base-container--component h2 { margin-top: 0; }` reaching into a fully
+        developer-authored `<h2><%= title %></h2>` (in the two chart-row partials, no CMS content
+        involved) from the parent. Replaced with `vw-partials-charts-chart-row-pa__title` applied directly to the
+        `h2`.
+      - Two pre-existing, *unrelated* dead-code call sites found while doing this (not fixed, only
+        renamed for source hygiene, logged so they aren't mistaken for new bugs): `effectiveness/
+        index.html.erb` and `gdpame/index.html.erb` both pass a `classes: "...tw-shared-bg-image-
+        overlay--white"` local into `hero-basic` via `thematic_and_data_area_hero_locals(...).merge(...)` —
+        but that helper always also sets `image:`, and `hero-basic.html.erb`'s `if local_assigns.has_key?
+        :image` branch never calls `get_local_classes`, so this local has silently never rendered
+        onto the header. Renamed to `vw-effectiveness__hero-overlay`/`vw-gdpame__hero-overlay` as
+        source hygiene only — fixing the actual dead branch is a separate, unrelated task.
+      - Full re-verification: `yarn vite:build`/`yarn typecheck` clean, every new class confirmed
+        present in the compiled CSS (`grep` against `layout-*.css`), and live-checked in a real
+        browser — home, country, region, and a protected-area page all render their new classes
+        with the expected computed styles (background colour, container max-width/padding,
+        flex/flex-wrap behaviour). CMS/thematic page routes couldn't be reached in this dev
+        environment's seed data (`/marine`, `/search`, `/data/gdpame` etc. 404 through to
+        `ProtectedAreasController`/Comfy's catch-all — a routing/seed-data gap, confirmed
+        unrelated to this change via the server log) — re-verify those visually once real content
+        is available.
+- [x] **`_error-page.scss`, `_news.scss`, `_resource.scss` — done.** All three legacy files are
+      deleted (`git log --diff-filter=D` shows `b1fa85e73 feat: migrate error page`,
+      `69abff942 feat: migrate news-and-stories`, `a4103c0b9 feat: migrate resource`). Backed by
+      `views/layouts/error-page.css`, `views/layouts/cms/news-and-stories{,-article}.css`,
+      `views/layouts/cms/resource{,s}.css`.
+- [x] **Static card grids — done, under different filenames than originally guessed.** The legacy
+      filenames listed above (`cards/_cards-circles.scss` etc.) never actually existed on disk — the
+      real partials are `app/views/partials/cards/_{circles,facts,squares,news,resources,sites}.html.erb`
+      and `_themes.html.erb`, all now rewritten to `vw-partials-cards-*`/`vw-cards-*` classes backed by
+      `views/partials/cards/{circles,facts,squares,news,resources,sites,themes/{index,card}}.css`. No
+      "scrollable" or "message" card-grid partial was ever found — likely dead scope from the start,
+      not something this wave skipped.
+- [x] **`_site.scss`'s `.page__col-wrapper`/`__col-1`/`__col-2` — done**, contrary to this item's
+      original "deliberately left alone" note. Ported into `views/site.css` as
+      `vw-site__col-wrapper`/`__col-1`/`__col-2` (the `.pdf .vw-site__col-1/2` PDF-width override kept
+      as an unlayered plain selector, same treatment as other PDF-conditional rules elsewhere in this
+      doc); `pages/_site.scss` fully deleted.
+- [x] **All 9 CMS layout templates + all 4 thematic/data-area page shells (marine, effectiveness,
+      gdpame, wdpca) + all 5 hero variants — done.** These were flagged as "couldn't be reached in
+      this dev environment's seed data" in the second-pass note above; re-verified 2026-08-10 that
+      every one of `views/layouts/cms/{about,basic,data-areas,news-and-stories(-article),resource(s),
+      thematic-and-data-area-default,thematic-areas}.css`, `views/thematic/{marine,effectiveness/
+      {index,green-list-tab}}.css`, `views/data/{gdpame,wdpca}/{index,tab-content|tab-extras}.css`,
+      and `views/layouts/partials/hero/{basic,green-list,home,marine,small}.css` exist, define real
+      `vw-*` classes, and are consumed by their exact owning `.erb` file (confirmed via static
+      grep-cross-reference, not a live route hit — the seed-data gap noted above may still apply for
+      an actual browser check). **Naming inconsistency found while confirming this:** the CMS layout
+      files use three different `vw-` prefix schemes (`vw-layouts-cms-*` as plain classes,
+      `@utility vw-cms-*`, and a mixed `.vw-cms-*` plain-class form) — this doesn't match rule 4c's
+      path-mirroring convention (added 2026-08-05, after these files shipped) consistently. Works
+      today; a follow-up consistency pass would normalize all of them to `vw-layouts-cms-*` per rule
+      4c's own worked example. Not blocking, just logged so it isn't mistaken for a bug later.
+- [x] **`components/_form.scss` + `form/*` overlap check — resolved, confirms Vue-only.** Re-verified
+      2026-08-10: `_checkbox.scss`/`_radio.scss`/`_input.scss` are consumed exclusively by
+      `Filters/Checkboxes/Item.vue` and `SearchAreas/RadioButtons.vue` (both still 100% legacy,
+      zero `<style>` blocks) — zero ERB consumers. This was already correctly listed under **T4**'s
+      scope; nothing to do here in T3, the "overlap check" this item asked for is done and confirms
+      no T3 work is needed.
+- [x] **`helpers/_cms.scss` — now dead, not migrated in place.** `.cms-wysiwyg` has zero remaining
+      ERB consumers (`grep -rn cms-wysiwyg app/views` returns nothing) — every real consumer now uses
+      the new `tw-shared-cms-wysiwyg` utility in `shared/cms.css` instead. The legacy file itself
+      (27 lines) is still sitting on disk and still `@import`ed via `helpers/_helpers.scss` →
+      `application.scss`, so it's pure dead weight now, not "unresolved migration work." **Delete it**
+      — this is the one concrete file-deletion action left in T3.
 - [ ] `_helpers.scss`'s remaining utility classes not already deleted in T0 (`.block`, `.red`, `.bold`,
       etc.) — replace call sites with native Tailwind equivalents (`block`, `text-red-500`, `font-bold`)
-      directly in the ERB, then delete the file.
-- [ ] Live-verify: country page, region page, a resource page, error page (404/500), one CMS static
-      page with a facts/circles/squares/scrollable card grid.
+      directly in the ERB, then delete the file. **Still genuinely open** — re-checked 2026-08-10,
+      file (and its `@import`s of `_cms.scss`/`_background.scss`/etc.) still present, not reverified
+      further this pass.
+- [ ] Live-verify in a real browser (still open — this pass was static/grep-based, not a live-route
+      check): a resource page, error page (404/500), one CMS static page with a facts/circles/
+      squares card grid, and marine/effectiveness/gdpame/wdpca now that the ERB side is confirmed
+      done. **Also re-check topbar and any Tabs/Banner-bearing page at tablet widths (768-1024px)** —
+      the base-container breakpoint correction above changes their container padding step point.
 
 ---
 
-## Wave T4 — Vue leaves with no existing styling (~1.5–2 wk, largest single wave)
+## Wave T4 — Vue leaves with no existing styling (~1.5–2 wk, largest single wave) — started 2026-08-10 (`NavBar/*` + `Listing/*` + `Listing/FiltersPanel` + `Filters/Checkboxes` + `Pagination` + `Download` done)
 
 **Goal:** close the ~85-component gap for the lowest-coupling islands first, mirroring the original
 Vue-migration principle (leaf/zero-coupling before global chrome/state).
 
-Components (confirmed zero `<style>` block, legacy-class-dependent): `NavBar/*`, `Listing/*`
-(`_listing.scss`), `PaginationInfinityScroll`/`Pame/Table/Pagination`/`Search/Pagination`/
-`SearchAreas/Index` pagination usage (`_pagination.scss`), `Search/*` except the already-migrated
-`SiteInput.vue`, `SearchAreas/*` except `TabStrip/Tab.vue` (`_search-autocomplete.scss`,
-`_search-results.scss`, `_search-results-areas.scss`, `_autocomplete.scss`), `Filters/Checkboxes/Item`,
-`SearchAreas/{RadioButtons,CheckboxSearch,FilterGroup}` (`form/_checkbox.scss`, `_input.scss`,
-`_radio.scss`), `Download/{Modal,Commercial,Popup}` (`modal/_modal-download.scss`,
-`_modal-download-commercial.scss`, `components/_popup.scss` — moved here from the T0 baseline's
-mistaken "dead" list; real consumer, with passing Vitest coverage to update alongside the rewrite).
+**Correction to this wave's own earlier framing (same day):** `Listing/FiltersPanel.vue`/
+`FilterGroup.vue` were initially deferred to T9 on the reasoning that they share `_filters-sidebar.scss`
+with unmigrated `SearchAreas/FilterGroup.vue`/`FiltersPanel.vue`. **Retracted after user feedback** —
+sharing a legacy SCSS file doesn't mean sharing a component; `SearchAreas`'s panel/group are their own
+independent `.vue` files with zero markup overlap, so `Listing`'s side could (and should) migrate on
+its own schedule, leaving `_filters-sidebar.scss` itself alone until `SearchAreas`'s turn comes. Also
+migrated as a real `{Desktop,Mobile}.vue` component split per direct user request, not just responsive
+CSS on one component — see below.
 
-- [ ] Per component: rewrite template classes to `ct-`-prefixed BEM, add `<style scoped>` with
-      `@apply` (using T1's shared utilities where applicable), delete the legacy SCSS once its last
-      consumer moves.
+Components (confirmed zero `<style>` block, legacy-class-dependent): ~~`NavBar/*`~~ (**done**,
+see below), ~~`Listing/{Index,List}.vue` + `Filters/Trigger.vue` + `Listing/FiltersPanel.vue` +
+`Listing/FilterGroup.vue`~~ (**done**, see below), ~~`Filters/Checkboxes/{Index,Item}.vue`~~ (**done**,
+landed in the same commit as the `Listing`/`Trigger`/`FilterGroup` slice, `form/_checkbox.scss`
+deleted), ~~`Pame/Table/Pagination`/`Search/Pagination` (`_pagination.scss`)~~ (**done**, see below;
+`PaginationInfinityScroll.vue` needed nothing beyond its earlier dead-CSS class rename), ~~`SearchAreas/
+InputAutocomplete.vue`~~ (**done** — landed 2026-08-07 in `511c2f5eb`, mis-tracked as open until the
+2026-08-11 re-audit), `Search/*` except the already-migrated `SiteInput.vue`,
+`SearchAreas/*` except `TabStrip/Tab.vue` (`_search-autocomplete.scss` — used only by `Map/PaSearch.vue`
+now, T5 scope, not T4 — `_search-results.scss`, `_search-results-areas.scss` — its `&__filter-trigger`
+rule closed out alongside `Filters/Trigger.vue`, rest of the file still open),
+`SearchAreas/{RadioButtons,CheckboxSearch,FilterGroup}` (`form/_input.scss`,
+`form/_radio.scss` — NOT `_checkbox.scss`, that file's only real consumer was `Filters/Checkboxes/
+Item.vue`, now migrated and deleted; a prior draft of this doc misattributed it to this group),
+~~`Download/{Index,Modal,Commercial,Popup,Item}.vue`~~ (**done**, see below).
+
+- [x] **`NavBar/{Index,Link,Dropdown}.vue` done, `components/_nav.scss` deleted.** New
+      `ct-nav-bar*`-prefixed styles, new `Icon/Burger.vue`, reused existing `Icon/Close.vue`/
+      `Icon/Arrow.vue` per rule 5b. `_topbar.html.erb`'s now-dead `nav--primary` mount class
+      dropped. Full detail, including two dead-code findings (an unstyled `<span>` and a
+      cascade-shadowed utility-class stack) and the Vue-attrs-fallthrough class-merging note for
+      future sub-component work in this wave: see
+      [CHANGELOG](./CHANGELOG.md#wave-t4--vue-leaves-with-no-existing-styling-started-navbar-slice-done).
+- [x] **`Listing/{Index,List}.vue` + shared `Filters/Trigger.vue` done, `components/_listing.scss`
+      deleted** (plus the now-dead `button-filter-trigger`/`icon-filters` mixins and the dormant
+      `tw-shared-icon-filters` utility). New `Icon/Filters.vue` + `Icon/LoadingSpinner.vue` per rule
+      5b. Closed a real behavioural gap in passing — `Trigger.vue`'s disabled state is now one real,
+      working `ct-filters-trigger--disabled` shared by both its consumers (`Listing/Index.vue` never
+      had working disabled styling before; `SearchAreas/Page.vue` did) — plus two independent
+      pre-existing dead-CSS bugs (the `icon-visible` spinner-toggle class and a `search__results-none`
+      selector that only worked nested under a `.search--results-areas` ancestor `Listing` never has).
+      Full detail: see
+      [CHANGELOG](./CHANGELOG.md#wave-t4--vue-leaves-with-no-existing-styling-started-navbar-slice--listing-slice-done).
+- [x] **`Listing/FiltersPanel.vue` + `Listing/FilterGroup.vue` done** (same-day follow-up, user
+      feedback-driven). New `Listing/FiltersPanel/{Desktop,Mobile}.vue`, mirroring the
+      `NavBar/{Desktop,Mobile}.vue` split precedent but `v-if`/`v-else`-gated via `useBreakpoint()`
+      (single DOM tree mounted at a time) rather than CSS `hidden`/`flex` toggling — a deliberate
+      departure since the two variants differ structurally, not just visually (full-screen drawer
+      with topbar+close-footer vs. a plain static sidebar column). `FiltersPanel.vue` itself is now a
+      thin switcher. Cutoff is 1024px (`isLarge || isXLarge`), narrower than the legacy SCSS's 768px —
+      a deliberate simplification, not a straight port; tablet widths now get the mobile drawer too.
+      `FilterGroup.vue` migrated once, shared by both variants (no breakpoint distinction in its own
+      legacy CSS). `_filters-sidebar.scss` is **not** touched/deleted — still has real
+      `SearchAreas/{FilterGroup,FiltersPanel}.vue` consumers, its own separate unmigrated files. Full
+      detail: see
+      [CHANGELOG](./CHANGELOG.md#wave-t4--vue-leaves-with-no-existing-styling-started-navbar-slice--listing-slice--filterspanel-slice-done).
+- [x] **`Pame/Table/Pagination.vue` + `Search/Pagination.vue` done, `components/_pagination.scss`
+      deleted** (2026-08-11), plus its now-dead `button-next`/`button-prev`, `icon-circle-chevron-
+      {green,grey}-{left,right}`, and `text-pagination`/`text-pagination-no-results` mixins. Both
+      buttons' circle-chevron icon reuses the existing `Icon/CircleChevron.vue`, extended with
+      `direction`/`circleColor` props rather than duplicated. Found and fixed a latent bug shared by
+      every `Icon/*.vue` component (icon root is `display: inline`, so a sizing utility on it is a
+      silent no-op unless the consumer happens to be a flex item) — fixed locally via `inline-flex` on
+      the pagination buttons; flagged for a wider sweep. Could not live-verify `Pame/Table/Pagination.vue`
+      (its only mount route, `/data/gdpame`, 500s on a pre-existing dev seed-data gap) — verified via
+      Vitest instead. Full detail: see
+      [CHANGELOG](./CHANGELOG.md#wave-t4--vue-leaves-with-no-existing-styling-started-navbar-slice--listing-slice--filterspanel-slice-done).
+- [x] **`Download/{Index,Modal,Commercial,Popup,Item}.vue` done** (2026-08-11), closing
+      `components/_download.scss`, `components/modal/_modal-download.scss`,
+      `components/modal/_modal-download-commercial.scss`, and `components/_popup.scss` (all 4
+      deleted) plus their now-dead `button-download*`/`icon-warning` mixins. New `Icon/{CircleClose,
+      Minus,Warning}.vue`; the two legacy fallthrough-class size variants (`download--search`/
+      `download--small`) collapsed into one new `compact` prop on `DownloadProps`, since the only
+      real difference between them was a single mobile-breakpoint square-size override. `.download__
+      target`'s toggle wrapper `<div>` was dropped outright in favour of a plain `v-if`. Full detail:
+      see [CHANGELOG](./CHANGELOG.md#wave-t4--vue-leaves-with-no-existing-styling-started-navbar-slice--listing-slice--filterspanel-slice-done).
+- [ ] Per remaining component: rewrite template classes to `ct-`-prefixed BEM, add `<style scoped>`
+      with `@apply` (using T1's shared utilities where applicable), delete the legacy SCSS once its
+      last consumer moves.
 - [ ] Since several of these share one legacy file (e.g. `_search-autocomplete.scss` feeds both
       `Search/Index.vue` and `SearchAreas/InputAutocomplete.vue`), sequence components sharing a file
       together so the file can be deleted in one sub-step rather than left half-migrated.
 - [ ] Existing Vitest coverage should mostly survive (BEM class renames may break class-based
-      selectors in specs — update alongside, same as every prior wave).
-- [ ] Live-verify: nav burger + search topbar, a listing page (news/resources), search results page,
-      search-areas page with filters/pagination, a download modal + the commercial download modal.
+      selectors in specs — update alongside, same as every prior wave). Worth a quick sweep for other
+      already-stale spec assertions left over from earlier waves while touching a component — this
+      round found 4 pre-existing broken assertions in `Listing/__tests__/*.spec.ts` referencing a
+      `.card__h3` class that hasn't existed since an earlier T7 session's rename.
+- [ ] Live-verify: nav burger + search topbar, a listing page (news/resources — done), search results
+      page, search-areas page with filters/pagination, a download modal + the commercial download
+      modal.
 
 ---
 
-## Wave T5 — Maps (~1 wk)
+## Wave T5 — Maps (~1 wk) — not started (confirmed 2026-08-10)
 
 Files: `components/maps/*` (8 files: `_v-map-header`, `_v-map-filters`, `_v-map-filter`,
 `_v-map-pa-search`, `_v-map-disclaimer`, `_v-map-toggler`, `_v-map-baselayer-controls`,
@@ -307,19 +648,30 @@ Files: `components/maps/*` (8 files: `_v-map-header`, `_v-map-filters`, `_v-map-
 
 ---
 
-## Wave T6 — Charts + Stats, closes Wave-8 rule-4 exceptions (~1–1.5 wk)
+## Wave T6 — Charts + Stats, closes Wave-8 rule-4 exceptions (~1–1.5 wk) — 1/~13 components done (confirmed 2026-08-10)
 
 Files: `components/_charts.scss` + `charts/*` (7 files), `card/stats/*` (9 files),
 `components/_lists.scss` (shared by `Attributes/*` and `Stats/*`).
 
-Components: `Chart/RowPa`, `Chart/RowStacked`, `AmChart/Pie`, `AmChart/Multiline`,
+Components: ~~`Chart/RowPa`~~, `Chart/RowStacked`, `AmChart/Pie`, `AmChart/Multiline`,
 `Stats/{Sources,IucnCategories,Sites,TooltipInfo,Governance,Designations,Message,Coverage}`,
 `Attributes/*` (Wave 9's family, sharing `_lists.scss`).
 
-- [ ] Rewrite each to `ct-`-prefixed styles per the same pattern; this wave specifically **closes** the
-      `Stats*`/`ChartRowPa`/`ChartRowStacked` rule-4 exception entries in CODE-CONVENTIONS.md — remove
-      them from the exception-precedent list once done, so the doc doesn't keep advertising a resolved
-      exception as current guidance.
+- [x] **`Chart/RowPa` — done, found during 2026-08-10 re-audit.** The component no longer exists
+      under that name; it was renamed to `Chart/TotalCoverageChart.vue` during the
+      `ef5c17575 feat: migrate coverage chart` commit and is now fully `ct-total-coverage-chart*`
+      with its own `<style scoped lang="css">` `@apply` block — no legacy classes remain. Its ERB
+      wrapper (`_chart-row-pa.html.erb`/`_chart-coverage-growth.html.erb`) was already confirmed done
+      in T3 above. `Chart/RowStacked.vue` is the one still fully legacy (`chart__title`/`chart__bar`/
+      `chart__percent`, no `<style>` block) — don't conflate the two despite the similar old names.
+- [ ] Rewrite the rest (`RowStacked`, `AmChart/*`, all `Stats/*`, `Attributes/*`) to `ct-`-prefixed
+      styles per the same pattern — **confirmed still 100% untouched** (re-verified via grep against
+      current component files 2026-08-10: `Stats/Sites.vue` and `Stats/Message.vue` have a `<style>`
+      block already but still reference legacy `.card`/list classes underneath — not yet a clean
+      `ct-` rewrite). This wave specifically **closes** the `Stats*`/`ChartRowStacked` rule-4 exception
+      entries in CODE-CONVENTIONS.md (the `ChartRowPa` entry can be removed now, per the item above) —
+      remove them from the exception-precedent list once done, so the doc doesn't keep advertising a
+      resolved exception as current guidance.
 - [ ] amCharts 4→5 is explicitly out of scope here (already deferred separately per README) — style
       the amCharts *wrapper* markup only, not the chart library's own internals.
 - [ ] Live-verify: country/region page stats blocks, a PA show page's `attributes-*` cards, the
@@ -327,29 +679,43 @@ Components: `Chart/RowPa`, `Chart/RowStacked`, `AmChart/Pie`, `AmChart/Multiline
 
 ---
 
-## Wave T7 — Cards family, Listing cards, Carousel (~1–1.5 wk)
+## Wave T7 — Cards family, Listing cards, Carousel (~1–1.5 wk) — **partially done** (re-audited 2026-08-10)
 
-Files: `components/_cards.scss` (aggregator) + `cards/cards/{_cards-articles,_cards-basic,
-_cards-resources,_cards-themes,_cards-search-results,_cards-search-results-areas}.scss`,
-`card/_card-theme.scss`, `card/attributes/{_card-attributes-pa-and-parcels,
-_card-attributes-parcels-dropdown}.scss`.
+**Remaining files** — re-verified still on disk with real Vue consumers: `cards/cards/{_cards-articles,
+_cards-basic,_cards-resources,_cards-search-results,_cards-search-results-areas}.scss`,
+`card/attributes/{_card-attributes-pa-and-parcels,_card-attributes-parcels-dropdown}.scss`.
+**Already deleted, contrary to this wave's original file list**: `components/_cards.scss` no longer
+has a live `.card`/`.cards` class body worth migrating (the family aggregator, superseded by the ERB
+work below), `cards/cards/_cards-themes.scss`, and `card/_card-theme.scss` — both gone, folded into
+`Carousel/Themes/Card.vue`'s own `ct-theme-card*` scoped styles (see below).
 
-Components: `ListingPageCard/{News,Resources}/{Index,Card}`, `Carousel/Themes/{Index,Card}`,
-`Search/Results/Item`, `SearchAreas/Results/Item`, `Attributes/ProtectedArea/*`,
-`Dropdown/ParcelsDropdown.vue` (card-family consumer despite living in the `Dropdown/` folder — don't
-conflate with T8's `ct-dropdown` work).
-
-- [ ] This wave **closes the `ListingPageCard` rule-4 exception** — remove it from
-      CODE-CONVENTIONS.md's exception-precedent list once done.
-- [ ] `Carousel/Themes/Card.vue` already has partial `ct-theme-card` styling (from the Swiper
-      migration) alongside leftover legacy `card__`/`card--` classes for some elements — finish the job
-      rather than leaving it half-`ct-`/half-legacy.
-- [ ] Live-verify: news/resources listing pages, home + marine carousels, search results (both site
-      and area search), a PA show page's attributes cards, the gdpame parcels dropdown.
+**Components — split by actual status, re-verified 2026-08-10:**
+- [x] `ListingPageCard/{News,Resources}/{Index,Card,Info}.vue` — **done.** Fully `ct-listing-page-
+      card-*` prefixed with scoped `@apply` styles, zero unprefixed legacy classes remain in either
+      the templates or their specs. **This wave closes the `ListingPageCard` rule-4 exception** —
+      remove it from CODE-CONVENTIONS.md's exception-precedent list.
+- [x] `Carousel/Themes/{Index,Card}.vue` — **done**, contrary to this wave's original "half-`ct-`/
+      half-legacy, finish the job" framing. `Card.vue` is now fully `ct-theme-card*` with no leftover
+      `card__`/`card--` classes anywhere in the file or its spec.
+- [x] The static ERB card grids (`partials/cards/_{circles,facts,squares,news,resources,sites,
+      themes}.html.erb`) — already confirmed done under **Wave T3** above (they were misfiled as T7
+      cards-family work in this wave's old framing, but their real consumer is ERB, not Vue — no
+      overlap with the Vue items below).
+- [ ] `Search/Results/Item.vue`, `SearchAreas/Results/Item.vue` — **confirmed still 100% legacy**
+      (`card__link`/`card__content`/`card__title`/`card__summary`/`card__image-placeholder`, no
+      `<style>` block). Backed by `cards/cards/_cards-search-results{,-areas}.scss`.
+- [ ] `Attributes/ProtectedArea/*` — **confirmed still 100% legacy**, backed by
+      `card/attributes/_card-attributes-pa-and-parcels.scss`.
+- [ ] `Dropdown/ParcelsDropdown.vue` (card-family consumer despite living in the `Dropdown/` folder —
+      don't conflate with T8's `ct-dropdown` work) — **confirmed still 100% legacy**, backed by
+      `card/attributes/_card-attributes-parcels-dropdown.scss`.
+- [ ] Live-verify (still open): news/resources listing pages, home + marine carousels, search results
+      (both site and area search — once migrated), a PA show page's attributes cards, the gdpame
+      parcels dropdown.
 
 ---
 
-## Wave T8 — PAME + Dropdown + Select, closes Wave-9/10 rule-4 exceptions (~1–1.5 wk)
+## Wave T8 — PAME + Dropdown + Select, closes Wave-9/10 rule-4 exceptions (~1–1.5 wk) — not started (confirmed 2026-08-10)
 
 Files: `components/table/{_table-pame,_table-head-pame,_table-horizontal-scroll,
 _table-head-horizontal-scroll}.scss`, `components/filters/_filters-pame.scss`,
@@ -363,6 +729,15 @@ still plain legacy-mixin SCSS, not `@apply`, so it still needs the real rewrite)
 
 - [ ] Closes the **Wave 10 `Pame/*`** and **Wave 9 `Dropdown`** rule-4 exceptions — remove both from
       CODE-CONVENTIONS.md's exception list once done.
+- [x] **Re-confirmed 2026-08-10, unchanged:** `Dropdown/Base.vue`/`Options.vue` render
+      `ct-dropdown__*`/`ct-dropdown-options__*` markup but have no `<style>` block at all — those
+      exact class names are still defined in legacy `components/_dropdown.scss` as plain
+      mixin-driven SCSS, not `@apply`. The `ct-` naming is real but cosmetic until this wave lands.
+      **Also found this pass:** `base/_buttons.scss` (the source T1 ported into `shared/buttons.css`)
+      is now down to a single live consumer, `Pame/Table/DownloadCsv.vue` (`.button`/`.button__text`/
+      `.download__trigger-text`) — everything else already moved to `tw-shared-button-*`. Worth
+      migrating `DownloadCsv.vue` alongside the rest of this wave's `Pame/Table/**` work so
+      `base/_buttons.scss` can be deleted outright rather than surviving as a single-consumer file.
 - [ ] Confirm `_select-searchable.scss` is genuinely superseded by `Search/SiteInput.vue`'s existing
       Tailwind styling before assuming zero migration work — the T0-era audit flagged this as
       "not independently confirmed," verify directly before skipping it.
@@ -374,7 +749,7 @@ still plain legacy-mixin SCSS, not `@apply`, so it still needs the real rewrite)
 
 ---
 
-## Wave T9 — Residual tabs/filters coupling (~0.5 wk)
+## Wave T9 — Residual tabs/filters coupling (~0.5 wk) — not started (confirmed 2026-08-10; note `Tabs.vue` itself is already fully `ct-tabs__*` from an earlier wave — this wave is only the *other* `.tabs` consumers listed below)
 
 Files: `_tabs.scss` (distinct from the already-fully-migrated `Tabs.vue`'s own `ct-tabs*` styling —
 this is the *other* `.tabs` consumers), `_filters-sidebar.scss`.
@@ -443,6 +818,13 @@ Components: `SearchAreas/Index.vue`, `SearchAreas/CheckboxSearch.vue`, `RegionCo
    note: when a legacy rule spaces siblings via margin/padding on the children, convert the parent to
    `flex`/`grid` and move the spacing to `gap-x-*`/`gap-y-*` on the container, rather than porting the
    same margin values to `m-*` utilities on each child.
+7. **An icon rendered by a Vue component is an `Icon/*.vue` component, never a `tw-shared-icon-*` CSS
+   class** (CODE-CONVENTIONS.md rule 5b, added during T1) — applies to every wave from here that
+   migrates an icon-consuming component (T2's ERB-only chrome is the one exception, since `vw-`
+   classes have no Vue component to hang an icon off). When a legacy icon mixin needs per-instance
+   color variation (like the old `icon-pin($circle, $outline)` family), follow `Icon/Pin.vue`'s
+   per-part `@apply fill-*` pattern rather than reaching for a background-image utility or inventing
+   a new mechanism.
 
 ---
 

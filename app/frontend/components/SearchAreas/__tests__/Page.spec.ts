@@ -78,7 +78,7 @@ describe('SearchAreasPage', () => {
   it('disables the download button when there are no results', () => {
     const wrapper = mountSearchAreas({ results: { ...baseProps.results, total: 0, areas: [] } })
 
-    expect(wrapper.find('.download__trigger').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-download__trigger').attributes('disabled')).toBeDefined()
   })
 
   it('re-fetches results and resets pagination when switching tabs', async () => {

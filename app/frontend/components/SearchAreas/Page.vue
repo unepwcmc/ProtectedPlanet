@@ -15,7 +15,6 @@
         />
         <Download
           :buttonText="downloadButtonText"
-          class="download--search"
           :downloadDisabled
           :gaId
           :options="downloadOptions"

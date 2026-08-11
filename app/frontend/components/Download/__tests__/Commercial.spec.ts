@@ -12,23 +12,23 @@ const text = {
 }
 
 describe('DownloadCommercial', () => {
-  it('is inactive by default and active when isActive is true', () => {
+  it('is not rendered by default and renders when isActive is true', () => {
     const inactive = mount(DownloadCommercial, { props: { text } })
-    expect(inactive.find('.modal--download-commercial').classes()).not.toContain('active')
+    expect(inactive.find('.ct-download-commercial').exists()).toBe(false)
 
     const active = mount(DownloadCommercial, { props: { text, isActive: true } })
-    expect(active.find('.modal--download-commercial').classes()).toContain('active')
+    expect(active.find('.ct-download-commercial').exists()).toBe(true)
   })
 
   it('emits close when the close icon is clicked', async () => {
     const wrapper = mount(DownloadCommercial, { props: { text, isActive: true } })
-    await wrapper.find('.modal__close').trigger('click')
+    await wrapper.find('.ct-download-commercial__close').trigger('click')
     expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
   it('emits nonCommercial when the non-commercial button is clicked', async () => {
     const wrapper = mount(DownloadCommercial, { props: { text, isActive: true } })
-    await wrapper.find('.modal__link-button').trigger('click')
+    await wrapper.find('.ct-download-commercial__link-button').trigger('click')
     expect(wrapper.emitted('nonCommercial')).toHaveLength(1)
   })
 })

@@ -20,6 +20,13 @@
   @apply
   flex
   gap-9;
+}
+
+@utility tw-shared-base-flex-gap-3-lg-gap-9 {
+  @apply
+  flex
+  gap-3
+  lg:gap-9;
 } 
 
 @utility tw-shared-base-flex-col {

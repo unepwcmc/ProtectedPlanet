@@ -37,16 +37,33 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
    WHY: distinguishes view-level chrome from component-scoped `ct-` (rule 4) and cross-cutting `tw-shared-` (rule 5) — was in use before this was written down; codified during [16 SCSS→Tailwind](./16-scss-to-tailwind-migration.md) Wave T0.
    REF: `styles/views/topbar.css`, `styles/views/topbar-secondary.css`.
 
+4c. `vw-` BLOCK NAME MUST MATCH ITS OWNING `.erb` FILE'S FULL PATH, AND ITS CSS FILE MUST MIRROR THAT SAME PATH.
+   RULE: the block segment of a `vw-` class is derived from the file's full path under `app/views`, never from just the leaf directory and never from the section's content/topic:
+   - Page entry template (`index.html.erb`, `show.html.erb`) → block = kebab-case(full page directory path, segments joined by `-`). `data/gdpame/index.html.erb` → `vw-data-gdpame` (in `styles/views/data/gdpame.css`), `thematic/marine/index.html.erb` → `vw-thematic-marine` (in `styles/views/thematic/marine.css`) — NOT `vw-gdpame`/`vw-marine`, which drop the parent category and collide if two categories ever have same-named leaf directories.
+   - Partial rendered from exactly one page (check every `render partial:`/`render "..."` call site — one owning page only) → block = `vw-<page-path>-<partial-slug>` (full page directory path + kebab-cased partial filename, leading `_` dropped, `_` → `-`). `data/gdpame/_tab_content.html.erb` (only rendered from `data/gdpame/index.html.erb`) → `vw-data-gdpame-tab-content`, NOT `vw-gdpame-tab-content` (drops `data-`) or `vw-gdpame__pame-table` (element name borrowed from the mounted widget instead of the file).
+   - Partial rendered from ≥2 different pages (genuinely shared chrome, e.g. `partials/cards/*`, `partials/charts/*`, `layouts/cms/*`, `partials/thematic_and_data_area/*`) → block = `vw-<family-dir>-<partial-slug>` (`partials/cards/_circles.html.erb` → `vw-cards-circles`), UNLESS several sibling files in that family are interchangeable renderings of the same structural component (`_hero-*.html.erb`, `_chart-row-pa.html.erb`/`_chart-coverage-growth.html.erb`, `_social-follow.html.erb`/`_social-share.html.erb`, `ctas/_*.html.erb`) — those intentionally share ONE block (`vw-hero`, `vw-partials-charts-chart-row-pa`, `vw-social`, `vw-partials-ctas-api`) distinguished by `--modifier`, not by file. This bullet's family dir is already unambiguous as-is, so it does NOT get the parent-category prefix from bullets 1-2 (`partials/thematic_and_data_area/*` stays `vw-thematic-and-data-area-*`, not `vw-partials-thematic-and-data-area-*`).
+   - The backing `styles/views/*.css` file (rule 4b) path mirrors its OWN `.erb` file 1:1, one CSS file per `.erb` file, never merged into another file's: `data/gdpame/index.html.erb` → `styles/views/data/gdpame/index.css`; `data/gdpame/_tab_content.html.erb` → `styles/views/data/gdpame/tab-content.css` (leading `_` dropped, `_` → `-`, same as the class-name transform); `thematic/effectiveness/_green_list_tab.html.erb` → `styles/views/thematic/effectiveness/green-list-tab.css`, sibling to that page's own `styles/views/thematic/effectiveness/index.css` — NOT folded into one shared file per page. A page with no owned partials stays a flat file (no folder needed): `thematic/marine/index.html.erb` → `styles/views/thematic/marine.css`. Precedent: `layouts/partials/footer/_index.html.erb` / `_social_follow.html.erb` → `styles/views/partials/footer/index.css` / `social-follow.css`.
+   WHY: a block name that describes content instead of the file (`vw-green-list__banner` for `effectiveness/_green_list_tab.html.erb`) collides across pages and can't be traced back to its owning file or `styles/views/*.css` definition without grepping. Dropping the parent category directory (`vw-gdpame` instead of `vw-data-gdpame`) has the same problem one level up. Merging a partial's rules into its page's file has the same problem again — corrected 2026-08-05 after `thematic/marine`/`thematic/effectiveness` shipped with leaf-only class names, and after `thematic/effectiveness/_green_list_tab.html.erb`'s rules were merged into `thematic/effectiveness.css` instead of getting their own file.
+   LINT: NOT enforced — manual review point.
+
 5. SHARED TAILWIND CLASSES.
-   RULE: reusable `@apply`-built utility/component classes needed by >1 component → `app/frontend/styles/shared.css` (split into `styles/shared/<name>.css` per concern once it grows — see [16](./16-scss-to-tailwind-migration.md) Wave T1), declared via `@utility tw-shared-<name>` (e.g. `tw-shared-base-container`). Never duplicated per-component or inlined ad hoc.
+   RULE: reusable `@apply`-built utility/component classes needed by >1 component → `app/frontend/styles/shared/<name>.css`, one file per concern (`base`, `icons`, `typography`, `shadows`, `forms`, `images`, `scrollbar` — see [16](./16-scss-to-tailwind-migration.md) Wave T1, done), declared via `@utility tw-shared-<name>` (e.g. `tw-shared-base-container`). Never duplicated per-component or inlined ad hoc. Import order in `tailwind.css` matters — a file whose utilities `@apply` another shared utility (e.g. `forms.css`/`images.css` applying `tw-shared-icon-*`) must be imported after the file that declares it.
+   EXCEPTION: `shared/icons.css`'s `tw-shared-icon-*` utilities are for **ERB view chrome only** (rule 4b `vw-` classes). See rule 5b — a Vue component never applies one of these.
+
+5b. ICONS IN A VUE COMPONENT = AN `Icon/*.vue` COMPONENT, NEVER A CSS UTILITY.
+    RULE: any icon rendered by a Vue component (new or migrated) is an inline-SVG component under `app/frontend/components/Icon/<Name>.vue` (`<svg fill="currentColor">...</svg>`), imported and used as a normal tag: `<IconSearch class="ct-search__icon" />`. Size and color are set by the CONSUMING component's own scoped `<style>` (`@apply size-3.75 text-theme-primary` on the class passed to the icon tag) — never hardcoded inside the `Icon/*.vue` file itself, so one icon file serves every color/size a caller needs.
+    WHY: the legacy `_icons.scss` mixin needed a separate SVG file per color (`circle-chevron-green-left.svg` / `circle-chevron-grey-left.svg` / `circle-chevron-white.svg` — one shape, three files) because a CSS `background-image` can't be recolored; an inline `<svg fill="currentColor">` can, from any ancestor's `text-*` class, with zero duplication. Real SVG markup also gets standard accessibility semantics for free. This isn't a new decision — `Icon/{Search,Close,Arrow,Pin,ExclamationCircle}.vue` already exist and are already used this way by `Search/SiteInput.vue`, `Carousel/Themes/Ribbon.vue`, `Stats/TooltipInfo.vue`; this rule just writes the precedent down (same situation as rule 4b before it existed).
+    MULTI-COLOR ICONS: an icon with independently-colored parts (e.g. a map pin's outline/fill/tick) puts one BEM class per `<path>`/`<g>` inside the `Icon/*.vue` file's own `<style scoped>` (`@apply fill-white` / `@apply fill-theme-bright-green` per part) — see `Icon/Pin.vue`. This is also the answer for icons the legacy SCSS mixin couldn't express as a flat background-image (e.g. `icon-pin($circle, $outline)`, deferred as "not portable" in [16](./16-scss-to-tailwind-migration.md) Wave T1) — it already IS portable, this way.
+    EXCEPTION: ERB view chrome (rule 4b) has no Vue component system to hang an `Icon/*.vue` off — those icons stay `tw-shared-icon-*` background-image utilities from `shared/icons.css` (rule 5's exception).
+    LINT: NOT enforced — manual review point.
 
 6. IMPORTS = `@/` ALIAS ONLY.
    RULE: never relative paths (`../../../`). `import ChartCircle from "@/components/Chart/Circle.vue"`, `import { ProtectedArea } from "@/types/backend"`.
 
-7. `@reference "tailwindcss"` IN SFC `<style>`.
+7. `@reference "#importtailwindcss"` IN SFC `<style>`.
    RULE: any `<style>` block using `@apply`/`theme()` opens with:
    ```css
-   @reference "tailwindcss";
+   @reference "#importtailwindcss";
    ```
    not a relative path to the real Tailwind entry.
    WHY: `app/frontend/styles/tailwind.css` is customized (preflight disabled — [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026)); `vite.config.mts` + `vitest.config.mts` alias the bare `tailwindcss` specifier (exact-match regex only — `tailwindcss/theme.css` etc. untouched) to that file.
@@ -55,7 +72,7 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
    RULE: `<template>` carries only semantic BEM classes + `:class="{...}"` state toggles. Every Tailwind utility backing a BEM class lives in the SFC's own `<style scoped>`, one rule per class, via `@apply`.
    EXAMPLE:
    ```css
-   @reference "tailwindcss";
+   @reference "#importtailwindcss";
 
    .ct-banner-content__title {
      @apply mt-0 mb-[0.5em] text-[1.125rem] font-bold leading-[1.3] text-theme-grey-black md:text-[1.25rem];
@@ -141,9 +158,32 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
     20b. If removing `props.` leaves `defineProps<T>()`'s return value completely unused elsewhere in `<script setup>`, also drop the `const props = ` assignment.
     LINT: NOT enforced — manual review point.
 
+21. BREAKPOINTS = NATIVE TAILWIND ONLY, NEVER A CUSTOM `--breakpoint-*` TOKEN.
+    RULE: any responsive variant, anywhere (`vw-`/`tw-shared-`/`ct-` classes alike) — use Tailwind's
+    own `sm:`/`md:`/`lg:`/`xl:`/`2xl:` (640/768/1024/1280/1536px). Never add a `@theme { --breakpoint-
+    <name>: ... }` token to `tailwind.css`, even to pixel-match a legacy SCSS breakpoint exactly.
+    WHY: Wave T1 originally added `--breakpoint-small/medium/large/xlarge` to mirror the legacy
+    `$small/$medium/$large/$xlarge` (767/1024/1200/1440px, exclusive via `breakpoint()`'s `+1px` →
+    768/1025/1201/1441px) pixel-for-pixel. User rejected this outright (2026-08-03) — the custom
+    tokens duplicated `md:`/`lg:` almost exactly for no real benefit, and worse, caused a real bug:
+    legacy `$small` (768px) is numerically IDENTICAL to Tailwind's native `md:` (768px), so any call
+    site that mixed the custom `small:` token with a native `md:` utility (several did, meaning
+    `md:` as "the tier after small") silently collapsed both rules onto the same breakpoint — the
+    smaller-tier value never rendered. See CHANGELOG.md's "Wave T3 correction — custom breakpoint
+    tokens removed" for the full incident.
+    MAPPING (when porting a legacy `breakpoint($x)` call site): `$small`(768px) → `md:` (exact
+    match) · `$medium`(1025px) → `lg:` (1024px, ~1px off, immaterial) · `$large`/`$xlarge`
+    (1201px/1441px) → `2xl:` (1536px) — collapse both onto one top tier rather than adding a
+    distinct `xl:` step; a few pixels of drift from the legacy value is an accepted tradeoff here
+    (precedent: T2/T3's `tw-shared-base-container` correction, CHANGELOG.md Wave T2).
+    EXCEPTION: none. If a future legacy scale genuinely needs a 4th or 5th distinct tier, collapse
+    the least-used ones onto an existing native tier — don't invent a new token to fit them all.
+    LINT: NOT enforced — manual review point. Grep `--breakpoint-` in `app/frontend/styles/` to
+    confirm none have crept back in.
+
 ---
 
 ## Setup status
 
 VERIFIED BUILT: `app/frontend/types/backend`; `@/` alias (`vite.config.mts` + `vitest.config.mts` `resolve.alias`, `tsconfig.json` `paths`); `typescript`/`vue-tsc` devDependencies + `yarn typecheck` script; `tailwindcss` bare-specifier alias (rule 7).
-REFERENCE IMPLEMENTATIONS: `Banner/Index.vue` + `Banner/Content.vue`, `Tabs.vue` (incl. rule 8 — Tailwind moved out of templates into `<style scoped>` via `@apply`). `app/frontend/styles/shared.css` provides `tw-shared-base-container` (rule 5) to both.
+REFERENCE IMPLEMENTATIONS: `Banner/Index.vue` + `Banner/Content.vue`, `Tabs.vue` (incl. rule 8 — Tailwind moved out of templates into `<style scoped>` via `@apply`). `app/frontend/styles/shared/base.css` provides `tw-shared-base-container` (rule 5) to both. `Icon/{Search,Close,Arrow,ExclamationCircle}.vue` (single-color, `fill="currentColor"`) + `Icon/Pin.vue` (multi-color, per-part `@apply fill-*`) are the rule 5b reference implementations, consumed by `Search/SiteInput.vue`, `Carousel/Themes/Ribbon.vue`, `Stats/TooltipInfo.vue`.
