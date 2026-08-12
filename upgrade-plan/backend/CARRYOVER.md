@@ -197,7 +197,16 @@ the **DB host** `192.168.176.65:9200`.
       header), so local dev is unblocked, but dev ≠ prod. Not downgraded here because the
       `protectedplanet_es_data` volume holds 8.6-format indices 7.17 can't read (would force a
       wipe + reindex). Align dev to 7.17.x (with a volume reset) as its own task when convenient.
-- [ ] **redis-rb 4.8.1 → 5.x** when we do Sidekiq 7 (minor; 4.8 works on Ruby 3.3 for now).
+- [x] **DONE — redis-rb 4.8 → 5.4 + Sidekiq 6.5 → 7.3.9.** redis was transitive via
+      Sidekiq 6.5; Sidekiq 7 drops redis-rb (uses redis-client) so added `gem 'redis', '~> 5.0'`
+      explicitly (app uses `$redis`/`Redis.new` directly). redis-rb 5 code fixes:
+      `active_token.rb` `$redis.exists` → `.exists?` (v5 #exists returns Integer; `unless 0`
+      is truthy — was a latent bug), and `redis_handler.rb` `multi do … end` → `multi do
+      |pipeline| pipeline.… end` (v5 requires the yielded pipeline). Two test mocks updated to
+      match (`:exists` → `:exists?`, `multi` yields a pipeline mock). Suite 653/0.
+      NOTE: the **2-Redis cache swap** (drop Memcached, `redis_cache_store` + `cache.rake` fix,
+      see the devops-decision item above) was NOT bundled in — do it as its own change when
+      provisioning is ready, to keep this commit to the gem/API bump.
 - [ ] **DECISION (devops, Jul 2026) — drop Memcached; move Rails cache to Redis. Two Redis
       instances, NOT one.** Devops wants everything standardized on Redis (Kamal accessories),
       Memcached gone. Doable, but PP's Redis is **not** a throwaway store — `$redis` (same

@@ -43,9 +43,11 @@ class ImportTools::RedisHandler
   end
 
   def increase_property_and_compare token, property, compared_property
-    values = $redis.multi do
-      $redis.incr property_key(token, property)
-      $redis.get property_key(token, compared_property)
+    # redis-rb 5 requires commands inside multi/pipelined to run on the yielded
+    # pipeline object, not the connection.
+    values = $redis.multi do |pipeline|
+      pipeline.incr property_key(token, property)
+      pipeline.get property_key(token, compared_property)
     end.map(&:to_i)
 
     values.first == values.last

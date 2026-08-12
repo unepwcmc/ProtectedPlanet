@@ -5,7 +5,9 @@ module ActiveToken
 
   module ClassMethods
     def find token, *attrs
-      return nil unless $redis.exists(token_key(token))
+      # redis-rb 5: #exists returns an Integer count (0 is truthy in Ruby, so the old
+      # `unless exists` never fired). #exists? returns the boolean we want.
+      return nil unless $redis.exists?(token_key(token))
       new(*attrs).tap{ |instance| instance.token = token }
     end
 

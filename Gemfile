@@ -114,7 +114,10 @@ gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 6.5'
+gem 'sidekiq', '~> 7.0'
+# Sidekiq 7 dropped its redis-rb dependency (it uses redis-client internally), but the
+# app talks to Redis directly via $redis / Redis.new, so require redis-rb explicitly.
+gem 'redis', '~> 5.0'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 

@@ -31,7 +31,9 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
   end
 
   test '.increase_property_and_compare calls redis commands in a redis transaction' do
-    $redis.expects(:multi).yields.returns([])
+    # redis-rb 5: multi yields a pipeline; commands run on it, not the connection.
+    pipeline = mock.tap { |p| p.stubs(:incr); p.stubs(:get) }
+    $redis.expects(:multi).yields(pipeline).returns([])
     @redis_handler.increase_property_and_compare(123, :test_key_1, :test_key_2)
   end
 
