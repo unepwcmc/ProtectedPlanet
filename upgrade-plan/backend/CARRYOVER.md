@@ -90,7 +90,13 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       `validate_staging_tables_existence` (pass + missing-lists-raise); rollback
       `validate_backup_tables_exist` (missing-raise) + `list_available_backups_impl` (unique,
       newest-first). Mocks the connection (raw-SQL DDL not run against the test DB). Suite 681/0.
-- [ ] **Relation `create_models` path** — `portal/relation/*` incl. the nil-jurisdiction logic (`ProtectedArea#designation`). Ties to the `belongs_to` decision in §6.
+- [x] **DONE — Relation `create_models` path** — `portal/relation/*` (was 0%). Added 15 tests:
+      `protected_area_test.rb` (create_models dispatch + for_create:false field removal, countries
+      resolve/skip, first_or_create converters, `designation` **with + without jurisdiction** — the
+      nil-jurisdiction case behind the `belongs_to` opt-out §6 — sources/no_take_status mocked as
+      staging_* aren't in the test schema), `protected_area_parcel_test.rb` (compact — near-copy),
+      `pame_evaluation_test.rb` (site_id/site_pid resolution, parcel-over-PA preference, method/source
+      linking; staging + PameMethod mocked). Suite 696/0.
 - [ ] **shared importers** — `country_overseas_territories.rb` (9%), `story_map_link_list.rb` (10%), `protected_areas_related_source.rb` (15%).
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
 - [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
