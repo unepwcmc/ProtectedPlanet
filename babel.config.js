@@ -1,15 +1,19 @@
 module.exports = function(api) {
-  var validEnv = ['development', 'test', 'production']
+  // 'staging' is accepted and treated exactly like production. Webpacker derives
+  // NODE_ENV from RAILS_ENV, so a staging deploy invokes babel with
+  // NODE_ENV=staging and this config previously threw, failing the pack build
+  // with a bare "Compilation failed:" from webpacker.
+  var validEnv = ['development', 'test', 'production', 'staging']
   var currentEnv = api.env()
   var isDevelopmentEnv = api.env('development')
-  var isProductionEnv = api.env('production')
+  var isProductionEnv = api.env('production') || api.env('staging')
   var isTestEnv = api.env('test')
 
   if (!validEnv.includes(currentEnv)) {
     throw new Error(
       'Please specify a valid `NODE_ENV` or ' +
         '`BABEL_ENV` environment variables. Valid values are "development", ' +
-        '"test", and "production". Instead, received: ' +
+        '"test", "staging", and "production". Instead, received: ' +
         JSON.stringify(currentEnv) +
         '.'
     )
