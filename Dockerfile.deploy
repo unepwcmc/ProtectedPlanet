@@ -92,8 +92,14 @@ COPY . .
 ARG RAILS_ENV=staging
 ENV RAILS_ENV=${RAILS_ENV} \
     NODE_OPTIONS=--openssl-legacy-provider \
-    SECRET_KEY_BASE_DUMMY=1
-RUN bundle exec rails assets:precompile \
+    SECRET_KEY_BASE_DUMMY=1 \
+    VITE_RUBY_VERBOSE=true
+
+# Vite is run explicitly before assets:precompile. vite_rails otherwise swallows
+# the bundler output and reports only "Compilation failed:" with no detail, which
+# is unusable in CI.
+RUN bundle exec vite build --mode production \
+ && bundle exec rails assets:precompile \
  && rm -rf node_modules tmp/cache
 
 # ---------------------------------------------------------------------------
