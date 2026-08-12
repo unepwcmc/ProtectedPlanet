@@ -76,6 +76,6 @@ function onChange() {
 }
 
 .ct-filters-checkboxes-item__input {
-  @apply sr-only;
+  @apply hidden;
 }
 </style>

@@ -26,7 +26,7 @@
     </div>
     <ul class="ct-total-coverage-chart__legends">
       <li
-        v-for="(item, index) in [total, coverage]"
+        v-for="(item, index) in [coverage, total]"
         :key="index"
         class="ct-total-coverage-chart__legend"
       >
@@ -51,7 +51,9 @@ const { total, coverage } = defineProps<ChartTotalCoverageChart>()
 @reference "#importtailwindcss";
 
 .ct-total-coverage-chart {
-  @apply py-10;
+  @apply
+  py-10
+  tw-shared-base-flex-col-gap-12;
 }
 
 .ct-total-coverage-chart__row {
@@ -59,11 +61,17 @@ const { total, coverage } = defineProps<ChartTotalCoverageChart>()
 }
 
 .ct-total-coverage-chart__total-bar {
-  @apply relative flex h-13 items-center justify-between;
+  @apply
+  relative
+  flex h-13
+  items-center
+  justify-between;
 }
 
 .ct-total-coverage-chart__coverage-bar {
-  @apply relative h-13;
+  @apply
+  relative
+  h-13;
 }
 
 .ct-total-coverage-chart__label {
@@ -71,12 +79,12 @@ const { total, coverage } = defineProps<ChartTotalCoverageChart>()
   absolute
   left-1/2
   flex
-  h-[30px]
+  h-7.5
   min-w-10
   -translate-x-1/2
   items-center
   justify-center
-  rounded-[5px]
+  tw-shared-border-radius
   bg-black
   px-1
   text-lg
@@ -87,28 +95,47 @@ const { total, coverage } = defineProps<ChartTotalCoverageChart>()
   before:h-0
   before:w-0
   before:-translate-x-1/2
-  before:border-x-[13px]
+  before:border-x-13
   before:border-x-transparent
   before:content-[''];
 }
 
 .ct-total-coverage-chart__label--total {
-  @apply top-[calc(100%+2px)] before:bottom-full before:border-b-[13px] before:border-b-black;
+  @apply
+  top-[calc(100%+2px)]
+  before:bottom-full
+  before:border-b-13
+  before:border-b-black;
 }
 
 .ct-total-coverage-chart__label--coverage {
-  @apply bottom-[calc(100%+2px)] before:top-full before:border-t-[13px] before:border-t-black;
+  @apply
+  bottom-[calc(100%+2px)]
+  before:top-full
+  before:border-t-13
+  before:border-t-black;
 }
 
 .ct-total-coverage-chart__legends {
-  @apply mt-6 flex flex-col gap-6 text-sm md:flex-row;
+  @apply
+  tw-shared-base-flex-col-gap-6
+  text-sm
+  md:flex-row;
 }
 
 .ct-total-coverage-chart__legend {
-  @apply flex items-center gap-2;
+  @apply
+  tw-shared-base-flex-gap-2
+  tw-shared-font-hind-siliguri__light-sm-grey-black
+  items-center;
 }
 
 .ct-total-coverage-chart__legend-key {
-  @apply block size-4 shrink-0 rounded-full md:size-6;
+  @apply
+  block
+  size-4
+  shrink-0
+  rounded-full
+  md:size-6;
 }
 </style>

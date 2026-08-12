@@ -58,14 +58,14 @@
   @apply
   w-full
   h-38.75;
+
   background-position: center;
   background-size: cover;
 }
 
 .vw-cards-sites__card-title {
   @apply 
-  text-lg
-  text-black
+  tw-shared-font-hind-siliguri__bold-lg-grey-black
   no-underline
   hover:no-underline;
 }

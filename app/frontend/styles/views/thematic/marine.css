@@ -7,20 +7,19 @@
   tw-shared-base-flex-col-gap-6-and-9;
 }
 
+.vw-thematic-marine__wysiwyg {
+  @apply tw-shared-cms-wysiwyg-thematic-page;
+}
+
 .vw-thematic-marine__container--mpa {
   @apply
   tw-shared-base-container
   px-0;
 }
 
-.vw-thematic-marine__distribution {
-  @apply tw-shared-base-container--medium;
-}
-
 .vw-thematic-marine__medium {
   @apply
-  tw-shared-base-container--medium
-  tw-shared-cms-wysiwyg;
+  tw-shared-base-container--medium;
 }
 
 .vw-thematic-marine__map {

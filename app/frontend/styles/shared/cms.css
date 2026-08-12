@@ -1,6 +1,5 @@
 @utility tw-shared-cms-wysiwyg {
-  @apply 
-  tw-shared-base-flex-col-gap-3;
+  @apply tw-shared-base-flex-col-gap-3;
 
   h1,
   h2 {
@@ -28,6 +27,7 @@
     @apply border
     border-solid 
     p-1.25;
+  
     border-collapse: collapse;
   }
 
@@ -58,4 +58,18 @@
   a:hover {
       @apply no-underline;
     }
+}
+
+@utility tw-shared-cms-wysiwyg-thematic-page {
+  @apply tw-shared-base-flex-col-gap-3;
+
+  h2 {
+    @apply tw-shared-font-playfair__bold-xl-lg-2xl-grey-black;
+  }
+
+  div {
+    @apply 
+    tw-shared-font-hind-siliguri__light-base-grey-black
+    leading-[1.6];
+  }
 }

@@ -20,7 +20,7 @@
       <% stats_items.each_with_index do |stat_item, index| %>
         <div class="vw-layouts-partials-hero-green-list__stat-item">
           <% small_number = stat_item[:small_number] == true %>
-          <div class="vw-layouts-partials-hero-green-list__stat-number <%= 'vw-layouts-partials-hero-green-list__stat-number--small' if small_number%>">
+          <div class="vw-layouts-partials-hero-green-list__stat-number <%= 'vw-layouts-partials-hero-green-list__stat-number--small' if small_number %>">
             <%= frontend_mount "Counter",
                         tag: :span,
                         key: index,

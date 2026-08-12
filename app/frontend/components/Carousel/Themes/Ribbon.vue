@@ -34,9 +34,7 @@ defineProps<CarouselThemesCard>()
 
 .ct-carousel-themes-ribbon {
   @apply
-  flex
-  flex-col
-  gap-3
+  tw-shared-base-flex-col
   h-37.5
   w-37.5
   items-center
@@ -52,15 +50,19 @@ defineProps<CarouselThemesCard>()
 }
 
 .ct-carousel-themes-ribbon__icon {
-  @apply h-9.5 w-7 shrink-0 text-white;
+  @apply
+  h-9.5
+  w-7
+  shrink-0
+  text-white;
 }
 
 .ct-carousel-themes-ribbon__details {
-  @apply flex flex-col gap-1;
+  @apply tw-shared-base-flex-col-gap-1;
 }
 
 .ct-carousel-themes-ribbon__number {
-  @apply tw-shared-font-hind-siliguri__bold-xl-md-3xl-lg-4xl-green;
+  @apply tw-shared-font-hind-siliguri__bold-xl-md-3xl-lg-4xl-green leading-none;
 }
 
 .ct-carousel-themes-ribbon__label {

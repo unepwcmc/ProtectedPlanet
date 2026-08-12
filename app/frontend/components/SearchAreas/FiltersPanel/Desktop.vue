@@ -49,9 +49,6 @@ function onUpdateFilter(payload: { id: string, options: unknown }) {
 .ct-search-areas-filters-panel-desktop {
   @apply
   w-full
-  sticky
-  top-6
-  max-h-[calc(100vh-3rem)]
   tw-shared-base-flex-col-gap-6
   py-6
   pr-9;
@@ -66,7 +63,6 @@ function onUpdateFilter(payload: { id: string, options: unknown }) {
   tw-shared-base-flex-col-gap-6
   grow
   min-h-0
-  overflow-y-auto
   m-0
   p-0;
 }

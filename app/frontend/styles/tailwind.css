@@ -24,6 +24,9 @@
   --color-theme-blue: #004DA8;
   --color-theme-orange: #D9B143;
   --color-theme-red: #FA3232;
+
+  --text-2xl: 1.565rem;
+  --text-4xl: 2.5rem;
 }
 
 @source "../";

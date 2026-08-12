@@ -10,7 +10,7 @@
       stats_items: @marine_stats_items,
       summary: cms_fragment_render(:summary, @cms_page) } %>
   <div class="vw-thematic-marine__container">
-    <section class="vw-thematic-marine__medium vw-thematic-marine__distribution">
+    <section class="vw-thematic-marine__medium vw-thematic-marine__wysiwyg">
       <h2>
         <%= t('thematic_area.marine.distribution.title') %>
       </h2>
@@ -38,7 +38,7 @@
         content: cms_fragment_render(:section_coverage_content, @cms_page),
         chart_data: @marine_protected_areas_growth,
         title: cms_fragment_render(:section_coverage_title, @cms_page) } %>
-    <section class="vw-thematic-marine__medium vw-thematic-marine__bbnj">
+    <section class="vw-thematic-marine__medium vw-thematic-marine__wysiwyg">
       <h2>
         <%= cms_fragment_render(:section_bbnj_agreement_title, @cms_page) %>
       </h2>
@@ -46,7 +46,7 @@
         <%= cms_fragment_render(:section_bbnj_agreement_content, @cms_page) %>
       </div>
     </section>
-    <section class="vw-thematic-marine__medium vw-thematic-marine__beyond-coverage">
+    <section class="vw-thematic-marine__medium vw-thematic-marine__wysiwyg">
       <h2>
         <%= cms_fragment_render(:section_beyond_coverage_title, @cms_page) %>
       </h2>
