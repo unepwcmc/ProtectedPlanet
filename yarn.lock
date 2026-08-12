@@ -4229,6 +4229,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"codemirror@npm:^5.65.18":
+  version: 5.65.21
+  resolution: "codemirror@npm:5.65.21"
+  checksum: 10c0/0884fc54ad32cbfa7605b23c8e9c0085d71856178f88448e6912335dddce321edab1326202b3778647658e7debdff07329f30e30b32f8fb4ba501582f798495a
+  languageName: node
+  linkType: hard
+
 "codepage@npm:~1.14.0":
   version: 1.14.0
   resolution: "codepage@npm:1.14.0"
@@ -7045,6 +7052,13 @@ __metadata:
     flatted: "npm:^3.4.2"
     hookified: "npm:^1.15.0"
   checksum: 10c0/c757c24f51334e1917958cd9d62d4ed3d520a3815d5a1ec50d993ac3a93fa81b6de7e28264231914bb0d990babd426e4d713d3e2f3d782dae65c42a2ded1e651
+  languageName: node
+  linkType: hard
+
+"flatpickr@npm:^4.6.13":
+  version: 4.6.13
+  resolution: "flatpickr@npm:4.6.13"
+  checksum: 10c0/0e027e72a2ce1716840a8c0bf9094f48d2665dc3f3024bf9604810c5bd7dd94aa830b133c5b5cfc0c330fc88939f33b54c8714515957f9d194c3a3bb7f75a1e2
   languageName: node
   linkType: hard
 
@@ -12953,6 +12967,7 @@ __metadata:
     "@vueuse/core": "npm:^14.3.0"
     axios: "npm:^0.19.0"
     babel-polyfill: "npm:^6.26.0"
+    codemirror: "npm:^5.65.18"
     cookieconsent: "npm:^3.1.1"
     d3: "npm:^5.9.2"
     dotenv-webpack: "npm:^1.7.0"
@@ -12960,6 +12975,7 @@ __metadata:
     es6-promise: "npm:^4.2.6"
     eslint: "npm:^10.7.0"
     eslint-plugin-vue: "npm:^10.4.0"
+    flatpickr: "npm:^4.6.13"
     globals: "npm:^17.7.0"
     jsdom: "npm:^25.0.1"
     pinia: "npm:^4.0.2"
