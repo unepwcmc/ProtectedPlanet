@@ -1,9 +1,9 @@
 <template>
-  <div class="v-map">
+  <div class="ct-map-base">
     <div
       :id="containerId"
       ref="mapContainer"
-      class="map__mapbox"
+      class="ct-map-base__canvas"
     />
     <MapBaselayerControls
       v-if="controlsOptions.showBaselayerControls"
@@ -134,3 +134,20 @@ onUnmounted(() => visibilityObserver?.disconnect())
 
 defineExpose({ zoomTo, resize })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-map-base {
+  @apply
+  relative
+  w-full;
+}
+
+.ct-map-base__canvas {
+  @apply
+  relative
+  h-90
+  md:h-175;
+}
+</style>

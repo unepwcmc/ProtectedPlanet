@@ -1,20 +1,20 @@
 <template>
-  <div
-    class="v-map-filter"
-    :class="{ 'v-map-filter--toggleable': isToggleable }"
+  <li
+    class="ct-map-overlay"
+    :class="{ 'ct-map-overlay--toggleable': isToggleable }"
     @click.stop="onClick"
   >
     <div
-      class="v-map-filter__color"
+      class="ct-map-overlay__color"
       :style="{ backgroundColor: color }"
     />
     <span
-      class="v-map-filter__description"
+      class="ct-map-overlay__description"
       v-text="title"
     />
     <div
       v-if="isToggleable"
-      class="v-map-filter__active-toggler"
+      class="ct-map-overlay__active-toggler"
     >
       <MapToggler
         :gaId="id"
@@ -22,7 +22,7 @@
         @change="setShown"
       />
     </div>
-  </div>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -63,3 +63,32 @@ onMounted(() => {
   setShown(props.isShownByDefault)
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-map-overlay {
+  @apply
+  tw-shared-base-flex-gap-3
+  items-center;
+}
+
+.ct-map-overlay--toggleable {
+  @apply cursor-pointer;
+}
+
+.ct-map-overlay__color {
+  @apply
+  size-4.75
+  rounded-full
+  border
+  border-white
+  bg-theme-grey
+  shrink-0;
+}
+
+.ct-map-overlay__description {
+  @apply tw-shared-font-hind-siliguri__light-sm-lg-base-white;
+}
+
+</style>

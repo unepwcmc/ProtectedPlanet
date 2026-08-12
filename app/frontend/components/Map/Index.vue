@@ -1,7 +1,8 @@
 <template>
-  <div class="map--main">
+  <div class="ct-map">
     <MapHeader
       v-if="showHeader"
+      class="ct-map__header"
       :title
     />
     <MapBase
@@ -13,9 +14,9 @@
     <MapDisclaimer
       v-if="isHidden"
       :disclaimer
+      :mapiIsForRegionCountryPA
     />
     <MapPanel
-      v-else
       :title
       :overlays
       :isHidden
@@ -23,6 +24,7 @@
       :type
       :autocompleteErrorMessages
       :autocompletePlaceholder
+      :mapiIsForRegionCountryPA
       @zoomTo="onZoomTo"
     />
   </div>
@@ -47,10 +49,23 @@ withDefaults(defineProps<Map>(), {
   showHeader: true,
   type: undefined,
   autocompleteErrorMessages: undefined,
-  autocompletePlaceholder: undefined
+  autocompletePlaceholder: undefined,
+  mapiIsForRegionCountryPA: false
 })
 
 const mapBaseRef = useTemplateRef('mapBaseRef')
 
 const onZoomTo = (options: ZoomToOptions) => mapBaseRef.value?.zoomTo(options)
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-map {
+  @apply md:relative;
+}
+
+.ct-map__header {
+  @apply flex md:hidden;
+}
+</style>

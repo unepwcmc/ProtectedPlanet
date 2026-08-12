@@ -36,23 +36,24 @@
   bg-cover;
 }
 
-@utility tw-shared-bg-image-overlay--white {
-  @apply 
+@utility tw-shared-bg-image-overlay {
+  @apply
   z-[-1]
+  relative
   before:content-[''] 
-  before:absolute 
-  before:inset-0 
-  before:bg-white/80 
+  before:absolute
+  before:inset-0
   before:z-[-1];
 }
 
+@utility tw-shared-bg-image-overlay--white {
+  @apply
+  tw-shared-bg-image-overlay
+  before:bg-white/80;
+}
+
 @utility tw-shared-bg-image-overlay--black {
-  @apply 
-  relative 
-  z-[-1]
-  before:content-[''] 
-  before:absolute 
-  before:inset-0 
-  before:bg-black/40
-  before:z-[-1];
+  @apply  
+  tw-shared-bg-image-overlay
+  before:bg-black/40;
 }

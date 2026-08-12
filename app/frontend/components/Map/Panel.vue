@@ -1,18 +1,19 @@
 <template>
   <div
     ref="root"
-    class="v-map-filters"
-    :class="{ 'v-map-filters--hidden': isHidden }"
+    class="ct-map-panel"
+    :class="{ 'ct-map-panel--hidden': isHidden }"
   >
     <MapHeader
       :title
       :filtersShown="show"
       closeable
+      class="ct-map-panel__header"
       @toggle="toggleShow"
     />
     <div
       v-show="show"
-      class="v-map-filters__body"
+      class="ct-map-panel__body"
     >
       <MapPaSearch
         v-if="hasPaSearch"
@@ -21,16 +22,17 @@
         :type="type!"
         @zoomTo="onZoomTo"
       />
-      <div class="v-map-filters__overlays">
-        <div
+      <ul class="ct-map-panel__overlays">
+        <MapOverlay
           v-for="(overlay, index) in overlays"
           :key="index"
-          class="v-map-filters__overlay"
-        >
-          <MapFilter v-bind="overlay" />
-        </div>
-      </div>
-      <MapDisclaimer :disclaimer />
+          v-bind="overlay"
+        />
+      </ul>
+      <MapDisclaimer
+        :disclaimer
+        :mapiIsForRegionCountryPA
+      />
     </div>
   </div>
 </template>
@@ -38,7 +40,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import MapHeader from '@/components/Map/Header.vue'
-import MapFilter from '@/components/Map/Filter.vue'
+import MapOverlay from '@/components/Map/Overlay.vue'
 import MapDisclaimer from '@/components/Map/Disclaimer.vue'
 import MapPaSearch from '@/components/Map/PaSearch.vue'
 import type { MapPanelProps } from '@/types/backend'
@@ -51,7 +53,8 @@ const props = withDefaults(defineProps<MapPanel>(), {
   disclaimer: null,
   type: undefined,
   autocompleteErrorMessages: undefined,
-  autocompletePlaceholder: undefined
+  autocompletePlaceholder: undefined,
+  mapiIsForRegionCountryPA: false
 })
 const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
 
@@ -76,3 +79,44 @@ onMounted(() => {
   }
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-map-panel {
+  @apply
+  bg-theme-grey-xdark
+  text-theme-grey-light
+  md:absolute
+  md:z-0
+  md:w-85
+  md:top-4.25
+  md:left-4.5
+  lg:w-124
+  lg:top-8
+  lg:left-10.75;
+}
+
+.ct-map-panel--hidden {
+  @apply sr-only;
+}
+
+.ct-map-panel__header {
+  @apply hidden md:flex;
+}
+
+.ct-map-panel__body {
+  @apply
+  tw-shared-base-flex-col-gap-9
+  justify-between
+  py-7.5
+  px-4.5
+  md:pt-4.5
+  md:px-4.5
+  md:pb-10;
+}
+
+.ct-map-panel__overlays {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+</style>

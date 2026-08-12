@@ -94,7 +94,7 @@ describe('Map Base', () => {
   it('renders baselayer controls by default', () => {
     const wrapper = mount(MapBase, { props: {} })
 
-    expect(wrapper.find('.v-map-baselayer-controls').exists()).toBe(true)
+    expect(wrapper.find('.ct-map-baselayer-controls').exists()).toBe(true)
   })
 
   it('hides baselayer controls when disabled via options', () => {
@@ -102,7 +102,7 @@ describe('Map Base', () => {
       props: { options: { controls: { showBaselayerControls: false } } }
     })
 
-    expect(wrapper.find('.v-map-baselayer-controls').exists()).toBe(false)
+    expect(wrapper.find('.ct-map-baselayer-controls').exists()).toBe(false)
   })
 
   it('exposes zoomTo and resize for the panel search box to call', async () => {

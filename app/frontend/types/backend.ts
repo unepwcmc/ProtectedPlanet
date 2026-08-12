@@ -252,6 +252,7 @@ export type DisclaimerText = { heading: string, body: string } | null
 // in the same place, for every page — no per-page slotting/placement variance).
 export interface MapDisclaimerProps {
   disclaimer?: DisclaimerText
+  mapiIsForRegionCountryPA: boolean
 }
 
 // Props for `frontend_mount "MapPanel"` (formerly "MapFilters") — see
@@ -267,6 +268,7 @@ export interface MapPanelProps {
   autocompleteErrorMessages?: AutocompleteErrorMessages
   autocompletePlaceholder?: string
   disclaimer: DisclaimerText
+  mapiIsForRegionCountryPA?: boolean
 }
 
 // Props for `frontend_mount "Map"` — the single top-level map composition
@@ -281,8 +283,9 @@ export interface MapProps {
   overlays: MapFilterProps[]
   disclaimer?: DisclaimerText
   isHidden?: boolean
-  // Set false for the "map--header" layout (protected_areas/show, region/show,
-  // country/show) — those pages show the panel toggle but no standalone map title.
+  // Set false on protected_areas/show, region/show, country/show — those
+  // pages show the disclaimer-only layout (isHidden: true) with no standalone
+  // map title.
   showHeader?: boolean
   // The PA-search box (`MapPaSearch`, rendered inside `MapPanel`) only appears
   // when these are provided — omitted on the header-map layout, which has no
@@ -290,6 +293,7 @@ export interface MapProps {
   type?: string
   autocompleteErrorMessages?: AutocompleteErrorMessages
   autocompletePlaceholder?: string
+  mapiIsForRegionCountryPA?: boolean
 }
 
 // Props for `MapPaSearch` — the "search & jump to a PA/country/region on the

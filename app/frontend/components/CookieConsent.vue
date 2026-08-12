@@ -67,7 +67,7 @@ function reject() {
   @apply
   fixed
   bottom-0
-  z-10
+  z-20
   flex
   lg:flex-row
   w-full
@@ -78,7 +78,7 @@ function reject() {
   lg:justify-between
   bg-theme-primary
   p-3
-  md:p-6 ;
+  md:p-6;
 }
 
 .ct-cookie-consent__description {
@@ -116,7 +116,7 @@ function reject() {
   @apply
   fixed
   inset-0
-  z-40
+  z-10
   bg-black/75;
 }
 </style>

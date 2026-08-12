@@ -38,9 +38,9 @@ describe('MapPaSearch', () => {
   it('shows the too-short error before three characters are typed', async () => {
     const wrapper = mountSearch()
 
-    await wrapper.find('.autocomplete__input').setValue('ab')
+    await wrapper.find('.ct-map-pa-search__input').setValue('ab')
 
-    expect(wrapper.find('.autocomplete__error-message').text()).toBe(errorMessages.invalid_search_string)
+    expect(wrapper.find('.ct-map-pa-search__error-message').text()).toBe(errorMessages.invalid_search_string)
     expect(fetch).not.toHaveBeenCalled()
   })
 
@@ -50,7 +50,7 @@ describe('MapPaSearch', () => {
     ]))
     const wrapper = mountSearch()
 
-    await wrapper.find('.autocomplete__input').setValue('yos')
+    await wrapper.find('.ct-map-pa-search__input').setValue('yos')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalledTimes(1))
 
     const [url, init] = vi.mocked(fetch).mock.calls[0]
@@ -60,15 +60,15 @@ describe('MapPaSearch', () => {
       type: 'wdpca',
       index: 'areas'
     })
-    await vi.waitFor(() => expect(wrapper.find('.autocomplete__result').text()).toBe('Yosemite'))
+    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__result').text()).toBe('Yosemite'))
   })
 
   it('shows the no-results error when the search resolves empty', async () => {
     vi.mocked(fetch).mockResolvedValue(jsonResponse([]))
     const wrapper = mountSearch()
 
-    await wrapper.find('.autocomplete__input').setValue('xyz')
-    await vi.waitFor(() => expect(wrapper.find('.autocomplete__error-message').text()).toBe(errorMessages.no_results))
+    await wrapper.find('.ct-map-pa-search__input').setValue('xyz')
+    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__error-message').text()).toBe(errorMessages.no_results))
   })
 
   it('emits zoomTo with the result shaped as ZoomToOptions when a result is clicked', async () => {
@@ -77,9 +77,9 @@ describe('MapPaSearch', () => {
     ]))
     const wrapper = mountSearch()
 
-    await wrapper.find('.autocomplete__input').setValue('yos')
-    await vi.waitFor(() => expect(wrapper.find('.autocomplete__result').exists()).toBe(true))
-    await wrapper.find('.autocomplete__result').trigger('click')
+    await wrapper.find('.ct-map-pa-search__input').setValue('yos')
+    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__result').exists()).toBe(true))
+    await wrapper.find('.ct-map-pa-search__result').trigger('click')
 
     expect(wrapper.emitted('zoomTo')?.[0]?.[0]).toEqual({
       id: 1,
@@ -96,9 +96,9 @@ describe('MapPaSearch', () => {
   it('clears the search on delete click', async () => {
     const wrapper = mountSearch()
 
-    await wrapper.find('.autocomplete__input').setValue('yos')
-    await wrapper.find('.autocomplete__delete').trigger('click')
+    await wrapper.find('.ct-map-pa-search__input').setValue('yos')
+    await wrapper.find('.ct-map-pa-search__delete').trigger('click')
 
-    expect((wrapper.find('.autocomplete__input').element as HTMLInputElement).value).toBe('')
+    expect((wrapper.find('.ct-map-pa-search__input').element as HTMLInputElement).value).toBe('')
   })
 })

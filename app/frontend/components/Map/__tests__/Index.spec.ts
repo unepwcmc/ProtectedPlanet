@@ -57,11 +57,11 @@ describe('Map', () => {
       }
     })
 
-    expect(wrapper.find(':scope > .v-map-header').exists()).toBe(true)
-    expect(wrapper.find('.map__mapbox').exists()).toBe(true)
-    expect(wrapper.find('.v-map-filters').exists()).toBe(true)
-    expect(wrapper.find('.v-map-filters--hidden').exists()).toBe(false)
-    expect(wrapper.find('.v-map-filters .v-map-disclaimer__heading').text()).toBe('Map Disclaimer')
+    expect(wrapper.find(':scope > .ct-map-header').exists()).toBe(true)
+    expect(wrapper.find('.ct-map-base__canvas').exists()).toBe(true)
+    expect(wrapper.find('.ct-map-panel').exists()).toBe(true)
+    expect(wrapper.find('.ct-map-panel--hidden').exists()).toBe(false)
+    expect(wrapper.find('.ct-map-panel .ct-map-disclaimer__heading').text()).toBe('Map Disclaimer')
   })
 
   it('does not render a disclaimer when none is provided', () => {
@@ -69,7 +69,7 @@ describe('Map', () => {
       props: { title: 'Discover Protected Areas', overlays }
     })
 
-    expect(wrapper.find('.v-map-disclaimer').exists()).toBe(false)
+    expect(wrapper.find('.ct-map-disclaimer').exists()).toBe(false)
   })
 
   it('forces the panel hidden when isHidden is passed', () => {
@@ -77,7 +77,7 @@ describe('Map', () => {
       props: { title: 'Protected Area', overlays, isHidden: true }
     })
 
-    expect(wrapper.find('.v-map-filters--hidden').exists()).toBe(true)
+    expect(wrapper.find('.ct-map-panel--hidden').exists()).toBe(true)
   })
 
   it('omits the standalone title header when showHeader is false', () => {
@@ -85,8 +85,8 @@ describe('Map', () => {
       props: { title: 'Protected Area', overlays, showHeader: false }
     })
 
-    expect(wrapper.find(':scope > .v-map-header').exists()).toBe(false)
-    expect(wrapper.find('.v-map-filters .v-map-header').exists()).toBe(true)
+    expect(wrapper.find(':scope > .ct-map-header').exists()).toBe(false)
+    expect(wrapper.find('.ct-map-panel .ct-map-header').exists()).toBe(true)
   })
 
   it('renders the PA-search box when type and autocomplete copy are provided', () => {
@@ -100,7 +100,7 @@ describe('Map', () => {
       }
     })
 
-    expect(wrapper.find('.v-map-pa-search').exists()).toBe(true)
+    expect(wrapper.find('.ct-map-pa-search').exists()).toBe(true)
   })
 
   it('omits the PA-search box when isHidden, or when type/autocomplete copy are not provided', () => {
@@ -108,7 +108,7 @@ describe('Map', () => {
       props: { title: 'Protected Area', overlays, showHeader: false }
     })
 
-    expect(withoutSearchProps.find('.v-map-pa-search').exists()).toBe(false)
+    expect(withoutSearchProps.find('.ct-map-pa-search').exists()).toBe(false)
 
     const hidden = mount(Map, {
       props: {
@@ -121,6 +121,6 @@ describe('Map', () => {
       }
     })
 
-    expect(hidden.find('.v-map-pa-search').exists()).toBe(false)
+    expect(hidden.find('.ct-map-pa-search').exists()).toBe(false)
   })
 })

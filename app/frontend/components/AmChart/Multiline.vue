@@ -27,8 +27,6 @@ onMounted(createChart)
 onUnmounted(() => root?.dispose())
 
 function createChart() {
-  console.log('hi', chartEl.value)
-
   if (!chartEl.value) return
 
   root = am5.Root.new(chartEl.value)

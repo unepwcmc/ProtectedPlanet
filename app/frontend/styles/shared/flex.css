@@ -29,6 +29,12 @@
   gap-6;
 }
 
+@utility tw-shared-base-flex-gap-8 {
+  @apply
+  flex
+  gap-8;
+}
+
 @utility tw-shared-base-flex-gap-9 {
   @apply
   flex

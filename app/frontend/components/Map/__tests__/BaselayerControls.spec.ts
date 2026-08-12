@@ -20,7 +20,7 @@ describe('Map BaselayerControls', () => {
     await flushPromises()
 
     expect(store.selectedBaselayer.id).toBe('terrain')
-    expect(wrapper.findAll('button')[0].classes()).toContain('selected')
+    expect(wrapper.findAll('button')[0].classes()).toContain('ct-map-baselayer-controls__control--selected')
   })
 
   it('updates the store when a different baselayer is clicked', async () => {

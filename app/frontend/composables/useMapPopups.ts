@@ -34,17 +34,17 @@ async function queryServicesForPoint(
 
 function attributeHtml(elementType: 'span' | 'a', element: { title: string, value?: string, url?: string }): string {
   if (elementType === 'a') {
-    return `<span class="mapboxgl-popup-content__wrapper">
-              <span class="mapboxgl-popup-content__title">${element.title}: </span>
-              <a class="mapboxgl-popup-content__link" href="${element.url}">
-                <span class="mapboxgl-popup-content__value">${element.value}</span>
+    return `<span class="maplibregl-popup-content__wrapper">
+              <span class="maplibregl-popup-content__title">${element.title}: </span>
+              <a class="maplibregl-popup-content__link" href="${element.url}">
+                <span class="maplibregl-popup-content__value">${element.value}</span>
               </a>
             </span>`
   }
 
-  return `<span class="mapboxgl-popup-content__wrapper">
-            <span class="mapboxgl-popup-content__title">${element.title}: </span>
-            <span class="mapboxgl-popup-content__value">${element.value}</span>
+  return `<span class="maplibregl-popup-content__wrapper">
+            <span class="maplibregl-popup-content__title">${element.title}: </span>
+            <span class="maplibregl-popup-content__value">${element.value}</span>
           </span>`
 }
 
@@ -73,9 +73,9 @@ export default function (
     removeAllMarkersAndPopups()
 
     const pin = document.createElement('div')
-    pin.className = 'v-map-pin'
+    pin.className = 'tw-shared-icon-pin-map'
 
-    const popup = new Popup({ className: 'v-map-pa-popup', closeButton: false, offset: POPUP_OFFSETS })
+    const popup = new Popup({ closeButton: false, offset: POPUP_OFFSETS })
     popup.setLngLat(coords)
     popup.setHTML(htmlString)
     popup.setMaxWidth('300px')
@@ -90,10 +90,10 @@ export default function (
 
   function generateAttributesHtml(attributes: Array<{ title: string, value?: string, url?: string }>): string {
     const items = attributes
-      .map(a => `<li class="mapboxgl-popup-content__attribute">${attributeHtml(a.url ? 'a' : 'span', a)}</li>`)
+      .map(a => `<li class="maplibregl-popup-content__attribute">${attributeHtml(a.url ? 'a' : 'span', a)}</li>`)
       .join('')
 
-    return `<ul class="mapboxgl-popup-content__attributes">${items}</ul>`
+    return `<ul class="maplibregl-popup-content__attributes">${items}</ul>`
   }
 
   async function onClick(e: MapMouseEvent) {

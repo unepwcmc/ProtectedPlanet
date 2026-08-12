@@ -33,7 +33,7 @@ describe('Map Filter', () => {
     const store = useMapStore()
     await flushPromises()
 
-    await wrapper.find('.v-map-toggler').trigger('click')
+    await wrapper.find('.ct-map-toggler').trigger('click')
 
     expect(store.visibleOverlays.some(o => o.id === 'terrestrial')).toBe(false)
   })
@@ -44,7 +44,7 @@ describe('Map Filter', () => {
     })
     const store = useMapStore()
 
-    expect(wrapper.find('.v-map-toggler').exists()).toBe(false)
+    expect(wrapper.find('.ct-map-toggler').exists()).toBe(false)
 
     await wrapper.trigger('click')
 

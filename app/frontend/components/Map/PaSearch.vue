@@ -1,74 +1,77 @@
 <template>
   <div
     ref="root"
-    class="v-map-pa-search"
+    class="ct-map-pa-search"
   >
-    <div class="autocomplete__container">
-      <div class="autocomplete">
-        <button
-          class="autocomplete__magnifying-glass"
-          type="button"
-          @click="onMagnifyingGlassClick"
-        />
-        <input
-          ref="inputEl"
-          v-model="search"
-          class="autocomplete__input"
-          type="text"
-          :placeholder="autocompletePlaceholder"
-          @input="onInput"
-          @keyup.enter.prevent.stop="onInputEnter"
-          @keyup.esc.prevent.stop="reset"
-        >
-        <button
-          v-if="hasSearchString"
-          class="autocomplete__delete"
-          type="button"
-          @click="reset"
-        />
-      </div>
-      <div
-        v-show="showResultsPane"
-        class="autocomplete__results-container"
+    <div class="ct-map-pa-search__bar">
+      <button
+        class="ct-map-pa-search__magnifying-glass"
+        type="button"
+        @click="onMagnifyingGlassClick"
       >
-        <div
-          v-if="hasTooShortError"
-          class="autocomplete__error-message"
-          v-text="autocompleteErrorMessages.invalid_search_string"
-        />
-        <div
-          v-if="hasNoResultsError"
-          class="autocomplete__error-message"
-          v-text="autocompleteErrorMessages.no_results"
-        />
-        <div class="autocomplete__results">
-          <div
-            v-for="(result, index) in results"
-            :key="index"
-            ref="resultEls"
-            class="autocomplete__result"
-            tabindex="0"
-            @click="submit(result)"
-            @keyup.enter.stop.prevent="submit(result)"
-            @mouseover="focusResult(index)"
-            v-text="result.title"
-          />
-        </div>
-      </div>
+        <IconSearch class="ct-map-pa-search__magnifying-glass-icon" />
+      </button>
+      <input
+        ref="inputEl"
+        v-model="search"
+        name="pa_search"
+        class="ct-map-pa-search__input"
+        type="text"
+        :placeholder="autocompletePlaceholder"
+        @input="onInput"
+        @keyup.enter.prevent.stop="onInputEnter"
+        @keyup.esc.prevent.stop="reset"
+      >
+      <button
+        v-if="hasSearchString"
+        class="ct-map-pa-search__delete"
+        type="button"
+        @click="reset"
+      >
+        <IconClose class="ct-map-pa-search__delete-icon" />
+      </button>
     </div>
+    <ul
+      v-if="showResultsPane"
+      class="ct-map-pa-search__results"
+    >
+      <li
+        v-if="hasTooShortError"
+        class="ct-map-pa-search__result
+        ct-map-pa-search__result--no-pointer"
+        v-text="autocompleteErrorMessages.invalid_search_string"
+      />
+      <li
+        v-if="hasNoResultsError"
+        class="ct-map-pa-search__result
+        ct-map-pa-search__result--no-pointer"
+        v-text="autocompleteErrorMessages.no_results"
+      />
+      <li
+        v-for="(result, index) in results"
+        :key="index"
+        ref="resultEls"
+        class="ct-map-pa-search__result"
+        tabindex="0"
+        @click="submit(result)"
+        @keyup.enter.stop.prevent="submit(result)"
+        @mouseover="focusResult(index)"
+        v-text="result.title"
+      />
+    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
 // Vue 3 port of the legacy VMapPASearch.vue + Autocomplete.vue pair
 // (app/javascript/components/map/VMapPASearch.vue) — merged into one component
-// since only the map PA-search box uses this markup here (site/area search get
-// their own autocomplete in a later wave). Reuses the legacy unprefixed BEM
-// classes (`.v-map-pa-search`, `.autocomplete__*`) as-is, same exception as the
-// Wave 3 nav/search chrome — this is high-traffic global map UI, not a fresh
-// component, so it keeps its existing styling rather than a `ct-` rewrite.
+// since only the map PA-search box uses this markup here (site/area search
+// has its own equivalent, SearchAreas/InputAutocomplete.vue, whose structure
+// this mirrors).
 import { ref, computed } from 'vue'
 import { onClickOutside, useDebounceFn } from '@vueuse/core'
+import IconClose from '@/components/Icon/Close.vue'
+import IconSearch from '@/components/Icon/Search.vue'
 import { postJson } from '@/lib/http'
 import type { MapPaSearchProps, AutocompleteResult } from '@/types/backend'
 import type { ZoomToOptions } from '@/composables/useMapBoundingBox'
@@ -177,3 +180,92 @@ function submit(result: AutocompleteResult) {
   })
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-map-pa-search {
+  @apply
+  relative;
+}
+
+.ct-map-pa-search__bar {
+  @apply
+  relative
+  z-1
+  tw-shared-base-flex-gap-2
+  justify-between
+  items-center
+  px-4
+  py-2
+  bg-theme-grey-dark
+  border
+  border-white
+  rounded-full;
+}
+
+.ct-map-pa-search__magnifying-glass-icon {
+  @apply
+  size-5.25
+  text-white;
+}
+
+.ct-map-pa-search__input {
+  @apply
+  grow
+  tw-shared-font-hind-siliguri__light-lg
+  placeholder:text-theme-grey-light
+  w-full
+  flex
+  flex-1;
+}
+
+.ct-map-pa-search__input:focus {
+  @apply
+  outline-none
+  border-white;
+}
+
+.ct-map-pa-search__delete-icon {
+  @apply
+  tw-shared-icon-button-reset
+  size-3.5
+  text-white;
+}
+
+.ct-map-pa-search__results {
+  @apply
+  bg-theme-grey-dark
+  border
+  border-white
+  rounded-b-3xl
+  pt-6.25
+  pb-6.25
+  w-full
+  absolute
+  top-[60%]
+  left-0
+  overflow-y-scroll
+  h-70
+  tw-shared-base-flex-col-gap-1;
+}
+
+.ct-map-pa-search__result {
+  @apply
+  p-3
+  tw-shared-font-hind-siliguri__light-base-grey-light
+  cursor-default;
+}
+
+.ct-map-pa-search__result--no-pointer {
+  @apply
+  cursor-text;
+}
+
+.ct-map-pa-search__result:focus,
+.ct-map-pa-search__result:hover {
+  @apply
+  bg-theme-grey-xlight
+  text-theme-grey-black;
+}
+</style>

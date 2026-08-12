@@ -87,6 +87,8 @@ function updateTabParam(id: number) {
 }
 
 function select(id: number) {
+  console.log('hihih')
+
   const tab = props.tabs.find(t => t.id === id)
   if (props.gaId && tab) {
     trackEvent('click', { event_label: `${props.gaId} - Tab: ${tab.title}` })
@@ -103,19 +105,29 @@ if (selectedId.value !== undefined) updateTabParam(selectedId.value)
 @reference "#importtailwindcss";
 
 .ct-tabs__triggers {
-  @apply tw-shared-base-container m-0 flex list-none gap-8 overflow-x-auto p-0 md:flex-wrap;
+  @apply
+  tw-shared-base-container
+  tw-shared-base-flex-gap-8
+  overflow-x-auto;
 }
 
 .ct-tabs__trigger {
-  @apply shrink-0 cursor-pointer border-b-2 border-transparent pb-1 text-[1.125rem] leading-[1.3] text-theme-grey-dark transition-colors hover:border-theme-primary md:text-[1.25rem];
+  @apply
+  shrink-0
+  cursor-pointer
+  border-b-2
+  border-transparent
+  pb-1
+  tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black
+  transition-colors
+  hover:border-theme-primary;
 }
 
 .ct-tabs__trigger--active {
-  @apply border-theme-primary font-bold text-theme-grey-black;
-}
-
-.ct-tabs__target {
-  @apply pt-4;
+  @apply
+  border-theme-primary
+  font-bold
+  text-theme-grey-black;
 }
 
 </style>
