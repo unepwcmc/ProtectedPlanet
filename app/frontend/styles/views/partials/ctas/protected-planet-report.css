@@ -44,13 +44,13 @@
 
 .vw-ctas-protected-planet-report__title {
   @apply 
-  tw-shared-font-playfair__light-2xl-md-4xl-white
+  tw-shared-font-playfair__normal-2xl-md-4xl-white
   md:w-92.5;
 }
 
 .vw-ctas-protected-planet-report__intro {
   @apply 
-  tw-shared-font-hind-siliguri__light-lg-md-xl-white
+  tw-shared-font-hind-siliguri__normal-lg-md-xl-white
   md:w-[75%]
   lg:w-[90%];
 }

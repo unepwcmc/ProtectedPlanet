@@ -213,7 +213,7 @@ function submit(result: AutocompleteResult) {
 .ct-map-pa-search__input {
   @apply
   grow
-  tw-shared-font-hind-siliguri__light-lg
+  tw-shared-font-hind-siliguri__normal-lg
   placeholder:text-theme-grey-light
   w-full
   flex
@@ -253,7 +253,7 @@ function submit(result: AutocompleteResult) {
 .ct-map-pa-search__result {
   @apply
   p-3
-  tw-shared-font-hind-siliguri__light-base-grey-light
+  tw-shared-font-hind-siliguri__normal-base-grey-light
   cursor-default;
 }
 

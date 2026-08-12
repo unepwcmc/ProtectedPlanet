@@ -72,7 +72,7 @@ defineProps<ListingPageCardNews>()
 }
 
 .ct-listing-page-card-news-card__date {
-  @apply tw-shared-font-hind-siliguri__light-sm-grey;
+  @apply tw-shared-font-hind-siliguri__normal-sm-grey;
 }
 
 .ct-listing-page-card-news-card__title {
@@ -80,6 +80,6 @@ defineProps<ListingPageCardNews>()
 }
 
 .ct-listing-page-card-news-card__summary {
-  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black;
 }
 </style>

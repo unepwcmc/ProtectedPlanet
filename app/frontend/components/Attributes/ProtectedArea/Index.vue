@@ -1,22 +1,23 @@
 <template>
-  <div class="card--attributes-pa-and-parcels">
+  <div class="ct-attributes-protected-area">
     <h2
-      class="card__h2"
+      class="ct-attributes-protected-area__title"
       v-text="title"
     />
     <div
       v-if="forPdf"
-      class="card__all-attributes"
+      class="ct-attributes-protected-area--for-pdf"
     >
       <AttributesProtectedAreaAttributeList
         v-for="(parcelAttributes, index) in attributesList"
         :key="`${index}parcelAttributesList`"
+        :forPdf
         :attributes="parcelAttributes.attributes"
-        :show-site-pid="true"
       />
     </div>
     <AttributesProtectedAreaAttributeList
       v-else
+      :forPdf
       :attributes="currentAttributeSet"
     />
   </div>
@@ -39,3 +40,20 @@ const currentAttributeSet = computed(() => {
   return chosen?.attributes ?? []
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-attributes-protected-area {
+  @apply tw-shared-card-stats;
+}
+
+.ct-attributes-protected-area--for-pdf {
+  @apply tw-shared-card-stats-for-pdf;
+}
+
+.ct-attributes-protected-area__title {
+  @apply tw-shared-card-title;
+}
+
+</style>

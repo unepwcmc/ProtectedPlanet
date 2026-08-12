@@ -13,7 +13,7 @@
 }
 
 .vw-partials-messages-message-citation__text {
-  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black;
 }
 
 .vw-partials-messages-message-citation__link {

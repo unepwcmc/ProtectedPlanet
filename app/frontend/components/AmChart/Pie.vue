@@ -1,8 +1,8 @@
 <template>
-  <div class="am-chart--pie chart__chart">
+  <div class="ct-am-chart-pie">
     <div
       ref="chartEl"
-      class="chart__svg"
+      class="ct-am-chart-pie__svg"
     />
   </div>
 </template>
@@ -108,3 +108,11 @@ function setTooltip() {
   pieSeries!.set('tooltip', tooltip)
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-am-chart-pie__svg {
+  @apply h-70;
+}
+</style>

@@ -30,7 +30,7 @@ describe('RegionCountryPages', () => {
       global
     })
 
-    expect(wrapper.find('.card--stats-toggle').exists()).toBe(false)
+    expect(wrapper.find('.ct-region-country-pages__toggle').exists()).toBe(false)
   })
 
   it('switches the active database when a tab is clicked', async () => {
@@ -83,8 +83,8 @@ describe('RegionCountryPages', () => {
     // hasCoverageStats requires > 1 entries, so no per-coverage cards render —
     // the wrapper div itself (also used by iucn/governance) still does.
     expect(wrapper.findAll('.card--stats-coverage')).toHaveLength(0)
-    expect(wrapper.find('.list--underline-sources').exists()).toBe(false)
-    expect(wrapper.find('.cards--search-results-areas').exists()).toBe(false)
+    expect(wrapper.find('.ct-stats-sources__list').exists()).toBe(false)
+    expect(wrapper.find('.ct-stats-sites__list').exists()).toBe(false)
   })
 
   it('renders relatedCountriesHtml as trusted HTML when present', () => {

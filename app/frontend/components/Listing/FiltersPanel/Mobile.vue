@@ -94,7 +94,7 @@ function onToggleFilterPane() {
 }
 
 .ct-listing-filters-panel-mobile__title {
-  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black;
 }
 
 .ct-listing-filters-panel-mobile__groups {

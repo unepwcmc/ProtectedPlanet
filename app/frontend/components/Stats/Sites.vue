@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="flex flex-v-center flex-h-between">
+  <div class="ct-stats-sites">
+    <div class="ct-stats-sites__header">
       <h2 v-text="title" />
       <a
         class="ct-stats-sites__view-all"
@@ -12,24 +12,22 @@
       </a>
     </div>
 
-    <div class="cards--search-results-areas preview">
+    <div class="ct-stats-sites__list">
       <a
         v-for="(siteDetail, i) in siteDetails"
         :key="i"
-        class="card__link"
+        class="ct-stats-sites__item"
         :href="`/${siteDetail.site_id}`"
         :title="`View more about the site: ${siteDetail.name}`"
       >
-        <div class="card__image-placeholder">
-          <div
-            class="card__image"
-            :style="{ backgroundImage: `url(${siteDetail.thumbnail_link})` }"
-          />
-        </div>
+        <div
+          class="ct-stats-sites__item-image"
+          :style="{ backgroundImage: `url(${siteDetail.thumbnail_link})` }"
+        />
 
-        <div class="card__content">
+        <div class="ct-stats-sites__item-content">
           <h3
-            class="card__title"
+            class="ct-stats-sites__item-title"
             v-text="siteDetail.name"
           />
         </div>
@@ -49,6 +47,10 @@ defineProps<StatsSites>()
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-stats-sites__header {
+  @apply flex items-center justify-between;
+}
+
 .ct-stats-sites__view-all {
   @apply
   tw-shared-button--all
@@ -57,5 +59,52 @@ defineProps<StatsSites>()
 
 .ct-stats-sites__view-all-icon {
   @apply size-8.5 ml-2.5;
+}
+
+.ct-stats-sites__list {
+  @apply flex flex-wrap justify-between;
+}
+
+.ct-stats-sites__item {
+  @apply
+  tw-shared-shadow-grey-light
+  flex
+  flex-col
+  w-full
+  md:w-[48%]
+  lg:w-[31.5%]
+  h-auto
+  md:h-90
+  min-h-70
+  mb-7.5
+  bg-white
+  px-4.5
+  pt-4.5
+  pb-4
+  no-underline
+  hover:no-underline;
+}
+
+/* legacy `.preview .card__link:nth-child(3)` — this component only ever renders the "preview"
+   variant, so the modifier is unconditional here. */
+.ct-stats-sites__item:nth-child(3) {
+  @apply max-md:hidden;
+}
+
+/* legacy trailing-lone-item centering hack for a 3-column grid with a leftover 2nd-of-3 row */
+.ct-stats-sites__item:not(:first-child, :nth-child(3n+1), :nth-child(3n)):last-child {
+  @apply ml-[5%] mr-auto;
+}
+
+.ct-stats-sites__item-image {
+  @apply tw-shared-image-placeholder h-38.75 w-full;
+}
+
+.ct-stats-sites__item-content {
+  @apply mt-3 text-lg;
+}
+
+.ct-stats-sites__item-title {
+  @apply tw-shared-font-hind-siliguri__bold-xl-grey-black;
 }
 </style>

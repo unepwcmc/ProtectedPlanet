@@ -88,7 +88,7 @@ onMounted(() => {
 }
 
 .ct-map-overlay__description {
-  @apply tw-shared-font-hind-siliguri__light-sm-lg-base-white;
+  @apply tw-shared-font-hind-siliguri__normal-sm-lg-base-white;
 }
 
 </style>

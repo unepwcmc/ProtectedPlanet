@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import './fonts.css';
 @import "tailwindcss";
 
 @theme {
@@ -35,6 +35,7 @@
 @import './shared/background.css';
 @import './shared/base.css';
 @import './shared/buttons.css';
+@import './shared/card.css';
 @import './shared/cms.css';
 @import './shared/container.css';
 @import './shared/flex.css';
@@ -42,6 +43,7 @@
 @import './shared/hero.css';
 @import './shared/icons.css';
 @import './shared/images.css';
+@import './shared/list.css';
 @import './shared/map.css';
 @import './shared/scrollbar.css';
 @import './shared/shadows.css';
@@ -99,6 +101,8 @@
 @import './views/partials/messages/message-citation.css';
 
 @import './views/partials/social/share.css';
+
+@import './views/partials/stats/stats-related-countries.css';
 
 @import './views/partials/thematic_and_data_area/footer.css';
 @import './views/partials/thematic_and_data_area/panel_content.css';

@@ -27,8 +27,8 @@ describe('AttributesAffiliationsList', () => {
       props: { affiliationsByParcel, subTitle: 'Parcel ID', translations }
     })
 
-    const subTitles = wrapper.findAll('.card__h3').map(el => el.text())
+    const subTitles = wrapper.findAll('.ct-attributes-affiliations-list__subtitle').map(el => el.text())
     expect(subTitles).toEqual(['Parcel ID: 1234_1', 'Parcel ID: 1234_2'])
-    expect(wrapper.findAll('.card__logo')).toHaveLength(2)
+    expect(wrapper.findAll('.ct-attributes-affiliations-affiliation')).toHaveLength(2)
   })
 })

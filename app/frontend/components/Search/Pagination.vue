@@ -80,7 +80,7 @@ function changePage(isActive: boolean, direction: 'previous' | 'next') {
 }
 
 .ct-search-pagination__text {
-  @apply tw-shared-font-hind-siliguri__light-base-lg-lg;
+  @apply tw-shared-font-hind-siliguri__normal-base-lg-lg;
 }
 
 .ct-search-pagination__button {

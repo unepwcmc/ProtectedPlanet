@@ -38,9 +38,9 @@
 
 @utility tw-shared-bg-image-overlay {
   @apply
-  z-[-1]
+  isolate
   relative
-  before:content-[''] 
+  before:content-['']
   before:absolute
   before:inset-0
   before:z-[-1];

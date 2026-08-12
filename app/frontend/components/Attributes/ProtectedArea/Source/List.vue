@@ -1,22 +1,26 @@
 <template>
-  <div class="card--feault-block sm-sources pdf-break-inside-avoid">
+  <div class="ct-attributes-protected-area-sources">
     <h2
-      class="card__h2"
+      class="ct-attributes-protected-area-sources__title"
       v-text="`${translations.title} (${forPdf ? totalCount : currentSources.length})`"
     />
-    <template v-if="forPdf">
+    <div
+      v-if="forPdf"
+      class="ct-attributes-protected-area-sources--pdf"
+    >
       <AttributesParcelSources
         v-for="(sources, sitePid) in sourcesAttributesList"
         :key="sitePid"
-        class="card__all-attributes"
-        :source-attributes="sources || []"
+        :forPdf
+        :sourceAttributes="sources || []"
         :title="subTitleForParcel(sitePid)"
         :translations
       />
-    </template>
+    </div>
     <AttributesParcelSources
       v-else
-      :source-attributes="currentSources"
+      :forPdf
+      :sourceAttributes="currentSources"
       :translations
     />
   </div>
@@ -45,3 +49,19 @@ function subTitleForParcel(sitePid: string) {
   return props.subTitle ? `${props.subTitle}: ${sitePid}` : sitePid
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-attributes-protected-area-sources {
+  @apply tw-shared-card-stats;
+}
+
+.ct-attributes-protected-area-sources--pdf {
+  @apply tw-shared-card-stats-for-pdf;
+}
+
+.ct-attributes-protected-area-sources__title {
+  @apply tw-shared-card-title;
+}
+</style>

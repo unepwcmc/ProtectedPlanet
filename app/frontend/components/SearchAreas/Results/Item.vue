@@ -85,6 +85,6 @@ defineProps<{
 }
 
 .ct-search-areas-results-item__total-areas {
-  @apply tw-shared-font-hind-siliguri__light-lg-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-lg-grey-black;
 }
 </style>

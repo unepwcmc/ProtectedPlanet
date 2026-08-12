@@ -1,0 +1,56 @@
+@utility tw-shared-card-stats {
+  @apply
+  relative
+  bg-white
+  px-4.5
+  py-4
+  md:px-7.5
+  md:py-7
+  tw-shared-base-flex-col-gap-6;
+}
+
+.pdf .tw-shared-card-stats {
+  @apply 
+  border 
+  border-theme-grey 
+  bg-transparent 
+  text-theme-grey-black;
+}
+
+/* legacy `card--stats-half` (`_card-stats.scss`) — two cards side by side at `md:`+, e.g.
+   IucnCategories/Governance. The `.pdf` width override has the same scoped-SFC restriction as
+   `tw-shared-card-stats` above. */
+@utility tw-shared-card-stats-half {
+  @apply w-full md:w-[calc(50%-0.9375rem)] md:first:mr-7.5;
+}
+
+.pdf .tw-shared-card-stats-half {
+  @apply w-138.75;
+}
+
+/* legacy `card--stats-wrapper` (`_card-stats.scss`) — flex row of `tw-shared-card-stats-half`
+   cards, e.g. RegionCountryPages' coverage row and iucn/governance row. */
+@utility tw-shared-card-stats-wrapper {
+  @apply flex flex-wrap md:flex-nowrap md:justify-between;
+}
+
+.pdf .tw-shared-card-stats-wrapper {
+  @apply justify-normal;
+}
+
+@utility tw-shared-card-title {
+  @apply tw-shared-font-playfair__semi-bold-xl-md-2xl-grey-black;
+}
+
+@utility tw-shared-card-sub-title {
+  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black;
+}
+
+
+@utility tw-shared-card-no-info-text {
+  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+}
+
+@utility tw-shared-card-stats-for-pdf {
+  @apply tw-shared-base-flex-col-gap-12;
+}

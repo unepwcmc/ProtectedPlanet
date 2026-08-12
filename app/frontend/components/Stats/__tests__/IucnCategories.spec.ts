@@ -19,7 +19,7 @@ describe('StatsIucnCategories', () => {
       global: { stubs }
     })
 
-    expect(wrapper.find('.list__value').text()).toBe('3, 12.35%')
+    expect(wrapper.find('.ct-stats-iucn-categories__item-value').text()).toBe('3, 12.35%')
   })
 
   it('renders an empty percentage when falsy', () => {
@@ -34,6 +34,6 @@ describe('StatsIucnCategories', () => {
       global: { stubs }
     })
 
-    expect(wrapper.find('.list__value').text()).toBe('1, %')
+    expect(wrapper.find('.ct-stats-iucn-categories__item-value').text()).toBe('1, %')
   })
 })

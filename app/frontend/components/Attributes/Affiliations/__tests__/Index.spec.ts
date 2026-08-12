@@ -29,7 +29,7 @@ describe('AttributesAffiliations', () => {
       props: { affiliations, title: 'Affiliations', forPdf: false, translations }
     })
 
-    expect(wrapper.findAll('.card__logo')).toHaveLength(1)
+    expect(wrapper.findAll('.ct-attributes-affiliations-affiliation')).toHaveLength(1)
     expect(wrapper.find('img').attributes('src')).toBe('/b.png')
   })
 
@@ -38,7 +38,7 @@ describe('AttributesAffiliations', () => {
       props: { affiliations, title: 'Affiliations', forPdf: true, translations }
     })
 
-    expect(wrapper.findAll('.card__logo')).toHaveLength(2)
+    expect(wrapper.findAll('.ct-attributes-affiliations-affiliation')).toHaveLength(2)
   })
 
   it('shows the no-information translation when there are no affiliations', () => {

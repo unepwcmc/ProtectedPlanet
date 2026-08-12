@@ -59,14 +59,14 @@ withDefaults(defineProps<MapDisclaimer>(), {
 
 .ct-map-disclaimer__body {
   @apply
-  tw-shared-font-hind-siliguri__light-sm-white
+  tw-shared-font-hind-siliguri__normal-sm-white
   overflow-y-auto
   max-h-[14em];
 }
 
 .ct-map-disclaimer__body--country-region-pa {
   @apply
-  tw-shared-font-hind-siliguri__light-sm-grey-xdark
+  tw-shared-font-hind-siliguri__normal-sm-grey-xdark
   overflow-y-auto
   max-h-[14em];
 }

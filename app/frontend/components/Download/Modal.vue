@@ -137,7 +137,7 @@ function toggleMinimise() {
 }
 
 .ct-download-modal__citation {
-  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
 }
 
 .ct-download-modal__list {

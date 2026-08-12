@@ -67,7 +67,7 @@ defineProps<CarouselThemesCard>()
 
 .ct-carousel-themes-ribbon__label {
   @apply
-  tw-shared-font-hind-siliguri__light-base-lg-lg
+  tw-shared-font-hind-siliguri__normal-base-lg-lg
   text-white;
 }
 

@@ -24,7 +24,7 @@ defineProps<{ link: NavLink }>()
   items-center
   h-full
   p-1
-  tw-shared-font-hind-siliguri__light-base-lg-lg
+  tw-shared-font-hind-siliguri__normal-base-lg-lg
   no-underline;
 }
 

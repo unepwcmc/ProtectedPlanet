@@ -18,11 +18,11 @@
 }
 
 .vw-partials-ctas-mpa__title {
-  @apply tw-shared-font-playfair__light-2xl-md-4xl-white;
+  @apply tw-shared-font-playfair__normal-2xl-md-4xl-white;
 }
 
 .vw-partials-ctas-mpa__intro {
-  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-white;
+  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-white;
 }
 
 .vw-partials-ctas-mpa__button {

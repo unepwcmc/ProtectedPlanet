@@ -1,29 +1,42 @@
 <template>
-  <li class="card__logo">
+  <li class="ct-attributes-affiliations-affiliation">
     <img
-      class="card__logo-image"
+      class="ct-attributes-affiliations-affiliation__image"
       :src="link.image_url"
       :alt="link.image_alt || imageAltFallback"
     >
     <template v-if="link.affiliation === 'greenlist'">
-      <p v-text="translations.green_list_intro" />
       <p
-        class="card__subtitle"
-        v-text="translations.green_list_type"
+        class="ct-attributes-affiliations-affiliation__green-list-intro"
+        v-text="translations.green_list_intro"
       />
-      <span v-text="link.type" />
-
-      <template v-if="link.date">
+      <div class="ct-attributes-affiliations-affiliation__green-list-category">
         <p
-          class="card__subtitle"
+          class="ct-attributes-affiliations-affiliation__subtitle"
+          v-text="translations.green_list_type"
+        />
+        <span
+          class="ct-attributes-affiliations-affiliation__text"
+          v-text="link.type"
+        />
+      </div>
+      <div
+        v-if="link.date"
+        class="ct-attributes-affiliations-affiliation__green-list-category"
+      >
+        <p
+          class="ct-attributes-affiliations-affiliation__subtitle"
           v-text="translations.green_list_date"
         />
-        <span v-text="link.date" />
-      </template>
+        <span
+          class="ct-attributes-affiliations-affiliation__text"
+          v-text="link.date"
+        />
+      </div>
 
       <template v-if="link.url">
         <a
-          class="card__subtitle--link"
+          class="ct-attributes-affiliations-affiliation__subtitle-link"
           :href="link.url"
           :title="translations.green_list_title"
           target="_blank"
@@ -34,14 +47,6 @@
         </a>
       </template>
     </template>
-    <a
-      class="card__button"
-      :href="link.link_url"
-      :title="link.link_title"
-      target="_blank"
-      rel="noopener noreferrer"
-      v-text="translations.more"
-    />
   </li>
 </template>
 
@@ -61,7 +66,38 @@ const imageAltFallback = computed(() => props.link.affiliation === 'greenlist' ?
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-attributes-affiliations-affiliation {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.ct-attributes-affiliations-affiliation__image {
+  @apply w-25;
+}
+
+.ct-attributes-affiliations-affiliation__green-list-intro {
+  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+}
+
+.ct-attributes-affiliations-affiliation__green-list-category {
+  @apply tw-shared-base-flex-col-gap-1;
+}
+
+.ct-attributes-affiliations-affiliation__subtitle {
+  @apply tw-shared-list-stripes-title;
+}
+
+.ct-attributes-affiliations-affiliation__text {
+  @apply tw-shared-list-stripes-value;
+}
+
+.ct-attributes-affiliations-affiliation__subtitle-link {
+  @apply
+  tw-shared-base-flex-gap-1
+  items-center
+  no-underline;
+}
+
 .ct-attributes-affiliations-affiliation__external-link-icon {
-  @apply size-5.25;
+  @apply tw-shared-list-underline-link-icon;
 }
 </style>

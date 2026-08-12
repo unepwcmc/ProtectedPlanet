@@ -1,0 +1,94 @@
+/* legacy `list-underline` mixin (`_lists.scss`) — the `.list__li`/`__icon`/`__title`/`__right`/
+   __value`/`__a` family shared by every "list of stat rows" component (Stats/Designations'
+   jurisdiction list, Stats/IucnCategories, Stats/Governance, Stats/Sources, Attributes'
+   protected-area-sources). Per-row icon colour (legacy `theme-chart-list-icon`/`list-theme`,
+   both nth-child loops over the same 12-colour palette) isn't included here — each consumer
+   binds `tw-shared-chart-theme-<n>` itself, same as ChartRowStacked's per-bar colour. */
+@utility tw-shared-list-underline-item {
+  @apply
+  tw-shared-base-flex-gap-3
+  items-center
+  border-t
+  border-theme-grey-light
+  py-3.5
+  first:border-t-0;
+}
+
+@utility tw-shared-list-underline-icon {
+  @apply
+  size-5
+  shrink-0
+  rounded-full;
+}
+
+@utility tw-shared-list-underline-title {
+  @apply font-bold;
+}
+
+@utility tw-shared-list-underline-value {
+  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+}
+
+@utility tw-shared-list-underline-link {
+  @apply
+  ml-auto 
+  tw-shared-base-flex-gap-3
+  tw-shared-button--all
+  text-lg;
+}
+
+@utility tw-shared-list-underline-link-text {
+  @apply max-lg:hidden;
+}
+
+@utility tw-shared-list-underline-link-icon {
+  @apply size-5.25;
+}
+
+@utility tw-shared-list-underline-scrollbar {
+  @apply
+  tw-shared-scrollbar
+  max-h-85
+  overflow-y-scroll;
+}
+ 
+@utility tw-shared-list-stripes-item {
+  @apply 
+  tw-shared-base-flex-col-md-row-gap-3
+  items-center
+  py-4 
+  px-3.5 
+  odd:bg-theme-grey-xlight;
+}
+
+@utility tw-shared-list-stripes-item-for-pdf {
+  @apply 
+  odd:bg-transparent 
+  border-b 
+  border-theme-grey-light;
+}
+
+@utility tw-shared-list-stripes-title {
+  @apply
+  max-w-56
+  tw-shared-font-hind-siliguri__bold-base-grey-black;
+}
+
+@utility tw-shared-list-stripes-value {
+  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+}
+
+@utility tw-shared-list-links-item {
+  @apply
+  flex
+  justify-between
+  items-center
+  text-base
+  md:text-lg
+  bg-theme-grey-xlight
+  mt-2.5
+  py-3.5
+  px-5
+  max-w-175
+  max-h-14;
+}

@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="tabs.length > 1"
-      class="card--stats-toggle"
+      class="ct-region-country-pages__toggle"
     >
       <TabStrip
         :children="tabs"
@@ -12,7 +12,7 @@
     </div>
     <div
       v-if="hasCoverageStats"
-      class="card--stats-wrapper"
+      class="ct-region-country-pages__coverage"
     >
       <StatsCoverage
         v-for="(stat, i) in coverageProps"
@@ -21,7 +21,7 @@
       />
     </div>
     <StatsMessage v-bind="activeDatabase.message" />
-    <div class="card--stats-wrapper pdf-break-before">
+    <div class="ct-region-country-pages__stats pdf-break-before">
       <StatsIucnCategories
         v-if="activeDatabase.iucn"
         v-bind="iucnProps"
@@ -161,3 +161,16 @@ function mapGovernance(data: StatsGovernanceData): StatsGovernanceProps {
   return { governance: data.governance, chart: data.chart, title: data.title }
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-region-country-pages__toggle {
+  @apply tw-shared-card-stats;
+}
+
+.ct-region-country-pages__coverage,
+.ct-region-country-pages__stats {
+  @apply tw-shared-card-stats-wrapper;
+}
+</style>

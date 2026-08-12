@@ -1,0 +1,31 @@
+.vw-partials-stats-stats-related-countries {
+  @apply tw-shared-card-stats;
+}
+
+.vw-partials-stats-stats-related-countries__title {
+  @apply mt-0;
+}
+
+.vw-partials-stats-stats-related-countries__list {
+  @apply list-none;
+}
+
+.vw-partials-stats-stats-related-countries__item {
+  @apply tw-shared-list-underline-item;
+}
+
+.vw-partials-stats-stats-related-countries__item-title {
+  @apply tw-shared-list-underline-title;
+}
+
+.vw-partials-stats-stats-related-countries__item-value {
+  @apply tw-shared-list-underline-value;
+}
+
+.vw-partials-stats-stats-related-countries__item-link {
+  @apply
+  ml-auto
+  tw-shared-button--all
+  after:tw-shared-icon-circle-chevron-black
+  after:size-5.25;
+}

@@ -7,18 +7,18 @@
   }
   
   h3 {
-    @apply tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-6-grey-black;
+    @apply tw-shared-font-hind-siliguri__normal-base-md-lg-leading-1-6-grey-black;
   }
   
   h4 {
-    @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+    @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
   }
 
   a,
   p,
   ul,
   li {
-    @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+    @apply tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black;
   }
 
   table,
@@ -69,7 +69,7 @@
 
   div {
     @apply 
-    tw-shared-font-hind-siliguri__light-base-grey-black
+    tw-shared-font-hind-siliguri__normal-base-grey-black
     leading-[1.6];
   }
 }

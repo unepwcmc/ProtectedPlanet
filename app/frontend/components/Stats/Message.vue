@@ -1,21 +1,20 @@
 <template>
-  <div class="card--message">
+  <div class="ct-stats-message">
     <p
-      class="card__warning"
+      class="ct-stats-message__warning"
       v-html="text"
     />
     <ul
       v-if="documents"
-      class="list--links"
+      class="ct-stats-message__list"
     >
       <li
         v-for="(document, i) in documents"
         :key="i"
-        class="list__li"
+        class="ct-stats-message__item"
       >
         <span v-text="document.name" />
         <a
-          class="list__a"
           :class="document.type === 'pdf' ? 'ct-stats-message__link--pdf' : 'ct-stats-message__link--link'"
           :href="document.url"
           target="_blank"
@@ -48,10 +47,20 @@ defineProps<StatsMessage>()
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-stats-message__list {
+  @apply list-none;
+}
+
+.ct-stats-message__item {
+  @apply tw-shared-list-links-item;
+}
+
 .ct-stats-message__link--pdf {
   @apply
   inline-flex
   items-center
+  ml-3.5
+  max-h-11.5
   text-theme-primary
   text-base
   font-bold;
@@ -65,6 +74,8 @@ defineProps<StatsMessage>()
   @apply
   inline-flex
   items-center
+  ml-3.5
+  max-h-11.5
   text-theme-primary
   text-base
   font-bold;

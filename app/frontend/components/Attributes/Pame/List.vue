@@ -1,21 +1,27 @@
 <template>
-  <div class="card--attributes-pame">
+  <div
+    class="ct-attributes-pame-list"
+    :class="{
+      'ct-attributes-pame-list--pdf': forPdf
+    }"
+  >
     <h2
-      class="card__h2"
+      class="ct-attributes-pame-list__title"
       v-text="title"
     />
     <template v-if="forPdf">
       <AttributesPame
         v-for="(pameAttributes, sitePid) in pamesAttributesList"
         :key="sitePid"
-        class="card__all-attributes"
         :pameAttributes
+        :forPdf
         :title="subTitle ? `${subTitle}: ${sitePid}` : undefined"
         :translations
       />
     </template>
     <AttributesPame
       v-else
+      :forPdf
       :pameAttributes="currentPameAttributes"
       :translations
     />
@@ -38,3 +44,19 @@ const currentPameAttributes = computed(() => {
   return activeParcelId ? (props.pamesAttributesList[activeParcelId] ?? {}) : {}
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-attributes-pame-list {
+  @apply tw-shared-card-stats;
+}
+
+.ct-attributes-pame-list--pdf {
+  @apply tw-shared-base-flex-col-gap-6;
+}
+
+.ct-attributes-pame-list__title {
+  @apply tw-shared-card-title;
+}
+</style>

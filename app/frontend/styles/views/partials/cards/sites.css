@@ -8,7 +8,7 @@
 
 .vw-cards-sites__view-all {
   @apply
-  tw-shared-font-hind-siliguri__light-base-md-lg-grey-black
+  tw-shared-font-hind-siliguri__normal-base-md-lg-grey-black
   shrink-0
   cursor-pointer
   no-underline

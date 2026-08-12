@@ -25,7 +25,7 @@ describe('AttributesProtectedAreaSources', () => {
     })
 
     expect(wrapper.find('h2').text()).toBe('Sources (2)')
-    expect(wrapper.findAll('.list__li')).toHaveLength(2)
+    expect(wrapper.findAll('.ct-attributes-protected-area-source__item')).toHaveLength(2)
   })
 
   it('shows the total count across all parcels when forPdf is true', () => {

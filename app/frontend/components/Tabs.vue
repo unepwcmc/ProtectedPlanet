@@ -118,7 +118,7 @@ if (selectedId.value !== undefined) updateTabParam(selectedId.value)
   border-b-2
   border-transparent
   pb-1
-  tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black
+  tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black
   transition-colors
   hover:border-theme-primary;
 }
