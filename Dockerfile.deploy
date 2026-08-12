@@ -159,6 +159,12 @@ COPY --from=build /usr/local/ruby-${RUBY_VERSION} /usr/local/ruby-${RUBY_VERSION
 COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}
 COPY --from=build /app /app
 
+# A JavaScript runtime is required at BOOT, not just at build time: terser and
+# coffee-rails initialise ExecJS when Rails loads, so without a `node` on PATH
+# Puma dies with ExecJS::RuntimeUnavailable even though assets are precompiled.
+# Taking the binary from the build stage keeps the version identical.
+COPY --from=build /usr/local/bin/node /usr/local/bin/node
+
 WORKDIR /app
 
 # Non-root. uid 1000 matches the ownership cloud-init sets on /data/pp-imports,
