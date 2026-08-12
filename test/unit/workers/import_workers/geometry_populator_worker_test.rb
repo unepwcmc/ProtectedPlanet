@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ImportWorkersGeometryPopulatorWorkerTest < ActiveSupport::TestCase
   test '.perform, given a Country ID, populates the country geometries' do
-    country = FactoryGirl.create(:country)
+    country = FactoryBot.create(:country)
 
     Geospatial::CountryGeometryPopulator.
       expects(:populate_dissolved_geometries).

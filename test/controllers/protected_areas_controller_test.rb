@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ProtectedAreasControllerTest < ActionController::TestCase
   def setup
-    @region  = FactoryGirl.create(:region, name: 'Killbeurope')
-    @country = FactoryGirl.create(:country, name: 'Killbearland', region: @region)
-    @protected_area = FactoryGirl.create(:protected_area, name: 'Killbear', countries: [@country])
+    @region  = FactoryBot.create(:region, name: 'Killbeurope')
+    @country = FactoryBot.create(:country, name: 'Killbearland', region: @region)
+    @protected_area = FactoryBot.create(:protected_area, name: 'Killbear', countries: [@country])
 
     search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
     Search.stubs(:search).returns(search_mock)
@@ -25,11 +25,11 @@ class ProtectedAreasControllerTest < ActionController::TestCase
   end
 
   test '#show is successful even if no jurisdiction is present' do
-    designation = FactoryGirl.create(:designation)
-    region = FactoryGirl.create(:region)
-    country = FactoryGirl.create(:country, region: region)
+    designation = FactoryBot.create(:designation)
+    region = FactoryBot.create(:region)
+    country = FactoryBot.create(:country, region: region)
 
-    protected_area = FactoryGirl.create(
+    protected_area = FactoryBot.create(
       :protected_area, designation: designation, countries: [country]
     )
 

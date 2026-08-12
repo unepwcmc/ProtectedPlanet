@@ -79,7 +79,7 @@ module SearchHelper
     keywords = query.split(',')
     if keywords.select { |k| k .length == 3 }.count == keywords.count
       # They all belong to the same parent country already when coming from the marine page
-      parent_country = Country.find_by_iso_3(keywords.first).try(:parent).try(:name)
+      parent_country = Country.find_by(iso_3: keywords.first).try(:parent).try(:name)
       return nil unless parent_country
 
       %(Search results for <strong class="u-link-color">#{parent_country} overseas territories</strong>).html_safe
@@ -90,7 +90,7 @@ module SearchHelper
     value: ->(config, param) { config['cases'][param.to_s] },
     model: lambda { |config, param|
       model = config['model'].constantize
-      instance = model.find_by_id(param)
+      instance = model.find_by(id: param)
       config['template'] % instance.name
     }
   }.freeze

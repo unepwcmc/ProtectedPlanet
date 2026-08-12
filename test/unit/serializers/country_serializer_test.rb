@@ -7,14 +7,14 @@ require 'test_helper'
 # values AND types.
 class CountrySerializerTest < ActiveSupport::TestCase
   setup do
-    @country = FactoryGirl.create(:country, name: 'Testland', iso_3: 'TST')
-    FactoryGirl.create(:country_statistic,
+    @country = FactoryBot.create(:country, name: 'Testland', iso_3: 'TST')
+    FactoryBot.create(:country_statistic,
       country: @country,
       percentage_pa_land_cover: 10.5,
       percentage_pa_marine_cover: 20.5,
       percentage_well_connected: 30.5,
       percentage_importance: 40.5)
-    FactoryGirl.create(:pame_statistic,
+    FactoryBot.create(:pame_statistic,
       country: @country,
       pame_percentage_pa_land_cover: 9.1234,
       pame_percentage_pa_marine_cover: 5.5678)

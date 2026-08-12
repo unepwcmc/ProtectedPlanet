@@ -3,7 +3,7 @@ require 'test_helper'
 class ProtectedAreasHelperTest < ActionView::TestCase
   test '#map_bounds, given a ProtectedArea object, returns a hash containing
    its bounds' do
-    pa = FactoryGirl.create(:protected_area)
+    pa = FactoryBot.create(:protected_area)
 
     pa.expects(:bounds).twice.returns([[0,0], [1,1]])
 

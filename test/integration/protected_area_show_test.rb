@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
   def setup
-    @region  = FactoryGirl.create(:region, name: 'Killbeurope')
-    @country = FactoryGirl.create(:country, name: 'Killbearland', region: @region)
-    @protected_area = FactoryGirl.create(
+    @region  = FactoryBot.create(:region, name: 'Killbeurope')
+    @country = FactoryBot.create(:country, name: 'Killbearland', region: @region)
+    @protected_area = FactoryBot.create(
       :protected_area, name: 'Killbear', slug: 'killbear', countries: [@country]
     )
 

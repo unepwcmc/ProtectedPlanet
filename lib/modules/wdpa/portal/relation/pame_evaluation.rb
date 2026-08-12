@@ -26,7 +26,7 @@ module Wdpa
           @current_attributes['site_pid'] = site_pid
 
           protected_area_parcel = Staging::ProtectedAreaParcel.find_by(site_id: site_id, site_pid: site_pid) || nil
-          protected_area = (protected_area_parcel ? nil : Staging::ProtectedArea.find_by_site_id(site_id)) || nil
+          protected_area = (protected_area_parcel ? nil : Staging::ProtectedArea.find_by(site_id: site_id)) || nil
 
           @current_attributes['protected_area'] = protected_area
           @current_attributes['protected_area_parcel'] = protected_area_parcel

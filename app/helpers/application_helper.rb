@@ -117,7 +117,7 @@ module ApplicationHelper
   def get_resource_cards(all = false)
     return (@items = empty_resource_cards) if @cms_site.nil?
 
-    resources_page = @cms_site.pages.find_by_slug(PageSlugs::RESOURCES)
+    resources_page = @cms_site.pages.find_by(slug: PageSlugs::RESOURCES)
     return (@items = empty_resource_cards) if resources_page.nil?
 
     presenter = ResourcesPresenter.new(@cms_site, all)
@@ -147,7 +147,7 @@ module ApplicationHelper
   def get_news_items(all = false)
     return (@items = { title: nil, url: false, cards: [] }) if @cms_site.nil?
 
-    news_page = @cms_site.pages.find_by_slug(PageSlugs::NEWS_AND_STORIES)
+    news_page = @cms_site.pages.find_by(slug: PageSlugs::NEWS_AND_STORIES)
     return (@items = { title: nil, url: false, cards: [] }) if news_page.nil?
 
     published_pages = news_page.children.published
@@ -204,7 +204,7 @@ module ApplicationHelper
 
   def make_footer_links(slug_array)
     slug_array.map do |slug|
-      page = @cms_site.pages.find_by_slug(slug)
+      page = @cms_site.pages.find_by(slug: slug)
       next if page.nil?
 
       {
@@ -226,7 +226,7 @@ module ApplicationHelper
   end
 
   def map_page(slug, map_children = false)
-    cms_page = Comfy::Cms::Page.find_by_slug(slug)
+    cms_page = Comfy::Cms::Page.find_by(slug: slug)
     return nil if cms_page.nil?
 
     mapped_page = {

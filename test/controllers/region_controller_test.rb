@@ -5,11 +5,11 @@ class RegionControllerTest < ActionController::TestCase
   test ".show action returns 200" do
     seed_cms
     
-    region = FactoryGirl.create(:region, iso: 'EU')
+    region = FactoryBot.create(:region, iso: 'EU')
 
-    country = FactoryGirl.create(:country, name: 'Belgium', iso_3: 'BEL', region: region)
+    country = FactoryBot.create(:country, name: 'Belgium', iso_3: 'BEL', region: region)
 
-    FactoryGirl.create(:country_statistic,
+    FactoryBot.create(:country_statistic,
       country: country,
       pa_area: 100,
       land_area: 50,

@@ -31,9 +31,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   # shapefile README (each a separate `system` call, chained with `and`).
   def expect_merge_steps(gen, zip_file_path, piece_paths)
     gen.expects(:system).with("zip -j #{zip_file_path} #{piece_paths.join(' ')}").returns(true)
-    gen.expects(:system).with("zip -ru #{zip_file_path} #{SOURCES_FILE}", { chdir: '.' }).returns(true)
+    gen.expects(:system).with("zip -ru #{zip_file_path} #{SOURCES_FILE}", chdir: '.').returns(true)
     gen.expects(:system).with("zip -ru #{zip_file_path} *",
-      { chdir: Download::Generators::Base::ATTACHMENTS_PATH }).returns(true)
+      chdir: Download::Generators::Base::ATTACHMENTS_PATH).returns(true)
     gen.expects(:system).with(
       "zip -j #{zip_file_path} #{Download::Generators::Base::SHAPEFILE_README_PATH}"
     ).returns(true)

@@ -6,7 +6,7 @@ class AssetGeneratorTest < ActiveSupport::TestCase
     # default host configured for route helpers.
     Rails.application.routes.default_url_options[:host] ||= 'test.host'
     @options = {size: {x: 25, y: 25}}
-    @protected_area = FactoryGirl.create(:protected_area)
+    @protected_area = FactoryBot.create(:protected_area)
     @protected_area.stubs(:geojson).returns('{}')
   end
 
@@ -53,7 +53,7 @@ class AssetGeneratorTest < ActiveSupport::TestCase
     skip('no longer try to provide a backend-generated fallback image')
     AssetGenerator.expects(:fallback_tile).returns('fallback image')
 
-    protected_area = FactoryGirl.create(:protected_area)
+    protected_area = FactoryBot.create(:protected_area)
     protected_area.stubs(:geojson).returns(nil)
 
     pa_image = AssetGenerator.protected_area_tile(protected_area)

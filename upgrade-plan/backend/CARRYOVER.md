@@ -93,7 +93,19 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
 - [ ] **Relation `create_models` path** — `portal/relation/*` incl. the nil-jurisdiction logic (`ProtectedArea#designation`). Ties to the `belongs_to` decision in §6.
 - [ ] **shared importers** — `country_overseas_territories.rb` (9%), `story_map_link_list.rb` (10%), `protected_areas_related_source.rb` (15%).
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
-- [ ] **Un-skip the 7 FDW integration tests** — they skip because the WDPA portal FDW schema isn't in the test DB (`release_orchestration_integration_test.rb`, `release_workflow_integration_test.rb`). Getting the portal FDW fixtures into test un-skips the core pipeline's integration layer.
+- [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
+      `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
+      `release_workflow_integration_test.rb`). Requirements: a **`portal_fdw` schema (~48 source
+      tables** — categories/lookups + `wdpas`, `spatial_data` w/ PostGIS geometry, `source`, `pame`,
+      `greenlists`, `wdpa_iso3` + junctions) + sample rows, on top of which `FDW_VIEWS.sql` (659
+      lines, in repo) builds ~9 staging materialized views; the tests then run import→swap→cleanup.
+      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs) — in prod it's a live
+      postgres_fdw foreign schema on the portal DB, so the exact 48-table schema exists only there.
+      **Do NOT hand-fabricate** (48 tables, high drift risk). **Path: `pg_dump --schema-only -n
+      portal_fdw` from the temp staging sandbox** (the devops ask — it has the portal FDW), convert
+      `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed a handful of rows. Gate on the
+      sandbox existing. The fragile *logic* is already covered by the geometry-importer +
+      table-service unit tests, so this is end-to-end confidence, not a correctness gap.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, currently 54) as coverage improves. Never lower it.
 
@@ -282,7 +294,19 @@ public CMS pages render; **page save + `assign_layout_categories` run clean (#3)
 ## 6. Minor code items (low priority, clear opportunistically)
 - [ ] **`belongs_to_required_by_default` opted out** (`config/application.rb`) — revisit as a data-integrity pass measured against a **production** dump. 4 associations have real NULLs: `Country#parent` (199/248), `Designation#jurisdiction` (57/1831), `pame_statistics.country`, `country_statistics.country`.
 - [ ] **`_info.svg` orphan partial** — `app/views/partials/svgs/_info.svg` is not rendered via `render` (only an unrelated SCSS `info.svg` asset ref exists). Confirm unused, then remove. (`_pin.svg` was renamed to `_pin.html.erb` to clear the dotted-template deprecation — do the same or delete `_info.svg`.)
-- [ ] **Mocha strict-keyword-argument warnings** (test-only) — surface during Ruby 3 prep; fix with the kwarg work.
+- [x] **DONE — Mocha strict-keyword-argument warnings** (Tier-1 modernization). 10 sites where a
+      `#with` expectation used a positional hash but the code passes kwargs (`system(cmd, chdir:)` in
+      `download/generators` csv/shapefile tests), or vice-versa (downloads_controller tests expected
+      kwargs but `Download.request/poll` take a single positional `params.permit!`). Fixed:
+      generator tests → `chdir:`/`**opts` kwargs; controller tests → block matchers on
+      `p.to_unsafe_h`. Then enabled `c.strict_keyword_argument_matching = true` in `test_helper.rb`
+      so mismatches are enforced, not warned. Suite 681/0, 0 Mocha warnings.
+- [x] **DONE — Tier-2 idiom cleanups.** (1) `FactoryGirl` → `FactoryBot` across all 38 test files
+      (~384 call sites) and removed the `FactoryGirl = FactoryBot` compat alias from `test_helper.rb`.
+      (2) Safe AR dynamic finders → `find_by(col:)`: `find_by_slug/site_id/name/id/iso_3/css_class`
+      in app + lib. **Left intentionally:** `Release.find_by_backup_timestamp_string` (custom method,
+      not an AR finder), `Comfy::Cms::Page.find_by_full_path` (Comfy internal), `find_by_older_version_id`
+      (dead versioning feature, pending removal decision). Suite 681/0.
 - [ ] **`Searchable` constants inside `included do`** (`app/controllers/concerns/searchable.rb:22`) — re-initialized per including controller; cosmetic, no behaviour change.
 
 ## 7. Dead code found during the upgrade (already removed — for reference)

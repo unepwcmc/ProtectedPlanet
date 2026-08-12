@@ -35,11 +35,11 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
 
     wdpa_zip_command = "zip -ru #{zip_file_path} #{SOURCES_FILE}"
-    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, { chdir: '.' }).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, chdir: '.').returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
-    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, **opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 
@@ -62,11 +62,11 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).returns(false)
 
     wdpa_zip_command = "zip -ru  #{SOURCES_FILE}"
-    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, { chdir: '.' }).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, chdir: '.').returns(true)
 
     update_zip_command = 'zip -ru  *'
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
-    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(false)
+    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, **opts).returns(false)
 
     assert_equal false, Download::Generators::Csv.generate(''),
       'Expected #generate to return false on failure'
@@ -105,11 +105,11 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
 
     wdpa_zip_command = "zip -ru #{zip_file_path} #{SOURCES_FILE}"
-    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, { chdir: '.' }).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, chdir: '.').returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
-    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, **opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 

@@ -94,7 +94,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     status = 'NO TAKE'
     area   = 153.6
 
-    FactoryGirl.create(:no_take_status, name: status, area: area)
+    FactoryBot.create(:no_take_status, name: status, area: area)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({
       no_take: status,
@@ -110,8 +110,8 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
-    norway = FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
-    guatemala = FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
+    norway = FactoryBot.create(:country, iso_3: 'NOR', name: 'Norway')
+    guatemala = FactoryBot.create(:country, iso_3: 'GTM', name: 'Guatemala')
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ iso3: 'NOR; GTM;' })
 
@@ -136,7 +136,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns LegalStatus models for a
    given legal status' do
     status_name = "It's legal, honest"
-    FactoryGirl.create(:legal_status, name: status_name)
+    FactoryBot.create(:legal_status, name: status_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ status: status_name })
 
@@ -165,7 +165,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     stored in Rails for a given legal status change year' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ status_yr: 0 })
 
-    protected_area = FactoryGirl.create(:protected_area)
+    protected_area = FactoryBot.create(:protected_area)
     protected_area.legal_status_updated_at = attributes[:legal_status_updated_at]
 
     assert protected_area.save
@@ -175,7 +175,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns an IucnCategory for a
    given IUCN category' do
     category_name = 'Extinct'
-    FactoryGirl.create(:iucn_category, name: category_name)
+    FactoryBot.create(:iucn_category, name: category_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ iucn_cat: category_name })
 
@@ -186,7 +186,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a Governance for a given
    governance type' do
     governance_name = 'Ministry of Ministries'
-    FactoryGirl.create(:governance, name: governance_name)
+    FactoryBot.create(:governance, name: governance_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ gov_type: governance_name })
 
@@ -197,7 +197,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given
    management authority' do
     management_name = 'Authority of Authorities'
-    FactoryGirl.create(:management_authority, name: management_name)
+    FactoryBot.create(:management_authority, name: management_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ mang_auth: management_name })
 
@@ -230,8 +230,8 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     designation = 'Sites of Special Importance'
     designation_type = 'Universal'
 
-    jurisdiction = FactoryGirl.create(:jurisdiction, name: designation_type)
-    FactoryGirl.create(:designation, name: designation, jurisdiction: jurisdiction)
+    jurisdiction = FactoryBot.create(:jurisdiction, name: designation_type)
+    FactoryBot.create(:designation, name: designation, jurisdiction: jurisdiction)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({
       desig_eng: designation,
@@ -252,7 +252,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     designation = 'Sites of Special Importance'
     designation_type = 'Universal'
 
-    FactoryGirl.create(:jurisdiction, name: designation_type)
+    FactoryBot.create(:jurisdiction, name: designation_type)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({
       desig_eng: designation,

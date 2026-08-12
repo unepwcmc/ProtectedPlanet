@@ -40,7 +40,7 @@ class ThematicAreasPresenter
   end
 
   def parent_page(slug)
-    @cms_site.pages.find_by_slug(slug)
+    @cms_site.pages.find_by(slug: slug)
   end
 
   def cards(parent_page)

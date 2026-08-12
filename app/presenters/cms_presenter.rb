@@ -25,7 +25,7 @@ class CmsPresenter
   private
 
   def collect_older_versions page, collection=[]
-    if older_version = Comfy::Cms::Page.find_by_id(page.older_version_id)
+    if older_version = Comfy::Cms::Page.find_by(id: page.older_version_id)
       collection << older_version
       return collect_older_versions(older_version, collection)
     end

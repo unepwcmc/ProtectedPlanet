@@ -58,15 +58,15 @@ module CmsHelper
   end
 
   def cta_api
-    @cta_api ||= CallToAction.find_by_css_class(PageSlugs::Cta::API)
+    @cta_api ||= CallToAction.find_by(css_class: PageSlugs::Cta::API)
   end
 
   def cta_live_report
-    @cta_live_report ||= CallToAction.find_by_css_class(PageSlugs::Cta::LIVE_REPORT)
+    @cta_live_report ||= CallToAction.find_by(css_class: PageSlugs::Cta::LIVE_REPORT)
   end
 
   def cta_mpa 
-    @cta_mpa ||= CallToAction.find_by_css_class(PageSlugs::Cta::MPA_GUIDE)
+    @cta_mpa ||= CallToAction.find_by(css_class: PageSlugs::Cta::MPA_GUIDE)
   end
 
   def get_resource_links 
