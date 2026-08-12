@@ -114,10 +114,29 @@ ENV VITE_RUBY_MODE=production
 ENV AWS_S3_REGION=eu-west-1 \
     AWS_REGION=eu-west-1
 
-# Vite runs explicitly before assets:precompile: vite_rails otherwise swallows
-# the failure and prints only "Compilation failed:" with no detail.
-RUN bundle exec vite build --mode production \
- && bundle exec rails assets:precompile \
+# Assets are built in two explicit steps rather than one assets:precompile.
+#
+# vite_ruby enhances assets:precompile to also run vite:build_all. That nested
+# invocation always fails here with a bare "Compilation failed:" and no stderr,
+# while the identical build succeeds every other way. Verified in the image:
+#
+#   bundle exec rake vite:build_all      -> OK, writes public/vite + manifest
+#   Open3.capture3(<the exact cmd vite_ruby builds>)  -> exit 0
+#   bundle exec rails assets:precompile  -> sprockets output OK, vite step fails
+#   ...also fails via `rake assets:precompile`, with NODE_OPTIONS unset, with
+#      VITE_RUBY_SKIP_ASSETS_PRECOMPILE_INSTALL=true, and in every vite mode.
+#
+# So: let assets:precompile do the sprockets work (its vite step is tolerated),
+# then run vite properly. Both outputs are then asserted — if either is really
+# missing the build still fails, so this tolerates one known-bogus exit code
+# without hiding a genuine breakage.
+RUN rm -rf public/assets public/vite tmp/cache/vite \
+ && (bundle exec rails assets:precompile || echo "note: ignoring vite_ruby's nested build failure, verified below") \
+ && bundle exec rake vite:build_all \
+ && test -s public/vite/.vite/manifest.json \
+ && ls public/assets/application-*.css >/dev/null \
+ && ls public/assets/application-*.js  >/dev/null \
+ && echo "assets OK: $(ls public/assets | wc -l) sprockets files, vite manifest present" \
  && rm -rf node_modules tmp/cache
 
 # ---------------------------------------------------------------------------
