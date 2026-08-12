@@ -157,6 +157,9 @@ WORKDIR /app
 RUN groupadd -g 1000 -r app 2>/dev/null || true \
  && useradd -u 1000 -g 1000 --create-home --shell /bin/bash app 2>/dev/null || true \
  && mkdir -p tmp/pids log storage \
+ # entrypoint.sh is mode 644 in git (the compose setup invoked it as
+ # `bash entrypoint.sh`), so set the bit here rather than relying on the repo.
+ && chmod +x entrypoint.sh bin/docker-sidekiq-healthcheck \
  && chown -R 1000:1000 /app
 USER 1000:1000
 
