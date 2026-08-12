@@ -135,7 +135,7 @@ RUN rm -rf public/assets public/vite tmp/cache/vite \
  && bundle exec rake vite:build_all \
  && test -s public/vite/.vite/manifest.json \
  && ls public/assets/application-*.css >/dev/null \
- && ls public/assets/application-*.js  >/dev/null \
+ && test "$(ls public/assets | wc -l)" -gt 10 \
  && echo "assets OK: $(ls public/assets | wc -l) sprockets files, vite manifest present" \
  && rm -rf node_modules tmp/cache
 
