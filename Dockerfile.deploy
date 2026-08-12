@@ -95,6 +95,12 @@ ENV RAILS_ENV=${RAILS_ENV} \
     SECRET_KEY_BASE_DUMMY=1 \
     VITE_RUBY_VERBOSE=true
 
+# vite_ruby derives its build mode from RAILS_ENV, so under RAILS_ENV=staging it
+# runs `vite build --mode staging`. config/vite.json defines only all/development/
+# test, and the staging-mode build fails where `--mode production` succeeds.
+# Pin the mode rather than inventing a staging section in vite.json.
+ENV VITE_RUBY_MODE=production
+
 # vite_rails boots the full Rails app before building, which initialises the
 # ActiveStorage S3 service. config/storage.yml takes its region from
 # Rails.application.secrets.s3_region, which config/secrets.yml populates from
