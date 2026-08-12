@@ -93,14 +93,16 @@ ARG RAILS_ENV=staging
 ENV RAILS_ENV=${RAILS_ENV} \
     NODE_OPTIONS=--openssl-legacy-provider \
     SECRET_KEY_BASE_DUMMY=1 \
-    VITE_RUBY_VERBOSE=true
+    VITE_RUBY_VERBOSE=true \
+    # vite_rails boots the Rails app before building, and aws-sdk raises
+    # "missing region" at boot unless AWS_REGION is set. The app's own config
+    # uses AWS_S3_REGION, so nothing sets the name the SDK looks for. This is a
+    # build-time placeholder only — the real value is injected at runtime.
+    AWS_REGION=eu-west-1
 
-# Vite is run explicitly before assets:precompile. vite_rails otherwise swallows
-# the bundler output and reports only "Compilation failed:" with no detail, which
-# is unusable in CI.
-RUN (bundle exec vite build --mode production || \
-      (echo '--- vite log ---'; cat log/vite.log 2>/dev/null; \
-       echo '--- direct vite ---'; ./node_modules/.bin/vite build --mode production; exit 1)) \
+# Vite runs explicitly before assets:precompile: vite_rails otherwise swallows
+# the failure and prints only "Compilation failed:" with no detail.
+RUN bundle exec vite build --mode production \
  && bundle exec rails assets:precompile \
  && rm -rf node_modules tmp/cache
 
