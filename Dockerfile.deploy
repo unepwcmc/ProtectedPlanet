@@ -98,7 +98,9 @@ ENV RAILS_ENV=${RAILS_ENV} \
 # Vite is run explicitly before assets:precompile. vite_rails otherwise swallows
 # the bundler output and reports only "Compilation failed:" with no detail, which
 # is unusable in CI.
-RUN bundle exec vite build --mode production \
+RUN (bundle exec vite build --mode production || \
+      (echo '--- vite log ---'; cat log/vite.log 2>/dev/null; \
+       echo '--- direct vite ---'; ./node_modules/.bin/vite build --mode production; exit 1)) \
  && bundle exec rails assets:precompile \
  && rm -rf node_modules tmp/cache
 
