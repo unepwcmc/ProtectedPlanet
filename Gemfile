@@ -49,7 +49,10 @@ gem 'sprockets-vue', '~> 0.1.0'
 
 gem 'rails-controller-testing'
 
-gem 'gdal', '~> 2.0'
+# The `gdal` gem is removed: it is pinned to GDAL 2.x and calls C API functions
+# (OSRStripCTParms, OSRFixup, OPTGetParameterInfo, ...) deleted in GDAL 3, so it
+# cannot compile against the 3.8.4 the image now ships. Its only use was
+# Ogr::Info, which shells out to the ogrinfo CLI instead.
 gem 'net-sftp'
 gem 'net-scp'
 
