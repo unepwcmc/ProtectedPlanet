@@ -3,6 +3,11 @@ source 'https://rubygems.org'
 gem 'rails', '~> 7.1.5'
 gem 'webpacker', '~> 4.0.2'
 
+# App server. The legacy deploy ran under system-installed Passenger via nginx,
+# so no server gem was ever in the bundle — but config/puma.rb has been here all
+# along, waiting for one. Containerised deploys need the server in the image.
+gem 'puma', '~> 6.4'
+
 # Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
 # its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
 # appsignal 3 call plain YAML.load on their aliased configs at boot and break.

@@ -67,8 +67,9 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   # Wraps "WKB_GEOMETRY" in ST_Multi() so every polygon feature is MULTIPOLYGON
-  # before it reaches the FileGDB driver, preventing -skipfailures from silently
+  # before it reaches the .gdb driver, preventing -skipfailures from silently
   # dropping features whose stored geometry type is POLYGON rather than MULTIPOLYGON.
+  # Still required under OpenFileGDB: it writes the layer as Multi Polygon too.
   def with_multi_geom(select)
     select.sub('"WKB_GEOMETRY"', 'ST_Multi("WKB_GEOMETRY") AS "WKB_GEOMETRY"')
   end

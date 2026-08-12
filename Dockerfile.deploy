@@ -1,0 +1,122 @@
+# ProtectedPlanet — production/staging image for Kamal 2.
+#
+# This replaces the buster + GDAL-2.2.3-from-source + ESRI FileGDB SDK chain the
+# development Dockerfile still carries. That chain cannot be built on a current
+# base: ESRI ship FileGDB as a RHEL7 binary linked against an old glibc.
+#
+# Instead: Ubuntu 24.04 (matching the host), distro GDAL 3.8.4, and GDAL's
+# built-in OpenFileGDB driver, which has written .gdb since 3.6 and reports as
+# `rw+v` here. Verified end to end against the staging database — a 500-feature
+# Multi Polygon layer plus a second layer appended with -update, read back
+# cleanly. See docs/GDAL-openfilegdb-migration.md.
+#
+# Ruby is built with ruby-build rather than taken from a ruby:* image, because
+# those are Debian-based and we want the 24.04 GDAL. The dev Dockerfile already
+# uses ruby-build for 3.3.7, so the approach is proven in this repo.
+
+ARG RUBY_VERSION=3.3.7
+ARG NODE_VERSION=24.4.1
+
+# ---------------------------------------------------------------------------
+# base — runtime libraries only, shared by build and final stages
+# ---------------------------------------------------------------------------
+FROM ubuntu:24.04 AS base
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_WITHOUT="development:test" \
+    RAILS_LOG_TO_STDOUT=1 \
+    RAILS_SERVE_STATIC_FILES=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates curl gnupg tzdata \
+      # GDAL 3.8.4 + its geo stack. OpenFileGDB is built in — no ESRI SDK.
+      gdal-bin libgdal34 libproj25 proj-data libgeos-c1v5 \
+      # PostGIS client (pg gem) and spatialite
+      libpq5 libsqlite3-0 libspatialite8t64 \
+      # image/asset handling and zip for the .gdb download bundles
+      shared-mime-info zip \
+      # Chromium runtime deps — the /country/*.pdf endpoint drives Puppeteer
+      fonts-liberation libgtk-3-0t64 libcups2t64 libx11-xcb1 libxcomposite1 \
+      libxdamage1 libxfixes3 libxrandr2 libgbm1 libnss3 libasound2t64 \
+      libdrm2 libxkbcommon0 \
+ && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------------------------
+# build — toolchain, Ruby, Node, gems, assets
+# ---------------------------------------------------------------------------
+FROM base AS build
+ARG RUBY_VERSION
+ARG NODE_VERSION
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential git pkg-config \
+      autoconf bison libssl-dev libyaml-dev zlib1g-dev libreadline-dev \
+      libffi-dev libgmp-dev libpq-dev libgdal-dev libsqlite3-dev \
+      libxml2-dev libxslt1-dev xz-utils \
+ && rm -rf /var/lib/apt/lists/*
+
+# Ruby via ruby-build
+RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
+ && PREFIX=/usr/local /tmp/ruby-build/install.sh \
+ && ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
+ && rm -rf /tmp/ruby-build
+ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
+
+# Node 24 from the official tarball (Vite 5 needs 18+; webpacker 4 still works
+# with NODE_OPTIONS=--openssl-legacy-provider, set at the asset build below).
+RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
+ && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
+ && rm /tmp/node.tar.xz \
+ && corepack enable && corepack prepare yarn@4.17.1 --activate
+
+WORKDIR /app
+
+# Gems first so the layer caches independently of app code
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler --no-document \
+ && bundle config set --local without "${BUNDLE_WITHOUT}" \
+ && bundle install --jobs 4 --retry 3 \
+ && rm -rf "${BUNDLE_PATH}"/ruby/*/cache
+
+# Then JS deps
+COPY package.json yarn.lock .yarnrc.yml* ./
+RUN yarn install --immutable || yarn install
+
+COPY . .
+
+# Asset build. SECRET_KEY_BASE_DUMMY lets Rails boot for assets:precompile
+# without a real key; openssl-legacy-provider is what keeps webpacker 4
+# (webpack 4) working on Node 24.
+ARG RAILS_ENV=staging
+ENV RAILS_ENV=${RAILS_ENV} \
+    NODE_OPTIONS=--openssl-legacy-provider \
+    SECRET_KEY_BASE_DUMMY=1
+RUN bundle exec rails assets:precompile \
+ && rm -rf node_modules tmp/cache
+
+# ---------------------------------------------------------------------------
+# runtime
+# ---------------------------------------------------------------------------
+FROM base AS runtime
+ARG RUBY_VERSION
+ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
+
+COPY --from=build /usr/local/ruby-${RUBY_VERSION} /usr/local/ruby-${RUBY_VERSION}
+COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}
+COPY --from=build /app /app
+
+WORKDIR /app
+
+# Non-root. uid 1000 matches the ownership cloud-init sets on /data/pp-imports,
+# so the Kamal volume is writable without a chown at boot.
+RUN groupadd -g 1000 -r app 2>/dev/null || true \
+ && useradd -u 1000 -g 1000 --create-home --shell /bin/bash app 2>/dev/null || true \
+ && mkdir -p tmp/pids log storage \
+ && chown -R 1000:1000 /app
+USER 1000:1000
+
+EXPOSE 3000
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

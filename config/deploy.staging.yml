@@ -1,0 +1,61 @@
+image: unepwcmc/protectedplanet/rails-staging
+
+servers:
+  web:
+    hosts:
+      - pp-web-staging-01.internal.unep-wcmc.org # 172.20.0.160, VM 222 on pve-04
+    options:
+      # Reaches host-bound Redis (172.17.0.1:6379), Memcached (:11211) and the
+      # Elasticsearch accessory (:9200) via host.docker.internal.
+      add-host: host.docker.internal:host-gateway
+    proxy:
+      host: pp-web-staging-01.internal.unep-wcmc.org
+      app_port: 3000
+      # Country pages and the /country/*.pdf Puppeteer endpoint are slow.
+      # 30s (the default) would cut them; 120 is Cloudflare's ceiling.
+      response_timeout: 120
+      # Explicit wildcard. `ssl: true` alone makes kamal-proxy attempt Let's
+      # Encrypt ACME, which cannot validate an internal-only hostname.
+      ssl:
+        certificate_pem: CERTIFICATE_PEM
+        private_key_pem: PRIVATE_KEY_PEM
+      forward_headers: true
+      healthcheck:
+        path: /
+        interval: 5
+
+  # TWO Sidekiq roles, matching the two systemd units on the old host
+  # (pp_default and pp_import). Do not collapse them: the import queue runs
+  # long multi-GB WDPA jobs that would starve the default queue.
+  job_default:
+    hosts:
+      - pp-web-staging-01.internal.unep-wcmc.org
+    options:
+      add-host: host.docker.internal:host-gateway
+      health-cmd: /app/bin/docker-sidekiq-healthcheck
+      health-interval: 5s
+      health-retries: 3
+      health-start-period: 10s
+      health-timeout: 3s
+    cmd: bundle exec sidekiq -C config/sidekiq.yml
+
+  job_import:
+    hosts:
+      - pp-web-staging-01.internal.unep-wcmc.org
+    options:
+      add-host: host.docker.internal:host-gateway
+      health-cmd: /app/bin/docker-sidekiq-healthcheck
+      health-interval: 5s
+      health-retries: 3
+      health-start-period: 10s
+      health-timeout: 3s
+    cmd: bundle exec sidekiq -C config/sidekiq-import.yml
+
+env:
+  clear:
+    RAILS_ENV: staging
+    PP_HOST: pp-web-staging-01.internal.unep-wcmc.org
+
+builder:
+  args:
+    RAILS_ENV: staging

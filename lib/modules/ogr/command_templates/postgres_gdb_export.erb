@@ -3,7 +3,7 @@ ogr2ogr
   -update
 <% end %>
 -skipfailures
--f "FileGDB"
+-f "<%= DRIVERS[:gdb] %>"
 <%= file_name %>
 PG:"host=<%= db_config[:host] %>
   user=<%= db_config[:username] %> 

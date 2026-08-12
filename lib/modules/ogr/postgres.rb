@@ -2,10 +2,14 @@ class Ogr::Postgres
   class ExportError < StandardError; end
 
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
+  # OpenFileGDB is GDAL's built-in .gdb driver. It replaces ESRI's proprietary
+  # FileGDB SDK, which shipped as a RHEL7 binary against an old glibc and cannot
+  # be built on a current base image. OpenFileGDB has written .gdb since GDAL
+  # 3.6; Ubuntu 24.04 ships 3.8.4, where the driver reports as `rw+v`.
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
     csv: 'CSV',
-    gdb: 'FileGDB'
+    gdb: 'OpenFileGDB'
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')

@@ -1,0 +1,69 @@
+service: protectedplanet
+
+# No registry, no credentials — matching SAPI's Proxmox setup. Kamal 2 auto-runs
+# a registry:3 on 127.0.0.1:5555 on the deploying machine, and `builder.remote`
+# targets the same host the app runs on, so the image never crosses a registry
+# and there is no token to expire. See docs/findings/002.
+registry:
+  server: localhost:5555
+
+ssh:
+  user: wcmc
+
+# ProtectedPlanet boots slowly: the entrypoint clears the pid file, Rails loads a
+# large legacy app, and Puma binds after that. 30s (the default) is not enough.
+deploy_timeout: 180
+
+builder:
+  arch: amd64
+  remote: ssh://wcmc@pp-web-staging-01.internal.unep-wcmc.org
+  # Dockerfile.deploy, NOT the dev Dockerfile — the dev one still carries the
+  # buster + GDAL-2.2.3 + ESRI FileGDB chain that cannot build on a current base.
+  dockerfile: Dockerfile.deploy
+  args:
+    RUBY_VERSION: 3.3.7
+    NODE_VERSION: 24.4.1
+    RAILS_ENV: staging
+
+env:
+  clear:
+    RAILS_ENV: staging
+    RAILS_LOG_TO_STDOUT: 1
+    RAILS_SERVE_STATIC_FILES: 1
+    RAILS_MAX_THREADS: 5
+    PORT: 3000
+  secret:
+    - SECRET_KEY_BASE
+    - POSTGRES_HOST
+    - POSTGRES_PORT
+    - POSTGRES_DBNAME
+    - POSTGRES_USER
+    - POSTGRES_PASSWORD
+    - ELASTIC_SEARCH_URL
+    - REDIS_URL
+    - COMFY_ADMIN_USERNAME
+    - COMFY_ADMIN_PASSWORD
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_S3_REGION
+    - MAILER_ADDRESS
+    - MAILER_PORT
+    - MAILER_DOMAIN
+    - MAILER_USERNAME
+    - MAILER_PASSWORD
+    - MAILER_HOST
+    - MAILER_ASSET_HOST
+    - MAPBOX_ACCESS_TOKEN
+    - CARTODB_API_KEY
+    - APPSIGNAL_PUSH_API_KEY
+    - SLACK_WEBHOOK_URL
+    - PP_SLACK_WEBHOOK_URL
+    - MAINTENANCE_MODE_KEY
+
+# WDPA imports and .gdb download generation write multi-GB files. This must be a
+# real volume, not container-ephemeral, and must be shared by the web and job
+# roles because Sidekiq writes the files the web role later serves.
+# cloud-init pre-creates /data/pp-imports owned 1000:1000, matching the image's
+# app user, so no chown is needed at boot.
+volumes:
+  - "/data/pp-imports:/app/tmp/imports"
