@@ -33,7 +33,15 @@ gem 'faraday', '~> 1.10'
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2'
 
+# Uglifier 4.x wraps uglify-js via ExecJS and is unmaintained since 2019. Under
+# Node 24 its error handling breaks -- it reads result['error']['message'], which
+# is nil for the error shape modern Node returns, so any compression failure
+# surfaces as `undefined method 'start_with?' for nil` rather than the real
+# problem. Terser is the maintained ES6+ successor. Uglifier is kept in the
+# bundle only because config/environments/production.rb still references it;
+# that should move to terser too when production migrates.
 gem 'uglifier', '~> 4.1.17'
+gem 'terser', '~> 1.2'
 gem 'coffee-rails', '~> 5.0'
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
