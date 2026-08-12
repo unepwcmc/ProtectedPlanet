@@ -89,4 +89,70 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     end
   end
 
+  # --- backup grouping / dependency ordering / retention (PG-migration-fragile logic) ---
+  CFG = Wdpa::Portal::Config::PortalImportConfig
+
+  test 'group_backups_by_timestamp buckets backup tables by timestamp and skips non-backup tables' do
+    conn = mock('conn')
+    conn.stubs(:tables).returns(%w[live_table bk2501011200_sources bk2501011200_protected_areas bk2501011201_sources])
+    @service.instance_variable_set(:@connection, conn)
+    CFG.stubs(:is_backup_table?).with('live_table').returns(false)
+    %w[bk2501011200_sources bk2501011200_protected_areas bk2501011201_sources].each { |t| CFG.stubs(:is_backup_table?).with(t).returns(true) }
+    CFG.stubs(:extract_backup_timestamp).with('bk2501011200_sources').returns('2501011200')
+    CFG.stubs(:extract_backup_timestamp).with('bk2501011200_protected_areas').returns('2501011200')
+    CFG.stubs(:extract_backup_timestamp).with('bk2501011201_sources').returns('2501011201')
+
+    groups = @service.send(:group_backups_by_timestamp)
+    assert_equal %w[bk2501011200_sources bk2501011200_protected_areas], groups['2501011200']
+    assert_equal %w[bk2501011201_sources], groups['2501011201']
+    refute groups.key?(nil), 'non-backup table must be excluded'
+  end
+
+  test 'sort_tables_by_dependency orders backups junction -> main -> independent' do
+    CFG.stubs(:junction_tables).returns({ 'countries_pas' => {} })
+    CFG.stubs(:main_entity_tables).returns({ 'protected_areas' => {} })
+    CFG.stubs(:independent_table_names).returns({ 'sources' => {} })
+    { 'bk1_countries_pas' => 'countries_pas', 'bk1_protected_areas' => 'protected_areas', 'bk1_sources' => 'sources' }
+      .each { |bk, orig| CFG.stubs(:extract_table_name_from_backup).with(bk).returns(orig) }
+
+    result = @service.send(:sort_tables_by_dependency, %w[bk1_sources bk1_protected_areas bk1_countries_pas])
+    assert_equal %w[bk1_countries_pas bk1_protected_areas bk1_sources], result
+  end
+
+  test 'sort_materialized_views_by_dependency follows the config deletion sequence' do
+    CFG.stubs(:deletion_sequence_materialized_view_names).returns(%w[polygons points])
+    CFG.stubs(:extract_table_name_from_backup).with('bk1_polygons').returns('polygons')
+    CFG.stubs(:extract_table_name_from_backup).with('bk1_points').returns('points')
+    result = @service.send(:sort_materialized_views_by_dependency, %w[bk1_points bk1_polygons])
+    assert_equal %w[bk1_polygons bk1_points], result
+  end
+
+  # Plain object so #transaction actually yields AND returns the block value (mocha's
+  # .yields returns the stub value, not the block result, which cleanup_old_backups needs).
+  def yielding_connection
+    conn = Object.new
+    def conn.transaction; yield; end
+    conn
+  end
+
+  test 'cleanup_old_backups keeps everything (returns 0) when within the limit' do
+    @service.instance_variable_set(:@connection, yielding_connection)
+    @service.stubs(:group_backups_by_timestamp).returns({ '2501011201' => ['t1'], '2501011202' => ['t2'] })
+    assert_equal 0, @service.send(:cleanup_old_backups, 2)
+  end
+
+  test 'cleanup_old_backups deletes the oldest timestamps beyond keep_count and sums the cleaned objects' do
+    @service.instance_variable_set(:@connection, yielding_connection)
+    @service.stubs(:group_backups_by_timestamp).returns({
+      '2501011200' => ['bkold'], '2501011201' => ['bkmid'], '2501011202' => ['bknew']
+    })
+    # keep 1 -> newest 2501011202 kept; 2501011201 + 2501011200 removed
+    @service.expects(:cleanup_backup_tables_for_timestamp).with('2501011201', ['bkmid']).returns(1)
+    @service.expects(:cleanup_backup_tables_for_timestamp).with('2501011200', ['bkold']).returns(1)
+    @service.stubs(:cleanup_backup_download_view_for_timestamp).returns(0)
+    @service.stubs(:cleanup_backup_materialized_views_for_timestamp).returns(0)
+
+    assert_equal 2, @service.send(:cleanup_old_backups, 1)
+  end
+
 end

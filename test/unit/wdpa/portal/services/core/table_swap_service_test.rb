@@ -116,4 +116,22 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     @service.expects(:restore_timeouts)
     @service.restore_after_swap
   end
+
+  # --- staging-table precondition check (guards the atomic swap) ---
+  test 'validate_staging_tables_existence passes when every staging table exists' do
+    conn = mock('conn')
+    conn.stubs(:table_exists?).with('sources_staging').returns(true)
+    conn.stubs(:table_exists?).with('protected_areas_staging').returns(true)
+    @service.instance_variable_set(:@connection, conn)
+    assert_nothing_raised { @service.send(:validate_staging_tables_existence) }
+  end
+
+  test 'validate_staging_tables_existence raises and lists the missing staging tables' do
+    conn = mock('conn')
+    conn.stubs(:table_exists?).with('sources_staging').returns(true)
+    conn.stubs(:table_exists?).with('protected_areas_staging').returns(false)
+    @service.instance_variable_set(:@connection, conn)
+    err = assert_raises(RuntimeError) { @service.send(:validate_staging_tables_existence) }
+    assert_match(/Missing staging tables:.*protected_areas/, err.message)
+  end
 end

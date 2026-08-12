@@ -73,8 +73,23 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
 Writing these now, then not touching the code for months, risks staleness. Do each
 **just before** its phase. (Coverage baseline captured via `COVERAGE=1 bin/rails test`.)
 
-- [ ] **WDPA geometry importer** — `lib/modules/wdpa/portal/importers/protected_area/geometry.rb` is **0% / 138 LOC**. Needs real PostGIS fixtures. Do **before GDAL ([13](./13-gdal-and-spatial-tooling.md)) + Postgres migration ([15](./12-infrastructure-migration.md))** — highest spatial-upgrade risk.
-- [ ] **Table services** — `portal/services/core/{table_cleanup,table_swap,table_rollback}_service.rb` (~19–36%). Raw SQL DDL, PG-version fragile. Do **before the Postgres migration**.
+- [x] **DONE — WDPA geometry importer** (`lib/modules/wdpa/portal/importers/protected_area/geometry.rb`,
+      was **0%**). Added `test/unit/wdpa/portal/importers/geometry_test.rb` (19 tests): mapping
+      logic, `get_matching_condition` site_pid branches, `get_geometry_column`, `validate_target_table`
+      (missing/empty-PA-hard-fail/empty-parcel-warn/populated), `import_geometry_from_view` (UPDATE SQL
+      shape + cmd_tuples + coordinate follow-up), `import_coordinates` (ST_Centroid/ST_MakeValid guard),
+      `import_geometry_for_table` (aggregation, checkpoint-skip, per-view error isolation), and
+      `import_to_staging`. Mocks the connection layer (portal staging tables/views aren't in the test
+      DB — matches the sibling importer tests) rather than real PostGIS fixtures. This is the
+      characterization net **before GDAL + the Postgres migration** — highest spatial-upgrade risk. Suite 672/0.
+- [x] **DONE — Table services** — `portal/services/core/{table_cleanup,table_swap,table_rollback}_service.rb`
+      (was ~19–36%). Extended the existing tests (+10) covering the PG-migration-fragile logic:
+      cleanup `group_backups_by_timestamp`, `sort_tables_by_dependency` /
+      `sort_materialized_views_by_dependency` (junction→main→independent / config deletion order),
+      `cleanup_old_backups` (retention: within-limit no-op + oldest-removed sum); swap
+      `validate_staging_tables_existence` (pass + missing-lists-raise); rollback
+      `validate_backup_tables_exist` (missing-raise) + `list_available_backups_impl` (unique,
+      newest-first). Mocks the connection (raw-SQL DDL not run against the test DB). Suite 681/0.
 - [ ] **Relation `create_models` path** — `portal/relation/*` incl. the nil-jurisdiction logic (`ProtectedArea#designation`). Ties to the `belongs_to` decision in §6.
 - [ ] **shared importers** — `country_overseas_territories.rb` (9%), `story_map_link_list.rb` (10%), `protected_areas_related_source.rb` (15%).
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
