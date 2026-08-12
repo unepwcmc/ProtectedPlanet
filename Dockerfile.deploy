@@ -95,13 +95,18 @@ ENV RAILS_ENV=${RAILS_ENV} \
     SECRET_KEY_BASE_DUMMY=1 \
     VITE_RUBY_VERBOSE=true
 
-# vite_rails boots the Rails app before building, and aws-sdk raises
-# "missing region" at boot unless AWS_REGION is set. The app's own config uses
-# AWS_S3_REGION, so nothing sets the name the SDK actually reads. Build-time
-# placeholder only — the real value is injected at runtime.
-# NB: this must be its own ENV instruction. A comment inside a backslash-
-# continued ENV silently breaks the continuation and the var never gets set.
-ENV AWS_REGION=eu-west-1
+# vite_rails boots the full Rails app before building, which initialises the
+# ActiveStorage S3 service. config/storage.yml takes its region from
+# Rails.application.secrets.s3_region, which config/secrets.yml populates from
+# ENV["AWS_S3_REGION"] — so with that unset the service is built with an
+# explicit region: nil and aws-sdk raises "missing region". An explicit nil also
+# defeats the SDK's own AWS_REGION fallback, so AWS_S3_REGION is the one that
+# matters here. Build-time placeholder; the real value is injected at runtime.
+#
+# NB: separate ENV instruction on purpose — a comment inside a backslash-
+# continued ENV breaks the continuation and the variable never gets set.
+ENV AWS_S3_REGION=eu-west-1 \
+    AWS_REGION=eu-west-1
 
 # Vite runs explicitly before assets:precompile: vite_rails otherwise swallows
 # the failure and prints only "Compilation failed:" with no detail.
