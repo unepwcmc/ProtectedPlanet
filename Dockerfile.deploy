@@ -134,13 +134,18 @@ ENV AWS_S3_REGION=eu-west-1 \
 # then run vite properly. Both outputs are then asserted — if either is really
 # missing the build still fails, so this tolerates one known-bogus exit code
 # without hiding a genuine breakage.
-RUN rm -rf public/assets public/vite tmp/cache/vite \
+# This app has THREE asset pipelines: sprockets, webpacker 4 and vite. Because
+# assets:precompile's exit code is tolerated (above), webpacker's own
+# precompile enhancement may not be reached — so it is run explicitly too.
+RUN rm -rf public/assets public/vite public/packs tmp/cache/vite \
  && (bundle exec rails assets:precompile || echo "note: ignoring vite_ruby's nested build failure, verified below") \
  && bundle exec rake vite:build_all \
+ && bundle exec rake webpacker:compile \
  && test -s public/vite/.vite/manifest.json \
+ && test -s public/packs/manifest.json \
  && ls public/assets/application-*.css >/dev/null \
  && test "$(ls public/assets | wc -l)" -gt 10 \
- && echo "assets OK: $(ls public/assets | wc -l) sprockets files, vite manifest present" \
+ && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite + webpacker manifests present" \
  && rm -rf node_modules tmp/cache
 
 # ---------------------------------------------------------------------------
