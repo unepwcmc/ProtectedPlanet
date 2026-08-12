@@ -1,10 +1,18 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-10 (Rails 7.2 phase).
+Keep this current as phases land. Last updated: 2026-08-10 (Rails 8.0 phase).
 
-Status at this point: **Rails 7.2.3**, Ruby 3.3.7, Zeitwerk, `load_defaults 7.2`,
-postgis-adapter 10.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+Status at this point: **Rails 8.0.5**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.0`,
+postgis-adapter 11.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+**Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0.**
+
+### Rails 8.0 phase — DONE
+- rails ~> 8.0.0 (8.0.5.1), `load_defaults 8.0`, activerecord-postgis-adapter 10 → 11.0.0,
+  **rails-i18n 7 → 8.1** (7.x caps railties < 8).
+- comfortable_media_surfer 3.1 resolved against Rails 8 with no cap conflict.
+- **Clean: 0 failures, 0 deprecations, no code changes** beyond the version + defaults —
+  the Zeitwerk/load_defaults ladder + secrets migration did the de-risking.
 
 ### Rails 7.2 phase — DONE
 - rails ~> 7.2.2 (7.2.3.2), `load_defaults 7.2`, activerecord-postgis-adapter 9 → 10.0.3.
