@@ -31,6 +31,8 @@ env:
     RAILS_LOG_TO_STDOUT: 1
     RAILS_SERVE_STATIC_FILES: 1
     RAILS_MAX_THREADS: 5
+    # localhost inside a container is the container; memcached runs on the host.
+    MEMCACHE_SERVERS: host.docker.internal:11211
     PORT: 3000
   secret:
     - SECRET_KEY_BASE
