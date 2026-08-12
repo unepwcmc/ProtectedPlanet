@@ -35,6 +35,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       gdal-bin libgdal34 libproj25 proj-data libgeos-c1v5 \
       # PostGIS client (pg gem) and spatialite
       libpq5 libsqlite3-0 libspatialite8t64 \
+      # psych/YAML. The build stage gets libyaml-dev, but the runtime stage needs
+      # the shared library or Puma dies with
+      # "libyaml-0.so.2: cannot open shared object file".
+      libyaml-0-2 \
       # image/asset handling and zip for the .gdb download bundles
       shared-mime-info zip \
       # Chromium runtime deps — the /country/*.pdf endpoint drives Puppeteer
@@ -144,7 +148,12 @@ RUN rm -rf public/assets public/vite tmp/cache/vite \
 # ---------------------------------------------------------------------------
 FROM base AS runtime
 ARG RUBY_VERSION
+ARG RAILS_ENV=staging
 ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
+# ENV from the build stage is not inherited. Without this, config/puma.rb falls
+# back to ENV.fetch("RAILS_ENV") { "development" } and Puma boots the wrong env
+# if the orchestrator's env file is ever missing it.
+ENV RAILS_ENV=${RAILS_ENV}
 
 COPY --from=build /usr/local/ruby-${RUBY_VERSION} /usr/local/ruby-${RUBY_VERSION}
 COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}
