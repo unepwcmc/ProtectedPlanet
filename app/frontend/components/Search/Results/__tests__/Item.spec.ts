@@ -8,15 +8,21 @@ describe('SearchSiteResultsItem', () => {
       props: { title: 'Yosemite', summary: 'A national park', image: '/img.jpg', url: '/protected-areas/1' }
     })
 
-    expect(wrapper.find('.card__title').html()).toContain('Yosemite')
-    expect(wrapper.find('.card__summary').html()).toContain('A national park')
-    expect(wrapper.find('.card__image').attributes('style')).toContain('/img.jpg')
+    expect(wrapper.find('.ct-search-results-item__title').html()).toContain('Yosemite')
+    expect(wrapper.find('.ct-search-results-item__summary').html()).toContain('A national park')
+    expect(wrapper.find('.ct-search-results-item__image').attributes('style')).toContain('/img.jpg')
     expect(wrapper.attributes('href')).toBe('/protected-areas/1')
   })
 
   it('omits the summary paragraph when absent', () => {
     const wrapper = mount(SearchSiteResultsItem, { props: { title: 'Yosemite', url: '/protected-areas/1' } })
 
-    expect(wrapper.find('.card__summary').exists()).toBe(false)
+    expect(wrapper.find('.ct-search-results-item__summary').exists()).toBe(false)
+  })
+
+  it('renders a placeholder icon when no image is given', () => {
+    const wrapper = mount(SearchSiteResultsItem, { props: { title: 'Yosemite', url: '/protected-areas/1' } })
+
+    expect(wrapper.find('.ct-search-results-item__placeholder-icon').exists()).toBe(true)
   })
 })

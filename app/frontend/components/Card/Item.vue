@@ -66,8 +66,7 @@ withDefaults(defineProps<{
 .ct-card-item {
   @apply
   tw-shared-shadow-grey-light
-  flex
-  flex-col
+  tw-shared-base-flex-col-gap-3
   w-full
   md:w-[48%]
   lg:w-[31.5%]

@@ -11,14 +11,14 @@ describe('SearchSiteResults', () => {
   it('renders the total count and each result card', () => {
     const wrapper = mount(SearchSiteResults, { props: { results, resultsText: 'results', totalItems: 2 } })
 
-    expect(wrapper.find('.search__total').text()).toBe('(2 results)')
-    expect(wrapper.findAll('.card__link')).toHaveLength(2)
+    expect(wrapper.find('.ct-search-results__total').text()).toBe('(2 results)')
+    expect(wrapper.findAll('.ct-search-results-item')).toHaveLength(2)
   })
 
   it('hides the total count when there are no results', () => {
     const wrapper = mount(SearchSiteResults, { props: { results: [], resultsText: 'results', totalItems: 0 } })
 
-    expect(wrapper.find('.search__total').isVisible()).toBe(false)
-    expect(wrapper.findAll('.card__link')).toHaveLength(0)
+    expect(wrapper.find('.ct-search-results__total').isVisible()).toBe(false)
+    expect(wrapper.findAll('.ct-search-results-item')).toHaveLength(0)
   })
 })

@@ -48,7 +48,7 @@
     </div>
   <% end %>
   <% if local_assigns[:site_id] && local_assigns[:area] %>
-    <div class="vw-partials-stats-stats-overview__section">
+    <div class="vw-partials-stats-stats-overview__section vw-partials-stats-stats-overview__section--gap-1">
       <span class="vw-partials-stats-stats-overview__number">
         <%= site_id %>
       </span>
@@ -56,7 +56,7 @@
         <%= t('stats.wdpa.id') %>
       </span>
     </div>
-    <div class="vw-partials-stats-stats-overview__section vw-partials-stats-stats-overview__section-with-border">
+    <div class="vw-partials-stats-stats-overview__section vw-partials-stats-stats-overview__section--gap-1 vw-partials-stats-stats-overview__section-with-border">
       <span class="vw-partials-stats-stats-overview__number">
         <%= area %>
       </span>
@@ -74,17 +74,19 @@
     </div>
   <% end %>
   <% if local_assigns[:type] && local_assigns[:location]%>
-    <div class="vw-partials-stats-stats-overview__section">
+    <div class="vw-partials-stats-stats-overview__section vw-partials-stats-stats-overview__section--gap-1">
       <span class="vw-partials-stats-stats-overview__subtitle">
         <%= t('stats.type') %>
       </span>
       <span class="vw-partials-stats-stats-overview__text">
         <%= type %>
       </span>
+    </div>
+    <div class="vw-partials-stats-stats-overview__section vw-partials-stats-stats-overview__section--gap-1">
       <span class="vw-partials-stats-stats-overview__subtitle">
         <%= t('stats.location') %>
       </span>
-      <span class="vw-partials-stats-stats-overview__text">
+      <span class="vw-partials-stats-stats-overview__text vw-partials-stats-stats-overview__text--link">
         <%= location %>
       </span>
     </div>

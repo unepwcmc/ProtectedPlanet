@@ -74,7 +74,7 @@ defineProps<{
 
 .ct-attributes-protected-area-source__item-title {
   @apply
-  tw-shared-font-hind-siliguri__normal-base-grey-black
+  tw-shared-font-hind-siliguri__semibold-base-grey-black
   md:w-[45%];
 }
 

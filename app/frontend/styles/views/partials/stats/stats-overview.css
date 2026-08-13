@@ -46,6 +46,10 @@
   @apply tw-shared-base-flex-col-gap-2;
 }
 
+.vw-partials-stats-stats-overview__section--gap-1 {
+  @apply tw-shared-base-flex-col-gap-1;
+}
+
 .vw-partials-stats-stats-overview__section-with-border {
   @apply 
   border-b 
@@ -71,6 +75,12 @@
 
 .vw-partials-stats-stats-overview__text {
   @apply tw-shared-font-hind-siliguri__light-base-white;
+}
+
+.vw-partials-stats-stats-overview__text--link {
+  @apply 
+  underline 
+  hover:no-underline;
 }
 
 .vw-partials-stats-stats-overview__flex {

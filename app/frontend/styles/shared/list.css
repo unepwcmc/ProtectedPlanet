@@ -67,7 +67,7 @@
 @utility tw-shared-list-stripes-title {
   @apply
   max-w-56
-  tw-shared-font-hind-siliguri__normal-base-grey-black;
+  tw-shared-font-hind-siliguri__semibold-base-grey-black;
 }
 
 @utility tw-shared-list-stripes-value {

@@ -1,17 +1,17 @@
-<% 
+<%
 # If a site has multiple parcels then
 # The area km2 is the addition for all parcels
 # The map shows all (parcels) polygons/points belonging to the site.
 # The name is the first parcel
 # The attributes table shows all parcel attributes
-# The rest info in the page are still only against site_id only not taking parcel Ids into consideration 
+# The rest info in the page are still only against site_id only not taking parcel Ids into consideration
 # If in future more info are taking parcel ids into consideration Please ADD COMMENTS here.
 %>
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
-<div class="page--site bg--grey-xlight spacer-small--top">
-  <div class="container">
-    <section class="page__section--overview-map">
-      <%= render partial: "partials/stats/stats-overview", locals: { 
+<div class="vw-site">
+  <div class="vw-site__container">
+    <section class="vw-site__overview">
+      <%= render partial: "partials/stats/stats-overview", locals: {
         area: reported_area,
         location: @locations.html_safe,
         title: @protected_area.name,
@@ -27,46 +27,44 @@
           overlays: @map[:overlays],
           disclaimer: @map[:disclaimer],
           isHidden: true,
-          showHeader: false
+          showHeader: false,
+          mapiIsForRegionCountryPA: true
         } %>
     </section>
-    <section class="page__section--parcels-dropdown">
+    <section class="vw-site__parcels-dropdown">
       <%= render partial: "partials/attributes/attributes-parcels-dropdown", locals: {
           site_pids: @presenter.parcels_site_pids,
           for_pdf: @for_pdf
         } %>
     </section>
-    <div class="page__col-wrapper pdf-break-after">
-      <div class="page__col-1">
+    <div class="vw-site__col-wrapper pdf-break-after">
+      <div class="vw-site__col-1">
         <%= render partial: "partials/attributes/attributes-protected-area", locals: {
-          current_pa_and_parcels_attributes: @presenter.current_pa_and_parcels_attributes, 
+          current_pa_and_parcels_attributes: @presenter.current_pa_and_parcels_attributes,
           for_pdf: @for_pdf
        } %>
       </div>
-      <div class="page__col-2">
-        <%= render partial: "partials/attributes/attributes-pame-list" , locals: { 
-          classes: 'page__col-child',
-          for_pdf: @for_pdf 
+      <div class="vw-site__col-2">
+        <%= render partial: "partials/attributes/attributes-pame-list" , locals: {
+          for_pdf: @for_pdf
           } %>
         <%= render partial: "partials/attributes/attributes-affiliations", locals: {
-          classes: 'page__col-child',
           affiliations: @presenter.affiliations,
           for_pdf: @for_pdf
         } %>
       </div>
     </div>
     <%= render partial: "partials/attributes/attributes-protected-area-sources", locals: {
-      sources_attributes_for_current_pa_and_all_parcels: @protected_area.sources_attributes_for_current_pa_and_all_parcels,
-      for_pdf: @for_pdf
-    } %>
-    <section class="spacer-large--top">
-      <%= render partial: "partials/cards/sites", locals: { 
-        cards: @wdpa_other,
-        title: t('thematic_area.wdpa.other_protected_areas'),
-        url: @otherWdpasViewAllUrl
+        sources_attributes_for_current_pa_and_all_parcels: @protected_area.sources_attributes_for_current_pa_and_all_parcels,
+        for_pdf: @for_pdf
       } %>
-    </section>
-    <section class="spacer-small--bottom">
+    <%= frontend_mount "StatsSites", props: {
+          siteDetails: site_card_details(@wdpa_other),
+          textViewAll: t('global.button.all'),
+          title: t('thematic_area.wdpa.other_protected_areas'),
+          viewAll: @otherWdpasViewAllUrl
+        } %>
+    <section class="vw-site__citation">
       <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
     </section>
   </div>

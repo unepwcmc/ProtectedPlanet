@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { ref } from 'vue'
-import useMapLayers from from '@/composables/useMapLayers'
+import useMapLayers from '@/composables/useMapLayers'
 
 function fakeMap(overrides: Partial<Record<string, unknown>> = {}) {
   const layers: Record<string, { visibility?: string }> = {}

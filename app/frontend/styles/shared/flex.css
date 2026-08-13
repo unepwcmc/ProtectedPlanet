@@ -31,6 +31,12 @@
   md:gap-3;
 }
 
+@utility tw-shared-base-flex-gap-5 {
+  @apply
+  flex
+  gap-5;
+}
+
 @utility tw-shared-base-flex-gap-6 {
   @apply
   flex

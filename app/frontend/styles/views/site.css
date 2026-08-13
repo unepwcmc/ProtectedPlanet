@@ -34,11 +34,3 @@
 .pdf .vw-site__col-2 {
   @apply w-[555px];
 }
-
-.vw-site__sources-and-related {
-  @apply tw-shared-base-wrapper;
-}
-
-.vw-site__other-protected-areas {
-  @apply pt-7.5 md:pt-15 lg:pt-20;
-}

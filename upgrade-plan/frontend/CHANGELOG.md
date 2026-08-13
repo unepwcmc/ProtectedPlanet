@@ -1704,3 +1704,44 @@ this wave, not filed separately.
   country tried in this dev environment's seed data — verified by code-reading + its own passing Vitest
   spec instead, the same seed-data-gap pattern as `Stats/Sites.vue`/`Attributes/Affiliations` earlier
   this wave.
+
+---
+
+## Wave T7 — Cards family, Listing cards, Carousel (almost done)
+
+`Search/Results/{Index,Item}.vue` migrated (2026-08-13). `Index.vue`'s root/total/grid are now
+`ct-search-results`/`ct-search-results__total`/`ct-search-results__list` — the list uses `flex flex-col
+gap-y-5` rather than porting the legacy `margin: 20px 0` onto each card, per the flex/grid-over-margin
+Decision. `Item.vue` is `ct-search-results-item*`; the no-image fallback now renders
+`Icon/PlaceholderImage.vue` per rule 5b instead of leaving the background-image `:style` empty, mirroring
+`SearchAreas/Results/Item.vue`'s already-established pattern (same legacy card family). Added
+`tw-shared-font-hind-siliguri__bold-lg-md-xl-grey` to `shared/typography.css` for `.search__total`'s
+count text (`text-tabs-fake` mixin: bold, `$grey`, 18px/`$small`→20px — no existing utility matched).
+The legacy `.card__title`/`.card__summary` selectors for this family were empty rules (bare
+browser-default `h3`/`p`, no deliberate font treatment ever existed) — left with no `@apply`
+counterpart rather than inventing one that changes current visual behaviour. `cards/cards/
+_cards-search-results.scss` and `components/search/_search-results.scss` deleted (plus `_search.scss`'s
+`@import` of the latter) — confirmed zero other consumers via grep; `.search`'s own `&--pa` block
+(unrelated, same root selector) is untouched.
+
+**Doc-drift fix, same pass**: this wave's checklist had `Attributes/ProtectedArea/*` listed as
+"still 100% legacy," referencing a `_card-attributes-pa-and-parcels.scss` file that no longer exists —
+that work was actually done under **T6** (see `Attributes/ProtectedArea/{Index,AttributeList,Source/*}`
+entries above) but this wave's own tracking was never updated to say so. Corrected in the plan doc; only
+`Dropdown/ParcelsDropdown.vue` remains open for T7.
+
+**Unrelated pre-existing bugs fixed while verifying**: the "same 2 pre-existing TS parse errors" noted
+in T6's verification above (`useMapBoundingBox.spec.ts`/`useMapLayers.spec.ts`, both `import x from from
+'@/...'` — a duplicated `from`) were genuine typos, not environment noise; fixed both so `yarn
+typecheck` is clean of them. A broader `yarn typecheck`/`yarn vitest` pass surfaced a separate, larger
+set of pre-existing failures in `Map/__tests__/{Filter,Panel}.spec.ts`, `useMapPopups.spec.ts`, and
+`Attributes/Affiliations/__tests__/List.spec.ts` (missing/renamed exports, stale required-prop
+mismatches) dating back to the T5 Maps and T6 Attributes waves — left untouched as out-of-scope for this
+wave (unrelated component families, non-trivial fixes each), but flagged here so they aren't mistaken
+for something this wave introduced.
+
+Verified: `yarn typecheck`/`yarn lint`/`yarn vite:build` clean (module classes confirmed present in the
+compiled dev bundle via grep — `ct-search-results*`, `bold-lg-md-xl-grey`). `yarn vitest` on
+`Search/Results/`: all 5 tests green (2 new/updated specs asserting the new class names + a new
+placeholder-icon-fallback case). Live-browser verification not yet done this pass — re-check `/en/search`
+results with and without a `summary`/`image` present.
