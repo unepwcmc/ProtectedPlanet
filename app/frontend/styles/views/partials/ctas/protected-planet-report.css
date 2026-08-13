@@ -50,7 +50,7 @@
 
 .vw-ctas-protected-planet-report__intro {
   @apply 
-  tw-shared-font-hind-siliguri__normal-lg-md-xl-white
+  tw-shared-font-hind-siliguri__light-lg-md-xl-white
   md:w-[75%]
   lg:w-[90%];
 }

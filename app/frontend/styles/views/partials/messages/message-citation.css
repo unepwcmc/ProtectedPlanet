@@ -1,23 +1,15 @@
 .vw-partials-messages-message-citation {
-  @apply
-  tw-shared-base-flex-col-gap-6
-  tw-shared-bg--white-border-grey
-  border-[9px]
-  mt-7.5
-  py-7
-  px-9.75;
+  @apply tw-shared-messages__container;
 }
 
 .vw-partials-messages-message-citation__title {
-  @apply tw-shared-font-playfair__bold-xl-md-2xl-grey-black;
+  @apply tw-shared-messages__title;
 }
 
 .vw-partials-messages-message-citation__text {
-  @apply tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black;
+  @apply tw-shared-messages__text;
 }
 
 .vw-partials-messages-message-citation__link {
-  @apply 
-  underline 
-  hover:no-underline;
+  @apply tw-shared-messages__link;
 }

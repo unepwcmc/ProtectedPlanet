@@ -61,7 +61,7 @@
 
 .vw-partials-footer__logos--t-c {
   @apply 
-  tw-shared-font-hind-siliguri__normal-sm
+  tw-shared-font-hind-siliguri__light-sm
   text-white/70;
 }
 

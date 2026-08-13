@@ -8,7 +8,6 @@
       class="ct-chart-row-stacked__title"
       v-text="title"
     />
-
     <ul class="ct-chart-row-stacked__bars">
       <li
         v-for="(row, index) in rows"
@@ -44,15 +43,23 @@ const themeClass = computed(() => props.theme ? `tw-shared-chart-legend-colour-$
 @reference "#importtailwindcss";
 
 .ct-chart-row-stacked {
-  @apply mb-15 md:mb-17.5;
+  @apply
+  tw-shared-base-flex-col-gap-3
+  my-12;
 }
 
 .ct-chart-row-stacked__bars {
-  @apply mt-13.5 flex h-11 w-full list-none md:h-20.5;
+  @apply
+  flex
+  w-full
+  h-11
+  md:h-20.5;
 }
 
 .ct-chart-row-stacked__bar {
-  @apply relative h-full;
+  @apply
+  relative
+  h-full;
 }
 
 .ct-chart-row-stacked__percent {

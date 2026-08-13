@@ -14,7 +14,6 @@
       <% if local_assigns[:button_link].present? && local_assigns[:button_text].present? %>
         <%= link_to button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'vw-layouts-partials-hero-basic__link' do %>
           <%= button_text %>
-          <i class="tw-shared-icon-arrow-external-white ml-2.5"></i>
         <% end %>
       <% end %>
     </div>

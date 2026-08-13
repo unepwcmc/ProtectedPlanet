@@ -12,11 +12,12 @@
       <div
         v-for="(designation, i) in designations"
         :key="i"
-        class="ct-stats-designations__legend-group pdf-break-inside-avoid"
+        class="ct-stats-designations__legend-group
+        pdf-break-inside-avoid"
       >
         <div class="ct-stats-designations__legend-header">
           <span
-            class="ct-stats-designations__legend-key"
+            class="ct-stats-designations__legend-icon"
             :class="`tw-shared-chart-theme-${(i % 12) + 1}`"
           />
           <h3
@@ -37,7 +38,10 @@
             :key="j"
             class="ct-stats-designations__jurisdiction"
           >
-            <span v-text="jurisdiction.designation_name" />
+            <span
+              class="ct-stats-designations__jurisdiction-name"
+              v-text="jurisdiction.designation_name"
+            />
             <span
               class="ct-stats-designations__jurisdiction-count"
               v-text="jurisdiction.count"
@@ -73,46 +77,75 @@ defineProps<StatsDesignations>()
 }
 
 .ct-stats-designations__title {
-  @apply mt-0;
+  @apply tw-shared-list-title;
 }
 
 .ct-stats-designations__legend {
-  @apply flex flex-col gap-10 md:grid md:grid-cols-2 md:gap-12;
+  @apply
+  tw-shared-base-flex-col-gap-10
+  md:grid
+  md:grid-cols-2
+  md:gap-12;
+}
+
+.ct-stats-designations__legend-group {
+  @apply tw-shared-base-flex-col-gap-3;
 }
 
 .ct-stats-designations__legend-header {
-  @apply flex items-center pr-6.75;
+  @apply
+  tw-shared-base-flex-gap-3
+  items-center
+  lg:pr-3;
 }
 
-.ct-stats-designations__legend-key {
-  @apply mr-2 block size-6 shrink-0 rounded-full;
+.ct-stats-designations__legend-icon {
+  @apply
+  tw-shared-list-underline-icon
+  size-6;
 }
 
 .ct-stats-designations__legend-title {
-  @apply m-0;
+  @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
 }
 
 .ct-stats-designations__legend-total {
-  @apply mr-[3%] ml-auto;
+  @apply
+  tw-shared-font-hind-siliguri__light-base-grey-black
+  ml-auto;
 }
 
 .ct-stats-designations__jurisdictions {
-  @apply tw-shared-list-underline-scrollbar w-full list-none;
+  @apply
+  tw-shared-list-underline-scrollbar
+  w-full
+  tw-shared-base-flex-col
+  pr-3;
 }
 
 .ct-stats-designations__jurisdiction {
-  @apply tw-shared-list-underline-item items-start;
+  @apply
+  tw-shared-list-underline-item;
+}
+
+.ct-stats-designations__jurisdiction-name {
+  @apply tw-shared-list-underline-value;
 }
 
 .ct-stats-designations__jurisdiction-count {
-  @apply ml-auto;
+  @apply
+  tw-shared-font-hind-siliguri__light-base-grey-black
+  ml-auto;
 }
 
 .ct-stats-designations__jurisdiction-link {
-  @apply tw-shared-button-basic shrink-0;
+  @apply
+  flex
+  tw-shared-button-basic
+  shrink-0;
 }
 
 .ct-stats-designations__jurisdiction-link-icon {
-  @apply size-5.25;
+  @apply tw-shared-list-underline-link-icon;
 }
 </style>

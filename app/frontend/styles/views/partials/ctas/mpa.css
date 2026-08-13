@@ -22,7 +22,7 @@
 }
 
 .vw-partials-ctas-mpa__intro {
-  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-white;
+  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-white;
 }
 
 .vw-partials-ctas-mpa__button {

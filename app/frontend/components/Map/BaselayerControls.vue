@@ -45,7 +45,7 @@ const selectBaselayer = (layer: MapBaselayer) => mapStore.updateSelectedBaselaye
   border-theme-grey-dark
   rounded-none
   cursor-pointer
-  tw-shared-font-hind-siliguri__normal-sm-lg-base-black
+  tw-shared-font-hind-siliguri__light-sm-lg-base-black
   w-20.5
   h-8.75
   md:w-35

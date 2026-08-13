@@ -9,7 +9,7 @@
 }
 
 .vw-data-wdpca-tab-extras__search {
-  @apply tw-shared-base-container;
+  @apply tw-shared-base-container--medium;
 }
 
 .vw-data-wdpca-tab-extras__map {

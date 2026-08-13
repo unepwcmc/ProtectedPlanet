@@ -6,10 +6,10 @@
   <div class="vw-country__container">
     <% if (restricted_message = get_restricted_message) %>
       <div class="vw-country__restricted-message">
-        <p>
+        <p class="vw-country__restricted-message-text">
           <%= restricted_message %>
         </p>
-      </div> 
+      </div>
     <% end %>
     <section class="vw-country__overview">
       <%= render partial: "partials/stats/stats-overview-country", locals: { 
@@ -35,8 +35,7 @@
           mapiIsForRegionCountryPA: true
         } %>
     </section>
-    <section>
-      <%= frontend_mount "RegionCountryPages", props: {
+    <%= frontend_mount "RegionCountryPages", props: {
           data: @stats_data,
           tabs: @tabs,
           gaId: "Country page stats",
@@ -45,7 +44,6 @@
             country_parent: @country.parent.present? ? @country.parent : nil
           }) : nil
         } %>
-    </section>
     <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
   </div>
 </div>

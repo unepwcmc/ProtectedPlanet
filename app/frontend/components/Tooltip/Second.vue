@@ -28,9 +28,8 @@
     >
       <slot name="trigger" />
     </div>
-
     <div
-      v-show="isActive"
+      v-if="isActive"
       :id
       role="tooltip"
       class="ct-tooltip-second__target"
@@ -43,7 +42,10 @@
           aria-label="Close tooltip"
           @click="toggleTooltip(false)"
         >
-          <span aria-hidden="true">&times;</span>
+          <IconClose
+            class="ct-tooltip-second__close-icon"
+            aria-hidden="true"
+          />
         </button>
       </div>
       <slot name="content" />
@@ -54,6 +56,7 @@
 <script setup lang="ts">
 import { ref, useId } from 'vue'
 import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
+import IconClose from '@/components/Icon/Close.vue'
 
 interface TooltipSecondProps {
   onHover?: boolean
@@ -79,22 +82,52 @@ usePopupCloseListeners(rootEl, {
 @reference "#importtailwindcss";
 
 .ct-tooltip-second {
-  @apply relative inline-block;
+  @apply relative;
 }
 
 .ct-tooltip-second__trigger {
-  @apply cursor-pointer border-none bg-none bg-transparent p-0;
+  @apply
+  cursor-pointer
+  border-none
+  bg-none
+  bg-transparent
+  p-0;
 }
 
 .ct-tooltip-second__target {
-  @apply absolute z-10 rounded bg-white p-3 text-sm text-theme-grey-black shadow-lg;
+  @apply
+  absolute
+  top-full
+  left-1/2
+  z-10
+  mt-2
+  -translate-x-1/2
+  rounded
+  bg-white
+  p-3
+  shadow-lg
+  tw-shared-base-flex-col-gap-2
+  before:absolute
+  before:-top-2
+  before:left-1/2
+  before:h-0
+  before:w-0
+  before:-translate-x-1/2
+  before:border-x-8
+  before:border-b-8
+  before:border-x-transparent
+  before:border-b-white
+  before:content-[''];
 }
 
 .ct-tooltip-second__header {
-  @apply flex items-center justify-between;
+  @apply
+  flex
+  items-center
+  justify-end;
 }
 
-.ct-tooltip-second__close {
-  @apply h-4 w-4 border-none bg-none bg-transparent p-0 leading-none text-theme-grey-black;
+.ct-tooltip-second__close-icon {
+  @apply size-3;
 }
 </style>

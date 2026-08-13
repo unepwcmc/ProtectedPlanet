@@ -72,7 +72,7 @@ function onChange() {
 }
 
 .ct-filters-checkboxes-item__text {
-  @apply tw-shared-font-hind-siliguri__normal-sm;
+  @apply tw-shared-font-hind-siliguri__light-sm;
 }
 
 .ct-filters-checkboxes-item__input {

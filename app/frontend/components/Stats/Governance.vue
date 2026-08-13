@@ -53,15 +53,17 @@ defineProps<StatsGovernance>()
 @reference "#importtailwindcss";
 
 .ct-stats-governance {
-  @apply tw-shared-card-stats tw-shared-card-stats-half;
+  @apply
+  tw-shared-card-stats
+  tw-shared-card-stats-half;
 }
 
 .ct-stats-governance__title {
-  @apply mt-0;
+  @apply tw-shared-list-title;
 }
 
 .ct-stats-governance__list {
-  @apply list-none;
+  @apply tw-shared-base-flex-col;
 }
 
 .ct-stats-governance__item {
@@ -69,7 +71,7 @@ defineProps<StatsGovernance>()
 }
 
 .ct-stats-governance__item-icon {
-  @apply tw-shared-list-underline-icon block;
+  @apply tw-shared-list-underline-icon;
 }
 
 .ct-stats-governance__item-title {

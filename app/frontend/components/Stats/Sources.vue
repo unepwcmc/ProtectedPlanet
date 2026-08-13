@@ -1,29 +1,32 @@
 <template>
-  <div class="ct-stats-sources pdf-break-inside-avoid">
-    <h2 v-text="`${title} ${count}`" />
-
-    <div class="ct-stats-sources__content">
-      <ol class="ct-stats-sources__list">
-        <li
-          v-for="(source, i) in sources"
-          :key="i"
-          class="ct-stats-sources__item"
-        >
-          <span
-            class="ct-stats-sources__item-title"
-            v-text="source.title"
-          />
-          <span
-            class="ct-stats-sources__item-date"
-            v-text="`${sourceUpdated}: ${source.date_updated}`"
-          />
-          <span
-            class="ct-stats-sources__item-party"
-            v-text="source.resp_party"
-          />
-        </li>
-      </ol>
-    </div>
+  <div
+    class="ct-stats-sources
+  pdf-break-inside-avoid"
+  >
+    <h2
+      class="ct-stats-sources__title"
+      v-text="`${title} ${count}`"
+    />
+    <ul class="ct-stats-sources__list">
+      <li
+        v-for="(source, i) in sources"
+        :key="i"
+        class="ct-stats-sources__item"
+      >
+        <span
+          class="ct-stats-sources__item-title"
+          v-text="source.title"
+        />
+        <span
+          class="ct-stats-sources__item-date"
+          v-text="`${sourceUpdated}: ${source.date_updated}`"
+        />
+        <span
+          class="ct-stats-sources__item-party"
+          v-text="source.resp_party"
+        />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -41,27 +44,42 @@ defineProps<StatsSources>()
   @apply tw-shared-card-stats;
 }
 
-.ct-stats-sources__content {
-  @apply flex flex-col md:flex-row;
+.ct-stats-sources__title {
+  @apply tw-shared-list-title;
 }
 
 .ct-stats-sources__list {
-  @apply tw-shared-list-underline-scrollbar w-full list-none;
+  @apply
+  tw-shared-list-underline-scrollbar
+  w-full;
 }
 
 .ct-stats-sources__item {
-  @apply tw-shared-list-underline-item flex-col md:flex-row;
+  @apply
+  tw-shared-base-flex-col-md-row-gap-1
+  border-t
+  first:border-t-0
+  border-theme-grey-light
+  py-3.5
+  items-baseline
+  md:items-center;
 }
 
 .ct-stats-sources__item-title {
-  @apply font-bold mr-2.5 md:w-[45%];
+  @apply
+  tw-shared-list-underline-title
+  md:w-[45%];
 }
 
 .ct-stats-sources__item-date {
-  @apply shrink-0 mr-2.5 md:w-[15%];
+  @apply
+  tw-shared-list-underline-value
+  md:w-[15%];
 }
 
 .ct-stats-sources__item-party {
-  @apply md:w-[40%];
+  @apply
+  tw-shared-list-underline-value
+  md:w-[40%];
 }
 </style>

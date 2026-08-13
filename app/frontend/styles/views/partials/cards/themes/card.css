@@ -58,23 +58,23 @@
 }
 
 .vw-cards-themes-card__number {
-  @apply tw-shared-font-hind-siliguri__bold-xl-md-3xl-lg-4xl-green;
+  @apply tw-shared-font-hind-siliguri__normal-xl-md-3xl-lg-4xl-green;
 }
 
 .vw-cards-themes-card__number-text {
-  @apply tw-shared-font-hind-siliguri__normal-base-lg-lg;
+  @apply tw-shared-font-hind-siliguri__light-base-lg-lg;
 }
 
 .vw-cards-themes-card__title {
   @apply 
-  tw-shared-font-hind-siliguri__normal-base-lg-lg
+  tw-shared-font-hind-siliguri__light-base-lg-lg
   mt-30
   lg:mt-37.5;
 }
 
 .vw-cards-themes-card__summary {
   @apply
-  tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black 
+  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black 
   hidden 
   md:block;
 }

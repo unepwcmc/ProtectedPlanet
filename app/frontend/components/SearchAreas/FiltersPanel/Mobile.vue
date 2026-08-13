@@ -98,7 +98,7 @@ function onToggleFilterPane() {
 }
 
 .ct-search-areas-filters-panel-mobile__title {
-  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
 }
 
 .ct-search-areas-filters-panel-mobile__groups {
@@ -113,7 +113,7 @@ function onToggleFilterPane() {
 }
 
 .ct-search-areas-filters-panel-mobile__group-title {
-  @apply tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black;
 }
 
 .ct-search-areas-filters-panel-mobile__list {
@@ -133,7 +133,7 @@ function onToggleFilterPane() {
   w-full
   h-15.75
   bg-theme-grey-xdark
-  tw-shared-font-hind-siliguri__bold-xl-white
+  tw-shared-font-hind-siliguri__normal-xl-white
   cursor-pointer;
 }
 </style>

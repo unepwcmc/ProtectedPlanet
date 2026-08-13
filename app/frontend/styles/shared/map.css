@@ -3,22 +3,21 @@
 }
 
 /*
- * MapLibre GL JS renders these class names on its own DOM nodes (zoom
- * controls, popups) — third-party library markup, not developer-authored
- * templates, so they stay unprefixed library selectors rather than
- * `ct-`/`tw-shared-` classes (same exception as `.cms-wysiwyg`'s bare-tag
- * descendant selectors for CMS-authored content). Ported from the legacy
- * `_map.scss`/`_v-map-popup.scss`; their `.mapboxgl-*` half was dropped
- * outright — no Mapbox runtime is left anywhere in the app (the legacy Vue2
- * map + CDN mapbox-gl.js were deleted 2026-07-24/2026-08-03), so those
- * selectors had zero live effect.
+ * The following has to be directly registered to the map
  */
 .maplibregl-ctrl-top-right .maplibregl-ctrl.maplibregl-ctrl-group {
-  @apply mt-3.25 mr-2.5 md:mt-4.25 lg:mt-8 lg:mr-4;
+  @apply 
+  mt-3.25 
+  mr-2.5 
+  md:mt-4.25 
+  lg:mt-8 
+  lg:mr-4;
 }
 
 .maplibregl-ctrl-bottom-left {
-  @apply flex flex-col-reverse;
+  @apply 
+  flex 
+  flex-col-reverse;
 }
 
 .maplibregl-ctrl.maplibregl-ctrl-group:not(:empty) {
@@ -46,8 +45,8 @@
   h-8
   md:w-10.5
   md:h-11
-  bg-[length:15px_15px]
-  md:bg-[length:20px_20px]
+  bg-size-[15px_15px]
+  md:bg-size-[20px_20px]
   first:border-b-0
   focus:first:rounded-none
   focus:last:rounded-none
@@ -94,15 +93,20 @@
 }
 
 .maplibregl-popup-content__attributes {
-  @apply list-none m-0 p-0;
+  @apply 
+  list-none 
+  m-0 
+  p-0;
 }
 
 .maplibregl-popup-content__attribute {
-  @apply flex flex-col gap-2;
+  @apply tw-shared-base-flex-col-gap-2;
 }
 
 .maplibregl-popup-content__wrapper {
-  @apply flex gap-1;
+  @apply 
+  flex 
+  gap-1;
 }
 
 .maplibregl-popup-close-button {

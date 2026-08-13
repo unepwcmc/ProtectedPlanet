@@ -1,0 +1,22 @@
+@utility tw-shared-messages__container {
+  @apply
+  tw-shared-base-flex-col-gap-6
+  tw-shared-bg--white-border-grey
+  border-[9px]
+  py-7
+  px-9.75;
+}
+
+@utility tw-shared-messages__title {
+  @apply tw-shared-font-playfair__bold-xl-md-2xl-grey-black;
+}
+
+@utility tw-shared-messages__text {
+  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+}
+
+@utility tw-shared-messages__link {
+  @apply 
+  underline 
+  hover:no-underline;
+}

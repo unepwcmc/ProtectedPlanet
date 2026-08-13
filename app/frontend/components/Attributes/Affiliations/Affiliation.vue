@@ -75,7 +75,7 @@ const imageAltFallback = computed(() => props.link.affiliation === 'greenlist' ?
 }
 
 .ct-attributes-affiliations-affiliation__green-list-intro {
-  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
 }
 
 .ct-attributes-affiliations-affiliation__green-list-category {

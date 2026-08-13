@@ -1,5 +1,9 @@
 @utility tw-shared-country-region-site-basic-overview {
-  @apply flex flex-col md:flex-row md:gap-7;
+  @apply 
+  flex 
+  flex-col 
+  lg:flex-row 
+  md:gap-7;
 }
 
  

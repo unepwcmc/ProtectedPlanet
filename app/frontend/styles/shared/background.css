@@ -36,6 +36,13 @@
   bg-cover;
 }
 
+@utility tw-shared-bg-center-no-repeat-contain {
+  @apply 
+  bg-center
+  bg-no-repeat
+  bg-contain;
+}
+
 @utility tw-shared-bg-image-overlay {
   @apply
   isolate

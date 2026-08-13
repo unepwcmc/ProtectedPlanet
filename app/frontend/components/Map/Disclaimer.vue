@@ -50,23 +50,23 @@ withDefaults(defineProps<MapDisclaimer>(), {
 }
 
 .ct-map-disclaimer__heading {
-  @apply tw-shared-font-hind-siliguri__semi-bold-sm-white;
+  @apply tw-shared-font-hind-siliguri__normal-sm-white;
 }
 
 .ct-map-disclaimer__heading--country-region-pa {
-  @apply tw-shared-font-hind-siliguri__semi-bold-sm-grey-xdark;
+  @apply tw-shared-font-hind-siliguri__normal-sm-grey-xdark;
 }
 
 .ct-map-disclaimer__body {
   @apply
-  tw-shared-font-hind-siliguri__normal-sm-white
+  tw-shared-font-hind-siliguri__light-sm-white
   overflow-y-auto
   max-h-[14em];
 }
 
 .ct-map-disclaimer__body--country-region-pa {
   @apply
-  tw-shared-font-hind-siliguri__normal-sm-grey-xdark
+  tw-shared-font-hind-siliguri__light-sm-grey-xdark
   overflow-y-auto
   max-h-[14em];
 }

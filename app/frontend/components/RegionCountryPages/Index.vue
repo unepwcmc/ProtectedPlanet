@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ct-region-country-pages">
     <div
       v-if="tabs.length > 1"
       class="ct-region-country-pages__toggle"
@@ -21,12 +21,14 @@
       />
     </div>
     <StatsMessage v-bind="activeDatabase.message" />
-    <div class="ct-region-country-pages__stats pdf-break-before">
+    <div
+      class="ct-region-country-pages__stats
+            pdf-break-before"
+    >
       <StatsIucnCategories
         v-if="activeDatabase.iucn"
         v-bind="iucnProps"
       />
-
       <StatsGovernance
         v-if="activeDatabase.governance"
         v-bind="governanceProps"
@@ -79,33 +81,21 @@ type RegionCountryPages = RegionCountryPagesProps
 const props = defineProps<RegionCountryPages>()
 
 const selectedDatabaseId = ref(props.tabs[0].id)
-
 const activeDatabase = computed(() => props.data[selectedDatabaseId.value])
 
 const hasCoverageStats = computed(() =>
   (activeDatabase.value.coverage?.length ?? 0) > 1)
-
 const hasDesignations = computed(() =>
   (activeDatabase.value.designations?.designations.length ?? 0) > 1)
-
 const hasSources = computed(() =>
   (activeDatabase.value.sources?.sources.length ?? 0) >= 1)
-
 const hasSites = computed(() =>
   (activeDatabase.value.sites?.site_details.length ?? 0) > 1)
 
 const coverageProps = computed(() => (activeDatabase.value.coverage ?? []).map(mapCoverage))
-
-// Non-null: only read from the template when `hasSources`/`hasSites` (guarding
-// the same `v-if`) is true, so `activeDatabase.value.sources`/`.sites` is
-// always present at that point — the `v-if` short-circuits the vnode's prop
-// evaluation, so these are never actually read otherwise.
 const sourcesProps = computed(() => mapSources(activeDatabase.value.sources!))
-
 const sitesProps = computed(() => mapSites(activeDatabase.value.sites!))
-
 const iucnProps = computed(() => mapIucnCategories(activeDatabase.value.iucn!))
-
 const governanceProps = computed(() => mapGovernance(activeDatabase.value.governance!))
 
 function onSelectDatabase(id: string) {
@@ -150,23 +140,32 @@ function mapSites(data: StatsSitesData): StatsSitesProps {
   }
 }
 
-// TabPresenter#iucn/#governance also carry a `country` field the component
-// doesn't use — picked out here rather than `v-bind`-spreading the raw object,
-// so it doesn't fall through onto the DOM as a stray attribute.
 function mapIucnCategories(data: StatsIucnCategoriesData): StatsIucnCategoriesProps {
-  return { categories: data.categories, chart: data.chart, title: data.title }
+  return {
+    categories: data.categories,
+    chart: data.chart,
+    title: data.title
+  }
 }
 
 function mapGovernance(data: StatsGovernanceData): StatsGovernanceProps {
-  return { governance: data.governance, chart: data.chart, title: data.title }
+  return {
+    governance: data.governance,
+    chart: data.chart,
+    title: data.title
+  }
 }
 </script>
 
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-region-country-pages {
+  @apply tw-shared-base-flex-col-gap-6;
+}
+
 .ct-region-country-pages__toggle {
-  @apply tw-shared-card-stats;
+  @apply tw-shared-card-stats--row-center;
 }
 
 .ct-region-country-pages__coverage,

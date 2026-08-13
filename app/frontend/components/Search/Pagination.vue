@@ -80,7 +80,7 @@ function changePage(isActive: boolean, direction: 'previous' | 'next') {
 }
 
 .ct-search-pagination__text {
-  @apply tw-shared-font-hind-siliguri__normal-base-lg-lg;
+  @apply tw-shared-font-hind-siliguri__light-base-lg-lg;
 }
 
 .ct-search-pagination__button {
@@ -103,7 +103,7 @@ function changePage(isActive: boolean, direction: 'previous' | 'next') {
 }
 
 .ct-search-pagination__no-results {
-  @apply tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-dark
+  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-dark
   text-center
   my-15;
 }

@@ -1,22 +1,12 @@
-/*
- * Protected-area ("site") page shell (Wave T3). Single ERB consumer:
- * app/views/protected_areas/show.html.erb.
- *
- * `page--site` stays in the ERB (not renamed/removed) as `pdf.scss` selects it directly
- * (`.pdf .page--site { background-color: transparent; }`) — that file is on a separate,
- * still-active Sprockets pipeline out of scope for this migration.
- *
- * `app/assets/stylesheets/pages/_site.scss` is now fully retired — its `&__col-wrapper`/
- * `__col-1`/`__col-2` rules (incl. the `.pdf &` width overrides that make the two attribute
- * columns render at a fixed 555px side-by-side for the Puppeteer PDF export) are ported below
- * as `vw-site__col-wrapper`/`__col-1`/`__col-2`. `pdf-break-after` stays as a bare class in the
- * ERB — it's defined in `pdf.scss`, not `_site.scss`, so it's untouched by this port.
- */
-
 @utility vw-site {
-  @apply tw-shared-bg--grey-xlight
-  pt-4 md:pt-6 lg:pt-9
-  pb-4 md:pb-6 lg:pb-9;
+  @apply 
+  tw-shared-bg--grey-xlight
+  pt-4 
+  md:pt-6 
+  lg:pt-9
+  pb-4 
+  md:pb-6 
+  lg:pb-9;
 }
 
 @utility vw-site__container {

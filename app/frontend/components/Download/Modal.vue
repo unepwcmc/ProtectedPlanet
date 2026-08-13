@@ -108,7 +108,7 @@ function toggleMinimise() {
 }
 
 .ct-download-modal__topbar-title {
-  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-white;
+  @apply tw-shared-font-hind-siliguri__normal-base-md-xl-white;
 }
 
 .ct-download-modal__minimise {
@@ -133,11 +133,11 @@ function toggleMinimise() {
 }
 
 .ct-download-modal__title {
-  @apply tw-shared-font-hind-siliguri__bold-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-xl-grey-black;
 }
 
 .ct-download-modal__citation {
-  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
 }
 
 .ct-download-modal__list {

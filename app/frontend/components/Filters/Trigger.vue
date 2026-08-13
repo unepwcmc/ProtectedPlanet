@@ -49,7 +49,7 @@ function toggleFilterPane() {
   @apply
   hidden
   md:inline
-  tw-shared-font-hind-siliguri__normal-lg-grey-black;
+  tw-shared-font-hind-siliguri__light-lg-grey-black;
 }
 
 .ct-filters-trigger__icon {

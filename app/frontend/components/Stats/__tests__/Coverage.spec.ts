@@ -17,12 +17,12 @@ describe('StatsCoverage', () => {
   it('sizes the coverage square as sqrt(percentage * 100)', () => {
     const wrapper = mount(StatsCoverage, { props: baseProps })
 
-    expect(wrapper.find('.chart__area').attributes('style')).toContain(`width: ${Math.sqrt(2500)}%`)
+    expect(wrapper.find('.ct-stats-coverage__area').attributes('style')).toContain(`width: ${Math.sqrt(2500)}%`)
   })
 
   it('only shows the national report line when both fields are present', () => {
     const withoutReport = mount(StatsCoverage, { props: baseProps })
-    expect(withoutReport.find('.card__subtitle').exists()).toBe(false)
+    expect(withoutReport.find('.ct-stats-coverage__subtitle').exists()).toBe(false)
 
     const withReport = mount(StatsCoverage, {
       props: { ...baseProps, protectedNationalReport: 12.3456, nationalReportVersion: 2020, textNationalReport: 'NR' }
@@ -32,11 +32,11 @@ describe('StatsCoverage', () => {
 
   it('only shows the PAME subsection when both pame fields are present', () => {
     const withoutPame = mount(StatsCoverage, { props: baseProps })
-    expect(withoutPame.find('.card__subsection').exists()).toBe(false)
+    expect(withoutPame.find('.ct-stats-coverage__subsection').exists()).toBe(false)
 
     const withPame = mount(StatsCoverage, {
       props: { ...baseProps, pamePercentage: 10, pameKm2: '500', textPame: 'PAME km2', textPameAssessments: 'PAME %' }
     })
-    expect(withPame.find('.card__subsection').exists()).toBe(true)
+    expect(withPame.find('.ct-stats-coverage__subsection').exists()).toBe(true)
   })
 })

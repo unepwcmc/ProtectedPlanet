@@ -7,9 +7,6 @@
 </template>
 
 <script setup lang="ts">
-// Replaces the legacy `scrollmagic` dependency with a native IntersectionObserver
-// (same approach as Counter.vue), observing this component's own root instead of a
-// separate `document.querySelector(smTriggerElement)` lookup.
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 const props = withDefaults(defineProps<{

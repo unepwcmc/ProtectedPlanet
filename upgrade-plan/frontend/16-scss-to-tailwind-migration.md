@@ -727,7 +727,7 @@ migrated off it). All 9 deleted, along with the now-fully-orphaned `helpers/_acc
 
 ---
 
-## Wave T6 — Charts + Stats, closes Wave-8 rule-4 exceptions (~1–1.5 wk) — 11/~13 components done (2026-08-12)
+## Wave T6 — Charts + Stats, closes Wave-8 rule-4 exceptions (~1–1.5 wk) — **done** (2026-08-12)
 
 **Pre-work audit (2026-08-12) found two more doc-drift issues, same recurring pattern as every prior
 wave:** (1) `AmChart/Multiline.vue` was already fully migrated (`ct-am-chart-multiline*`) via an
@@ -741,7 +741,9 @@ below), not filed as a separate bug — it's the same file-family work either wa
 
 Files: `components/_charts.scss` + `charts/*` (6 files, not 7 — the doc's own count included
 `_charts.scss` itself), `card/stats/*` (9 files), `components/_lists.scss` (shared by `Attributes/*` and
-`Stats/*`).
+`Stats/*`). **All deleted by the end of this wave** — `components/charts/` and `card/stats/` are now gone
+as directories entirely; `_lists.scss` closed alongside its last real consumer (`Stats/Sources.vue`'s
+sibling `Attributes/ProtectedArea/Source/*`).
 
 **Done this wave:**
 - [x] **`AmChart/Pie.vue`** — `ct-am-chart-pie*`. Its own `.chart__chart` padding rule turned out to be
@@ -862,31 +864,79 @@ Files: `components/_charts.scss` + `charts/*` (6 files, not 7 — the doc's own 
       `card__top` class, not `card__content`) and the now-dead `card-button-external` mixin (its one
       caller was the just-deleted `_card-stats-affiliations.scss`). `&--feault-block`'s `card-stats`
       include + `.card__h2` rule stay — `ParcelsDropdown.vue` (T8) still needs both.
-- [ ] **Still open, and now T6's only remaining scope**: `Stats/Coverage.vue` (`_card-stats-coverage.scss`
-      + `_chart-square.scss`) and `Stats/TooltipInfo.vue` (`_card-stats-overview.scss`) — the latter also
-      backs a full ERB `card--stats-overview` card (`_stats-overview.html.erb`/`-country.html.erb`) that
-      was never in this wave's original Vue-component list but turns out to be the same legacy file.
-      `_chart-legend.scss`'s `--map`/`--points-poly` blocks (ERB-only, same two files) are the last piece
-      of the charts family. Once these close, remove `Stats*` from CODE-CONVENTIONS.md's
-      exception-precedent list entirely (already narrowed to just `Coverage`/`TooltipInfo` this session).
+- [x] **`Stats/Coverage.vue`** — `ct-stats-coverage*`, reusing `tw-shared-card-stats`/`-half`. The
+      `theme--${type}` square (`_chart-square.scss`) becomes two real modifiers (`--marine`/
+      `--terrestrial`, `bg-theme-blue`/`bg-theme-bright-green` — both already-existing tokens, exact hex
+      matches for `$marine`/`$terrestrial`) — confirmed via `CountryPresenter#yml_key` that the real prop
+      value is always one of those two strings, never the literal `'land'` its own Vitest spec's fixture
+      data uses (a pre-existing test/reality mismatch, not fixed — the fixture's `type: 'land'` still
+      resolves to no matching modifier, same dead-in-practice outcome as before). `_card-stats-coverage.
+      scss`/`_chart-square.scss` deleted; the now-fully-dead `card-stat-content`/`card-stats-number`
+      mixins removed from `_card-stats.scss` too (zero remaining callers once this file's `card--stats-
+      coverage`/`_card-stats-overview.scss` — see below — were gone). `_card-stats.scss`'s own
+      `&--stats-half` block also removed (dead — every real `card--stats-half` consumer had already
+      moved to `tw-shared-card-stats-half` earlier this wave).
+- [x] **`Stats/TooltipInfo.vue`** — `ct-stats-tooltip-info*`. `.carousel__tooltip` (the class it passed
+      onto `TooltipSecond`) had zero backing CSS anywhere — dropped, not ported.
+- [x] **The ERB `card--stats-overview` card** (`_stats-overview.html.erb`/`-country.html.erb`, both
+      identical apart from two extra `StatsTooltipInfo` mounts — same "one shared file" precedent as T3's
+      `error-page.css`) → `vw-partials-stats-stats-overview*`, new `views/partials/stats/stats-overview.
+      css`. `.card__flag.icon--flag-outline`'s two stacked legacy classes merged into one
+      (`__flag`); `.card__subtitle-margined.card__flex`/`.card__subtitle.card__flex`'s stacked pairs each
+      became one combined class (`flex` wins over `card-stats-overview-subtitle`'s own `display: block`
+      in the legacy cascade — it's there to sit the label next to `StatsTooltipInfo`'s trigger, so flex is
+      the intended, not accidental, outcome). `.card__external-text` confirmed to have zero backing CSS
+      (same as `Stats/Message.vue`'s `card__warning` earlier this wave) — carried forward unstyled.
+      `card__external-button`'s `@extend .button--link-external` (icon-arrow-external `::after`, no
+      color/font of its own) → the existing `tw-shared-icon-arrow-external` utility via `after:`, ERB's
+      standard rule-5b icon carve-out. `_card-stats-overview.scss` deleted whole — every one of its rules
+      turned out to belong to either this ERB card or `TooltipInfo.vue`, nothing left over.
+- [x] **`_chart-legend.scss`'s `--map`/`--points-poly` blocks** (the last two live variants — `--
+      designation` moved into `Stats/Designations.vue` earlier this wave, `--vertical` was already dead)
+      → `_chart-legend.html.erb` rewritten to `vw-partials-charts-chart-legend*`, new `views/partials/
+      charts/chart-legend.css`. Its own `row[:theme]` was previously a **full legacy class-name string**
+      built in Ruby (`'theme--primary'`, `'theme--terrestrial'`, etc., from `{country,region}_presenter.
+      rb#chart_point_poly` and `map_helper.rb#map_legend`) stacked directly onto `chart__legend-key` —
+      interpolating that into a `vw-` element would mean ERB rendering a raw legacy/`tw-shared-*` class
+      name directly, which rule 4c forbids. Changed all three Ruby call sites to emit a short key
+      (`'primary'`/`'primary-dark'`/`'terrestrial'`/`'marine'`/`'oecm'`) instead, so the partial can build
+      its own `vw-partials-charts-chart-legend__key--<variant>-<key>` class name from data it controls
+      end to end. Same fix applied to `_chart-row.html.erb` (→ `vw-partials-charts-chart-row*`, new `
+      views/partials/charts/chart-row.css`), the other consumer of the same `chart_point_poly` rows —
+      `chart__bar-overseas` (zero consumers anywhere, confirmed via grep) dropped, not ported.
+      `_chart-legend.scss`/`_chart-row.scss` deleted, and with them `components/_charts.scss` itself —
+      empty once both were gone, so it and the now-empty `components/charts/` directory are gone too.
+- [x] Fixed a typography-routing gap this same session: `Coverage.vue`/`TooltipInfo.vue`/`stats-overview.
+      css` initially landed with raw `text-*`/`font-*` combos instead of going through `shared/
+      typography.css`, inconsistent with how every other T6 component already routed size+weight(+colour)
+      combos through a named `tw-shared-font-*` utility (bare single-property utilities like a lone
+      `font-bold` or `text-sm` stay unwrapped — only true combos need a named utility). Added two new
+      ones (`tw-shared-font-hind-siliguri__normal-4xl`, `...bold-3xl-md-4xl-leading-none-primary`) for the
+      two combos with no existing match; everything else composed onto what already existed (e.g. the
+      ERB card's `card__h1`'s 20→25px bold white reuses `tw-shared-font-hind-siliguri__normal-xl-white` +
+      `md:text-2xl`, `--text-2xl`'s custom 1.565rem token being an exact match for legacy's 25px).
+      `TooltipInfo.vue`'s literal `color: black` (not the site's usual `grey-black`) folded into the
+      existing `tw-shared-font-hind-siliguri__light-base-grey-black` — the only place in the whole
+      codebase that ever used true black instead of grey-black, read as an authoring slip rather than a
+      deliberate distinct colour.
+- [x] **This wave closes the Wave-8 `Stats*`/`ChartRowPa`/`ChartRowStacked` rule-4 exception** — removed
+      from CODE-CONVENTIONS.md's exception-precedent list.
 - [ ] amCharts 4→5 is explicitly out of scope here (already deferred separately per README) — style
       the amCharts *wrapper* markup only, not the chart library's own internals.
-- [x] Live-verified (Playwright, `/en/country/BRA` — real designation-jurisdiction data; `/en/country/KEN`
-      for the two-card iucn/governance row; PA `/142` and `/767` — no locale prefix, the plain `/:id` route
-      is registered outside the `(:locale)` scope and 500s otherwise — for the Attributes family, `/767`
-      "Jirisan" having real PAME/attributes/sources data): pie donut charts, per-bar/per-swatch rainbow
-      colouring, tooltip caret bubble, "View list" chevron links, jurisdiction scrollbar list,
-      toggle/wrapper layout, striped Attributes/PAME columns (odd/even shading, bold titles), Sources card
-      layout. **Could not live-verify `Stats/Sites.vue`'s fix or `Attributes/Affiliations`** — the former
-      needs a country/region with >1 `site_details` and a working region-page route (this dev
-      environment's region pages 500, same seed-data gap noted since T3, and no country tried had >1
-      site); the latter needs a PA with real affiliation data, none tried had any. Both verified by
-      code-reading against the deleted legacy SCSS and sibling reference components instead. `yarn
-      typecheck`/`stylelint`/`yarn lint`/`vite:build`/`bundle exec rake assets:precompile` all clean (2
-      pre-existing unrelated TS parse errors in `useMapBoundingBox.spec.ts`/`useMapLayers.spec.ts`
-      reproduce identically on unmodified HEAD, not from this wave). `yarn vitest` all green except one
-      pre-existing failure (`TotalCoverageChart.spec.ts`'s legend-colour assertion, reproduces identically
-      via `git stash`).
+- [x] Live-verified (Playwright, `/en/country/BRA` for the full stats-overview card — flag/heading/h1,
+      map legend's 3 correctly-coloured swatches, the polygons/points chart-row bar + its own legend,
+      computed font-size/weight/colour on `__h1`/`__number`/`__subtitle-margined` all matching the ported
+      typography exactly; `/en/country/{USA,IND,DEU}` for `StatsTooltipInfo`'s trigger icon rendering.
+      `Stats/Coverage.vue` itself never appeared on any country tried in this dev environment's seed data
+      — verified by code-reading + its own passing Vitest spec instead, same seed-data-gap pattern as
+      `Stats/Sites.vue`/`Attributes/Affiliations` earlier this wave) plus everything verified earlier this
+      wave (see above). `yarn typecheck`/`stylelint`/`yarn lint`/`vite:build`/`bundle exec rake assets:
+      precompile` all clean (2 pre-existing unrelated TS parse errors in `useMapBoundingBox.spec.ts`/
+      `useMapLayers.spec.ts` reproduce identically on unmodified HEAD, not from this wave). `yarn vitest`
+      all green except one pre-existing failure (`TotalCoverageChart.spec.ts`'s legend-colour assertion,
+      reproduces identically via `git stash`) — a stale `showSitePid` prop reference in `AttributeList.
+      spec.ts` (left over from the user's own concurrent `showSitePid`→`forPdf` prop rename) was a real
+      regression, fixed in this pass.
 
 ---
 

@@ -126,7 +126,7 @@ const { total, coverage } = defineProps<ChartTotalCoverageChart>()
 .ct-total-coverage-chart__legend {
   @apply
   tw-shared-base-flex-gap-2
-  tw-shared-font-hind-siliguri__normal-sm-grey-black
+  tw-shared-font-hind-siliguri__light-sm-grey-black
   items-center;
 }
 

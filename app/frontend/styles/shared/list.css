@@ -1,9 +1,7 @@
-/* legacy `list-underline` mixin (`_lists.scss`) — the `.list__li`/`__icon`/`__title`/`__right`/
-   __value`/`__a` family shared by every "list of stat rows" component (Stats/Designations'
-   jurisdiction list, Stats/IucnCategories, Stats/Governance, Stats/Sources, Attributes'
-   protected-area-sources). Per-row icon colour (legacy `theme-chart-list-icon`/`list-theme`,
-   both nth-child loops over the same 12-colour palette) isn't included here — each consumer
-   binds `tw-shared-chart-theme-<n>` itself, same as ChartRowStacked's per-bar colour. */
+@utility tw-shared-list-title {
+  @apply tw-shared-font-playfair__bold-xl-lg-2xl-grey-black;
+}
+
 @utility tw-shared-list-underline-item {
   @apply
   tw-shared-base-flex-gap-3
@@ -16,7 +14,7 @@
 
 @utility tw-shared-list-underline-icon {
   @apply
-  size-5
+  size-4
   shrink-0
   rounded-full;
 }
@@ -26,15 +24,13 @@
 }
 
 @utility tw-shared-list-underline-value {
-  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
 }
 
 @utility tw-shared-list-underline-link {
   @apply
-  ml-auto 
-  tw-shared-base-flex-gap-3
-  tw-shared-button--all
-  text-lg;
+  ml-auto
+  tw-shared-button--all;
 }
 
 @utility tw-shared-list-underline-link-text {
@@ -47,9 +43,9 @@
 
 @utility tw-shared-list-underline-scrollbar {
   @apply
-  tw-shared-scrollbar
   max-h-85
-  overflow-y-scroll;
+  px-1
+  overflow-y-auto;
 }
  
 @utility tw-shared-list-stripes-item {
@@ -71,11 +67,15 @@
 @utility tw-shared-list-stripes-title {
   @apply
   max-w-56
-  tw-shared-font-hind-siliguri__bold-base-grey-black;
+  tw-shared-font-hind-siliguri__normal-base-grey-black;
 }
 
 @utility tw-shared-list-stripes-value {
-  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+}
+
+@utility tw-shared-list-links {
+  @apply tw-shared-base-flex-col-gap-3;
 }
 
 @utility tw-shared-list-links-item {
@@ -86,7 +86,6 @@
   text-base
   md:text-lg
   bg-theme-grey-xlight
-  mt-2.5
   py-3.5
   px-5
   max-w-175

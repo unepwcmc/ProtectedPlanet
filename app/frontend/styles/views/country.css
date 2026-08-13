@@ -1,21 +1,34 @@
-@utility vw-country {
-  @apply tw-shared-bg--grey-xlight
-  pt-4 md:pt-6 lg:pt-9
-  pb-4 md:pb-6 lg:pb-9;
+.vw-country {
+  @apply 
+  tw-shared-bg--grey-xlight
+  pt-4
+  md:pt-6
+  lg:pt-9
+  pb-4
+  md:pb-6
+  lg:pb-9;
 }
 
-@utility vw-country__container {
-  @apply tw-shared-base-container
+.vw-country__container {
+  @apply 
+  tw-shared-base-container
   flex
   flex-col
   gap-4
   lg:gap-9;
 }
 
-@utility vw-country__overview {
+.vw-country__overview {
   @apply tw-shared-country-region-site-basic-overview;
 }
 
-@utility vw-country__restricted-message {
-  @apply bg-theme-grey-light text-sm py-1.5 px-5 md:px-6.25 lg:px-7.5;
+.vw-country__restricted-message {
+  @apply 
+  bg-theme-grey-light
+  p-5
+  md:p-6.25;
+}
+
+.vw-country__restricted-message-text {
+  @apply tw-shared-font-hind-siliguri__light-sm-leading-1-6-grey-black;
 }

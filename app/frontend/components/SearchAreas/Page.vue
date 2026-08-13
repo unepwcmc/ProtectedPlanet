@@ -52,7 +52,6 @@
           @click:tab="updateSelectedTab"
         />
         <SearchAreasResults
-          v-if="!loadingResults"
           :noResultsText
           :results="newResults"
           :smTriggerElement
@@ -125,7 +124,7 @@ interface SearchAreasResultsResponse {
 }
 
 async function ajaxSubmission(resetFilters = false, pagination = false, requestedPage = 1) {
-  if (!pagination) loadingResults.value = true
+  loadingResults.value = true
 
   const response = await getJson<SearchAreasResultsResponse>(props.endpointSearch, {
     filters: JSON.stringify(activeFilterOptions.value),

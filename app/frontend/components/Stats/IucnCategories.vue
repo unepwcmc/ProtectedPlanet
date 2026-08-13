@@ -58,15 +58,17 @@ function formattedPercentage(percentage: number) {
 @reference "#importtailwindcss";
 
 .ct-stats-iucn-categories {
-  @apply tw-shared-card-stats tw-shared-card-stats-half;
+  @apply
+  tw-shared-card-stats
+  tw-shared-card-stats-half;
 }
 
 .ct-stats-iucn-categories__title {
-  @apply mt-0;
+  @apply tw-shared-list-title;
 }
 
 .ct-stats-iucn-categories__list {
-  @apply list-none;
+  @apply tw-shared-base-flex-col;
 }
 
 .ct-stats-iucn-categories__item {
@@ -74,7 +76,7 @@ function formattedPercentage(percentage: number) {
 }
 
 .ct-stats-iucn-categories__item-icon {
-  @apply tw-shared-list-underline-icon block;
+  @apply tw-shared-list-underline-icon;
 }
 
 .ct-stats-iucn-categories__item-title {

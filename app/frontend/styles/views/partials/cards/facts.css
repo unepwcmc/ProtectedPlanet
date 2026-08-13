@@ -47,19 +47,19 @@
 
 .vw-partials-cards-facts__number-large {
   @apply
-  tw-shared-font-hind-siliguri__normal-4xl-md-7xl-leading-none-primary
+  tw-shared-font-hind-siliguri__light-4xl-md-7xl-leading-none-primary
   text-center;
 }
 
 .vw-partials-cards-facts__number {
-  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-primary;
+  @apply tw-shared-font-hind-siliguri__normal-base-md-xl-primary;
 }
 
 .vw-partials-cards-facts__text {
-  @apply tw-shared-font-hind-siliguri__normal-base-md-lg-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-md-lg-grey-black;
 }
 
 .vw-partials-cards-facts__title {
   @apply
-  tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black;
+  tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black;
 }

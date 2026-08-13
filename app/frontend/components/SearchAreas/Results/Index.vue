@@ -6,13 +6,14 @@
         v-text="`${results.title} (${totalAsString})`"
       />
       <div class="ct-search-areas-results__grid">
-        <SearchAreasResultsItem
+        <CardItem
           v-for="(area, index) in results.areas"
           :key="index"
-          :countryFlag="area.countryFlag"
-          :geoType="results.geoType"
+          hasSecondaryLine
           :image="area.image"
-          :totalAreas="area.totalAreas"
+          :modifier="results.geoType"
+          :secondaryText="area.totalAreas"
+          titleIsHtml
           :title="area.title"
           :url="area.url"
         />
@@ -35,7 +36,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import SearchAreasResultsItem from '@/components/SearchAreas/Results/Item.vue'
+import CardItem from '@/components/Card/Item.vue'
 import PaginationInfinityScroll from '@/components/PaginationInfinityScroll.vue'
 import type { SearchAreasResults } from '@/types/backend'
 
@@ -76,7 +77,7 @@ function requestMore(page: number) {
 
 .ct-search-areas-results__none {
   @apply
-  tw-shared-font-hind-siliguri__bold-xl
+  tw-shared-font-hind-siliguri__normal-xl
   text-center
   py-7.5;
 }

@@ -54,7 +54,7 @@ function onUpdateFilter(payload: { id: string, options: Array<string | number> }
 }
 
 .ct-listing-filters-panel-desktop__title {
-  @apply tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black;
 }
 
 .ct-listing-filters-panel-desktop__list {

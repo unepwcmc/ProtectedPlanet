@@ -126,7 +126,7 @@ onMounted(() => {
 }
 
 .ct-search-areas-filter-group__title {
-  @apply tw-shared-font-hind-siliguri__bold-lg-lg-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__normal-lg-lg-base-grey-black;
 }
 
 .ct-search-areas-filter-group__clear {
@@ -134,7 +134,7 @@ onMounted(() => {
   tw-shared-button-basic
   flex
   items-center
-  tw-shared-font-hind-siliguri__normal-sm
+  tw-shared-font-hind-siliguri__light-sm
   tw-shared-base-flex-gap-2;
 }
 
@@ -158,6 +158,6 @@ onMounted(() => {
   @apply
   overflow-y-auto
   max-h-62.5
-  tw-shared-font-hind-siliguri__normal-sm;
+  tw-shared-font-hind-siliguri__light-sm;
 }
 </style>

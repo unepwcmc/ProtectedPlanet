@@ -111,7 +111,7 @@ const selectNonCommercial = () => emit('nonCommercial')
 
 .ct-download-commercial__title {
   @apply
-  tw-shared-font-hind-siliguri__bold-xl-grey-black
+  tw-shared-font-hind-siliguri__normal-xl-grey-black
   text-center;
 }
 
@@ -135,12 +135,12 @@ const selectNonCommercial = () => emit('nonCommercial')
 
 .ct-download-commercial__link-title {
   @apply
-  tw-shared-font-hind-siliguri__bold-xl-grey-black
+  tw-shared-font-hind-siliguri__normal-xl-grey-black
   text-center;
 }
 
 .ct-download-commercial__link-text {
-  @apply tw-shared-font-hind-siliguri__normal-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
 }
 
 .ct-download-commercial__divider {

@@ -45,7 +45,7 @@
 @import './shared/images.css';
 @import './shared/list.css';
 @import './shared/map.css';
-@import './shared/scrollbar.css';
+@import './shared/messages.css';
 @import './shared/shadows.css';
 @import './shared/themes.css';
 @import './shared/typography.css';
@@ -86,6 +86,8 @@
 
 @import './views/partials/carousels/theme.css';
 
+@import './views/partials/charts/chart-legend.css';
+@import './views/partials/charts/chart-row.css';
 @import './views/partials/charts/chart-section.css';
 @import './views/partials/charts/total-coverage-chart.css';
 
@@ -101,6 +103,8 @@
 @import './views/partials/messages/message-citation.css';
 
 @import './views/partials/social/share.css';
+
+@import './views/partials/stats/stats-overview.css';
 
 @import './views/partials/stats/stats-related-countries.css';
 

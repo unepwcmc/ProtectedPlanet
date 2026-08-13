@@ -82,7 +82,7 @@ describe('RegionCountryPages', () => {
 
     // hasCoverageStats requires > 1 entries, so no per-coverage cards render —
     // the wrapper div itself (also used by iucn/governance) still does.
-    expect(wrapper.findAll('.card--stats-coverage')).toHaveLength(0)
+    expect(wrapper.findAll('.ct-stats-coverage')).toHaveLength(0)
     expect(wrapper.find('.ct-stats-sources__list').exists()).toBe(false)
     expect(wrapper.find('.ct-stats-sites__list').exists()).toBe(false)
   })

@@ -165,7 +165,7 @@ onUnmounted(stopPolling)
   tw-shared-base-flex-gap-3
   items-center
   justify-end
-  tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black
+  tw-shared-font-hind-siliguri__light-base-md-xl-grey-black
   min-h-10
   px-2.5
   md:h-15.5

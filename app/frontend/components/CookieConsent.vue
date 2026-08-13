@@ -82,7 +82,7 @@ function reject() {
 }
 
 .ct-cookie-consent__description {
-  @apply tw-shared-font-hind-siliguri__bold-base-white;
+  @apply tw-shared-font-hind-siliguri__normal-base-white;
 
   a {
     @apply underline;
@@ -101,7 +101,7 @@ function reject() {
   items-center
   gap-3
   p-3
-  tw-shared-font-hind-siliguri__normal-sm-white
+  tw-shared-font-hind-siliguri__light-sm-white
   uppercase;
 }
 

@@ -1,13 +1,6 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin card-stat-content {
-  @include flex;
-  @include flex-column;
-
-  @include breakpoint($small) { @include flex-row; }
-}
-
 @mixin card-stats-for-pdf {
   .pdf & {
     background-color: transparent;
@@ -22,17 +15,6 @@
   padding: rem-calc(16 18); 
 
   @include breakpoint($small) { padding: rem-calc(28 30); }
-}
-
-@mixin card-stats-number {
-  color: $primary;
-  font-size: rem-calc(30);
-  font-weight: $bold;
-  line-height: 1;
-  
-  display: block;
-
-  @include breakpoint($small) { font-size: rem-calc(40); }
 }
 
 @mixin card-stats {
@@ -54,23 +36,6 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-&--stats-half {
-  width: 100%; 
-
-  @include breakpoint($small) { width: calc(50% - 15px); }
-
-  .pdf & { 
-    width: 555px; 
-  }
-
-  &:first-child { 
-    @include breakpoint($small) { margin-right: rem-calc(30); }
-  }
-}
-
-@import './stats/card-stats-coverage';
-@import './stats/card-stats-overview';
-
 // As most of them should be named attributes, not stats so we are gradually moving them to the attributes folder.
 // Once all are moved, we can rename this file to card-attributes.scss.
 @import './attributes/card-attributes-parcels-dropdown';

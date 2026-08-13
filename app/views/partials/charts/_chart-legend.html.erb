@@ -1,8 +1,8 @@
-<div class="<%= get_local_classes local_assigns %>">
+<div class="vw-partials-charts-chart-legends vw-partials-charts-chart-legend--<%= variant %>">
   <% rows.each do |row| %>
-    <div class="chart__legend-item">
-      <span class="chart__legend-key <%= row[:theme] %>"></span>
-      <span class="chart__legend-title"><%= row[:title] %></span>
+    <div class="vw-partials-charts-chart-legend__item vw-partials-charts-chart-legend__item--<%= variant %>">
+      <span class="vw-partials-charts-chart-legend__key vw-partials-charts-chart-legend__key--<%= variant %>-<%= row[:theme] %>"></span>
+      <span class="vw-partials-charts-chart-legend__title vw-partials-charts-chart-legend__title--<%= variant %>"><%= row[:title] %></span>
     </div>
   <% end %>
 </div>

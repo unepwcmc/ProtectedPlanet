@@ -1,0 +1,98 @@
+/* The css is shared between 
+app/views/partials/stats/_stats-overview.html.erb 
+app/views/partials/stats/_stats-overview-country.html.erb 
+*/
+.vw-partials-stats-stats-overview {
+  @apply
+  relative
+  bg-theme-grey-black
+  w-full
+  px-4.5
+  py-4
+  md:px-7.5
+  md:py-7
+  lg:w-[33%]
+  md:shrink-0
+  tw-shared-base-flex-col-gap-7;
+}
+
+.pdf .vw-partials-stats-stats-overview {
+  @apply 
+  border 
+  border-theme-grey 
+  bg-transparent 
+  text-theme-grey-black
+  w-94;
+}
+
+.vw-partials-stats-stats-overview__heading {
+  @apply 
+  tw-shared-base-flex-gap-2
+  items-center;
+}
+
+.vw-partials-stats-stats-overview__flag {
+  @apply
+  size-8.75
+  shrink-0
+  rounded-full
+  border-2
+  border-white
+  tw-shared-bg-center-no-repeat-contain;
+}
+
+.vw-partials-stats-stats-overview__title {
+  @apply tw-shared-font-playfair__bold-xl-md-2xl-white;
+}
+
+.vw-partials-stats-stats-overview__section {
+  @apply tw-shared-base-flex-col-gap-1;
+}
+
+.vw-partials-stats-stats-overview__section-with-border {
+  @apply border-b border-theme-grey-light pb-5;
+}
+
+.vw-partials-stats-stats-overview__number {
+  @apply tw-shared-font-hind-siliguri__normal-3xl-md-4xl-leading-none-primary;
+}
+
+.vw-partials-stats-stats-overview__subtitle {
+  @apply tw-shared-font-hind-siliguri__normal-base-white;
+}
+
+.vw-partials-stats-stats-overview__text {
+  @apply tw-shared-font-hind-siliguri__light-base-white;
+}
+
+.vw-partials-stats-stats-overview__flex {
+  @apply flex gap-3;
+}
+
+.vw-partials-stats-stats-overview__subtitle-flex {
+  @apply tw-shared-font-hind-siliguri__normal-base mb-1.5 flex gap-3;
+}
+
+.vw-partials-stats-stats-overview__subtitle-flex {
+  @apply tw-shared-font-hind-siliguri__normal-base flex gap-3;
+}
+
+.vw-partials-stats-stats-overview__external-link {
+  @apply flex justify-between items-start text-base mb-5;
+}
+
+.vw-partials-stats-stats-overview__external-label {
+  @apply mr-[4%] w-[74%];
+}
+
+.vw-partials-stats-stats-overview__external-title {
+  @apply font-bold;
+}
+
+.vw-partials-stats-stats-overview__external-button {
+  @apply
+  no-underline
+  after:tw-shared-icon-arrow-external
+  after:inline-block
+  after:content-[''];
+}

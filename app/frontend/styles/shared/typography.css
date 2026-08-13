@@ -30,6 +30,15 @@
   font-bold;
 }
 
+@utility tw-shared-font-playfair__bold-xl-md-2xl-white {
+  @apply
+  tw-shared-font-family-playfair-leading-1-1
+  font-bold
+  text-xl
+  md:text-2xl
+  text-white;
+}
+
 @utility tw-shared-font-playfair__bold-xl-md-2xl-grey-black {
   @apply
   tw-shared-font-playfair__bold-grey-black
@@ -79,11 +88,11 @@
   leading-[1.1];
 }
 
-@utility tw-shared-font-hind-siliguri__normal-4xl-md-7xl-leading-none-primary {
+@utility tw-shared-font-hind-siliguri__light-4xl-md-7xl-leading-none-primary {
   @apply
   font-hindSiliguri
   leading-none
-  font-normal
+  font-light
   text-4xl
   md:text-7xl
   text-theme-primary;
@@ -108,259 +117,51 @@
   leading-[1.3];
 }
 
-@utility tw-shared-font-hind-siliguri__semi-bold {
+@utility tw-shared-font-hind-siliguri__semibold-base-grey-black {
   @apply
   tw-shared-font-family-hind-siliguri__leading-1-3
-  font-semibold;
-}
-
-@utility tw-shared-font-hind-siliguri__semi-bold-sm-grey-xdark {
-  @apply
-  tw-shared-font-hind-siliguri__semi-bold
-  text-sm
-  text-theme-grey-xdark;
-}
-
-@utility tw-shared-font-hind-siliguri__semi-bold-sm-white {
-  @apply
-  tw-shared-font-hind-siliguri__semi-bold
-  text-sm
-  text-white;
-}
-
-@utility tw-shared-font-hind-siliguri__bold {
-  @apply
-  tw-shared-font-family-hind-siliguri__leading-1-3
-  font-bold;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-sm-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-sm
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-base {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-base;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold
+  font-semibold
   text-base
   text-theme-grey-black;
 }
 
-@utility tw-shared-font-hind-siliguri__bold-base-lg-lg-grey-black {
+@utility tw-shared-font-hind-siliguri__semibold-lg-primary {
   @apply
-  tw-shared-font-hind-siliguri__bold-base
-  text-theme-grey-black
-  lg:text-lg;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-base-white {
-  @apply
-  tw-shared-font-hind-siliguri__bold-base
-  text-white;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-base-md-lg {
-  @apply
-  tw-shared-font-hind-siliguri__bold-base
-  md:text-lg;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-base-md-xl-primary {
-  @apply
-  tw-shared-font-hind-siliguri__bold-base
-  md:text-xl
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-semibold
+  text-lg
   text-theme-primary;
 }
 
-@utility tw-shared-font-hind-siliguri__bold-base-md-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold-base
-  md:text-xl
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-base-md-xl-white {
-  @apply
-  tw-shared-font-hind-siliguri__bold-base
-  text-white
-  md:text-xl;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-xl {
+@utility tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black {
   @apply
   tw-shared-font-family-hind-siliguri__leading-1-3
-  font-bold
-  text-xl;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold-xl
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-xl-white {
-  @apply
-  tw-shared-font-hind-siliguri__bold-xl
-  text-white;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-xl-md-3xl-lg-4xl-green {
-  @apply
-  tw-shared-font-hind-siliguri__bold-xl
-  md:text-3xl
-  lg:text-4xl
-  text-theme-chart-green;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-md-3xl-lg-4xl-green {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-3xl
-  lg:text-4xl
-  text-theme-chart-green;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-md-3xl-lg-6xl-green {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-3xl
-  lg:text-6xl
-  text-theme-chart-green;
-}
-
-
-@utility tw-shared-font-hind-siliguri__bold-lg-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold-base
-  text-lg
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-lg-lg-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-theme-grey-black
-  text-lg
-  lg:text-base;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-theme-grey-black
-  text-lg
-  md:text-xl;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-lg-md-xl-grey-dark {
-  @apply
-  tw-shared-font-hind-siliguri__bold
-  text-theme-grey-black
-  text-lg
-  md:text-xl;
-}
-
-@utility tw-shared-font-hind-siliguri__bold-lg-md-xl-white {
-  @apply
-  tw-shared-font-hind-siliguri__bold
+  font-semibold
   text-lg
   md:text-xl
-  text-white;
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__semibold-xl-grey-black {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-semibold
+  text-xl
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__semibold-4xl-grey-black {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-semibold
+  text-4xl
+  text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__normal {
   @apply
   tw-shared-font-family-hind-siliguri__leading-1-3
   font-normal;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-base
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-base-md-lg-grey-black {
-  @apply 
-  tw-shared-font-hind-siliguri__normal
-  text-base
-  md:text-lg
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-base-md-lg-white {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-base
-  md:text-lg
-  text-white;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-lg;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-lg
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg-grey-black-md-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-lg
-  md:text-xl
-text-theme-grey-black;;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-lg
-  md:text-xl
-text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg-md-xl-white {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-lg
-  md:text-xl
-  text-white;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-sm {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-sm;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-sm-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-sm
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-sm-grey {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-sm
-  text-theme-grey;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-sm-grey-xdark {
@@ -377,33 +178,23 @@ text-theme-grey-black;
   text-white;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-sm-lg-base-white {
+@utility tw-shared-font-hind-siliguri__normal {
   @apply
-  tw-shared-font-hind-siliguri__normal
-  text-sm
-  lg:text-base
-  text-white;
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-normal;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-sm-lg-base-black {
+@utility tw-shared-font-hind-siliguri__normal-sm-grey-black {
   @apply
   tw-shared-font-hind-siliguri__normal
   text-sm
-  lg:text-base
-  text-black;
+  text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-base {
   @apply
   tw-shared-font-hind-siliguri__normal
   text-base;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-base-grey-light {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-base
-  text-theme-grey-light;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-base-grey-black {
@@ -413,17 +204,294 @@ text-theme-grey-black;
   text-theme-grey-black;
 }
 
+@utility tw-shared-font-hind-siliguri__normal-base-lg-lg-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  text-theme-grey-black
+  lg:text-lg;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-base-white {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-base-md-lg {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  md:text-lg;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-base-md-xl-primary {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  md:text-xl
+  text-theme-primary;
+}
+
 @utility tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black {
   @apply
+  tw-shared-font-hind-siliguri__normal-base
+  md:text-xl
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-base-md-xl-white {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  text-white
+  md:text-xl;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-3xl-md-4xl-leading-none-primary {
+  @apply
+  font-hindSiliguri
+  leading-none
+  font-normal
+  text-3xl
+  md:text-4xl
+  text-theme-primary;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-xl {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-normal
+  text-xl;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-xl-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__normal-xl
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-xl-white {
+  @apply
+  tw-shared-font-hind-siliguri__normal-xl
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-xl-md-3xl-lg-4xl-green {
+  @apply
+  tw-shared-font-hind-siliguri__normal-xl
+  md:text-3xl
+  lg:text-4xl
+  text-theme-chart-green;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-md-3xl-lg-4xl-green {
+  @apply
   tw-shared-font-hind-siliguri__normal
+  text-3xl
+  lg:text-4xl
+  text-theme-chart-green;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-md-3xl-lg-6xl-green {
+  @apply
+  tw-shared-font-hind-siliguri__normal
+  text-3xl
+  lg:text-6xl
+  text-theme-chart-green;
+}
+
+
+@utility tw-shared-font-hind-siliguri__normal-lg-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  text-lg
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-lg-lg-base-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__normal
+  text-theme-grey-black
+  text-lg
+  lg:text-base;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__normal
+  text-theme-grey-black
+  text-lg
+  md:text-xl;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-dark {
+  @apply
+  tw-shared-font-hind-siliguri__normal
+  text-theme-grey-black
+  text-lg
+  md:text-xl;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-lg-md-xl-white {
+  @apply
+  tw-shared-font-hind-siliguri__normal
+  text-lg
+  md:text-xl
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-light;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-md-lg-grey-black {
+  @apply 
+  tw-shared-font-hind-siliguri__light
+  text-base
+  md:text-lg
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-md-lg-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  md:text-lg
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light-lg-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-lg
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-lg-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-lg
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light-lg-grey-black-md-xl-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-lg
+  md:text-xl
+text-theme-grey-black;;
+}
+
+@utility tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-lg
+  md:text-xl
+text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-lg-md-xl-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-lg
+  md:text-xl
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-grey {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  text-theme-grey;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-grey-xdark {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  text-theme-grey-xdark;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-lg-base-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  lg:text-base
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-lg-base-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  lg:text-base
+  text-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-grey-light {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  text-theme-grey-light;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-md-xl-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
   text-base
   md:text-xl
   text-theme-grey-black;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-lg-lg {
+@utility tw-shared-font-hind-siliguri__light-base-lg-lg {
   @apply
-  tw-shared-font-hind-siliguri__normal
+  tw-shared-font-hind-siliguri__light
   text-base
   lg:text-lg
   text-theme-grey-black;
@@ -432,37 +500,42 @@ text-theme-grey-black;
 
 
 /* default is leading 1.3 so the following has leading-1-6 in its name */
-@utility tw-shared-font-family-hind-siliguri__leading-1-6 {
+@utility tw-shared-font-family-hind-siliguri__light-leading-1-6 {
   @apply
   font-hindSiliguri
-  leading-[1.6];
+  leading-[1.6]
+  font-light;
 }
 
-@utility tw-shared-font-family-hind-siliguri__leading-1-6-grey-black {
+@utility tw-shared-font-hind-siliguri__light-sm-grey-black {
   @apply
-  tw-shared-font-family-hind-siliguri__leading-1-6
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-family-hind-siliguri__light-leading-1-6-grey-black {
+  @apply
+  tw-shared-font-family-hind-siliguri__light-leading-1-6
   text-theme-grey-black
   leading-[1.6];
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black {
+@utility tw-shared-font-hind-siliguri__light-sm-leading-1-6-grey-black  {
   @apply
-  tw-shared-font-family-hind-siliguri__leading-1-6-grey-black
-  font-normal
+  tw-shared-font-family-hind-siliguri__light-leading-1-6-grey-black
+  text-sm;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black  {
+  @apply
+  tw-shared-font-family-hind-siliguri__light-leading-1-6-grey-black
   text-base;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-leading-1-6-grey-black  {
+@utility tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-6-grey-black {
   @apply
-  tw-shared-font-family-hind-siliguri__leading-1-6-grey-black
-  font-normal
-  text-base;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-base-md-lg-leading-1-6-grey-black {
-  @apply
-  tw-shared-font-family-hind-siliguri__leading-1-6-grey-black
-  font-normal
+  tw-shared-font-family-hind-siliguri__light-leading-1-6-grey-black
   text-base
   md:text-lg;
 }
