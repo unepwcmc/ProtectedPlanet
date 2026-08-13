@@ -1,35 +1,35 @@
 <template>
-  <tr class="table__list">
+  <tr class="ct-pame-table-row-mobile">
     <td
-      class="table__list-items"
-      :class="{ 'table__list-items--last': isLast }"
+      class="ct-pame-table-row-mobile__items"
+      :class="{ 'ct-pame-table-row-mobile__items--last': isLast }"
     >
-      <p class="table__list-item table__list-item--name">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[0].title}:`"
         />
         <span
-          class="table__list-item-value"
+          class="ct-pame-table-row-mobile__item-value"
           v-text="item.name"
         />
       </p>
-      <p class="table__list-item table__list-item--designation">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[1].title}:`"
         />
         <span
-          class="table__list-item-value"
+          class="ct-pame-table-row-mobile__item-value"
           v-text="item.designation"
         />
       </p>
-      <p class="table__list-item able__list-item--site-id">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[2].title}:`"
         />
-        <span class="table__list-item-value">
+        <span class="ct-pame-table-row-mobile__item-value">
           <a
             v-if="item.site_id"
             :href="item.pa_site_url"
@@ -48,52 +48,52 @@
           />
         </span>
       </p>
-      <p class="table__list-item table__list-item--assessment-id">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[3].title}:`"
         />
         <span
-          class="table__list-item-value"
+          class="ct-pame-table-row-mobile__item-value"
           v-text="item.asmt_id"
         />
       </p>
-      <p class="table__list-item table__list-item--country">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[4].title}:`"
         />
         <span
-          class="table__list-item-value"
+          class="ct-pame-table-row-mobile__item-value"
           v-text="countryDisplay"
         />
       </p>
-      <p class="table__list-item table__list-item--method">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[5].title}:`"
         />
         <span
-          class="table__list-item-value"
+          class="ct-pame-table-row-mobile__item-value"
           v-text="item.method"
         />
       </p>
-      <p class="table__list-item table__list-item--year-of-assessment">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[6].title}:`"
         />
         <span
-          class="table__list-item-value"
+          class="ct-pame-table-row-mobile__item-value"
           v-text="item.asmt_year"
         />
       </p>
-      <p class="table__list-item table__list-item--link-to-assessment">
+      <p class="ct-pame-table-row-mobile__item">
         <span
-          class="table__list-item-label"
+          class="ct-pame-table-row-mobile__item-label"
           v-text="`${attributes[7].title}:`"
         />
-        <span class="table__list-item-value">
+        <span class="ct-pame-table-row-mobile__item-value">
           <a
             v-if="item.asmt_url.includes('http')"
             :href="item.asmt_url"
@@ -109,16 +109,14 @@
         </span>
       </p>
       <p
-        class="table__list-item table__list-item--metadata-id table__cell-modal-trigger"
+        class="ct-pame-table-row-mobile__item--no-flex
+        ct-pame-table-row-mobile__item--modal-trigger"
         @click="onOpenModal"
       >
         <span
-          class="table__list-item-label"
-          v-text="`${attributes[8].title}:`"
-        />
-        <span
-          class="table__list-item-value"
-          v-text="item.eff_metaid"
+          class="ct-pame-table-row-mobile__item-label
+          ct-pame-table-row-mobile__item--modal-trigger"
+          v-text="`${attributes[8].title}: ${item.eff_metaid}`"
         />
       </p>
     </td>
@@ -129,7 +127,6 @@
 import { computed } from 'vue'
 import PameTableRowSiteId from '@/components/Pame/Table/Row/SiteId.vue'
 import { joinOrMultiple } from '@/lib/pameTableFormat'
-import { usePameStore } from '@/stores/usePameStore'
 import type { PameEvaluationItem, PameTableAttribute } from '@/types/backend'
 
 const props = withDefaults(defineProps<{
@@ -140,11 +137,56 @@ const props = withDefaults(defineProps<{
   isLast: false
 })
 
-const pameStore = usePameStore()
+const emit = defineEmits<{ 'open-modal': [item: PameEvaluationItem] }>()
 
 const countryDisplay = computed(() => joinOrMultiple(props.item.country))
 
 function onOpenModal() {
-  pameStore.openModal(props.item)
+  emit('open-modal', props.item)
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-table-row-mobile__items {
+  @apply
+  bg-theme-grey-xlight
+  py-1
+  px-3.5
+  border-b-12
+  border-white
+  tw-shared-base-flex-col;
+}
+
+.ct-pame-table-row-mobile__items--last {
+  @apply border-b-0;
+}
+
+.ct-pame-table-row-mobile__item {
+  @apply
+  py-3
+  tw-shared-base-flex-gap-2;
+}
+
+.ct-pame-table-row-mobile__item--no-flex {
+  @apply
+  py-3;
+}
+
+.ct-pame-table-row-mobile__item-label {
+  @apply tw-shared-font-hind-siliguri__semibold-base-grey-black;
+}
+
+.ct-pame-table-row-mobile__item-value {
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+}
+
+.ct-pame-table-row-mobile__item--modal-trigger {
+  @apply
+  cursor-pointer
+  tw-shared-font-hind-siliguri__semibold-base-primary
+  underline
+  hover:no-underline;
+}
+</style>

@@ -125,12 +125,28 @@
   text-white;
 }
 
+@utility tw-shared-font-hind-siliguri__semibold-base-primary {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-semibold
+  text-base
+  text-theme-primary;
+}
+
 @utility tw-shared-font-hind-siliguri__semibold-base-grey-black {
   @apply
   tw-shared-font-family-hind-siliguri__leading-1-3
   font-semibold
   text-base
   text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__semibold-lg-white {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-semibold
+  text-lg
+  text-white;
 }
 
 @utility tw-shared-font-hind-siliguri__semibold-lg-primary {
@@ -352,28 +368,7 @@
   font-light;
 }
 
-@utility tw-shared-font-hind-siliguri__light-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__light
-  text-base
-  text-theme-grey-black;
-}
 
-@utility tw-shared-font-hind-siliguri__light-base-md-lg-grey-black {
-  @apply 
-  tw-shared-font-hind-siliguri__light
-  text-base
-  md:text-lg
-  text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__light-base-md-lg-white {
-  @apply
-  tw-shared-font-hind-siliguri__light
-  text-base
-  md:text-lg
-  text-white;
-}
 
 @utility tw-shared-font-hind-siliguri__light-lg-grey-black {
   @apply
@@ -433,6 +428,13 @@ text-theme-grey-black;
   text-theme-grey;
 }
 
+@utility tw-shared-font-hind-siliguri__light-sm-primary {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  text-theme-primary;
+}
+
 @utility tw-shared-font-hind-siliguri__light-sm-grey-xdark {
   @apply
   tw-shared-font-hind-siliguri__light
@@ -461,6 +463,37 @@ text-theme-grey-black;
   text-sm
   lg:text-base
   text-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-sm-lg-lg-primary {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-sm
+  lg:text-lg
+  text-theme-primary;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-md-lg-grey-black {
+  @apply 
+  tw-shared-font-hind-siliguri__light
+  text-base
+  md:text-lg
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__light-base-md-lg-white {
+  @apply
+  tw-shared-font-hind-siliguri__light
+  text-base
+  md:text-lg
+  text-white;
 }
 
 @utility tw-shared-font-hind-siliguri__light-base {

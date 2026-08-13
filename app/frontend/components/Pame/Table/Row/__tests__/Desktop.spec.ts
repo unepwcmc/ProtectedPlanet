@@ -1,8 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
-import Row from '@/components/Pame/Table/Row/Index.vue'
-import { usePameStore } from '@/stores/usePameStore'
+import Row from '@/components/Pame/Table/Row/Desktop.vue'
 import type { PameEvaluationItem } from '@/types/backend'
 
 const item: PameEvaluationItem = {
@@ -25,24 +23,18 @@ const item: PameEvaluationItem = {
   source_year: 2019
 }
 
-beforeEach(() => {
-  setActivePinia(createPinia())
-})
-
-describe('Pame Table Row', () => {
+describe('Pame Table Row Desktop', () => {
   it('shows "Multiple" when a field has more than one value', () => {
     const wrapper = mount(Row, { props: { item } })
 
     expect(wrapper.text()).toContain('Multiple')
   })
 
-  it('opens the pame store modal with the row item when the metadata cell is clicked', async () => {
+  it('emits open-modal with the row item when the metadata cell is clicked', async () => {
     const wrapper = mount(Row, { props: { item } })
-    const store = usePameStore()
 
-    await wrapper.find('.table__cell-modal-trigger').trigger('click')
+    await wrapper.find('.ct-pame-table-row-desktop__cell--modal-trigger').trigger('click')
 
-    expect(store.isModalOpen).toBe(true)
-    expect(store.modalContent).toEqual(item)
+    expect(wrapper.emitted('open-modal')?.[0]).toEqual([item])
   })
 })

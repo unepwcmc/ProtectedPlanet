@@ -1,21 +1,22 @@
 <template>
   <div
     v-if="showDropdown"
-    class="card--feault-block"
+    class="ct-dropdown-parcels-dropdown"
   >
-    <div class="card__top">
+    <div class="ct-dropdown-parcels-dropdown__top">
       <h2
-        class="card__h2"
+        class="ct-dropdown-parcels-dropdown__title"
         v-text="title"
       />
       <span
         v-if="showDescription"
+        class="ct-dropdown-parcels-dropdown__description"
         v-text="description"
       />
     </div>
     <DropdownBase
       v-model="chosenParcelId"
-      class="card--attributes-parcels-dropdown"
+      class="ct-dropdown-parcels-dropdown__dropdown"
       :title="dropdownTitle"
       :options="sitePids"
     />
@@ -52,3 +53,27 @@ onMounted(() => {
     : props.sitePids[0]
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-dropdown-parcels-dropdown {
+  @apply tw-shared-card-stats;
+}
+
+.ct-dropdown-parcels-dropdown__top {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.ct-dropdown-parcels-dropdown__title {
+  @apply tw-shared-list-title;
+}
+
+.ct-dropdown-parcels-dropdown__description {
+  @apply tw-shared-list-underline-value;
+}
+
+.ct-dropdown-parcels-dropdown__dropdown {
+  @apply lg:max-w-100;
+}
+</style>

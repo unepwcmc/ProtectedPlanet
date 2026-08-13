@@ -10,7 +10,7 @@
 RowStacked`, all of `Stats/*` except `Coverage`/`TooltipInfo`, all of `Attributes/*`, and the
 `RegionCountryPages/Index` wrapper landed this session; also fixed a real regression where T7's SCSS
 deletion had silently unstyled `Stats/Sites.vue` — see the T6 section and CHANGELOG). Only `Stats/
-{Coverage,TooltipInfo}` and the `card--stats-overview` ERB card remain. **T8, T9 are confirmed still 100% untouched** (re-verified via fresh grep against current Vue component consumers, not just trusted from the old baseline). **Two new findings**: `shared/forms.css` and `shared/scrollbar.css` (from T1) are wired into `tailwind.css` but have zero live consumers anywhere — dead weight, flag for removal or reuse when T4/T8 land. The CMS layout files (`views/layouts/cms/*.css`) use three inconsistent `vw-` prefix schemes (`vw-layouts-cms-*`, `vw-cms-*`, mixed `@utility`/plain-class syntax) — violates rule 4c's path-mirroring rule (added 2026-08-05) but works today; worth a small consistency pass. Custom breakpoint tokens were reverted 2026-08-03 — every consumer uses native `md:`/`lg:`/`2xl:` — see CODE-CONVENTIONS.md rule 21. |
+{Coverage,TooltipInfo}` and the `card--stats-overview` ERB card remain. **T8, T9 are confirmed still 100% untouched** (re-verified via fresh grep against current Vue component consumers, not just trusted from the old baseline). **Two new findings**: `shared/forms.css` and `shared/scrollbar.css` (from T1) are wired into `tailwind.css` but have zero live consumers anywhere — dead weight, flag for removal or reuse when T4/T8 land. The CMS layout files (`views/layouts/cms/*.css`) use three inconsistent `vw-` prefix schemes (`vw-layouts-cms-*`, `vw-cms-*`, mixed `@utility`/plain-class syntax) — violates rule 4c's path-mirroring rule (added 2026-08-05) but works today; worth a small consistency pass. Custom breakpoint tokens were reverted 2026-08-03 — every consumer uses native `md:`/`lg:`/`2xl:` — see CODE-CONVENTIONS.md rule 21. **2026-08-13: T7 and T8 are both now fully done** — `Dropdown/ParcelsDropdown.vue` closed out T7; the whole `Pame/*` family + `Dropdown/{Base,Options}` closed out T8, deleting `_dropdown.scss`, `_filters-pame.scss`, `_modal-pame.scss`, `table/{_table-pame,_table-head-pame,_table-horizontal-scroll,_table-head-horizontal-scroll}.scss`, `components/_table.scss`, `_tooltip.scss`, `components/_select.scss` + `select/{_select,_select-searchable}.scss`, and `base/_buttons.scss` — see the T7/T8 sections and CHANGELOG for full detail. Only **T9 and T10 remain**. |
 
 [← Summary](./README.md)
 
@@ -226,8 +226,8 @@ often share one legacy partial (e.g. `_lists.scss` styles both `Attributes/*` an
 | **T4** | Vue-only leaves with no existing coupling (NavBar, Listing, Pagination, Search/SearchAreas non-exception, Download, form checkboxes) | T1 | Vue templates + new `ct-` styles | **✅ done** |
 | **T5** | Maps (`Map/*` — 8 sub-islands, `_map.scss` views wrapper) | T1, T4 | Vue only (the ERB-wrapper part of the original scope turned out to already be done, see below) | **✅ done** |
 | **T6** | Charts + Stats (closes Wave-8 rule-4 exceptions) | T1 | Vue only | 11/~13 components done — `TotalCoverageChart`, `AmChart/{Pie,Multiline}`, `Chart/RowStacked`, `Stats/{Designations,IucnCategories,Governance,Sites,Sources,Message}`, `Attributes/*`, `RegionCountryPages/Index` (wrapper); only `Stats/{Coverage,TooltipInfo}` + the `card--stats-overview` ERB card remain |
-| **T7** | Cards family + Listing cards + Carousel (closes `ListingPageCard` exception) | T1, T4 | Vue + a few ERB card grids | **almost done** — ERB card grids, `ListingPageCard/*`, `Carousel/Themes/Card.vue`, `SearchAreas/Results/{Index,Item}.vue`, `Search/Results/{Index,Item}.vue`, `Attributes/ProtectedArea/*` (done under T6, mis-tracked here until 2026-08-13) all done; only `Dropdown/ParcelsDropdown.vue` remains |
-| **T8** | PAME + Dropdown + Select (closes Wave-9/10 rule-4 exceptions) | T1 | Vue only | not started (`Dropdown/Base.vue`/`Options.vue` already render `ct-dropdown*` markup, but still styled by legacy `_dropdown.scss`, not `@apply` — see T8 below) |
+| **T7** | Cards family + Listing cards + Carousel (closes `ListingPageCard` exception) | T1, T4 | Vue + a few ERB card grids | **✅ done** (2026-08-13) — everything including `Dropdown/ParcelsDropdown.vue` (the last item) migrated |
+| **T8** | PAME + Dropdown + Select (closes Wave-9/10 rule-4 exceptions) | T1 | Vue only | **✅ done** (2026-08-13) |
 | **T9** | Residual tabs/filters coupling (`_tabs.scss`, `_filters-sidebar.scss`) | T4, T5, T7 | Vue only | not started |
 | **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide | not started |
 
@@ -986,46 +986,67 @@ work below), `cards/cards/_cards-themes.scss`, and `card/_card-theme.scss` — b
       deleted). Re-verified 2026-08-13: all four files are fully `ct-attributes-protected-area*`/no bare
       legacy classes remain. Corrected here so this checklist stops claiming 100%-legacy for files that
       no longer exist on disk.
-- [ ] `Dropdown/ParcelsDropdown.vue` (card-family consumer despite living in the `Dropdown/` folder —
-      don't conflate with T8's `ct-dropdown` work) — **confirmed still 100% legacy**, backed by
-      `card/attributes/_card-attributes-parcels-dropdown.scss`.
-- [ ] Live-verify (still open): news/resources listing pages, home + marine carousels, search results
-      (both site and area search — once migrated), a PA show page's attributes cards, the gdpame
-      parcels dropdown.
+- [x] `Dropdown/ParcelsDropdown.vue` — **done** — `ct-parcels-dropdown*`, reusing `tw-shared-card-stats`/
+      `tw-shared-list-title`/`tw-shared-list-underline-value`. `card/attributes/
+      _card-attributes-parcels-dropdown.scss` and the now-fully-dead `_card-stats.scss` deleted. T7
+      is now fully done.
+- [x] Live-verified: gdpame page's parcels dropdown (via the shared `Dropdown/Base.vue` it wraps),
+      search results, PA attributes cards — see T8 below for the same session's full live-verify pass.
+
+**T7 is now fully done (2026-08-13).**
 
 ---
 
-## Wave T8 — PAME + Dropdown + Select, closes Wave-9/10 rule-4 exceptions (~1–1.5 wk) — not started (confirmed 2026-08-10)
+## Wave T8 — PAME + Dropdown + Select, closes Wave-9/10 rule-4 exceptions — done (2026-08-13)
 
 Files: `components/table/{_table-pame,_table-head-pame,_table-horizontal-scroll,
 _table-head-horizontal-scroll}.scss`, `components/filters/_filters-pame.scss`,
-`components/modal/_modal-pame.scss`, `card/attributes/_card-attributes-pame.scss`,
-`components/_dropdown.scss`, `_tooltip.scss` (residual `.tooltip__target` in PAME table headers),
-`components/select/{_select-searchable,_select}.scss`.
+`components/modal/_modal-pame.scss`, `components/_dropdown.scss`, `_tooltip.scss`,
+`components/_select.scss` + `components/select/{_select-searchable,_select}.scss`,
+`base/_buttons.scss`. (`card/attributes/_card-attributes-pame.scss` turned out already deleted under
+T6 — see that section.)
 
-Components: `Pame/{Modal,Filters/**,Table/**}`, `Attributes/Pame/{Pame,List}`, `Dropdown/{Base,
-Options}` (the true `ct-dropdown` — note it's pre-named `ct-` already but the CSS body underneath is
-still plain legacy-mixin SCSS, not `@apply`, so it still needs the real rewrite).
+Components: `Pame/{Modal,Filters/**,Table/**}`, `Dropdown/{Base,Options}`. (`Attributes/Pame/
+{Pame,List}` turned out already done under T6 — this wave's original component list mis-tracked them,
+same recurring doc-drift pattern as T7's `Attributes/ProtectedArea/*`.)
 
-- [ ] Closes the **Wave 10 `Pame/*`** and **Wave 9 `Dropdown`** rule-4 exceptions — remove both from
-      CODE-CONVENTIONS.md's exception list once done.
-- [x] **Re-confirmed 2026-08-10, unchanged:** `Dropdown/Base.vue`/`Options.vue` render
-      `ct-dropdown__*`/`ct-dropdown-options__*` markup but have no `<style>` block at all — those
-      exact class names are still defined in legacy `components/_dropdown.scss` as plain
-      mixin-driven SCSS, not `@apply`. The `ct-` naming is real but cosmetic until this wave lands.
-      **Also found this pass:** `base/_buttons.scss` (the source T1 ported into `shared/buttons.css`)
-      is now down to a single live consumer, `Pame/Table/DownloadCsv.vue` (`.button`/`.button__text`/
-      `.download__trigger-text`) — everything else already moved to `tw-shared-button-*`. Worth
-      migrating `DownloadCsv.vue` alongside the rest of this wave's `Pame/Table/**` work so
-      `base/_buttons.scss` can be deleted outright rather than surviving as a single-consumer file.
-- [ ] Confirm `_select-searchable.scss` is genuinely superseded by `Search/SiteInput.vue`'s existing
-      Tailwind styling before assuming zero migration work — the T0-era audit flagged this as
-      "not independently confirmed," verify directly before skipping it.
-- [ ] `_table-horizontal-scroll.scss`/`_table-head-horizontal-scroll.scss` use
-      `helpers/_beautify-scrollbar.scss`'s mixin (ported to `tw-shared-scrollbar` in T1) — use that
-      shared utility rather than re-deriving scrollbar styling per table.
-- [ ] Live-verify: gdpame page — table sort/scroll, filters panel, pagination, modal open, the sticky
-      table header tooltip.
+- [x] Closes the **Wave 10 `Pame/*`** and **Wave 9 `Dropdown`** rule-4 exceptions — remove both from
+      CODE-CONVENTIONS.md's exception list.
+- [x] `Dropdown/Base.vue`/`Options.vue` — real `@apply` styles added. `Base.vue`'s button reuses
+      `tw-shared-button--border-theme-primary` (exact match for legacy `button-outline($black,1px)`);
+      `Options.vue`'s list reuses `tw-shared-shadow-grey`. Renamed `ct-dropdown` → `ct-dropdown-base`
+      mid-wave to disambiguate from `Options.vue`'s `ct-dropdown-options` (propagated into both specs).
+      `_dropdown.scss` deleted.
+- [x] `Pame/Modal.vue` — `ct-pame-modal*`. Close button is now a real `Icon/Close.vue` (rule 5b) instead
+      of the `button-close`/`icon-cross` mixin. `z-300`/`z-400` are valid bare Tailwind v4 utilities
+      (not arbitrary values). `_modal-pame.scss` deleted.
+- [x] `Pame/Filters/*` family — `ct-pame-filters`/`ct-pame-filter`/`ct-pame-filter-option`. Chevron and
+      tick-mark background-image swaps replaced with real `Icon/Arrow.vue` (rotated) and a new
+      `Icon/Tick.vue`. Confirmed via `PameEvaluation.filters` that the legacy `--category`/`--donors`/
+      `--ocean-region` per-filter max-width variants are dead (no such filter exists) — only the real
+      `--country` variant was ported. `_filters-pame.scss` deleted.
+- [x] `Pame/Table/*` family — `ct-pame-table*`. `$large` (1200px) mapped to native `xl:` for the
+      desktop-table/mobile-card switch. `Row/Mobile.vue` dropped 9 per-field modifier classes confirmed
+      to have zero CSS backing (including a pre-existing `able__list-item--site-id` typo). `Head/*`'s
+      decorative sort icons got the same real-`Icon/Arrow` treatment as the filter chevron.
+      `Table/DownloadCsv.vue`'s one dangling legacy spinner closed out with `tw-shared-icon-loading-spinner`
+      (not `.button`/`.button__text` as originally flagged — that part was already done in an earlier
+      undocumented pass). `table/_table-pame.scss`, `table/_table-head-pame.scss`, `components/_table.scss`
+      deleted.
+- [x] Confirmed-dead, deleted without migration: `table/_table-horizontal-scroll.scss` +
+      `table/_table-head-horizontal-scroll.scss` (a second, separate table variant, zero consumers
+      ever); `_tooltip.scss` (`Tooltip/Index.vue` + `Tooltip/Second.vue` were both already fully
+      migrated from an earlier undocumented pass, so the legacy `.tooltip*` classes were already dead);
+      `components/_select.scss` + `components/select/{_select,_select-searchable}.scss` (confirmed
+      superseded by `Search/SiteInput.vue` — the "not independently confirmed" flag from the T0-era
+      audit is now resolved; `select/_select.scss` itself was never even `@import`ed); `base/_buttons.scss`
+      (zero remaining class/mixin consumers once the above landed).
+- [x] Live-verified via Playwright screenshots on the gdpame page: filters open/close, checkbox + tick
+      icon + badge counter, Apply correctly filters (and correctly shows "no records" + disables CSV
+      when zero results), modal opens/closes with content, sticky table header holds on scroll, mobile
+      viewport switches to the card-list layout, no new console errors. `ParcelsDropdown`'s live click-
+      through wasn't reachable (no real multi-parcel PA in the dev seed data) — covered instead by the
+      full green `Dropdown`/`ParcelsDropdown` Vitest suite.
 
 ---
 

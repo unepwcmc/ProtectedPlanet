@@ -12,7 +12,7 @@ describe('AttributesParcelsDropdown', () => {
       props: { title: 'Choose a parcel', sitePids: ['1234_1'], forPdf: false }
     })
 
-    expect(wrapper.find('.card--feault-block').exists()).toBe(false)
+    expect(wrapper.find('.ct-parcels-dropdown').exists()).toBe(false)
   })
 
   it('does not render when forPdf is true, even with multiple parcels', () => {
@@ -20,7 +20,7 @@ describe('AttributesParcelsDropdown', () => {
       props: { title: 'Choose a parcel', sitePids: ['1234_1', '1234_2'], forPdf: true }
     })
 
-    expect(wrapper.find('.card--feault-block').exists()).toBe(false)
+    expect(wrapper.find('.ct-parcels-dropdown').exists()).toBe(false)
   })
 
   it('defaults to the first parcel and writes it to the URL on mount', async () => {
@@ -29,7 +29,7 @@ describe('AttributesParcelsDropdown', () => {
     })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('.ct-dropdown__chosen-value').text()).toBe('1234_1')
+    expect(wrapper.find('.ct-dropdown-base__chosen-value').text()).toBe('1234_1')
     expect(window.location.search).toBe('?site_pid=1234_1')
   })
 
@@ -41,7 +41,7 @@ describe('AttributesParcelsDropdown', () => {
     })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('.ct-dropdown__chosen-value').text()).toBe('1234_2')
+    expect(wrapper.find('.ct-dropdown-base__chosen-value').text()).toBe('1234_2')
   })
 
   it('updates the URL when a new parcel is chosen', async () => {
@@ -49,7 +49,7 @@ describe('AttributesParcelsDropdown', () => {
       props: { title: 'Choose a parcel', sitePids: ['1234_1', '1234_2'], forPdf: false }
     })
 
-    await wrapper.find('.ct-dropdown__button').trigger('click')
+    await wrapper.find('.ct-dropdown-base__button').trigger('click')
     await wrapper.findAll('.ct-dropdown-options__option')[1].trigger('click')
 
     expect(window.location.search).toBe('?site_pid=1234_2')

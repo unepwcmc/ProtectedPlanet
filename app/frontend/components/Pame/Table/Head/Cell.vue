@@ -1,28 +1,13 @@
 <template>
-  <th class="table-head__cell">
+  <th class="ct-pame-table-head__cell">
     <span
-      class="table-head__title"
+      class="ct-pame-table-head__title"
       v-text="filter.title"
     />
-
     <Tooltip
       v-if="hasTooltip"
       :text="filter.tooltip ?? ''"
     />
-
-    <div
-      v-if="hasOptions"
-      class="table__sorting"
-    >
-      <span
-        alt="Sort results"
-        class="table__sort table__sort--ascending"
-      />
-      <span
-        alt="Sort results"
-        class="table__sort table__sort--descending"
-      />
-    </div>
   </th>
 </template>
 
@@ -35,9 +20,30 @@ const props = defineProps<{
   filter: PameTableAttribute
 }>()
 
-// `field` stands in for the legacy `name`/`options` presence check — every
-// TABLE_ATTRIBUTES entry has one, so every column shows the sort icons (a
-// purely visual/legacy holdover — see the note below).
-const hasOptions = computed(() => props.filter.field !== undefined)
 const hasTooltip = computed(() => !!props.filter.tooltip)
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-table-head__cell {
+  @apply
+  border-l-2
+  border-dotted
+  border-white
+  first:border-l-0
+  bg-black
+  pt-2
+  px-3.5
+  h-14.25
+  text-left
+  tw-shared-font-hind-siliguri__semibold-lg-white
+  align-top;
+}
+
+.ct-pame-table-head__title {
+  @apply
+  inline-block
+  align-middle;
+}
+</style>

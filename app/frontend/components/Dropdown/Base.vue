@@ -1,22 +1,22 @@
 <template>
-  <div class="ct-dropdown">
+  <div class="ct-dropdown-base">
     <span
-      class="ct-dropdown__title"
+      class="ct-dropdown-base__title"
       v-text="title"
     />
     <div
       ref="rootEl"
-      class="ct-dropdown__container"
+      class="ct-dropdown-base__container"
     >
       <button
-        class="ct-dropdown__button"
+        class="ct-dropdown-base__button"
         @click="toggle"
       >
         <span
-          class="ct-dropdown__chosen-value"
+          class="ct-dropdown-base__chosen-value"
           v-text="modelValue ?? defaultDropdownText"
         />
-        <IconArrow class="ct-dropdown__icon" />
+        <IconArrow class="ct-dropdown-base__icon" />
       </button>
       <DropdownOptions
         v-if="openOptions"
@@ -58,3 +58,35 @@ usePopupCloseListeners(rootEl, {
   onClose: () => { openOptions.value = false }
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-dropdown-base {
+  @apply
+  tw-shared-base-flex-col-gap-1
+  w-full;
+}
+
+.ct-dropdown-base__title {
+  @apply tw-shared-font-hind-siliguri__semibold-base-grey-black;
+}
+
+.ct-dropdown-base__container {
+  @apply relative;
+}
+
+.ct-dropdown-base__button {
+  @apply
+  tw-shared-button--border-theme-primary
+  items-center;
+}
+
+.ct-dropdown-base__chosen-value {
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+}
+
+.ct-dropdown-base__icon {
+  @apply w-2;
+}
+</style>

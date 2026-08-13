@@ -1,8 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import PameModal from '@/components/Pame/Modal.vue'
-import { usePameStore } from '@/stores/usePameStore'
 import type { PameEvaluationItem, PameModalTranslations } from '@/types/backend'
 
 const text: PameModalTranslations = {
@@ -22,42 +20,37 @@ const item: Partial<PameEvaluationItem> = {
   language: 'English'
 }
 
-beforeEach(() => {
-  setActivePinia(createPinia())
-})
-
 describe('PameModal', () => {
-  it('is inactive until the store opens it', () => {
-    const wrapper = mount(PameModal, { props: { text } })
+  it('is inactive until isModalOpen is true', () => {
+    const wrapper = mount(PameModal, { props: { text, modalContent: null, isModalOpen: false } })
 
-    expect(wrapper.classes()).not.toContain('modal--active')
+    expect(wrapper.classes()).not.toContain('ct-pame-modal--active')
   })
 
-  it('becomes active and shows the row detail once the store opens the modal', async () => {
-    const wrapper = mount(PameModal, { props: { text } })
-    usePameStore().openModal(item as PameEvaluationItem)
-    await wrapper.vm.$nextTick()
+  it('becomes active and shows the row detail once isModalOpen is true', () => {
+    const wrapper = mount(PameModal, {
+      props: { text, modalContent: item as PameEvaluationItem, isModalOpen: true }
+    })
 
-    expect(wrapper.classes()).toContain('modal--active')
+    expect(wrapper.classes()).toContain('ct-pame-modal--active')
     expect(wrapper.text()).toContain('2019')
     expect(wrapper.text()).toContain('A report')
   })
 
-  it('closes on the close button click', async () => {
-    const wrapper = mount(PameModal, { props: { text } })
-    const store = usePameStore()
-    store.openModal(item as PameEvaluationItem)
-    await wrapper.vm.$nextTick()
+  it('emits close on the close button click', async () => {
+    const wrapper = mount(PameModal, {
+      props: { text, modalContent: item as PameEvaluationItem, isModalOpen: true }
+    })
 
-    await wrapper.find('.modal__close').trigger('click')
+    await wrapper.find('.ct-pame-modal__close').trigger('click')
 
-    expect(store.isModalOpen).toBe(false)
+    expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
-  it('shows the year of submission based on source_year, matching the legacy field mapping bug fix', async () => {
-    const wrapper = mount(PameModal, { props: { text } })
-    usePameStore().openModal({ ...item, source_year: 2021 } as PameEvaluationItem)
-    await wrapper.vm.$nextTick()
+  it('shows the year of submission based on source_year, matching the legacy field mapping bug fix', () => {
+    const wrapper = mount(PameModal, {
+      props: { text, modalContent: { ...item, source_year: 2021 } as PameEvaluationItem, isModalOpen: true }
+    })
 
     expect(wrapper.text()).toContain('Year of submission')
     expect(wrapper.text()).toContain('2021')

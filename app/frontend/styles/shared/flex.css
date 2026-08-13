@@ -31,6 +31,20 @@
   md:gap-3;
 }
 
+@utility tw-shared-base-flex-gap-4 {
+  @apply
+  flex
+  gap-4;
+}
+
+@utility tw-shared-base-flex-wrap-gap-4-lg-gap-2 {
+  @apply
+  flex
+  flex-wrap
+  gap-4
+  lg:gap-2;
+}
+
 @utility tw-shared-base-flex-gap-5 {
   @apply
   flex
@@ -103,6 +117,13 @@
   @apply
   tw-shared-base-flex-col-gap-5
   md:flex-row;
+}
+
+@utility tw-shared-base-flex-col-gap-3-md-gap-6 {
+  @apply
+  tw-shared-base-flex-col
+  gap-3
+  md:gap-6;
 }
 
 @utility tw-shared-base-flex-col-gap-6 {

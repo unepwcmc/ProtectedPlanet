@@ -1,14 +1,14 @@
 <template>
-  <tr class="table__row">
+  <tr class="ct-pame-table-row-desktop">
     <td
-      class="table__cell"
+      class="ct-pame-table-row-desktop__cell"
       v-text="item.name"
     />
     <td
-      class="table__cell"
+      class="ct-pame-table-row-desktop__cell"
       v-text="item.designation"
     />
-    <td class="table__cell">
+    <td class="ct-pame-table-row-desktop__cell">
       <a
         v-if="item.site_id"
         :href="item.pa_site_url"
@@ -27,22 +27,22 @@
       />
     </td>
     <td
-      class="table__cell"
+      class="ct-pame-table-row-desktop__cell"
       v-text="item.asmt_id"
     />
     <td
-      class="table__cell"
+      class="ct-pame-table-row-desktop__cell"
       v-text="countryDisplay"
     />
     <td
-      class="table__cell"
+      class="ct-pame-table-row-desktop__cell"
       v-text="item.method"
     />
     <td
-      class="table__cell"
+      class="ct-pame-table-row-desktop__cell"
       v-text="item.asmt_year"
     />
-    <td class="table__cell">
+    <td class="ct-pame-table-row-desktop__cell">
       <a
         v-if="item.asmt_url.includes('http')"
         :href="item.asmt_url"
@@ -57,7 +57,7 @@
       />
     </td>
     <td
-      class="table__cell table__cell-modal-trigger"
+      class="ct-pame-table-row-desktop__cell ct-pame-table-row-desktop__cell--modal-trigger"
       @click="onOpenModal"
       v-text="item.eff_metaid"
     />
@@ -68,18 +68,52 @@
 import { computed } from 'vue'
 import PameTableRowSiteId from '@/components/Pame/Table/Row/SiteId.vue'
 import { joinOrMultiple } from '@/lib/pameTableFormat'
-import { usePameStore } from '@/stores/usePameStore'
 import type { PameEvaluationItem } from '@/types/backend'
 
 const props = defineProps<{
   item: PameEvaluationItem
 }>()
 
-const pameStore = usePameStore()
+const emit = defineEmits<{ 'open-modal': [item: PameEvaluationItem] }>()
 
 const countryDisplay = computed(() => joinOrMultiple(props.item.country))
 
 function onOpenModal() {
-  pameStore.openModal(props.item)
+  emit('open-modal', props.item)
 }
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-table-row-desktop {
+  @apply
+  bg-theme-grey-xlight
+  even:bg-white;
+}
+
+.ct-pame-table-row-desktop__cell {
+  @apply
+  py-4
+  px-3.5
+  border-l-2
+  border-dotted
+  border-white
+  first:border-l-0
+  tw-shared-font-hind-siliguri__light-base-grey-black;
+
+  a {
+    @apply
+    underline
+    hover:no-underline;
+  }
+}
+
+.ct-pame-table-row-desktop__cell--modal-trigger {
+  @apply
+  tw-shared-font-hind-siliguri__semibold-base-primary
+  cursor-pointer
+  underline
+  hover:no-underline;
+}
+</style>

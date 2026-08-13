@@ -1,10 +1,10 @@
 <template>
   <thead
     ref="rootEl"
-    class="table-head table-head--pame"
-    :class="{ 'table-head--stuck': isSticky }"
+    class="ct-pame-table-head"
+    :class="{ 'ct-pame-table-head--stuck': isSticky }"
   >
-    <tr class="table-head__row">
+    <tr class="ct-pame-table-head__row">
       <PameTableHeadCell
         v-for="(filter, index) in filters"
         :key="`${filter.field}-${index}`"
@@ -61,3 +61,21 @@ onBeforeUnmount(() => {
   visibilityObserver?.disconnect()
 })
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-pame-table-head {
+  @apply
+  hidden
+  xl:table-header-group
+  h-14;
+}
+
+.ct-pame-table-head--stuck {
+  @apply
+  sticky
+  top-0
+  z-2;
+}
+</style>

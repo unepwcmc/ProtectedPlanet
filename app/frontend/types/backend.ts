@@ -916,13 +916,6 @@ export interface PameModalTranslations {
   language: string
 }
 
-// Props for `Pame/Modal.vue`, rendered by `Pame/Table/Index.vue` as a normal
-// child (not its own `frontend_mount` — it only ever appears alongside the
-// table, and shares `usePameStore` with it).
-export interface PameModalProps {
-  text: PameModalTranslations
-}
-
 // Props for `frontend_mount "PameTable"` (Data::GdpameController#index, via
 // partials/data/gdpame/_tab_content).
 export interface PameTableProps {

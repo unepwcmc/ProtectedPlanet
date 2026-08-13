@@ -1,11 +1,11 @@
 <template>
-  <span class="pame-site-id">
-    <span class="pame-site-id__site-id">{{ siteId }}</span>
+  <span class="ct-pame-table-row-site-id">
+    <span class="ct-pame-table-row-site-id__site-id">{{ siteId }}</span>
     <span
       v-if="hasParcelId"
-      class="pame-site-id__site-pid"
+      class="ct-pame-table-row-site-id__site-pid"
     >
-      <span class="pame-site-id__site-pid-label">/</span>
+      <span class="ct-pame-table-row-site-id__site-pid-label">/</span>
       <span>{{ sitePid }}</span>
     </span>
   </span>

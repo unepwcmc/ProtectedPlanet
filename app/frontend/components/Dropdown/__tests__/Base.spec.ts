@@ -8,8 +8,8 @@ describe('Dropdown', () => {
       props: { title: 'Parcel ID', defaultDropdownText: 'Choose one', options: ['a', 'b'] }
     })
 
-    expect(wrapper.find('.ct-dropdown__title').text()).toBe('Parcel ID')
-    expect(wrapper.find('.ct-dropdown__chosen-value').text()).toBe('Choose one')
+    expect(wrapper.find('.ct-dropdown-base__title').text()).toBe('Parcel ID')
+    expect(wrapper.find('.ct-dropdown-base__chosen-value').text()).toBe('Choose one')
   })
 
   it('opens the options list on click and emits update:modelValue on choice', async () => {
@@ -19,7 +19,7 @@ describe('Dropdown', () => {
 
     expect(wrapper.find('.ct-dropdown-options__options').exists()).toBe(false)
 
-    await wrapper.find('.ct-dropdown__button').trigger('click')
+    await wrapper.find('.ct-dropdown-base__button').trigger('click')
     expect(wrapper.find('.ct-dropdown-options__options').exists()).toBe(true)
 
     await wrapper.findAll('.ct-dropdown-options__option')[1].trigger('click')
@@ -33,7 +33,7 @@ describe('Dropdown', () => {
       attachTo: document.body
     })
 
-    await wrapper.find('.ct-dropdown__button').trigger('click')
+    await wrapper.find('.ct-dropdown-base__button').trigger('click')
     expect(wrapper.find('.ct-dropdown-options__options').exists()).toBe(true)
 
     await new Promise(resolve => setTimeout(resolve, 0))

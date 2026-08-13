@@ -51,7 +51,7 @@
 @utility tw-shared-list-stripes-item {
   @apply 
   tw-shared-base-flex-col-md-row-gap-3
-  items-center
+  md:items-center
   py-4 
   px-3.5 
   odd:bg-theme-grey-xlight;

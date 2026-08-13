@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import PameTable from '@/components/Pame/Table/Index.vue'
 import type { PameTableProps } from '@/types/backend'
 
@@ -56,15 +55,15 @@ const props: PameTableProps = {
 }
 
 beforeEach(() => {
-  setActivePinia(createPinia())
   vi.stubGlobal('fetch', vi.fn())
+  window.history.replaceState({}, '', '/data/gdpame')
 })
 
 describe('Pame Table Index', () => {
   it('renders the initial items from the json prop without fetching', () => {
     const wrapper = mount(PameTable, { props })
 
-    expect(wrapper.findAll('.table__row')).toHaveLength(1)
+    expect(wrapper.findAll('.ct-pame-table-row-desktop')).toHaveLength(1)
     expect(fetch).not.toHaveBeenCalled()
   })
 
@@ -74,9 +73,9 @@ describe('Pame Table Index', () => {
 
     const wrapper = mount(PameTable, { props })
 
-    await wrapper.find('.filter__button').trigger('click')
-    await wrapper.find('.filter__checkbox').setValue(true)
-    await wrapper.find('.filter__button-apply').trigger('click')
+    await wrapper.find('.ct-pame-filter__button').trigger('click')
+    await wrapper.find('.ct-pame-filter-option__checkbox').setValue(true)
+    await wrapper.find('.ct-pame-filter__button-apply').trigger('click')
     await flushPromises()
 
     const [, options] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]
@@ -85,6 +84,38 @@ describe('Pame Table Index', () => {
       filters: [{ name: 'method', options: ['Site visit'], type: 'multiple' }]
     })
     expect(wrapper.text()).toContain('60')
+  })
+
+  it('writes the applied filter to the URL query string — the URL is the only place applied filters live', async () => {
+    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue(jsonResponse({ ...props.json, items: [] }))
+
+    const wrapper = mount(PameTable, { props })
+
+    await wrapper.find('.ct-pame-filter__button').trigger('click')
+    await wrapper.find('.ct-pame-filter-option__checkbox').setValue(true)
+    await wrapper.find('.ct-pame-filter__button-apply').trigger('click')
+    await flushPromises()
+
+    expect(window.location.search).toBe('?pame_filters%5Bmethod%5D%5B%5D=Site+visit')
+  })
+
+  it('re-fetches immediately using filters already present in the URL on load, and pre-checks them', async () => {
+    window.history.replaceState({}, '', '/data/gdpame?pame_filters%5Bmethod%5D%5B%5D=Site+visit')
+    const filtered = { ...props.json, total_entries: 1, items: [item] }
+    ;(fetch as ReturnType<typeof vi.fn>).mockResolvedValue(jsonResponse(filtered))
+
+    const wrapper = mount(PameTable, { props })
+    await flushPromises()
+
+    const [, options] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]
+    expect(JSON.parse(options.body)).toEqual({
+      requested_page: 1,
+      filters: [{ name: 'method', options: ['Site visit'], type: 'multiple' }]
+    })
+
+    await wrapper.find('.ct-pame-filter__button').trigger('click')
+    const checkbox = wrapper.find('.ct-pame-filter-option__checkbox').element as HTMLInputElement
+    expect(checkbox.checked).toBe(true)
   })
 
   it('re-fetches on pagination', async () => {
@@ -114,9 +145,9 @@ describe('Pame Table Index', () => {
 
     const nextButton = wrapper.find('.ct-pame-table-pagination__button--next')
     await nextButton.trigger('click')
-    // The button disables itself once the store's isFetching flips, but the guard
-    // in fetchItems is what actually matters here — assert the network effect,
-    // not just the disabled attribute.
+    // The button disables itself once isFetching flips, but the guard in fetchItems
+    // is what actually matters here — assert the network effect, not just the
+    // disabled attribute.
     await nextButton.trigger('click')
 
     expect(fetch).toHaveBeenCalledTimes(1)
@@ -154,12 +185,12 @@ describe('Pame Table Index', () => {
   it('renders the modal alongside the table and opens it from a row click', async () => {
     const wrapper = mount(PameTable, { props })
 
-    expect(wrapper.find('.modal-wrapper').exists()).toBe(true)
-    expect(wrapper.classes()).not.toContain('modal--active')
+    expect(wrapper.find('.ct-pame-modal').exists()).toBe(true)
+    expect(wrapper.find('.ct-pame-modal').classes()).not.toContain('ct-pame-modal--active')
 
-    await wrapper.find('.table__cell-modal-trigger').trigger('click')
+    await wrapper.find('.ct-pame-table-row-desktop__cell--modal-trigger').trigger('click')
 
-    expect(wrapper.find('.modal-wrapper').classes()).toContain('modal--active')
+    expect(wrapper.find('.ct-pame-modal').classes()).toContain('ct-pame-modal--active')
     expect(wrapper.text()).toContain('Assessment details')
   })
 })

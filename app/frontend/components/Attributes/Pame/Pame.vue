@@ -62,7 +62,13 @@ defineProps<{
 }
 
 .ct-attributes-pame__item {
-  @apply tw-shared-list-stripes-item;
+  @apply
+  tw-shared-base-flex-gap-3
+  flex-wrap
+  md:items-center
+  py-4
+  px-3.5
+  odd:bg-theme-grey-xlight;
 }
 
 .ct-attributes-pame__item--for-pdf {
@@ -70,7 +76,9 @@ defineProps<{
 }
 
 .ct-attributes-pame__item-title {
-  @apply tw-shared-list-stripes-title;
+  @apply
+  tw-shared-list-stripes-title
+  max-w-full;
 }
 
 .ct-attributes-pame__item-value {

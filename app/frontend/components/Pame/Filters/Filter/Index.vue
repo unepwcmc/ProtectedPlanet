@@ -1,70 +1,75 @@
 <template>
   <li
     v-if="hasOptions"
-    class="filter"
+    class="ct-pame-filter"
   >
-    <p
-      class="filter__button button"
+    <button
+      class="ct-pame-filter__button"
       :class="{
-        'filter__button--active': isOpen,
-        'filter__button--has-selected': hasSelected,
-        'ct-pame-filter__button--disabled': pameStore.isFetching
+        'ct-pame-filter__button--active': isOpen,
+        'ct-pame-filter__button--has-selected': hasSelected,
+        'ct-pame-filter__button--disabled': isFetching
       }"
       @click="onToggle"
     >
-      {{ title }}
+      <span
+        class="ct-pame-filter__title"
+        :class="{
+          'ct-pame-filter__title--active': isOpen
+        }"
+        v-text="title"
+      />
+      <IconArrow
+        v-if="!hasSelected"
+        class="ct-pame-filter__icon"
+        :class="{ 'ct-pame-filter__icon--active': isOpen }"
+      />
       <span
         v-show="hasSelected"
-        class="filter__button-total"
-        v-text="pendingOptions.length"
+        class="ct-pame-filter__button-total"
+        v-text="appliedOptions.length"
       />
-    </p>
-
-    <div
-      class="filter__options"
-      :class="[filterClass, { 'filter__options--active': isOpen }]"
-    >
-      <PameFiltersFilterOptions
+    </button>
+    <template v-if="isOpen">
+      <PameFiltersFilterMobile
+        v-if="isSmall || isMedium"
+        :name
+        :title
         :options
-        :selectedOptions="pendingOptions"
-        :groupId="name"
-        @click="onOptionClick"
+        :appliedOptions
+        :isFetching
+        :isOpen
+        @toggle="emit('toggle')"
+        @apply="emit('apply',$event)"
       />
-
-      <div class="filter__buttons">
-        <button
-          class="filter__button-clear"
-          @click="onClear"
-          v-text="'Clear'"
-        />
-        <button
-          class="filter__button-cancel"
-          @click="onCancel"
-          v-text="'Cancel'"
-        />
-        <button
-          class="filter__button-apply"
-          :disabled="pameStore.isFetching"
-          @click="onApply"
-          v-text="'Apply'"
-        />
-      </div>
-    </div>
+      <PameFiltersFilterDesktop
+        v-else
+        :name
+        :title
+        :options
+        :appliedOptions
+        :isFetching
+        :isOpen
+        @toggle="emit('toggle')"
+        @apply="emit('apply',$event)"
+      />
+    </template>
   </li>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import PameFiltersFilterOptions from '@/components/Pame/Filters/Filter/Options.vue'
-import useAnalytics from '@/composables/useAnalytics'
-import { usePameStore } from '@/stores/usePameStore'
-
-const { trackEvent } = useAnalytics()
+import { computed } from 'vue'
+import IconArrow from '@/components/Icon/Arrow.vue'
+import PameFiltersFilterMobile from '@/components/Pame/Filters/Filter/Mobile.vue'
+import PameFiltersFilterDesktop from '@/components/Pame/Filters/Filter/Desktop.vue'
+import useBreakpoint from '@/composables/useBreakpoint'
 
 const props = defineProps<{
   name: string
   title: string
   options: string[]
+  appliedOptions: string[]
+  isFetching: boolean
   isOpen: boolean
 }>()
 
@@ -73,54 +78,93 @@ const emit = defineEmits<{
   apply: [options: string[]]
 }>()
 
-const pameStore = usePameStore()
-
-// `pendingOptions` mirrors the checkboxes as the user clicks them; `appliedOptions`
-// is only updated on Apply, and Cancel reverts the checkboxes to it — same
-// two-state model as the legacy DataFilter (`activeOptions`/live `$children`).
-const pendingOptions = ref<string[]>([])
-const appliedOptions = ref<string[]>([])
+const { isSmall, isMedium } = useBreakpoint()
 
 const hasOptions = computed(() => props.options.length > 0)
-const hasSelected = computed(() => pendingOptions.value.length > 0)
-const filterClass = computed(() => `filter__options--${props.name.replace(/[\s()_]/g, '-').toLowerCase()}`)
-
-function onOptionClick(option: string, checked: boolean) {
-  pendingOptions.value = checked
-    ? [...pendingOptions.value, option]
-    : pendingOptions.value.filter(selected => selected !== option)
-}
+const hasSelected = computed(() => props.appliedOptions.length > 0)
 
 function onToggle() {
-  if (pameStore.isFetching) return
+  if (props.isFetching) return
   emit('toggle')
 }
 
-function onCancel() {
-  pendingOptions.value = [...appliedOptions.value]
-  emit('toggle')
-  trackEvent('click', { event_label: `Page: PAME - Filter title: ${props.title} - Button: cancel` })
-}
-
-function onClear() {
-  pendingOptions.value = []
-  trackEvent('click', { event_label: `Page: PAME - Filter title: ${props.title} - Button: clear` })
-}
-
-function onApply() {
-  if (pameStore.isFetching) return
-
-  appliedOptions.value = [...pendingOptions.value]
-  emit('toggle')
-  emit('apply', appliedOptions.value)
-  trackEvent('click', { event_label: `Page: PAME - Filter title: ${props.title} - Button: Apply` })
-}
 </script>
 
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
+.ct-pame-filter {
+  @apply relative;
+}
+
+.ct-pame-filter__button {
+  @apply
+  tw-shared-button-basic
+  relative
+  tw-shared-base-flex-gap-2
+  items-center
+  cursor-pointer
+  rounded-[0.1875rem]
+  border
+  border-black
+  text-black
+  h-8.5
+  px-2.75
+  text-base
+  lg:h-14
+  lg:px-6.75
+  lg:text-lg
+  hover:bg-theme-primary
+  hover:border-theme-primary
+  hover:text-white;
+}
+
+.ct-pame-filter__button--active {
+  @apply
+  bg-theme-primary
+  border-theme-primary
+  text-white;
+}
+
+.ct-pame-filter__title {
+  @apply tw-shared-font-hind-siliguri__light-base-md-lg-grey-black;
+}
+
+.ct-pame-filter__title--active {
+  @apply text-white;
+}
+
+.ct-pame-filter__icon {
+  @apply
+  invisible
+  lg:visible
+  size-2;
+}
+
+.ct-pame-filter__icon--active {
+  @apply rotate-180;
+}
+
+.ct-pame-filter__button--has-selected {
+  @apply
+  bg-theme-primary
+  border-theme-primary
+  text-white;
+}
+
 .ct-pame-filter__button--disabled {
   @apply tw-shared-button--disabled;
+}
+
+.ct-pame-filter__button-total {
+  @apply
+  flex
+  items-center
+  justify-center
+  rounded-full
+  bg-white
+  tw-shared-font-hind-siliguri__light-sm-lg-lg-primary
+  size-5
+  lg:size-6;
 }
 </style>
