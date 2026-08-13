@@ -1,7 +1,8 @@
 # Coverage — opt-in via COVERAGE=1 so local `rake test` stays fast; CI sets it.
 # Must start before any application code is required. The floor is a ratchet:
 # CI fails if line coverage drops below it. Raise it as coverage improves;
-# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026).
+# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026); ratcheted to 62 on
+# Rails 8 (Aug 2026, ~64.4% actual after the spatial/relation test net).
 if ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start 'rails' do
@@ -10,7 +11,7 @@ if ENV['COVERAGE']
     add_group 'Presenters', 'app/presenters'
     add_group 'Workers', 'app/workers'
     add_group 'lib/modules', 'lib/modules'
-    minimum_coverage 54
+    minimum_coverage 62
   end
 end
 

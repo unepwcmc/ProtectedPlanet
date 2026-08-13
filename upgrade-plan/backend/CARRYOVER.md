@@ -97,7 +97,28 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       staging_* aren't in the test schema), `protected_area_parcel_test.rb` (compact — near-copy),
       `pame_evaluation_test.rb` (site_id/site_pid resolution, parcel-over-PA preference, method/source
       linking; staging + PameMethod mocked). Suite 696/0.
-- [ ] **shared importers** — `country_overseas_territories.rb` (9%), `story_map_link_list.rb` (10%), `protected_areas_related_source.rb` (15%).
+- [x] **DONE — shared importers** (+12 tests, CSV stubbed / records real). `country_overseas_territories`
+      (parent-child wiring, parent/child-not-found, skip-existing), `story_map_link_list` (link create,
+      site-not-found, invalid site_id), `protected_areas_related_source` (invalid env, missing file,
+      empty CSV soft-warn, live/staging update_table dispatch). Suite 708/0. **Coverage 65.43%**
+      (SimpleCov floor raised 54 → 62 this session).
+- [ ] **GDAL `.gdb` driver swap: `FileGDB` (Esri SDK) → `OpenFileGDB` — scoped Aug 2026, NOT started.**
+      Two refs name the driver: `lib/modules/ogr/postgres.rb` (`DRIVERS = { gdb: 'FileGDB' }`) and
+      `lib/modules/ogr/command_templates/postgres_gdb_export.erb` (`-f "FileGDB"`). The Esri-SDK driver
+      is why the Docker image source-builds GDAL 2.2.3 + links the RHEL7 FileGDB SDK — which won't
+      build on Ubuntu 24.04. Target: stock apt GDAL 3.8 (24.04) / 3.6+ (bookworm) + OpenFileGDB (write
+      support since GDAL 3.6).
+      **REFERENCE IMPLEMENTATION EXISTS — `wdpa-data-management-portal`** already generates the *same*
+      WDPA `.gdb` (same 3 layers: poly/point/source) with **`-f OpenFileGDB`** on **apt GDAL (Debian
+      bookworm), no Esri SDK**, in production — see `app/services/downloads/gdb_exporter.rb`
+      (`build_ogr2ogr_command`). So the swap is **proven, not blind**: mirror the portal's command
+      (it adds `-lco GEOMETRY_NAME=wkb_geometry`, `-lco FID=OBJECTID`, `-a_srs EPSG:4326`,
+      `--config PG_USE_COPY YES`, `-nlt <type>`, `-nln <layer>` — richer than PP's current template).
+      **Locally verifiable now** (was wrong to call it blind/infra-gated): run against a standalone
+      `ghcr.io/osgeo/gdal:*-3.8` container + our Postgres, and diff output vs the portal's known-good
+      `.gdb`. NOTE: PP's current dev image has GDAL 2.2.3 (OpenFileGDB read-only there) so the swap
+      can't be tested on *that* image — use a GDAL 3.6+ container (or the eventual 3.8 app image).
+      Data-team `.gdb` sign-off largely pre-answered since the portal's OpenFileGDB output already ships.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
 - [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
       `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
