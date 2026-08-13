@@ -1,0 +1,161 @@
+name: Deploy to Proxmox staging (Kamal 2)
+
+# Deploys to the Proxmox staging host (pp-web-staging-01.internal.unep-wcmc.org).
+#
+# The existing deploy.yml targets the old Linode staging via Kamal 1 and is left
+# alone, so both can run side by side until the Linode box is decommissioned.
+on:
+  push:
+    branches:
+      - staging_kamal
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: staging
+    steps:
+      - name: Set workflow start time
+        run: echo "START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v4
+
+      - name: Notify deployment start
+        id: notify-start
+        uses: unepwcmc/devops-actions/.github/actions/slack-notify@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          notification-type: started
+          action-type: Deploy
+          environment: staging
+          repository: ${{ github.repository }}
+          repository-url: ${{ github.server_url }}/${{ github.repository }}
+          action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          actor: ${{ github.actor }}
+          actor-url: ${{ github.server_url }}/${{ github.actor }}
+          workflow-name: ${{ github.workflow }}
+          run-id: ${{ github.run_id }}
+          commit-message: ${{ github.event.head_commit.message || 'Manual workflow trigger' }}
+          runner-name: ${{ runner.name }}
+          start-time: ${{ env.START_TIME }}
+
+      # Parses .kamal/secrets-common and fails listing anything unset, so a
+      # missing GitHub secret is a clear error rather than a container that
+      # boots and crashes.
+      - name: Export and validate kamal secrets
+        shell: bash
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+        run: |
+          if [[ ! -f ".kamal/secrets-common" ]]; then
+            echo "Error: .kamal/secrets-common not found."
+            exit 1
+          fi
+
+          temp_secrets="$(mktemp)"
+          trap 'rm -f "$temp_secrets"' EXIT
+          printf '%s' "$SECRETS_JSON" > "$temp_secrets"
+
+          needed_vars=()
+          while IFS= read -r line; do
+            trimmed="$(echo "$line" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+            [[ -z "$trimmed" || "$trimmed" == \#* ]] && continue
+            [[ "$trimmed" != *=* ]] && continue
+            value="${trimmed#*=}"
+            value="${value#"${value%%[![:space:]]*}"}"
+            value="${value%"${value##*[![:space:]]}"}"
+            [[ "$value" != \$* ]] && continue
+            [[ "$value" == '$('* ]] && continue
+            if [[ "$value" =~ ^\$\{([A-Z0-9_]+) ]]; then
+              needed_vars+=("${BASH_REMATCH[1]}")
+            elif [[ "$value" =~ ^\$([A-Z0-9_]+) ]]; then
+              needed_vars+=("${BASH_REMATCH[1]}")
+            fi
+          done < ".kamal/secrets-common"
+
+          IFS=$'\n' read -r -d '' -a unique_vars < <(printf '%s\n' "${needed_vars[@]}" | sort -u && printf '\0')
+
+          missing=0
+          for var in "${unique_vars[@]}"; do
+            value=$(jq -r --arg key "$var" '.[$key] // empty' "$temp_secrets")
+            if [[ -z "$value" ]]; then
+              echo "Missing secret required by .kamal/secrets-common: ${var}" >&2
+              missing=1
+              continue
+            fi
+            {
+              echo "${var}<<EOF"
+              echo "$value"
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          done
+          [[ "$missing" -eq 1 ]] && exit 1
+
+          echo "✅ All required kamal secrets validated"
+
+      - name: Deploy with Kamal v2
+        uses: unepwcmc/devops-actions/.github/actions/kamal-v2.x-deploy@v1
+        with:
+          environment: staging
+          working-directory: .
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Set end time and duration
+        if: always()
+        run: |
+          echo "END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
+          if [[ -n "$START_TIME" ]]; then
+            start_timestamp=$(date -d "$START_TIME" +%s)
+            end_timestamp=$(date -u +%s)
+            echo "DEPLOYMENT_DURATION=$((end_timestamp - start_timestamp))" >> $GITHUB_ENV
+          else
+            echo "DEPLOYMENT_DURATION=0" >> $GITHUB_ENV
+          fi
+
+      - name: Notify deployment success
+        if: success()
+        uses: unepwcmc/devops-actions/.github/actions/slack-notify@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          notification-type: success
+          action-type: Deploy
+          environment: staging
+          repository: ${{ github.repository }}
+          repository-url: ${{ github.server_url }}/${{ github.repository }}
+          action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          actor: ${{ github.actor }}
+          actor-url: ${{ github.server_url }}/${{ github.actor }}
+          workflow-name: ${{ github.workflow }}
+          run-id: ${{ github.run_id }}
+          commit-message: ${{ github.event.head_commit.message || 'Manual workflow trigger' }}
+          runner-name: ${{ runner.name }}
+          start-time: ${{ env.START_TIME }}
+          end-time: ${{ env.END_TIME }}
+          deployment-duration: ${{ env.DEPLOYMENT_DURATION }}
+          update-message-ts: ${{ steps.notify-start.outputs.message-ts }}
+
+      - name: Notify deployment failure
+        if: failure()
+        uses: unepwcmc/devops-actions/.github/actions/slack-notify@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          notification-type: failure
+          action-type: Deploy
+          environment: staging
+          repository: ${{ github.repository }}
+          repository-url: ${{ github.server_url }}/${{ github.repository }}
+          action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          actor: ${{ github.actor }}
+          actor-url: ${{ github.server_url }}/${{ github.actor }}
+          workflow-name: ${{ github.workflow }}
+          run-id: ${{ github.run_id }}
+          commit-message: ${{ github.event.head_commit.message || 'Manual workflow trigger' }}
+          runner-name: ${{ runner.name }}
+          start-time: ${{ env.START_TIME }}
+          end-time: ${{ env.END_TIME }}
+          deployment-duration: ${{ env.DEPLOYMENT_DURATION }}
+          update-message-ts: ${{ steps.notify-start.outputs.message-ts }}

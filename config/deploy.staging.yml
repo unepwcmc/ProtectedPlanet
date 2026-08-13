@@ -54,6 +54,8 @@ servers:
 env:
   clear:
     RAILS_ENV: staging
+    # PP_HOST keeps its prefix: config/secrets.yml reads it, and a bare HOST is
+    # far too generic to be safe in a Rails env alongside PORT and DATABASE_HOST.
     PP_HOST: pp-web-staging-01.internal.unep-wcmc.org
 
 builder:
