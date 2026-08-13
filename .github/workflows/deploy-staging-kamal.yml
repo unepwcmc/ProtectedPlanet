@@ -3,7 +3,7 @@ name: Deploy to Proxmox staging (Kamal 2)
 # Deploys to the Proxmox staging host (pp-web-staging-01.internal.unep-wcmc.org).
 #
 # The existing deploy.yml targets the old Linode staging via Kamal 1 and is left
-# alone, so both can run side by side until the Linode box is decommissioned.
+# alone, so both run side by side until Linode is decommissioned.
 on:
   push:
     branches:
@@ -11,14 +11,70 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  determine-environment:
     runs-on: self-hosted
-    environment: staging_proxmox
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+      gh-environment: ${{ steps.env.outputs.gh-environment }}
+      kamal-secrets-file: ${{ steps.env.outputs.kamal-secrets-file }}
+    steps:
+      - id: env
+        run: |
+          # `environment` is the KAMAL destination (config/deploy.staging.yml) and
+          # the label shown in Slack — it must stay "staging".
+          # `gh-environment` is the GitHub environment the secrets live in. It is
+          # separate so the Linode Kamal 1 workflow can keep its own `staging`
+          # secrets while this one uses `staging_proxmox`.
+          echo "environment=staging" >> $GITHUB_OUTPUT
+          echo "gh-environment=staging_proxmox" >> $GITHUB_OUTPUT
+          echo "kamal-secrets-file=.kamal/secrets-common" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: determine-environment
+    runs-on: self-hosted
+    environment: ${{ needs.determine-environment.outputs.gh-environment }}
+    # Only the secrets .kamal/secrets-common actually references. This job
+    # previously serialised the entire secrets context into one variable and
+    # picked through it at runtime, which handed every repository and
+    # environment secret to the job and wrote them all to a file on the
+    # self-hosted runner.
+    env:
+      APPSIGNAL_PUSH_API_KEY: ${{ secrets.APPSIGNAL_PUSH_API_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_S3_REGION: ${{ secrets.AWS_S3_REGION }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      CARTODB_API_KEY: ${{ secrets.CARTODB_API_KEY }}
+      CERTIFICATE_PEM: ${{ secrets.CERTIFICATE_PEM }}
+      COMFY_ADMIN_PASSWORD: ${{ secrets.COMFY_ADMIN_PASSWORD }}
+      COMFY_ADMIN_USERNAME: ${{ secrets.COMFY_ADMIN_USERNAME }}
+      ELASTIC_SEARCH_URL: ${{ secrets.ELASTIC_SEARCH_URL }}
+      MAILER_ADDRESS: ${{ secrets.MAILER_ADDRESS }}
+      MAILER_ASSET_HOST: ${{ secrets.MAILER_ASSET_HOST }}
+      MAILER_DOMAIN: ${{ secrets.MAILER_DOMAIN }}
+      MAILER_HOST: ${{ secrets.MAILER_HOST }}
+      MAILER_PASSWORD: ${{ secrets.MAILER_PASSWORD }}
+      MAILER_PORT: ${{ secrets.MAILER_PORT }}
+      MAILER_USERNAME: ${{ secrets.MAILER_USERNAME }}
+      MAINTENANCE_MODE_KEY: ${{ secrets.MAINTENANCE_MODE_KEY }}
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      POSTGRES_DBNAME: ${{ secrets.POSTGRES_DBNAME }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      PP_SLACK_WEBHOOK_URL: ${{ secrets.PP_SLACK_WEBHOOK_URL }}
+      PRIVATE_KEY_PEM: ${{ secrets.PRIVATE_KEY_PEM }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Set workflow start time
-        run: echo "START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
+        run: |
+          echo "START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
+          echo "ACTION_TYPE=Deploy" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Notify deployment start
         id: notify-start
@@ -28,7 +84,7 @@ jobs:
           slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           notification-type: started
           action-type: Deploy
-          environment: staging
+          environment: ${{ needs.determine-environment.outputs.environment }}
           repository: ${{ github.repository }}
           repository-url: ${{ github.server_url }}/${{ github.repository }}
           action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -40,75 +96,27 @@ jobs:
           runner-name: ${{ runner.name }}
           start-time: ${{ env.START_TIME }}
 
-      # Parses .kamal/secrets-common and fails listing anything unset, so a
-      # missing GitHub secret is a clear error rather than a container that
-      # boots and crashes.
-      - name: Export and validate kamal secrets
-        shell: bash
-        env:
-          SECRETS_JSON: ${{ toJSON(secrets) }}
-        run: |
-          if [[ ! -f ".kamal/secrets-common" ]]; then
-            echo "Error: .kamal/secrets-common not found."
-            exit 1
-          fi
-
-          temp_secrets="$(mktemp)"
-          trap 'rm -f "$temp_secrets"' EXIT
-          printf '%s' "$SECRETS_JSON" > "$temp_secrets"
-
-          needed_vars=()
-          while IFS= read -r line; do
-            trimmed="$(echo "$line" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-            [[ -z "$trimmed" || "$trimmed" == \#* ]] && continue
-            [[ "$trimmed" != *=* ]] && continue
-            value="${trimmed#*=}"
-            value="${value#"${value%%[![:space:]]*}"}"
-            value="${value%"${value##*[![:space:]]}"}"
-            [[ "$value" != \$* ]] && continue
-            [[ "$value" == '$('* ]] && continue
-            if [[ "$value" =~ ^\$\{([A-Z0-9_]+) ]]; then
-              needed_vars+=("${BASH_REMATCH[1]}")
-            elif [[ "$value" =~ ^\$([A-Z0-9_]+) ]]; then
-              needed_vars+=("${BASH_REMATCH[1]}")
-            fi
-          done < ".kamal/secrets-common"
-
-          IFS=$'\n' read -r -d '' -a unique_vars < <(printf '%s\n' "${needed_vars[@]}" | sort -u && printf '\0')
-
-          missing=0
-          for var in "${unique_vars[@]}"; do
-            value=$(jq -r --arg key "$var" '.[$key] // empty' "$temp_secrets")
-            if [[ -z "$value" ]]; then
-              echo "Missing secret required by .kamal/secrets-common: ${var}" >&2
-              missing=1
-              continue
-            fi
-            {
-              echo "${var}<<EOF"
-              echo "$value"
-              echo "EOF"
-            } >> "$GITHUB_ENV"
-          done
-          [[ "$missing" -eq 1 ]] && exit 1
-
-          echo "✅ All required kamal secrets validated"
+      - name: Validate kamal secrets
+        uses: unepwcmc/devops-actions/.github/actions/validate-secrets@v1
+        with:
+          secrets-file: ${{ needs.determine-environment.outputs.kamal-secrets-file }}
+          environment: ${{ needs.determine-environment.outputs.environment }}
 
       - name: Deploy with Kamal v2
         uses: unepwcmc/devops-actions/.github/actions/kamal-v2.x-deploy@v1
         with:
-          environment: staging
+          environment: ${{ needs.determine-environment.outputs.environment }}
           working-directory: .
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Set end time and duration
+      - name: Set workflow end time and calculate duration
         if: always()
         run: |
           echo "END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
           if [[ -n "$START_TIME" ]]; then
             start_timestamp=$(date -d "$START_TIME" +%s)
-            end_timestamp=$(date -u +%s)
+            end_timestamp=$(date -d "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" +%s)
             echo "DEPLOYMENT_DURATION=$((end_timestamp - start_timestamp))" >> $GITHUB_ENV
           else
             echo "DEPLOYMENT_DURATION=0" >> $GITHUB_ENV
@@ -122,7 +130,7 @@ jobs:
           slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           notification-type: success
           action-type: Deploy
-          environment: staging
+          environment: ${{ needs.determine-environment.outputs.environment }}
           repository: ${{ github.repository }}
           repository-url: ${{ github.server_url }}/${{ github.repository }}
           action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -145,7 +153,7 @@ jobs:
           slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           notification-type: failure
           action-type: Deploy
-          environment: staging
+          environment: ${{ needs.determine-environment.outputs.environment }}
           repository: ${{ github.repository }}
           repository-url: ${{ github.server_url }}/${{ github.repository }}
           action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
