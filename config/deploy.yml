@@ -70,3 +70,34 @@ env:
 # app user, so no chown is needed at boot.
 volumes:
   - "/data/pp-imports:/app/tmp/imports"
+
+# Elasticsearch runs as a Kamal accessory rather than a host service so it
+# version-bumps with the app. It was previously deb-installed on the old
+# database host, which the handover asked to undo.
+#
+# 7.17.24 matches the version the old staging ran and the `elasticsearch ~> 7.17`
+# client gem — the 8.x client is a rewrite (elastic-transport, namespace changes)
+# and the app uses Elasticsearch::Transport::Transport::Errors::*.
+#
+# Bound to the docker bridge, not 0.0.0.0: reachable by app containers via
+# host.docker.internal, not from the wider network. Security is disabled because
+# it is bridge-local and the 7.x client here is not configured for auth.
+accessories:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.24
+    host: pp-web-staging-01.internal.unep-wcmc.org
+    port: "172.17.0.1:9200:9200"
+    env:
+      clear:
+        discovery.type: single-node
+        cluster.name: ProtectedPlanet
+        node.name: ProtectedPlanetStaging
+        bootstrap.memory_lock: "true"
+        xpack.security.enabled: "false"
+        # Half of the 4 GB the container is allowed, per Elastic's guidance.
+        ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+    volumes:
+      # cloud-init pre-creates this owned 1000:1000, matching the uid the
+      # official image runs as, and sets vm.max_map_count=262144 which 7.17
+      # refuses to start without.
+      - /data/elasticsearch:/usr/share/elasticsearch/data
