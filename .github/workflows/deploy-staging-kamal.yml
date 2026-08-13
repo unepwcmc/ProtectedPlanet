@@ -13,7 +13,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    environment: staging
+    environment: staging_proxmox
     steps:
       - name: Set workflow start time
         run: echo "START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
@@ -28,7 +28,7 @@ jobs:
           slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           notification-type: started
           action-type: Deploy
-          environment: staging
+          environment: staging_proxmox
           repository: ${{ github.repository }}
           repository-url: ${{ github.server_url }}/${{ github.repository }}
           action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -97,7 +97,7 @@ jobs:
       - name: Deploy with Kamal v2
         uses: unepwcmc/devops-actions/.github/actions/kamal-v2.x-deploy@v1
         with:
-          environment: staging
+          environment: staging_proxmox
           working-directory: .
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -122,7 +122,7 @@ jobs:
           slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           notification-type: success
           action-type: Deploy
-          environment: staging
+          environment: staging_proxmox
           repository: ${{ github.repository }}
           repository-url: ${{ github.server_url }}/${{ github.repository }}
           action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -145,7 +145,7 @@ jobs:
           slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           notification-type: failure
           action-type: Deploy
-          environment: staging
+          environment: staging_proxmox
           repository: ${{ github.repository }}
           repository-url: ${{ github.server_url }}/${{ github.repository }}
           action-run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
