@@ -6,17 +6,17 @@ describe('SearchSiteInput', () => {
   it('starts closed when popout, and opens on trigger click', async () => {
     const wrapper = mount(SearchSiteInput, { props: { placeholder: 'Search', popout: true } })
 
-    expect(wrapper.find('.ct-search__pane').classes()).not.toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).not.toContain('ct-search__pane--popout-active')
 
     await wrapper.find('.ct-search__trigger').trigger('click')
-    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--popout-active')
   })
 
   it('has no trigger and starts open when not popout', () => {
     const wrapper = mount(SearchSiteInput, { props: { placeholder: 'Search' } })
 
     expect(wrapper.find('.ct-search__trigger').exists()).toBe(false)
-    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--popout-active')
   })
 
   it('has no close button when not popout', () => {
@@ -29,10 +29,10 @@ describe('SearchSiteInput', () => {
     const wrapper = mount(SearchSiteInput, { props: { placeholder: 'Search', popout: true } })
 
     await wrapper.find('.ct-search__trigger').trigger('click')
-    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--popout-active')
 
     await wrapper.find('.ct-search__close').trigger('click')
-    expect(wrapper.find('.ct-search__pane').classes()).not.toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).not.toContain('ct-search__pane--popout-active')
   })
 
   it('pre-populates the search term', () => {
@@ -78,14 +78,14 @@ describe('SearchSiteInput', () => {
     })
 
     await wrapper.find('.ct-search__trigger').trigger('click')
-    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--popout-active')
 
     // onClickOutside guards against double-firing within the same tick (see
     // vueuse-adoption memory) — wait a macrotask so it doesn't ignore this click.
-    await new Promise((resolve) => setTimeout(resolve, 0))
+    await new Promise(resolve => setTimeout(resolve, 0))
     document.body.click()
     await wrapper.vm.$nextTick()
-    expect(wrapper.find('.ct-search__pane').classes()).not.toContain('ct-search__pane--active')
+    expect(wrapper.find('.ct-search__pane').classes()).not.toContain('ct-search__pane--popout-active')
 
     wrapper.unmount()
   })

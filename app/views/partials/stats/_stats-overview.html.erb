@@ -4,31 +4,65 @@
       <% unless @country.iso_3 == 'ESH' # temporary fix until we can figure out where the flag asset is cached %>
         <i class="vw-partials-stats-stats-overview__flag" style="background-image:url('<%= flag %>');"></i>
       <% end %>
-      <h1 class="vw-partials-stats-stats-overview__title"><%= title %></h1>
+      <h1 class="vw-partials-stats-stats-overview__title">
+        <%= title %>
+      </h1>
     </div>
   <% else %>
-    <h1 class="vw-partials-stats-stats-overview__title"><%= title %></h1>
+    <h1 class="vw-partials-stats-stats-overview__title">
+      <%= title %>
+    </h1>
   <% end %>
   <% if local_assigns[:total_wdpa] %>
     <div class="vw-partials-stats-stats-overview__section">
-      <span class="vw-partials-stats-stats-overview__number"><%= total_wdpa %></span>
-      <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.wdpa.total') %></span>
+      <span class="vw-partials-stats-stats-overview__number">
+        <%= total_wdpa %>
+      </span>
+      <% if local_assigns[:wdpa_national_designations_count] %>
+        <div class="vw-partials-stats-stats-overview__subtitle-flex">
+          <span class="vw-partials-stats-stats-overview__subtitle">
+            <%= t('stats.wdpa.total') %>
+          </span>
+          <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
+          <%= frontend_mount "StatsTooltipInfo", key: "wdpa", props: {
+              description: t('stats.wdpa_tooltip.description'),
+              designationsLabel: t('stats.wdpa_tooltip.designations'),
+              designationsCount: wdpa_national_designations_count
+            } %>
+        </div>
+      <% else %>
+        <span class="vw-partials-stats-stats-overview__subtitle">
+          <%= t('stats.wdpa.total') %>
+        </span>
+      <% end %>
       <% unless local_assigns[:total_pame].nil? %>
         <div class="vw-partials-stats-stats-overview__flex">
-          <span class="vw-partials-stats-stats-overview__number"><%= total_pame %></span>
-          <span class="vw-partials-stats-stats-overview__text"><%= t('attributes.pame.with-assessments') %></span>
+          <span class="vw-partials-stats-stats-overview__number">
+            <%= total_pame %>
+          </span>
+          <span class="vw-partials-stats-stats-overview__text">
+            <%= t('attributes.pame.with-assessments') %>
+          </span>
         </div>
       <% end %>
     </div>
   <% end %>
   <% if local_assigns[:site_id] && local_assigns[:area] %>
     <div class="vw-partials-stats-stats-overview__section">
-      <span class="vw-partials-stats-stats-overview__number"><%= site_id %></span>
-      <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.wdpa.id') %></span>
+      <span class="vw-partials-stats-stats-overview__number">
+        <%= site_id %>
+      </span>
+      <span class="vw-partials-stats-stats-overview__subtitle">
+        <%= t('stats.wdpa.id') %>
+      </span>
     </div>
-    <div class="vw-partials-stats-stats-overview__section-with-border">
-      <span class="vw-partials-stats-stats-overview__number"><%= area %></span>
-      <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.reported-area') %></span>
+    <div class="vw-partials-stats-stats-overview__section vw-partials-stats-stats-overview__section-with-border">
+      <span class="vw-partials-stats-stats-overview__number">
+        <%= area %>
+      </span>
+      <span class="vw-partials-stats-stats-overview__subtitle">
+        <%= t('stats.reported-area') %>
+      </span>
     </div>
   <% end %>
   <% if local_assigns[:legend_map] %>
@@ -41,14 +75,18 @@
   <% end %>
   <% if local_assigns[:type] && local_assigns[:location]%>
     <div class="vw-partials-stats-stats-overview__section">
-      <p>
-        <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.type') %></span>
-        <span class="vw-partials-stats-stats-overview__text"><%= type %></span>
-      </p>
-      <p>
-        <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.location') %></span>
-        <span class="vw-partials-stats-stats-overview__text"><%= location %></span>
-      </p>
+      <span class="vw-partials-stats-stats-overview__subtitle">
+        <%= t('stats.type') %>
+      </span>
+      <span class="vw-partials-stats-stats-overview__text">
+        <%= type %>
+      </span>
+      <span class="vw-partials-stats-stats-overview__subtitle">
+        <%= t('stats.location') %>
+      </span>
+      <span class="vw-partials-stats-stats-overview__text">
+        <%= location %>
+      </span>
     </div>
   <% end %>
   <% if local_assigns[:external_links] %>
@@ -72,14 +110,38 @@
   <% end %>
   <% if local_assigns[:total_oecm] %>
     <div class="vw-partials-stats-stats-overview__section">
-      <span class="vw-partials-stats-stats-overview__number"><%= total_oecm %></span>
-      <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.oecm.title') %></span>
+      <span class="vw-partials-stats-stats-overview__number">
+        <%= total_oecm %>
+      </span>
+      <% if local_assigns[:oecm_national_designations_count] %>
+        <div class="vw-partials-stats-stats-overview__subtitle-flex">
+          <span class="vw-partials-stats-stats-overview__subtitle vw-partials-stats-stats-overview__subtitle--shorter">
+            <%= t('stats.oecm.title') %>
+          </span>
+          <div>
+            <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
+            <%= frontend_mount "StatsTooltipInfo", key: "oecm", props: {
+                description: t('stats.oecm_tooltip.description'),
+                designationsLabel: t('stats.oecm_tooltip.designations'),
+                designationsCount: oecm_national_designations_count
+              } %>
+          </div>
+        </div>
+      <% else %>
+        <span class="vw-partials-stats-stats-overview__subtitle">
+          <%= t('stats.oecm.title') %>
+        </span>
+      <% end %>
     </div>
   <% end %>
   <% if local_assigns[:total_countries] %>
     <div class="vw-partials-stats-stats-overview__section">
-      <span class="vw-partials-stats-stats-overview__number"><%= total_countries %></span>
-      <span class="vw-partials-stats-stats-overview__subtitle"><%= t('stats.countries') %></span>
+      <span class="vw-partials-stats-stats-overview__number">
+        <%= total_countries %>
+      </span>
+      <span class="vw-partials-stats-stats-overview__subtitle">
+        <%= t('stats.countries') %>
+      </span>
     </div>
   <% end %>
   <% if local_assigns[:chart_point_poly] %>

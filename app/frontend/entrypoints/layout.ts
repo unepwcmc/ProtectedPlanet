@@ -45,6 +45,7 @@ registerIslands({
   SearchAreas: () => import('@/components/SearchAreas/Index.vue'),
   RegionCountryPages: () => import('@/components/RegionCountryPages/Index.vue'),
   StatsTooltipInfo: () => import('@/components/Stats/TooltipInfo.vue'),
+  StatsSites: () => import('@/components/Stats/Sites.vue'),
   ChartTotalCoverageChart: () => import('@/components/Chart/TotalCoverageChart.vue'),
   AmChartMultiline: () => import('@/components/AmChart/Multiline.vue'),
   AttributesParcelsDropdown: () => import('@/components/Dropdown/ParcelsDropdown.vue'),

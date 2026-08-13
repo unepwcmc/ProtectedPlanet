@@ -46,6 +46,7 @@
 @import './shared/list.css';
 @import './shared/map.css';
 @import './shared/messages.css';
+@import './shared/region-country-site.css';
 @import './shared/shadows.css';
 @import './shared/themes.css';
 @import './shared/typography.css';
@@ -80,7 +81,6 @@
 @import './views/partials/cards/news.css';
 @import './views/partials/cards/resources.css';
 @import './views/partials/cards/squares.css';
-@import './views/partials/cards/sites.css';
 @import './views/partials/cards/themes/index.css';
 @import './views/partials/cards/themes/card.css';
 

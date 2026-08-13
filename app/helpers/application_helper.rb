@@ -67,6 +67,16 @@ module ApplicationHelper
     )
   end
 
+  def site_card_details(protected_areas)
+    Array(protected_areas).map do |protected_area|
+      {
+        name: protected_area[:name],
+        site_id: protected_area[:site_id],
+        thumbnail_link: protected_area_cover(protected_area, with_tag: false)
+      }
+    end
+  end
+
   def country_cover(country, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
     image_params = { id: country.iso, type: 'country', version: version }

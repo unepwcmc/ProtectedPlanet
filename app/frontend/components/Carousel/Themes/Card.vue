@@ -81,7 +81,7 @@ const props = defineProps<CarouselThemesCard>()
   z-1
   hidden
   md:block
-  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black 
+  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black
   text-white;
 }
 

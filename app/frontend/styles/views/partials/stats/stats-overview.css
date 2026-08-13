@@ -1,7 +1,4 @@
-/* The css is shared between 
-app/views/partials/stats/_stats-overview.html.erb 
-app/views/partials/stats/_stats-overview-country.html.erb 
-*/
+/* app/views/partials/stats/_stats-overview.html.erb */
 .vw-partials-stats-stats-overview {
   @apply
   relative
@@ -57,12 +54,18 @@ app/views/partials/stats/_stats-overview-country.html.erb
 }
 
 .vw-partials-stats-stats-overview__number {
-  @apply tw-shared-font-hind-siliguri__normal-3xl-md-4xl-leading-none-primary;
+  @apply tw-shared-font-hind-siliguri__semibold-3xl-md-4xl-leading-none-primary;
 }
 
 .vw-partials-stats-stats-overview__subtitle {
   @apply 
   tw-shared-font-hind-siliguri__normal-base-white
+  lg:w-full;
+}
+
+.vw-partials-stats-stats-overview__subtitle--shorter {
+  @apply 
+  w-[50%]
   lg:w-full;
 }
 

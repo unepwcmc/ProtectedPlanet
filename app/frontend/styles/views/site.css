@@ -1,31 +1,24 @@
-@utility vw-site {
-  @apply 
-  tw-shared-bg--grey-xlight
-  pt-4 
-  md:pt-6 
-  lg:pt-9
-  pb-4 
-  md:pb-6 
-  lg:pb-9;
+.vw-site {
+  @apply tw-shared-region-country-site__wrapper;
 }
 
-@utility vw-site__container {
-  @apply tw-shared-base-container;
+.vw-site__container {
+  @apply tw-shared-region-country-site__container;
 }
 
-@utility vw-site__overview {
-  @apply tw-shared-country-region-site-basic-overview;
+.vw-site__overview {
+  @apply tw-shared-region-country-site__overview;
 }
 
-@utility vw-site__col-wrapper {
+.vw-site__col-wrapper {
   @apply flex flex-wrap lg:flex-nowrap;
 }
 
-@utility vw-site__col-1 {
+.vw-site__col-1 {
   @apply w-full lg:w-[calc(50%_-_15px)];
 }
 
-@utility vw-site__col-2 {
+.vw-site__col-2 {
   @apply w-full lg:ml-auto lg:w-[calc(50%_-_15px)] lg:block;
 }
 
@@ -42,6 +35,10 @@
   @apply w-[555px];
 }
 
-@utility vw-site__sources-and-related {
+.vw-site__sources-and-related {
   @apply tw-shared-base-wrapper;
+}
+
+.vw-site__other-protected-areas {
+  @apply pt-7.5 md:pt-15 lg:pt-20;
 }

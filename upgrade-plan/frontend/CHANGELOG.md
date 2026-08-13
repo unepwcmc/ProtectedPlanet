@@ -758,7 +758,7 @@ instead of `shared/`. Fixed:
   `Tabs`/`Banner` now also use `medium:`/`large:`. **This is a real behaviour change for those 3
   pre-existing consumers** (container padding now steps up at 1025px/1201px instead of
   768px/1024px) — flagged for live re-verification, not silently assumed fine.
-- Added `tw-shared-country-region-site-basic-overview` (`flex flex-wrap small:flex-nowrap`) to `shared/base.css` —
+- Added `tw-shared-region-country-site__overview` (`flex flex-wrap small:flex-nowrap`) to `shared/base.css` —
   the legacy `flex-stack-mobile` mixin's exact 2-line body, called identically by all three of
   `pages/_country.scss`/`_region.scss`/`_site.scss`'s `.page__section--overview-map` rule. First
   consumer is country (below); region/site inherit it when their own rows in the plan's T3 wave
@@ -768,7 +768,7 @@ instead of `shared/`. Fixed:
 - Outer wrapper: `page--country vw-bg--grey-xlight vw-base-spacer-small--top` → single class
   `vw-country` (`@apply tw-shared-bg--grey-xlight tw-shared-base-spacer-small--top`).
 - Container div: `vw-base-container` → `vw-country__container` (`@apply tw-shared-base-container`).
-- `page__section--overview-map` → `vw-country__overview` (`@apply tw-shared-country-region-site-basic-overview`).
+- `page__section--overview-map` → `vw-country__overview` (`@apply tw-shared-region-country-site__overview`).
 - Both new classes live in new `views/country.css`.
 - `pages/_country.scss` **deleted** — its only rule (`.page--country .page__section--overview-map
   { flex-stack-mobile }`) is now `vw-country__overview` above, and `page--country` had zero

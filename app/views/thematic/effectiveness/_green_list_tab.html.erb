@@ -31,10 +31,11 @@
     } %>
   </section>
   <div class="vw-thematic-effectiveness-green-list-tab__container--gap-3">
-    <%= render partial: "partials/cards/sites", locals: {
-          cards: @example_greenlist,
+    <%= frontend_mount "StatsSites", props: {
+          siteDetails: site_card_details(@example_greenlist),
+          textViewAll: t('global.button.all'),
           title: t('thematic_area.green_list.card_text') + " (#{@greenlisted_pas_total_count})",
-          url: @green_list_view_all_url
+          viewAll: @green_list_view_all_url
       } %>
   </div>
 </div>

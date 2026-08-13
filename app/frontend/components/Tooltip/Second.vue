@@ -6,6 +6,7 @@
   >
     <button
       v-if="onHover"
+      ref="triggerEl"
       tabindex="0"
       :aria-describedby="id"
       :aria-expanded="isActive"
@@ -20,6 +21,7 @@
     </button>
     <div
       v-else
+      ref="triggerEl"
       tabindex="0"
       :aria-describedby="id"
       :aria-expanded="isActive"
@@ -31,8 +33,10 @@
     <div
       v-if="isActive"
       :id
+      ref="targetEl"
       role="tooltip"
       class="ct-tooltip-second__target"
+      :style="{ '--ct-tooltip-second-shift': `${shiftX}px` }"
     >
       <div class="ct-tooltip-second__header">
         <slot name="header" />
@@ -54,7 +58,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useId } from 'vue'
+import { ref, useId, nextTick } from 'vue'
+import { useEventListener } from '@vueuse/core'
 import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 import IconClose from '@/components/Icon/Close.vue'
 
@@ -64,13 +69,47 @@ interface TooltipSecondProps {
 
 withDefaults(defineProps<TooltipSecondProps>(), { onHover: true })
 
+const VIEWPORT_MARGIN_PX = 8
+
 const id = `tooltip_${useId()}`
 const isActive = ref(false)
 const rootEl = ref<HTMLElement | null>(null)
+const triggerEl = ref<HTMLElement | null>(null)
+const targetEl = ref<HTMLElement | null>(null)
+const shiftX = ref(0)
 
 function toggleTooltip(value?: boolean) {
   isActive.value = typeof value === 'boolean' ? value : !isActive.value
+  if (isActive.value) nextTick(updateShift)
 }
+
+// The target is centered on the trigger by default (see CSS). If that would
+// push it past the viewport edge, shift the box (not the arrow, which stays
+// pinned to the trigger) just enough to keep it fully on screen.
+function updateShift() {
+  if (!triggerEl.value || !targetEl.value) return
+
+  const triggerRect = triggerEl.value.getBoundingClientRect()
+  const targetWidth = targetEl.value.offsetWidth
+  const centerX = triggerRect.left + triggerRect.width / 2
+  const naturalLeft = centerX - targetWidth / 2
+  const naturalRight = centerX + targetWidth / 2
+  const viewportWidth = window.innerWidth
+
+  if (naturalLeft < VIEWPORT_MARGIN_PX) {
+    shiftX.value = VIEWPORT_MARGIN_PX - naturalLeft
+  }
+  else if (naturalRight > viewportWidth - VIEWPORT_MARGIN_PX) {
+    shiftX.value = viewportWidth - VIEWPORT_MARGIN_PX - naturalRight
+  }
+  else {
+    shiftX.value = 0
+  }
+}
+
+useEventListener(window, 'resize', () => {
+  if (isActive.value) updateShift()
+})
 
 usePopupCloseListeners(rootEl, {
   isActive,
@@ -101,7 +140,6 @@ usePopupCloseListeners(rootEl, {
   left-1/2
   z-10
   mt-2
-  -translate-x-1/2
   rounded
   bg-white
   p-3
@@ -109,15 +147,20 @@ usePopupCloseListeners(rootEl, {
   tw-shared-base-flex-col-gap-2
   before:absolute
   before:-top-2
-  before:left-1/2
   before:h-0
   before:w-0
-  before:-translate-x-1/2
   before:border-x-8
   before:border-b-8
   before:border-x-transparent
   before:border-b-white
   before:content-[''];
+
+  transform: translateX(calc(-50% + var(--ct-tooltip-second-shift, 0px)));
+}
+
+.ct-tooltip-second__target::before {
+  left: calc(50% - var(--ct-tooltip-second-shift, 0px));
+  transform: translateX(-50%);
 }
 
 .ct-tooltip-second__header {

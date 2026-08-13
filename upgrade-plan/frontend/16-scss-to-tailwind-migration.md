@@ -409,15 +409,15 @@ before assuming 0 views work here), `helpers/_cms.scss` (`.cms-wysiwyg` CMS rich
       `shared/background.css` as `tw-shared-base-*`/`tw-shared-bg--*` (see the two Decisions
       corrections above), repointed all ~40 consumers (`hero.css`/`cta.css`/`footer.css`/
       `content-banner.css` plus every ERB page template that had them). Added
-      `tw-shared-country-region-site-basic-overview` to `shared/base.css` for the `flex-stack-mobile` mixin shared
+      `tw-shared-region-country-site__overview` to `shared/base.css` for the `flex-stack-mobile` mixin shared
       by country/region/site's identical `.page__section--overview-map` rule (country is its first
       consumer; region/site pick it up when their own rows below land).
 - [x] **`country/show.html.erb` done** — one class per element per the retracted-exception
       Decision above: `page--country vw-bg--grey-xlight vw-base-spacer-small--top` → `vw-country`,
       `vw-base-container` → `vw-country__container`, `page__section--overview-map` →
-      `vw-country__overview` (`@apply tw-shared-country-region-site-basic-overview`), all in new
+      `vw-country__overview` (`@apply tw-shared-region-country-site__overview`), all in new
       `views/country.css`. `pages/_country.scss` deleted (its only rule is now the
-      `tw-shared-country-region-site-basic-overview` application above); `pdf.scss`'s `.page--country` selector
+      `tw-shared-region-country-site__overview` application above); `pdf.scss`'s `.page--country` selector
       repointed to `.vw-country` so the PDF-export transparent-background override keeps matching.
 - [x] **Second pass (2026-08-03): every remaining `tw-shared-*` class exposed directly in ERB
       markup wrapped in its own `vw-*` class.** The first pass above only fully applied the

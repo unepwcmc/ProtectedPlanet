@@ -685,7 +685,8 @@ export interface StatsSiteDetail {
   thumbnail_link: string
 }
 
-// TabPresenter#sites.
+// TabPresenter#sites, or `frontend_mount "StatsSites"` fed by
+// ApplicationHelper#site_card_details for a direct (non-RegionCountryPages) mount.
 export interface StatsSitesProps {
   siteDetails: StatsSiteDetail[]
   textViewAll: string
@@ -742,7 +743,8 @@ export interface RegionCountryPagesProps {
 }
 
 // Props for `StatsTooltipInfo` — the WDPA/OECM info tooltip in
-// partials/stats/_stats-overview-country.html.erb, replacing the legacy
+// partials/stats/_stats-overview.html.erb (country#show only, gated on
+// wdpa/oecm_national_designations_count locals), replacing the legacy
 // `<tooltip-second>` + ERB-in-slot markup (see Pattern B note in
 // 14-architecture-and-design.md) with a single props-driven island.
 export interface StatsTooltipInfoProps {
