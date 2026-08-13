@@ -46,11 +46,14 @@ app/views/partials/stats/_stats-overview-country.html.erb
 }
 
 .vw-partials-stats-stats-overview__section {
-  @apply tw-shared-base-flex-col-gap-1;
+  @apply tw-shared-base-flex-col-gap-2;
 }
 
 .vw-partials-stats-stats-overview__section-with-border {
-  @apply border-b border-theme-grey-light pb-5;
+  @apply 
+  border-b 
+  border-theme-grey-light 
+  pb-5;
 }
 
 .vw-partials-stats-stats-overview__number {
@@ -58,7 +61,9 @@ app/views/partials/stats/_stats-overview-country.html.erb
 }
 
 .vw-partials-stats-stats-overview__subtitle {
-  @apply tw-shared-font-hind-siliguri__normal-base-white;
+  @apply 
+  tw-shared-font-hind-siliguri__normal-base-white
+  lg:w-full;
 }
 
 .vw-partials-stats-stats-overview__text {
@@ -66,27 +71,34 @@ app/views/partials/stats/_stats-overview-country.html.erb
 }
 
 .vw-partials-stats-stats-overview__flex {
-  @apply flex gap-3;
+  @apply tw-shared-base-flex-gap-3;
 }
 
 .vw-partials-stats-stats-overview__subtitle-flex {
-  @apply tw-shared-font-hind-siliguri__normal-base mb-1.5 flex gap-3;
+  @apply 
+  tw-shared-font-hind-siliguri__normal-base
+  tw-shared-base-flex-gap-3;
 }
 
 .vw-partials-stats-stats-overview__subtitle-flex {
-  @apply tw-shared-font-hind-siliguri__normal-base flex gap-3;
+  @apply 
+  tw-shared-font-hind-siliguri__normal-base
+  tw-shared-base-flex-gap-3;
 }
 
 .vw-partials-stats-stats-overview__external-link {
-  @apply flex justify-between items-start text-base mb-5;
+  @apply 
+  tw-shared-base-flex-gap-3
+  justify-between
+  items-start;
 }
 
 .vw-partials-stats-stats-overview__external-label {
-  @apply mr-[4%] w-[74%];
+  @apply tw-shared-font-hind-siliguri__normal-base-white;
 }
 
 .vw-partials-stats-stats-overview__external-title {
-  @apply font-bold;
+  @apply tw-shared-font-hind-siliguri__semibold-base-white;
 }
 
 .vw-partials-stats-stats-overview__external-button {

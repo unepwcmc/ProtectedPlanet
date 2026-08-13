@@ -117,6 +117,14 @@
   leading-[1.3];
 }
 
+@utility tw-shared-font-hind-siliguri__semibold-base-white {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-semibold
+  text-base
+  text-white;
+}
+
 @utility tw-shared-font-hind-siliguri__semibold-base-grey-black {
   @apply
   tw-shared-font-family-hind-siliguri__leading-1-3

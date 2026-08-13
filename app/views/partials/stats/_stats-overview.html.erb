@@ -56,8 +56,12 @@
       <% external_links.each do |link| %>
         <div class="vw-partials-stats-stats-overview__external-link">
           <span class="vw-partials-stats-stats-overview__external-label">
-            <span class="vw-partials-stats-stats-overview__external-title"><%= link[:title] %></span>
-            <span class="vw-partials-stats-stats-overview__external-text"><%= link[:text] %></span>
+            <span class="vw-partials-stats-stats-overview__external-title">
+              <%= link[:title] %>
+            </span>
+            <span class="vw-partials-stats-stats-overview__external-text">
+              <%= link[:text] %>
+            </span>
           </span>
           <a class="vw-partials-stats-stats-overview__external-button" href="<%= link[:link] %>" target="_blank" title="<%= link[:button_title] %>">
             <%= t('stats.story_map.link', default: 'Link') %>
