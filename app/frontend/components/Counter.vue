@@ -18,24 +18,24 @@ const props = withDefaults(defineProps<Counter>(), {
 
 const number = ref(0)
 const step = ref(0)
-const increase = ref(true)
+const isIncreasing = ref(true)
 
 function calculateStep() {
   step.value = Math.abs(props.total - number.value) / props.config.divisor
 }
 
 function checkDirection() {
-  increase.value = number.value < props.total
+  isIncreasing.value = number.value < props.total
 }
 
 function count() {
   checkDirection()
 
   const interval = window.setInterval(() => {
-    if (increase.value && number.value + step.value < props.total) {
+    if (isIncreasing.value && number.value + step.value < props.total) {
       number.value += step.value
     }
-    else if (!increase.value && number.value - step.value > props.total) {
+    else if (!isIncreasing.value && number.value - step.value > props.total) {
       number.value -= step.value
     }
     else {

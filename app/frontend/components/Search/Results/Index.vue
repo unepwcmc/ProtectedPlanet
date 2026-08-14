@@ -6,7 +6,7 @@
       v-text="text"
     />
     <div class="ct-search-results__list">
-      <SearchSiteResultsItem
+      <SearchResultsItem
         v-for="(result, index) in results"
         :key="index"
         v-bind="result"
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import SearchSiteResultsItem from '@/components/Search/Results/Item.vue'
+import SearchResultsItem from '@/components/Search/Results/Item.vue'
 import type { SearchSiteResult } from '@/types/backend'
 
 const props = defineProps<{

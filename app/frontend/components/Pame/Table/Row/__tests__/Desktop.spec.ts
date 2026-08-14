@@ -30,11 +30,11 @@ describe('Pame Table Row Desktop', () => {
     expect(wrapper.text()).toContain('Multiple')
   })
 
-  it('emits open-modal with the row item when the metadata cell is clicked', async () => {
+  it('emits openModal with the row item when the metadata cell is clicked', async () => {
     const wrapper = mount(Row, { props: { item } })
 
     await wrapper.find('.ct-pame-table-row-desktop__cell--modal-trigger').trigger('click')
 
-    expect(wrapper.emitted('open-modal')?.[0]).toEqual([item])
+    expect(wrapper.emitted('openModal')?.[0]).toEqual([item])
   })
 })

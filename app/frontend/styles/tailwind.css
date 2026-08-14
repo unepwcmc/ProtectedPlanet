@@ -88,7 +88,7 @@
 @import './views/partials/cards/resources.css';
 @import './views/partials/cards/squares.css';
 
-@import './views/partials/carousels/theme.css';
+@import './views/partials/carousels/themes.css';
 
 @import './views/partials/charts/chart-legend.css';
 @import './views/partials/charts/chart-row.css';
@@ -96,7 +96,7 @@
 @import './views/partials/charts/total-coverage-chart.css';
 
 @import './views/partials/ctas/api.css';
-@import './views/partials/ctas/mpa.css';
+@import './views/partials/ctas/mpa-guide.css';
 @import './views/partials/ctas/protected-planet-report.css';
 
 @import './views/partials/footer/index.css';
@@ -113,7 +113,7 @@
 @import './views/partials/stats/stats-related-countries.css';
 
 @import './views/partials/thematic_and_data_area/footer.css';
-@import './views/partials/thematic_and_data_area/panel_content.css';
+@import './views/partials/thematic_and_data_area/panel-content.css';
 
 @import './views/thematic/effectiveness/green-list-tab.css';
 @import './views/thematic/effectiveness/index.css';

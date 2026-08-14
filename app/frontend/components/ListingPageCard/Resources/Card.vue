@@ -9,9 +9,9 @@
       :href="url"
       :title
     >
-      <ListingPageCardInfo v-bind="props" />
+      <ListingPageCardResourcesInfo v-bind="props" />
     </a>
-    <ListingPageCardInfo
+    <ListingPageCardResourcesInfo
       v-else
       v-bind="props"
     />
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import type { ListingPageCardResourcesProps } from '@/types/backend'
-import ListingPageCardInfo from '@/components/ListingPageCard/Resources/Info.vue'
+import ListingPageCardResourcesInfo from '@/components/ListingPageCard/Resources/Info.vue'
 
 type ListingPageCardResources = ListingPageCardResourcesProps
 const props = defineProps<ListingPageCardResources>()

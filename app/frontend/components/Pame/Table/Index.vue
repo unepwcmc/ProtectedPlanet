@@ -24,7 +24,7 @@
             :item
             :attributes
             :isLast="index === items.length - 1"
-            @open-modal="onOpenModal"
+            @openModal="onOpenModal"
           />
         </tbody>
         <tbody
@@ -35,7 +35,7 @@
             v-for="item in items"
             :key="item.id"
             :item
-            @open-modal="onOpenModal"
+            @openModal="onOpenModal"
           />
         </tbody>
       </table>

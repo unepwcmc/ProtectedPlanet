@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="haveResults"
+    v-if="hasResults"
     class="ct-search-pagination"
   >
     <span
@@ -12,7 +12,7 @@
       ct-search-pagination__button--previous"
       :class="{ 'ct-search-pagination__button--disabled': isPreviousDisabled }"
       :disabled="isPreviousDisabled"
-      @click="changePage(previousIsActive, 'previous')"
+      @click="changePage(isPreviousActive, 'previous')"
     >
       <IconCircleChevron
         direction="left"
@@ -25,7 +25,7 @@
       ct-search-pagination__button--next"
       :class="{ 'ct-search-pagination__button--disabled': isNextDisabled }"
       :disabled="isNextDisabled"
-      @click="changePage(nextIsActive, 'next')"
+      @click="changePage(isNextActive, 'next')"
     >
       <IconCircleChevron
         circleColor="green"
@@ -57,11 +57,11 @@ const text = computed(() => `${props.pageItemsStart} - ${props.pageItemsEnd} of 
 
 const emit = defineEmits<{ 'update:page': [requestedPage: number] }>()
 
-const haveResults = computed(() => props.totalItems > 0)
-const nextIsActive = computed(() => props.pageItemsEnd < props.totalItems)
-const previousIsActive = computed(() => props.currentPage > 1)
-const isNextDisabled = computed(() => !nextIsActive.value || props.loading)
-const isPreviousDisabled = computed(() => !previousIsActive.value || props.loading)
+const hasResults = computed(() => props.totalItems > 0)
+const isNextActive = computed(() => props.pageItemsEnd < props.totalItems)
+const isPreviousActive = computed(() => props.currentPage > 1)
+const isNextDisabled = computed(() => !isNextActive.value || props.loading)
+const isPreviousDisabled = computed(() => !isPreviousActive.value || props.loading)
 
 function changePage(isActive: boolean, direction: 'previous' | 'next') {
   if (!isActive || props.loading) return

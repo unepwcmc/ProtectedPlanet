@@ -1,9 +1,9 @@
-<div class="vw-cms-thematic-areas">
-  <%= render partial: "./layouts/partials/hero/small", locals: {
+<div class="vw-layouts-cms-thematic-areas">
+  <%= render partial: "layouts/partials/hero/small", locals: {
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label
   } %>
-  <div class="vw-cms-thematic-areas__container">
+  <div class="vw-layouts-cms-thematic-areas__container">
     <%= render "partials/cards/themes/index", card_set: :thematic %>
     <%= render "partials/cards/resources" %>
   </div>

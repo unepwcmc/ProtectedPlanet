@@ -89,12 +89,12 @@ class ApplicationController < ActionController::Base
     raise PageNotFound
   end
 
-  rescue_from PageNotFound do
-    render_error_page(404)
-  end
-
   rescue_from StandardError do
     render_error_page(500)
+  end
+
+  rescue_from PageNotFound do
+    render_error_page(404)
   end
 
   def enable_caching
@@ -160,13 +160,13 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error_page(status)
-    path = "/app/views/layouts/error_page.html.erb"
+    path = "app/views/layouts/error_page.html.erb"
     
     case status
     when 404
-       render file: Rails.root.join(path), layout: true, status: :not_found, locals: { error_status: status }
+       render file: Rails.root.join(path), layout: "application", status: :not_found, locals: { error_status: status }
     else
-      render file: Rails.root.join(path), layout: true, status: :internal_server_error, locals: { error_status: status }
+      render file: Rails.root.join(path), layout: "application", status: :internal_server_error, locals: { error_status: status }
     end
   end
 

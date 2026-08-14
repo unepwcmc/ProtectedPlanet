@@ -19,7 +19,7 @@
         <IconArrow class="ct-dropdown-base__icon" />
       </button>
       <DropdownOptions
-        v-if="openOptions"
+        v-if="isOptionsOpen"
         :options
         @click="chooseOption"
       />
@@ -42,20 +42,20 @@ defineProps<{
 const modelValue = defineModel<string>()
 
 const rootEl = ref<HTMLElement | null>(null)
-const openOptions = ref(false)
+const isOptionsOpen = ref(false)
 
 function chooseOption(option: string) {
   modelValue.value = option
-  openOptions.value = false
+  isOptionsOpen.value = false
 }
 
 function toggle() {
-  openOptions.value = !openOptions.value
+  isOptionsOpen.value = !isOptionsOpen.value
 }
 
 usePopupCloseListeners(rootEl, {
-  isActive: openOptions,
-  onClose: () => { openOptions.value = false }
+  isActive: isOptionsOpen,
+  onClose: () => { isOptionsOpen.value = false }
 })
 </script>
 

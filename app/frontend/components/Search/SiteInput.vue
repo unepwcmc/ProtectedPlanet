@@ -49,7 +49,7 @@
           @keyup.enter="submit"
         >
         <button
-          v-show="showSubmit"
+          v-show="isSubmitVisible"
           class="ct-search__submit"
           :disabled
           @click="submit"
@@ -82,7 +82,7 @@ const searchTerm = ref(props.prePopulatedSearchTerm ?? '')
 const inputEl = ref<HTMLInputElement | null>(null)
 const rootEl = ref<HTMLElement | null>(null)
 
-const showSubmit = computed(() => props.popout || searchTerm.value.length !== 0)
+const isSubmitVisible = computed(() => props.popout || searchTerm.value.length !== 0)
 
 if (props.popout) {
   usePopupCloseListeners(rootEl, { isActive, onClose: closeInput })

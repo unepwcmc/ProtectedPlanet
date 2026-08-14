@@ -2,7 +2,7 @@
   <div class="ct-tabs">
     <Teleport
       to="#vw-hero-tabs-target"
-      :disabled="!heroTabsTargetExists"
+      :disabled="!hasHeroTabsTarget"
     >
       <ul class="ct-tabs__triggers">
         <li
@@ -58,9 +58,9 @@ const emit = defineEmits<{ change: [id: number] }>()
 // into, so it visually sits at the bottom of the hero while panel content (this
 // component's actual mount point) stays where it was rendered. Falls back to
 // rendering triggers in place when no hero target exists (e.g. component tests).
-const heroTabsTargetExists = ref(false)
+const hasHeroTabsTarget = ref(false)
 onMounted(() => {
-  heroTabsTargetExists.value = document.querySelector('#vw-hero-tabs-target') !== null
+  hasHeroTabsTarget.value = document.querySelector('#vw-hero-tabs-target') !== null
 })
 
 function initialTabId() {

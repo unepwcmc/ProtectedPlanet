@@ -1,8 +1,8 @@
-.vw-cms-thematic-areas {
+.vw-layouts-cms-thematic-areas {
   @apply tw-shared-base-wrapper;
 }
 
-.vw-cms-thematic-areas__container {
+.vw-layouts-cms-thematic-areas__container {
   @apply 
   tw-shared-base-container
   tw-shared-base-flex-col-gap-6-and-9;

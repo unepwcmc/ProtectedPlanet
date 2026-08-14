@@ -1,7 +1,7 @@
 <template>
   <div
-    class="ct-pame-filter__options"
-    :class="[filterClass, { 'ct-pame-filter__options--active': isOpen }]"
+    class="ct-pame-filter-mobile"
+    :class="[filterClass, { 'ct-pame-filter-mobile--active': isOpen }]"
   >
     <PameFiltersFilterOptions
       :options
@@ -9,20 +9,20 @@
       :groupId="name"
       @click="onOptionClick"
     />
-    <div class="ct-pame-filter__buttons">
+    <div class="ct-pame-filter-mobile__buttons">
       <button
-        class="ct-pame-filter__button-clear"
+        class="ct-pame-filter-mobile__button-clear"
         @click="onClear"
         v-text="'Clear'"
       />
-      <div class="ct-pame-filter__buttons--right">
+      <div class="ct-pame-filter-mobile__buttons--right">
         <button
-          class="ct-pame-filter__button-cancel"
+          class="ct-pame-filter-mobile__button-cancel"
           @click="onCancel"
           v-text="'Cancel'"
         />
         <button
-          class="ct-pame-filter__button-apply"
+          class="ct-pame-filter-mobile__button-apply"
           :disabled="isFetching"
           @click="onApply"
           v-text="'Apply'"
@@ -63,7 +63,7 @@ useFreezeBackground(computed(() => props.isOpen))
 // this can pick up the filter's real current value.
 const pendingOptions = ref<string[]>([...props.appliedOptions])
 
-const filterClass = computed(() => `ct-pame-filter__options--${props.name.replace(/[\s()_]/g, '-').toLowerCase()}`)
+const filterClass = computed(() => `ct-pame-filter-mobile--${props.name.replace(/[\s()_]/g, '-').toLowerCase()}`)
 
 function onOptionClick(option: string, checked: boolean) {
   pendingOptions.value = checked
@@ -94,7 +94,7 @@ function onApply() {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-pame-filter__options {
+.ct-pame-filter-mobile {
   @apply
   invisible
   fixed
@@ -109,31 +109,31 @@ function onApply() {
   tw-shared-base-flex-col-gap-3;
 }
 
-.ct-pame-filter__options--active {
+.ct-pame-filter-mobile--active {
   @apply visible;
 }
 
-.ct-pame-filter__buttons {
+.ct-pame-filter-mobile__buttons {
   @apply
   flex
   justify-between;
 }
 
-.ct-pame-filter__buttons--right {
+.ct-pame-filter-mobile__buttons--right {
   @apply tw-shared-base-flex-gap-3;
 }
 
-.ct-pame-filter__button-apply {
+.ct-pame-filter-mobile__button-apply {
   @apply tw-shared-button--theme-purple;
 }
 
-.ct-pame-filter__button-cancel {
+.ct-pame-filter-mobile__button-cancel {
   @apply
   tw-shared-button--outline-black
   mx-auto;
 }
 
-.ct-pame-filter__button-clear {
+.ct-pame-filter-mobile__button-clear {
   @apply tw-shared-button--outline-black;
 }
 </style>

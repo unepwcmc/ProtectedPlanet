@@ -6,13 +6,13 @@
   >
     <MapHeader
       :title
-      :filtersShown="show"
+      :filtersShown="isVisible"
       closeable
       class="ct-map-panel__header"
       @toggle="toggleShow"
     />
     <div
-      v-show="show"
+      v-show="isVisible"
       class="ct-map-panel__body"
     >
       <MapPaSearch
@@ -58,10 +58,10 @@ const props = withDefaults(defineProps<MapPanel>(), {
 })
 const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
 
-const show = ref(true)
+const isVisible = ref(true)
 const root = ref<HTMLElement | null>(null)
 
-const toggleShow = () => (show.value = !show.value)
+const toggleShow = () => (isVisible.value = !isVisible.value)
 const onZoomTo = (options: ZoomToOptions) => emit('zoomTo', options)
 
 // Matches the legacy `v-if="!areFiltersHidden"` on `<v-map-pa-search>` — the

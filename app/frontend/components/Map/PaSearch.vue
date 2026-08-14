@@ -32,7 +32,7 @@
       </button>
     </div>
     <ul
-      v-if="showResultsPane"
+      v-if="isResultsPaneVisible"
       class="ct-map-pa-search__results"
     >
       <li
@@ -86,7 +86,7 @@ const resultEls = ref<HTMLElement[]>([])
 
 const search = ref('')
 const results = ref<AutocompleteResult[]>([])
-const shouldShowResults = ref(false)
+const isResultsPaneRequested = ref(false)
 const isBusy = ref(false)
 const hasNoResultsError = ref(false)
 
@@ -94,10 +94,10 @@ const hasSearchString = computed(() => search.value.length > 0)
 const isValidSearchString = computed(() => search.value.length > 2)
 const hasResults = computed(() => results.value.length > 0)
 const hasTooShortError = computed(() => hasSearchString.value && !isValidSearchString.value)
-const showResultsPane = computed(() => hasSearchString.value && shouldShowResults.value)
+const isResultsPaneVisible = computed(() => hasSearchString.value && isResultsPaneRequested.value)
 
 onClickOutside(root, () => {
-  shouldShowResults.value = false
+  isResultsPaneRequested.value = false
 })
 
 function reset() {
@@ -137,7 +137,7 @@ const runAutocomplete = useDebounceFn(async () => {
 }, 500)
 
 function onInput() {
-  shouldShowResults.value = true
+  isResultsPaneRequested.value = true
 
   if (hasSearchString.value) {
     runAutocomplete()

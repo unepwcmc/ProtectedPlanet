@@ -1,7 +1,7 @@
 <template>
-  <th class="ct-pame-table-head__cell">
+  <th class="ct-pame-table-head-cell">
     <span
-      class="ct-pame-table-head__title"
+      class="ct-pame-table-head-cell__title"
       v-text="filter.title"
     />
     <Tooltip
@@ -26,7 +26,7 @@ const hasTooltip = computed(() => !!props.filter.tooltip)
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-pame-table-head__cell {
+.ct-pame-table-head-cell {
   @apply
   border-l-2
   border-dotted
@@ -41,7 +41,7 @@ const hasTooltip = computed(() => !!props.filter.tooltip)
   align-top;
 }
 
-.ct-pame-table-head__title {
+.ct-pame-table-head-cell__title {
   @apply
   inline-block
   align-middle;

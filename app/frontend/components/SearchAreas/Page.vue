@@ -2,7 +2,7 @@
   <div class="ct-search-areas-page">
     <Teleport
       to="#vw-hero-search-target"
-      :disabled="!heroSearchTargetExists"
+      :disabled="!hasHeroSearchTarget"
     >
       <div class="ct-search-areas-page__bar">
         <div class="ct-search-areas-page__bar--left">
@@ -21,7 +21,7 @@
         <Download
           class="ct-search-areas-page__bar--right"
           :buttonText="downloadButtonText"
-          :downloadDisabled
+          :downloadDisabled="isDownloadDisabled"
           :gaId
           :options="downloadOptions"
           :textCommercial="downloadTextCommercial"
@@ -59,7 +59,7 @@
           @requestMore="requestMore"
         />
         <IconLoadingSpinner
-          v-if="loadingResults"
+          v-if="isLoadingResults"
           class="ct-search-areas-page__spinner"
         />
       </div>
@@ -92,9 +92,9 @@ const downloadStore = useDownloadStore()
 // into, so it visually sits inside the hero while the rest of this component's tree
 // (filters panel, tabs, results) stays at its own mount point below. Falls back to
 // rendering the bar in place when no hero target exists (e.g. component tests).
-const heroSearchTargetExists = ref(false)
+const hasHeroSearchTarget = ref(false)
 onMounted(() => {
-  heroSearchTargetExists.value = document.querySelector('#vw-hero-search-target') !== null
+  hasHeroSearchTarget.value = document.querySelector('#vw-hero-search-target') !== null
 })
 
 const activeFilterOptions = ref<Record<string, unknown>>({})
@@ -105,7 +105,7 @@ const filtersTitle = props.filterGroups[0]?.title ?? ''
 const filters = ref<SearchFilter[]>(props.filterGroups[0]?.filters ?? [])
 const isFilterPaneActive = ref(false)
 const isFilterPaneDisabled = ref(false)
-const loadingResults = ref(false)
+const isLoadingResults = ref(false)
 const newResults = ref<SearchAreasResultsData>(props.results)
 const searchTerm = ref('')
 const tabIdDefault = props.tabs[2].id
@@ -116,7 +116,7 @@ const tabIdSelected = ref(tabIdDefault)
 const filterResetKey = ref(0)
 const paginationResetKey = ref(0)
 
-const downloadDisabled = computed(() => Number(newResults.value.total || 0) === 0)
+const isDownloadDisabled = computed(() => Number(newResults.value.total || 0) === 0)
 
 interface SearchAreasResultsResponse {
   areas: SearchAreasResultsData
@@ -124,7 +124,7 @@ interface SearchAreasResultsResponse {
 }
 
 async function ajaxSubmission(resetFilters = false, pagination = false, requestedPage = 1) {
-  loadingResults.value = true
+  isLoadingResults.value = true
 
   const response = await getJson<SearchAreasResultsResponse>(props.endpointSearch, {
     filters: JSON.stringify(activeFilterOptions.value),
@@ -141,7 +141,7 @@ async function ajaxSubmission(resetFilters = false, pagination = false, requeste
     updateProperties(response, resetFilters)
   }
 
-  loadingResults.value = false
+  isLoadingResults.value = false
 }
 
 function disableFilters() {

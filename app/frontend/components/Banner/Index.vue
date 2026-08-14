@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible"
+    v-if="isVisible"
     class="ct-banner"
   >
     <div class="ct-banner__container">
@@ -38,7 +38,7 @@
         class="ct-banner__close"
         @click="closeBanner"
       >
-        <Iconclose class="ct-banner__icon" />
+        <IconClose class="ct-banner__icon" />
       </button>
     </div>
   </div>
@@ -48,13 +48,13 @@
 import { ref, computed } from 'vue'
 import type { BannerProps } from '@/types/backend'
 import BannerContent from '@/components/Banner/Content.vue'
-import Iconclose from '@/components/Icon/Close.vue'
+import IconClose from '@/components/Icon/Close.vue'
 
 type Banner = BannerProps
 const props = defineProps<Banner>()
 
 const currentIndex = ref(0)
-const visible = ref(true)
+const isVisible = ref(true)
 
 const hasMultipleBanners = computed(() => props.banners.length > 1)
 
@@ -80,7 +80,7 @@ function closeBanner() {
   }
 
   // Hide with animation
-  visible.value = false
+  isVisible.value = false
 }
 </script>
 

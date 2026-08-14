@@ -10,7 +10,7 @@
       v-text="title"
     />
     <template v-if="forPdf">
-      <AttributesPame
+      <AttributesPamePame
         v-for="(pameAttributes, sitePid) in pamesAttributesList"
         :key="sitePid"
         :pameAttributes
@@ -19,7 +19,7 @@
         :translations
       />
     </template>
-    <AttributesPame
+    <AttributesPamePame
       v-else
       :forPdf
       :pameAttributes="currentPameAttributes"
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AttributesPame from '@/components/Attributes/Pame/Pame.vue'
+import AttributesPamePame from '@/components/Attributes/Pame/Pame.vue'
 import useParcelSelection from '@/composables/useParcelSelection'
 import type { AttributesPameListProps } from '@/types/backend'
 

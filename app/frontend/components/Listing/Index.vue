@@ -24,7 +24,7 @@
       />
       <div class="ct-listing__results-wrapper">
         <ListingList
-          v-show="!updatingResults"
+          v-show="!isUpdatingResults"
           :resetKey="paginationResetKey"
           :results="currentResults"
           :template
@@ -33,7 +33,7 @@
         />
         <IconLoadingSpinner
           class="ct-listing__spinner"
-          :class="{ 'ct-listing__spinner--visible': loadingResults }"
+          :class="{ 'ct-listing__spinner--visible': isLoadingResults }"
         />
       </div>
     </div>
@@ -65,12 +65,12 @@ const currentResults = ref<ListingResults>(props.results)
 // re-reading the URL, so Vue state can't drift from what's in the address bar.
 const activeFilterOptions = ref<Record<string, Array<string | number>>>(readFiltersFromUrl())
 const isFilterPaneActive = ref(false)
-const loadingMoreResults = ref(false)
-const updatingResults = ref(false)
+const isLoadingMoreResults = ref(false)
+const isUpdatingResults = ref(false)
 const paginationResetKey = ref(0)
 let ajaxRequests = 0
 
-const loadingResults = computed(() => loadingMoreResults.value || updatingResults.value)
+const isLoadingResults = computed(() => isLoadingMoreResults.value || isUpdatingResults.value)
 
 function readFiltersFromUrl(): Record<string, string[]> {
   const params = new URLSearchParams(window.location.search)
@@ -114,8 +114,8 @@ function buildSearchParams(requestedPage: number): URLSearchParams {
 }
 
 function requestSearch(pagination = false, requestedPage = 1) {
-  if (pagination) loadingMoreResults.value = true
-  else updatingResults.value = true
+  if (pagination) isLoadingMoreResults.value = true
+  else isUpdatingResults.value = true
 
   ajaxRequests++
 
@@ -133,8 +133,8 @@ function requestSearch(pagination = false, requestedPage = 1) {
 
       if (ajaxRequests === 0) {
         window.setTimeout(() => {
-          loadingMoreResults.value = false
-          updatingResults.value = false
+          isLoadingMoreResults.value = false
+          isUpdatingResults.value = false
         }, 1000)
       }
     })

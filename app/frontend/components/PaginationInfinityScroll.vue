@@ -1,6 +1,6 @@
 <template>
   <span
-    v-show="showTrigger"
+    v-show="isTriggerVisible"
     ref="triggerEl"
     :class="triggerClass"
   />
@@ -26,7 +26,7 @@ const emit = defineEmits<{ requestMore: [page: number] }>()
 const triggerEl = ref<HTMLElement | null>(null)
 const currentPage = ref(1)
 
-const showTrigger = computed(() => currentPage.value < props.totalPages)
+const isTriggerVisible = computed(() => currentPage.value < props.totalPages)
 
 function requestMore() {
   currentPage.value += 1
@@ -45,7 +45,7 @@ onMounted(() => {
   if (!triggerEl.value) return
 
   observer = new IntersectionObserver((entries) => {
-    if (showTrigger.value && entries.some(entry => entry.isIntersecting)) {
+    if (isTriggerVisible.value && entries.some(entry => entry.isIntersecting)) {
       requestMore()
     }
   })

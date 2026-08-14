@@ -1,5 +1,5 @@
 <div class="vw-thematic-effectiveness">
-  <%= render partial: "./layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page) %>
+  <%= render partial: "layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page) %>
   <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
     ga_id: "Slug: #{@cms_page.slug}",
     tabs_list: @tabs_list,

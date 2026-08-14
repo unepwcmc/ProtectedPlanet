@@ -16,12 +16,12 @@
       <IconDownload class="ct-download__trigger-icon" />
     </button>
     <DownloadPopup
-      v-if="showPopup"
+      v-if="isPopupVisible"
       :options
       @select="clickDownloadOption"
     />
     <DownloadCommercial
-      v-if="showCommercialModal"
+      v-if="isCommercialModalVisible"
       :text="textCommercial"
       @close="closeCommercialModal"
       @nonCommercial="clickNonCommercial"
@@ -49,8 +49,8 @@ const props = withDefaults(defineProps<Download>(), {
 const downloadStore = useDownloadStore()
 
 const selectedDownloadOption = ref<DownloadOption | null>(null)
-const showCommercialModal = ref(false)
-const showPopup = ref(false)
+const isCommercialModalVisible = ref(false)
+const isPopupVisible = ref(false)
 
 function addNewDownloadItem() {
   const params = selectedDownloadOption.value?.params
@@ -62,11 +62,11 @@ function addNewDownloadItem() {
 }
 
 function clickDownloadOption(option: DownloadOption) {
-  showPopup.value = false
+  isPopupVisible.value = false
   selectedDownloadOption.value = option
 
   if (option.commercialAvailable) {
-    showCommercialModal.value = true
+    isCommercialModalVisible.value = true
   }
   else {
     addNewDownloadItem()
@@ -95,12 +95,12 @@ function clickNonCommercial() {
 }
 
 function closeCommercialModal() {
-  showCommercialModal.value = false
+  isCommercialModalVisible.value = false
 }
 
 function toggleDownloadPane() {
   if (props.downloadDisabled) return
-  showPopup.value = !showPopup.value
+  isPopupVisible.value = !isPopupVisible.value
 }
 </script>
 

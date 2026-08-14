@@ -1,16 +1,16 @@
-<div class="vw-cms-news-and-stories-article">
-  <%= render partial: "./layouts/partials/hero/basic", locals: {
+<div class="vw-layouts-cms-news-and-stories-article">
+  <%= render partial: "layouts/partials/hero/basic", locals: {
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label,
     items_centre: true,
   } %>
-  <section class="vw-cms-news-and-stories-article__content">
+  <section class="vw-layouts-cms-news-and-stories-article__content">
     <%= cms_fragment_render("content") %>
   </section>
-  <div class="vw-cms-news-and-stories-article__socials">
+  <div class="vw-layouts-cms-news-and-stories-article__socials">
     <%= render "partials/social/social-share" %>
   </div>
-  <section class="vw-cms-news-and-stories-article__news">
+  <section class="vw-layouts-cms-news-and-stories-article__news">
     <%= render "partials/cards/news" %>
   </section>
   <%= render "partials/ctas/protected-planet-report" %>

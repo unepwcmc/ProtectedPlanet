@@ -20,10 +20,10 @@ describe('Pame Filters Index', () => {
     const buttons = wrapper.findAll('.ct-pame-filter__button')
 
     await buttons[0].trigger('click')
-    expect(wrapper.findAll('.ct-pame-filter__options--active')).toHaveLength(1)
+    expect(wrapper.findAll('.ct-pame-filter-mobile--active')).toHaveLength(1)
 
     await buttons[1].trigger('click')
-    const activeOptions = wrapper.findAll('.ct-pame-filter__options--active')
+    const activeOptions = wrapper.findAll('.ct-pame-filter-mobile--active')
     expect(activeOptions).toHaveLength(1)
   })
 
@@ -33,7 +33,7 @@ describe('Pame Filters Index', () => {
     const countryFilter = wrapper.findAll('.ct-pame-filter')[1]
     await countryFilter.find('.ct-pame-filter__button').trigger('click')
     await countryFilter.find('.ct-pame-filter-option__checkbox').setValue(true)
-    await countryFilter.find('.ct-pame-filter__button-apply').trigger('click')
+    await countryFilter.find('.ct-pame-filter-mobile__button-apply').trigger('click')
 
     expect(wrapper.emitted('apply')?.[0]).toEqual(['country', ['Kenya']])
   })

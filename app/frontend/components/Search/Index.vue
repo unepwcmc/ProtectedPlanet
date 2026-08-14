@@ -1,32 +1,32 @@
 <template>
   <div class="ct-search-site">
     <SearchSiteInput
-      :disabled="loadingResults"
+      :disabled="isLoadingResults"
       :placeholder
       :prePopulatedSearchTerm="searchTerm"
       @submit:search="updateSearchTerm"
     />
-    <SearchSiteTabStrip
+    <TabStrip
       :children="categories"
       :defaultSelectedId="defaultCategoryId"
-      :disabled="loadingResults"
+      :disabled="isLoadingResults"
       :gaId
       :preSelectedId="categoryId"
       @click:tab="updateCategory"
     />
-    <SearchSiteResults
-      v-show="!loadingResults"
+    <SearchResults
+      v-show="!isLoadingResults"
       :results
       :resultsText
       :totalItems
     />
     <IconLoadingSpinner
       class="ct-search-site__spinner"
-      :class="{ 'ct-search-site__spinner--visible': loadingResults }"
+      :class="{ 'ct-search-site__spinner--visible': isLoadingResults }"
     />
-    <SearchSitePagination
+    <SearchPagination
       :currentPage
-      :loading="loadingResults"
+      :loading="isLoadingResults"
       :noResultsText
       :pageItemsEnd
       :pageItemsStart
@@ -40,9 +40,9 @@
 import { ref } from 'vue'
 import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
 import SearchSiteInput from '@/components/Search/SiteInput.vue'
-import SearchSitePagination from '@/components/Search/Pagination.vue'
-import SearchSiteResults from '@/components/Search/Results/Index.vue'
-import SearchSiteTabStrip from '@/components/TabStrip/Index.vue'
+import SearchPagination from '@/components/Search/Pagination.vue'
+import SearchResults from '@/components/Search/Results/Index.vue'
+import TabStrip from '@/components/TabStrip/Index.vue'
 import { getJson } from '@/lib/http'
 import type { SearchSiteProps, SearchSiteResultsData } from '@/types/backend'
 
@@ -57,7 +57,7 @@ const defaultCategoryId = props.categories[0].id
 
 const categoryId = ref(defaultCategoryId)
 const currentPage = ref(props.dataPageLoad.currentPage)
-const loadingResults = ref(false)
+const isLoadingResults = ref(false)
 const pageItemsEnd = ref(props.dataPageLoad.pageItemsEnd)
 const pageItemsStart = ref(props.dataPageLoad.pageItemsStart)
 const results = ref(props.dataPageLoad.results)
@@ -69,7 +69,7 @@ function resetCategory() {
 }
 
 async function ajaxSubmission(requestedPage: number) {
-  loadingResults.value = true
+  isLoadingResults.value = true
 
   const response = await getJson<SearchSiteResultsData>(props.endpoint, {
     filters: JSON.stringify({ ancestor: categoryId.value }),
@@ -79,16 +79,16 @@ async function ajaxSubmission(requestedPage: number) {
   })
 
   updateProperties(response)
-  loadingResults.value = false
+  isLoadingResults.value = false
 }
 function updateCategory(selectedCategoryId: string) {
-  if (loadingResults.value) return
+  if (isLoadingResults.value) return
   categoryId.value = selectedCategoryId
   ajaxSubmission(1)
 }
 
 function updatePage(requestedPage: number) {
-  if (loadingResults.value) return
+  if (isLoadingResults.value) return
   ajaxSubmission(requestedPage)
 }
 
@@ -108,7 +108,7 @@ function updateQueryString(newSearchTerm: string) {
 }
 
 function updateSearchTerm(newSearchTerm: string) {
-  if (loadingResults.value) return
+  if (isLoadingResults.value) return
   searchTerm.value = newSearchTerm
   updateQueryString(newSearchTerm)
   resetCategory()

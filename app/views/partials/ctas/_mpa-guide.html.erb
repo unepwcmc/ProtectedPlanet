@@ -1,14 +1,14 @@
 <% if cta_mpa %>
-  <section class="vw-partials-ctas-mpa">
-    <div class="vw-partials-ctas-mpa__container">
-      <div class="vw-partials-ctas-mpa__content">
-        <h2 class="vw-partials-ctas-mpa__title">
+  <section class="vw-partials-ctas-mpa-guide">
+    <div class="vw-partials-ctas-mpa-guide__container">
+      <div class="vw-partials-ctas-mpa-guide__content">
+        <h2 class="vw-partials-ctas-mpa-guide__title">
           <%= cta_mpa.title %>
         </h2>
-        <p class="vw-partials-ctas-mpa__intro">
+        <p class="vw-partials-ctas-mpa-guide__intro">
           <%= cta_mpa.summary %>
         </p>
-        <%= link_to t('ctas.mpa.button'), cta_mpa.url, target: '_blank', class: 'vw-partials-ctas-mpa__button' %>
+        <%= link_to t('ctas.mpa.button'), cta_mpa.url, target: '_blank', class: 'vw-partials-ctas-mpa-guide__button' %>
       </div>
     </div>
   </section>

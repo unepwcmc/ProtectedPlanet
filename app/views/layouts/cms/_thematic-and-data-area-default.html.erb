@@ -1,6 +1,6 @@
 <% tabs_list = thematic_and_data_area_tabs(@cms_page) %>
-<div class="vw-cms-thematic-and-data-area-default">
-  <%= render partial: "./layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page) %>
+<div class="vw-layouts-cms-thematic-and-data-area-default">
+  <%= render partial: "layouts/partials/hero/basic", locals: thematic_and_data_area_hero_locals(@cms_page) %>
   <% if tabs_list.any? %>
     <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
         ga_id: "Slug: #{@cms_page.slug}",

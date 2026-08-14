@@ -75,7 +75,7 @@ describe('Pame Table Index', () => {
 
     await wrapper.find('.ct-pame-filter__button').trigger('click')
     await wrapper.find('.ct-pame-filter-option__checkbox').setValue(true)
-    await wrapper.find('.ct-pame-filter__button-apply').trigger('click')
+    await wrapper.find('.ct-pame-filter-mobile__button-apply').trigger('click')
     await flushPromises()
 
     const [, options] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]
@@ -93,7 +93,7 @@ describe('Pame Table Index', () => {
 
     await wrapper.find('.ct-pame-filter__button').trigger('click')
     await wrapper.find('.ct-pame-filter-option__checkbox').setValue(true)
-    await wrapper.find('.ct-pame-filter__button-apply').trigger('click')
+    await wrapper.find('.ct-pame-filter-mobile__button-apply').trigger('click')
     await flushPromises()
 
     expect(window.location.search).toBe('?pame_filters%5Bmethod%5D%5B%5D=Site+visit')

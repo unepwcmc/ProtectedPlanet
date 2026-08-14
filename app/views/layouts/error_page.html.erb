@@ -5,7 +5,7 @@
       <code>application_controller.rb</code> temporarily to see Rails' real error page instead of this one.
     </p>
   <% end %>
-  <%= render partial: "./layouts/partials/hero/basic", locals: {
+  <%= render partial: "layouts/partials/hero/basic", locals: {
       title: error_status == 404 ? t('global.redirect.title') : t('global.redirect.alt_title'),
       summary: t('global.redirect.text', url: root_url).html_safe,
       items_centre: true,

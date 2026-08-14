@@ -24,7 +24,7 @@ describe('Pame Filters Filter', () => {
     const wrapper = mount(Filter, { props })
 
     await wrapper.findAll('.ct-pame-filter-option__checkbox')[0].setValue(true)
-    await wrapper.find('.ct-pame-filter__button-apply').trigger('click')
+    await wrapper.find('.ct-pame-filter-mobile__button-apply').trigger('click')
 
     expect(wrapper.emitted('apply')?.[0]).toEqual([['Aerial survey']])
     expect(wrapper.emitted('toggle')).toHaveLength(1)
@@ -34,7 +34,7 @@ describe('Pame Filters Filter', () => {
     const wrapper = mount(Filter, { props: { ...props, appliedOptions: ['Aerial survey'] } })
 
     await wrapper.findAll('.ct-pame-filter-option__checkbox')[1].setValue(true)
-    await wrapper.find('.ct-pame-filter__button-cancel').trigger('click')
+    await wrapper.find('.ct-pame-filter-mobile__button-cancel').trigger('click')
 
     const checked = wrapper.findAll('.ct-pame-filter-option__checkbox').map(el => (el.element as HTMLInputElement).checked)
     expect(checked).toEqual([true, false])
@@ -58,7 +58,7 @@ describe('Pame Filters Filter', () => {
     const wrapper = mount(Filter, { props })
 
     await wrapper.findAll('.ct-pame-filter-option__checkbox')[0].setValue(true)
-    await wrapper.find('.ct-pame-filter__button-clear').trigger('click')
+    await wrapper.find('.ct-pame-filter-mobile__button-clear').trigger('click')
 
     const checked = wrapper.findAll('.ct-pame-filter-option__checkbox').map(el => (el.element as HTMLInputElement).checked)
     expect(checked).toEqual([false, false])
@@ -82,7 +82,7 @@ describe('Pame Filters Filter', () => {
   it('disables toggle and apply while a PAME request is in flight', async () => {
     const wrapper = mount(Filter, { props: { ...props, isFetching: true } })
 
-    expect(wrapper.find('.ct-pame-filter__button-apply').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.ct-pame-filter-mobile__button-apply').attributes('disabled')).toBeDefined()
 
     await wrapper.find('.ct-pame-filter__button').trigger('click')
 

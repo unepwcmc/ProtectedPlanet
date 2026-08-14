@@ -14,7 +14,7 @@
         @keyup.enter="submit"
       >
       <button
-        v-show="showResetIcon"
+        v-show="isResetIconVisible"
         class="ct-search-areas-autocomplete__delete"
         @click="resetSearchTerm"
       >
@@ -67,7 +67,7 @@ const root = ref<HTMLElement | null>(null)
 const searchTerm = ref(props.prePopulatedSearchTerm ?? '')
 const autocomplete = ref<AutocompleteResult[]>([])
 
-const showResetIcon = computed(() => searchTerm.value.length !== 0)
+const isResetIconVisible = computed(() => searchTerm.value.length !== 0)
 const isDropdownOpen = computed(() => autocomplete.value.length > 0)
 
 async function updateAutocomplete() {

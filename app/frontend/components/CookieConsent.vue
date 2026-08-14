@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible"
+    v-if="isVisible"
     class="ct-cookie-consent"
   >
     <div class="ct-cookie-consent__container">
@@ -38,19 +38,19 @@ const props = defineProps<CookieConsentProps>()
 
 const { acceptAnalytics, rejectAnalytics } = useAnalytics()
 
-const visible = ref(getConsent() === null)
+const isVisible = ref(getConsent() === null)
 
 // Banner sits over an overlay, so the page behind it shouldn't scroll while it's up.
-useFreezeBackground(visible)
+useFreezeBackground(isVisible)
 
 function accept() {
   acceptAnalytics()
-  visible.value = false
+  isVisible.value = false
 }
 
 function reject() {
   rejectAnalytics()
-  visible.value = false
+  isVisible.value = false
 }
 </script>
 
