@@ -5,8 +5,13 @@
   </title>
   <meta name="description" content="<%= t('meta.site.description') %>">
   <%== opengraph %>
-  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  <% if canonical_url %>
+    <link rel="canonical" href="<%= canonical_url %>">
+  <% end %>
+  <% if structured_data %>
+    <script type="application/ld+json"><%== structured_data.to_json %></script>
+  <% end %>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <% unless Rails.env.development? %>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <% end %>

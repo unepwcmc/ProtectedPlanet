@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   # Required for development
   before_action :set_host_for_local_storage
 
-  helper_method :opengraph
+  helper_method :opengraph, :canonical_url, :structured_data
 
   before_action :load_cms_site
   before_action :load_cms_content
@@ -47,6 +47,29 @@ class ApplicationController < ActionController::Base
       'card': t('meta.twitter.card'),
       'site': t('meta.twitter.site'),
       'creator': t('meta.twitter.creator')
+    }
+  end
+
+  def canonical_url
+    return if admin_path?
+
+    request.original_url.split('?').first
+  end
+
+  def structured_data
+    return if admin_path?
+
+    @structured_data ||= {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: t('meta.site.name'),
+      url: root_url,
+      description: t('meta.site.description'),
+      publisher: {
+        '@type': 'Organization',
+        name: t('meta.site.name'),
+        logo: URI.join(root_url, helpers.image_path(t('meta.image'))).to_s
+      }
     }
   end
 
