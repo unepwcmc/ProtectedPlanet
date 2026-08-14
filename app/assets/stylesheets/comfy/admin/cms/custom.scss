@@ -1,12 +1,12 @@
 //--------------------------------------------------
 // custom fields
 //--------------------------------------------------
-#fragment-published_date { background-color: $white; }
+#fragment-published_date { background-color: #fff; }
 
 [for="fragment-types"],
 [for="fragment-topics"] { padding-top: 0; }
 
-.alert.alert-alert { 
-  background-color: $red; 
-  color: $white;
+.alert.alert-alert {
+  background-color: #dc3545;
+  color: #fff;
 }
