@@ -21,10 +21,25 @@
     @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black;
   }
 
+  strong,
+  b {
+    @apply font-bold;
+  }
+
+  em,
+  i {
+    @apply italic;
+  }
+
+  u {
+    @apply underline;
+  }
+
   table,
   th,
   td {
-    @apply border
+    @apply 
+    border
     border-solid 
     p-1.25;
   
@@ -49,15 +64,14 @@
     ps-4;
   }
 
+
   a {
     @apply underline;
-
-    
   }
 
   a:hover {
       @apply no-underline;
-    }
+  }
 }
 
 @utility tw-shared-cms-wysiwyg-thematic-page {
@@ -68,8 +82,22 @@
   }
 
   div {
-    @apply 
+    @apply
     tw-shared-font-hind-siliguri__light-base-grey-black
     leading-[1.6];
+  }
+
+  strong,
+  b {
+    @apply font-bold;
+  }
+
+  em,
+  i {
+    @apply italic;
+  }
+
+  u {
+    @apply underline;
   }
 }

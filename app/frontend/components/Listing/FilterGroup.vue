@@ -75,7 +75,7 @@ onMounted(() => {
 }
 
 .ct-listing-filter-group__title {
-  @apply tw-shared-font-hind-siliguri__normal-lg-lg-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__semibold-lg-lg-base-grey-black;
 }
 
 .ct-listing-filter-group__clear {

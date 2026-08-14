@@ -15,7 +15,6 @@
         </span>
       </button>
     </div>
-
     <FiltersCheckboxes
       v-if="type === 'checkbox'"
       :id
@@ -126,7 +125,7 @@ onMounted(() => {
 }
 
 .ct-search-areas-filter-group__title {
-  @apply tw-shared-font-hind-siliguri__normal-lg-lg-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__semibold-lg-lg-base-grey-black;
 }
 
 .ct-search-areas-filter-group__clear {

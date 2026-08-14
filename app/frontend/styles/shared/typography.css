@@ -415,13 +415,6 @@ text-white;
   text-theme-grey-black;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-lg-lg-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal-lg
-  lg:text-base
-  text-theme-grey-black;
-}
-
 @utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-dark {
   @apply
   tw-shared-font-hind-siliguri__normal-lg
@@ -502,6 +495,13 @@ text-white;
   @apply
   tw-shared-font-hind-siliguri__semibold-lg
   text-theme-primary;
+}
+
+@utility tw-shared-font-hind-siliguri__semibold-lg-lg-base-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__semibold-lg
+  lg:text-base
+  text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey {

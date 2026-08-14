@@ -1,4 +1,5 @@
 .vw-thematic-and-data-area-panel-content__container {
-  @apply tw-shared-base-container--medium
+  @apply 
+  tw-shared-base-container--medium
   tw-shared-cms-wysiwyg;
 }
