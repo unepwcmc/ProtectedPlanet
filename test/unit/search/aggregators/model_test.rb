@@ -2,8 +2,8 @@ require 'test_helper'
 
 class SearchAggregatorsModel < ActiveSupport::TestCase
   test '.build, given a name and aggregation hash, returns a model and a count' do
-    country_1 = FactoryGirl.create(:country)
-    country_2 = FactoryGirl.create(:country)
+    country_1 = FactoryBot.create(:country)
+    country_2 = FactoryBot.create(:country)
 
     name = 'country'
     aggregation_hash = {

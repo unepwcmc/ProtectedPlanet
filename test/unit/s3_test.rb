@@ -2,10 +2,10 @@ require 'test_helper'
 
 class S3Test < ActiveSupport::TestCase
   def setup
-    Rails.application.secrets.aws_access_key_id = '123'
-    Rails.application.secrets.aws_secret_access_key = 'abc'
-    Rails.application.secrets.aws_downloads_bucket = 'pp-downloads-development'
-    Rails.application.secrets.s3_region = 'eu-west-2'
+    AppSecrets.aws_access_key_id = '123'
+    AppSecrets.aws_secret_access_key = 'abc'
+    AppSecrets.aws_downloads_bucket = 'pp-downloads-development'
+    AppSecrets.s3_region = 'eu-west-2'
   end
 
   test '#new creates an S3 connection' do

@@ -91,7 +91,7 @@ class ProtectedArea < ApplicationRecord
     results = $redis.zrevrangebyscore(year_month, "+inf", "-inf", opts)
     results.map { |site_id, visits|
       {
-        protected_area: ProtectedArea.find_by_site_id(site_id),
+        protected_area: ProtectedArea.find_by(site_id: site_id),
         visits: visits.to_i
       }
     }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :comfy do
-  TO    = Rails.application.secrets.aws_files_bucket
+  TO    = Rails.application.config_for(:app_secrets).aws_files_bucket
   FILES = File.join(ComfortableMediaSurfer.config.seeds_path, 'protected-planet', 'files')
   STORAGE = Rails.root.join('storage').freeze
 

@@ -2,13 +2,13 @@ require 'test_helper'
 
 class CountryTest < ActiveSupport::TestCase
   test '.bounds returns the bounding box for the Country geometry' do
-    country = FactoryGirl.create(:country, bounding_box: 'POLYGON ((-1 0, 0 1, 1 2, 1 0, -1 0))')
+    country = FactoryBot.create(:country, bounding_box: 'POLYGON ((-1 0, 0 1, 1 2, 1 0, -1 0))')
 
     assert_equal [[0, -1], [2, 1]], country.bounds
   end
 
   test '.without_geometry does not select the geometry columns' do
-    country = FactoryGirl.create(:country)
+    country = FactoryBot.create(:country)
 
     selected_country = Country.without_geometry.find(country.id)
 
@@ -16,8 +16,8 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test '.as_indexed_json returns the Country as JSON' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
+    region = FactoryBot.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryBot.create(:country, id: 123, name: 'Manboneland', region: region)
 
     expected_json = {
       "id" => 123,
@@ -32,14 +32,14 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test '.protected_areas returns the number of Protected Areas in the country' do
-    country = FactoryGirl.create(:country)
+    country = FactoryBot.create(:country)
 
     expected_pas = [
-      FactoryGirl.create(:protected_area, countries: [country]),
-      FactoryGirl.create(:protected_area, countries: [country])
+      FactoryBot.create(:protected_area, countries: [country]),
+      FactoryBot.create(:protected_area, countries: [country])
     ]
 
-    FactoryGirl.create(:protected_area)
+    FactoryBot.create(:protected_area)
 
     protected_areas = country.protected_areas
 
@@ -48,37 +48,37 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test ".designations returns the designations for the Country's Protected Areas" do
-    designation_1 = FactoryGirl.create(:designation, name: 'Lionel Messi')
-    designation_2 = FactoryGirl.create(:designation, name: 'Robin Van Persie')
-    designation_3 = FactoryGirl.create(:designation, name: 'Cristiano Ronaldo')
+    designation_1 = FactoryBot.create(:designation, name: 'Lionel Messi')
+    designation_2 = FactoryBot.create(:designation, name: 'Robin Van Persie')
+    designation_3 = FactoryBot.create(:designation, name: 'Cristiano Ronaldo')
 
-    country_1 = FactoryGirl.create(:country)
-    country_2 = FactoryGirl.create(:country)
-    country_3 = FactoryGirl.create(:country)
+    country_1 = FactoryBot.create(:country)
+    country_2 = FactoryBot.create(:country)
+    country_3 = FactoryBot.create(:country)
 
-    FactoryGirl.create(:protected_area, designation: designation_1, countries: [country_1])
-    FactoryGirl.create(:protected_area, designation: designation_2, countries: [country_1])
-    FactoryGirl.create(:protected_area, designation: designation_2, countries: [country_2])
-    FactoryGirl.create(:protected_area, designation: designation_3, countries: [country_3])
+    FactoryBot.create(:protected_area, designation: designation_1, countries: [country_1])
+    FactoryBot.create(:protected_area, designation: designation_2, countries: [country_1])
+    FactoryBot.create(:protected_area, designation: designation_2, countries: [country_2])
+    FactoryBot.create(:protected_area, designation: designation_3, countries: [country_3])
 
     assert_equal 2, country_1.designations.count
   end
 
   test '#data_providers returns all countries that provide PA data' do
-    country_1 = FactoryGirl.create(:country)
-    country_2 = FactoryGirl.create(:country)
-    FactoryGirl.create(:country)
+    country_1 = FactoryBot.create(:country)
+    country_2 = FactoryBot.create(:country)
+    FactoryBot.create(:country)
 
-    FactoryGirl.create(:protected_area, countries: [country_1])
-    FactoryGirl.create(:protected_area, countries: [country_2])
+    FactoryBot.create(:protected_area, countries: [country_1])
+    FactoryBot.create(:protected_area, countries: [country_2])
 
     assert_equal 2, Country.data_providers.count
   end
 
   test '#random_protected_areas, given an integer, returns the given number of random pas' do
-    country = FactoryGirl.create(:country)
-    country_pas = 2.times.map{ FactoryGirl.create(:protected_area, countries: [country]) }
-    2.times{ FactoryGirl.create(:protected_area) }
+    country = FactoryBot.create(:country)
+    country_pas = 2.times.map{ FactoryBot.create(:protected_area, countries: [country]) }
+    2.times{ FactoryBot.create(:protected_area) }
 
     random_pas = country.random_protected_areas 2
     assert_same_elements country_pas, random_pas
@@ -89,9 +89,9 @@ class CountryTest < ActiveSupport::TestCase
     # distinct names (the factory default is the same for both). SUM() over an
     # integer column is numeric in Postgres, and since Rails 6.1 / pg 1.x the
     # raw result is decoded to BigDecimal rather than handed back as a string.
-    designation_1 = FactoryGirl.create(:designation, name: 'Alpha')
-    designation_2 = FactoryGirl.create(:designation, name: 'Beta')
-    country = FactoryGirl.create(:country)
+    designation_1 = FactoryBot.create(:designation, name: 'Alpha')
+    designation_2 = FactoryBot.create(:designation, name: 'Beta')
+    country = FactoryBot.create(:country)
     expected_groups = [{
       'designation_name' => 'Alpha',
       'count' => BigDecimal('2')
@@ -100,16 +100,16 @@ class CountryTest < ActiveSupport::TestCase
       'count' => BigDecimal('3')
     }]
 
-    2.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_1) }
-    3.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_2) }
+    2.times { FactoryBot.create(:protected_area, countries: [country], designation: designation_1) }
+    3.times { FactoryBot.create(:protected_area, countries: [country], designation: designation_2) }
 
     assert_same_elements expected_groups, country.protected_areas_per_designation.to_a
   end
 
   test '#protected_areas_per_iucn_category returns groups of pa counts per iucn_category' do
-    iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
-    iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
-    country = FactoryGirl.create(:country)
+    iucn_category_1 = FactoryBot.create(:iucn_category, name: 'Ib')
+    iucn_category_2 = FactoryBot.create(:iucn_category, name: 'V')
+    country = FactoryBot.create(:country)
     expected_groups = [{
       'iucn_category_id' => iucn_category_1.id,
       'iucn_category_name' => iucn_category_1.name,
@@ -123,16 +123,16 @@ class CountryTest < ActiveSupport::TestCase
       'percentage' => BigDecimal('60')
     }]
 
-    2.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_1) }
-    3.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_2) }
+    2.times { FactoryBot.create(:protected_area, countries: [country], iucn_category: iucn_category_1) }
+    3.times { FactoryBot.create(:protected_area, countries: [country], iucn_category: iucn_category_2) }
 
     assert_same_elements expected_groups, country.protected_areas_per_iucn_category.to_a
   end
 
   test '#protected_areas_per_governance returns groups of pa counts per governance' do
-    governance_1 = FactoryGirl.create(:governance, name: 'Regional')
-    governance_2 = FactoryGirl.create(:governance, name: 'International')
-    country = FactoryGirl.create(:country)
+    governance_1 = FactoryBot.create(:governance, name: 'Regional')
+    governance_2 = FactoryBot.create(:governance, name: 'International')
+    country = FactoryBot.create(:country)
     expected_groups = [{
       'governance_id' => governance_1.id,
       'governance_name' => governance_1.name,
@@ -148,8 +148,8 @@ class CountryTest < ActiveSupport::TestCase
       'percentage' => BigDecimal('60')
     }]
 
-    2.times { FactoryGirl.create(:protected_area, countries: [country], governance: governance_1) }
-    3.times { FactoryGirl.create(:protected_area, countries: [country], governance: governance_2) }
+    2.times { FactoryBot.create(:protected_area, countries: [country], governance: governance_1) }
+    3.times { FactoryBot.create(:protected_area, countries: [country], governance: governance_2) }
 
     assert_same_elements expected_groups, country.protected_areas_per_governance.to_a
   end

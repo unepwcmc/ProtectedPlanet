@@ -4,9 +4,9 @@ class S3
 
   def initialize
     base = {
-      access_key_id: Rails.application.secrets.aws_access_key_id,
-      secret_access_key: Rails.application.secrets.aws_secret_access_key,
-      region: Rails.application.secrets.s3_region
+      access_key_id: AppSecrets.aws_access_key_id,
+      secret_access_key: AppSecrets.aws_secret_access_key,
+      region: AppSecrets.s3_region
     }
     # Local/dev: point at an S3-compatible endpoint (e.g. MinIO) when set. Path
     # style is required because per-bucket virtual hosts don't resolve locally.
@@ -33,13 +33,13 @@ class S3
     prefix = opts[:for_import] ? IMPORT_PREFIX : CURRENT_PREFIX
     prefixed_file_name = prefix + file_name
 
-    url = Rails.application.secrets.aws_s3_url
+    url = AppSecrets.aws_s3_url
     URI.join(url, prefixed_file_name).to_s
   end
 
   def upload(object_name, source, opts)
     # Default to downloads bucket unless specified (e.g. for when uploading CMS files)
-    bucket = opts[:bucket] || Rails.application.secrets.aws_downloads_bucket
+    bucket = opts[:bucket] || AppSecrets.aws_downloads_bucket
 
     object = @s3.bucket(bucket).object(object_name)
     object.upload_file(source)
@@ -58,7 +58,7 @@ class S3
 
 
   def delete_all(path)
-    bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
+    bucket = @s3.bucket(AppSecrets.aws_downloads_bucket)
     objects = bucket.objects(prefix: path)
 
     objects.each do |objs|

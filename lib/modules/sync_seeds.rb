@@ -8,7 +8,7 @@ class SyncSeeds
   end
 
   def start_session
-    opts = Rails.env.development? ? {} : {keys: [Rails.application.secrets.staging_ssh_key]}
+    opts = Rails.env.development? ? {} : {keys: [AppSecrets.staging_ssh_key]}
 
     Net::SSH.start(
       @server,

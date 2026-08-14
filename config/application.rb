@@ -27,7 +27,7 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 7.1
+    config.load_defaults 8.0
 
     # Opted out of one default. Every belongs_to foreign key in this schema is
     # nullable, so nothing at the database level backs a presence validation, and
@@ -53,5 +53,10 @@ module ProtectedPlanet
     config.eager_load_paths += %W[#{config.root}/lib/modules]
 
     config.active_record.schema_format = :sql
+
+    # secret_key_base used to come from config/secrets.yml via Rails' auto-load. That
+    # is deprecated (7.1) / removed (7.2), and we renamed the file to app_secrets.yml,
+    # so set it explicitly from the same YAML (ENV-driven for prod/staging).
+    config.secret_key_base = config_for(:app_secrets)[:secret_key_base]
   end
 end

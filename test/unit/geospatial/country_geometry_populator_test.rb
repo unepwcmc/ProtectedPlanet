@@ -3,7 +3,7 @@ require 'test_helper'
 class CountryGeometryPopulatorTest < ActiveSupport::TestCase
   test '#populate_dissolved_geometries, given a country, dissolves the marine and terrestrial
    geometries' do
-    country = FactoryGirl.build(:country, iso_3: 'FAK')
+    country = FactoryBot.build(:country, iso_3: 'FAK')
 
     marine_query = """
       UPDATE countries
@@ -91,7 +91,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
   test '#populate_dissolved_geometries, given a country defined as "complex", simplifies the
    marine geometry' do
-    country = FactoryGirl.build(:country, iso_3: 'GBR')
+    country = FactoryBot.build(:country, iso_3: 'GBR')
 
     marine_query = """
       UPDATE countries
@@ -179,7 +179,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
   test '#populate_marine_geometries, given a country, sets the EEZ and
    Territorial Water geometries for that country' do
-    country = FactoryGirl.build(:country, iso_3: 'FAK')
+    country = FactoryBot.build(:country, iso_3: 'FAK')
 
     repair_query = """
       UPDATE countries

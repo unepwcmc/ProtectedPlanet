@@ -16,4 +16,7 @@ PG:"host=<%= db_config[:host] %>
 <% unless geom_type == 'source' %>
   -nlt "<%= geom_type.upcase %>"
 <% end %>
+<%# OpenFileGDB names the geometry column after the source (the_geom); the Esri FileGDB
+    SDK named it SHAPE. Force SHAPE so the .gdb schema is identical to the old output. %>
+-lco "GEOMETRY_NAME=SHAPE"
 -nln "<%= feature_name %>"

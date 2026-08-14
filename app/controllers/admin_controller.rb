@@ -28,7 +28,7 @@ class AdminController < ApplicationController
   private
 
   def authenticated?
-    authentication_key = Rails.application.secrets.maintenance_mode_key
+    authentication_key = AppSecrets.maintenance_mode_key
     request.headers['X-Auth-Key'] == authentication_key
   end
 

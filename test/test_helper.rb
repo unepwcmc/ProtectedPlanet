@@ -1,7 +1,8 @@
 # Coverage — opt-in via COVERAGE=1 so local `rake test` stays fast; CI sets it.
 # Must start before any application code is required. The floor is a ratchet:
 # CI fails if line coverage drops below it. Raise it as coverage improves;
-# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026).
+# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026); ratcheted to 62 on
+# Rails 8 (Aug 2026, ~64.4% actual after the spatial/relation test net).
 if ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start 'rails' do
@@ -10,7 +11,7 @@ if ENV['COVERAGE']
     add_group 'Presenters', 'app/presenters'
     add_group 'Workers', 'app/workers'
     add_group 'lib/modules', 'lib/modules'
-    minimum_coverage 54
+    minimum_coverage 62
   end
 end
 
@@ -25,16 +26,13 @@ require 'webmock/minitest'
 
 require 'database_cleaner'
 
-# factory_girl was renamed factory_bot (and 4.x doesn't run on Ruby 3.2+).
-# Alias the old constant so the ~400 existing FactoryGirl.* call sites keep
-# working without a mass rename. (Factory *definitions* were converted from
-# static to block attributes, as factory_bot 5+ requires.)
-FactoryGirl = FactoryBot
-
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
 Mocha.configure do |c|
   c.stubbing_non_existent_method = :prevent
+  # Ruby 3 distinguishes positional hashes from keyword arguments; enforce the same in
+  # Mocha's #with matching so expectations can't silently mismatch the real call.
+  c.strict_keyword_argument_matching = true
 end
 
 class ActionMailer::TestCase
@@ -89,27 +87,27 @@ class ActiveSupport::TestCase
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms
-    @site = FactoryGirl.create(:cms_site)
-    @layout = FactoryGirl.create(:cms_layout, site: @site)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
+    @site = FactoryBot.create(:cms_site)
+    @layout = FactoryBot.create(:cms_layout, site: @site)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
   end
 
   # and home page needs some extra cms bits
   def seed_cms_home
     seed_cms
     # we need to add extra pages for pa categories on the home page
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
     # and the CTAs
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::API)
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::LIVE_REPORT)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::API)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::LIVE_REPORT)
 
   end
 end

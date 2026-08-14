@@ -1,4 +1,4 @@
-secrets = Rails.application.secrets.mailer
+secrets = Rails.application.config_for(:app_secrets).mailer
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

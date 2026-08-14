@@ -5,8 +5,8 @@ class DownloadUtilsTest < ActiveSupport::TestCase
    download S3 bucket for that object name' do
     download_name = 'that-download'
 
-    Rails.application.secrets.aws_downloads_bucket = 'pp-downloads-development'
-    url = Rails.application.secrets.aws_s3_url
+    AppSecrets.aws_downloads_bucket = 'pp-downloads-development'
+    url = AppSecrets.aws_s3_url
 
     # The zip is named after the download only; the format is no longer suffixed.
     expected_url = "#{url}/#{S3::CURRENT_PREFIX}that-download.zip"

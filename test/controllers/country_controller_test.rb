@@ -2,13 +2,13 @@ require 'test_helper'
 
 class CountryControllerTest < ActionController::TestCase
   test '.show returns a 200 HTTP code' do
-    FactoryGirl.create(:region, iso: 'GL')
+    FactoryBot.create(:region, iso: 'GL')
 
-    region = FactoryGirl.create(:region)
+    region = FactoryBot.create(:region)
 
-    country = FactoryGirl.create(:country, name: 'Orange Emirate', iso_3: 'PUM', region: region)
+    country = FactoryBot.create(:country, name: 'Orange Emirate', iso_3: 'PUM', region: region)
 
-    FactoryGirl.create(:country_statistic,
+    FactoryBot.create(:country_statistic,
       country: country,
       pa_area: 100,
       percentage_pa_cover: 50,
@@ -19,7 +19,7 @@ class CountryControllerTest < ActionController::TestCase
       points_count: 100
     )
 
-    FactoryGirl.create(:pame_statistic, country: country)
+    FactoryBot.create(:pame_statistic, country: country)
 
     seed_cms
     

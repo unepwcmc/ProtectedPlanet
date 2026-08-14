@@ -2,10 +2,10 @@ require 'test_helper'
 
 class ProtectedAreaPresenterGreenListTest < ActiveSupport::TestCase
   test 'greenlist_status_by_pa_and_all_its_parcels returns one affiliation per greenlisted parcel' do
-    status = FactoryGirl.create(:green_list_status, gl_status: 'Green Listed', gl_link: 'https://example.com/gl/1')
-    pa = FactoryGirl.create(:protected_area, green_list_status: nil)
-    FactoryGirl.create(:protected_area_parcel, protected_area: pa, site_pid: '123_1', green_list_status: status, name: 'Parcel 1')
-    FactoryGirl.create(:protected_area_parcel, protected_area: pa, site_pid: '123_2', green_list_status: nil, name: 'Parcel 2')
+    status = FactoryBot.create(:green_list_status, gl_status: 'Green Listed', gl_link: 'https://example.com/gl/1')
+    pa = FactoryBot.create(:protected_area, green_list_status: nil)
+    FactoryBot.create(:protected_area_parcel, protected_area: pa, site_pid: '123_1', green_list_status: status, name: 'Parcel 1')
+    FactoryBot.create(:protected_area_parcel, protected_area: pa, site_pid: '123_2', green_list_status: nil, name: 'Parcel 2')
 
     presenter = ProtectedAreaPresenter.new(pa)
     affiliations = presenter.send(:greenlist_status_by_pa_and_all_its_parcels)

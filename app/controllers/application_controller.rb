@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
   end
 
   def enable_caching
-    expires_in Rails.application.secrets.cache_max_age, public: true
+    expires_in AppSecrets.cache_max_age, public: true
   end
 
   # as of 04Apr it doesn't seem to be used

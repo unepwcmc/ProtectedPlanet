@@ -1,10 +1,28 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-10 (Rails 7.1 phase / B0).
+Keep this current as phases land. Last updated: 2026-08-10 (Rails 8.0 phase).
 
-Status at this point: **Rails 7.1.6**, Ruby 3.3.7, Zeitwerk, `load_defaults 7.1`,
-postgis-adapter 9.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+Status at this point: **Rails 8.0.5**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.0`,
+postgis-adapter 11.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+**Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0.**
+
+### Rails 8.0 phase — DONE
+- rails ~> 8.0.0 (8.0.5.1), `load_defaults 8.0`, activerecord-postgis-adapter 10 → 11.0.0,
+  **rails-i18n 7 → 8.1** (7.x caps railties < 8).
+- comfortable_media_surfer 3.1 resolved against Rails 8 with no cap conflict.
+- **Clean: 0 failures, 0 deprecations, no code changes** beyond the version + defaults —
+  the Zeitwerk/load_defaults ladder + secrets migration did the de-risking.
+
+### Rails 7.2 phase — DONE
+- rails ~> 7.2.2 (7.2.3.2), `load_defaults 7.2`, activerecord-postgis-adapter 9 → 10.0.3.
+- **`Rails.application.secrets` → `config_for(:app_secrets)`** (the 7.2 blocker) done first as
+  its own commit: renamed `config/secrets.yml` → `config/app_secrets.yml`, added
+  `config/initializers/00_app_secrets.rb` (`AppSecrets = config_for(:app_secrets)`), set
+  `config.secret_key_base` explicitly. Boot-time spots (env files, `storage.yml`,
+  `export_to_s3.rake` load-time constant) use `config_for` directly; app/lib/test use the
+  `AppSecrets` constant (mutable, so tests that set config still work). Zero deprecations.
+- Version bump itself was clean: **0 failures, 0 new deprecations** after the secrets prep.
 
 ### Rails 7.1 phase (B0) — DONE
 - rails ~> 7.1.5 (7.1.6), `load_defaults 7.1`, activerecord-postgis-adapter 8 → 9.0.2.
@@ -17,14 +35,9 @@ postgis-adapter 9.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in 
   matched the name inside that redirect body) broke. App is correct (slug → 302 to search);
   test now asserts the redirect + `search_term=` location.
 
-### ⚠️ Rails 7.2 headline blocker — `Rails.application.secrets`
-`load_defaults 7.1` **deprecates** `Rails.application.secrets` (removed in **7.2**). PP uses
-it **~48 times across 23 files** (`config/initializers/redis.rb`, `secrets.yml`,
-env configs, `search/index.rb`, `countries_geometry_importer.rb`, etc.) plus
-`secret_key_base` itself. **This is the main 7.2 task.** Migration path: move `secrets.yml`
-→ `Rails.application.config_for(:secrets)` (keeps the ENV-driven `secrets.yml` + dotenv flow,
-minimal churn) rather than encrypted credentials. Do it as the first step of the 7.2 phase.
-Works fine on 7.1 (deprecation warnings only) — deferred deliberately.
+### ✅ Rails 7.2 headline blocker — `Rails.application.secrets` — DONE
+Was the main 7.2 task (deprecated in 7.1, removed in 7.2; ~48 uses / 23 files + test/).
+Migrated to `config_for(:app_secrets)` — see the "Rails 7.2 phase — DONE" note above.
 
 ---
 
@@ -60,12 +73,70 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
 Writing these now, then not touching the code for months, risks staleness. Do each
 **just before** its phase. (Coverage baseline captured via `COVERAGE=1 bin/rails test`.)
 
-- [ ] **WDPA geometry importer** — `lib/modules/wdpa/portal/importers/protected_area/geometry.rb` is **0% / 138 LOC**. Needs real PostGIS fixtures. Do **before GDAL ([13](./13-gdal-and-spatial-tooling.md)) + Postgres migration ([15](./12-infrastructure-migration.md))** — highest spatial-upgrade risk.
-- [ ] **Table services** — `portal/services/core/{table_cleanup,table_swap,table_rollback}_service.rb` (~19–36%). Raw SQL DDL, PG-version fragile. Do **before the Postgres migration**.
-- [ ] **Relation `create_models` path** — `portal/relation/*` incl. the nil-jurisdiction logic (`ProtectedArea#designation`). Ties to the `belongs_to` decision in §6.
-- [ ] **shared importers** — `country_overseas_territories.rb` (9%), `story_map_link_list.rb` (10%), `protected_areas_related_source.rb` (15%).
+- [x] **DONE — WDPA geometry importer** (`lib/modules/wdpa/portal/importers/protected_area/geometry.rb`,
+      was **0%**). Added `test/unit/wdpa/portal/importers/geometry_test.rb` (19 tests): mapping
+      logic, `get_matching_condition` site_pid branches, `get_geometry_column`, `validate_target_table`
+      (missing/empty-PA-hard-fail/empty-parcel-warn/populated), `import_geometry_from_view` (UPDATE SQL
+      shape + cmd_tuples + coordinate follow-up), `import_coordinates` (ST_Centroid/ST_MakeValid guard),
+      `import_geometry_for_table` (aggregation, checkpoint-skip, per-view error isolation), and
+      `import_to_staging`. Mocks the connection layer (portal staging tables/views aren't in the test
+      DB — matches the sibling importer tests) rather than real PostGIS fixtures. This is the
+      characterization net **before GDAL + the Postgres migration** — highest spatial-upgrade risk. Suite 672/0.
+- [x] **DONE — Table services** — `portal/services/core/{table_cleanup,table_swap,table_rollback}_service.rb`
+      (was ~19–36%). Extended the existing tests (+10) covering the PG-migration-fragile logic:
+      cleanup `group_backups_by_timestamp`, `sort_tables_by_dependency` /
+      `sort_materialized_views_by_dependency` (junction→main→independent / config deletion order),
+      `cleanup_old_backups` (retention: within-limit no-op + oldest-removed sum); swap
+      `validate_staging_tables_existence` (pass + missing-lists-raise); rollback
+      `validate_backup_tables_exist` (missing-raise) + `list_available_backups_impl` (unique,
+      newest-first). Mocks the connection (raw-SQL DDL not run against the test DB). Suite 681/0.
+- [x] **DONE — Relation `create_models` path** — `portal/relation/*` (was 0%). Added 15 tests:
+      `protected_area_test.rb` (create_models dispatch + for_create:false field removal, countries
+      resolve/skip, first_or_create converters, `designation` **with + without jurisdiction** — the
+      nil-jurisdiction case behind the `belongs_to` opt-out §6 — sources/no_take_status mocked as
+      staging_* aren't in the test schema), `protected_area_parcel_test.rb` (compact — near-copy),
+      `pame_evaluation_test.rb` (site_id/site_pid resolution, parcel-over-PA preference, method/source
+      linking; staging + PameMethod mocked). Suite 696/0.
+- [x] **DONE — shared importers** (+12 tests, CSV stubbed / records real). `country_overseas_territories`
+      (parent-child wiring, parent/child-not-found, skip-existing), `story_map_link_list` (link create,
+      site-not-found, invalid site_id), `protected_areas_related_source` (invalid env, missing file,
+      empty CSV soft-warn, live/staging update_table dispatch). Suite 708/0. **Coverage 65.43%**
+      (SimpleCov floor raised 54 → 62 this session).
+- [x] **DONE (code) — GDAL `.gdb` driver swap: `FileGDB` (Esri SDK) → `OpenFileGDB`.** Changed
+      `lib/modules/ogr/postgres.rb` `DRIVERS[:gdb]` → `'OpenFileGDB'` and made
+      `postgres_gdb_export.erb` read `-f "<%= DRIVERS[:gdb] %>"` (single source of truth, was a
+      hardcoded `-f "FileGDB"`). **Added `-lco "GEOMETRY_NAME=SHAPE"`** — this was NOT optional:
+      without it OpenFileGDB names the geometry column after the source (`the_geom`), whereas the Esri
+      SDK named it `SHAPE`; the LCO restores exact parity. Added `test/unit/ogr/postgres_gdb_export_test.rb`
+      (3 tests, `system` mocked — the gdb path had NO test before) asserting driver + SHAPE lco + `-update`.
+      **Before/after verified byte-schema-identical** by generating both on the same data: OLD via
+      FileGDB on PP's image (GDAL 2.2.3, Esri SDK) vs NEW via OpenFileGDB on Debian bookworm (GDAL 3.6.2,
+      apt, no SDK). All three layer types match — **poly** (Multi Polygon, 20 feat), **point** (Multi
+      Point, 5 feat), **source** (non-spatial) — same geometry type, feature count, `FID=OBJECTID`,
+      `Geometry Column=SHAPE`, fields, and CRS (WGS84/EPSG:4326; the only textual diff is GDAL 3.6 WKT2
+      `GEOGCRS` vs 2.2.3 WKT1 `GEOGCS` — same CRS, cosmetic). Multi-layer `-update` append confirmed.
+      **Other download formats unaffected** — the swap only touches `DRIVERS[:gdb]` + the gdb template;
+      CSV (`'CSV'`) and Shapefile (`'ESRI Shapefile'`) use unchanged drivers + `postgres_export.erb`,
+      PDF is a separate generator. Suite 711/0.
+      Reference: `wdpa-data-management-portal` already ships the same WDPA `.gdb` via OpenFileGDB on bookworm.
+      **STILL TO DO (gated):** (1) can't run on PP's *current* dev image (GDAL 2.2.3 = OpenFileGDB
+      read-only) — needs the **GDAL 3.8 app image** (Dockerfile modernization, infra track) for in-app
+      end-to-end; (2) **data-team ArcGIS sign-off** on a real `.gdb` (largely pre-answered — portal output
+      already consumed); (3) diffs above used samples (20 poly / 5 point) not a full release volume.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
-- [ ] **Un-skip the 7 FDW integration tests** — they skip because the WDPA portal FDW schema isn't in the test DB (`release_orchestration_integration_test.rb`, `release_workflow_integration_test.rb`). Getting the portal FDW fixtures into test un-skips the core pipeline's integration layer.
+- [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
+      `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
+      `release_workflow_integration_test.rb`). Requirements: a **`portal_fdw` schema (~48 source
+      tables** — categories/lookups + `wdpas`, `spatial_data` w/ PostGIS geometry, `source`, `pame`,
+      `greenlists`, `wdpa_iso3` + junctions) + sample rows, on top of which `FDW_VIEWS.sql` (659
+      lines, in repo) builds ~9 staging materialized views; the tests then run import→swap→cleanup.
+      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs) — in prod it's a live
+      postgres_fdw foreign schema on the portal DB, so the exact 48-table schema exists only there.
+      **Do NOT hand-fabricate** (48 tables, high drift risk). **Path: `pg_dump --schema-only -n
+      portal_fdw` from the temp staging sandbox** (the devops ask — it has the portal FDW), convert
+      `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed a handful of rows. Gate on the
+      sandbox existing. The fragile *logic* is already covered by the geometry-importer +
+      table-service unit tests, so this is end-to-end confidence, not a correctness gap.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, currently 54) as coverage improves. Never lower it.
 
@@ -184,7 +255,16 @@ the **DB host** `192.168.176.65:9200`.
       header), so local dev is unblocked, but dev ≠ prod. Not downgraded here because the
       `protectedplanet_es_data` volume holds 8.6-format indices 7.17 can't read (would force a
       wipe + reindex). Align dev to 7.17.x (with a volume reset) as its own task when convenient.
-- [ ] **redis-rb 4.8.1 → 5.x** when we do Sidekiq 7 (minor; 4.8 works on Ruby 3.3 for now).
+- [x] **DONE — redis-rb 4.8 → 5.4 + Sidekiq 6.5 → 7.3.9.** redis was transitive via
+      Sidekiq 6.5; Sidekiq 7 drops redis-rb (uses redis-client) so added `gem 'redis', '~> 5.0'`
+      explicitly (app uses `$redis`/`Redis.new` directly). redis-rb 5 code fixes:
+      `active_token.rb` `$redis.exists` → `.exists?` (v5 #exists returns Integer; `unless 0`
+      is truthy — was a latent bug), and `redis_handler.rb` `multi do … end` → `multi do
+      |pipeline| pipeline.… end` (v5 requires the yielded pipeline). Two test mocks updated to
+      match (`:exists` → `:exists?`, `multi` yields a pipeline mock). Suite 653/0.
+      NOTE: the **2-Redis cache swap** (drop Memcached, `redis_cache_store` + `cache.rake` fix,
+      see the devops-decision item above) was NOT bundled in — do it as its own change when
+      provisioning is ready, to keep this commit to the gem/API bump.
 - [ ] **DECISION (devops, Jul 2026) — drop Memcached; move Rails cache to Redis. Two Redis
       instances, NOT one.** Devops wants everything standardized on Redis (Kamal accessories),
       Memcached gone. Doable, but PP's Redis is **not** a throwaway store — `$redis` (same
@@ -242,10 +322,76 @@ public CMS pages render; **page save + `assign_layout_categories` run clean (#3)
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
 
+### 5a. `staging_kamal` convergence — Kamal v2 on Proxmox staging (scoped Aug 2026)
+DevOps stood up Proxmox/Kamal-v2 staging; **`pp-web-staging-01.internal.unep-wcmc.org` (172.20.0.160)
+is ProtectedPlanet**, `api-pp-web-staging-01` is protectedplanet-api, DB is
+`pp-db-staging-01.internal.unep-wcmc.org` (172.20.0.159). The other four FQDNs are the
+already-dockerised fleet (digital-report, api-pp-authentication, wdpa-api, pp-data-management-portal).
+
+PP's Kamal config lives on the **`staging_kamal` branch** (not master, not upgrade-plan):
+`config/deploy.yml` + `deploy.staging.yml`, `Dockerfile.deploy`, `.kamal/secrets-common`,
+`.github/workflows/deploy-staging-kamal.yml`, web + **two Sidekiq roles**, **ES 7.17 accessory**,
+host-bound Redis/Memcached via `host.docker.internal`.
+**Its `Dockerfile.deploy` already does the GDAL modernisation** — Ubuntu 24.04, distro **GDAL 3.8.4,
+OpenFileGDB, no ESRI SDK**, Ruby 3.3.7 via ruby-build, Node 24 + yarn 4.
+It branched from our **Rails 7.1 (B0)** commit, so it lacks the 7.2→8.0 / redis-5 / Sidekiq-7 /
+secrets→config_for / test-net / GDAL work.
+
+⚠️ **The two halves are incompatible apart:** staging_kamal ships GDAL 3.8 *without* the ESRI SDK while
+its app code still asks for the `FileGDB` driver → **`.gdb` downloads would fail on staging**. Our
+OpenFileGDB swap is the missing app-side half.
+
+**Merge scope (dry-run verified, `git merge-tree`): mechanically CLEAN, no conflicts.** Only two files
+touched by both sides since the merge base (`b6d3fcbc1`): `config/environments/staging.rb` (ours: L1 +
+21–27 secrets→config_for/dalli; theirs: L36–39 Uglifier→`:terser` — different regions) and `Gemfile`
+(both kept: rails 8 + sidekiq 7 + redis 5 from us, `terser` from them).
+`config/secrets.yml` resolves correctly: ours was a **pure rename** (100% similarity) to
+`app_secrets.yml`, theirs edited the content (`MEMCACHE_SERVERS` env-overridable) — the merged
+`app_secrets.yml` keeps **their** edit. Verified.
+
+**Sequence (steps 1–5 are ours; keep LOCAL until we're ready to push):**
+1. ~~Commit + push the GDAL OpenFileGDB swap to `upgrade-plan`~~ — **DONE locally (merged, not pushed).**
+   Was the blocker: `origin/upgrade-plan` still had `gdb: 'FileGDB'`.
+2. Merge `upgrade-plan` → `staging_kamal`.
+3. **`bundle install` + commit the regenerated `Gemfile.lock`.** ⚠️ The lock merges "cleanly" but is
+   **inconsistent** — the merged Gemfile has `terser` while the merged lock does not (git keeps our
+   lock). `bundle check` fails until regenerated. Classic trap; don't skip.
+4. Run the full suite on the merged branch.
+5. Fix stale comments referencing the old `config/secrets.yml` path: `Dockerfile.deploy:110`,
+   `config/deploy.staging.yml:57`. (Also: `Dockerfile.deploy` cites `docs/GDAL-openfilegdb-migration.md`,
+   which does not exist in that tree.)
+6. Push `staging_kamal` → the GH Action deploys to `pp-web-staging-01`. **Needs devops**: the
+   `staging_proxmox` GitHub environment + secrets (registry creds, SSH key) populated.
+7. **Verify `.gdb` download end-to-end on staging** — the in-app GDAL 3.8 / OpenFileGDB validation we
+   cannot do locally (PP's dev image is GDAL 2.2.3, OpenFileGDB read-only there). This also serves the
+   data-team ArcGIS sign-off.
+
+**Not blocked on the frontend.** `staging_kamal`'s Dockerfile builds *both* webpacker and Vite, matching
+`upgrade-plan`'s current asset setup. `feat/upgrade-frontend` (which removes webpacker) is a separate,
+later change needing its own Dockerfile update + the psych unpin. Frontend was **97 ahead / 64 behind**
+upgrade-plan and still committing daily — waiting only grows that merge.
+
+**Open questions for devops:** PG version/PostGIS on `pp-db-staging-01` (drives postgis-adapter 11 and
+the PG 10→17 story); whether the `staging_proxmox` env/secrets are populated. Also note the deploy
+config still assumes **host Memcached + a single Redis** — our two-Redis / drop-Memcached decision
+(§4e) is not reflected there yet; that's the follow-up once devops provisions them.
+
 ## 6. Minor code items (low priority, clear opportunistically)
 - [ ] **`belongs_to_required_by_default` opted out** (`config/application.rb`) — revisit as a data-integrity pass measured against a **production** dump. 4 associations have real NULLs: `Country#parent` (199/248), `Designation#jurisdiction` (57/1831), `pame_statistics.country`, `country_statistics.country`.
 - [ ] **`_info.svg` orphan partial** — `app/views/partials/svgs/_info.svg` is not rendered via `render` (only an unrelated SCSS `info.svg` asset ref exists). Confirm unused, then remove. (`_pin.svg` was renamed to `_pin.html.erb` to clear the dotted-template deprecation — do the same or delete `_info.svg`.)
-- [ ] **Mocha strict-keyword-argument warnings** (test-only) — surface during Ruby 3 prep; fix with the kwarg work.
+- [x] **DONE — Mocha strict-keyword-argument warnings** (Tier-1 modernization). 10 sites where a
+      `#with` expectation used a positional hash but the code passes kwargs (`system(cmd, chdir:)` in
+      `download/generators` csv/shapefile tests), or vice-versa (downloads_controller tests expected
+      kwargs but `Download.request/poll` take a single positional `params.permit!`). Fixed:
+      generator tests → `chdir:`/`**opts` kwargs; controller tests → block matchers on
+      `p.to_unsafe_h`. Then enabled `c.strict_keyword_argument_matching = true` in `test_helper.rb`
+      so mismatches are enforced, not warned. Suite 681/0, 0 Mocha warnings.
+- [x] **DONE — Tier-2 idiom cleanups.** (1) `FactoryGirl` → `FactoryBot` across all 38 test files
+      (~384 call sites) and removed the `FactoryGirl = FactoryBot` compat alias from `test_helper.rb`.
+      (2) Safe AR dynamic finders → `find_by(col:)`: `find_by_slug/site_id/name/id/iso_3/css_class`
+      in app + lib. **Left intentionally:** `Release.find_by_backup_timestamp_string` (custom method,
+      not an AR finder), `Comfy::Cms::Page.find_by_full_path` (Comfy internal), `find_by_older_version_id`
+      (dead versioning feature, pending removal decision). Suite 681/0.
 - [ ] **`Searchable` constants inside `included do`** (`app/controllers/concerns/searchable.rb:22`) — re-initialized per including controller; cosmetic, no behaviour change.
 
 ## 7. Dead code found during the upgrade (already removed — for reference)

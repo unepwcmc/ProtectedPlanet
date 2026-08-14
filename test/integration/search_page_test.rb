@@ -7,9 +7,9 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     # ES and WebMock don't get along
     WebMock.disable!
     # need some data to force index/field creation but don't want it to be found in test searches
-    region = FactoryGirl.create(:region, id: 999, name: 'jsdfasdf')
-    country = FactoryGirl.create(:country, id: 999, iso_3: 'jsd', name: 'jsdjkjkasdhf', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, has_irreplaceability_info: false)
+    region = FactoryBot.create(:region, id: 999, name: 'jsdfasdf')
+    country = FactoryBot.create(:country, id: 999, iso_3: 'jsd', name: 'jsdjkjkasdhf', region: region)
+    pa = FactoryBot.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, has_irreplaceability_info: false)
 
     @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
     @psi.create
@@ -62,8 +62,8 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   # Since "Default index to include everything and boost country index" (Sep 2020)
   # the default search spans PAs, countries and regions, with countries boosted.
   test 'search query matching a country returns it from the main search' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone', region: region)
+    region = FactoryBot.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryBot.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone', region: region)
     assert_index 2, 1
 
     get '/en/search-results?search_term=Manbone'
@@ -73,9 +73,9 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   end
 
   test 'search query that returns single protected area returns success' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
+    region = FactoryBot.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryBot.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    pa = FactoryBot.create(:protected_area, name: "Protected Forest", countries: [country])
     assert_index 2, 2
 
     get '/en/search-results?search_term=forest'
@@ -87,9 +87,9 @@ class SearchPageTest < ActionDispatch::IntegrationTest
 
   test 'search query matching a PA and a country returns both' do
 
-    region = FactoryGirl.create(:region, id: 987, name: 'Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'North Manbone land', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "North Protected Forest", countries: [country])
+    region = FactoryBot.create(:region, id: 987, name: 'Manmerica')
+    country = FactoryBot.create(:country, id: 123, iso_3: 'MBN', name: 'North Manbone land', region: region)
+    pa = FactoryBot.create(:protected_area, name: "North Protected Forest", countries: [country])
     assert_index 2, 2
 
     get '/en/search-results?search_term=north'

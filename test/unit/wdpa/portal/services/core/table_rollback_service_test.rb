@@ -164,4 +164,33 @@ class Wdpa::Portal::Services::Core::TableRollbackServiceTest < ActiveSupport::Te
       @service.rollback_portal_materialized_views
     end
   end
+
+  # --- backup preconditions + available-backup listing ---
+  test 'validate_backup_tables_exist raises listing tables whose backup is missing' do
+    conn = mock('conn')
+    @service.instance_variable_set(:@connection, conn)
+    @service.instance_variable_set(:@backup_timestamp, '2501011200')
+    @service.stubs(:all_table_names).returns(%w[sources protected_areas])
+    cfg = Wdpa::Portal::Config::PortalImportConfig
+    cfg.stubs(:generate_backup_name).with('sources', '2501011200').returns('bk2501011200_sources')
+    cfg.stubs(:generate_backup_name).with('protected_areas', '2501011200').returns('bk2501011200_protected_areas')
+    conn.stubs(:table_exists?).with('bk2501011200_sources').returns(true)
+    conn.stubs(:table_exists?).with('bk2501011200_protected_areas').returns(false)
+    err = assert_raises(RuntimeError) { @service.send(:validate_backup_tables_exist) }
+    assert_match(/Missing backup tables:.*protected_areas/, err.message)
+  end
+
+  test 'list_available_backups_impl returns unique timestamps, newest first' do
+    conn = mock('conn')
+    conn.stubs(:tables).returns(%w[live bk2501011200_sources bk2501011201_sources bk2501011200_protected_areas])
+    @service.instance_variable_set(:@connection, conn)
+    cfg = Wdpa::Portal::Config::PortalImportConfig
+    cfg.stubs(:is_backup_table?).with('live').returns(false)
+    %w[bk2501011200_sources bk2501011201_sources bk2501011200_protected_areas].each { |t| cfg.stubs(:is_backup_table?).with(t).returns(true) }
+    cfg.stubs(:extract_backup_timestamp).with('bk2501011200_sources').returns('2501011200')
+    cfg.stubs(:extract_backup_timestamp).with('bk2501011201_sources').returns('2501011201')
+    cfg.stubs(:extract_backup_timestamp).with('bk2501011200_protected_areas').returns('2501011200')
+
+    assert_equal %w[2501011201 2501011200], @service.send(:list_available_backups_impl)
+  end
 end

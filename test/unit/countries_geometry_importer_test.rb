@@ -4,7 +4,7 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
   test '#import downloads the geometries from S4, imports to postgres
    and updates each Country with the matching geometries' do
     #skip("skipping broken S3 tests")
-    bucket = Rails.application.secrets.aws_datasets_bucket
+    bucket = AppSecrets.aws_datasets_bucket
 
     filename = 'countries_geometries_dump.tar.gz'
     path = Rails.root.join('tmp', filename).to_s
@@ -35,8 +35,8 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
       with("PGPASSWORD=password pg_restore -c -i -U username -h localhost -d database -v #{path}").
       returns(true)
 
-    FactoryGirl.create(:country, iso_3: 'GBR')
-    FactoryGirl.create(:country, iso_3: 'USA')
+    FactoryBot.create(:country, iso_3: 'GBR')
+    FactoryBot.create(:country, iso_3: 'USA')
     ActiveRecord::Base.connection.expects(:execute).times(6).returns(true)
 
     ActiveRecord::Base.connection.
