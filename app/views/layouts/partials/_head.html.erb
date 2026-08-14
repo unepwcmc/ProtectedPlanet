@@ -14,12 +14,6 @@
   <%= csrf_meta_tags %>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-  <% # Legacy SCSS pipeline: kept loading only for PDF export, which still relies on
-   # it (pdf.scss only overrides on top of it) and hasn't been migrated to Tailwind yet. %>
-  <% if @for_pdf %>
-    <%= stylesheet_link_tag 'pdf', media: 'all' %>
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-  <% end %>
   <%= vite_client_tag %>
   <%= vite_javascript_tag 'entrypoints/application' %>
   <%= vite_typescript_tag 'entrypoints/layout' %>

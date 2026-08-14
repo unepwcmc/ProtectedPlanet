@@ -49,7 +49,7 @@
 }
 
 .vw-partials-cards-circles__card-title {
-  @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
 }
 
 .vw-partials-cards-circles__chevron {

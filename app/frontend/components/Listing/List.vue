@@ -83,7 +83,7 @@ const onRequestMore = (page: number) => emit('requestMore', page)
 
 .ct-listing-list__no-results {
   @apply
-  tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black
+  tw-shared-font-hind-siliguri__semibold-base-md-xl-grey-black
   text-center
   py-7.5;
 }

@@ -38,7 +38,7 @@
         class="ct-banner__close"
         @click="closeBanner"
       >
-        <span aria-hidden="true">&times;</span>
+        <Iconclose class="ct-banner__icon" />
       </button>
     </div>
   </div>
@@ -48,6 +48,7 @@
 import { ref, computed } from 'vue'
 import type { BannerProps } from '@/types/backend'
 import BannerContent from '@/components/Banner/Content.vue'
+import Iconclose from '@/components/Icon/Close.vue'
 
 type Banner = BannerProps
 const props = defineProps<Banner>()
@@ -87,22 +88,64 @@ function closeBanner() {
 @reference "#importtailwindcss";
 
 .ct-banner {
-  @apply flex items-center justify-center border-b border-b-theme-grey-light bg-theme-grey-xlight py-1;
+  @apply
+  flex
+  items-center
+  justify-center
+  border-b
+  border-b-theme-grey-light
+  bg-theme-grey-xlight
+  py-3;
 }
 
 .ct-banner__container {
-  @apply tw-shared-base-container flex justify-between gap-5;
+  @apply
+  tw-shared-base-container
+  tw-shared-base-flex-gap-5
+  justify-between ;
 }
 
 .ct-banner__slides {
-  @apply flex-1;
+  @apply
+  flex
+  flex-1
+  items-center;
 }
 
 .ct-banner__nav {
-  @apply self-center rounded-[0.3125rem] border border-theme-grey-light bg-transparent px-2 py-1 leading-none text-theme-grey-dark transition-all duration-200 ease-in-out hover:border-theme-primary hover:bg-white hover:text-theme-primary;
+  @apply
+  self-center
+  tw-shared-border-radius
+  border
+  border-theme-grey-light
+  bg-transparent
+  px-2
+  py-1
+  leading-none
+  text-theme-grey-dark
+  transition-all
+  duration-200
+  ease-in-out
+  hover:border-theme-primary
+  hover:bg-white
+  hover:text-theme-primary;
 }
 
 .ct-banner__close {
-  @apply shrink-0 p-1 text-2xl leading-none border-none bg-none bg-transparent text-theme-grey hover:bg-theme-grey/10 hover:text-theme-grey-dark focus:outline-2 focus:outline-theme-primary focus:outline-offset-2;
+  @apply
+  flex
+  items-center
+  p-2
+  cursor-pointer
+  bg-none
+  hover:bg-theme-grey/10;
+}
+
+.ct-banner__icon {
+  @apply
+  shrink-0
+  size-3
+  text-theme-grey
+  hover:text-theme-grey-dark;
 }
 </style>

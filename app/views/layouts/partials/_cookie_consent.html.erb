@@ -1,5 +1,6 @@
 <%= frontend_mount "CookieConsent", props: {
-      description: t('global.cookie_consent.description', url: "/#{PageSlugs::LEGAL}"),
+      description: t('global.cookie_consent.description', 
+      url: "en/#{PageSlugs::LEGAL}"),
       accept: t('global.cookie_consent.accept'),
       reject: t('global.cookie_consent.reject')
     } %>

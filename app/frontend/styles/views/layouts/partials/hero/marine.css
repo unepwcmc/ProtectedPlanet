@@ -66,6 +66,6 @@
 
 .vw-layouts-partials-hero-marine__stat-text {
   @apply 
-  text-white
-  tw-shared-font-hind-siliguri__normal-base-md-lg;
+  
+  tw-shared-font-hind-siliguri__normal-base-md-lg-white;
 }

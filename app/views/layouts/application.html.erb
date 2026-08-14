@@ -2,12 +2,14 @@
 <html>
   <%= render "layouts/partials/head" %>
   <body>
-    <%= render "layouts/partials/cookie_consent" %>
+    <% unless @cms_page&.slug == PageSlugs::LEGAL %>
+      <%= render "layouts/partials/cookie_consent" %>
+    <% end %>
     <% unless @for_pdf %>
       <%= render "layouts/partials/banner" %>
     <% end %>
     <%= render "layouts/partials/topbar" %>
-    <div class="<%= if @for_pdf then 'pdf' end %>">
+    <div class="vw-layouts-application <%= if @for_pdf then 'tw-global-pdf' end %>">
       <%= yield %>
       <%= render "layouts/partials/footer/index" %>
     </div>

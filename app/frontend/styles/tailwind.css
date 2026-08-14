@@ -1,9 +1,9 @@
-@import './fonts.css';
+@import './global/fonts.css';
 @import "tailwindcss";
 
 @theme {
 
-  --font-hindSiliguri: 'Hind Siliguri', sans-serif, system-ui;
+  --font-sans: 'Hind Siliguri', sans-serif, system-ui;
   --font-playfairDisplay: "Playfair Display", serif, system-ui;
 
   --color-theme-primary: #71a32b;
@@ -50,6 +50,8 @@
 @import './shared/shadows.css';
 @import './shared/themes.css';
 @import './shared/typography.css';
+
+@import './global/pdf.css';
 
 /* All styles used in views */
 @import './views/data/gdpame/index.css';

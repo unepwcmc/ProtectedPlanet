@@ -13,15 +13,6 @@
   tw-shared-base-flex-col-gap-7;
 }
 
-.pdf .vw-partials-stats-stats-overview {
-  @apply 
-  border 
-  border-theme-grey 
-  bg-transparent 
-  text-theme-grey-black
-  w-94;
-}
-
 .vw-partials-stats-stats-overview__heading {
   @apply 
   tw-shared-base-flex-gap-2

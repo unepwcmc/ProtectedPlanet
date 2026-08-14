@@ -21,16 +21,3 @@
 .vw-protected-areas__col-2 {
   @apply w-full lg:ml-auto lg:w-[calc(50%_-_15px)] lg:block;
 }
-
-/*
- * Unlayered (plain selectors, not @utility) so they beat the layered utilities above
- * regardless of specificity — only active inside the `.pdf` wrapper div that
- * layouts/application.html.erb renders around the whole page when `@for_pdf`.
- */
-.pdf .vw-protected-areas__col-1 {
-  @apply mr-[30px] w-[555px];
-}
-
-.pdf .vw-protected-areas__col-2 {
-  @apply w-[555px];
-}

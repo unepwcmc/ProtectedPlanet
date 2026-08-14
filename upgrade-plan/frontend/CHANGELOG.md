@@ -1839,7 +1839,7 @@ the same re-audit turned up instead.
 
 ---
 
-## Wave T10 — Finish (almost done, started 2026-08-14)
+## Wave T10 — Finish (done, 2026-08-14)
 
 **Found a live-breaking bug while re-auditing T9**: `bundle exec rake assets:precompile` was failing —
 `components/_filters.scss` and `components/_modal.scss` (left behind by T8's deletion of
@@ -1893,3 +1893,112 @@ gap T3 already documented, confirmed via the server log to predate this session.
 needs. Risk is much lower now (there's no legacy SCSS left to fight at all), but it's still the one
 previously-forbidden change and deserves its own dedicated verification pass rather than being folded
 into an already-large session. This is the one remaining checklist item in the entire plan.
+
+### T10 continued, same day — `pdf.scss` decision flipped from (b) to (a)
+
+A follow-up request ("consolidate all PDF CSS into `global/pdf.css`, plus any other globally-used
+CSS into the same folder") led to actually doing what option (b) above had deferred. The fact that
+flipped the risk calculus: `entrypoints/layout.ts` already `import`s `tailwind.css` unconditionally
+— not gated on `@for_pdf` — so anything added to a new `app/frontend/styles/global/pdf.css` would
+already be live on PDF-rendered pages regardless of whether the old Sprockets `pdf.scss` link stuck
+around. Porting was no longer "two systems computing overlapping styles" risk; that overlap already
+existed the moment `global/pdf.css` got any content, so removing the redundant old half was strictly
+a cleanup, not a behavior change.
+
+All 39 lines of `pdf.scss` ported into `global/pdf.css` — unlayered plain selectors (as documented
+by the pre-existing comment in `protected-areas.css`), `@apply` where a Tailwind utility exists,
+raw `page-break-*`/`break-*` properties otherwise. Folded in the three previously-scattered `.pdf
+`-scoped override blocks that already lived in `shared/card.css`, `views/protected-areas.css`, and
+`views/partials/stats/stats-overview.css` (same convention, same file each was "waiting" to move
+into once one existed). Root wrapper class renamed `.pdf` → `.tw-global-pdf` to fit the new folder's
+naming scheme (`layouts/application.html.erb` + every consumer updated — grepped for stray `.pdf`
+class assumptions in Vue/TS, found none; the few string matches were unrelated `forPdf`-prop-driven
+classes like `ct-stats-message__link--pdf`). Also moved `styles/fonts.css` (ambient `@font-face`,
+applies with zero opt-in class — same "global" semantics as the PDF mode flag) into
+`global/fonts.css`, distinguishing `global/`'s role (ambient, automatic) from `shared/`'s (opt-in
+`@apply` utilities).
+
+Two pieces of the old `pdf.scss` were dropped rather than ported, confirmed dead by grep before
+deleting (mark-and-sweep discipline, not scope creep): the entire `&--protected-area` nested block
+(`.pa-card`, `.leaflet-control*`, `.flex-2-fiths`/`.flex-3-fiths`, `.js-tab-content.u-hide` — its
+trigger class `.pdf--protected-area` was never applied by any consumer, so the whole block was
+unreachable) and `.modal--download.active`/`.card__stat-box` from the display:none list (zero
+consumers, same as the classes inside the dropped block).
+
+With `pdf.scss` gone, `_settings.scss` (only import left was `pdf.scss`), `utilities/_rem-calc.scss`,
+and the `application.scss` stub had zero remaining consumers — deleted all three. `app/assets/
+stylesheets/` now contains only the out-of-scope `comfy/admin/cms/custom.scss`. Dropped the
+`@for_pdf`-gated `stylesheet_link_tag 'pdf'/'application'` block from `_head.html.erb` (its own
+comment explaining why it existed went with it) and the now-dangling `assets.precompile += %w(
+pdf.css )` line from `config/initializers/assets.rb`. Removed the explicit `sass-rails` gem from the
+Gemfile. `sassc-rails`/`sassc` deliberately kept — `comfortable_mexican_sofa` depends on
+`sassc-rails (>= 2.0.0)` directly, so they stay in `Gemfile.lock` regardless, still compiling the
+out-of-scope admin `custom.scss`.
+
+**Verified**: `docker exec protectedplanet-web bundle install` clean (395 gems, `sass`/`sass-rails`
+gone from `Gemfile.lock`, `sassc`/`sassc-rails` still present as expected). `bundle exec rake
+assets:clobber assets:precompile` clean (exit 0) — this step also runs the production Vite build,
+which is where a pre-existing latent bug surfaced and got fixed: `tailwind.css`'s `@import
+'./global/pdf.css'` was missing its trailing semicolon, silently tolerated while the imported file
+was empty, breaking the build the moment it had real content. Live smoke test: `GET
+/country/USA?for_pdf=true` and `/region/AF?for_pdf=true` both 200, `tw-global-pdf` root class present
+in the rendered HTML, and the compiled production CSS bundle (`public/vite-dev/assets/layout-*.css`)
+contains every ported `.tw-global-pdf …` rule with `!important`/nesting correctly flattened by
+Lightning CSS. Protected-area PDF smoke test (`GET /1?for_pdf=true`) hit the same pre-existing,
+unrelated seed-data `PageNotFound` gap already documented above and in T3 — confirmed via server log
+to predate this change, not caused by it.
+
+This closes every T10 checklist item except enabling Tailwind preflight + the final full-site visual
+sweep, which remain the one deliberately-deferred item in the entire plan.
+
+### T10 continued, same day — preflight + full-site sweep closed, plan fully done
+
+Went looking for the "enable preflight" checklist item in `tailwind.css` and found no commented-out
+`preflight.css` import to uncomment at all — just the shorthand `@import "tailwindcss";`. Bisecting
+history found the cause: commit `ef5c17575` ("feat: migrate coverage chart", 2026-08-06) replaced the
+deliberately-split import (`theme.css` + `utilities.css`, omitting `preflight.css`, with a comment
+block explaining why) with that shorthand — which bundles preflight back in — as an incidental side
+effect of an unrelated component migration, comment block and all gone, never mentioned in the commit
+message. Confirmed live (not just in source) via the compiled CSS: preflight's universal reset
+(`*,::before,::after{box-sizing:border-box;border:0 solid;margin:0;padding:0}`) present in both the
+dev-server output and the production build. Practical upshot: every wave from T2 onward (2026-08-06
+onward) was actually verified against a preflight-**on** site the whole time — the docs were wrong
+about the starting condition, not the other way around. `shared/cms.css`'s `tw-shared-cms-wysiwyg`
+wrapper already explicitly restyles `h1`-`h4`/`p`/`ul`/`ol`/`li`/`a`/`table` rather than relying on
+browser defaults, consistent with having been built against a preflight-on reality all along.
+
+Ran the full-site visual sweep this left as the only remaining checklist item. First pass used this
+repo's own `puppeteer` dependency (already used for real PDF export) — and it produced screenshots
+that looked badly broken: a CTA ribbon (`.vw-ctas-protected-planet-report__ribbon`) rendered black
+text with no background instead of white-on-red, `min-h-73` computed as `auto`. Chased it down to the
+actual cause rather than reporting it as a regression: that puppeteer bundles **Chrome 88, which
+predates CSS Cascade Layers (`@layer`, shipped Chrome 99)** — an unrecognized at-rule's entire block
+gets dropped per CSS forward-compatible parsing, so *none* of Tailwind v4's `@layer theme`/`@layer
+utilities` content ever applies in that browser, while unlayered CSS (`global/pdf.css`, `@font-face`)
+still renders fine. Confirmed by re-screenshotting the same page in a real, ephemeral Chromium (`npx
+--yes playwright screenshot` on the host, using an already-cached modern build) — the ribbon rendered
+exactly as designed, white-on-red, background photo intact. This is the same failure mode as
+[[tailwind-v4-setup]]'s already-documented oklch/nesting gotchas from this same ancient test browser,
+just for `@layer` specifically — worth remembering as its own entry since it's broader (drops
+*everything* layered, not just color or `:hover` rules) and easy to mistake for a real bug if the
+"old test browser" caveat isn't front of mind.
+
+Swept, real-browser-verified, at 1400px and 390px: home, country (`AFG`), region (`AF`), protected
+area (`10467` — the WDPA site ID; an initial attempt with the internal DB `id` 404'd, which is correct
+behavior, not a bug, the controller resolves by slug/site-id not primary key), marine, effectiveness,
+a CMS resource-layout page, a CMS thematic-page layout, a news article, and PDF export
+(`?for_pdf=true`). All render correctly — headings, lists, tables, buttons, spacing, hero images, the
+world map, CTA banners, footer, all matching design with zero preflight-attributable regressions. PDF
+export specifically confirmed the `global/pdf.css` port from earlier today works end-to-end in a real
+browser: topbar and map controls hidden, background transparent, single narrow container, exactly the
+old `pdf.scss`'s intent. Two unrelated pre-existing issues surfaced and were **not** fixed (out of
+scope, already partly documented): `/search` and any unmatched path 500 instead of 404 (the app's
+catch-all `get '/:id'` route hits `ProtectedAreasController#show`, which raises `PageNotFound` that
+isn't rescued into a real 404 response in this dev environment — same gap T3/T9/T10 already flagged);
+a couple of inline CMS images 500 via `ActiveStorage::DiskController` with `Errno::ENOENT` (missing
+local blob files in this dev seed). Also noticed but not investigated: the map panel doesn't render
+inline on country/region/protected-area pages (it does on home/marine) — a Vue/MapLibre concern,
+flagged for a future session rather than chased here. Comfy admin confirmed unaffected — still
+Sprockets/`sassc-rails`-served, the preflight boundary holds.
+
+**Every item in the entire SCSS→Tailwind plan (T0 through T10) is now done.**

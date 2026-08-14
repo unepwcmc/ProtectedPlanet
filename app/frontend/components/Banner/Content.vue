@@ -6,11 +6,11 @@
   >
     <h3
       v-if="data.title"
-      class="ct-banner__title"
+      class="ct-banner-content__title"
       v-html="data.title"
     />
     <div
-      class="ct-banner__body"
+      class="ct-banner-content__body"
       v-html="data.content"
     />
   </div>
@@ -33,14 +33,14 @@ defineProps<{
 }
 
 .ct-banner-content--is-active {
-  @apply block;
+  @apply tw-shared-base-flex-col-gap-1;
 }
 
 .ct-banner-content__title {
-  @apply mt-0 mb-[0.5em] text-[1.125rem] font-bold leading-[1.3] text-theme-grey-black md:text-[1.25rem];
+  @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
 }
 
-.ct-banner-content__body {
-  @apply text-base leading-[1.3] text-theme-grey-black;
+:deep(.ct-banner-content__body) {
+  @apply tw-shared-cms-wysiwyg;
 }
 </style>

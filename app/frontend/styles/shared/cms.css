@@ -3,7 +3,7 @@
 
   h1,
   h2 {
-    @apply tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black;
+    @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
   }
   
   h3 {
@@ -44,7 +44,7 @@
     @apply 
     list-decimal 
     list-inside
-    mbs-4 
+    mbs-4
     mbe-4
     ps-4;
   }

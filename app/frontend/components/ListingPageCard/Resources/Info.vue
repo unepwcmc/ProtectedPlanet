@@ -53,8 +53,7 @@ defineProps<ListingPageCardInfo>()
 }
 
 .ct-listing-page-card-resources-card-info__title {
-  @apply
-  tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
 }
 
 .ct-listing-page-card-resources-card-info__summary {

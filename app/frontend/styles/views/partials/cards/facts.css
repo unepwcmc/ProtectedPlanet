@@ -60,6 +60,5 @@
 }
 
 .vw-partials-cards-facts__title {
-  @apply
-  tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__semibold-base-md-xl-grey-black;
 }

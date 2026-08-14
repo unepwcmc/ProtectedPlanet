@@ -21,22 +21,10 @@
   justify-center;
 }
 
-.pdf .tw-shared-card-stats {
-  @apply 
-  border 
-  border-theme-grey 
-  bg-transparent 
-  text-theme-grey-black;
-}
- 
 @utility tw-shared-card-stats-half {
   @apply 
   w-full 
   md:w-[calc(50%-0.9375rem)];
-}
-
-.pdf .tw-shared-card-stats-half {
-  @apply w-138.75;
 }
 
 @utility tw-shared-card-stats-wrapper {
@@ -49,16 +37,12 @@
   md:justify-between;
 }
 
-.pdf .tw-shared-card-stats-wrapper {
-  @apply justify-normal;
-}
-
 @utility tw-shared-card-title {
   @apply tw-shared-font-playfair__semi-bold-xl-md-2xl-grey-black;
 }
 
 @utility tw-shared-card-sub-title {
-  @apply tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__semibold-base-md-xl-grey-black;
 }
 
 

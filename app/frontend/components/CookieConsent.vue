@@ -68,29 +68,31 @@ function reject() {
   fixed
   bottom-0
   z-20
-  flex
-  lg:flex-row
   w-full
-  flex-col
-  gap-1
-  lg:gap-4
+  tw-shared-base-flex-col-md-row-gap-3
   lg:items-center
   lg:justify-between
   bg-theme-primary
   p-3
-  md:p-6;
+  md:px-6
+  md:py-9;
 }
 
 .ct-cookie-consent__description {
-  @apply tw-shared-font-hind-siliguri__normal-base-white;
+  @apply tw-shared-font-hind-siliguri__normal-lg-white;
 
   a {
-    @apply underline;
+    @apply
+    underline
+    hover:no-underline;
   }
 }
 
 .ct-cookie-consent__decisions {
-  @apply flex items-center text-white;
+  @apply
+  flex
+  items-center
+  text-white;
 }
 
 .ct-cookie-consent__button {
@@ -101,15 +103,16 @@ function reject() {
   items-center
   gap-3
   p-3
-  tw-shared-font-hind-siliguri__light-sm-white
+  tw-shared-font-hind-siliguri__normal-lg-white
   uppercase;
 }
 
 .ct-cookie-consent__button--accept {
   @apply
-  border
+  border-2
   border-solid
-  border-white;
+  border-white
+  font-semibold;
 }
 
 .ct-cookie-consent__overlay {

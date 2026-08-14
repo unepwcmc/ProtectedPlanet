@@ -100,7 +100,7 @@ watch(() => props.resetKey, () => {
   border-theme-grey
   px-2
   py-1.5
-  font-hindSiliguri
+  font-sans
   text-lg
   text-theme-grey-black;
 }

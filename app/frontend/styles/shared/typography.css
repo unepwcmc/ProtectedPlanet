@@ -99,7 +99,7 @@ text-theme-grey-black;
 /* no leading */
 @utility tw-shared-font-hind-siliguri__leading-none {
   @apply
-  font-hindSiliguri
+  font-sans
   leading-none;
 }
 
@@ -142,7 +142,7 @@ text-theme-grey-black;
 /* default leading - 1.3 so no leading in its name */
 @utility tw-shared-font-family-hind-siliguri__leading-1-3 {
   @apply
-  font-hindSiliguri
+  font-sans
   leading-[1.3];
 }
 
@@ -330,10 +330,9 @@ text-theme-grey-black;
   text-base;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-lg-lg-grey-black {
+@utility tw-shared-font-hind-siliguri__normal-base-grey-black {
   @apply
   tw-shared-font-hind-siliguri__normal-base
-  lg:text-lg
   text-theme-grey-black;
 }
 
@@ -343,10 +342,18 @@ text-theme-grey-black;
   text-white;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-md-lg {
+@utility tw-shared-font-hind-siliguri__normal-base-md-lg-white {
   @apply
   tw-shared-font-hind-siliguri__normal-base
-  md:text-lg;
+  md:text-lg
+  text-white;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-base-lg-lg-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__normal-base
+  lg:text-lg
+  text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-base-md-xl-primary {
@@ -356,18 +363,25 @@ text-theme-grey-black;
   text-theme-primary;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-md-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal-base
-  md:text-xl
-  text-theme-grey-black;
-}
-
 @utility tw-shared-font-hind-siliguri__normal-base-md-xl-white {
   @apply
   tw-shared-font-hind-siliguri__normal-base
   md:text-xl
 text-white;
+}
+
+
+@utility tw-shared-font-hind-siliguri__normal-lg {
+  @apply
+  tw-shared-font-family-hind-siliguri__leading-1-3
+  font-normal
+  text-lg;
+}
+
+@utility tw-shared-font-hind-siliguri__normal-lg-white {
+  @apply
+  tw-shared-font-hind-siliguri__normal-lg
+  text-white;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-xl {
@@ -406,13 +420,6 @@ text-white;
   tw-shared-font-hind-siliguri__normal-lg
   lg:text-base
   text-theme-grey-black;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal-lg
-  md:text-xl
-text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-dark {
@@ -469,6 +476,13 @@ text-theme-grey-black;
 @utility tw-shared-font-hind-siliguri__semibold-base-grey-black {
   @apply
   tw-shared-font-hind-siliguri__semibold-base
+  text-theme-grey-black;
+}
+
+@utility tw-shared-font-hind-siliguri__semibold-base-md-xl-grey-black {
+  @apply
+  tw-shared-font-hind-siliguri__semibold-base
+  md:text-xl
   text-theme-grey-black;
 }
 
@@ -532,7 +546,7 @@ text-theme-grey-black;
 /* default is leading 1.3 so the following has leading-1-6 in its name */
 @utility tw-shared-font-family-hind-siliguri__leading-1-6-light {
   @apply
-  font-hindSiliguri
+  font-sans
   leading-[1.6]
   font-light;
 }
