@@ -107,7 +107,7 @@ ENV VITE_RUBY_MODE=production
 
 # vite_rails boots the full Rails app before building, which initialises the
 # ActiveStorage S3 service. config/storage.yml takes its region from
-# Rails.application.secrets.s3_region, which config/secrets.yml populates from
+# Rails.application.config_for(:app_secrets).s3_region, which config/app_secrets.yml populates from
 # ENV["AWS_S3_REGION"] — so with that unset the service is built with an
 # explicit region: nil and aws-sdk raises "missing region". An explicit nil also
 # defeats the SDK's own AWS_REGION fallback, so AWS_S3_REGION is the one that
