@@ -2,9 +2,7 @@
 <div class="vw-partials-cards-facts">
   <% cards.each do |card| %>
     <div class="vw-partials-cards-facts__card">
-      <i class="vw-partials-cards-facts__pin vw-partials-cards-facts__pin--<%= card[:theme] %>">
-        <%= render partial: 'partials/svgs/pin', formats: :svg %>
-      </i>
+      <i class="vw-partials-cards-facts__pin vw-partials-cards-facts__pin--<%= card[:theme] %>"></i>
       <span class="vw-partials-cards-facts__number-large">
         <%= card[:percentage] %>%
       </span>

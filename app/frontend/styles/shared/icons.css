@@ -255,6 +255,33 @@
   background-image: url('../../assets/icons/minus-white.svg');
 }
 
+@utility tw-shared-icon-pin-fact-terrestrial {
+  @apply
+  tw-shared-icon-base
+  w-7.25
+  h-9.5;
+
+  background-image: url('../../assets/icons/pin-fact-terrestrial.svg');
+}
+
+@utility tw-shared-icon-pin-fact-marine {
+  @apply
+  tw-shared-icon-base
+  w-7.25
+  h-9.5;
+
+  background-image: url('../../assets/icons/pin-fact-marine.svg');
+}
+
+@utility tw-shared-icon-pin-fact-oecm {
+  @apply
+  tw-shared-icon-base
+  w-7.25
+  h-9.5;
+
+  background-image: url('../../assets/icons/pin-fact-oecm.svg');
+}
+
 @utility tw-shared-icon-pin-outline {
   @apply 
   tw-shared-icon-base 
