@@ -1,9 +1,19 @@
-# require "codeclimate-test-reporter"
-# CodeClimate::TestReporter.start
-# require 'simplecov'
-# require 'simplecov-console'
-# SimpleCov.formatter = SimpleCov::Formatter::Console
-# SimpleCov.start
+# Coverage — opt-in via COVERAGE=1 so local `rake test` stays fast; CI sets it.
+# Must start before any application code is required. The floor is a ratchet:
+# CI fails if line coverage drops below it. Raise it as coverage improves;
+# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026); ratcheted to 62 on
+# Rails 8 (Aug 2026, ~64.4% actual after the spatial/relation test net).
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start 'rails' do
+    add_filter '/test/'
+    add_group 'Serializers', 'app/serializers'
+    add_group 'Presenters', 'app/presenters'
+    add_group 'Workers', 'app/workers'
+    add_group 'lib/modules', 'lib/modules'
+    minimum_coverage 62
+  end
+end
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
@@ -11,14 +21,19 @@ require 'rails/test_help'
 
 ActiveRecord::Migration.maintain_test_schema!
 
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'webmock/minitest'
 
 require 'database_cleaner'
 
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
-Mocha::Configuration.prevent(:stubbing_non_existent_method)
+Mocha.configure do |c|
+  c.stubbing_non_existent_method = :prevent
+  # Ruby 3 distinguishes positional hashes from keyword arguments; enforce the same in
+  # Mocha's #with matching so expectations can't silently mismatch the real call.
+  c.strict_keyword_argument_matching = true
+end
 
 class ActionMailer::TestCase
   def html_body mail
@@ -26,7 +41,7 @@ class ActionMailer::TestCase
   end
 end
 
-module MiniTest::Assertions
+module Minitest::Assertions
   def assert_same_elements(array_one, array_two)
     assert ((array_one - array_two) + (array_two - array_one)).empty?,
       "Expected #{array_one} to contain the same elements as #{array_two}"
@@ -49,30 +64,50 @@ class ActionController::TestCase
 end
 
 class ActiveSupport::TestCase
+  # No test should hit real S3. Building a download filename resolves the current
+  # WDPA release via Wdpa::S3.current_wdpa_identifier, which lists the import
+  # bucket over the network. Stub it globally; a test needing a specific label
+  # (or to exercise that method) can re-stub in its own setup.
+  setup do
+    Wdpa::S3.stubs(:current_wdpa_identifier).returns('WDPA_Jan2024')
+  end
+
+  # The home page renders GlobalStatistic coverage percentages (HomePresenter
+  # calls .round on them). The singleton row exists but its columns are nil until
+  # seeded; in production they are always populated.
+  def seed_global_statistics
+    GlobalStatistic.instance.update!(
+      total_land_pa_coverage_percentage: 12.0,
+      total_ocean_pa_coverage_percentage: 8.0,
+      total_land_oecms_pas_coverage_percentage: 1.0,
+      total_ocean_oecms_pas_coverage_percentage: 2.0
+    )
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms
-    @site = FactoryGirl.create(:cms_site)
-    @layout = FactoryGirl.create(:cms_layout, site: @site)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
+    @site = FactoryBot.create(:cms_site)
+    @layout = FactoryBot.create(:cms_layout, site: @site)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
   end
 
   # and home page needs some extra cms bits
   def seed_cms_home
     seed_cms
     # we need to add extra pages for pa categories on the home page
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
     # and the CTAs
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::API)
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::PROTECTED_PLANET_REPORT)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::API)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::PROTECTED_PLANET_REPORT)
 
   end
 end

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class GreenListHelperTest < ActionView::TestCase
-  include GreenListHelper
+  include Thematic::Effectiveness::GreenListHelper
 
   test 'total_coverage_chart_data returns total and coverage bars with expected legend colour classes' do
     chart_data = total_coverage_chart_data

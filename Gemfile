@@ -1,19 +1,37 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.2.0'
+gem 'rails', '~> 8.0.0'
+gem 'webpacker', '~> 4.0.2'
 
-gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '5.1.0'
+# Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
+# its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
+# appsignal 3 call plain YAML.load on their aliased configs at boot and break.
+# Pin Psych 3 until those are gone -- webpacker at the Vite cutover (B5),
+# appsignal on a version bump. (libyaml-dev is present in the image.)
+gem 'psych', '~> 3.3'
+
+gem 'bourbon'
+gem "neat"
+
+gem 'pg', '~> 1.1'
+gem 'activerecord-postgis-adapter', '~> 11.0'
 gem 'dbf', '~> 2.0.7'
 #
-gem 'elasticsearch', '~> 7.2.0'
+# Match the 7.17.24 server. Stay on the ES 7.x client — 8.x is a client rewrite
+# (elastic-transport gem, namespace changes) and the code uses
+# Elasticsearch::Transport::Transport::Errors::*, which 7.17 keeps and 8.x drops.
+gem 'elasticsearch', '~> 7.17'
+# elasticsearch-transport 7.17 rides on Faraday; pin the 1.x line (2.x split the
+# adapters into separate gems). 1.10 is the last 1.x and Ruby 3.3-clean.
+gem 'faraday', '~> 1.10'
 #
-gem 'sprockets-rails', '~> 3.2.1'
+gem 'sass-rails', '~> 5.0.7'
+gem 'sprockets-rails', '~> 3.2'
 
 gem 'uglifier', '~> 4.1.17'
-gem 'coffee-rails', '~> 4.2.2'
+gem 'coffee-rails', '~> 5.0'
 gem "autoprefixer-rails"
-gem "exception_notification", '~> 4.3.0'
+gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
 gem "slack-notifier", "~> 1.5.1"
 #
 gem 'jquery-rails', '~> 4.3.3'
@@ -35,7 +53,7 @@ gem 'vite_rails', '~> 3.11.1'
 
 group :production, :staging do
 #  gem 'unicorn'
-  gem 'dalli', '~> 2.7.2'
+  gem 'dalli', '~> 3.2'
   gem 'rack-cache', '~> 1.2'
 end
 #
@@ -61,9 +79,10 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl_rails', '~> 4.4.1'
-  gem 'mocha', '~> 1.0.0'
-  gem 'webmock', '~> 1.22.0', require: false
+  gem 'factory_bot_rails', '~> 6.2' # was factory_girl_rails 4.4 (File.exists?, removed in Ruby 3.2)
+  gem 'webrick' # removed from Ruby 3's default gems; used by the S3 upload test
+  gem 'mocha', '~> 2.7'
+  gem 'webmock', '~> 3.23', require: false
   gem 'timecop', '~> 0.7.1'
   gem 'capybara', '~> 2.3.0'
   # gem 'codeclimate-test-reporter', require: nil
@@ -77,7 +96,7 @@ group :test, :development do
   #gem 'konacha' - TODO - NOT COMPATIBLE WITH RAILS 5
   gem 'ejs'
   # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
-  gem 'minitest', '~> 5.10', '!= 5.10.2'
+  gem 'minitest', '~> 5.10', '!= 5.10.2', '< 5.26.2' # 5.26.2+ requires ruby >= 3.1
   
 
 end
@@ -95,27 +114,31 @@ gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 5.2.5' # DRAMATIC CHANGES
+gem 'sidekiq', '~> 7.0'
+# Sidekiq 7 dropped its redis-rb dependency (it uses redis-client internally), but the
+# app talks to Redis directly via $redis / Redis.new, so require redis-rb explicitly.
+gem 'redis', '~> 5.0'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
 gem 'appsignal', '~> 3.3.11'
 
 gem 'system'
-gem 'dotenv', '~> 0.11.1'
+gem 'dotenv', '~> 2.8' # 0.11 used File.exists?, removed in Ruby 3.2
 gem 'dotenv-deployment'
 
-gem 'best_in_place', '~> 3.0.1'
 gem 'turnout', '~> 2.5.0'
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
-gem 'comfortable_mexican_sofa', '~> 2.0.0'
-# Use this in local docker file, comment out the one with v1.10.4
-# gem 'nokogiri'
-gem 'nokogiri', '~> 1.10.4'
-gem 'loofah', '~> 2.19.1' # 2.21+ needs Nokogiri::HTML4 (not in nokogiri 1.10)
-gem 'tinymce-rails', '~> 4.3.2'
+gem 'comfortable_media_surfer', '~> 3.1'
+# Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
+# rails-i18n 5.1.3, which caps railties < 6. Force the Rails 6 line.
+gem 'rails-i18n', '~> 8.0'
+# nokogiri 1.10 does not build on Ruby 3.x; 1.16+ supports Ruby 3.3. Bumping it
+# also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
+gem 'nokogiri', '~> 1.16'
+gem 'loofah', '~> 2.22'
 gem 'phantompdf', '~> 1.2.2'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 gem 'ed25519', '>= 1.2', '< 2.0'

@@ -1,4 +1,4 @@
-class Data::GdpameController < ApplicationController
+class DataPages::GdpameController < ApplicationController
 
   DEFAULT_PARAMS =
   {

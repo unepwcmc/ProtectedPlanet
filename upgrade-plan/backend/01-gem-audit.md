@@ -24,15 +24,15 @@ Every Gemfile entry has a **keep / upgrade / remove** decision recorded before a
 |-----|---------|---------|-----------|---------|--------|
 | `rails` | 5.2.0 | 6.1.x | 7.1.x | 8.0.x | **Upgrade** — step by step, one minor at a time |
 | `pg` | ~> 0.21 | needs 1.x | needs 1.x | needs 1.x | **Upgrade to `~> 1.5`** — `pg` 0.21 does not support Ruby 3 |
-| `activerecord-postgis-adapter` | 5.1.0 | 7.x | 8.x | 8.x | **Upgrade at each AR step** — see [06](./06-postgis-and-database.md) |
-| `puma` | (config present) | ✓ | ✓ | ✓ | Keep, ensure version is current |
+| `activerecord-postgis-adapter` | 5.1.0 | 7.x | 8.x → 9.x | **11.x** | **Upgrade at each AR step** — majors track AR exactly (8→7.0, 9→7.1, 10→7.2, 11→8.0/8.1). `PostgisDatabaseTasks` removed from 8.x. See [06](./06-postgis-and-database.md) |
+| `puma` | (config present) | ✓ | ✓ | ✓ | **Becomes the app server** (replaces Passenger) — see [11](./11-deploy-and-devops.md). Ensure version current, tune workers/threads |
 
 ### Frontend / asset pipeline (backend-touching gems)
 
 | Gem | Current | Action | When | Notes |
 |-----|---------|--------|------|-------|
 | `webpacker` | ~> 4.0.2 | **Remove** | B5 (shared with frontend) | Remove gem + deploy hook together |
-| `vite_rails` | ~> 2.0.13 | **Upgrade to 3.x** on upgrade branch | B0 | Frontend writes PR; backend reviews |
+| `vite_rails` | ~> 2.0.13 | ✓ **Done — 3.11.1** on `feat/upgrade-frontend` | Delivered | Works on **Rails 5.2** (`railties >= 5.1, < 9`); needed only Ruby 2.7. Backend inherits it |
 | `sass-rails` | ~> 5.0.7 | **Upgrade to `sassc-rails`** or keep for transition | Rails 6 | `sass-rails` 5 breaks on Rails 6 |
 | `sprockets-rails` | ~> 3.2.1 | **Keep** through transition; Sprockets 4 on Rails 6 | Rails 6 | Required until Vite serves all CSS |
 | `uglifier` | ~> 4.1.17 | **Remove** when Sprockets JS gone | B5 | Vite minifies; no Sprockets JS needed |
@@ -48,8 +48,8 @@ Every Gemfile entry has a **keep / upgrade / remove** decision recorded before a
 
 | Gem | Current | Action | Risk |
 |-----|---------|--------|------|
-| `comfortable_mexican_sofa` | ~> 2.0.0 | **Audit first** — Rails 7/8 compat unknown | **HIGH** — see [09](./09-cms-comfy.md) |
-| `tinymce-rails` | ~> 4.3.2 | **Upgrade** with Comfy — TinyMCE 4 is EOL | Medium |
+| `comfortable_mexican_sofa` | ~> 2.0.0 | **Replace** with `comfortable_media_surfer ~> 3.1` at the Rails 7.0 step — upstream dead since Dec 2019 | Medium — same schema, but our monkey-patching must be ported. See [09](./09-cms-comfy.md) |
+| `tinymce-rails` | ~> 4.3.2 | **Remove** — Media Surfer uses Redactor, not TinyMCE. Also drop `config.tinymce.install` (`config/application.rb:40`) | Low |
 | `best_in_place` | ~> 3.0.1 | **Remove** if confirmed unused (no `app/` usage found) | Low |
 
 ### Background jobs & queues
@@ -105,15 +105,26 @@ Every Gemfile entry has a **keep / upgrade / remove** decision recorded before a
 
 | Gem | Current | Action | Notes |
 |-----|---------|--------|-------|
-| `capistrano` | 3.11.0 | **Upgrade to ~> 3.18** | Ruby 3 compat fixes in 3.17+ |
-| `capistrano-rails` | 1.4.0 | **Upgrade** | Keep in sync with Capistrano |
-| `capistrano-bundler` | 1.6.0 | **Upgrade** | |
-| `capistrano-rvm` | 0.1.2 | **Keep or replace** | If moving to rbenv/system Ruby on server, can drop |
-| `capistrano-passenger` | 0.2.0 | **Keep** — confirm Rails 8 / Passenger compat | |
-| `capistrano-maintenance` | 1.2.1 | **Keep** | Maintenance page (Turnout) |
-| `capistrano-service` | current | **Keep** | Restarts `pp_default` + `pp_import` Sidekiq services |
-| `capistrano-git-with-submodules` | 2.0.3 | **Keep** | DB submodule checkout |
-| `turnout` | ~> 2.5.0 | **Keep** | Maintenance mode — ops only |
+**All Capistrano gems are being removed** — deployment moves to Docker + Kamal 2, see [11](./11-deploy-and-devops.md). Keep them working until a Kamal production deploy is proven; remove as the last step, not the first.
+
+| Gem | Current | Action | Notes |
+|-----|---------|--------|-------|
+| `capistrano` | 3.11.0 | **Remove** at Kamal cutover | Bump to `~> 3.18` only if it must survive on Ruby 3 in the interim |
+| `capistrano-rails` | 1.4.0 | **Remove** | |
+| `capistrano-bundler` | 1.6.0 | **Remove** | |
+| `capistrano-rvm` | 0.1.2 | **Remove** | Ruby version is baked into the image |
+| `capistrano-passenger` | 0.2.0 | **Remove** | Passenger → Puma behind kamal-proxy |
+| `capistrano-maintenance` | 1.2.1 | **Remove** | Replaced by kamal-proxy maintenance mode |
+| `capistrano-service` | current | **Remove** | `pp_default` / `pp_import` become Kamal worker roles |
+| `capistrano-git-with-submodules` | 2.0.3 | **Remove** | Confirm whether the DB submodule is still needed under Docker |
+| `whenever` | current | **Remove** | Kamal has no cron primitive — move `S3PollingWorker` to `sidekiq-cron` or a supercronic role, see [11](./11-deploy-and-devops.md) |
+| `turnout` | ~> 2.5.0 | **Audit** | Maintenance mode — check whether kamal-proxy covers this before removing |
+
+### Spatial / native
+
+| Gem | Current | Action | Notes |
+|-----|---------|--------|-------|
+| `gdal` | ~> 2.0 | **Remove** | Abandoned gdal-ruby SWIG bindings; used only in `Ogr::Info` / `Ogr::Split`. Replaced by `ogrinfo` shell-outs — see [13](./13-gdal-and-spatial-tooling.md) |
 
 ### Test / development
 
@@ -142,7 +153,6 @@ Every Gemfile entry has a **keep / upgrade / remove** decision recorded before a
 | Gem | Current | Action | Notes |
 |-----|---------|--------|-------|
 | `will_paginate` | ~> 3.0 | **Keep** — confirm Rails 7 compat (3.3+ supports it) | |
-| `gdal` | ~> 2.0 | **Audit** — native extension; GDAL system lib version on server | May block Ruby 3 if C extension needs rebuild |
 | `bystander` | 2.0.0 git | **Audit** — private gem from unepwcmc org | Confirm still maintained; check Ruby 3 compat |
 | `levenshtein` | ~> 0.2.2 | **Audit** — native C extension | May need update for Ruby 3 |
 | `dbf` | ~> 2.0.7 | **Upgrade to ~> 4.x** | Used in import; pure Ruby, no native ext risk |
@@ -158,15 +168,15 @@ Every Gemfile entry has a **keep / upgrade / remove** decision recorded before a
 - [ ] Grep `BestInPlace`, `Phantompdf` in views and controllers.
 - [ ] `grep -r "require.*system" config/ app/ lib/` — identify what the `system` gem provides.
 - [ ] Check `bystander` gem for last commit / Ruby 3 issues on GitHub.
-- [ ] Verify GDAL system library version on production (`gdalinfo --version`).
-- [ ] Check ComfortableMexicanSofa changelog / issues for Rails 7/8 — see [09](./09-cms-comfy.md).
+- [ ] Verify GDAL system library version on production (`gdalinfo --version`) — baseline for the [13](./13-gdal-and-spatial-tooling.md) comparison.
 - [ ] Confirm `dotenv-deployment` is still needed or absorbed by `dotenv` 2.x.
+- [ ] Confirm nothing outside Comfy admin uses `tinymce-rails` or `jquery-rails` before removing them.
 
 ---
 
 ## Exit criteria
 
 - Every gem has **keep / upgrade / remove** decision in writing.
-- ComfortableMexicanSofa Rails 7/8 verdict recorded — drives [09](./09-cms-comfy.md) scope.
+- CMS replacement path confirmed: `comfortable_media_surfer` — drives [09](./09-cms-comfy.md) scope.
 - Dead gems (`bourbon`, `neat`, `phantompdf`, `vuejs-rails`, `sprockets-vue`, `best_in_place`) confirmed dead and removal tickets created.
 - `pg` 1.x upgrade confirmed safe (no `PGconn`/`PGresult` raw API usage in app).

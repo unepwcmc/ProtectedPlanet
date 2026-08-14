@@ -7,7 +7,7 @@ class ActiveTokenTest < ActiveSupport::TestCase
   test '#find looks for a key on redis and initialises an instance with the
    containing attributes' do
     token = '123'
-    $redis.expects(:exists).with("test:#{token}").returns(true)
+    $redis.expects(:exists?).with("test:#{token}").returns(true)
 
     obj = TestObj.find token
     assert_equal token, obj.token

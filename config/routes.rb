@@ -35,21 +35,21 @@ Rails.application.routes.draw do
 
     # JSON endpoints
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-    resources :downloads, only: %i[show create update]
+    resources :downloads, only: %i[show create]
 
     ## Only CMS routes are present below
 
     get '/terms', to: redirect("/c/#{PageSlugs::TERMS_AND_CONDITIONS}")
 
-    get PageSlugs::Data.path(PageSlugs::Data::WDPCA), to: 'data/wdpca#index'
-    get PageSlugs::Data.path(PageSlugs::Data::GDPAME), to: 'data/gdpame#index'
+    get PageSlugs::Data.path(PageSlugs::Data::WDPCA), to: 'data_pages/wdpca#index'
+    get PageSlugs::Data.path(PageSlugs::Data::GDPAME), to: 'data_pages/gdpame#index'
 
     get PageSlugs::ThematicAreas.path(PageSlugs::ThematicAreas::EFFECTIVENESS), to: 'thematic/effectiveness#index'
     get PageSlugs::ThematicAreas.path(PageSlugs::ThematicAreas::MARINE), to: 'thematic/marine#index'
 
     # JSON endpoints - CMS
-    post '/pame/download', to: 'data/gdpame#download'
-    post '/pame/list', to: 'data/gdpame#list'
+    post '/pame/download', to: 'data_pages/gdpame#download'
+    post '/pame/list', to: 'data_pages/gdpame#list'
 
     # Used for site-wide search
     post '/search/autocomplete', to: 'search#autocomplete'

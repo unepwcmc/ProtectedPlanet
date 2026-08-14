@@ -1,4 +1,4 @@
-secrets = Rails.application.secrets.mailer
+secrets = Rails.application.config_for(:app_secrets).mailer
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -19,10 +19,11 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
 
   # Use a different cache store in production.
-  config.cache_store = :dalli_store
+  # dalli 3.x removed :dalli_store; :mem_cache_store is the Rails built-in (dalli-backed).
+  config.cache_store = :mem_cache_store, Rails.application.config_for(:app_secrets).memcache_servers, { value_max_bytes: 10_485_760 }
 
   # http://wcmc.io/heroku_memcached for reference
-  client = Dalli::Client.new(Rails.application.secrets.memcache_servers, {value_max_bytes: 10485760})
+  client = Dalli::Client.new(Rails.application.config_for(:app_secrets).memcache_servers, {value_max_bytes: 10485760})
   config.action_dispatch.rack_cache = {:metastore => client, :entitystore => client }
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application

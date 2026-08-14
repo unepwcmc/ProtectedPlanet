@@ -18,7 +18,7 @@ namespace :comfy do
 
     abort('Goodbye') if answer == 'nothing'
 
-    { answer: answer, destination: File.join(ComfortableMexicanSofa.config.seeds_path, 'protected-planet') }
+    { answer: answer, destination: File.join(ComfortableMediaSurfer.config.seeds_path, 'protected-planet') }
   end
 
   desc "Import CMS Seed data from staging. Can be run with arguments
@@ -33,7 +33,7 @@ namespace :comfy do
       dest = answers[:destination]
       answer = answers[:answer]
     elsif args[:dest] && args[:folder]
-      dest = File.join(ComfortableMexicanSofa.config.seeds_path, args[:dest])
+      dest = File.join(ComfortableMediaSurfer.config.seeds_path, args[:dest])
       answer = args[:folder].downcase
     else
       abort('Please specify both destination and folder or leave both blank')

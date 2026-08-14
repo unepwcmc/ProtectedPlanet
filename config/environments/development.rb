@@ -76,7 +76,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
 
-  secrets = Rails.application.secrets.mailer
+  secrets = Rails.application.config_for(:app_secrets).mailer
   config.action_mailer.asset_host = secrets[:asset_host]
   config.action_mailer.default_url_options = { :host => secrets[:host] }
   config.action_mailer.smtp_settings = {

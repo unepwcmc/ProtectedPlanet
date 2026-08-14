@@ -1,13 +1,18 @@
 require 'test_helper'
 
 class HomeHelperTest < ActionView::TestCase
-  test '#get_filters returns special_status and db_type for green list filter' do
-    result = get_filters('pa_or_any_its_parcels_is_greenlisted')
-    assert_equal({ special_status: ['pa_or_any_its_parcels_is_greenlisted'], db_type: ['wdpa'] }, result)
+  # The home-category filter building moved from a HomeHelper#get_filters method to
+  # SearchAreaLinkFilters.home_category_filters(filter:, is_green_list:), which now
+  # returns just the status/type key (db_type is applied elsewhere in the search path).
+  test 'home_category_filters builds a special_status filter for green list categories' do
+    result = SearchAreaLinkFilters.home_category_filters(
+      filter: 'pa_or_any_its_parcels_is_greenlisted', is_green_list: true
+    )
+    assert_equal({ special_status: ['pa_or_any_its_parcels_is_greenlisted'] }, result)
   end
 
-  test '#get_filters returns is_type and db_type for non-green-list filter' do
-    result = get_filters('marine')
-    assert_equal({ is_type: ['marine'], db_type: ['wdpa'] }, result)
+  test 'home_category_filters builds an is_type filter for non-green-list categories' do
+    result = SearchAreaLinkFilters.home_category_filters(filter: 'marine', is_green_list: false)
+    assert_equal({ is_type: ['marine'] }, result)
   end
 end

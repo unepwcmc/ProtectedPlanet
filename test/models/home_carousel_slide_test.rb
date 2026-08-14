@@ -11,7 +11,7 @@ class HomeCarouselSlideTest < ActiveSupport::TestCase
   def test_validation
     home_carousel_slide = HomeCarouselSlide.new
     assert home_carousel_slide.invalid?
-    assert_equal [:title, :description, :url], home_carousel_slide.errors.keys
+    assert_equal [:title, :description, :url], home_carousel_slide.errors.attribute_names
   end
 
   def test_creation

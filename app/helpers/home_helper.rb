@@ -38,7 +38,7 @@ module HomeHelper
     return image_path(category[:use_this_image]) if category[:use_this_image].present?
     return '' if category[:cms_slug].blank?
 
-    cms_page = Comfy::Cms::Page.find_by_slug(category[:cms_slug])
+    cms_page = Comfy::Cms::Page.find_by(slug: category[:cms_slug])
     return '' if cms_page.blank?
 
     cms_fragment_render(:image, cms_page).presence || ''

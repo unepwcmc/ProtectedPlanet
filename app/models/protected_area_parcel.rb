@@ -31,7 +31,7 @@ class ProtectedAreaParcel < ApplicationRecord
 
   def create_slug
     updated_slug = [site_id, site_pid, name, designation.try(:name)].join(' ').parameterize
-    update_attributes(slug: updated_slug)
+    update(slug: updated_slug)
   end
 
   # PAs with green list on the PA record only (ignores parcel-level green list).

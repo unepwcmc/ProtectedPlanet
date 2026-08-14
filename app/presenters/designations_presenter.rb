@@ -53,7 +53,7 @@ class DesignationsPresenter
   end
 
   def get_jurisdiction(jurisdiction)
-    Jurisdiction.find_by_name(jurisdiction)
+    Jurisdiction.find_by(name: jurisdiction)
   end
 
   def designation_title(jurisdiction)

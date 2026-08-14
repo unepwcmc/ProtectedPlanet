@@ -3,7 +3,7 @@ require 'test_helper'
 class DownloadsControllerTest < ActionController::TestCase
   test 'GET :show responds with a json containing the link to s3, when domain is general' do
     type = 'csv'
-    country = FactoryGirl.create(:country, iso_3: 'CAN')
+    country = FactoryBot.create(:country, iso_3: 'CAN')
     link = "https://bucket.s3.com/#{country.iso_3}.#{type}"
 
     Download.expects(:link_to).returns(link)
@@ -17,8 +17,11 @@ class DownloadsControllerTest < ActionController::TestCase
     token = '12345'
     expected_json = {'status' => 'generating', 'token' => token}
 
+    # download_params is params.permit! -- a single positional ActionController::Parameters,
+    # not keyword args. Match on its contents (block matcher) so this holds under Mocha's
+    # strict keyword-argument matching.
     Download.expects(:request).
-      with('q' => search_term, 'type' => 'protected_area', 'controller' => 'downloads', 'action' => 'create').
+      with { |p| p.to_unsafe_h == { 'q' => search_term, 'type' => 'protected_area', 'controller' => 'downloads', 'action' => 'create' } }.
       returns(expected_json)
 
     post :create, params: {q: search_term, type: 'protected_area'}
@@ -32,7 +35,7 @@ class DownloadsControllerTest < ActionController::TestCase
     expected_json = {'status' => 'generating', 'token' => token}
 
     Download.expects(:poll).
-      with('domain' => 'project', 'token' => '12345', 'controller' => 'downloads', 'action' => 'poll').
+      with { |p| p.to_unsafe_h == { 'domain' => 'project', 'token' => '12345', 'controller' => 'downloads', 'action' => 'poll' } }.
       returns(expected_json)
 
     get :poll, params: {domain: 'project', token: token}
@@ -41,20 +44,6 @@ class DownloadsControllerTest < ActionController::TestCase
     assert_equal(expected_json, json_response)
   end
 
-  test 'PUT :update, given a token and an email, adds a users email
-   address to the Search properties' do
-    token = '12345'
-    email = 'stephen@fakename.com'
-
-    Download.expects(:set_email).with({
-      'id' => token,
-      'email' => email,
-      'action' => 'update',
-      'controller' => 'downloads'
-    })
-
-    put :update, params: {id: token, email: email}
-
-    assert_response :success
-  end
+  # The PUT :update action (the legacy "email me when the download is ready" flow)
+  # no longer exists on DownloadsController; the stale route has been removed too.
 end

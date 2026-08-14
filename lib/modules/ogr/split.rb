@@ -1,5 +1,7 @@
 require 'gdal-ruby/ogr'
-require 'shapefile'
+# Rails 7.1 load_defaults sets add_autoload_paths_to_load_path=false, so lib/modules
+# subdirs are no longer on $LOAD_PATH -- use require_relative for sibling files.
+require_relative 'shapefile'
 
 class Ogr::Split
   def self.split filename, layer, number_of_pieces, column_names = ['*']

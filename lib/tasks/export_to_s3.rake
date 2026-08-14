@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 namespace :comfy do
-  TO    = Rails.application.secrets.aws_files_bucket
-  FILES = File.join(ComfortableMexicanSofa.config.seeds_path, 'protected-planet', 'files')
+  TO    = Rails.application.config_for(:app_secrets).aws_files_bucket
+  FILES = File.join(ComfortableMediaSurfer.config.seeds_path, 'protected-planet', 'files')
   STORAGE = Rails.root.join('storage').freeze
 
   def check_for_identifiers(attachment)
@@ -50,7 +50,7 @@ namespace :comfy do
         f2 = old_key[2..3]
         old_file = File.join(STORAGE, f1, f2, old_key)
 
-        unless File.exists?(old_file)
+        unless File.exist?(old_file)
           puts "SKIP FRAGMENT: File #{old_filename}[#{old_file}] doesn't exist. Skipping..."
           skipped_fragments_count += 1
           unmigrated_files << attachment.record.id

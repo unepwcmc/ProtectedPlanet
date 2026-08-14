@@ -1,6 +1,6 @@
 module CmsTransfer
   def self.transfer only_dump=false
-    config = ActiveRecord::Base.connection_config
+    config = ActiveRecord::Base.connection_db_config.configuration_hash
 
     backup_path = Rails.root.join("tmp/comfy.dump")
 

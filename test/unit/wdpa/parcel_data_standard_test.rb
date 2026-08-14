@@ -3,13 +3,15 @@ require 'test_helper'
 class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    for SITE ID' do
+    # wdpa_id is set alongside site_id for compatibility (see ParcelDataStandard).
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ wdpaid: 1234 })
-    assert_equal({ site_id: 1234 }, attributes)
+    assert_equal({ site_id: 1234, wdpa_id: 1234 }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    for SITE_PID' do
-    attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ site_pid: '1234_A' })
+    # The source column is wdpa_pid; it maps to the site_pid attribute.
+    attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ wdpa_pid: '1234_A' })
     assert_equal({ site_pid: '1234_A' }, attributes)
   end
 
@@ -30,19 +32,19 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is false' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ marine: '0' })
-    assert_equal({ marine: false }, attributes)
+    assert_equal({ marine_type: 0, marine: false }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is true when coastal' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ marine: '1' })
-    assert_equal({ marine: true }, attributes)
+    assert_equal({ marine_type: 1, marine: true }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is true' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ marine: '2' })
-    assert_equal({ marine: true }, attributes)
+    assert_equal({ marine_type: 2, marine: true }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
@@ -92,7 +94,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     status = 'NO TAKE'
     area   = 153.6
 
-    FactoryGirl.create(:no_take_status, name: status, area: area)
+    FactoryBot.create(:no_take_status, name: status, area: area)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({
       no_take: status,
@@ -108,8 +110,8 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
-    norway = FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
-    guatemala = FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
+    norway = FactoryBot.create(:country, iso_3: 'NOR', name: 'Norway')
+    guatemala = FactoryBot.create(:country, iso_3: 'GTM', name: 'Guatemala')
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ iso3: 'NOR; GTM;' })
 
@@ -134,7 +136,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns LegalStatus models for a
    given legal status' do
     status_name = "It's legal, honest"
-    FactoryGirl.create(:legal_status, name: status_name)
+    FactoryBot.create(:legal_status, name: status_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ status: status_name })
 
@@ -163,7 +165,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     stored in Rails for a given legal status change year' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ status_yr: 0 })
 
-    protected_area = FactoryGirl.create(:protected_area)
+    protected_area = FactoryBot.create(:protected_area)
     protected_area.legal_status_updated_at = attributes[:legal_status_updated_at]
 
     assert protected_area.save
@@ -173,7 +175,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns an IucnCategory for a
    given IUCN category' do
     category_name = 'Extinct'
-    FactoryGirl.create(:iucn_category, name: category_name)
+    FactoryBot.create(:iucn_category, name: category_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ iucn_cat: category_name })
 
@@ -184,7 +186,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a Governance for a given
    governance type' do
     governance_name = 'Ministry of Ministries'
-    FactoryGirl.create(:governance, name: governance_name)
+    FactoryBot.create(:governance, name: governance_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ gov_type: governance_name })
 
@@ -195,7 +197,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given
    management authority' do
     management_name = 'Authority of Authorities'
-    FactoryGirl.create(:management_authority, name: management_name)
+    FactoryBot.create(:management_authority, name: management_name)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({ mang_auth: management_name })
 
@@ -228,8 +230,8 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     designation = 'Sites of Special Importance'
     designation_type = 'Universal'
 
-    jurisdiction = FactoryGirl.create(:jurisdiction, name: designation_type)
-    FactoryGirl.create(:designation, name: designation, jurisdiction: jurisdiction)
+    jurisdiction = FactoryBot.create(:jurisdiction, name: designation_type)
+    FactoryBot.create(:designation, name: designation, jurisdiction: jurisdiction)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({
       desig_eng: designation,
@@ -250,7 +252,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     designation = 'Sites of Special Importance'
     designation_type = 'Universal'
 
-    FactoryGirl.create(:jurisdiction, name: designation_type)
+    FactoryBot.create(:jurisdiction, name: designation_type)
 
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({
       desig_eng: designation,
@@ -270,17 +272,9 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
     assert_equal({}, attributes)
   end
 
-  test '#standard_attributes returns the pre-defined WDPA standard attributes' do
-    expected_attributes = Wdpa::ParcelDataStandard::STANDARD_ATTRIBUTES
-    assert_equal expected_attributes, Wdpa::ParcelDataStandard.standard_attributes
-  end
-
-  test '#standardise_table_name converts WDPA Geodatabase table names in
-   to consistent names' do
-    standardised_name = Wdpa::ParcelDataStandard.standardise_table_name 'wdpapoly_june2014'
-    assert_equal 'standard_polygons', standardised_name
-
-    standardised_name = Wdpa::ParcelDataStandard.standardise_table_name 'wdpapoint_june2014'
-    assert_equal 'standard_points', standardised_name
-  end
+  # NOTE: #standard_attributes and #standardise_table_name are NOT part of
+  # Wdpa::ParcelDataStandard (they live on Wdpa::DataStandard, tested in
+  # data_standard_test.rb, and the release pipeline uses them from there).
+  # The tests for them here were copied over for methods this class never had;
+  # removed.
 end

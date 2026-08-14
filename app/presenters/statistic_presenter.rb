@@ -13,6 +13,8 @@ class StatisticPresenter
   end
 
   def geometry_ratio
+    return { polygons: 0, points: 0 } if @statistic.nil?
+
     @statistic.polygons_count ||= 0
     @statistic.points_count   ||= 0
     total = @statistic.polygons_count + @statistic.points_count

@@ -91,7 +91,7 @@ class ProtectedArea < ApplicationRecord
     results = $redis.zrevrangebyscore(year_month, "+inf", "-inf", opts)
     results.map { |site_id, visits|
       {
-        protected_area: ProtectedArea.find_by_site_id(site_id),
+        protected_area: ProtectedArea.find_by(site_id: site_id),
         visits: visits.to_i
       }
     }
@@ -340,7 +340,7 @@ class ProtectedArea < ApplicationRecord
 
   def create_slug
     updated_slug = [site_id, name, designation.try(:name)].join(' ').parameterize
-    update_attributes(slug: updated_slug)
+    update(slug: updated_slug)
   end
 
   def db

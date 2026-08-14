@@ -52,7 +52,7 @@ module ApplicationHelper
   end
 
   def protected_area_cover(protected_area, with_tag: true)
-    version = Rails.application.secrets.mapbox[:version]
+    version = AppSecrets.mapbox[:version]
     image_params = { id: protected_area.site_id, type: 'protected_area', version: version }
     data = cover_data(image_params, protected_area.class)
 
@@ -78,7 +78,7 @@ module ApplicationHelper
   end
 
   def country_cover(country, with_tag: true)
-    version = Rails.application.secrets.mapbox[:version]
+    version = AppSecrets.mapbox[:version]
     image_params = { id: country.iso, type: 'country', version: version }
     data = cover_data(image_params, country.class)
 
@@ -91,7 +91,7 @@ module ApplicationHelper
   end
 
   def region_cover(region, with_tag: true)
-    version = Rails.application.secrets.mapbox[:version]
+    version = AppSecrets.mapbox[:version]
     image_params = { id: region.iso, type: 'region', version: version }
     return tiles_path(image_params) unless with_tag
 
@@ -127,7 +127,7 @@ module ApplicationHelper
   def get_resource_cards(all = false)
     return (@items = empty_resource_cards) if @cms_site.nil?
 
-    resources_page = @cms_site.pages.find_by_slug(PageSlugs::RESOURCES)
+    resources_page = @cms_site.pages.find_by(slug: PageSlugs::RESOURCES)
     return (@items = empty_resource_cards) if resources_page.nil?
 
     presenter = ResourcesPresenter.new(@cms_site, all)
@@ -157,7 +157,7 @@ module ApplicationHelper
   def get_news_items(all = false)
     return (@items = { title: nil, url: false, cards: [] }) if @cms_site.nil?
 
-    news_page = @cms_site.pages.find_by_slug(PageSlugs::NEWS_AND_STORIES)
+    news_page = @cms_site.pages.find_by(slug: PageSlugs::NEWS_AND_STORIES)
     return (@items = { title: nil, url: false, cards: [] }) if news_page.nil?
 
     published_pages = news_page.children.published
@@ -235,7 +235,7 @@ module ApplicationHelper
 
   def make_footer_links(slug_array)
     slug_array.map do |slug|
-      page = @cms_site.pages.find_by_slug(slug)
+      page = @cms_site.pages.find_by(slug: slug)
       next if page.nil?
 
       {
@@ -251,7 +251,7 @@ module ApplicationHelper
   end
 
   def map_page(slug, map_children = false)
-    cms_page = Comfy::Cms::Page.find_by_slug(slug)
+    cms_page = Comfy::Cms::Page.find_by(slug: slug)
     return nil if cms_page.nil?
 
     mapped_page = {

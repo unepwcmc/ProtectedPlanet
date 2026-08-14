@@ -1,4 +1,4 @@
-class TextCustom < ComfortableMexicanSofa::Content::Tag::Fragment
+class TextCustom < ComfortableMediaSurfer::Content::Tags::Fragment
 
   def initialize(context:, params: [], source: nil)
     super
@@ -21,6 +21,6 @@ class TextCustom < ComfortableMexicanSofa::Content::Tag::Fragment
   end
 end
 
-ComfortableMexicanSofa::Content::Renderer.register_tag(
+ComfortableMediaSurfer::Content::Renderer.register_tag(
   :text_custom, TextCustom
 )

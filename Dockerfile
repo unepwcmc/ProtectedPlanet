@@ -1,6 +1,9 @@
-# Ruby 2.7 on Debian buster — Rails 5.2 supports Ruby up to 2.7, and 2.7's
-# `filter_map` unlocks vite_rails 3.x (G1 gate). buster tag keeps the apt/GDAL
-# setup below working. Node stays 12 in this step; bumped to 24 in the next.
+# Debian buster base. We compile Ruby 3.3 further down via ruby-build rather than
+# using a ruby:3.3-* image, because those are bookworm-based and would break the
+# GDAL 2.2.3 + ESRI FileGDB source build below (RHEL7 SDK needs old glibc). Keeping
+# buster isolates the Ruby 3.3 bump from the Debian/GDAL modernisation, which stays
+# in the deploy/infra phases. The base still ships Ruby 2.7; PATH is repointed to
+# 3.3 at the ruby-build step.
 FROM ruby:2.7-buster
 
 # Buster is EOL, so point APT to Debian archive mirrors before updating
@@ -123,6 +126,25 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN corepack enable && \
     corepack prepare yarn@4.17.1 --activate
 
+# --- Ruby 3.3, compiled on buster ---
+# Placed after the heavy apt/Node/GDAL layers so those stay cache-valid (no GDAL
+# recompile) when only Ruby changes. GEM_HOME is inherited from the base
+# (/usr/local/bundle), so the shared bundler volume keeps working; gems get
+# rebuilt for 3.3 at runtime by the `install` service.
+ENV RUBY_VERSION_TARGET=3.3.7
+RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --no-install-recommends \
+        git autoconf bison libssl-dev libyaml-dev zlib1g-dev libreadline-dev libffi-dev libgmp-dev \
+ && git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
+ && PREFIX=/usr/local /tmp/ruby-build/install.sh \
+ && ruby-build "${RUBY_VERSION_TARGET}" "/usr/local/ruby-${RUBY_VERSION_TARGET}" \
+ && rm -rf /tmp/ruby-build /var/lib/apt/lists/*
+ENV PATH="/usr/local/ruby-${RUBY_VERSION_TARGET}/bin:${PATH}"
+# The compose commands use login shells (`bash -l -c`), which source /etc/profile
+# and rebuild PATH from scratch -- dropping the ENV above and falling back to the
+# base image's Ruby 2.7. This profile.d snippet re-prepends 3.3 for login shells.
+RUN printf 'export PATH=/usr/local/ruby-%s/bin:$PATH\n' "${RUBY_VERSION_TARGET}" > /etc/profile.d/ruby-3.3.sh
+RUN ruby -v | grep -q "3.3.7" && echo "Ruby 3.3.7 active"
+
 RUN mkdir /ProtectedPlanet
 WORKDIR /ProtectedPlanet
 
@@ -134,12 +156,20 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 # We need the following to avoid bundler install error
 # https://nokogiri.org/tutorials/installing_nokogiri.html#installing-using-standard-system-libraries
-# Install the locked bundler (1.17.3) BEFORE any `bundle` call: Ruby 2.7's
+# Install the locked bundler (2.4.22) BEFORE any `bundle` call: Ruby 2.7's
 # rubygems errors hard when Gemfile.lock's BUNDLED WITH version is absent
-# (Ruby 2.6.3 only warned). Pin every bundle invocation to 1.17.3.
-RUN gem install bundler -v 1.17.3
-RUN bundle _1.17.3_ config build.nokogiri --use-system-libraries
-RUN bundle _1.17.3_ install
+# (Ruby 2.6.3 only warned). Pin every bundle invocation to 2.4.22.
+# Bundler 1.17.3 cannot resolve the Rails 6 dependency graph -- it dies with
+# `undefined method 'name' for "Gemfile" String`. 2.4.22 is the last 2.x line
+# that still supports Ruby 2.7.
+# Compile native gems from source rather than pulling precompiled platform gems:
+# the precompiled x86_64-linux builds (pg, nokogiri) target a newer glibc than
+# buster's 2.28 and fail to load here. Applies to build-time and the runtime
+# `install` service (it is an ENV, so it survives the shared bundler volume).
+ENV BUNDLE_FORCE_RUBY_PLATFORM=true
+RUN gem install bundler -v 2.4.22
+RUN bundle _2.4.22_ config build.nokogiri --use-system-libraries
+RUN bundle _2.4.22_ install
 
 # As it fails for not able to download r809590 during first time of yarn install so we need to skip it and install it manually later
 RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install

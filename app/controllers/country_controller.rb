@@ -148,5 +148,11 @@ class CountryController < ApplicationController
     character_replacements.each { |key, val| path_string.gsub!(key, val) }
 
     ActionController::Base.helpers.image_url("flags/#{path_string}.svg")
+  rescue Sprockets::Rails::Helper::AssetNotFound
+    # Not every country has a flag asset -- a newly added or renamed one will not
+    # until someone adds the SVG. Returning nil degrades to the no-flag layout the
+    # views already handle (`if local_assigns[:flag]`) rather than 500ing the whole
+    # country page. Before load_defaults 6.0 this silently produced a broken path.
+    nil
   end
 end

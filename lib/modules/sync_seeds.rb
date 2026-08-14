@@ -8,7 +8,7 @@ class SyncSeeds
   end
 
   def start_session
-    opts = Rails.env.development? ? {} : {keys: [Rails.application.secrets.staging_ssh_key]}
+    opts = Rails.env.development? ? {} : {keys: [AppSecrets.staging_ssh_key]}
 
     Net::SSH.start(
       @server,
@@ -144,19 +144,19 @@ class SyncSeeds
 
   # Piggybacks on existing Comfy modules 
   def commence_comfy_import(answer, source)
-    logger = ComfortableMexicanSofa.logger
-    ComfortableMexicanSofa.logger = Logger.new(STDOUT)
+    logger = ComfortableMediaSurfer.logger
+    ComfortableMediaSurfer.logger = Logger.new(STDOUT)
     site = Comfy::Cms::Site.first.identifier
     folder = source.split('/').last
 
     if answer == 'all'
       Rake::Task["comfy:cms_seeds:import"].invoke(folder, site)
     else
-      module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize.capitalize}::Importer".constantize
+      module_name = "ComfortableMediaSurfer::Seeds::#{answer.singularize.capitalize}::Importer".constantize
       module_name.new(folder, site).import!
     end
     
-    ComfortableMexicanSofa.logger = logger
+    ComfortableMediaSurfer.logger = logger
   end
   
 end

@@ -34,7 +34,7 @@ module Wdpa
           csv.each do |parent_iso, child_isos|
             # Wrap each parent-child relationship in its own transaction
             ActiveRecord::Base.transaction do
-              parent_country = Country.find_by_iso_3(parent_iso)
+              parent_country = Country.find_by(iso_3: parent_iso)
               child_isos = child_isos.split(';')
 
               if parent_country.nil?
@@ -44,7 +44,7 @@ module Wdpa
               end
 
               child_isos.each do |child_iso|
-                child_country = Country.find_by_iso_3(child_iso)
+                child_country = Country.find_by(iso_3: child_iso)
 
                 if child_country.nil?
                   Rails.logger.warn "Child country not found: #{child_iso}"

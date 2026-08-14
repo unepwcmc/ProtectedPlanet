@@ -30,18 +30,24 @@ Spatial data correctness is non-negotiable for Protected Planet. PostGIS queries
 
 ## Adapter version map
 
-`activerecord-postgis-adapter` tracks ActiveRecord versions closely:
+`activerecord-postgis-adapter` majors track ActiveRecord majors/minors one-to-one:
 
-| Rails (AR) version | PostGIS adapter version |
-|--------------------|-------------------------|
-| Rails 5.2 (current) | 5.1.0 (current) |
-| Rails 6.0 | **7.0.x** |
-| Rails 6.1 | **7.1.x** |
-| Rails 7.0 | **8.0.x** |
-| Rails 7.1 | **8.0.x** (same) |
-| Rails 8.0 | **8.0.x** or 9.x if released |
+| Rails (AR) version | PostGIS adapter version | Min Ruby |
+|--------------------|-------------------------|----------|
+| Rails 5.2 (current) | 5.1.0 (current) | — |
+| Rails 6.0 | **7.0.x** | — |
+| Rails 6.1 | **7.1.x** | — |
+| Rails 7.0 | **8.x** | 2.7+ |
+| Rails 7.1 | **9.x** | 3.0+ |
+| Rails 7.2 | **10.x** | 3.1+ |
+| Rails 8.0 | **11.0.x** | 3.2+ |
+| Rails 8.1 | **11.1.x** | 3.2+ |
 
 **Important:** The version jump from 5.x to 7.x is not a typo — the gem skipped 6.x to align with AR versioning. Check `rubygems.org/gems/activerecord-postgis-adapter` for the latest compatible version at each step.
+
+**Final target is 11.x, not 8.x.** 8.x is the Rails **7.0** row — we pass through it (and 9.x) en route to Rails 8.
+
+**`PostgisDatabaseTasks` was removed in 8.x.** From that step onward, the PostGIS extension is no longer created automatically by `db:create` — CI, the Docker entrypoint and any fresh-DB setup must run `CREATE EXTENSION postgis;` explicitly. Catch this at the Rails 7.0 bump, not later.
 
 **Also upgrade `pg` from 0.21 to `~> 1.5` at the Ruby 2.7 step** — `pg` 0.21 does not compile on Ruby 3.
 
@@ -80,14 +86,27 @@ Run this after every Rails bump that changes the PostGIS adapter version. Add to
 
 ## PostGIS server version check
 
-Before any upgrade, confirm the PostGIS extension version on the production DB server:
+Before any upgrade, confirm the PostgreSQL and PostGIS extension versions on the production DB server:
 
 ```bash
-ssh wcmc@new-web.pp-production.linode.protectedplanet.net \
-  'psql pp_production -c "SELECT PostGIS_Full_Version();"'
+ssh wcmc@new-web.pp-production.linode.protectedplanet.net 'psql pp_production -c "SELECT version();" -c "SELECT PostGIS_Full_Version();"'
 ```
 
 The PostGIS extension version on the server constrains which geometry functions are available. Upgrading the Ruby adapter does not change the server — but new adapter versions may expose new server functions; ensure the server PostGIS version supports them if any new spatial queries are added.
+
+---
+
+## PostgreSQL server major upgrade
+
+The dev stack pins `kartoza/postgis:11.5-2.5` (PG 11 / PostGIS 2.5) in `docker-compose.yml`; the production version is **unconfirmed** — run the check above.
+
+The server-side move to **PG 17/18 + PostGIS 3.5/3.6** is planned as part of the infrastructure migration, since it is done *as* the server move via logical replication. Full detail: **[12 — Infrastructure migration](./12-infrastructure-migration.md)**.
+
+What this phase owns at that point:
+
+- [ ] Re-run the full spatial regression checklist above against the new server
+- [ ] Confirm the PostGIS extension upgraded cleanly (`postgis_extensions_upgrade()`)
+- [ ] Regenerate and review `db/structure.sql` on the new major — the diff is large and it is what guarantees our geometry column types
 
 ---
 
@@ -102,20 +121,19 @@ At each Rails bump:
 
 ---
 
-## GDAL native extension
+## GDAL
 
-`gdal ~> 2.0` is a native extension used in geometry / shapefile processing. At each Ruby version bump:
+`gdal ~> 2.0` (the abandoned gdal-ruby SWIG bindings) and the proprietary ESRI FileGDB driver are **being removed entirely**, not upgraded. See **[13 — GDAL & spatial tooling](./13-gdal-and-spatial-tooling.md)**.
 
-- [ ] Confirm `gem install gdal` compiles against the system GDAL library
-- [ ] Check production server GDAL version: `gdalinfo --version`
-- [ ] If GDAL 2.x gem does not compile on Ruby 3.x, investigate `ffi-gdal` or the maintained `gdal` gem fork
+Until that phase lands, `gdal` remains a native-extension risk at each Ruby bump ([02](./02-ruby-upgrade.md)). After it lands, the risk disappears — there is no Ruby GDAL binding left to compile.
 
 ---
 
 ## Exit criteria (across all phases)
 
-- `activerecord-postgis-adapter` bumped correctly at each Rails step
+- `activerecord-postgis-adapter` bumped correctly at each Rails step, landing on **11.x** at Rails 8
 - `pg` gem on 1.x
+- PostGIS extension creation handled explicitly (no `PostgisDatabaseTasks` from 8.x)
 - Spatial regression checklist passes at Rails 6.1, 7.1, and 8.0
 - `structure.sql` generates correctly at each step
-- GDAL compiles on Ruby 3.3
+- Spatial regression checklist re-passes on the new Postgres major ([12](./12-infrastructure-migration.md))

@@ -8,8 +8,51 @@
 # ACCOMMODATE THE NEW LAYOUT AND PAGE CATEGORY MODELS
 # ------------------------------------------------------------- #
 
+# --- CMS seed import: Psych safe_load compatibility (Ruby 3) ---
+# Media Surfer's seed importers (page attrs, page-translations, layout, file,
+# snippet) call bare `YAML.safe_load`, which under Ruby 3's Psych rejects datetime/
+# symbol attributes (Psych::DisallowedClass) and breaks `sync_seeds`. Rather than
+# re-copy each importer method, permit a safe class set — but ONLY while a seed
+# import is running (thread-local flag), so normal app YAML.safe_load is unchanged.
+module CmsSeedYaml
+  SEED_CLASSES = [Symbol, Date, Time, ActiveSupport::TimeWithZone,
+                  ActiveSupport::TimeZone, BigDecimal].freeze
+  def self.importing? = Thread.current[:cms_seed_importing]
+
+  module YamlPatch
+    def safe_load(*args, **opts)
+      if CmsSeedYaml.importing?
+        opts[:permitted_classes] = Array(opts[:permitted_classes]) | CmsSeedYaml::SEED_CLASSES
+        opts[:aliases] = true unless opts.key?(:aliases)
+      end
+      super
+    end
+    def safe_load_file(*args, **opts)
+      if CmsSeedYaml.importing?
+        opts[:permitted_classes] = Array(opts[:permitted_classes]) | CmsSeedYaml::SEED_CLASSES
+        opts[:aliases] = true unless opts.key?(:aliases)
+      end
+      super
+    end
+  end
+
+  module ImporterWrap
+    def import!(*)
+      prev = Thread.current[:cms_seed_importing]
+      Thread.current[:cms_seed_importing] = true
+      super
+    ensure
+      Thread.current[:cms_seed_importing] = prev
+    end
+  end
+end
+YAML.singleton_class.prepend(CmsSeedYaml::YamlPatch)
+%w[Page Layout File Snippet].each do |type|
+  "ComfortableMediaSurfer::Seeds::#{type}::Importer".constantize.prepend(CmsSeedYaml::ImporterWrap)
+end
+
 Rails.configuration.to_prepare do
-  Comfy::Cms::Fragment.class_eval do 
+  Comfy::Cms::Fragment.class_eval do
     validates_with UrlValidator, if: -> { identifier == 'resource_link_url' }, fields: [:content]
   end
 
@@ -91,7 +134,7 @@ Rails.configuration.to_prepare do
     end
   end
 
-  ComfortableMexicanSofa::Seeds::Page::Exporter.class_eval do
+  ComfortableMediaSurfer::Seeds::Page::Exporter.class_eval do
     def fragments_data(record, page_path)
       record.fragments.collect do |frag|
         header = "#{frag.tag} #{frag.identifier}"
@@ -125,14 +168,16 @@ Rails.configuration.to_prepare do
 
   end
 
-  ComfortableMexicanSofa::Seeds::Page::Importer.class_eval do 
+  ComfortableMediaSurfer::Seeds::Page::Importer.class_eval do 
     def import_page(path, parent)
       slug = path.split("/").last
 
       # setting page record
       page =
         if parent.present?
-          child = site.pages.where(slug: slug).first_or_initialize
+          # Scope by parent_id (matches Media Surfer) so identical slugs under
+          # different parents don't collide.
+          child = site.pages.where(slug: slug, parent_id: parent.id).first_or_initialize
           child.parent = parent
           child
         else
@@ -149,6 +194,8 @@ Rails.configuration.to_prepare do
 
         # parsing attributes section
         attributes_yaml = fragments_hash.delete("attributes")
+        # safe_load permitted-classes handled by the CmsSeedYaml patch above (active
+        # for the duration of import!), so this stays a bare call like upstream.
         attrs           = YAML.safe_load(attributes_yaml)
 
         # applying attributes
@@ -175,7 +222,9 @@ Rails.configuration.to_prepare do
         # Set the page categories 
         new_categories = []
         fragments_attributes.select { |attr| attr[:tag] == 'categories'}.each do |cat|
-          cat[:content].split(' ').each do |label|
+          # A categories fragment can have empty/nil content (page in no categories) —
+          # guard against nil so import doesn't crash.
+          cat[:content].to_s.split(' ').each do |label|
             category = Comfy::Cms::PageCategory.where(label: label).first
             new_categories << category unless category.nil?
           end
@@ -189,7 +238,7 @@ Rails.configuration.to_prepare do
 
         if page.save
           message = "[CMS SEEDS] Imported Page \t #{page.full_path}"
-          ComfortableMexicanSofa.logger.info(message)
+          ComfortableMediaSurfer.logger.info(message)
 
           # defering target page linking
           if target_page.present?
@@ -202,7 +251,7 @@ Rails.configuration.to_prepare do
 
         else
           message = "[CMS SEEDS] Failed to import Page \n#{page.errors.inspect}"
-          ComfortableMexicanSofa.logger.warn(message)
+          ComfortableMediaSurfer.logger.warn(message)
         end
       end
 
@@ -239,9 +288,14 @@ Rails.configuration.to_prepare do
         when "checkbox"
           frag_hash[:boolean] = frag_content
         when "file", "files"
-          files, file_ids_destroy = files_content(record, identifier, path, frag_content)
-          frag_hash[:files]            = files
-          frag_hash[:file_ids_destroy] = file_ids_destroy
+          # Media Surfer's files_content does frag_content.split("\n") with no nil
+          # guard, so an empty file fragment (no attachment) crashes import. Skip
+          # the file handling when there's no content.
+          if frag_content.present?
+            files, file_ids_destroy = files_content(record, identifier, path, frag_content)
+            frag_hash[:files]            = files
+            frag_hash[:file_ids_destroy] = file_ids_destroy
+          end
         else
           frag_hash[:content] = frag_content
         end

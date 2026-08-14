@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
   end
 
   def enable_caching
-    expires_in Rails.application.secrets.cache_max_age, public: true
+    expires_in AppSecrets.cache_max_age, public: true
   end
 
   # as of 04Apr it doesn't seem to be used
@@ -129,10 +129,14 @@ class ApplicationController < ActionController::Base
                         page: @cms_page).parse(opengraph: opengraph, type: 'og')
   end
 
-  def record_invalid_error
+  def record_invalid_error(exception = nil)
     message = "We're sorry, but something went wrong"
 
-    fragments_params = params[:page][:fragments_attributes]
+    # This handler is registered for ALL ActiveRecord::StatementInvalid, but its
+    # not-null-fragment logic only applies to the Comfy page-edit form. Guard the
+    # page params (nil on any other request) and log the underlying error so a DB
+    # error elsewhere isn't silently swallowed by a crash in this handler.
+    fragments_params = params.dig(:page, :fragments_attributes)
     if fragments_params.present? && is_comfy_page_edit?
       null_fragments = []
       # Only get custom not null cms tags
@@ -144,9 +148,11 @@ class ApplicationController < ActionController::Base
         end
       end
       message = "The following fields cannot be empty: #{null_fragments.join(', ')}"
+    elsif exception
+      Rails.logger.error("record_invalid_error: #{exception.class}: #{exception.message}")
     end
 
-    redirect_to request.referrer, alert: message
+    redirect_to(request.referrer || root_path, alert: message)
   end
 
   def is_comfy_page_edit?

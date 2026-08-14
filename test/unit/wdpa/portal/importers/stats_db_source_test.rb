@@ -126,7 +126,7 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'import_country_statistics from db merges NR fields from CSV and preserves nil country_id rows' do
+  test 'import_country_statistics from db imports known countries only, merging NR fields from CSV' do
     Wdpa::Portal::ImportRuntimeConfig.stats_source = 'db'
 
     Country.stubs(:pluck).returns([[1, 'ABW']])
@@ -147,13 +147,18 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     result = Wdpa::Portal::Importers::CountryStatistics.import_country_statistics
 
     assert result[:success]
-    assert_equal 2, result[:imported_count]
+
+    # The DB path iterates known countries (so every country gets a row, zero-filled
+    # when the stats server returned nothing for it). Source rows with no matching
+    # Country - e.g. ABNJ / high seas - are therefore not imported. Nothing consumes
+    # a nil-country statistic: the high-seas figures shown on the site come from the
+    # global stats and the marine growth CSV instead.
+    assert_equal 1, result[:imported_count]
+
     abw = saved.find { |a| a[:country_id] == 1 }
-    abnj = saved.find { |a| a[:country_id].nil? }
     assert_equal '6', abw['nr_version']
     assert_equal 26.9, abw['percentage_pa_land_cover']
-    assert_equal 3172433.65, abnj['pa_marine_area']
-    refute abnj.key?('nr_version') # no NR data for ABNJ in CSV -> left unset
+    assert_nil saved.find { |a| a[:country_id].nil? }, 'unmatched iso3 rows are not imported'
   end
 
   test 'import_country_statistics from db returns hard error when stats missing for vintage' do

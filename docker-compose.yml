@@ -7,7 +7,7 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-install
     image: protectedplanet-app
-    command: /bin/bash -l -c "bundle install && yarn install --frozen-lockfile"
+    command: /bin/bash -l -c "bundle install && yarn install --frozen-lockfile && bundle exec rails comfy:compile_assets"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
@@ -236,11 +236,42 @@ services:
             MP_SMTP_AUTH_ACCEPT_ANY: 1
             MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
+  # Local S3-compatible object store for exercising the download/upload pipeline
+  # without real AWS. Point the app at it with AWS_S3_ENDPOINT=http://minio:9000
+  # (see config/initializers/aws is not needed -- lib/modules/s3.rb reads the env).
+  minio:
+    image: minio/minio:latest
+    platform: linux/x86_64
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - protectedplanet_minio_data:/data
+    networks:
+      - protectedplanet
+
+  # Local Memcached for exercising the prod/staging cache_store (:mem_cache_store,
+  # dalli-backed) on Ruby 3 / dalli 3.x. Dev/test use memory_store/null_store, so
+  # this is only needed when verifying the production cache path. Point at it with
+  # MEMCACHE_SERVERS=memcached:11211.
+  memcached:
+    image: memcached:1.6-alpine
+    command: memcached -m 64 -I 16m
+    ports:
+      - "11211:11211"
+    networks:
+      - protectedplanet
+
 networks:
   protectedplanet:
     driver: bridge
 
 volumes:
+  protectedplanet_minio_data:
   protectedplanet_pg_data:
   protectedplanet_redis_data:
   protectedplanet_es_data:

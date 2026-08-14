@@ -1,4 +1,4 @@
-module Concerns::GreenListPageData
+module GreenListPageData
   extend ActiveSupport::Concern
   include MapHelper
 

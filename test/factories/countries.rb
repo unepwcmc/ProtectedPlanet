@@ -1,9 +1,9 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :country do
-    name "MyText"
-    iso "MT"
-    iso_3 "MTX"
+    name { "MyText" }
+    iso { "MT" }
+    iso_3 { "MTX" }
   end
 end

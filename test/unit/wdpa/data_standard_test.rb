@@ -3,13 +3,15 @@ require 'test_helper'
 class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    for SITE ID' do
+    # wdpa_id is set alongside site_id for compatibility (see DataStandard).
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ wdpaid: 1234 })
-    assert_equal({ site_id: 1234 }, attributes)
+    assert_equal({ site_id: 1234, wdpa_id: 1234 }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    for SITE_PID' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({ site_pid: '1234' })
+    # The source column is wdpa_pid; it maps to the site_pid attribute.
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({ wdpa_pid: '1234' })
     assert_equal({ site_pid: '1234' }, attributes)
   end
 
@@ -29,20 +31,21 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is false' do
+    # marine maps to marine_type; the marine boolean is derived from it and both are kept.
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ marine: '0' })
-    assert_equal({ marine: false }, attributes)
+    assert_equal({ marine_type: 0, marine: false }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is true when coastal' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ marine: '1' })
-    assert_equal({ marine: true }, attributes)
+    assert_equal({ marine_type: 1, marine: true }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
    when marine is true' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ marine: '2' })
-    assert_equal({ marine: true }, attributes)
+    assert_equal({ marine_type: 2, marine: true }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
@@ -92,7 +95,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     status = 'NO TAKE'
     area   = 153.6
 
-    FactoryGirl.create(:no_take_status, name: status, area: area)
+    FactoryBot.create(:no_take_status, name: status, area: area)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({
       no_take: status,
@@ -108,8 +111,8 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
-    norway = FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
-    guatemala = FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
+    norway = FactoryBot.create(:country, iso_3: 'NOR', name: 'Norway')
+    guatemala = FactoryBot.create(:country, iso_3: 'GTM', name: 'Guatemala')
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ iso3: 'NOR; GTM;' })
 
@@ -135,7 +138,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns LegalStatus models for a
    given legal status' do
     status_name = "It's legal, honest"
-    FactoryGirl.create(:legal_status, name: status_name)
+    FactoryBot.create(:legal_status, name: status_name)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ status: status_name })
 
@@ -164,7 +167,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     stored in Rails for a given legal status change year' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ status_yr: 0 })
 
-    protected_area = FactoryGirl.create(:protected_area)
+    protected_area = FactoryBot.create(:protected_area)
     protected_area.legal_status_updated_at = attributes[:legal_status_updated_at]
 
     assert protected_area.save
@@ -174,7 +177,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns an IucnCategory for a
    given IUCN category' do
     category_name = 'Extinct'
-    FactoryGirl.create(:iucn_category, name: category_name)
+    FactoryBot.create(:iucn_category, name: category_name)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ iucn_cat: category_name })
 
@@ -185,7 +188,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a Governance for a given
    governance type' do
     governance_name = 'Ministry of Ministries'
-    FactoryGirl.create(:governance, name: governance_name)
+    FactoryBot.create(:governance, name: governance_name)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ gov_type: governance_name })
 
@@ -195,9 +198,9 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns all matching Sources for a given
    metadataid' do
-    first_source = FactoryGirl.create(:source, metadataid: 123)
-    second_source = FactoryGirl.create(:source, metadataid: 123)
-    FactoryGirl.create(:source, metadataid: 456)
+    first_source = FactoryBot.create(:source, metadataid: 123)
+    second_source = FactoryBot.create(:source, metadataid: 123)
+    FactoryBot.create(:source, metadataid: 456)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ metadataid: 123 })
 
@@ -212,7 +215,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given
    management authority' do
     management_name = 'Authority of Authorities'
-    FactoryGirl.create(:management_authority, name: management_name)
+    FactoryBot.create(:management_authority, name: management_name)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ mang_auth: management_name })
 
@@ -245,8 +248,8 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     designation = 'Sites of Special Importance'
     designation_type = 'Universal'
 
-    jurisdiction = FactoryGirl.create(:jurisdiction, name: designation_type)
-    FactoryGirl.create(:designation, name: designation, jurisdiction: jurisdiction)
+    jurisdiction = FactoryBot.create(:jurisdiction, name: designation_type)
+    FactoryBot.create(:designation, name: designation, jurisdiction: jurisdiction)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({
       desig_eng: designation,
@@ -267,7 +270,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     designation = 'Sites of Special Importance'
     designation_type = 'Universal'
 
-    FactoryGirl.create(:jurisdiction, name: designation_type)
+    FactoryBot.create(:jurisdiction, name: designation_type)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({
       desig_eng: designation,
@@ -283,13 +286,18 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash parses geometries to WKT' do
     wkb_geom = "\x00\x00\x00\x00\x01?\xF0\x00\x00\x00\x00\x00\x00?\xF0\x00\x00\x00\x00\x00\x00"
-    wkt_geom = 'POINT (1.0 1.0)'
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ wkb_geometry: wkb_geom })
 
     the_geom = attributes[:the_geom]
 
     assert_not_nil the_geom, 'Expected the_geom to be returned'
-    assert_equal wkt_geom, the_geom
+    # Parse the WKT back rather than string-matching it: RGeo renders the same
+    # point as "POINT (1.0 1.0)" on postgis-adapter 5.x and "POINT (1 1)" on
+    # 6.x. Both are valid WKT and PostGIS accepts either.
+    point = RGeo::Cartesian.preferred_factory.parse_wkt(the_geom)
+    assert_not_nil point, "Expected #{the_geom.inspect} to be parseable WKT"
+    assert_equal 1.0, point.x
+    assert_equal 1.0, point.y
   end
 
   test '.attributes_from_standards_hash ignores attributes not in the

@@ -1,10 +1,18 @@
 require 'test_helper'
 
-class Data::GdpameControllerTest < ActionController::TestCase
-  tests Data::GdpameController
+class DataPages::GdpameControllerTest < ActionController::TestCase
+  tests DataPages::GdpameController
 
   def setup
     seed_cms
+    # seed_cms creates the WDPCA data page but not GDPAME; without it @cms_page is
+    # nil and the controller's tabs_list comes back empty.
+    # @cms_page is resolved by Comfy full_path (/data/<slug>), which needs the page
+    # nested under the data parent; seed_cms creates pages flat, so resolve it here.
+    page = FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::GDPAME)
+    Comfy::Cms::Page.stubs(:find_by_full_path).returns(page)
+    # tabs_list is built from tab-title-N / tab-content-N CMS fragments on the page.
+    page.fragments.create!(identifier: 'tab-title-1', content: 'Overview')
   end
 
   test 'index assigns table attributes, filters and initial json' do

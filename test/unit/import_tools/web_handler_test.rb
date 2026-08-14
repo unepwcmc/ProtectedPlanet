@@ -17,7 +17,7 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
   end
 
   test '#maintenance_on does an HTTP call to the maintenance url' do
-    key = Rails.application.secrets.maintenance_mode_key
+    key = AppSecrets.maintenance_mode_key
 
     fake_url = 'http://example.com/maintenance'
     ImportTools::WebHandler.any_instance.stubs(:maintenance_url).returns(fake_url)
@@ -31,7 +31,7 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
   end
 
   test '#maintenance_off does an HTTP call to the maintenance url' do
-    key = Rails.application.secrets.maintenance_mode_key
+    key = AppSecrets.maintenance_mode_key
 
     fake_url = 'http://example.com/maintenance'
     ImportTools::WebHandler.any_instance.stubs(:maintenance_url).returns(fake_url)
@@ -55,7 +55,7 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
   end
 
   test '#clear_cache does an HTTP call to the clear_cache url' do
-    key = Rails.application.secrets.maintenance_mode_key
+    key = AppSecrets.maintenance_mode_key
 
     fake_url = 'http://example.com/clear_cache'
     ImportTools::WebHandler.any_instance.stubs(:clear_cache_url).returns(fake_url)

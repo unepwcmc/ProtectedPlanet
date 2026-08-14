@@ -59,7 +59,12 @@ module Wdpa
                 AND d.deptype = 'a'
             SQL
 
-            result = @connection.exec_query(sql, 'SQL', [[nil, schema_name], [nil, schema_name], [nil, table_name]])
+            # Rails 7 dropped the legacy [[nil, value], ...] bind-array format for
+            # exec_query (raises "can't cast Array"); pass QueryAttribute binds.
+            binds = [schema_name, schema_name, table_name].map do |value|
+              ActiveRecord::Relation::QueryAttribute.new(nil, value, ActiveRecord::Type::String.new)
+            end
+            result = @connection.exec_query(sql, 'SQL', binds)
 
             sequences = result.map { |row| { name: row['sequence_name'] } }
 

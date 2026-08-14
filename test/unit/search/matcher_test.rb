@@ -25,7 +25,7 @@ class SearchMatcherTest < ActiveSupport::TestCase
       }
     }
 
-    assert_equal matcher.to_h, expected_hash
+    assert_equal matcher.to_matcher_hash, expected_hash
   end
 
   test '.to_h, given a multi_match Matcher, returns the matcher query as a
@@ -42,10 +42,12 @@ class SearchMatcherTest < ActiveSupport::TestCase
       "multi_match" => {
         "query" => "#{term}",
         "fields" => [ "name", "original_name" ],
+        "minimum_should_match" => "0%",
+        "type" => "most_fields",
         "fuzziness" => "0"
       }
     }
 
-    assert_equal  expected_hash, matcher.to_h
+    assert_equal  expected_hash, matcher.to_matcher_hash
   end
 end

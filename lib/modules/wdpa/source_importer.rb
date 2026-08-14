@@ -1,4 +1,6 @@
-require 'wdpa/data_standard/source'
+# Rails 7.1 load_defaults sets add_autoload_paths_to_load_path=false, so lib/modules
+# subdirs are no longer on $LOAD_PATH -- use require_relative.
+require_relative 'data_standard/source'
 
 class Wdpa::SourceImporter
   def self.import wdpa_release

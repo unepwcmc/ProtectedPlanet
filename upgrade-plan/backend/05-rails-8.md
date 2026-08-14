@@ -28,9 +28,10 @@ Rails 8 requires Ruby 3.1 minimum. Complete [02 — Ruby upgrade stage 2](./02-r
 
 - Sprockets **still works** with Rails 8 — it is no longer the default but is fully supported if you opt in.
 - Decision: **keep Sprockets** through this phase unless the team explicitly decides to migrate.
-  - The app uses Sprockets for `application.scss`, `pdf.css`, and Comfy admin assets.
+  - The app uses Sprockets for `application.scss`, `pdf.css`, and CMS admin assets.
   - Propshaft migration is a separate, optional initiative — do not bundle it into this phase.
 - Add `gem 'sprockets-rails'` explicitly if Rails 8 drops it from the default gemset.
+- **Caveat:** Media Surfer 3.1 removed sassc-sprockets and added Propshaft support ([09](./09-cms-comfy.md)). If the CMS admin turns out to need Propshaft, that decision is forced earlier than this phase — carry the outcome forward from the Rails 7.0 step.
 
 ### Authentication generator (new, opt-in)
 
@@ -76,9 +77,11 @@ Notable defaults that could affect this app:
   - [ ] `Rails.application.secrets` → `Rails.application.credentials`
   - [ ] `config.cache_store :dalli_store` syntax — update to Rails 8 format if changed
 - [ ] Check AppSignal gem — upgrade to 4.x (3.x EOL on Rails 8) — see [01](./01-gem-audit.md)
+- [ ] Bump `activerecord-postgis-adapter` 9.x/10.x → **11.0.x** (11.1.x if on Rails 8.1) — see [06](./06-postgis-and-database.md)
 - [ ] Run full test suite on Rails 8.0
+- [ ] Run the spatial regression checklist ([06](./06-postgis-and-database.md))
 - [ ] Smoke-test import pipeline end-to-end
-- [ ] Smoke-test Comfy `/admin` (B3 re-check at B4)
+- [ ] Smoke-test CMS `/admin` (B3 re-check at B4)
 - [ ] Deploy to staging
 - [ ] **Tag B4 on upgrade branch**
 - [ ] Coordinate with frontend — confirm platform target locked at Rails 8

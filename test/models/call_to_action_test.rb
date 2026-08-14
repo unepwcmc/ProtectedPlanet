@@ -11,7 +11,7 @@ class CallToActionTest < ActiveSupport::TestCase
   def test_validation
     cta = CallToAction.new
     assert cta.invalid?
-    assert_equal [:title, :summary, :url], cta.errors.keys
+    assert_equal [:title, :summary, :url], cta.errors.attribute_names
   end
 
   def test_creation

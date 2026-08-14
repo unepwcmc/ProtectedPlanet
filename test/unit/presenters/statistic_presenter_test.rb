@@ -2,16 +2,16 @@ require 'test_helper'
 
 class StatisticPresenterTest < ActiveSupport::TestCase
   def setup
-    @statistic = FactoryGirl.create(:country_statistic)
-    @country = FactoryGirl.create(:country, country_statistic: @statistic)
+    @statistic = FactoryBot.create(:country_statistic)
+    @country = FactoryBot.create(:country, country_statistic: @statistic)
 
     @presenter = StatisticPresenter.new @country
   end
 
   test '.percentage_of_global_pas returns the percentage of global PAs' do
     skip("Regional statistics calculations need to be revisited and are now calculated via SQL view")
-    global_statistic = FactoryGirl.create(:regional_statistic, pa_area: 25)
-    FactoryGirl.create(:region, iso: 'GL', regional_statistic: global_statistic)
+    global_statistic = FactoryBot.create(:regional_statistic, pa_area: 25)
+    FactoryBot.create(:region, iso: 'GL', regional_statistic: global_statistic)
     Region.where(iso: 'GL').first.regional_statistic = global_statistic
 
     @statistic.stubs(:pa_area).returns(10)

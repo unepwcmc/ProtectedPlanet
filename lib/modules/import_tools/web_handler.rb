@@ -36,10 +36,10 @@ class ImportTools::WebHandler
   private
 
   def admin_request method, url, query={}
-    host = Rails.application.secrets.host
+    host = AppSecrets.host
     url = send(url, host: host)
 
-    authentication_key = Rails.application.secrets.maintenance_mode_key
+    authentication_key = AppSecrets.maintenance_mode_key
     headers = {'X-Auth-Key' => authentication_key}
 
     HTTParty.public_send(method, url, query: query, headers: headers)

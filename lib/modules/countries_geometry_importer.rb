@@ -13,8 +13,8 @@ class CountriesGeometryImporter
 
   def initialize
     @s3 = Aws::S3::Resource.new({
-      access_key_id: Rails.application.secrets.aws_access_key_id,
-      secret_access_key: Rails.application.secrets.aws_secret_access_key
+      access_key_id: AppSecrets.aws_access_key_id,
+      secret_access_key: AppSecrets.aws_secret_access_key
     })
   end
 
@@ -39,14 +39,14 @@ class CountriesGeometryImporter
   end
 
   def compressed_geometries
-    bucket_name = Rails.application.secrets.aws_datasets_bucket
+    bucket_name = AppSecrets.aws_datasets_bucket
     filename = File.basename(FILEPATH)
 
     @s3.buckets[bucket_name].objects[filename].read
   end
 
   def restore_to_temporary_table
-    db_config = ActiveRecord::Base.connection_config
+    db_config = ActiveRecord::Base.connection_db_config.configuration_hash
     system restore_command(binding)
   end
 
