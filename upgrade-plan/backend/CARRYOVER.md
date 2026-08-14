@@ -322,6 +322,60 @@ public CMS pages render; **page save + `assign_layout_categories` run clean (#3)
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
 
+### 5a. `staging_kamal` convergence — Kamal v2 on Proxmox staging (scoped Aug 2026)
+DevOps stood up Proxmox/Kamal-v2 staging; **`pp-web-staging-01.internal.unep-wcmc.org` (172.20.0.160)
+is ProtectedPlanet**, `api-pp-web-staging-01` is protectedplanet-api, DB is
+`pp-db-staging-01.internal.unep-wcmc.org` (172.20.0.159). The other four FQDNs are the
+already-dockerised fleet (digital-report, api-pp-authentication, wdpa-api, pp-data-management-portal).
+
+PP's Kamal config lives on the **`staging_kamal` branch** (not master, not upgrade-plan):
+`config/deploy.yml` + `deploy.staging.yml`, `Dockerfile.deploy`, `.kamal/secrets-common`,
+`.github/workflows/deploy-staging-kamal.yml`, web + **two Sidekiq roles**, **ES 7.17 accessory**,
+host-bound Redis/Memcached via `host.docker.internal`.
+**Its `Dockerfile.deploy` already does the GDAL modernisation** — Ubuntu 24.04, distro **GDAL 3.8.4,
+OpenFileGDB, no ESRI SDK**, Ruby 3.3.7 via ruby-build, Node 24 + yarn 4.
+It branched from our **Rails 7.1 (B0)** commit, so it lacks the 7.2→8.0 / redis-5 / Sidekiq-7 /
+secrets→config_for / test-net / GDAL work.
+
+⚠️ **The two halves are incompatible apart:** staging_kamal ships GDAL 3.8 *without* the ESRI SDK while
+its app code still asks for the `FileGDB` driver → **`.gdb` downloads would fail on staging**. Our
+OpenFileGDB swap is the missing app-side half.
+
+**Merge scope (dry-run verified, `git merge-tree`): mechanically CLEAN, no conflicts.** Only two files
+touched by both sides since the merge base (`b6d3fcbc1`): `config/environments/staging.rb` (ours: L1 +
+21–27 secrets→config_for/dalli; theirs: L36–39 Uglifier→`:terser` — different regions) and `Gemfile`
+(both kept: rails 8 + sidekiq 7 + redis 5 from us, `terser` from them).
+`config/secrets.yml` resolves correctly: ours was a **pure rename** (100% similarity) to
+`app_secrets.yml`, theirs edited the content (`MEMCACHE_SERVERS` env-overridable) — the merged
+`app_secrets.yml` keeps **their** edit. Verified.
+
+**Sequence (steps 1–5 are ours; keep LOCAL until we're ready to push):**
+1. ~~Commit + push the GDAL OpenFileGDB swap to `upgrade-plan`~~ — **DONE locally (merged, not pushed).**
+   Was the blocker: `origin/upgrade-plan` still had `gdb: 'FileGDB'`.
+2. Merge `upgrade-plan` → `staging_kamal`.
+3. **`bundle install` + commit the regenerated `Gemfile.lock`.** ⚠️ The lock merges "cleanly" but is
+   **inconsistent** — the merged Gemfile has `terser` while the merged lock does not (git keeps our
+   lock). `bundle check` fails until regenerated. Classic trap; don't skip.
+4. Run the full suite on the merged branch.
+5. Fix stale comments referencing the old `config/secrets.yml` path: `Dockerfile.deploy:110`,
+   `config/deploy.staging.yml:57`. (Also: `Dockerfile.deploy` cites `docs/GDAL-openfilegdb-migration.md`,
+   which does not exist in that tree.)
+6. Push `staging_kamal` → the GH Action deploys to `pp-web-staging-01`. **Needs devops**: the
+   `staging_proxmox` GitHub environment + secrets (registry creds, SSH key) populated.
+7. **Verify `.gdb` download end-to-end on staging** — the in-app GDAL 3.8 / OpenFileGDB validation we
+   cannot do locally (PP's dev image is GDAL 2.2.3, OpenFileGDB read-only there). This also serves the
+   data-team ArcGIS sign-off.
+
+**Not blocked on the frontend.** `staging_kamal`'s Dockerfile builds *both* webpacker and Vite, matching
+`upgrade-plan`'s current asset setup. `feat/upgrade-frontend` (which removes webpacker) is a separate,
+later change needing its own Dockerfile update + the psych unpin. Frontend was **97 ahead / 64 behind**
+upgrade-plan and still committing daily — waiting only grows that merge.
+
+**Open questions for devops:** PG version/PostGIS on `pp-db-staging-01` (drives postgis-adapter 11 and
+the PG 10→17 story); whether the `staging_proxmox` env/secrets are populated. Also note the deploy
+config still assumes **host Memcached + a single Redis** — our two-Redis / drop-Memcached decision
+(§4e) is not reflected there yet; that's the follow-up once devops provisions them.
+
 ## 6. Minor code items (low priority, clear opportunistically)
 - [ ] **`belongs_to_required_by_default` opted out** (`config/application.rb`) — revisit as a data-integrity pass measured against a **production** dump. 4 associations have real NULLs: `Country#parent` (199/248), `Designation#jurisdiction` (57/1831), `pame_statistics.country`, `country_statistics.country`.
 - [ ] **`_info.svg` orphan partial** — `app/views/partials/svgs/_info.svg` is not rendered via `render` (only an unrelated SCSS `info.svg` asset ref exists). Confirm unused, then remove. (`_pin.svg` was renamed to `_pin.html.erb` to clear the dotted-template deprecation — do the same or delete `_info.svg`.)
