@@ -102,23 +102,27 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       site-not-found, invalid site_id), `protected_areas_related_source` (invalid env, missing file,
       empty CSV soft-warn, live/staging update_table dispatch). Suite 708/0. **Coverage 65.43%**
       (SimpleCov floor raised 54 → 62 this session).
-- [ ] **GDAL `.gdb` driver swap: `FileGDB` (Esri SDK) → `OpenFileGDB` — scoped Aug 2026, NOT started.**
-      Two refs name the driver: `lib/modules/ogr/postgres.rb` (`DRIVERS = { gdb: 'FileGDB' }`) and
-      `lib/modules/ogr/command_templates/postgres_gdb_export.erb` (`-f "FileGDB"`). The Esri-SDK driver
-      is why the Docker image source-builds GDAL 2.2.3 + links the RHEL7 FileGDB SDK — which won't
-      build on Ubuntu 24.04. Target: stock apt GDAL 3.8 (24.04) / 3.6+ (bookworm) + OpenFileGDB (write
-      support since GDAL 3.6).
-      **REFERENCE IMPLEMENTATION EXISTS — `wdpa-data-management-portal`** already generates the *same*
-      WDPA `.gdb` (same 3 layers: poly/point/source) with **`-f OpenFileGDB`** on **apt GDAL (Debian
-      bookworm), no Esri SDK**, in production — see `app/services/downloads/gdb_exporter.rb`
-      (`build_ogr2ogr_command`). So the swap is **proven, not blind**: mirror the portal's command
-      (it adds `-lco GEOMETRY_NAME=wkb_geometry`, `-lco FID=OBJECTID`, `-a_srs EPSG:4326`,
-      `--config PG_USE_COPY YES`, `-nlt <type>`, `-nln <layer>` — richer than PP's current template).
-      **Locally verifiable now** (was wrong to call it blind/infra-gated): run against a standalone
-      `ghcr.io/osgeo/gdal:*-3.8` container + our Postgres, and diff output vs the portal's known-good
-      `.gdb`. NOTE: PP's current dev image has GDAL 2.2.3 (OpenFileGDB read-only there) so the swap
-      can't be tested on *that* image — use a GDAL 3.6+ container (or the eventual 3.8 app image).
-      Data-team `.gdb` sign-off largely pre-answered since the portal's OpenFileGDB output already ships.
+- [x] **DONE (code) — GDAL `.gdb` driver swap: `FileGDB` (Esri SDK) → `OpenFileGDB`.** Changed
+      `lib/modules/ogr/postgres.rb` `DRIVERS[:gdb]` → `'OpenFileGDB'` and made
+      `postgres_gdb_export.erb` read `-f "<%= DRIVERS[:gdb] %>"` (single source of truth, was a
+      hardcoded `-f "FileGDB"`). **Added `-lco "GEOMETRY_NAME=SHAPE"`** — this was NOT optional:
+      without it OpenFileGDB names the geometry column after the source (`the_geom`), whereas the Esri
+      SDK named it `SHAPE`; the LCO restores exact parity. Added `test/unit/ogr/postgres_gdb_export_test.rb`
+      (3 tests, `system` mocked — the gdb path had NO test before) asserting driver + SHAPE lco + `-update`.
+      **Before/after verified byte-schema-identical** by generating both on the same data: OLD via
+      FileGDB on PP's image (GDAL 2.2.3, Esri SDK) vs NEW via OpenFileGDB on Debian bookworm (GDAL 3.6.2,
+      apt, no SDK). All three layer types match — **poly** (Multi Polygon, 20 feat), **point** (Multi
+      Point, 5 feat), **source** (non-spatial) — same geometry type, feature count, `FID=OBJECTID`,
+      `Geometry Column=SHAPE`, fields, and CRS (WGS84/EPSG:4326; the only textual diff is GDAL 3.6 WKT2
+      `GEOGCRS` vs 2.2.3 WKT1 `GEOGCS` — same CRS, cosmetic). Multi-layer `-update` append confirmed.
+      **Other download formats unaffected** — the swap only touches `DRIVERS[:gdb]` + the gdb template;
+      CSV (`'CSV'`) and Shapefile (`'ESRI Shapefile'`) use unchanged drivers + `postgres_export.erb`,
+      PDF is a separate generator. Suite 711/0.
+      Reference: `wdpa-data-management-portal` already ships the same WDPA `.gdb` via OpenFileGDB on bookworm.
+      **STILL TO DO (gated):** (1) can't run on PP's *current* dev image (GDAL 2.2.3 = OpenFileGDB
+      read-only) — needs the **GDAL 3.8 app image** (Dockerfile modernization, infra track) for in-app
+      end-to-end; (2) **data-team ArcGIS sign-off** on a real `.gdb` (largely pre-answered — portal output
+      already consumed); (3) diffs above used samples (20 poly / 5 point) not a full release volume.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
 - [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
       `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,

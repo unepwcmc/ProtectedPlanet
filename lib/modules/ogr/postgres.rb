@@ -5,7 +5,11 @@ class Ogr::Postgres
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
     csv: 'CSV',
-    gdb: 'FileGDB'
+    # OpenFileGDB (built into GDAL, write support since 3.6) replaces the proprietary
+    # Esri FileGDB SDK driver -- lets us drop the source-built GDAL 2.2.3 + RHEL7 SDK
+    # that won't build on Ubuntu 24.04. Matches wdpa-data-management-portal, which
+    # already ships the same WDPA .gdb via OpenFileGDB on stock apt GDAL.
+    gdb: 'OpenFileGDB'
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')
