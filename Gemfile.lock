@@ -964,8 +964,6 @@ GEM
       actionpack (>= 3.2)
       railties (>= 3.2)
     bindex (0.8.1)
-    bourbon (6.0.0)
-      thor (~> 0.19)
     builder (3.3.0)
     byebug (9.1.0)
     capistrano (3.11.0)
@@ -1124,8 +1122,6 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     mutex_m (0.3.0)
-    neat (4.0.0)
-      thor (~> 0.19)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
     net-sftp (3.0.0)
@@ -1317,7 +1313,6 @@ DEPENDENCIES
   aws-sdk (= 3.0.1)
   bcrypt_pbkdf (>= 1.0, < 2.0)
   best_in_place (~> 3.0.1)
-  bourbon
   byebug (~> 9.0, >= 9.0.5)
   bystander (= 2.0.0)!
   capistrano (= 3.11.0)
@@ -1350,7 +1345,6 @@ DEPENDENCIES
   loofah (~> 2.19.1)
   minitest (~> 5.10, != 5.10.2)
   mocha (~> 1.0.0)
-  neat
   net-scp
   net-sftp
   nokogiri (~> 1.10.4)

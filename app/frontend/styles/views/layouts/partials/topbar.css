@@ -1,8 +1,8 @@
-@utility vw-topbar {
+.vw-layouts-partials-topbar {
   @apply bg-white;
 }
 
-@utility vw-topbar__container {
+.vw-layouts-partials-topbar__container {
   @apply 
   tw-shared-base-container 
   flex
@@ -11,7 +11,7 @@
   gap-6;
 }
 
-@utility vw-topbar__logo {
+.vw-layouts-partials-topbar__logo {
   @apply
   flex
   h-13
@@ -25,14 +25,14 @@
   lg:px-7.5;
 }
 
-@utility vw-topbar__right {
+.vw-layouts-partials-topbar__right {
   @apply
   tw-shared-base-flex-gap-6
   items-center
   justify-center;
 }
 
-@utility vw-topbar__nav {
+.vw-layouts-partials-topbar__nav {
   @apply
   order-2
   lg:order-1
@@ -40,7 +40,7 @@
   self-stretch;
 }
 
-@utility vw-topbar__search {
+.vw-layouts-partials-topbar__search {
   @apply
   order-1
   lg:order-2;

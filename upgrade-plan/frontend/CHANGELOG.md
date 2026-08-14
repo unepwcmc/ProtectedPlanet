@@ -617,7 +617,7 @@ wave doc) turned out to have **zero live consumers anywhere** — not even compi
 same discipline as T0):
 - `_nav.scss` **cannot be deleted** — only `.nav--primary`'s own `display:flex; align-self:stretch`
   (not `align-items:stretch` as the doc's baseline said) moved to `views/topbar.css`'s existing
-  `vw-topbar__nav` utility. Everything nested under `.nav--primary .nav__*` is rendered by
+  `vw-layouts-partials-topbar__nav` utility. Everything nested under `.nav--primary .nav__*` is rendered by
   `NavBar/Index.vue`/`Link.vue`/`Dropdown.vue` (Vue 3's `app.mount()` nests children inside
   `frontend_mount`'s wrapper div rather than replacing it) — squarely Wave T4, so `_nav.scss` stays
   alive with just that trimmed top-level rule.
@@ -1414,7 +1414,7 @@ the actually-enforced `stylelint-bem-namics` config never granted anyone.
   own scoped block (confirmed by literally running `yarn stylelint` — `:global()` isn't in the config's
   `ignorePseudoClasses` allowlist alongside `:deep()`, so that escape hatch doesn't work here either) —
   same "global cross-page override lives outside the scoped file" pattern `views/site.css`'s
-  `.pdf .vw-site__col-1/2` already established. Covers the MapLibre zoom-control buttons (ported 1:1 from
+  `.pdf .vw-protected-areas__col-1/2` already established. Covers the MapLibre zoom-control buttons (ported 1:1 from
   `_map.scss`'s pixel values, `.mapboxgl-*` half dropped) and the popup content/tip/close-button styling
   (ported 1:1 from `_v-map-popup.scss`, same drop). `Disclaimer.vue`'s own `.pdf`-ancestor border override
   moved there too for the same reason, with a comment pointing back at the pattern.
@@ -1824,3 +1824,72 @@ filters open/close, checkbox + tick icon + badge counter, Apply correctly filter
 sticky table header holds on scroll, mobile viewport switches to the card-list layout, no new console
 errors. Did not find a real multi-parcel PA in the dev dataset to click through to `ParcelsDropdown` live
 (seed data limitation) — covered instead by the full green `Dropdown`/`ParcelsDropdown` Vitest suite.
+
+---
+
+## Wave T9 — Residual tabs/filters coupling (done, no code changes needed)
+
+Re-audited before starting (per this doc's own repeated drift lesson) and found the whole wave
+already closed by same-day, undocumented direct commits after the T8 session ended. `_tabs.scss` and
+`_filters-sidebar.scss` no longer exist on disk. All 5 named components already render fully
+`ct-`-prefixed markup with real `<style scoped>`: `SearchAreas/CheckboxSearch.vue`, `SearchAreas/
+FilterGroup.vue`, `Listing/FilterGroup.vue`, `RegionCountryPages/Index.vue`; `SearchAreas/Index.vue`
+turned out to be a thin wrapper with no markup classes of its own. Nothing to do — see T10 for what
+the same re-audit turned up instead.
+
+---
+
+## Wave T10 — Finish (almost done, started 2026-08-14)
+
+**Found a live-breaking bug while re-auditing T9**: `bundle exec rake assets:precompile` was failing —
+`components/_filters.scss` and `components/_modal.scss` (left behind by T8's deletion of
+`_filters-pame.scss`/`_modal-pame.scss`) still `@import`ed those now-gone files. This had been broken
+since 2026-08-13, silently — it would break any real deploy, and specifically PDF export, since
+`_head.html.erb` links `application.css` whenever `@for_pdf` is true. `bin/rails runner` is still
+broken in this container (see [[t8-pame-dropdown-select-wave-done]]) — verified via `docker exec
+protectedplanet-web bundle exec rake assets:clobber assets:precompile` directly instead.
+
+**Fixing it cascaded into finishing this wave's whole SCSS-deletion checklist in one pass.** A fresh
+`class="..."`-usage grep sweep (careful to exclude `ct-`/`tw-shared-`/`vw-` substring false positives,
+e.g. `cards--resources` inside `ct-listing-list__cards--resources`) found the **entire remaining
+legacy SCSS tree had zero live consumers left**, 24 files beyond the two broken ones: `components/
+{_search,_cards}.scss` + `components/{cards,form}/**` (`.search--pa`, `.card--message`, `.cards--
+{articles,basic,resources}`, and the bare `input {}` tag selector — every real `<input>` consumer,
+e.g. `Search/SiteInput.vue`, already has its own scoped styles); `base/_base.scss` (already fully
+commented-out since preflight+Tailwind fonts took over); `base/{_circles,_icons,_svgs,_themes}.scss`;
+`base/_fonts.scss` (legacy MuseoSans/MuseoSlab `@font-face`, fully superseded by `app/frontend/
+styles/fonts.css`'s self-hosted Hind Siliguri/Playfair Display); `helpers/_cms.scss` (already flagged
+dead in T3); `helpers/{_background,_beautify-scrollbar,_border-and-shadows,_form-fields,_images,
+_helpers}.scss` (closing T3's long-open `.block`/`.bold`/`.ul-unstyled`/etc. item — all zero
+consumers now); `helpers/mixins/{_cards,_icons,_layout,_text}.scss`; `utilities/{_flexbox,
+_media-queries}.scss`. Kept `utilities/_rem-calc.scss` — `_settings.scss` itself calls `rem-calc()`
+for its own variables. `application.scss` rewritten to just import `rem-calc`+`settings`; confirmed
+the compiled output is now byte-for-byte empty (`sha256` of `''`), consistent with the 2026-08-07
+finding that `application.css` hasn't been linked on normal page loads for a while (PDF-only).
+
+**`pdf.scss`'s fate — decided as option (b), left on the Sprockets/sassc path.** It only imports
+`settings` (zero dependency on anything just deleted) and every selector it references is either an
+already-live Tailwind-era class or a pre-existing, harmless dead Leaflet-era leftover (`.pa-card`,
+`.leaflet-control*`, from before the MapLibre migration). Porting its 39 lines to hand-written CSS
+(option a) would add risk for no benefit. **Because of this, `sassc`/`sass-rails` stay in the
+Gemfile** — they're the only thing left compiling `pdf.scss`/the `application.scss` stub.
+
+**`bourbon`/`neat` removed** — confirmed zero remaining usage anywhere in the 5-file tree above (they
+were never used by `_settings.scss`, `_rem-calc.scss`, or `pdf.scss`). Removed from `Gemfile` +
+`config/initializers/assets.rb`'s `assets.paths` entry; `bundle install` completed clean (both gone
+from `Gemfile.lock`); re-ran `assets:precompile` after — still clean.
+
+**Verified**: `assets:clobber assets:precompile` clean after every deletion batch; `bundle install`
+clean after the gem removal. Live PDF-export smoke test — `GET /country/USA?for_pdf=true` → 200, both
+`pdf.self-*.css`/`application.self-*.css` `<link>` tags resolve, `.pdf` root class present in the
+rendered HTML. Live Playwright check (home, country, 1400px, after restarting the crash-prone
+`protectedplanet-vite` container per [[vite-dev-server-optimize-deps-crash]]): both fully styled, zero
+visual regression (expected — none of the deleted classes had live consumers). Remaining console
+noise is pre-existing/unrelated: a Playwright-vs-dev-server WebSocket HMR handshake warning, and
+`/search` 500ing with `PageNotFound in ProtectedAreasController#show` — the same seed-data routing
+gap T3 already documented, confirmed via the server log to predate this session.
+
+**Not done, deliberately deferred**: enabling Tailwind preflight + the full-site visual sweep it
+needs. Risk is much lower now (there's no legacy SCSS left to fight at all), but it's still the one
+previously-forbidden change and deserves its own dedicated verification pass rather than being folded
+into an already-large session. This is the one remaining checklist item in the entire plan.

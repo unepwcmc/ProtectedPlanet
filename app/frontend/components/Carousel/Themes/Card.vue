@@ -1,6 +1,7 @@
 <template>
   <a
     class="ct-theme-card"
+    :class="{ 'ct-theme-card--featured': featured }"
     :href="url"
     :title="linkTitle"
     :style="{ backgroundImage: `url('${imageUrl}')` }"
@@ -39,6 +40,8 @@ const props = defineProps<CarouselThemesCard>()
 .ct-theme-card {
   @apply
   tw-shared-base-flex-col-gap-6-and-9
+  relative
+  overflow-hidden
   justify-start
   h-120
   lg:h-190
@@ -50,6 +53,12 @@ const props = defineProps<CarouselThemesCard>()
   pb-8
   text-white
   no-underline;
+}
+
+.ct-theme-card--featured {
+  @apply
+  h-130
+  lg:pr-[25%];
 }
 
 .ct-theme-card__overlay {
@@ -81,7 +90,7 @@ const props = defineProps<CarouselThemesCard>()
   z-1
   hidden
   md:block
-  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black
+  tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black
   text-white;
 }
 

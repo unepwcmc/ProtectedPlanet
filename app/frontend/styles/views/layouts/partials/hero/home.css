@@ -20,7 +20,8 @@
 .vw-layouts-partials-hero-home__content{
     @apply
     tw-shared-base-flex-col-gap-6
-    w-1/2;
+    md:w-[90%]
+    lg:w-1/2;
 }
 
 .vw-layouts-partials-hero-home__title {
@@ -28,7 +29,7 @@
 }
 
 .vw-layouts-partials-hero-home__intro {
-    @apply tw-shared-font-hind-siliguri__light-lg-grey-black-md-xl-grey-black;
+    @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
 }
 
 .vw-layouts-partials-hero-home__button {

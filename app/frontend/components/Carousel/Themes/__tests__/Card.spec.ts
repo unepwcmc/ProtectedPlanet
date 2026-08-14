@@ -36,4 +36,9 @@ describe('Carousel/Themes/Card', () => {
     expect(ribbon.text()).toContain('1234')
     expect(ribbon.text()).toContain('protected areas')
   })
+
+  it('only applies the featured modifier class when the featured prop is set', () => {
+    expect(mount(CarouselThemesCard, { props: BASE_PROPS }).find('a').classes()).not.toContain('ct-theme-card--featured')
+    expect(mount(CarouselThemesCard, { props: { ...BASE_PROPS, featured: true } }).find('a').classes()).toContain('ct-theme-card--featured')
+  })
 })

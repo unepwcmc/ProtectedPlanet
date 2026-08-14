@@ -3,10 +3,4 @@
    when :thematic then get_thematic_areas
    else get_thematic_areas
    end %>
-<div class="vw-cards-themes">
-  <div class="vw-cards-themes__grid">
-    <% @items[:cards].each do |card| %>
-      <%= render partial: 'partials/cards/themes/card', locals: { theme: card } %>
-    <% end %>
-  </div>
-</div>
+<%= frontend_mount "CardsThemes", props: theme_cards_vue_props(@items) %>

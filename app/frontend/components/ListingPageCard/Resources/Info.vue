@@ -58,7 +58,7 @@ defineProps<ListingPageCardInfo>()
 }
 
 .ct-listing-page-card-resources-card-info__summary {
-  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black;
 }
 
 .ct-listing-page-card-resources-card-info__download {
@@ -78,7 +78,7 @@ defineProps<ListingPageCardInfo>()
   @apply
   flex
   items-center
-  tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black
+  tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black
   underline
   hover:no-underline;
 }

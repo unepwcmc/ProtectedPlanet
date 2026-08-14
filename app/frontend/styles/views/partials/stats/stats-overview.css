@@ -58,7 +58,7 @@
 }
 
 .vw-partials-stats-stats-overview__number {
-  @apply tw-shared-font-hind-siliguri__semibold-3xl-md-4xl-leading-none-primary;
+  @apply tw-shared-font-hind-siliguri__leading-none-semibold-3xl-md-4xl-primary;
 }
 
 .vw-partials-stats-stats-overview__subtitle {

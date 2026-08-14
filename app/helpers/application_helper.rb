@@ -190,6 +190,27 @@ module ApplicationHelper
     @items = ThematicAreasPresenter.new(@cms_site).all_cards
   end
 
+  # Shared prop-building for anything rendering ThematicAreasPresenter cards
+  # via a Vue island (CarouselThemes carousel, CardsThemes grid) — both need
+  # the same `{ areaTypeLabel, cards: [...] }` shape from `@items`.
+  def theme_cards_vue_props(items)
+    {
+      areaTypeLabel: t('global.area-types.wdpca'),
+      cards: items[:cards].map do |slide|
+        page = slide[:obj]
+        {
+          url: root_url + page[:full_path],
+          linkTitle: "View the #{page[:label]} page",
+          label: page[:label],
+          imageUrl: cms_fragment_render(:image, page),
+          summary: cms_fragment_content(:summary, page),
+          pasNo: slide[:pas_no],
+          slug: page[:slug]
+        }
+      end
+    }
+  end
+
   def get_footer_links
     @links = { 'explore_links' => [], 'general_info_links' => [] }
     return @links if @cms_site.nil?

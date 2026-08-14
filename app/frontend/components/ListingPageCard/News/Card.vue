@@ -80,6 +80,6 @@ defineProps<ListingPageCardNews>()
 }
 
 .ct-listing-page-card-news-card__summary {
-  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black;
 }
 </style>

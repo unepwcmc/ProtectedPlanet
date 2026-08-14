@@ -8,9 +8,9 @@
 # If in future more info are taking parcel ids into consideration Please ADD COMMENTS here.
 %>
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
-<div class="vw-site">
-  <div class="vw-site__container">
-    <section class="vw-site__overview">
+<div class="vw-protected-areas">
+  <div class="vw-protected-areas__container">
+    <section class="vw-protected-areas__overview">
       <%= render partial: "partials/stats/stats-overview", locals: {
         area: reported_area,
         location: @locations.html_safe,
@@ -31,20 +31,20 @@
           mapiIsForRegionCountryPA: true
         } %>
     </section>
-    <section class="vw-site__parcels-dropdown">
+    <section class="vw-protected-areas__parcels-dropdown">
       <%= render partial: "partials/attributes/attributes-parcels-dropdown", locals: {
           site_pids: @presenter.parcels_site_pids,
           for_pdf: @for_pdf
         } %>
     </section>
-    <div class="vw-site__col-wrapper pdf-break-after">
-      <div class="vw-site__col-1">
+    <div class="vw-protected-areas__col-wrapper pdf-break-after">
+      <div class="vw-protected-areas__col-1">
         <%= render partial: "partials/attributes/attributes-protected-area", locals: {
           current_pa_and_parcels_attributes: @presenter.current_pa_and_parcels_attributes,
           for_pdf: @for_pdf
        } %>
       </div>
-      <div class="vw-site__col-2">
+      <div class="vw-protected-areas__col-2">
         <%= render partial: "partials/attributes/attributes-pame-list" , locals: {
           for_pdf: @for_pdf
           } %>
@@ -64,7 +64,7 @@
           title: t('thematic_area.wdpa.other_protected_areas'),
           viewAll: @otherWdpasViewAllUrl
         } %>
-    <section class="vw-site__citation">
+    <section class="vw-protected-areas__citation">
       <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
     </section>
   </div>

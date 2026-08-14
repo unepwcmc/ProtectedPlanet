@@ -28,10 +28,7 @@
   bg-transparent 
   text-theme-grey-black;
 }
-
-/* legacy `card--stats-half` (`_card-stats.scss`) — two cards side by side at `md:`+, e.g.
-   IucnCategories/Governance. The `.pdf` width override has the same scoped-SFC restriction as
-   `tw-shared-card-stats` above. */
+ 
 @utility tw-shared-card-stats-half {
   @apply 
   w-full 

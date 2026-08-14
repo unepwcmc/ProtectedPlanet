@@ -12,7 +12,7 @@
 }
 
 @utility tw-shared-messages__text {
-  @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black;
 }
 
 @utility tw-shared-messages__link {

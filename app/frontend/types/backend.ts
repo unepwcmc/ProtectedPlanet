@@ -926,9 +926,11 @@ export interface PameTableProps {
   modalText: PameModalTranslations
 }
 
-// One card in the "themes" carousel (partials/carousels/_themes), built from
-// ThematicAreasPresenter#all_cards. `pasNo` is -1 when the theme has no
-// protected-area count to show (ribbon is hidden in that case).
+// One card built from ThematicAreasPresenter (via ApplicationHelper#theme_cards_vue_props)
+// — shared by the "themes" carousel (partials/carousels/_themes) and the CMS
+// data-areas/thematic-areas card grid (partials/cards/themes/_index). `pasNo`
+// is -1 when the theme has no protected-area count to show (ribbon is hidden
+// in that case).
 export interface CarouselThemeCard {
   url: string
   linkTitle: string
@@ -939,14 +941,17 @@ export interface CarouselThemeCard {
   slug: string
 }
 
-// Props for `frontend_mount "CarouselThemes"`.
+// Props for `frontend_mount "CarouselThemes"` and `frontend_mount "CardsThemes"`.
 export interface CarouselThemesProps {
   cards: CarouselThemeCard[]
   areaTypeLabel: string
 }
 
 // Props for Carousel/Themes/Card.vue — a single card plus the list-level
-// `areaTypeLabel` forwarded down by Carousel/Themes/Index.vue.
+// `areaTypeLabel` forwarded down by Carousel/Themes/Index.vue. `featured` is
+// grid-only (Cards/Themes/Index.vue, every 3rd card) — the Swiper carousel
+// never sets it, so cards there stay a uniform size.
 export interface CarouselThemesCardProps extends CarouselThemeCard {
   areaTypeLabel: string
+  featured?: boolean
 }

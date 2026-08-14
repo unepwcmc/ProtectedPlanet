@@ -1,4 +1,4 @@
-@utility vw-topbar-secondary {
+.vw-partials-bars-topbar-secondary {
   @apply 
   sticky
   top-0
@@ -7,7 +7,7 @@
   bg-white;
 }
 
-@utility vw-topbar-secondary__container {
+.vw-partials-bars-topbar-secondary__container {
   @apply 
   tw-shared-base-container 
   tw-shared-base-flex-gap-3-lg-gap-9

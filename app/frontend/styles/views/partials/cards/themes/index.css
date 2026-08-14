@@ -1,7 +1,0 @@
-.vw-cards-themes {
-  @apply tw-shared-base-container;
-}
-
-.vw-cards-themes__grid {
-  @apply flex flex-wrap justify-between;
-}

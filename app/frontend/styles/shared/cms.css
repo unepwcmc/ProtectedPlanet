@@ -7,7 +7,7 @@
   }
   
   h3 {
-    @apply tw-shared-font-hind-siliguri__light-base-md-lg-leading-1-6-grey-black;
+    @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-md-lg-grey-black;
   }
   
   h4 {
@@ -18,7 +18,7 @@
   p,
   ul,
   li {
-    @apply tw-shared-font-hind-siliguri__light-base-leading-1-6-grey-black;
+    @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black;
   }
 
   table,

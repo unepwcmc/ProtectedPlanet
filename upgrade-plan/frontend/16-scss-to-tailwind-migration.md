@@ -10,7 +10,7 @@
 RowStacked`, all of `Stats/*` except `Coverage`/`TooltipInfo`, all of `Attributes/*`, and the
 `RegionCountryPages/Index` wrapper landed this session; also fixed a real regression where T7's SCSS
 deletion had silently unstyled `Stats/Sites.vue` — see the T6 section and CHANGELOG). Only `Stats/
-{Coverage,TooltipInfo}` and the `card--stats-overview` ERB card remain. **T8, T9 are confirmed still 100% untouched** (re-verified via fresh grep against current Vue component consumers, not just trusted from the old baseline). **Two new findings**: `shared/forms.css` and `shared/scrollbar.css` (from T1) are wired into `tailwind.css` but have zero live consumers anywhere — dead weight, flag for removal or reuse when T4/T8 land. The CMS layout files (`views/layouts/cms/*.css`) use three inconsistent `vw-` prefix schemes (`vw-layouts-cms-*`, `vw-cms-*`, mixed `@utility`/plain-class syntax) — violates rule 4c's path-mirroring rule (added 2026-08-05) but works today; worth a small consistency pass. Custom breakpoint tokens were reverted 2026-08-03 — every consumer uses native `md:`/`lg:`/`2xl:` — see CODE-CONVENTIONS.md rule 21. **2026-08-13: T7 and T8 are both now fully done** — `Dropdown/ParcelsDropdown.vue` closed out T7; the whole `Pame/*` family + `Dropdown/{Base,Options}` closed out T8, deleting `_dropdown.scss`, `_filters-pame.scss`, `_modal-pame.scss`, `table/{_table-pame,_table-head-pame,_table-horizontal-scroll,_table-head-horizontal-scroll}.scss`, `components/_table.scss`, `_tooltip.scss`, `components/_select.scss` + `select/{_select,_select-searchable}.scss`, and `base/_buttons.scss` — see the T7/T8 sections and CHANGELOG for full detail. Only **T9 and T10 remain**. |
+{Coverage,TooltipInfo}` and the `card--stats-overview` ERB card remain. **T8, T9 are confirmed still 100% untouched** (re-verified via fresh grep against current Vue component consumers, not just trusted from the old baseline). **Two new findings**: `shared/forms.css` and `shared/scrollbar.css` (from T1) are wired into `tailwind.css` but have zero live consumers anywhere — dead weight, flag for removal or reuse when T4/T8 land. The CMS layout files (`views/layouts/cms/*.css`) use three inconsistent `vw-` prefix schemes (`vw-layouts-cms-*`, `vw-cms-*`, mixed `@utility`/plain-class syntax) — violates rule 4c's path-mirroring rule (added 2026-08-05) but works today; worth a small consistency pass. Custom breakpoint tokens were reverted 2026-08-03 — every consumer uses native `md:`/`lg:`/`2xl:` — see CODE-CONVENTIONS.md rule 21. **2026-08-13: T7 and T8 are both now fully done** — `Dropdown/ParcelsDropdown.vue` closed out T7; the whole `Pame/*` family + `Dropdown/{Base,Options}` closed out T8, deleting `_dropdown.scss`, `_filters-pame.scss`, `_modal-pame.scss`, `table/{_table-pame,_table-head-pame,_table-horizontal-scroll,_table-head-horizontal-scroll}.scss`, `components/_table.scss`, `_tooltip.scss`, `components/_select.scss` + `select/{_select,_select-searchable}.scss`, and `base/_buttons.scss` — see the T7/T8 sections and CHANGELOG for full detail. **2026-08-14: T9 confirmed already done** (its named files/components were closed by same-day, undocumented direct commits after the T8 session ended — `_tabs.scss`/`_filters-sidebar.scss` no longer exist on disk, and `SearchAreas/{Index,CheckboxSearch,FilterGroup}`, `Listing/FilterGroup`, `RegionCountryPages/Index` are all already `ct-`-migrated with real `<style scoped>`). **T10 mostly done the same session**: found and fixed a live-breaking bug (`bundle exec rake assets:precompile` was failing — two files left over from the T8 deletion pass, `components/_filters.scss`/`_modal.scss`, still `@import`ed their now-deleted `filters-pame`/`modal-pame` targets), which cascaded into confirming and deleting the **entire remaining legacy SCSS tree** (24 more files — every `base/*`, `helpers/*`, `helpers/mixins/*`, `utilities/{_flexbox,_media-queries}.scss` file; `application.scss` now compiles to a byte-for-byte empty file) and removing the now-fully-unused `bourbon`/`neat` gems. Only `_settings.scss`, `utilities/_rem-calc.scss`, `application.scss` (now a stub), `pdf.scss` (kept — see T10), and the out-of-scope `comfy/admin/cms/custom.scss` remain on disk. **Only remaining checklist item in the whole plan: enable Tailwind preflight + do the final full-site visual sweep** — see T10 below. |
 
 [← Summary](./README.md)
 
@@ -33,16 +33,13 @@ independent of whether the *content* is SCSS or Tailwind. If both land, do the c
 
 ## Baseline (audited August 2026)
 
-- **Current state (re-audited 2026-08-12, same day, end of this session's T6 work): 57 legacy `.scss`
-  files remain** (T5 deleted 10 — see below; this session's T6 work deleted 13 more across two slices:
-  `_am-chart-pie.scss`, `_chart-row-stacked.scss`, `_chart-line.scss`, `_card-stats-{designations,iucn,
-  governance,overlap,toggle}.scss`, `_lists.scss`, `_card-stats-affiliations.scss`,
-  `_card-stats-related.scss`, `_card-attributes-{pame,pa-and-parcels}.scss`) — down from the 131-file
-  original baseline below. See the Status line above and CHANGELOG's T4/T5/T6 sections for the full
-  reconciliation
-  against this doc's stale wave checklists — this count has drifted from hands-on commits outpacing doc
-  updates more than once already, re-verify with `find app/assets/stylesheets -name "*.scss" | wc -l`
-  before trusting it in a future session.
+- **Current state (re-audited 2026-08-14, end of this session's T9/T10 work): 4 legacy `.scss` files
+  remain** — `_settings.scss`, `utilities/_rem-calc.scss`, `application.scss` (now a stub importing
+  just those two), and `pdf.scss` (kept on the SCSS pipeline, see T10's decision) — plus the
+  out-of-scope `comfy/admin/cms/custom.scss`. Down from 131 originally. See the Status line above and
+  CHANGELOG's T9/T10 sections for the full reconciliation — this count has drifted from hands-on
+  commits outpacing doc updates several times now, re-verify with `find app/assets/stylesheets -name
+  "*.scss" | wc -l` before trusting it in a future session regardless.
 - **Original baseline — 131 files, 8,119 lines** under `app/assets/stylesheets/` (the ~100/~8.7k estimates in
   [08](./08-styles-and-assets.md) undercounted nested `card/`, `cards/`, `attributes/`, `stats/`
   sub-partials).
@@ -61,7 +58,7 @@ independent of whether the *content* is SCSS or Tailwind. If both land, do the c
     real file is the flat `styles/shared.css`, no `shared/` subfolder exists.** Fix this doc bug in
     Wave 0.
   - `vw-` — ERB-**view**-level Tailwind classes for chrome that belongs to no single Vue component
-    (`app/frontend/styles/views/{topbar,topbar-secondary}.css`, e.g. `vw-topbar__container`). **Not
+    (`app/frontend/styles/views/{topbar,topbar-secondary}.css`, e.g. `vw-layouts-partials-topbar__container`). **Not
     documented anywhere.** This migration touches views constantly, so codify it as rule 4b in Wave 0
     rather than leaving it an unnamed precedent.
 - **Baseline correction (Wave T0 re-verify, confirms the "re-check for drift" risk below was real):**
@@ -228,8 +225,8 @@ often share one legacy partial (e.g. `_lists.scss` styles both `Attributes/*` an
 | **T6** | Charts + Stats (closes Wave-8 rule-4 exceptions) | T1 | Vue only | 11/~13 components done — `TotalCoverageChart`, `AmChart/{Pie,Multiline}`, `Chart/RowStacked`, `Stats/{Designations,IucnCategories,Governance,Sites,Sources,Message}`, `Attributes/*`, `RegionCountryPages/Index` (wrapper); only `Stats/{Coverage,TooltipInfo}` + the `card--stats-overview` ERB card remain |
 | **T7** | Cards family + Listing cards + Carousel (closes `ListingPageCard` exception) | T1, T4 | Vue + a few ERB card grids | **✅ done** (2026-08-13) — everything including `Dropdown/ParcelsDropdown.vue` (the last item) migrated |
 | **T8** | PAME + Dropdown + Select (closes Wave-9/10 rule-4 exceptions) | T1 | Vue only | **✅ done** (2026-08-13) |
-| **T9** | Residual tabs/filters coupling (`_tabs.scss`, `_filters-sidebar.scss`) | T4, T5, T7 | Vue only | not started |
-| **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide | not started |
+| **T9** | Residual tabs/filters coupling (`_tabs.scss`, `_filters-sidebar.scss`) | T4, T5, T7 | Vue only | **✅ done** (2026-08-14 — confirmed already closed by undocumented commits) |
+| **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide | **almost done** (2026-08-14) — legacy SCSS tree + bourbon/neat deleted; only preflight-enable + full sweep left |
 
 *Estimates below assume the same "AI-assisted, 1 FTE, verify live in browser every wave" cadence used
 throughout the Vue migration (see CHANGELOG.md) — screenshots before/after, not just Vitest/typecheck,
@@ -431,11 +428,11 @@ before assuming 0 views work here), `helpers/_cms.scss` (`.cms-wysiwyg` CMS rich
         real rule was the same `flex-stack-mobile` on `.page__section--overview-map`, now
         `vw-region__overview`); `pages/_region.scss` deleted (`.page__2cols` was already dead,
         confirmed via grep), `pdf.scss`'s `.page--region` repointed to `.vw-region`.
-      - `site.css` — `protected_areas/show.html.erb`'s `tw-shared-*` usages wrapped in `vw-site*`
+      - `site.css` — `protected_areas/show.html.erb`'s `tw-shared-*` usages wrapped in `vw-protected-areas*`
         classes, but `.page--site` itself **stays** in the ERB (unlike country/region) since
         `_site.scss`'s `.page__col-wrapper`/`__col-1`/`__col-2` have real PDF-width-conditional
         content this wave doesn't touch — only the now-independent `.page__section--overview-map`
-        rule was deleted from `_site.scss` and replaced by `vw-site__overview`.
+        rule was deleted from `_site.scss` and replaced by `vw-protected-areas__overview`.
       - `home.css`, `search.css`, `search-areas-home.css` (the `SearchAreasHome` widget wrapper,
         reused by `home/index.html.erb` and `data/wdpca/_tab_extras.html.erb`), `error-page.css`
         (identical `layouts/404.html.erb`/`500.html.erb` markup shares one file),
@@ -494,7 +491,7 @@ before assuming 0 views work here), `helpers/_cms.scss` (`.cms-wysiwyg` CMS rich
       not something this wave skipped.
 - [x] **`_site.scss`'s `.page__col-wrapper`/`__col-1`/`__col-2` — done**, contrary to this item's
       original "deliberately left alone" note. Ported into `views/site.css` as
-      `vw-site__col-wrapper`/`__col-1`/`__col-2` (the `.pdf .vw-site__col-1/2` PDF-width override kept
+      `vw-protected-areas__col-wrapper`/`__col-1`/`__col-2` (the `.pdf .vw-protected-areas__col-1/2` PDF-width override kept
       as an unlayered plain selector, same treatment as other PDF-conditional rules elsewhere in this
       doc); `pages/_site.scss` fully deleted.
 - [x] **All 9 CMS layout templates + all 4 thematic/data-area page shells (marine, effectiveness,
@@ -1050,50 +1047,127 @@ same recurring doc-drift pattern as T7's `Attributes/ProtectedArea/*`.)
 
 ---
 
-## Wave T9 — Residual tabs/filters coupling (~0.5 wk) — not started (confirmed 2026-08-10; note `Tabs.vue` itself is already fully `ct-tabs__*` from an earlier wave — this wave is only the *other* `.tabs` consumers listed below)
+## Wave T9 — Residual tabs/filters coupling (~0.5 wk) — **done** (confirmed 2026-08-14)
 
-Files: `_tabs.scss` (distinct from the already-fully-migrated `Tabs.vue`'s own `ct-tabs*` styling —
-this is the *other* `.tabs` consumers), `_filters-sidebar.scss`.
+**Re-audited before starting, per this doc's own repeated drift lesson — and found the whole wave
+was already closed.** `_tabs.scss` and `_filters-sidebar.scss` no longer exist anywhere on disk
+(`find app/assets/stylesheets -iname "*tabs*" -o -iname "*filters-sidebar*"` returns nothing). All
+5 named components already render fully `ct-`-prefixed markup with their own `<style scoped>`:
+`SearchAreas/CheckboxSearch.vue` (`ct-search-areas-checkbox-search*`), `SearchAreas/FilterGroup.vue`
+(`ct-search-areas-filter-group*`), `Listing/FilterGroup.vue` (`ct-listing-filter-group*`),
+`RegionCountryPages/Index.vue` (`ct-region-country-pages*`). `SearchAreas/Index.vue` turned out to be
+a thin wrapper with zero markup classes of its own (just renders `SearchAreas/InputAutocomplete.vue`)
+— nothing to migrate there either. This landed via the same undocumented-direct-commit pattern as
+every prior doc-drift episode (see [[scss-tailwind-plan-drift-2026-08-10]] in memory) — the 2026-08-13
+"migrate search page, pa page" / "migrate pa site" / "migrate country region pages" / "migrate
+attributes" commits closed this wave's scope without it ever being logged here.
 
-Components: `SearchAreas/Index.vue`, `SearchAreas/CheckboxSearch.vue`, `RegionCountryPages/Index.vue`
-(all three still read the legacy `.tabs` class, unrelated to the `Tabs` island itself),
-`SearchAreas/FilterGroup.vue`, `Listing/FilterGroup.vue`.
-
-- [ ] Straightforward `ct-`-prefixed rewrite per the established pattern — small, isolated, last
-      because it depends on T4/T5/T7's components already being done (shared filter-group patterns).
-- [ ] Live-verify: search-areas page filters + tab strip, region/country page tabs, a listing page's
-      filter sidebar.
+No code changes were needed for T9 itself — see T10 below for what this session's re-audit turned up
+instead (a live-breaking bug plus the rest of the legacy tree turning out to be dead too).
 
 ---
 
-## Wave T10 — Finish (~1 wk)
+## Wave T10 — Finish (~1 wk) — **almost done** (started 2026-08-14)
 
-- [ ] Confirm zero remaining `@import` targets in `application.scss` besides `_settings.scss` (vars/
-      functions, if anything still genuinely needs them) — delete `application.scss`'s glob imports,
-      the `components/`, `pages/`, `helpers/`, `utilities/`, `base/` directories, `custom.scss`.
-- [ ] Decide `pdf.scss`'s fate explicitly (do not let it become an accidental last SCSS file nobody
-      decided about): either (a) port its 39 lines to a small hand-written Tailwind-adjacent CSS file
-      the PDF pipeline links directly (simplest — it's tiny and isolated), or (b) leave it on the
-      existing Sprockets/sassc path indefinitely since it's CMS/PDF-only and never touches Tailwind's
-      `@source` scan anyway. Either way, **re-run a real PDF export smoke test** (per
-      [08](./08-styles-and-assets.md)'s existing "PDF & Comfy" task) — this is the one path Tailwind's
-      dev-server verification never covers.
-- [ ] Leave `comfy/admin/cms/custom.scss` untouched (documented out-of-scope, Comfy admin only) unless
-      separately requested.
-- [ ] Remove `bourbon`/`neat` gems and the Sprockets `assets.paths` entries for them (per
-      [08](./08-styles-and-assets.md)'s existing task, now finally safe — nothing imports them once all
-      SCSS above is gone).
-- [ ] Remove `sassc`/`sass-rails` from the Gemfile (or leave `dartsass-rails` if the compiler-swap task
-      from 08 already landed separately — either way, there's no SCSS left to compile).
+**Started by re-auditing T9 (above) and immediately found a live-breaking bug**, not just doc drift:
+`bundle exec rake assets:precompile` was failing outright —
+```
+SassC::SyntaxError: Error: File to import not found or unreadable: ./filters/filters-pame.
+  on line 9:3 of app/assets/stylesheets/components/_filters.scss
+  from line 7:1 of app/assets/stylesheets/application.scss
+```
+`components/_filters.scss` and `components/_modal.scss` were left behind by the T8 session's deletion
+of `_filters-pame.scss`/`_modal-pame.scss` — their own only content was `@import`ing those now-gone
+files, so they'd been silently broken since 2026-08-13. This would have broken any real deploy
+(`assets:precompile` is a hard requirement) and, since `_head.html.erb` links `application.css`
+whenever `@for_pdf` is true, PDF export specifically. `bin/rails runner` is still broken in this
+container (prints `rails new` help regardless of script, same issue noted in
+[[t8-pame-dropdown-select-wave-done]]) — used `docker exec ... bundle exec rake assets:clobber
+assets:precompile` directly against `protectedplanet-web` to reproduce and then re-verify after each
+fix, since Vite's dev server never touches this Sprockets pipeline at all.
+
+**Fixing it cascaded into finishing the rest of this wave's SCSS deletion in one pass**, because once
+`_filters.scss`/`_modal.scss` were confirmed to have zero other content, a full fresh
+`class="..."`-usage grep sweep (across `app/frontend` + `app/views`, careful to exclude `ct-`/
+`tw-shared-`/`vw-` prefixed false-positive substring matches — e.g. `cards--resources` inside
+`ct-listing-list__cards--resources`) found **the entire remaining legacy SCSS tree had zero live
+consumers left**:
+
+- [x] `components/{_filters,_modal,_search,_cards}.scss` + `components/{cards,form}/**` (the
+      `.filters`/`.modal`/`.search--pa`/`.card--message`/`.cards--{articles,basic,resources}`
+      families, plus the bare `input {}` tag selector in `form/_input.scss` — every real `<input>`
+      consumer, e.g. `Search/SiteInput.vue`, already has its own `<style scoped>` with zero reliance
+      on it) — all confirmed zero consumers, deleted.
+- [x] `base/_base.scss` — already 100% commented out since preflight/Tailwind fonts took over
+      (see the 2026-08-07 finding above); deleted outright, nothing to migrate.
+- [x] `base/_circles.scss`, `base/_icons.scss`, `base/_svgs.scss`, `base/_themes.scss` — every
+      `.icon--*`/`.svg--*`/`.theme--*`/`circle-*` class and mixin confirmed zero consumers; deleted.
+- [x] `base/_fonts.scss` — the legacy `MuseoSans`/`MuseoSlab` `@font-face` declarations, fully
+      superseded by `app/frontend/styles/fonts.css`'s self-hosted Hind Siliguri/Playfair Display
+      (confirmed via `grep -rl MuseoSans` returning only the file itself); deleted.
+- [x] `helpers/_cms.scss` — already flagged dead in this doc's own T3 section (zero `.cms-wysiwyg`
+      ERB consumers left, `tw-shared-cms-wysiwyg` replaced it); deleted, closing that lingering T3 item.
+- [x] `helpers/{_background,_beautify-scrollbar,_border-and-shadows,_form-fields,_images}.scss` —
+      every mixin's `@include` consumers were themselves already-dead files from this same list (e.g.
+      `input-custom-focus`'s only caller was the already-commented-out `base/_base.scss`); deleted.
+- [x] `helpers/_helpers.scss` — the T3 "still genuinely open" item (`.block`/`.bold`/`.ul-unstyled`/
+      `.no-margin`/`.margin-center`/`.hover--pointer`) — all confirmed zero consumers now (unlike at
+      T3's own check); deleted, along with its `@import` chain into the 5 files above.
+- [x] `helpers/mixins/{_cards,_icons,_layout,_text}.scss` — pure mixin files, only ever `@include`d
+      by the now-deleted files above; deleted.
+- [x] `utilities/{_flexbox,_media-queries}.scss` — same; **`utilities/_rem-calc.scss` kept**, since
+      `_settings.scss` itself calls `rem-calc()` to compute its own `$gutter-*`/`$spacer-*` variables.
+- [x] `application.scss` rewritten to just `@import './utilities/rem-calc'; @import './settings';` —
+      confirmed via the compiled output that it's now a byte-for-byte empty file (`sha256` of `''`,
+      `wc -l` = 0). This is expected, not a bug: recall the 2026-08-07 finding that `application.css`
+      hasn't been linked on normal page loads for a while now anyway (PDF-export-only) — every class
+      that ever lived in it has either been ported to Tailwind already or, per the checks above, had
+      zero real consumers left to port.
+- [x] Remaining tree: only `_settings.scss`, `utilities/_rem-calc.scss`, `application.scss` (stub),
+      `pdf.scss`, and the out-of-scope `comfy/admin/cms/custom.scss`.
+
+**`pdf.scss`'s fate — decided as option (b), left on the existing Sprockets/sassc path.** It only
+`@import`s `settings` (no dependency on anything just deleted) and every class it references
+(`.vw-layouts-partials-topbar`, `.vw-country`/`.vw-protected-areas`/`.vw-region`, `.ct-map-baselayer-controls`, `.container`,
+etc.) is either already a live Tailwind-era class or a pre-existing, separately-tracked legacy
+oddity (`.pa-card`, `.leaflet-control*` — dead Leaflet-era selectors from before the MapLibre
+migration, out of scope here, harmless to leave). It's 39 lines, isolated, and still compiles
+standalone — porting it to hand-written Tailwind-adjacent CSS (option a) would add risk for no
+real benefit. **Because of this decision, `sassc`/`sass-rails` must stay in the Gemfile** — they're
+still the only thing that compiles `pdf.scss` (and the now-stub `application.scss`) — the "remove
+sassc/sass-rails" item below only applies if a future session instead chooses option (a).
+
+- [x] Remove `bourbon`/`neat` gems and their Sprockets `assets.paths` entry — confirmed zero
+      remaining `@import`/mixin usage anywhere in the 5-file tree above (bourbon/neat mixins were
+      never used by `_settings.scss`, `_rem-calc.scss`, or `pdf.scss`). Removed from `Gemfile` +
+      `config/initializers/assets.rb`; `bundle install` inside `protectedplanet-web` completed clean
+      (400 gems, both gone from `Gemfile.lock`); re-ran `assets:precompile` after — still clean.
+- [ ] Remove `sassc`/`sass-rails` from the Gemfile — **not done, and shouldn't be** unless a future
+      session revisits the `pdf.scss` decision above (option a instead of b).
 - [ ] **Enable Tailwind preflight** (`app/frontend/styles/tailwind.css` — uncomment
-      `@import "tailwindcss/preflight.css" layer(base);`) — the one previously-forbidden change,
-      now safe since no legacy SCSS remains to fight it.
+      `@import "tailwindcss/preflight.css" layer(base);`) — not done this session. Risk is now much
+      lower than when this item was originally written (there is no legacy SCSS left to fight at all,
+      versus "almost the whole site" when this decision was first made), but it's still the one
+      previously-forbidden change and deserves its own dedicated live full-site sweep rather than
+      being folded into an already-large session — see the next item.
 - [ ] Full-site visual sweep post-preflight: every page type hit in every prior wave's "Live-verify"
-      step, plus anything not explicitly covered above (404/500 pages, PDF export, Comfy admin — admin
-      is unaffected since preflight only applies to the public-site Vite entrypoint, confirm that
-      boundary holds).
+      step, plus 404/500 pages, PDF export, Comfy admin (admin is unaffected since preflight only
+      applies to the public-site Vite entrypoint — confirm that boundary holds).
 - [ ] Update [08](./08-styles-and-assets.md)'s exit criteria checklist and this doc's Status line to
       "done."
+
+**Verified this session**: `bundle exec rake assets:clobber assets:precompile` clean (exit 0) after
+every batch of deletions. `bundle install` clean after the gem removal. Live PDF-export smoke test —
+`GET /country/USA?for_pdf=true` returns 200, both `pdf.self-*.css` and `application.self-*.css`
+`<link>` tags resolve, rendered HTML has the `.pdf` root class present (matches `pdf.scss`'s
+selectors). Live Playwright check (home, country pages, 1400px viewport, after restarting the
+crash-prone `protectedplanet-vite` container per [[vite-dev-server-optimize-deps-crash]]): both fully
+styled, no visual regression from any of the deletions above (expected, since none of the deleted
+classes had live consumers to begin with). Remaining console noise/500s are pre-existing and
+unrelated: a WebSocket HMR handshake warning (Playwright-vs-dev-server artifact, not a real user
+issue) and `/search` 500ing with `PageNotFound in ProtectedAreasController#show` — the same seed-data
+routing gap already documented in T3's "couldn't be reached in this dev environment's seed data" note,
+confirmed via the server log to predate this session.
 
 ---
 

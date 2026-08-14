@@ -74,15 +74,17 @@
 @import './views/layouts/partials/hero/marine.css';
 @import './views/layouts/partials/hero/small.css';
 
+@import './views/layouts/partials/topbar.css';
+
 @import './views/layouts/error-page.css';
+
+@import './views/partials/bars/topbar-secondary.css';
 
 @import './views/partials/cards/circles.css';
 @import './views/partials/cards/facts.css';
 @import './views/partials/cards/news.css';
 @import './views/partials/cards/resources.css';
 @import './views/partials/cards/squares.css';
-@import './views/partials/cards/themes/index.css';
-@import './views/partials/cards/themes/card.css';
 
 @import './views/partials/carousels/theme.css';
 
@@ -111,27 +113,12 @@
 @import './views/partials/thematic_and_data_area/footer.css';
 @import './views/partials/thematic_and_data_area/panel_content.css';
 
-@import './views/search.css'; 
-
 @import './views/thematic/effectiveness/green-list-tab.css';
 @import './views/thematic/effectiveness/index.css';
 @import './views/thematic/marine.css';
 
-
-
-
-
-
-/* Following to be corrected */
-@import './views/topbar.css';
-@import './views/topbar-secondary.css';
-
 @import './views/country.css';
-@import './views/region.css';
-@import './views/site.css'; 
-
 @import './views/home.css';
-
-
-
-
+@import './views/protected-areas.css'; 
+@import './views/region.css';
+@import './views/search.css';

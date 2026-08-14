@@ -86,8 +86,7 @@ changeInput(props.preSelected)
   relative
   flex
   items-center
-  tw-shared-font-family-hind-siliguri__leading-1-3-grey-black
-  text-sm;
+  tw-shared-font-hind-siliguri__light-sm-grey-black;
 }
 
 .ct-search-areas-radio-buttons__input {

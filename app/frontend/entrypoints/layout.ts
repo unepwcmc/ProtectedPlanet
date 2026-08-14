@@ -55,6 +55,7 @@ registerIslands({
   AttributesProtectedAreaSources: () => import('@/components/Attributes/ProtectedArea/Source/List.vue'),
   PameTable: () => import('@/components/Pame/Table/Index.vue'),
   CarouselThemes: () => import('@/components/Carousel/Themes/Index.vue'),
+  CardsThemes: () => import('@/components/Cards/Themes/Index.vue'),
   SearchSite: () => import('@/components/Search/Index.vue')
 })
 

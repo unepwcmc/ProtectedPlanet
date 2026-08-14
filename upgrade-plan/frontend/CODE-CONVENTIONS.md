@@ -33,7 +33,7 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
    4b. Test-only hook classes may skip the `ct-` namespace: add a second, plain class purely for stable test/JS selection when two elements are visually identical — `class="ct-banner__nav banner__nav--prev"` (`ct-banner__nav` carries all `@apply` styling; `banner__nav--prev` exists only so a spec can distinguish prev/next). INVALID: putting Tailwind/`@apply` rules on the unnamespaced class.
 
 4b. CSS = `vw-` PREFIX FOR VIEW-OWNED CHROME.
-   RULE: ERB view chrome with no single owning Vue component (page shells, nav/footer wrappers, hero blocks, CTAs) → `vw-block__element--modifier` classes, backed by `app/frontend/styles/views/<name>.css` (e.g. `vw-topbar__container` in `styles/views/topbar.css`).
+   RULE: ERB view chrome with no single owning Vue component (page shells, nav/footer wrappers, hero blocks, CTAs) → `vw-block__element--modifier` classes, backed by `app/frontend/styles/views/<name>.css` (e.g. `vw-layouts-partials-topbar__container` in `styles/views/topbar.css`).
    WHY: distinguishes view-level chrome from component-scoped `ct-` (rule 4) and cross-cutting `tw-shared-` (rule 5) — was in use before this was written down; codified during [16 SCSS→Tailwind](./16-scss-to-tailwind-migration.md) Wave T0.
    REF: `styles/views/topbar.css`, `styles/views/topbar-secondary.css`.
 

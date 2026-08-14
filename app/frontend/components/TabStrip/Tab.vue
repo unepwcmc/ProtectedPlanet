@@ -53,19 +53,14 @@ function click() {
 
 .ct-tab-strip-tab--default {
   @apply
-  tw-shared-font-family-hind-siliguri__leading-1-3-grey-black
-  font-light
-  text-lg
-  md:text-xl
+  tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black
   px-6.5
   py-1.25;
 }
 
 .ct-tab-strip-tab--small {
   @apply
-  tw-shared-font-family-hind-siliguri__leading-1-3-grey-black
-  font-light
-  text-sm
+  tw-shared-font-hind-siliguri__light-sm-grey-black
   px-4
   py-1.5;
 }

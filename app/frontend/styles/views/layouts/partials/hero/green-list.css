@@ -21,7 +21,7 @@
 }
 
 .vw-layouts-partials-hero-green-list__intro {
-  @apply tw-shared-font-hind-siliguri__light-lg-grey-black-md-xl-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
 }
 
 .vw-layouts-partials-hero-green-list__button {
@@ -51,11 +51,11 @@
 }
 
 .vw-layouts-partials-hero-green-list__stat-number {
-  @apply tw-shared-font-hind-siliguri__normal-md-3xl-lg-6xl-green;
+  @apply tw-shared-font-hind-siliguri__normal-3xl-lg-6xl-green;
 }
 
 .vw-layouts-partials-hero-green-list__stat-number--small {
-  @apply tw-shared-font-hind-siliguri__normal-md-3xl-lg-4xl-green;
+  @apply tw-shared-font-hind-siliguri__normal-3xl-lg-4xl-green;
 }
 
 .vw-layouts-partials-hero-green-list__stat-text {

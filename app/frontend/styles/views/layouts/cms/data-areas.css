@@ -1,8 +1,8 @@
-@utility vw-cms-data-areas {
+.vw-cms-data-areas {
   @apply tw-shared-base-wrapper;
 }
 
-@utility vw-cms-data-areas__container {
+.vw-cms-data-areas__container {
   @apply 
   tw-shared-base-container
   tw-shared-base-flex-col-gap-6-and-9;

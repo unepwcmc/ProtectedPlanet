@@ -18,5 +18,5 @@
 }
 
 .vw-country__restricted-message-text {
-  @apply tw-shared-font-hind-siliguri__light-sm-leading-1-6-grey-black;
+  @apply tw-shared-font-hind-siliguri__leading-1-6-light-sm-grey-black;
 }

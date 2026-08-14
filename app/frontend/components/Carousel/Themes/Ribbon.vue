@@ -52,7 +52,7 @@ defineProps<CarouselThemesCard>()
 .ct-carousel-themes-ribbon__icon {
   @apply
   h-9.5
-  w-7
+  w-7.5
   shrink-0
   text-white;
 }
@@ -62,7 +62,7 @@ defineProps<CarouselThemesCard>()
 }
 
 .ct-carousel-themes-ribbon__number {
-  @apply tw-shared-font-hind-siliguri__normal-xl-md-3xl-lg-4xl-green leading-none;
+  @apply tw-shared-font-hind-siliguri__leading-none-semibold-xl-md-3xl-lg-4xl-green;
 }
 
 .ct-carousel-themes-ribbon__label {

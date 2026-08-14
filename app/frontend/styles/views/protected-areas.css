@@ -1,24 +1,24 @@
-.vw-site {
+.vw-protected-areas {
   @apply tw-shared-region-country-site__wrapper;
 }
 
-.vw-site__container {
+.vw-protected-areas__container {
   @apply tw-shared-region-country-site__container;
 }
 
-.vw-site__overview {
+.vw-protected-areas__overview {
   @apply tw-shared-region-country-site__overview;
 }
 
-.vw-site__col-wrapper {
+.vw-protected-areas__col-wrapper {
   @apply flex flex-wrap lg:flex-nowrap;
 }
 
-.vw-site__col-1 {
+.vw-protected-areas__col-1 {
   @apply w-full lg:w-[calc(50%_-_15px)];
 }
 
-.vw-site__col-2 {
+.vw-protected-areas__col-2 {
   @apply w-full lg:ml-auto lg:w-[calc(50%_-_15px)] lg:block;
 }
 
@@ -27,10 +27,10 @@
  * regardless of specificity — only active inside the `.pdf` wrapper div that
  * layouts/application.html.erb renders around the whole page when `@for_pdf`.
  */
-.pdf .vw-site__col-1 {
+.pdf .vw-protected-areas__col-1 {
   @apply mr-[30px] w-[555px];
 }
 
-.pdf .vw-site__col-2 {
+.pdf .vw-protected-areas__col-2 {
   @apply w-[555px];
 }

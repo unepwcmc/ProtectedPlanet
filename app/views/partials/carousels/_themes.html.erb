@@ -4,20 +4,6 @@
     <%= @items[:title] %>
   </h2>
   <div class="vw-partials-carousels-themes__carousels">
-    <%= frontend_mount "CarouselThemes", props: {
-        areaTypeLabel: t('global.area-types.wdpca'),
-        cards: @items[:cards].map do |slide|
-          page = slide[:obj]
-          {
-            url: root_url + page[:full_path],
-            linkTitle: "View the #{page[:label]} page",
-            label: page[:label],
-            imageUrl: cms_fragment_render(:image, page),
-            summary: cms_fragment_content(:summary, page),
-            pasNo: slide[:pas_no],
-            slug: page[:slug]
-          }
-        end
-  } %>
+    <%= frontend_mount "CarouselThemes", props: theme_cards_vue_props(@items) %>
   </div>
 </div>
