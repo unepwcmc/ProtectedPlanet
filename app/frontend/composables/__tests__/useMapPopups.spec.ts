@@ -15,7 +15,7 @@ vi.mock('maplibre-gl', () => ({
   Popup: vi.fn(function () { return popup })
 }))
 
-const { useMapPopups } = await import('@/composables/useMapPopups')
+const { default: useMapPopups } = await import('@/composables/useMapPopups')
 
 function jsonResponse(data: unknown) {
   return { ok: true, status: 200, json: () => Promise.resolve(data) } as Response

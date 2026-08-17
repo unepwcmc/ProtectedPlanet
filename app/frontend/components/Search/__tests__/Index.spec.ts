@@ -51,7 +51,7 @@ describe('SearchSite', () => {
     const wrapper = mountSearchSite()
 
     expect(wrapper.text()).toContain('Yosemite')
-    expect(wrapper.find('.search__total').text()).toBe('(1 results)')
+    expect(wrapper.find('.ct-search-results__total').text()).toBe('(1 results)')
   })
 
   it('pre-populates the search term from the URL query string', () => {
@@ -68,7 +68,7 @@ describe('SearchSite', () => {
     }))
     const wrapper = mountSearchSite()
 
-    await wrapper.findAll('.ct-search-areas-tab-strip li')[1].trigger('click')
+    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
@@ -82,7 +82,7 @@ describe('SearchSite', () => {
     }))
     const wrapper = mountSearchSite()
 
-    await wrapper.findAll('.ct-search-areas-tab-strip li')[1].trigger('click')
+    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalledTimes(1))
     await vi.waitFor(() => expect(wrapper.find('.ct-search__input').attributes('disabled')).toBeUndefined())
 
@@ -91,7 +91,7 @@ describe('SearchSite', () => {
     await vi.waitFor(() => expect(fetch).toHaveBeenCalledTimes(2))
 
     expect(window.location.search).toContain('search_term=coral')
-    expect(wrapper.findAll('.ct-search-areas-tab-strip li')[0].classes()).toContain('ct-search-areas-tab-strip-tab--active')
+    expect(wrapper.findAll('.ct-tab-strip li')[0].classes()).toContain('ct-tab-strip-tab--active')
   })
 
   it('disables the input, tabs, and pagination while a request is in flight', async () => {
@@ -104,7 +104,7 @@ describe('SearchSite', () => {
     await wrapper.find('.ct-search-pagination__button--next').trigger('click')
 
     expect(wrapper.find('.ct-search__input').attributes('disabled')).toBeDefined()
-    expect(wrapper.findAll('.ct-search-areas-tab-strip li')[1].attributes('aria-disabled')).toBe('true')
+    expect(wrapper.findAll('.ct-tab-strip li')[1].attributes('aria-disabled')).toBe('true')
     expect(wrapper.find('.ct-search-pagination__button--next').attributes('disabled')).toBeDefined()
 
     resolveFetch(jsonResponse({

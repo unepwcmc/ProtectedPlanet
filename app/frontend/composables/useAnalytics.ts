@@ -65,12 +65,24 @@ export default function () {
       window.dataLayer!.push(args)
     }
     window.gtag('js', new Date())
-    window.gtag('config', measurementId)
+    // send_page_view: false — with Turbo Drive, this config call and its
+    // script tag only ever run once per browser tab (module state survives
+    // Turbo's no-reload navigations), so the auto page_view it would normally
+    // send only covers the very first page. Every page view, including this
+    // first one, is instead sent explicitly below on turbo:load.
+    window.gtag('config', measurementId, { send_page_view: false })
 
     const script = document.createElement('script')
     script.async = true
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
     document.head.appendChild(script)
+
+    document.addEventListener('turbo:load', () => {
+      window.gtag?.('event', 'page_view', {
+        page_location: window.location.href,
+        page_title: document.title
+      })
+    })
   }
 
   function loadOptionalScripts() {

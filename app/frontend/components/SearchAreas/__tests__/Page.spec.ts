@@ -88,7 +88,7 @@ describe('SearchAreasPage', () => {
     }))
     const wrapper = mountSearchAreas()
 
-    await wrapper.findAll('.ct-search-areas-tab-strip li')[1].trigger('click')
+    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
@@ -104,7 +104,7 @@ describe('SearchAreasPage', () => {
     }))
     const wrapper = mountSearchAreas()
 
-    await wrapper.findAll('.ct-search-areas-tab-strip li')[0].trigger('click')
+    await wrapper.findAll('.ct-tab-strip li')[0].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     expect(wrapper.find('.ct-filters-trigger').classes()).toContain('ct-filters-trigger--disabled')
@@ -134,6 +134,7 @@ describe('SearchAreasPage', () => {
     const wrapper = mountSearchAreas()
     const downloadStore = useDownloadStore()
 
+    await wrapper.find('.ct-filters-trigger').trigger('click')
     await wrapper.find('input[value="wdpa"]').setValue(true)
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 

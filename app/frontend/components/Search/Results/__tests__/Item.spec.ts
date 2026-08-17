@@ -23,6 +23,6 @@ describe('SearchResultsItem', () => {
   it('renders a placeholder icon when no image is given', () => {
     const wrapper = mount(SearchResultsItem, { props: { title: 'Yosemite', url: '/protected-areas/1' } })
 
-    expect(wrapper.find('.ct-search-results-item__placeholder-icon').exists()).toBe(true)
+    expect(wrapper.find('.ct-search-results-item__placeholder').exists()).toBe(true)
   })
 })

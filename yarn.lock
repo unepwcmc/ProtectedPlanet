@@ -388,6 +388,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hotwired/turbo-rails@npm:^8.0.23":
+  version: 8.0.23
+  resolution: "@hotwired/turbo-rails@npm:8.0.23"
+  dependencies:
+    "@hotwired/turbo": "npm:^8.0.23"
+    "@rails/actioncable": "npm:>=7.0"
+  checksum: 10c0/58f46b787674029bc70e7a8efd734036214258805686384c8969d360320c33886c90c4da3c08abee3dc9c3ec2672e9c088d9205a2fe1f8b5fee230ce23cfb188
+  languageName: node
+  linkType: hard
+
+"@hotwired/turbo@npm:^8.0.23":
+  version: 8.0.23
+  resolution: "@hotwired/turbo@npm:8.0.23"
+  checksum: 10c0/600ba4ba7632e27c3ed9e80a2114715df94302d3d3b72b0a70efcd7c31477b377228a7fad629eeb2e4b2d778bf65571b176fc76a6bc5603dfc814810c0a815d6
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.2":
   version: 0.19.2
   resolution: "@humanfs/core@npm:0.19.2"
@@ -684,6 +701,13 @@ __metadata:
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
   checksum: 10c0/5bd7576bb1b38a47a7fc7b51ac9f38748e772beebc56200450c4a817d712232b8f1d3ef70532c80840243c657d491cf6a6be1e3a214cff907645819fdc34aadd
+  languageName: node
+  linkType: hard
+
+"@rails/actioncable@npm:>=7.0":
+  version: 8.1.301
+  resolution: "@rails/actioncable@npm:8.1.301"
+  checksum: 10c0/50d395e012f23b7cbdd18ad42077baaf8f15fd2b3e55cdc93e0ae771c7d24ec0deeea97062e7e9549f0ebeae3f90d6a32ef7de909389d957f87e3384fe23501e
   languageName: node
   linkType: hard
 
@@ -5063,6 +5087,7 @@ __metadata:
   dependencies:
     "@amcharts/amcharts5": "npm:^5.20.0"
     "@hotwired/stimulus": "npm:^3.2.2"
+    "@hotwired/turbo-rails": "npm:^8.0.23"
     "@namics/stylelint-bem": "npm:^11.1.0"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
     "@tailwindcss/vite": "npm:^4.3.3"

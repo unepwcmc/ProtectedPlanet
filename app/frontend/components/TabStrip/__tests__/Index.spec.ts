@@ -20,13 +20,13 @@ describe('TabStrip', () => {
   it('selects the first child by default', () => {
     const wrapper = mountTabStrip()
 
-    expect(wrapper.findAll('li')[0].classes()).toContain('ct-search-areas-tab-strip-tab--active')
+    expect(wrapper.findAll('li')[0].classes()).toContain('ct-tab-strip-tab--active')
   })
 
   it('honours defaultSelectedId over the first child', () => {
     const wrapper = mountTabStrip({ defaultSelectedId: 'site' })
 
-    expect(wrapper.findAll('li')[2].classes()).toContain('ct-search-areas-tab-strip-tab--active')
+    expect(wrapper.findAll('li')[2].classes()).toContain('ct-tab-strip-tab--active')
   })
 
   it('emits click:tab and updates the active tab on click', async () => {
@@ -35,7 +35,7 @@ describe('TabStrip', () => {
     await wrapper.findAll('li')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')?.[0]).toEqual(['country'])
-    expect(wrapper.findAll('li')[1].classes()).toContain('ct-search-areas-tab-strip-tab--active')
+    expect(wrapper.findAll('li')[1].classes()).toContain('ct-tab-strip-tab--active')
   })
 
   it('follows preSelectedId when it changes externally', async () => {
@@ -43,7 +43,7 @@ describe('TabStrip', () => {
 
     await wrapper.setProps({ preSelectedId: 'site' })
 
-    expect(wrapper.findAll('li')[2].classes()).toContain('ct-search-areas-tab-strip-tab--active')
+    expect(wrapper.findAll('li')[2].classes()).toContain('ct-tab-strip-tab--active')
     expect(wrapper.emitted('click:tab')?.at(-1)).toEqual(['site'])
   })
 
@@ -65,6 +65,6 @@ describe('TabStrip', () => {
     await wrapper.findAll('li')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')).toBeUndefined()
-    expect(wrapper.findAll('li')[0].classes()).toContain('ct-search-areas-tab-strip-tab--active')
+    expect(wrapper.findAll('li')[0].classes()).toContain('ct-tab-strip-tab--active')
   })
 })

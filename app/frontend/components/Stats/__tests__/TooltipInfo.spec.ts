@@ -13,12 +13,13 @@ describe('StatsTooltipInfo', () => {
     })
 
     expect(wrapper.find('svg').exists()).toBe(true)
-    expect(wrapper.find('[role="tooltip"]').attributes('style')).toContain('display: none')
+    // The tooltip target is v-if'd (not merely hidden via style) until active.
+    expect(wrapper.find('[role="tooltip"]').exists()).toBe(false)
 
     await wrapper.find('.ct-tooltip-second__trigger').trigger('click')
 
     const target = wrapper.find('[role="tooltip"]')
-    expect(target.attributes('style')).not.toContain('display: none')
+    expect(target.exists()).toBe(true)
     expect(target.text()).toContain('Some description')
     expect(target.text()).toContain('National designations')
     expect(target.text()).toContain('12')

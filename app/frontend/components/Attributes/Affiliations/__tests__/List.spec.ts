@@ -24,7 +24,7 @@ const translations = {
 describe('AttributesAffiliationsList', () => {
   it('renders one item per parcel group, sub-titled with the parcel id', () => {
     const wrapper = mount(AttributesAffiliationsList, {
-      props: { affiliationsByParcel, subTitle: 'Parcel ID', translations }
+      props: { affiliationsByParcel, forPdf: false, subTitle: 'Parcel ID', translations }
     })
 
     const subTitles = wrapper.findAll('.ct-attributes-affiliations-list__subtitle').map(el => el.text())

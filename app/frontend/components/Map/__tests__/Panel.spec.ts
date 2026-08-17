@@ -21,7 +21,7 @@ describe('Map Panel', () => {
     const wrapper = mount(Panel, { props: { overlays, title: 'Filters' } })
 
     expect(wrapper.find('.ct-map-header__title').text()).toBe('Filters')
-    expect(wrapper.findAll('.ct-map-panel__overlay')).toHaveLength(1)
+    expect(wrapper.findAll('.ct-map-overlay')).toHaveLength(1)
     expect(wrapper.find('.ct-map-panel__body').isVisible()).toBe(true)
   })
 

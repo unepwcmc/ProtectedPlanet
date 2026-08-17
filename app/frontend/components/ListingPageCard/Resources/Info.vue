@@ -11,27 +11,25 @@
     class="ct-listing-page-card-resources-card-info__summary"
     v-html="summary"
   />
-  <template v-if="url">
-    <a
-      v-if="fileUrl"
-      class="ct-listing-page-card-resources-card-info__download"
-      :href="fileUrl"
-      target="_blank"
-      :title
-    >
-      <IconDownload class="ct-listing-page-card-resources-card-info__download-icon" />
-    </a>
-    <a
-      v-if="linkUrl"
-      class="ct-listing-page-card-resources-card-info__external-link"
-      :href="linkUrl"
-      target="_blank"
-      :title
-    >
-      <span v-html="linkTitle" />
-      <IconArrowExternal class="ct-listing-page-card-resources-card-info__external-link-icon" />
-    </a>
-  </template>
+  <a
+    v-if="fileUrl"
+    class="ct-listing-page-card-resources-card-info__download"
+    :href="fileUrl"
+    target="_blank"
+    :title
+  >
+    <IconDownload class="ct-listing-page-card-resources-card-info__download-icon" />
+  </a>
+  <a
+    v-if="linkUrl"
+    class="ct-listing-page-card-resources-card-info__external-link"
+    :href="linkUrl"
+    target="_blank"
+    :title
+  >
+    <span v-html="linkTitle" />
+    <IconArrowExternal class="ct-listing-page-card-resources-card-info__external-link-icon" />
+  </a>
 </template>
 
 <script setup lang="ts">

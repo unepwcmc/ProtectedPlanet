@@ -88,12 +88,18 @@ export function registerTurboMountComponents(map: Record<string, TurboMountLoade
   }
 
   scan(document)
-  if (typeof MutationObserver === 'undefined' || !document.body) return
+  if (typeof MutationObserver === 'undefined' || !document.documentElement) return
+  // Observe <html>, not <body>: Turbo Drive replaces the whole <body> element
+  // on navigation (it doesn't just mutate its children), so an observer bound
+  // to the original document.body would keep watching a detached node after
+  // the first Turbo visit and miss every turbo_mount host on later pages.
+  // <html> itself is never replaced, so this survives both a full body swap
+  // and Turbo 8's in-place morph render.
   new MutationObserver((mutations) => {
     mutations.forEach(mutation =>
       mutation.addedNodes.forEach((node) => {
         if (node instanceof HTMLElement) scan(node)
       })
     )
-  }).observe(document.body, { childList: true, subtree: true })
+  }).observe(document.documentElement, { childList: true, subtree: true })
 }

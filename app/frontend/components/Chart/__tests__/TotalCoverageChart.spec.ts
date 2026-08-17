@@ -23,7 +23,7 @@ describe('ChartTotalCoverageChart', () => {
     expect(wrapper.find('.ct-total-coverage-chart__label--total').text()).toBe('56.78%')
   })
 
-  it('renders one legend entry per bar, total first then coverage', () => {
+  it('renders one legend entry per bar, coverage first then total', () => {
     const wrapper = mount(ChartTotalCoverageChart, {
       props: {
         total: { legend_colour_class: 'tw-shared-chart-legend-colour-blue', title: 'Blue legend', value: '2' },
@@ -33,9 +33,9 @@ describe('ChartTotalCoverageChart', () => {
 
     const legendItems = wrapper.findAll('.ct-total-coverage-chart__legend')
     expect(legendItems).toHaveLength(2)
-    expect(legendItems[0].find('.ct-total-coverage-chart__legend-key').classes()).toContain('tw-shared-chart-legend-colour-blue')
-    expect(legendItems[0].text()).toBe('Blue legend')
-    expect(legendItems[1].find('.ct-total-coverage-chart__legend-key').classes()).toContain('tw-shared-chart-legend-colour-aqua')
-    expect(legendItems[1].text()).toBe('Aqua legend')
+    expect(legendItems[0].find('.ct-total-coverage-chart__legend-key').classes()).toContain('tw-shared-chart-legend-colour-aqua')
+    expect(legendItems[0].text()).toBe('Aqua legend')
+    expect(legendItems[1].find('.ct-total-coverage-chart__legend-key').classes()).toContain('tw-shared-chart-legend-colour-blue')
+    expect(legendItems[1].text()).toBe('Blue legend')
   })
 })

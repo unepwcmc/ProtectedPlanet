@@ -26,6 +26,12 @@
 // never actually skipped buys nothing, it just adds a network round-trip
 // before it can mount. Static imports bundle them straight into this
 // entrypoint's own chunk instead.
+// Turbo Drive: intercepts same-origin link clicks/form submits and swaps the
+// <body> via fetch instead of a full page reload. Stimulus (which turbo-mount
+// is built on) already handles island mount/unmount across that swap; see
+// turboMount.ts and useAnalytics.ts for the two places that needed to adapt.
+import '@hotwired/turbo-rails'
+
 import Banner from '@/components/Banner/Index.vue'
 import NavBar from '@/components/NavBar/Index.vue'
 import SearchSiteTopbar from '@/components/Search/SiteTopbar.vue'

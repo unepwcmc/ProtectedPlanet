@@ -40,7 +40,7 @@ describe('MapPaSearch', () => {
 
     await wrapper.find('.ct-map-pa-search__input').setValue('ab')
 
-    expect(wrapper.find('.ct-map-pa-search__error-message').text()).toBe(errorMessages.invalid_search_string)
+    expect(wrapper.find('.ct-map-pa-search__result--no-pointer').text()).toBe(errorMessages.invalid_search_string)
     expect(fetch).not.toHaveBeenCalled()
   })
 
@@ -68,7 +68,7 @@ describe('MapPaSearch', () => {
     const wrapper = mountSearch()
 
     await wrapper.find('.ct-map-pa-search__input').setValue('xyz')
-    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__error-message').text()).toBe(errorMessages.no_results))
+    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__result--no-pointer').text()).toBe(errorMessages.no_results))
   })
 
   it('emits zoomTo with the result shaped as ZoomToOptions when a result is clicked', async () => {

@@ -1,5 +1,6 @@
 <%= render partial: "layouts/partials/hero/small", locals: {
-  title: t('search.search-areas-title')
+  title: t('search.search-areas-title'),
+  has_bottom_shadow: true
 } %>
 
 <%= turbo_mount "SearchAreasPage", props: {

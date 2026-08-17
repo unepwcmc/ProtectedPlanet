@@ -267,7 +267,7 @@ export interface MapPanelProps {
   type?: string
   autocompleteErrorMessages?: AutocompleteErrorMessages
   autocompletePlaceholder?: string
-  disclaimer: DisclaimerText
+  disclaimer?: DisclaimerText
   mapiIsForRegionCountryPA?: boolean
 }
 
