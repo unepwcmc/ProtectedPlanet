@@ -2,7 +2,7 @@
   title: t('search.search-areas-title')
 } %>
 
-<%= frontend_mount "SearchAreasPage", props: {
+<%= turbo_mount "SearchAreasPage", props: {
   configAutocomplete: @config_search_areas,
   downloadButtonText: t('global.button.download'),
   downloadOptions: @download_options,

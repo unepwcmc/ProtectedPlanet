@@ -3,7 +3,7 @@
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label
   } %>
-  <%= frontend_mount "Listing", props: {
+  <%= turbo_mount "Listing", props: {
     endpointSearch: search_cms_path,
     filterGroups: get_category_filters,
     gaId: "Slug: #{@cms_page.slug}",

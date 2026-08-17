@@ -1,7 +1,7 @@
 <% show_tab_triggers = thematic_and_data_area_show_tab_triggers?(tabs_list) %>
 <% tab_extras = local_assigns[:tab_extras] %>
 <% if show_tab_triggers %>
-  <%= frontend_mount "Tabs", props: {
+  <%= turbo_mount "Tabs", props: {
     tabs: thematic_and_data_area_vue_tabs(tabs_list, tab_extras),
     preselectedTab: params[:tab],
     gaId: ga_id

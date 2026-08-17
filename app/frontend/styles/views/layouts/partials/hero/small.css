@@ -6,7 +6,8 @@
   bg-white
   min-h-37.5
   md:min-h-52.5
-  lg:min-h-78.75;
+  lg:min-h-78.75
+  tw-shared-shadow-bottom-grey;
 }
 
 .vw-layouts-partials-hero-small__container {

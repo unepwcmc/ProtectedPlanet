@@ -1,5 +1,5 @@
 <%= render layout: "partials/charts/chart-section", locals: { title: title, content: content } do %>
-  <%= frontend_mount "AmChartMultiline", props: {
+  <%= turbo_mount "AmChartMultiline", props: {
           data: chart_data,
           dots: true
   } %>

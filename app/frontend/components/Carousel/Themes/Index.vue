@@ -132,7 +132,7 @@ const swiperSettings = {
   border-none
   bg-theme-primary
   text-white
-  shadow-md
+  tw-shared-shadow-bottom-grey-light
   transition-colors
   duration-200
   hover:bg-theme-primary-dark;

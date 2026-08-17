@@ -24,7 +24,7 @@
             <%= t('stats.wdpa.total') %>
           </span>
           <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
-          <%= frontend_mount "StatsTooltipInfo", key: "wdpa", props: {
+          <%= turbo_mount "StatsTooltipInfo", props: {
               description: t('stats.wdpa_tooltip.description'),
               designationsLabel: t('stats.wdpa_tooltip.designations'),
               designationsCount: wdpa_national_designations_count
@@ -122,7 +122,7 @@
           </span>
           <div>
             <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
-            <%= frontend_mount "StatsTooltipInfo", key: "oecm", props: {
+            <%= turbo_mount "StatsTooltipInfo", props: {
                 description: t('stats.oecm_tooltip.description'),
                 designationsLabel: t('stats.oecm_tooltip.designations'),
                 designationsCount: oecm_national_designations_count

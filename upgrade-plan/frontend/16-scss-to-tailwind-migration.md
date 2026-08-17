@@ -215,7 +215,7 @@ often share one legacy partial (e.g. `_lists.scss` styles both `Attributes/*` an
 
 ## Wave overview
 
-| Wave | Scope | Depends on | Touches | Status (re-audited 2026-08-10) |
+| Wave | Scope | Depends on | Touches | Status (re-audited 2026-08-14 — all waves done) |
 |---|---|---|---|---|
 | **T0** | Delete confirmed-dead SCSS; fix stale doc refs; codify `vw-` (rule 4b) | — | docs only + 8 files deleted | ✅ done |
 | **T1** | Shared Tailwind foundation — port mixins/functions to `@theme`/`@utility`, split `shared.css` | T0 | `styles/shared.css` → `styles/shared/*.css`, `tailwind.css` `@theme` | ✅ done (+ 7 more shared files added post-hoc, see T1 addendum) |
@@ -223,11 +223,11 @@ often share one legacy partial (e.g. `_lists.scss` styles both `Attributes/*` an
 | **T3** | Views-only page shells + static card grids + form + CMS wysiwyg | T1 | ERB only, 0 Vue | **✅ done** (only `helpers/_cms.scss` deletion + `_helpers.scss` cleanup + a live-browser check left) |
 | **T4** | Vue-only leaves with no existing coupling (NavBar, Listing, Pagination, Search/SearchAreas non-exception, Download, form checkboxes) | T1 | Vue templates + new `ct-` styles | **✅ done** |
 | **T5** | Maps (`Map/*` — 8 sub-islands, `_map.scss` views wrapper) | T1, T4 | Vue only (the ERB-wrapper part of the original scope turned out to already be done, see below) | **✅ done** |
-| **T6** | Charts + Stats (closes Wave-8 rule-4 exceptions) | T1 | Vue only | 11/~13 components done — `TotalCoverageChart`, `AmChart/{Pie,Multiline}`, `Chart/RowStacked`, `Stats/{Designations,IucnCategories,Governance,Sites,Sources,Message}`, `Attributes/*`, `RegionCountryPages/Index` (wrapper); only `Stats/{Coverage,TooltipInfo}` + the `card--stats-overview` ERB card remain |
+| **T6** | Charts + Stats (closes Wave-8 rule-4 exceptions) | T1 | Vue only | **✅ done** — `TotalCoverageChart`, `AmChart/{Pie,Multiline}`, `Chart/RowStacked`, `Stats/{Designations,IucnCategories,Governance,Sites,Sources,Message,Coverage,TooltipInfo}`, `Attributes/*`, `RegionCountryPages/Index` (wrapper), and the `card--stats-overview` ERB card (`vw-partials-stats-stats-overview*`) all confirmed `ct-`/`vw-`-migrated on disk (re-verified 2026-08-14; this row was stale even though the CHANGELOG's own T6 entry already documents the closing session) |
 | **T7** | Cards family + Listing cards + Carousel (closes `ListingPageCard` exception) | T1, T4 | Vue + a few ERB card grids | **✅ done** (2026-08-13) — everything including `Dropdown/ParcelsDropdown.vue` (the last item) migrated |
 | **T8** | PAME + Dropdown + Select (closes Wave-9/10 rule-4 exceptions) | T1 | Vue only | **✅ done** (2026-08-13) |
 | **T9** | Residual tabs/filters coupling (`_tabs.scss`, `_filters-sidebar.scss`) | T4, T5, T7 | Vue only | **✅ done** (2026-08-14 — confirmed already closed by undocumented commits) |
-| **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide | **almost done** (2026-08-14) — legacy SCSS tree fully deleted (`pdf.scss` ported to `global/pdf.css`, option (a)), bourbon/neat/sass-rails removed; only preflight-enable + full sweep left |
+| **T10** | Finish — enable preflight, delete legacy pipeline, handle `pdf.scss` | T0–T9 | site-wide | **✅ done** (2026-08-14) — legacy SCSS tree fully deleted (`pdf.scss` ported to `global/pdf.css`, option (a)), bourbon/neat/sass-rails removed, preflight confirmed live (`tailwind.css` uses the plain `@import "tailwindcss";` shorthand) and the full-site Playwright sweep completed with zero regressions — re-verified 2026-08-14, `app/assets/stylesheets/` contains only the out-of-scope `comfy/admin/cms/custom.scss` |
 
 *Estimates below assume the same "AI-assisted, 1 FTE, verify live in browser every wave" cadence used
 throughout the Vue migration (see CHANGELOG.md) — screenshots before/after, not just Vitest/typecheck,
@@ -1264,9 +1264,14 @@ confirmed via the server log to predate this session.
       out of scope) — everything else deleted. Done 2026-08-14.
 - [x] Tailwind preflight enabled — found already live since 2026-08-06 (undocumented side effect of
       an unrelated commit), confirmed via compiled CSS; this doc now reflects reality. See T10.
-- [x] `bourbon`/`neat`/`sass-rails` removed from the Gemfile. `sassc`/`sassc-rails` deliberately kept
-      — pulled in transitively by `comfortable_mexican_sofa` for the out-of-scope admin custom.scss,
-      not by anything in this doc's scope anymore.
+- [x] `bourbon`/`neat`/`sass-rails` removed from the Gemfile. **Re-verified 2026-08-14: this has moved
+      further than expected** — `Gemfile`/`Gemfile.lock` now contain zero `sass`/`sassc`/`sassc-rails`
+      gems at all (not just the explicit `sass-rails` this doc originally tracked). The CMS gem itself
+      changed too, from `comfortable_mexican_sofa` to `comfortable_media_surfer` (~> 3.1) — presumably
+      as part of the backend's Rails 5.2→8.0 upgrade, which landed alongside/after this doc's own T10
+      close-out and was never cross-referenced here. Whether `comfy/admin/cms/custom.scss` is still
+      compiled by anything (no Sprockets manifest reference found) is now an open question — see
+      README.md's "Next" section.
 - [x] CODE-CONVENTIONS.md rule 4's exception-precedent list is empty (or explicitly states none
       remain) — already says so as of T8's closure ("none are active exceptions any more").
 - [x] PDF export smoke-tested post-cutover (country/region/PDF-export all verified in a real browser

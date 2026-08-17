@@ -11,7 +11,7 @@
           <%= @update_date %>
         </span>
       </span>
-      <%= frontend_mount "GaLink",
+      <%= turbo_mount "GaLink",
             tag: :span,
             class: "vw-home__download-link",
             props: {
@@ -27,7 +27,7 @@
     <%= render partial: "partials/cards/squares", locals: { cards: pas_categories } %>
   </div>
   <div class="vw-home__map">
-    <%= frontend_mount "Map", props: {
+    <%= turbo_mount "Map", props: {
       servicesForPointQuery: @main_map[:point_query_services],
       popupAttributes: @main_map[:popup_attributes],
       title: @main_map[:title],

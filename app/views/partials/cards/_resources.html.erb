@@ -12,7 +12,7 @@
       <% end %>
     <% end %>
   </div>
-  <%= frontend_mount "ListingPageCardResources", props: {
+  <%= turbo_mount "ListingPageCardResources", props: {
         cards: @items[:cards].map do |card|
           {
             date: card[:date],

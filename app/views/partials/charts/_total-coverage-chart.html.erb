@@ -5,6 +5,6 @@
         <%= chart[:title] %>
       </h3>
     <% end %>
-    <%= frontend_mount "ChartTotalCoverageChart", key: index, props: chart[:charts_data] %>
+    <%= turbo_mount "ChartTotalCoverageChart", props: chart[:charts_data] %>
   <% end %>
 <% end %>

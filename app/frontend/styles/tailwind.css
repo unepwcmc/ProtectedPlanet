@@ -34,6 +34,7 @@
 
 @import './shared/background.css';
 @import './shared/base.css';
+@import './shared/borders.css';
 @import './shared/buttons.css';
 @import './shared/card.css';
 @import './shared/cms.css';
@@ -51,7 +52,7 @@
 @import './shared/themes.css';
 @import './shared/typography.css';
 
-@import './global/pdf.css';
+@import './global/pdf-export.css';
 
 /* All styles used in views */
 @import './views/data/gdpame/index.css';

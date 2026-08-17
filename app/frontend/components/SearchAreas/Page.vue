@@ -324,7 +324,7 @@ handleQueryString()
 
 .ct-search-areas-page__bar {
   @apply
-  py-2
+  py-6
   tw-shared-base-container
   tw-shared-base-flex-gap-3-md-gap-6
   items-center

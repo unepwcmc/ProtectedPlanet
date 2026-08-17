@@ -3,7 +3,7 @@
   sticky
   top-0
   z-2
-  shadow-[0_3px_3px_#919191]
+  tw-shared-shadow-bottom-grey
   bg-white;
 }
 

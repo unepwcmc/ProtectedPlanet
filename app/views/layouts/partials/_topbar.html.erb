@@ -3,9 +3,9 @@
     <%= render '/partials/global/site-logo' %>
     <div class="vw-layouts-partials-topbar__right">
       <% unless @for_pdf %>
-        <%= frontend_mount "NavBar", props: { links: get_nav_primary }, class: "vw-layouts-partials-topbar__nav" %>
+        <%= turbo_mount "NavBar", props: { links: get_nav_primary }, class: "vw-layouts-partials-topbar__nav" %>
       <% end %>
-      <%= frontend_mount "SearchSiteTopbar", props: {
+      <%= turbo_mount "SearchSiteTopbar", props: {
       endpoint: "/#{locale}/search?search_term=",
       placeholder: t('global.placeholder.search-site')
     }, class: "vw-layouts-partials-topbar__search" %>

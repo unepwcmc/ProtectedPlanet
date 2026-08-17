@@ -42,6 +42,11 @@ gem 'net-scp'
 # 3.x needs Ruby 2.7+ (filter_map) and Vite 5+ (Node 18+). Pin 2.x for Rails 5 / Ruby 2.6 / Node 12 spike.
 gem 'vite_rails', '~> 3.11.1'
 
+# Pilot alongside the homegrown frontend_mount/islands.ts mounter (Banner/Download/Tabs, see
+# app/frontend/lib/turboMount.ts) before deciding whether to migrate the rest. See
+# upgrade-plan/frontend/14-architecture-and-design.md and the "turbo-mount spike result" memory.
+gem 'turbo-mount', '~> 0.4.4'
+
 group :production, :staging do
 #  gem 'unicorn'
   gem 'dalli', '~> 3.2'

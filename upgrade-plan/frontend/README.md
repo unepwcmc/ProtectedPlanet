@@ -8,7 +8,7 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 |                     |                                                                                                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | **Target**          | Vite 7 · Vue 3 · island mounts (Rails 7/8 desirable but **not required** for the frontend — see gates)                          |
-| **Now**             | Rails 5.2 · **Ruby 2.7.8 ✓ · Node 24.4.1 ✓ · Vite 7 + vite-plugin-rails ✓** · Webpacker⇄Vite dual bundler ✓ · Waves 0–10 done (see status below) |
+| **Now**             | **Rails 8.0.5.1 · Ruby 3.3.7 · Node 24.4.1 ✓ · Vite 7 + vite-plugin-rails ✓** · Webpacker fully removed (Vue 3 / Vite only) · Waves 0–12 done + SCSS→Tailwind (T0–T10) done (see status below) |
 | **Owner**           | Frontend (+ Vite/ERB integration, Comfy admin JS)                                                                               |
 | **Not in estimate** | Backend Rails 5→8 · CMS redesign                                                                                               |
 | **Scope**           | **[Live inventory](./01-live-inventory.md)** — nav-led; ~12 entrypoints; dead code + **Vue 2–only npm** replacements in phase 4 |
@@ -17,38 +17,63 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 
 ---
 
-## Status — G1 gate done (Jul 2026)
+## Status — Vue migration + SCSS→Tailwind both fully done (re-verified 2026-08-14)
 
-**Stack today:** Ruby 2.7.8, Node 24.4.1, Vite 7 + `vite-plugin-rails` (`vite_rails` 3.11.1) running
-**alongside** Webpacker/Vue 2 (dual bundler, cold-start safe). Islands foundation built —
+**Stack today:** Rails 8.0.5.1, Ruby 3.3.7, Node 24.4.1, Vite 7 + `vite-plugin-rails` (`vite_rails`
+3.11.1). **Webpacker is gone** — `app/javascript` no longer exists, there is no dual bundler, no
+`#v-app`, no Vue 2 anywhere in the tree (`bin/webpack`, `config/webpacker.yml`, the `webpacker`
+Docker service, and `gem 'webpacker'` are all removed). Islands foundation —
 `frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue,
-`MutationObserver`), registered in `entrypoints/layout.ts`. Tailwind v4 added via Vite (preflight
-disabled, additive to the legacy SCSS — [08 Styles](./08-styles-and-assets.md#decision-tailwind-v4--added-additive-july-2026)).
-Vitest set up (282 tests, all green).
+`MutationObserver`), registered in `entrypoints/layout.ts` — is now the *only* mount path. Tailwind v4
+is the **only** styling system: `app/assets/stylesheets/` contains nothing but the out-of-scope
+`comfy/admin/cms/custom.scss`, and preflight is enabled (`tailwind.css` uses the plain
+`@import "tailwindcss";` shorthand — confirmed live, not disabled). Vitest is set up and green (test
+count has grown well past the old 282 baseline as more islands landed; re-run `yarn test` for the
+current number rather than trusting a stale figure here).
 
-**Waves 0–10 are done.** Full narrative — decisions made, bugs found and fixed, how each wave was
-verified — lives in **[CHANGELOG.md](./CHANGELOG.md)**; this table is just the current state:
+**Waves 0–12 are done — the entire Vue 2→3 migration is finished**, and separately **the SCSS→Tailwind
+migration (waves T0–T10, tracked in [16](./16-scss-to-tailwind-migration.md)) is also fully done**.
+Full narrative — decisions made, bugs found and fixed, how each wave was verified — lives in
+**[CHANGELOG.md](./CHANGELOG.md)**; note that Waves 11 and 12 below landed via direct commits
+(`feat: migrate carousel` 2026-07-29, `feat: migrate site-search` 2026-07-30, `feat: remove webpack`
+2026-07-31) that were never looped back into CHANGELOG.md's wave narrative — confirmed done by direct
+filesystem/git verification, not by a written wave entry. This table is just the current state:
 
 | Wave | Scope | Status |
 |---|---|---|
 | 0 | Delete dead code | ✓ done |
 | 1 | Simple leaves (Banner, ga-link, counter, listing cards) | ✓ done |
-| 2 | Mixin-only leaves (tooltip, tooltip-second) | ✓ done — both now wired live (tooltip-second in Wave 8, tooltip in Wave 10) |
-| 3 | Global chrome (nav, search topbar), break `#v-app` | mostly done — `search-site` deferred (still Vue2) |
+| 2 | Mixin-only leaves (tooltip, tooltip-second) | ✓ done — both wired live (tooltip-second in Wave 8, tooltip in Wave 10) |
+| 3 | Global chrome (nav, search topbar), break `#v-app` | ✓ done — `search-site` migrated 2026-07-30 (`Search/SiteTopbar.vue`), `TabsFake`/`#v-app` no longer exist anywhere |
 | 4 | Pinia + downloads | ✓ done |
-| 5 | Listings + tabs | ✓ done — `Tabs` island only covers pages without `tab_extras` |
+| 5 | Listings + tabs | ✓ done — `Tabs` island now covers `tab_extras` pages too (wdpca/gdpame/effectiveness all render via `frontend_mount "Tabs"`, no legacy fallback left) |
 | 6 | Maps (MapLibre) | ✓ done |
 | 7 | Search areas | ✓ done |
-| 8 | Charts + stats | ✓ done — amCharts stays on v4 |
+| 8 | Charts + stats | ✓ done — amCharts since moved to v5 (see Next below) |
 | 9 | PA show `attributes-*` | ✓ done |
 | 10 | PAME | ✓ done |
-| 11 | Carousel (flickity → Swiper/CSS) | not started — next up |
-| 12 | Finish (remove `#v-app`, Webpacker) | not started, blocked on 3 and 11 landing |
+| 11 | Carousel (flickity → Swiper) | ✓ done — `package.json` has `swiper`, zero `flickity`/`vue-flickity` references remain anywhere |
+| 12 | Finish (remove `#v-app`, Webpacker) | ✓ done — `app/javascript`, `config/webpacker.yml`, `bin/webpack`, the `webpacker` Docker service, and `gem 'webpacker'` are all gone |
 
-**Next:** the entire Vue 2→3 migration (Waves 0–12) and Webpacker removal are done. Remaining frontend
-work: **[16 — SCSS → Tailwind migration](./16-scss-to-tailwind-migration.md)** (retire the ~8.1k-line
-legacy SCSS pipeline in waves T0–T10, closing the CODE-CONVENTIONS.md rule-4 exceptions along the way)
-and amCharts 4→5 (deferred out of Wave 8, still not started).
+**Next:** the entire Vue 2→3 migration (Waves 0–12) **and** the SCSS→Tailwind migration (T0–T10) are
+both fully done — there is exactly one styling system and one frontend framework left in the repo.
+Remaining frontend work is smaller than previously tracked:
+- **amCharts 4→5 is no longer open** — `package.json` already pins `@amcharts/amcharts5` and both
+  `AmChart/Multiline.vue`/`AmChart/Pie.vue` import from `@amcharts/amcharts5`/`amcharts5/xy`/`percent`
+  with zero `amcharts4` references anywhere. This item was carried in prior status text as "deferred,
+  not started" — that was stale; verify against `package.json` again before trusting either claim in
+  a future pass.
+- **The Dart Sass compiler swap** (`sassc`→`dartsass-rails`, tracked in
+  [08](./08-styles-and-assets.md)) **has no `sass`/`sassc`/`sass-rails` gem left to swap** —
+  `Gemfile`/`Gemfile.lock` now contain zero Sass-family gems at all (the last one, `sassc-rails`
+  transitively via `comfortable_mexican_sofa`, is gone too as of this check). Since
+  `app/assets/stylesheets/` holds only the out-of-scope, apparently-uncompiled-by-Sass-now
+  `comfy/admin/cms/custom.scss`, this task may already be moot rather than merely de-risked — confirm
+  how Comfy admin CSS is actually built today before deciding whether [08](./08-styles-and-assets.md)'s
+  Dart Sass task still needs doing at all.
+- Repo root has an untracked `CLEANUP_CHECKLIST.md` plus a batch of untracked `bin/*` shims
+  (`bin/sidekiq`, `bin/irb`, `bin/rackup`, etc.) sitting in git status — unrelated to this migration but
+  open items in the working tree worth triaging.
 
 ### Decisions made
 - **Vite/Rails glue — `vite-plugin-rails`** (not `vite-plugin-ruby`) is the npm package actually wired up (`vite.config.mts`) alongside the `vite_rails` gem. [02](./02-vite-on-rails-8.md) corrected to match.
@@ -56,7 +81,7 @@ and amCharts 4→5 (deferred out of Wave 8, still not started).
 - **Analytics — `vue-gtag`** (GA4) replaces `vue-analytics`. Detail: [04](./04-vue3-and-state.md#dependency-replacements).
 
 ### Decisions to revisit later
-- **Mounting library — homegrown for now; revisit `turbo-mount` after Ruby 3 / Rails 6+.** We use a small in-house mounter (`frontend_mount` + `islands.ts`). [`turbo-mount`](https://github.com/skryukov/turbo-mount) (Evil Martians, Stimulus-based) is the "batteries-included" equivalent, but its **gem requires Ruby ≥ 3.0 and railties ≥ 6.0** — won't install on our **Ruby 2.7.8 / Rails 5.2** — and it pulls in Hotwire/Stimulus. Because views only ever call `frontend_mount`, adopting it later is a ~2-file swap (Vue SFCs never move). Detail: [14 Architecture](./14-architecture-and-design.md#mounting-mechanism-and-the-turbo-mount-decision).
+- **Mounting library — homegrown for now; `turbo-mount`'s gem-version blocker is gone.** We use a small in-house mounter (`frontend_mount` + `islands.ts`). [`turbo-mount`](https://github.com/skryukov/turbo-mount) (Evil Martians, Stimulus-based) is the "batteries-included" equivalent — its gem requires Ruby ≥ 3.0 and railties ≥ 6.0, which was the original reason it was rejected on **Ruby 2.7.8 / Rails 5.2**. **The backend has since moved to Ruby 3.3.7 / Rails 8.0.5.1** (verified via `.ruby-version`/`Gemfile.lock`, 2026-08-14) — that gate no longer applies. Still not adopted because it pulls in Hotwire/Stimulus and the homegrown mounter already works; this is now a pure cost/benefit call, not a version blocker. Because views only ever call `frontend_mount`, adopting it later remains a ~2-file swap (Vue SFCs never move). Detail: [14 Architecture](./14-architecture-and-design.md#mounting-mechanism-and-the-turbo-mount-decision).
 
 ---
 
@@ -117,7 +142,7 @@ With that, a single bumped Node (24 LTS) runs **both** Webpacker 4 (Vue 2, with 
 
 ### Recommended execution order (constrained path — current Ruby/Rails)
 
-> **Status (Jul 2026):** steps **1–6 ✓ done** (Waves 0–10, see status table above) · step **7 pending** (Webpacker removal, blocked on Waves 3, 11–12).
+> **Status (re-verified 2026-08-14):** steps **1–7 ✓ all done** (Waves 0–12, see status table above) — Webpacker removal (step 7) landed 2026-07-31 via a direct `feat: remove webpack` commit, confirmed by `app/javascript`/`config/webpacker.yml`/`bin/webpack`/the `webpacker` Docker service/`gem 'webpacker'` all being absent from the repo today.
 
 1. **Delete genuinely-dead code now ✓ done** (safe on Rails 5.2): orphan `.vue` files, dead globals (`ChartDial`, carousel, sunburst/treemap/bar, `select-equity`/`select-dropdown`), `leaflet`, plus the last orphaned SCSS (`_select-equity.scss`). Browser polyfills (`babel-polyfill`/`es6-promise`/`url-search-params-polyfill`) are a separate, not-yet-done audit — [01](./01-live-inventory.md), [13](./13-work-while-rails-upgrades.md).
 2. **Add Vite as a Docker dev service alongside Webpacker** (dual bundler, already spiked) — [15](./15-docker-vite-dev.md).
@@ -125,7 +150,7 @@ With that, a single bumped Node (24 LTS) runs **both** Webpacker 4 (Vue 2, with 
 4. **Node 12 → 24 LTS** in the Dockerfile; add `--openssl-legacy-provider` to the webpacker service.
 5. **`vite_rails` 2→3, Vite 2.9→5** + `@vitejs/plugin-vue`.
 6. **Migrate Vue 2→3 island by island**; swap each component's Vue2-only deps (vuex→Pinia, vue-analytics→GA4, …) and drop each package once unused — [04](./04-vue3-and-state.md).
-7. **Remove Webpacker last** — service, gem, `@rails/webpacker`, config, and the legacy flag together — [03](./03-end-runtime-compilation.md), [15](./15-docker-vite-dev.md) D3.
+7. **Remove Webpacker last ✓ done** — service, gem, `@rails/webpacker`, config, and the legacy flag are all gone — [03](./03-end-runtime-compilation.md), [15](./15-docker-vite-dev.md) D3.
 
 **Webpack removal is the finish line, not the first step** — it stays until the last Vue component is on Vite. Keep the dual-Node overlap window short.
 
@@ -146,17 +171,17 @@ Full detail (decisions, bugs found/fixed, verification) per wave: **[CHANGELOG.m
 |------|----------------------|--------------|
 | **0 · Delete dead code first ✓** | `chart-dial`, carousel/`carousel-slide`, `sticky-nav`, `chart-bar`/`chart-bar-simple`, `chart-sunburst`/`chart-treemap-*`/`chart-rectangles`, `select-equity`/`select-dropdown`, ~10 orphan `.vue` | Don't migrate the dead — shrinks phase 4. Safe on Rails 5.2. |
 | **1 · Simple leaves ✓** (zero coupling) | `banner-banner`, `ga-link`, `counter`, `select-with-content`, `listing-page-card-news`, `listing-page-card-resources` | Establish the Composition-API + Tailwind + composable pattern on the lowest-risk surface. |
-| **2 · Mixin-only leaves ✓** (⚠️ `tooltip` still not wired live) | `tooltip`, `tooltip-second` | First mixin→composable extractions; no store/bus. |
-| **3 · Global chrome → break `#v-app`** ⚠️ mostly done | `nav-burger`, `search-site-topbar`, `search-site` | mixin→composable, `$eventHub`→`mitt`/emits. Once chrome is islands, **dismantle `#v-app`**. `search-site` deferred — still Vue2, still imports legacy `TabsFake.vue`. |
+| **2 · Mixin-only leaves ✓** | `tooltip`, `tooltip-second` | First mixin→composable extractions; no store/bus. Both wired live (tooltip-second in Wave 8, tooltip in Wave 10). |
+| **3 · Global chrome → break `#v-app`** ✓ done | `nav-burger`, `search-site-topbar`, `search-site` | mixin→composable, `$eventHub`→`mitt`/emits. `#v-app` dismantled. `search-site` migrated 2026-07-30 (`Search/SiteTopbar.vue`); legacy `TabsFake.vue` no longer exists. |
 | **4 · Pinia + downloads ✓** | `useDownloadStore` (port Vuex `download`), `download`, `download-item`, `download-csv`, `download-modal` | Set up **Pinia** first; downloads span pages (loaded from `layout`). |
-| **5 · Listings + tabs ✓** | `listing-page`, `tabs`/`tab-target`/`tab-trigger` | `$eventHub 'map:resize'`→composable; wire news/resources + a real tab page. `Tabs` island only replaces pages with no `tab_extras`. |
+| **5 · Listings + tabs ✓** | `listing-page`, `tabs`/`tab-target`/`tab-trigger` | `$eventHub 'map:resize'`→composable; wire news/resources + a real tab page. `Tabs` island now covers `tab_extras` pages too (wdpca/gdpame/effectiveness) — no legacy fallback left. |
 | **6 · Maps ✓** (phase 5) | `v-map` (+ `-header`/`-filters`/`-pa-search`/`-disclaimer`/`-baselayer-controls`/`-toggler`) | **MapLibre chosen** + `useMapStore` (Pinia) first. |
 | **7 · Search areas ✓** | `search-areas`, `search-areas-home`, `search-areas-input-autocomplete` (+ filters/tabs-fake/pagination leaves) | Closes the Wave 4 download-store bridge. Separate from the Map PA-search box (Wave 6). |
-| **8 · Charts + stats ✓** | `chart-row-pa`, `chart-row-stacked`, `am-chart-multiline`, `am-chart-pie`, `region-country-pages` (+ `Stats*`) | Custom SVG charts + stats are lower-risk than amCharts. **amCharts 4→5 deferred** to its own follow-up. |
+| **8 · Charts + stats ✓** | `chart-row-pa`, `chart-row-stacked`, `am-chart-multiline`, `am-chart-pie`, `region-country-pages` (+ `Stats*`) | Custom SVG charts + stats are lower-risk than amCharts. **amCharts has since moved to v5** (`package.json` pins `@amcharts/amcharts5`, zero v4 references) — no longer an open follow-up. |
 | **9 · PA show — done** | `attributes-*` (5) | mixin→composable; page's map/download pieces already Vue3 (Waves 4/6). |
 | **10 · PAME — done** | `usePameStore` (port Vuex `pame`), `filtered-table`, `pame-modal` (+ table subcomponents) | gdpame page. Also wired in the previously-unwired `tooltip` from Wave 2 (PAME table header uses it) — legacy `Tooltip.vue`/`TooltipSecond.vue` deleted. |
-| **11 · Carousel — not started** | replace `flickity` (`vue-flickity`) → Swiper/CSS | affects home + marine hero carousels. No spike done yet. |
-| **12 · Finish — not started** | remove `#v-app`, `vue.js`, Vuex, `vue-analytics`/`vue2-touch-events`/`vue-lazyload`, Webpacker + packs | Webpacker removed last, once nothing is left on Vue 2 — blocked on Wave 3's `search-site` and Wave 11 landing first. |
+| **11 · Carousel — done** | replaced `flickity`/`vue-flickity` → Swiper (`Carousel/Themes/{Index,Card,Ribbon}.vue`) | Landed 2026-07-29 via a direct `feat: migrate carousel` commit, never logged to CHANGELOG.md — confirmed done by `package.json` (`swiper` present, zero `flickity` refs anywhere). |
+| **12 · Finish — done** | removed `#v-app`, `vue.js`, Vuex, Webpacker + packs, `app/javascript` entirely | Landed 2026-07-31 via a direct `feat: remove webpack` commit, never logged to CHANGELOG.md — confirmed done: `app/javascript` has 0 files, no `v-app`/`#v-app` reference anywhere in `app/views`/`app/frontend`. |
 
 ---
 
@@ -184,4 +209,4 @@ or migrating a component: **[CODE-CONVENTIONS.md](./CODE-CONVENTIONS.md)**.
 | [16 SCSS → Tailwind](./16-scss-to-tailwind-migration.md)     | Wave-by-wave plan to retire legacy SCSS entirely      |
 
 
-*Updated July 2026*
+*Updated 2026-08-14*

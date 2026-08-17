@@ -4,6 +4,6 @@
     <%= @items[:title] %>
   </h2>
   <div class="vw-partials-carousels-themes__carousels">
-    <%= frontend_mount "CarouselThemes", props: theme_cards_vue_props(@items) %>
+    <%= turbo_mount "CarouselThemes", props: theme_cards_vue_props(@items) %>
   </div>
 </div>

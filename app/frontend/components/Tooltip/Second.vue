@@ -143,7 +143,7 @@ usePopupCloseListeners(rootEl, {
   rounded
   bg-white
   p-3
-  shadow-lg
+  tw-shared-shadow-bottom-grey-light
   tw-shared-base-flex-col-gap-2
   before:absolute
   before:-top-2

@@ -18,9 +18,8 @@
       <% stats_items.each_with_index do |stat_item, index| %>
         <div class="vw-layouts-partials-hero-marine__stat-item">
           <div class="vw-layouts-partials-hero-marine__stat-number">
-            <%= frontend_mount "Counter",
+            <%= turbo_mount "Counter",
                     tag: :span,
-                    key: index,
                     props: {
                       total: stat_item[:total],
                       trigger: "vw-layouts-partials-hero-marine__stats",

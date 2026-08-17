@@ -1,5 +1,5 @@
 <div class="vw-search">
-  <%= frontend_mount "SearchSite", props: {
+  <%= turbo_mount "SearchSite", props: {
     categories: @categories,
     dataPageLoad: @results,
     endpoint: search_results_path,

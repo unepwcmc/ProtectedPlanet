@@ -1,7 +1,7 @@
 <div class="vw-partials-bars-topbar-secondary">
   <div class="vw-partials-bars-topbar-secondary__container">
     <%= render "partials/social/social-share" %>
-    <%= frontend_mount "Download",
+    <%= turbo_mount "Download",
             props: {
               buttonText: t('global.button.download'),
               options: JSON.parse(download_options),

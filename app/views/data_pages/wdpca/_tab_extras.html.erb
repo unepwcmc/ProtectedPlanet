@@ -6,7 +6,7 @@
     <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
   </div>
   <section class="vw-data-wdpca-tab-extras__map">
-    <%= frontend_mount "Map", props: {
+    <%= turbo_mount "Map", props: {
       options: local_assigns[:map_options] || {},
       servicesForPointQuery: map[:point_query_services],
       popupAttributes: map[:popup_attributes],

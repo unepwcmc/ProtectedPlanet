@@ -59,7 +59,7 @@
     <%= render "partials/ctas/mpa-guide" %>
   </div>
   <section class="vw-thematic-marine__map">
-    <%= frontend_mount "Map", props: {
+    <%= turbo_mount "Map", props: {
     servicesForPointQuery: @map[:point_query_services],
     popupAttributes: @map[:popup_attributes],
     title: @map[:title],
@@ -70,7 +70,7 @@
     autocompletePlaceholder: map_yml[:autocomplete_placeholder] } %>
   </section>
   <div class="vw-thematic-marine__container">
-    <%= frontend_mount "StatsSites", props: {
+    <%= turbo_mount "StatsSites", props: {
     siteDetails: site_card_details(@num_of_marine_protected_areas),
     textViewAll: t('global.button.all'),
     title: "#{t('global.area-types.wdpca')} (#{@marine_total_pas_count})",

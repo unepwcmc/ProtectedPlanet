@@ -12,7 +12,7 @@
       <% end %>
     </div>
   <% end %>
-  <%= frontend_mount "ListingPageCardNews", props: {
+  <%= turbo_mount "ListingPageCardNews", props: {
         cards: @items[:cards].map do |card|
           {
             date: cms_fragment_content_datetime(:published_date, card).strftime('%d %B %y'),

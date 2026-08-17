@@ -19,7 +19,7 @@
         site_id: @protected_area.site_id,
         external_links: @presenter.external_links
       } %>
-      <%= frontend_mount "Map", props: {
+      <%= turbo_mount "Map", props: {
           options: @map_options,
           servicesForPointQuery: @map[:point_query_services],
           popupAttributes: @map[:popup_attributes],
@@ -58,7 +58,7 @@
         sources_attributes_for_current_pa_and_all_parcels: @protected_area.sources_attributes_for_current_pa_and_all_parcels,
         for_pdf: @for_pdf
       } %>
-    <%= frontend_mount "StatsSites", props: {
+    <%= turbo_mount "StatsSites", props: {
           siteDetails: site_card_details(@wdpa_other),
           textViewAll: t('global.button.all'),
           title: t('thematic_area.wdpa.other_protected_areas'),
