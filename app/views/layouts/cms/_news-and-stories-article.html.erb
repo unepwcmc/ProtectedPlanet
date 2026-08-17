@@ -3,6 +3,7 @@
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label,
     items_centre: true,
+    limited_title_width: true
   } %>
   <section class="vw-layouts-cms-news-and-stories-article__content">
     <%= cms_fragment_render("content") %>

@@ -43,7 +43,8 @@ module ThematicAndDataAreaHelper
       image: cms_fragment_render(:image, page),
       summary: cms_fragment_render('summary', page),
       title: page.fragments.find_by(identifier: 'short_title')&.content.presence || page.label,
-      items_centre: true
+      items_centre: true,
+      limited_title_width: true
     }
 
     button_link = cms_fragment_render('button-link', page)
