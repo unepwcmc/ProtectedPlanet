@@ -160,13 +160,11 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error_page(status)
-    path = "app/views/layouts/error_page.html.erb"
-    
     case status
     when 404
-       render file: Rails.root.join(path), layout: "application", status: :not_found, locals: { error_status: status }
+      render template: "layouts/error_page", layout: "application", status: :not_found, locals: { error_status: status }
     else
-      render file: Rails.root.join(path), layout: "application", status: :internal_server_error, locals: { error_status: status }
+      render template: "layouts/error_page", layout: "application", status: :internal_server_error, locals: { error_status: status }
     end
   end
 

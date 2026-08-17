@@ -71,6 +71,7 @@
 
 .tw-global-pdf-export .vw-partials-stats-stats-overview__title,
 .tw-global-pdf-export .vw-partials-stats-stats-overview__subtitle,
-.tw-global-pdf-export .vw-partials-stats-stats-overview__text {
+.tw-global-pdf-export .vw-partials-stats-stats-overview__text,
+.tw-global-pdf-export .vw-partials-charts-chart-legend__title {
   @apply text-theme-grey-black!;
 }

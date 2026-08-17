@@ -6,7 +6,8 @@
   image: cms_fragment_render(:image, @cms_page),
   summary: cms_fragment_render("summary"),
   title: @cms_page.label,
-  items_centre: true
+  items_centre: true,
+  limited_title_width: true
 } %>
   <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
   ga_id: "Slug: #{@cms_page.slug}",

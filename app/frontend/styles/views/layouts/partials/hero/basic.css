@@ -10,21 +10,23 @@
 .vw-layouts-partials-hero-basic__container {
   @apply
   tw-shared-base-container
-  flex
-  flex-col
+  tw-shared-base-flex-col
   pt-6
   md:pt-0;
 }
 
 .vw-layouts-partials-hero-basic__container--items-centre {
-  @apply mt-20;
+  @apply my-auto;
 }
 
 .vw-layouts-partials-hero-basic__content {
+  @apply tw-shared-base-flex-col-gap-6;
+}
+
+.vw-layouts-partials-hero-basic__content--limited-width {
   @apply
   md:max-w-[50%]
-  lg:max-w-[58%]
-  tw-shared-base-flex-col-gap-6;
+  lg:max-w-[58%];
 }
 
 .vw-layouts-partials-hero-basic__content--centre-text {
@@ -38,7 +40,7 @@
 }
 
 .vw-layouts-partials-hero-basic__intro {
-  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+  @apply tw-shared-font-hind-siliguri__light-lg-grey-black;
 }
 
 .vw-layouts-partials-hero-basic__link {
@@ -48,8 +50,12 @@
 }
 
 .vw-layouts-partials-hero-basic__tabs {
-  @apply 
-  tw-shared-base-container 
+  @apply
+  tw-shared-base-container
   mt-auto
   overflow-x-auto;
+}
+
+.vw-layouts-partials-hero-basic__tabs:empty {
+  @apply hidden;
 }
