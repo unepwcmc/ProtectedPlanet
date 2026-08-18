@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+# Pre-push checks for a Kamal staging deploy.
+#
+# Each deploy cycle costs ~15 minutes (remote image build) and a failure part-way
+# leaves you reading thousands of log lines. These checks reproduce, locally and
+# cheaply, the conditions that have actually broken deploys so far.
+#
+#   ./bin/preflight-deploy              # everything
+#   ./bin/preflight-deploy --skip-tests # skip the suite (~4 min) when it just ran
+#
+# NOT covered (deliberately): building Dockerfile.deploy itself. The image is
+# ~3.4GB plus build cache, and on Apple Silicon it builds under amd64 emulation —
+# slower than just deploying. The checks below target the failure modes that
+# build would have caught, without the cost.
+set -uo pipefail
+cd "$(dirname "$0")/.."
+
+SKIP_TESTS=0
+[[ "${1:-}" == "--skip-tests" ]] && SKIP_TESTS=1
+
+# The docker CLI symlink in /usr/local/bin can point at an unmounted DMG; fall
+# back to the app bundle.
+DOCKER="$(command -v docker 2>/dev/null || true)"
+[[ -x "$DOCKER" ]] || DOCKER=/Applications/Docker.app/Contents/Resources/bin/docker
+export PATH="$(dirname "$DOCKER"):$PATH"
+
+PASS=0; FAIL=0; WARN=0
+ok()   { echo "  ✅ $*"; PASS=$((PASS+1)); }
+bad()  { echo "  ❌ $*"; FAIL=$((FAIL+1)); }
+warn() { echo "  ⚠️  $*"; WARN=$((WARN+1)); }
+step() { echo; echo "── $* ──"; }
+
+step "0. environment"
+if docker info >/dev/null 2>&1; then ok "docker daemon reachable"; else bad "docker daemon not running"; exit 1; fi
+AVAIL_KB=$(df -k . | awk 'NR==2{print $4}')
+if [[ "$AVAIL_KB" -lt 5242880 ]]; then
+  warn "only $((AVAIL_KB/1024/1024))GB free — builds and asset compiles may fail (docker builder prune -af)"
+else
+  ok "disk: $((AVAIL_KB/1024/1024))GB free"
+fi
+
+step "1. git state"
+if [[ -n "$(git status --porcelain | grep -v '^??' || true)" ]]; then
+  warn "uncommitted changes — the deploy builds the PUSHED commit, not your working tree"
+  git status --short | grep -v '^??' | sed 's/^/       /'
+else
+  ok "working tree clean"
+fi
+
+step "2. kamal hooks"
+shopt -s nullglob
+HOOKS=(.kamal/hooks/*)
+if [[ ${#HOOKS[@]} -eq 0 ]]; then
+  ok "no hooks to check"
+else
+  for h in "${HOOKS[@]}"; do
+    [[ -d "$h" ]] && continue
+    # Kamal silently SKIPS a hook that is not executable, so a lost +x looks like
+    # "the hook never ran" rather than an error.
+    if [[ -x "$h" ]]; then ok "$h executable"; else bad "$h NOT executable (kamal will skip it silently): chmod +x $h"; fi
+    mode=$(git ls-files -s "$h" 2>/dev/null | awk '{print $1}')
+    [[ -n "$mode" && "$mode" != "100755" ]] && bad "$h exec bit not recorded in git (mode $mode)"
+    if bash -n "$h" 2>/dev/null; then ok "$h syntax"; else bad "$h has a bash syntax error"; fi
+    # app exec fans out across every role unless narrowed; concurrent db:migrate
+    # then races the advisory lock (ActiveRecord::ConcurrentMigrationError).
+    if grep -q "app exec" "$h" && grep -q "db:migrate" "$h" && ! grep -q -- "--roles" "$h"; then
+      bad "$h runs db:migrate via 'app exec' without --roles (will run once per role and race the migration lock)"
+    fi
+  done
+fi
+
+step "3. deploy config parses"
+for f in config/deploy.yml config/deploy.staging.yml .github/workflows/deploy-staging-kamal.yml; do
+  [[ -f "$f" ]] || continue
+  if ruby -ryaml -e "YAML.unsafe_load_file('$f')" >/dev/null 2>&1 \
+     || docker compose run --rm --no-deps -T web bash -lc "ruby -ryaml -e \"YAML.unsafe_load_file('$f')\"" >/dev/null 2>&1; then
+    ok "$f valid YAML"
+  else
+    bad "$f is not valid YAML"
+  fi
+done
+# db/ is a submodule holding db/migrate + db/structure.sql. Without a recursive
+# checkout the image ships an empty db/ and migrations become a silent no-op.
+if [[ -f .gitmodules ]] && ! grep -q "submodules" .github/workflows/deploy-staging-kamal.yml 2>/dev/null; then
+  bad "workflow checkout is missing 'submodules: recursive' (db/ submodule holds the migrations)"
+else
+  ok "workflow checks out submodules"
+fi
+
+step "4. test suite"
+if [[ "$SKIP_TESTS" -eq 1 ]]; then
+  warn "skipped (--skip-tests)"
+else
+  if docker compose run --rm --no-deps -e RAILS_ENV=test web bash -lc "bundle exec rails test" 2>&1 | tee /tmp/preflight-tests.log | tail -3; then
+    grep -qE "0 failures, 0 errors" /tmp/preflight-tests.log && ok "suite green" || bad "suite has failures (see /tmp/preflight-tests.log)"
+  else
+    bad "suite did not run (see /tmp/preflight-tests.log)"
+  fi
+fi
+
+step "5. build-time asset compile (the deploy image's environment)"
+# Dockerfile.deploy precompiles with RAILS_ENV=staging, no SECRET_KEY_BASE and
+# SECRET_KEY_BASE_DUMMY=1 (Rails' escape hatch for generating a throwaway key).
+# Anything that assigns secret_key_base itself, or otherwise needs real secrets at
+# boot, blows up here — exactly how the first deploy failed, ~9 minutes in.
+# Mirror Dockerfile.deploy exactly: vite_ruby enhances assets:precompile with a
+# nested vite:build_all that always exits non-zero here with a bare "Compilation
+# failed:" while sprockets itself succeeds. So the exit code is NOT the signal —
+# the Dockerfile tolerates it and asserts the outputs instead. Do the same, or
+# this reports a false failure on every run.
+rm -rf public/assets
+docker compose run --rm --no-deps \
+      -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
+      -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
+      web bash -lc "bundle exec rails assets:precompile" >/tmp/preflight-assets.log 2>&1 || true
+ASSET_COUNT=$(ls public/assets 2>/dev/null | wc -l | tr -d ' ')
+if compgen -G "public/assets/application-*.css" >/dev/null && [[ "$ASSET_COUNT" -gt 10 ]]; then
+  ok "sprockets precompiles in the build environment ($ASSET_COUNT assets)"
+else
+  bad "assets:precompile produced no sprockets output — the deploy will fail the same way"
+  grep -iE "aborted|ArgumentError|Missing|error" /tmp/preflight-assets.log | head -5 | sed 's/^/       /'
+fi
+
+step "6. staging boot with real secrets present"
+if docker compose run --rm --no-deps \
+      -e RAILS_ENV=staging -e SECRET_KEY_BASE=preflight_dummy_key_0123456789 \
+      -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
+      web bash -lc "bundle exec rails runner 'Rails.application.eager_load!; puts :ok'" >/tmp/preflight-boot.log 2>&1; then
+  ok "staging env boots + eager loads"
+else
+  bad "staging env fails to boot (see /tmp/preflight-boot.log)"
+  grep -iE "error|exception" /tmp/preflight-boot.log | head -5 | sed 's/^/       /'
+fi
+
+echo
+echo "──────────────────────────────────"
+echo "  passed: $PASS   warnings: $WARN   failed: $FAIL"
+if [[ "$FAIL" -gt 0 ]]; then
+  echo "  ❌ do NOT push — fix the above first"
+  exit 1
+fi
+echo "  ✅ ready: git push origin staging_kamal"
