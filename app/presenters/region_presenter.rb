@@ -37,12 +37,12 @@ class RegionPresenter
     [
       {
         percentage: total_polygons_percentage,
-        theme: 'theme--primary',
+        theme: 'primary',
         title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%"
       },
       {
         percentage: total_points_percentage,
-        theme: 'theme--primary-dark',
+        theme: 'primary-dark',
         title: "#{I18n.t('stats.points')} #{total_points_percentage}%"
       }
     ]

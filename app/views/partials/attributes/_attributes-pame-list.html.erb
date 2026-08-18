@@ -1,0 +1,9 @@
+<%= turbo_mount "AttributesPameList", html: { class: get_local_classes(local_assigns) }, props: {
+  pamesAttributesList: current_pa_and_all_parcels_pame_evaluations_attributes,
+  title: t('attributes.pame.title'),
+  subTitle: t('attributes.parcel_id'),
+  forPdf: for_pdf == true,
+  translations: {
+    no_information: t('attributes.no-information')
+  }
+} %>

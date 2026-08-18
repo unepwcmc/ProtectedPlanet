@@ -1,0 +1,13 @@
+<header class="vw-layouts-partials-hero-home">
+  <div class="vw-layouts-partials-hero-home__container">
+    <div class="vw-layouts-partials-hero-home__content">
+      <h1 class="vw-layouts-partials-hero-home__title">
+        <%= cms_fragment_content("title") %>
+      </h1>
+      <p class="vw-layouts-partials-hero-home__intro">
+        <%= cms_fragment_content("introduction") %>
+      </p>
+      <%= link_to t('home.hero.button'), @pas_link, title: t('home.hero.button'), class: 'vw-layouts-partials-hero-home__button' %>
+    </div>
+  </div>
+</header>

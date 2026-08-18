@@ -1,0 +1,15 @@
+@utility tw-shared-shadow-grey-light {
+  box-shadow: 2px 2px 6px var(--color-theme-grey-light);
+}
+
+@utility tw-shared-shadow-grey {
+  box-shadow: 2px 2px 6px var(--color-theme-grey);
+}
+
+@utility tw-shared-shadow-bottom-grey-light {
+  box-shadow: 0 3px 3px var(--color-theme-grey-light);
+}
+
+@utility tw-shared-shadow-bottom-grey {
+  box-shadow: 0 3px 3px var(--color-theme-grey);
+}

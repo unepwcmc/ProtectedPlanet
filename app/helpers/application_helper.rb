@@ -67,6 +67,16 @@ module ApplicationHelper
     )
   end
 
+  def site_card_details(protected_areas)
+    Array(protected_areas).map do |protected_area|
+      {
+        name: protected_area[:name],
+        site_id: protected_area[:site_id],
+        thumbnail_link: protected_area_cover(protected_area, with_tag: false)
+      }
+    end
+  end
+
   def country_cover(country, with_tag: true)
     version = AppSecrets.mapbox[:version]
     image_params = { id: country.iso, type: 'country', version: version }
@@ -180,12 +190,33 @@ module ApplicationHelper
     @items = ThematicAreasPresenter.new(@cms_site).all_cards
   end
 
+  # Shared prop-building for anything rendering ThematicAreasPresenter cards
+  # via a Vue island (CarouselThemes carousel, CardsThemes grid) — both need
+  # the same `{ areaTypeLabel, cards: [...] }` shape from `@items`.
+  def theme_cards_vue_props(items)
+    {
+      areaTypeLabel: t('global.area-types.wdpca'),
+      cards: items[:cards].map do |slide|
+        page = slide[:obj]
+        {
+          url: root_url + page[:full_path],
+          linkTitle: "View the #{page[:label]} page",
+          label: page[:label],
+          imageUrl: cms_fragment_render(:image, page),
+          summary: cms_fragment_content(:summary, page),
+          pasNo: slide[:pas_no],
+          slug: page[:slug]
+        }
+      end
+    }
+  end
+
   def get_footer_links
-    @links = { 'links1' => [], 'links2' => [] }
+    @links = { 'explore_links' => [], 'general_info_links' => [] }
     return @links if @cms_site.nil?
 
-    @links['links1'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
-    @links['links2'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
+    @links['explore_links'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
+    @links['general_info_links'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
   end
 
   def get_local_classes(local_assigns)
@@ -217,12 +248,6 @@ module ApplicationHelper
         url: get_cms_url(page.full_path)
       }
     end.compact
-  end
-
-  def get_config_carousel_themes
-    {
-      wrapAround: true
-    }.to_json
   end
 
   def map_page(slug, map_children = false)

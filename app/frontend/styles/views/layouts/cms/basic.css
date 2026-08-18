@@ -1,0 +1,14 @@
+.vw-layouts-cms-basic {
+  @apply tw-shared-base-wrapper;
+}
+
+.vw-layouts-cms-basic__container {
+  @apply tw-shared-base-container 
+  tw-shared-base-flex-col-gap-6-and-9;
+}
+
+.vw-layouts-cms-basic__content {
+  @apply
+  tw-shared-base-container
+  tw-shared-cms-wysiwyg;
+}

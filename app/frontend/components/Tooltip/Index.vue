@@ -31,7 +31,7 @@
 
     <div
       v-show="isActive"
-      :id="id"
+      :id
       role="tooltip"
       class="ct-tooltip__target"
     >
@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { ref, useId } from 'vue'
-import { usePopupCloseListeners } from '@/composables/usePopupCloseListeners'
+import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 
 interface TooltipProps {
   text: string
@@ -75,7 +75,7 @@ usePopupCloseListeners(rootEl, {
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-tooltip {
   @apply relative inline-block;

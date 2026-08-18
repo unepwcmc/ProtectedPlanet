@@ -1,0 +1,30 @@
+/*
+ * Ported from app/assets/stylesheets/helpers/_form-fields.scss (Wave T1).
+ * NOT ported (native Tailwind utilities already cover them 1:1, no shared utility needed):
+ *   - input-hidden       -> Tailwind's built-in `sr-only`
+ *   - input-custom-focus -> Tailwind's built-in `outline-none`
+ * Width/height are left to the consuming component's own `w-*`/`h-*` (legacy mixins took
+ * a $width arg per call site) rather than baked into these shells.
+ *
+ * input-custom-checkbox-selected() is NOT ported here either — the legacy mixin's entire body
+ * was `@include icon-tick`, and this checkbox family's only consumers are Vue components
+ * (Filters/Checkboxes/Item, SearchAreas/{RadioButtons,CheckboxSearch,FilterGroup}, Wave T4).
+ * Per CODE-CONVENTIONS.md rule 5b, a Vue-rendered icon is an `Icon/*.vue` component, not a
+ * `tw-shared-icon-*` CSS utility — Wave T4 should add `Icon/Tick.vue` (following the existing
+ * `Icon/Search.vue` single-color pattern) and render it directly in the checkbox's own
+ * `:checked` markup, not `@apply` an icon utility onto this shell.
+ */
+
+@utility tw-shared-input-custom-radio {
+  @apply flex shrink-0 rounded-full border border-solid inline-block relative m-[0.25rem_0.5rem_0.25rem_0.25rem];
+  border-color: var(--color-theme-grey);
+}
+
+@utility tw-shared-input-custom-radio-selected {
+  @apply shrink-0 rounded-full block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+@utility tw-shared-input-custom-checkbox {
+  @apply border border-solid inline-block relative m-[0.25rem_0.5rem_0.25rem_0.25rem];
+  border-color: var(--color-theme-grey);
+}

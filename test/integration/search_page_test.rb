@@ -69,7 +69,7 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     get '/en/search-results?search_term=Manbone'
     assert_response :success
     json = JSON.parse response.body
-    assert_equal 1, json['total_items']
+    assert_equal 1, json['totalItems']
   end
 
   test 'search query that returns single protected area returns success' do
@@ -82,7 +82,7 @@ class SearchPageTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     json = JSON.parse response.body
-    assert_equal 1, json['total_items']
+    assert_equal 1, json['totalItems']
   end
 
   test 'search query matching a PA and a country returns both' do
@@ -96,6 +96,6 @@ class SearchPageTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     json = JSON.parse response.body
-    assert_equal 2, json['total_items']
+    assert_equal 2, json['totalItems']
   end
 end

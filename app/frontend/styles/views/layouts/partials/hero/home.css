@@ -1,0 +1,38 @@
+.vw-layouts-partials-hero-home {
+    @apply 
+    tw-shared-hero-wrapper-common
+    flex
+    flex-col
+    justify-center
+    min-h-[25.9rem]
+    md:min-h-[51.6rem]
+    lg:min-h-180;
+    
+    background-image: url('../../../../../assets/hero/home.jpg');
+}
+
+.vw-layouts-partials-hero-home__container {
+    @apply
+    tw-shared-base-container
+    tw-shared-base-container--py;
+}
+
+.vw-layouts-partials-hero-home__content{
+    @apply
+    tw-shared-base-flex-col-gap-6
+    md:w-[90%]
+    lg:w-1/2
+    xl:w-[58%];
+}
+
+.vw-layouts-partials-hero-home__title {
+    @apply tw-shared-font-playfair__bold-4xl-lg-7xl-grey-black;
+}
+
+.vw-layouts-partials-hero-home__intro {
+    @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
+}
+
+.vw-layouts-partials-hero-home__button {
+    @apply tw-shared-button--theme-purple self-start;
+}

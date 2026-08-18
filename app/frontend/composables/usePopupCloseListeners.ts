@@ -11,7 +11,7 @@ interface PopupCloseListenersOptions {
   closeOnEscKeypress?: boolean
 }
 
-export function usePopupCloseListeners(
+export default function (
   target: Ref<HTMLElement | null>,
   { isActive, onClose, closeOnClickOutside = true, closeOnEscKeypress = true }: PopupCloseListenersOptions
 ): void {

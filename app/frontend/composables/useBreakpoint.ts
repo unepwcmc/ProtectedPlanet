@@ -9,7 +9,7 @@ import { useWindowSize } from '@vueuse/core'
 // MUST match the breakpoints in app/assets/stylesheets/_settings.
 const BREAKPOINTS = { small: 767, medium: 1024, large: 1200 }
 
-export function useBreakpoint() {
+export default function () {
   const { width: windowWidth } = useWindowSize()
 
   const isSmall = computed(() => windowWidth.value <= BREAKPOINTS.small)

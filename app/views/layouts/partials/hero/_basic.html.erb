@@ -1,0 +1,22 @@
+<header class="vw-layouts-partials-hero-basic"
+  <% if local_assigns[:image].present? %>style="background-image: url('<%= image %>')"<% end %>
+>
+  <div class="vw-layouts-partials-hero-basic__container <%= 'vw-layouts-partials-hero-basic__container--items-centre' if local_assigns[:items_centre]%>">
+    <div class="vw-layouts-partials-hero-basic__content <%= 'vw-layouts-partials-hero-basic__content--centre-text' if local_assigns[:centre_text] %><%= 'vw-layouts-partials-hero-basic__content--limited-width' if local_assigns[:limited_title_width] %>">
+      <h1 class="vw-layouts-partials-hero-basic__title">
+        <%= title %>
+      </h1>
+      <% if local_assigns[:summary].present? %>
+        <h2 class="vw-layouts-partials-hero-basic__intro">
+          <%= summary %>
+        </h2>
+      <% end %>
+      <% if local_assigns[:button_link].present? && local_assigns[:button_text].present? %>
+        <%= link_to button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'vw-layouts-partials-hero-basic__link' do %>
+          <%= button_text %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div id="vw-hero-tabs-target" class="vw-layouts-partials-hero-basic__tabs"></div>
+</header>

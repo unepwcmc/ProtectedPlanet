@@ -1,0 +1,46 @@
+.vw-partials-ctas-api {
+  @apply
+  relative
+  tw-shared-bg--grey-black;
+}
+
+.vw-partials-ctas-api__container {
+  @apply
+  tw-shared-base-container--px
+  tw-shared-base-container--py;
+}
+
+.vw-partials-ctas-api__content {
+  @apply 
+  tw-shared-base-flex-col-gap-6 
+  md:w-173;
+}
+
+.vw-partials-ctas-api__title {
+  @apply 
+  tw-shared-font-playfair__normal-2xl-md-4xl-white 
+  text-white;
+}
+
+.vw-partials-ctas-api__intro {
+  @apply 
+  tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black
+  text-white;
+}
+
+.vw-partials-ctas-api__button {
+  @apply
+  tw-shared-button--outline-white
+  self-start;
+}
+
+.vw-partials-ctas-api__key {
+  @apply
+  hidden
+  md:block
+  md:absolute
+  md:top-[-6%]
+  md:right-0
+  md:h-[122%]
+  lg:top-[-11%];
+}

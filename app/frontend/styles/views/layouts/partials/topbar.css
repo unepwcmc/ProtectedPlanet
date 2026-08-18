@@ -1,0 +1,47 @@
+.vw-layouts-partials-topbar {
+  @apply bg-white;
+}
+
+.vw-layouts-partials-topbar__container {
+  @apply 
+  tw-shared-base-container 
+  flex
+  items-center
+  justify-between
+  gap-6;
+}
+
+.vw-layouts-partials-topbar__logo {
+  @apply
+  flex
+  h-13
+  items-center
+  justify-center
+  bg-theme-primary
+  px-4
+  md:h-14
+  md:px-5
+  lg:h-16.75
+  lg:px-7.5;
+}
+
+.vw-layouts-partials-topbar__right {
+  @apply
+  tw-shared-base-flex-gap-6
+  items-center
+  justify-center;
+}
+
+.vw-layouts-partials-topbar__nav {
+  @apply
+  order-2
+  lg:order-1
+  flex
+  self-stretch;
+}
+
+.vw-layouts-partials-topbar__search {
+  @apply
+  order-1
+  lg:order-2;
+}

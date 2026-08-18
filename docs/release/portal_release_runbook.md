@@ -87,7 +87,7 @@ tmux new -s pp-release
 
 
 # Step 1: Dry run (stops after validation, does not swap tables), can do this as soon as NC completes all drafts approval on all needed data
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Jul2026"]
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Aug2026"]
 
 # Detach without stopping the process
 Ctrl-b then d
@@ -111,7 +111,7 @@ RAILS_ENV=production bundle exec rake pp:portal:status
 # When ready to go live** (normally on the first day of the month), continue with the swap:
 # If the first day is a Friday, run this on Thursday instead (see Monthly Release Date Rule above)
 # IMPORTANT! Make sure you change the correct label
-RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Jul2026"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Aug2026"]
 
 
 # Make sure to kill the session so next time next release can start refresh

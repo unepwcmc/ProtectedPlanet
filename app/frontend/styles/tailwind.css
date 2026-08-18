@@ -1,43 +1,127 @@
-/*
- * Tailwind v4 entrypoint (imported from app/frontend/entrypoints/layout.ts, so it
- * loads on every page during the migration).
- *
- * PREFLIGHT (Tailwind's base reset) IS INTENTIONALLY OMITTED. The site is still
- * styled by ~8.7k lines of global SCSS (Bourbon/Neat era) that assume browser
- * defaults; enabling Tailwind's reset would fight those styles. We import only the
- * `theme` (design tokens / CSS vars) and `utilities` layers, so Tailwind utility
- * classes work WITHOUT touching existing pages. Re-enable preflight (add the
- * `preflight.css` import below) once the legacy SCSS is retired.
- *
- * See upgrade-plan/frontend/08-styles-and-assets.md and 14-architecture-and-design.md.
- */
-@layer theme, base, components, utilities;
+@import './global/fonts.css';
+@import "tailwindcss";
 
-@import "tailwindcss/theme.css" layer(theme);
-/* @import "tailwindcss/preflight.css" layer(base);  <-- deliberately disabled for now */
-@import "tailwindcss/utilities.css" layer(utilities);
-
-/*
- * Design tokens mirrored from the legacy SCSS palette (app/assets/stylesheets/_settings.scss),
- * so migrated components can use e.g. `bg-theme-primary`, `text-theme-grey-dark`, `border-theme-grey-light`
- * instead of arbitrary hex values, and stay visually consistent with pages still on the
- * legacy stylesheet. Add tokens here as more components migrate; don't duplicate per-file.
- */
 @theme {
+
+  --font-sans: 'Hind Siliguri', sans-serif, system-ui;
+  --font-playfairDisplay: "Playfair Display", serif, system-ui;
+
   --color-theme-primary: #71a32b;
   --color-theme-primary-dark: #415519;
   --color-theme-grey-xlight: #f4f4f4;
   --color-theme-grey-light: #c8c8c8;
   --color-theme-grey: #919191;
   --color-theme-grey-dark: #666666;
+  --color-theme-grey-xdark: #404040;
   --color-theme-grey-black: #242424;
+  --color-theme-bright-green: #38A800;
+  --color-theme-green-dark: #527B19;
+  --color-theme-chart-purple: #A54897;
+  --color-theme-chart-green: #71A22B;
+  --color-theme-chart-blue: #5F81CB;
+  --color-theme-chart-aqua: #65C9B2;
+  --color-theme-purple: #7B1977;
+  --color-theme-blue: #004DA8;
+  --color-theme-orange: #D9B143;
+  --color-theme-red: #FA3232;
+
+  --text-2xl: 1.565rem;
+  --text-4xl: 2.5rem;
 }
 
-/*
- * Where Tailwind scans for class names. CMS content lives in the DB and is NOT
- * scanned — developer-authored views/components only. Paths are relative to this file.
- */
 @source "../";
 @source "../../views";
 
+@import './shared/background.css';
 @import './shared/base.css';
+@import './shared/borders.css';
+@import './shared/buttons.css';
+@import './shared/card.css';
+@import './shared/cms.css';
+@import './shared/container.css';
+@import './shared/flex.css';
+@import './shared/forms.css';
+@import './shared/hero.css';
+@import './shared/icons.css';
+@import './shared/images.css';
+@import './shared/list.css';
+@import './shared/map.css';
+@import './shared/messages.css';
+@import './shared/region-country-site.css';
+@import './shared/shadows.css';
+@import './shared/themes.css';
+@import './shared/typography.css';
+
+@import './global/pdf-export.css';
+
+/* All styles used in views */
+@import './views/data/gdpame/index.css';
+@import './views/data/gdpame/tab-content.css';
+@import './views/data/wdpca/index.css';
+@import './views/data/wdpca/tab-extras.css';
+
+@import './views/layouts/cms/about.css';
+@import './views/layouts/cms/basic.css';
+@import './views/layouts/cms/data-areas.css';
+@import './views/layouts/cms/news-and-stories-article.css';
+@import './views/layouts/cms/news-and-stories.css';
+@import './views/layouts/cms/resource.css';
+@import './views/layouts/cms/resources.css';
+@import './views/layouts/cms/thematic-and-data-area-default.css';
+@import './views/layouts/cms/thematic-areas.css';
+
+
+@import './views/layouts/partials/hero/basic.css';
+@import './views/layouts/partials/hero/green-list.css';
+@import './views/layouts/partials/hero/home.css';
+@import './views/layouts/partials/hero/marine.css';
+@import './views/layouts/partials/hero/small.css';
+
+@import './views/layouts/partials/topbar.css';
+
+@import './views/layouts/error-page.css';
+
+@import './views/partials/bars/topbar-secondary.css';
+
+@import './views/partials/cards/circles.css';
+@import './views/partials/cards/facts.css';
+@import './views/partials/cards/news.css';
+@import './views/partials/cards/resources.css';
+@import './views/partials/cards/squares.css';
+
+@import './views/partials/carousels/themes.css';
+
+@import './views/partials/charts/chart-legend.css';
+@import './views/partials/charts/chart-row.css';
+@import './views/partials/charts/chart-section.css';
+@import './views/partials/charts/total-coverage-chart.css';
+
+@import './views/partials/ctas/api.css';
+@import './views/partials/ctas/mpa-guide.css';
+@import './views/partials/ctas/protected-planet-report.css';
+
+@import './views/partials/footer/index.css';
+@import './views/partials/footer/social-follow.css';
+
+@import './views/partials/global/site-logo.css';
+
+@import './views/partials/messages/message-citation.css';
+
+@import './views/partials/social/share.css';
+
+@import './views/partials/stats/stats-overview.css';
+
+@import './views/partials/stats/stats-related-countries.css';
+
+@import './views/partials/thematic_and_data_area/footer.css';
+@import './views/partials/thematic_and_data_area/panel-content.css';
+
+@import './views/thematic/effectiveness/green-list-tab.css';
+@import './views/thematic/effectiveness/index.css';
+@import './views/thematic/marine.css';
+
+@import './views/country.css';
+@import './views/home.css';
+@import './views/protected-areas.css'; 
+@import './views/region.css';
+@import './views/search.css';

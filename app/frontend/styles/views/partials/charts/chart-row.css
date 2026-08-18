@@ -1,0 +1,16 @@
+.vw-partials-charts-chart-row__row {
+  @apply flex h-8.5 md:h-10 bg-white;
+}
+
+.vw-partials-charts-chart-row__bar--primary,
+.vw-partials-charts-chart-row__bar--primary-dark {
+  @apply h-8.5 md:h-10;
+}
+
+.vw-partials-charts-chart-row__bar--primary {
+  @apply bg-theme-primary;
+}
+
+.vw-partials-charts-chart-row__bar--primary-dark {
+  @apply bg-theme-primary-dark;
+}

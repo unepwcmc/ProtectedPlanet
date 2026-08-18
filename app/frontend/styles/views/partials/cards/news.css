@@ -1,0 +1,32 @@
+.vw-partials-cards-news {
+  @apply tw-shared-base-flex-col-gap-3;
+}
+
+.vw-partials-cards-news__header {
+  @apply
+  flex
+  gap-3
+  items-center
+  justify-between;
+}
+
+.vw-partials-cards-news__title {
+  @apply tw-shared-font-playfair__bold-xl-md-2xl-grey-black;
+}
+
+.vw-partials-cards-news__all {
+  @apply
+  flex
+  gap-3
+  items-center
+  shrink-0
+  tw-shared-font-hind-siliguri__light-base-md-lg-grey-black
+  cursor-pointer
+  no-underline
+  hover:no-underline
+  focus:outline-none;
+}
+
+.vw-partials-cards-news__all-icon {
+  @apply tw-shared-icon-circle-chevron-black;
+}

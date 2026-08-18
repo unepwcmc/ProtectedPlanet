@@ -68,8 +68,7 @@ RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build 
  && rm -rf /tmp/ruby-build
 ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
 
-# Node 24 from the official tarball (Vite 5 needs 18+; webpacker 4 still works
-# with NODE_OPTIONS=--openssl-legacy-provider, set at the asset build below).
+# Node 24 from the official tarball (Vite 5 needs 18+).
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \
@@ -91,11 +90,10 @@ RUN yarn install --immutable || yarn install
 COPY . .
 
 # Asset build. SECRET_KEY_BASE_DUMMY lets Rails boot for assets:precompile
-# without a real key; openssl-legacy-provider is what keeps webpacker 4
-# (webpack 4) working on Node 24.
+# without a real key. (NODE_OPTIONS=--openssl-legacy-provider is gone with
+# webpacker 4 — Vite needs no such workaround on Node 24.)
 ARG RAILS_ENV=staging
 ENV RAILS_ENV=${RAILS_ENV} \
-    NODE_OPTIONS=--openssl-legacy-provider \
     SECRET_KEY_BASE_DUMMY=1 \
     VITE_RUBY_VERBOSE=true
 
@@ -134,29 +132,25 @@ ENV AWS_S3_REGION=eu-west-1 \
 # then run vite properly. Both outputs are then asserted — if either is really
 # missing the build still fails, so this tolerates one known-bogus exit code
 # without hiding a genuine breakage.
-# This app has THREE asset pipelines: sprockets, webpacker 4 and vite.
+# This app now has TWO asset pipelines: sprockets and vite. (webpacker 4 was
+# removed at the Vite cutover, along with config/webpack/* and babel.config.js.)
 #
-# The bundler wrappers for the two JS pipelines (vite_ruby's vite:build_all and
-# webpacker's webpacker:compile) both fail here with a bare "Compilation
-# failed:" and no stderr — they print identical wording, which makes the failure
-# hard to attribute. Verified in the image that the underlying binaries succeed:
+# vite_ruby's vite:build_all wrapper fails here with a bare "Compilation failed:"
+# and no stderr, while the underlying binary succeeds. Verified in the image:
 #
-#   ./node_modules/.bin/vite build --mode production            -> exit 0
-#   ./node_modules/.bin/webpack --config config/webpack/staging.js -> exit 0, 5 files
-#   bundle exec rake vite:build_all / webpacker:compile         -> "Compilation failed:"
+#   ./node_modules/.bin/vite build --mode production  -> exit 0
+#   bundle exec rake vite:build_all                   -> "Compilation failed:"
 #
-# So the binaries are invoked directly and every output is asserted afterwards.
+# So the binary is invoked directly and every output is asserted afterwards.
 # Sprockets still goes through assets:precompile, whose exit code is tolerated
-# because its enhancements re-run the same failing wrappers.
-RUN rm -rf public/assets public/vite public/packs tmp/cache/vite \
- && (bundle exec rails assets:precompile || echo "note: sprockets done; ignoring the wrappers' bogus exit, outputs asserted below") \
+# because its enhancement re-runs the same failing wrapper.
+RUN rm -rf public/assets public/vite tmp/cache/vite \
+ && (bundle exec rails assets:precompile || echo "note: sprockets done; ignoring the wrapper's bogus exit, outputs asserted below") \
  && ./node_modules/.bin/vite build --mode production \
- && NODE_ENV=staging ./node_modules/.bin/webpack --config config/webpack/staging.js \
  && test -s public/vite/.vite/manifest.json \
- && test -s public/packs/manifest.json \
  && ls public/assets/application-*.css >/dev/null \
  && test "$(ls public/assets | wc -l)" -gt 10 \
- && echo "assets OK: $(ls public/assets | wc -l) sprockets, $(ls public/packs | wc -l) packs, vite manifest present" \
+ && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite manifest present" \
  && rm -rf node_modules tmp/cache
 
 # ---------------------------------------------------------------------------

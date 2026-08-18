@@ -31,8 +31,8 @@ describe('Banner', () => {
   it('renders a single banner without nav controls', () => {
     const wrapper = mount(Banner, { props: { banners: single, signature: 'sig' } })
 
-    expect(wrapper.find('.ct-banner__title').text()).toBe('Hello')
-    expect(wrapper.find('.ct-banner__body').html()).toContain('<p>World</p>')
+    expect(wrapper.find('.ct-banner-content__title').text()).toBe('Hello')
+    expect(wrapper.find('.ct-banner-content__body').html()).toContain('<p>World</p>')
     expect(wrapper.find('.banner__nav--next').exists()).toBe(false)
     expect(wrapper.find('.banner__nav--prev').exists()).toBe(false)
   })
@@ -42,7 +42,7 @@ describe('Banner', () => {
 
     const activeSlideTitle = () => wrapper.findAll('.ct-banner__slide')
       .find(slide => slide.classes().includes('ct-banner-content--is-active'))
-      ?.find('.ct-banner__title')
+      ?.find('.ct-banner-content__title')
       .text()
 
     expect(activeSlideTitle()).toBe('A')

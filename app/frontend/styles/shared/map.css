@@ -1,0 +1,114 @@
+@utility tw-shared-map-section {
+  @apply tw-shared-base-container--px;
+}
+
+/*
+ * The following has to be directly registered to the map
+ */
+.maplibregl-ctrl-top-right .maplibregl-ctrl.maplibregl-ctrl-group {
+  @apply 
+  mt-3.25 
+  mr-2.5 
+  md:mt-4.25 
+  lg:mt-8 
+  lg:mr-4;
+}
+
+.maplibregl-ctrl-bottom-left {
+  @apply 
+  flex 
+  flex-col-reverse;
+}
+
+.maplibregl-ctrl.maplibregl-ctrl-group:not(:empty) {
+  @apply shadow-none;
+}
+
+.maplibregl-control-container .maplibregl-ctrl-bottom-left,
+.maplibregl-control-container .maplibregl-ctrl-top-right {
+  @apply z-1;
+}
+ 
+.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon,
+.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+  @apply hidden!;
+}
+
+.maplibregl-ctrl-group .maplibregl-ctrl-zoom-in,
+.maplibregl-ctrl-group .maplibregl-ctrl-zoom-out {
+  @apply
+  tw-shared-icon-base
+  border
+  border-theme-grey-dark
+  bg-white
+  w-7.75
+  h-8
+  md:w-10.5
+  md:h-11
+  bg-size-[15px_15px]
+  md:bg-size-[20px_20px]
+  first:border-b-0
+  focus:first:rounded-none
+  focus:last:rounded-none
+  hover:bg-theme-grey-xlight;
+}
+
+.maplibregl-ctrl-group .maplibregl-ctrl-zoom-in {
+  @apply tw-shared-icon-plus-mapbox;
+}
+
+.maplibregl-ctrl-group .maplibregl-ctrl-zoom-out {
+  @apply tw-shared-icon-minus-mapbox;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left .maplibregl-popup-tip {
+  border-bottom-color: var(--color-theme-grey-xdark) !important;
+  border-bottom-width: 6px;
+}
+
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--color-theme-grey-xdark) !important;
+  border-left-width: 6px;
+}
+
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--color-theme-grey-xdark) !important;
+  border-right-width: 6px;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip {
+  border-top-color: var(--color-theme-grey-xdark) !important;
+  border-top-width: 6px;
+}
+
+.maplibregl-popup-content {
+  background-color: var(--color-theme-grey-xdark) !important;
+  color: #fff !important;
+
+  @apply p-2;
+}
+
+.maplibregl-popup-content__attributes {
+  @apply 
+  list-none 
+  m-0 
+  p-0;
+}
+
+.maplibregl-popup-content__attribute {
+  @apply tw-shared-base-flex-col-gap-2;
+}
+
+.maplibregl-popup-content__wrapper {
+  @apply 
+  flex 
+  gap-1;
+}
+
+.maplibregl-popup-close-button {
+  display: none !important;
+}

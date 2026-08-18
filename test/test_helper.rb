@@ -107,7 +107,7 @@ class ActiveSupport::TestCase
     FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
     # and the CTAs
     FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::API)
-    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::LIVE_REPORT)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::PROTECTED_PLANET_REPORT)
 
   end
 end

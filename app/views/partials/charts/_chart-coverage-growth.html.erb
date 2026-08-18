@@ -1,12 +1,6 @@
-<section class="container">
-  <div class="container--component">
-    <h2><%= title %></h2>
-    <div><%= content %></div>
-    <div>
-      <am-chart-multiline 
-        :data="<%= chart_data %>"
-        :dots="true"
-      ></am-chart-multiline>
-    </div>
-  </div>
-</section>
+<%= render layout: "partials/charts/chart-section", locals: { title: title, content: content } do %>
+  <%= turbo_mount "AmChartMultiline", props: {
+          data: chart_data,
+          dots: true
+  } %>
+<% end %>

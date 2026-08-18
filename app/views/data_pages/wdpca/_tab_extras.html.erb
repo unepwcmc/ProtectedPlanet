@@ -1,10 +1,21 @@
-<section class="spacer-large--bottom">
-  <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
-</section>
-
-<section class="map-section">
-  <%= render partial: "partials/maps/main", locals: {
-    map: map,
-    map_options: local_assigns[:map_options]
-  } %>
-</section>
+<div class="vw-data-wdpca-tab-extras">
+  <div class="vw-data-wdpca-tab-extras__container">
+    <%= cms_fragment_render(tab[:content_id]) %>
+  </div>
+  <div class="vw-data-wdpca-tab-extras__search">
+    <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+  </div>
+  <section class="vw-data-wdpca-tab-extras__map">
+    <%= turbo_mount "Map", props: {
+      options: local_assigns[:map_options] || {},
+      servicesForPointQuery: map[:point_query_services],
+      popupAttributes: map[:popup_attributes],
+      title: map[:title],
+      overlays: map[:overlays],
+      disclaimer: map[:disclaimer],
+      type: map[:type],
+      autocompleteErrorMessages: map_yml[:autocomplete_error_messages],
+      autocompletePlaceholder: map_yml[:autocomplete_placeholder]
+    } %>
+  </section>
+</div>

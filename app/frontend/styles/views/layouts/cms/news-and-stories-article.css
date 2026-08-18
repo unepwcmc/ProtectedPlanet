@@ -1,0 +1,19 @@
+.vw-layouts-cms-news-and-stories-article {
+  @apply tw-shared-base-wrapper;
+}
+
+.vw-layouts-cms-news-and-stories-article__content {
+  @apply 
+  tw-shared-base-container--medium
+  tw-shared-cms-wysiwyg;
+}
+
+.vw-layouts-cms-news-and-stories-article__socials {
+  @apply
+  flex
+  justify-center;
+}
+
+.vw-layouts-cms-news-and-stories-article__news {
+  @apply tw-shared-base-container;
+}

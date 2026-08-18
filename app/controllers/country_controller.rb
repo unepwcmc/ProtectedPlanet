@@ -29,7 +29,10 @@ class CountryController < ApplicationController
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: all_services_for_point_query
+      point_query_services: all_services_for_point_query,
+      title: map_yml[:title],
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
 
     @map_options = {
@@ -42,7 +45,7 @@ class CountryController < ApplicationController
       format.html
       format.pdf do
         rasterizer_name = Rails.env.development? ? 'rasterize_dev_mode.js' : 'rasterize.js'
-        rasterizer = Rails.root.join('vendor/assets/javascripts', rasterizer_name)
+        rasterizer = Rails.root.join('app/frontend/backend-scripts', rasterizer_name)
         url = url_for(action: :pdf, iso: @country.iso)
         dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
 

@@ -1,7 +1,7 @@
 <template>
   <div
-    class="cards__cards"
-    :class="{ preview }"
+    class="ct-listing-page-card-resources"
+    :class="{ 'ct-listing-page-card-resources--preview': preview }"
   >
     <ListingPageCardResourcesCard
       v-for="(card, index) in cards"
@@ -18,3 +18,16 @@ import ListingPageCardResourcesCard from '@/components/ListingPageCard/Resources
 type ListingPageCardResourcesList = ListingPageCardResourcesListProps
 defineProps<ListingPageCardResourcesList>()
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-listing-page-card-resources {
+  @apply tw-shared-base-flex-col-md-row-gap-1;
+}
+
+.ct-listing-page-card-resources--preview > :nth-child(3),
+.ct-listing-page-card-resources--preview > :nth-child(4) {
+  @apply hidden lg:block;
+}
+</style>

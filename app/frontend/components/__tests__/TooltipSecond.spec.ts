@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import TooltipSecond from '@/components/Tooltip/Second.vue'
 
 describe('TooltipSecond', () => {
-  it('renders the trigger, header and content slots', () => {
+  it('renders the trigger, header and content slots', async () => {
     const wrapper = mount(TooltipSecond, {
       slots: {
         trigger: 'Trigger',
@@ -13,6 +13,10 @@ describe('TooltipSecond', () => {
     })
 
     expect(wrapper.find('.ct-tooltip-second__trigger').text()).toBe('Trigger')
+
+    // The target (header/content) is only mounted (v-if) once active.
+    await wrapper.find('.ct-tooltip-second__trigger').trigger('mouseenter')
+
     expect(wrapper.find('.ct-tooltip-second__header').html()).toContain('Header')
     expect(wrapper.find('.ct-tooltip-second__target').html()).toContain('Content')
   })
@@ -32,15 +36,16 @@ describe('TooltipSecond', () => {
   it('toggles on click and closes via the close button when onHover is false', async () => {
     const wrapper = mount(TooltipSecond, { props: { onHover: false } })
 
-    expect(wrapper.find('.ct-tooltip-second__target').attributes('style')).toContain('display: none')
+    // The target is v-if'd (not merely hidden via style) until active.
+    expect(wrapper.find('.ct-tooltip-second__target').exists()).toBe(false)
 
     await wrapper.find('.ct-tooltip-second__trigger').trigger('click')
     expect(wrapper.classes()).toContain('ct-tooltip-second--active')
-    expect(wrapper.find('.ct-tooltip-second__target').attributes('style')).not.toContain('display: none')
+    expect(wrapper.find('.ct-tooltip-second__target').exists()).toBe(true)
 
     await wrapper.find('.ct-tooltip-second__close').trigger('click')
     expect(wrapper.classes()).not.toContain('ct-tooltip-second--active')
-    expect(wrapper.find('.ct-tooltip-second__target').attributes('style')).toContain('display: none')
+    expect(wrapper.find('.ct-tooltip-second__target').exists()).toBe(false)
   })
 
   it('closes when clicking outside the tooltip', async () => {

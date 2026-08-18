@@ -12,9 +12,11 @@ module PageSlugs
   TERMS_AND_CONDITIONS = 'terms-and-conditions'
 
   # Call-to-action records (CallToAction#css_class)
+  # Although it is called Class here but it is used as a slug/id for some reason
   module Cta
     API = 'api'
-    LIVE_REPORT = 'live-report'
+    # If you want to use protected-planet-report as a slug, you need to update the Slug in admin panel
+    PROTECTED_PLANET_REPORT = 'live-report'
     MPA_GUIDE = 'mpa-guide'
   end
 
