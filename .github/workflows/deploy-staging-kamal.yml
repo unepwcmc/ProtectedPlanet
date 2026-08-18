@@ -74,7 +74,16 @@ jobs:
           echo "START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
           echo "ACTION_TYPE=Deploy" >> $GITHUB_ENV
 
+      # submodules: db/ is the unepwcmc/protectedplanet-db submodule and holds
+      # db/migrate + db/structure.sql. Without this the checkout leaves db/ empty,
+      # Dockerfile.deploy's `COPY . .` bakes an empty db/ into the image, and the
+      # pre-deploy migration hook silently migrates nothing.
+      # protectedplanet-db is a separate but PUBLIC repo, so the default GITHUB_TOKEN
+      # can clone it — no PAT or deploy key needed. (It is pinned to the
+      # backend/rails-upgrade branch in .gitmodules.)
       - uses: actions/checkout@v5
+        with:
+          submodules: recursive
 
       - name: Notify deployment start
         id: notify-start
