@@ -23,22 +23,6 @@ module ProtectedAreasHelper
     }
   end
 
-  # as of 04Apr it doesn't seem to be used
-  # def related_links? protected_area
-  #   !!protected_area.wikipedia_article
-  # end
-
-  def completion_attribute(label, complete)
-    if complete
-      content_tag(:li, class: 'complete') do
-        icon = content_tag(:i, '', class: 'fa fa-check')
-        raw "#{icon} #{label}"
-      end
-    else
-      content_tag(:li, label, class: 'non-complete')
-    end
-  end
-
   def reported_area
     # We add up all reported_area in all parcels
     parcels_including_protected_area_self = @protected_area.parcels_including_protected_area_self

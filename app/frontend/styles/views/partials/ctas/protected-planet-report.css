@@ -1,0 +1,62 @@
+ 
+
+.vw-partials-ctas-protected-planet-report {
+  @apply tw-shared-bg--grey-xdark 
+  tw-shared-bg-image-overlay--black
+  tw-shared-bg-center-no-repeat-cover
+  min-h-73; 
+  background-image: url('../../../../assets/ctas/protected-planet-report.jpg');
+}
+
+.vw-partials-ctas-protected-planet-report__container {
+  @apply tw-shared-base-container 
+  tw-shared-base-flex-col-gap-3;
+}
+
+.vw-partials-ctas-protected-planet-report__content {
+  @apply 
+  flex 
+  flex-col
+  gap-3
+  pt-16.5 
+  pb-10
+  md:p-0 
+  items-start
+  md:items-center
+  md:flex-row 
+  md:justify-between;
+}
+
+.vw-partials-ctas-protected-planet-report__ribbon {
+  @apply self-start 
+  text-[1.125rem] 
+  md:text-[1.25rem] 
+  bg-[#fa3232] 
+  text-white 
+  font-bold 
+  py-3.5
+  px-5;
+}
+ 
+.vw-partials-ctas-protected-planet-report__text {
+  @apply flex flex-col gap-3;
+}
+
+.vw-partials-ctas-protected-planet-report__title {
+  @apply 
+  tw-shared-font-playfair__normal-2xl-md-4xl-white
+  md:w-92.5;
+}
+
+.vw-partials-ctas-protected-planet-report__intro {
+  @apply 
+  tw-shared-font-hind-siliguri__light-lg-md-xl-white
+  md:w-[75%]
+  lg:w-[90%];
+}
+
+.vw-partials-ctas-protected-planet-report__button {
+  @apply
+  tw-shared-button--theme-purple
+  shrink-0;
+}

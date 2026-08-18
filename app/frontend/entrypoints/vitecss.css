@@ -1,0 +1,6 @@
+@import "@/styles/tailwind.css";
+/* Wrapper-div mitigation for every turbo_mount(...) island, see
+   app/frontend/lib/turboMount.ts's file header. Loaded from this blocking
+   stylesheet entrypoint, not application.ts, so it applies before first
+   paint instead of arriving late via a component's own JS-injected style. */
+@import "@/styles/global/turbo-mount.css";

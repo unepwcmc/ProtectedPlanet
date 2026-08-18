@@ -1,0 +1,45 @@
+.vw-partials-charts-chart-legend--map {
+  @apply tw-shared-base-flex-col-gap-2;
+}
+
+.vw-partials-charts-chart-legend--points-poly {
+  @apply tw-shared-base-flex-gap-2;
+}
+
+.vw-partials-charts-chart-legend__item {
+  @apply 
+  tw-shared-base-flex-gap-3
+  items-center;
+}
+
+.vw-partials-charts-chart-legend__key {
+  @apply
+  shrink-0 
+  rounded-full 
+  size-3.75;
+}
+
+.vw-partials-charts-chart-legend__key--map-terrestrial {
+  @apply bg-theme-bright-green;
+}
+
+.vw-partials-charts-chart-legend__key--map-marine {
+  @apply bg-theme-blue;
+}
+
+.vw-partials-charts-chart-legend__key--map-oecm {
+  @apply bg-theme-orange;
+}
+
+.vw-partials-charts-chart-legend__key--points-poly-primary {
+  @apply bg-theme-primary;
+}
+
+.vw-partials-charts-chart-legend__key--points-poly-primary-dark {
+  @apply bg-theme-primary-dark;
+}
+
+.vw-partials-charts-chart-legend__title {
+  @apply tw-shared-font-hind-siliguri__light-sm-white;
+}
+ 

@@ -1,3 +1,7 @@
+# TODO(backend): unused — no callers anywhere in the app, and the CMS page-edit
+# "Versioning" UI that fed older_version_id (_page_form_inner.html.erb, versions.js)
+# was removed on the frontend. Safe to delete this class; consider also dropping
+# Comfy::Cms::Page#older_version_id if nothing else relies on it.
 class CmsPresenter
   def initialize page
     @page = page

@@ -1,0 +1,63 @@
+.vw-layouts-partials-hero-green-list {
+  @apply tw-shared-hero-wrapper-common
+  flex
+  justify-center
+  lg:items-center
+  flex-col
+  lg:flex-row
+  p-6
+  md:p-16
+  lg:p-10
+  gap-6
+  lg:gap-24;
+}
+
+.vw-layouts-partials-hero-green-list__content {
+  @apply tw-shared-base-flex-col-gap-6;
+}
+
+.vw-layouts-partials-hero-green-list__title {
+  @apply tw-shared-font-playfair__bold-3xl-md-4xl-grey-black;
+}
+
+.vw-layouts-partials-hero-green-list__intro {
+  @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
+}
+
+.vw-layouts-partials-hero-green-list__button {
+  @apply 
+  tw-shared-button--theme-purple 
+  self-start;
+}
+
+.vw-layouts-partials-hero-green-list__stats {
+  @apply tw-shared-bg--grey-black
+  tw-shared-border-radius 
+  flex 
+  flex-col
+  gap-4
+  box-border
+  p-5 
+  md:p-6 
+  w-full
+  lg:max-w-[33%];
+} 
+
+.vw-layouts-partials-hero-green-list__stat-item {
+  @apply 
+  flex
+  flex-col 
+  gap-1;
+}
+
+.vw-layouts-partials-hero-green-list__stat-number {
+  @apply tw-shared-font-hind-siliguri__normal-3xl-lg-6xl-green;
+}
+
+.vw-layouts-partials-hero-green-list__stat-number--small {
+  @apply tw-shared-font-hind-siliguri__normal-3xl-lg-4xl-green;
+}
+
+.vw-layouts-partials-hero-green-list__stat-text {
+  @apply tw-shared-font-hind-siliguri__normal-base-md-xl-white;
+}

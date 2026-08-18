@@ -17,7 +17,9 @@ class Thematic::MarineController < ApplicationController
       overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'marine',
-      point_query_services: marine_services_for_point_query
+      point_query_services: marine_services_for_point_query,
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
     @filters = SearchAreaLinkFilters.wdpa_and_marine_is_true_filters
   end
@@ -61,7 +63,7 @@ class Thematic::MarineController < ApplicationController
           datapoints: marine_growth_datapoints_from_csv,
           units: "km2",
           legend: ["National", "ABNJ", "Global"]
-        }.to_json
+        }
       }
   end
 
@@ -75,42 +77,36 @@ class Thematic::MarineController < ApplicationController
           total: marine_statistics['total_ocean_pa_coverage_percentage'],
           text: t('thematic_area.marine.hero.stat_text_1'),
           decimal: 2,
-          suffix: '%',
-          small_number: true
+          suffix: '%'
         },
         {
           total: marine_statistics['total_marine_protected_areas'],
           text: t('thematic_area.marine.hero.stat_text_2'),
-          decimal: 0,
-          small_number: true
+          decimal: 0
         },
         {
           # TODO: Once stats server is hooked up, we will have a dedicated field for this
           total: marine_statistics['total_ocean_oecms_pas_coverage_percentage'].to_f - @marine_statistics['total_ocean_pa_coverage_percentage'].to_f,
           text: t('thematic_area.marine.hero.stat_text_3'),
           decimal: 2,
-          suffix: '%',
-          small_number: true
+          suffix: '%'
         },
         {
           total: marine_statistics['total_marine_oecms'].to_i,
           text: t('thematic_area.marine.hero.stat_text_4'),
-          decimal: 0,
-          small_number: true
+          decimal: 0
         },
         {
           total: marine_statistics['total_ocean_oecms_pas_coverage_percentage'],
           text: t('thematic_area.marine.hero.stat_text_5'),
           decimal: 2,
-          suffix: '%',
-          small_number: true
+          suffix: '%'
         },
         {
           total: marine_statistics['total_ocean_area_oecms_pas'],
           text: t('thematic_area.marine.hero.stat_text_6'),
           decimal: 0,
-          suffix: 'km<sup>2</sup>',
-          small_number: true
+          suffix: 'km<sup>2</sup>'
         }
       ]
     end

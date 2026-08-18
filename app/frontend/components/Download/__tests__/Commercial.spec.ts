@@ -12,23 +12,23 @@ const text = {
 }
 
 describe('DownloadCommercial', () => {
-  it('is inactive by default and active when isActive is true', () => {
-    const inactive = mount(DownloadCommercial, { props: { text } })
-    expect(inactive.find('.modal--download-commercial').classes()).not.toContain('active')
-
-    const active = mount(DownloadCommercial, { props: { text, isActive: true } })
-    expect(active.find('.modal--download-commercial').classes()).toContain('active')
+  // Commercial.vue no longer owns an `isActive` prop/toggle — the parent
+  // (Download/Index.vue) controls visibility itself via `v-if`, so the
+  // component always renders its content once mounted.
+  it('renders its content when mounted', () => {
+    const wrapper = mount(DownloadCommercial, { props: { text } })
+    expect(wrapper.find('.ct-download-commercial').exists()).toBe(true)
   })
 
   it('emits close when the close icon is clicked', async () => {
-    const wrapper = mount(DownloadCommercial, { props: { text, isActive: true } })
-    await wrapper.find('.modal__close').trigger('click')
+    const wrapper = mount(DownloadCommercial, { props: { text } })
+    await wrapper.find('.ct-download-commercial__close').trigger('click')
     expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
   it('emits nonCommercial when the non-commercial button is clicked', async () => {
-    const wrapper = mount(DownloadCommercial, { props: { text, isActive: true } })
-    await wrapper.find('.modal__link-button').trigger('click')
+    const wrapper = mount(DownloadCommercial, { props: { text } })
+    await wrapper.find('.ct-download-commercial__link-button').trigger('click')
     expect(wrapper.emitted('nonCommercial')).toHaveLength(1)
   })
 })

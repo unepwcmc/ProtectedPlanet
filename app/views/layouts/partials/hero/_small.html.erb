@@ -1,0 +1,12 @@
+<header class="vw-layouts-partials-hero-small<% if local_assigns[:has_bottom_shadow] %> vw-layouts-partials-hero-small--shadow<% end %>"
+  <% if local_assigns.has_key? :image %>
+    style="background-image: url('<%= image %>')"
+  <% end %>
+>
+  <div class="vw-layouts-partials-hero-small__container">
+    <h1 class="vw-layouts-partials-hero-small__title">
+      <%= title %>
+    </h1>
+  </div>
+  <div id="vw-hero-search-target" class="vw-layouts-partials-hero-small__search"></div>
+</header>

@@ -1,3 +1,3 @@
 <% if banner_visible? %>
-  <%= frontend_mount "Banner", props: { banners: active_banners, signature: banner_signature } %>
+  <%= turbo_mount "Banner", props: { banners: active_banners, signature: banner_signature } %>
 <% end %>

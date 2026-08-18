@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 8.0.0'
-gem 'webpacker', '~> 4.0.2'
 
 # Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
 # its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
@@ -9,9 +8,6 @@ gem 'webpacker', '~> 4.0.2'
 # Pin Psych 3 until those are gone -- webpacker at the Vite cutover (B5),
 # appsignal on a version bump. (libyaml-dev is present in the image.)
 gem 'psych', '~> 3.3'
-
-gem 'bourbon'
-gem "neat"
 
 gem 'pg', '~> 1.1'
 gem 'activerecord-postgis-adapter', '~> 11.0'
@@ -25,11 +21,9 @@ gem 'elasticsearch', '~> 7.17'
 # adapters into separate gems). 1.10 is the last 1.x and Ruby 3.3-clean.
 gem 'faraday', '~> 1.10'
 #
-gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2'
 
 gem 'uglifier', '~> 4.1.17'
-gem 'coffee-rails', '~> 5.0'
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
 gem "slack-notifier", "~> 1.5.1"
@@ -39,17 +33,16 @@ gem 'premailer-rails'
 # gem 'listen'
 gem 'levenshtein', '~> 0.2.2'
 
-gem 'vuejs-rails', '~> 2.3.2'
-gem 'sprockets-vue', '~> 0.1.0'
-
 gem 'rails-controller-testing'
 
 gem 'gdal', '~> 2.0'
 gem 'net-sftp'
 gem 'net-scp'
 
-# 3.x needs Ruby 2.7+ (filter_map) and Vite 5+ (Node 18+). Pin 2.x for Rails 5 / Ruby 2.6 / Node 12 spike.
+# Frontend related gems
 gem 'vite_rails', '~> 3.11.1'
+gem 'turbo-mount', '~> 0.4.4'
+gem 'turbo-rails', '~> 2.0'
 
 group :production, :staging do
 #  gem 'unicorn'
@@ -94,7 +87,6 @@ end
 
 group :test, :development do
   #gem 'konacha' - TODO - NOT COMPATIBLE WITH RAILS 5
-  gem 'ejs'
   # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
   gem 'minitest', '~> 5.10', '!= 5.10.2', '< 5.26.2' # 5.26.2+ requires ruby >= 3.1
   

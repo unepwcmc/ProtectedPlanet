@@ -32,8 +32,8 @@ class SearchController < ApplicationController
     }
 
     @results = Search::FullSerializer.new(@search, _options).serialize
-    
-    render json: @results.to_json
+
+    render json: @results
   end
 
   def map

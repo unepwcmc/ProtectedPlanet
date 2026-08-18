@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   # Required for development
   before_action :set_host_for_local_storage
 
-  helper_method :opengraph
+  helper_method :opengraph, :canonical_url, :structured_data
 
   before_action :load_cms_site
   before_action :load_cms_content
@@ -50,6 +50,29 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  def canonical_url
+    return if admin_path?
+
+    request.original_url.split('?').first
+  end
+
+  def structured_data
+    return if admin_path?
+
+    @structured_data ||= {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: t('meta.site.name'),
+      url: root_url,
+      description: t('meta.site.description'),
+      publisher: {
+        '@type': 'Organization',
+        name: t('meta.site.name'),
+        logo: URI.join(root_url, helpers.image_path(t('meta.image'))).to_s
+      }
+    }
+  end
+
   def default_url_options
     { locale: I18n.locale }
   end
@@ -66,14 +89,21 @@ class ApplicationController < ActionController::Base
     raise PageNotFound
   end
 
+  # Production only: a blanket StandardError handler swallows every exception, so in
+  # development it hides the Rails error page/backtrace and in test it turns genuine
+  # failures into a rendered 500 instead of failing loudly.
   if Rails.env.production?
-    rescue_from PageNotFound do
-      render_404
-    end
-
     rescue_from StandardError do
-      render_500
+      render_error_page(500)
     end
+  end
+
+  # Declared AFTER StandardError deliberately: rescue_from matches the most recently
+  # registered handler first, and PageNotFound < StandardError — reverse the order and
+  # every 404 would render as a 500 in production.
+  # Unguarded, so a missing record renders the styled 404 page in every environment.
+  rescue_from PageNotFound do
+    render_error_page(404)
   end
 
   def enable_caching
@@ -138,12 +168,13 @@ class ApplicationController < ActionController::Base
     params[:controller] == 'comfy/admin/cms/pages' && params[:action] == 'update'
   end
 
-  def render_404
-    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
-  end
-
-  def render_500
-    render file: Rails.root.join("/app/views/layouts/500.html.erb"), layout: true, status: :internal_server_error
+  def render_error_page(status)
+    case status
+    when 404
+      render template: "layouts/error_page", layout: "application", status: :not_found, locals: { error_status: status }
+    else
+      render template: "layouts/error_page", layout: "application", status: :internal_server_error, locals: { error_status: status }
+    end
   end
 
   def check_for_pdf

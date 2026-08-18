@@ -1,19 +1,18 @@
-<%= render partial: "layouts/partials/hero-basic", locals: { 
-  image: cms_fragment_render(:image, @cms_page),
-  title: @cms_page.label 
-} %>
-
-<section class="container--medium spacer-small--top spacer-small--bottom">
-  <%= cms_fragment_render("content") %>
-</section>
-
-
-<div class="flex flex-h-center spacer-small--bottom">
-  <%= render "partials/social/social-share" %>
+<div class="vw-layouts-cms-news-and-stories-article">
+  <%= render partial: "layouts/partials/hero/basic", locals: {
+    image: cms_fragment_render(:image, @cms_page),
+    title: @cms_page.label,
+    items_centre: true,
+    limited_title_width: true
+  } %>
+  <section class="vw-layouts-cms-news-and-stories-article__content">
+    <%= cms_fragment_render("content") %>
+  </section>
+  <div class="vw-layouts-cms-news-and-stories-article__socials">
+    <%= render "partials/social/social-share" %>
+  </div>
+  <section class="vw-layouts-cms-news-and-stories-article__news">
+    <%= render "partials/cards/news" %>
+  </section>
+  <%= render "partials/ctas/protected-planet-report" %>
 </div>
-
-<section class="container spacer-small--bottom">
-  <%= render "partials/cards/news" %>
-</section>
-
-<%= render "partials/ctas/live-report" %>

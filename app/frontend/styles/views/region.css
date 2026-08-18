@@ -1,0 +1,11 @@
+.vw-region {
+  @apply tw-shared-region-country-site__wrapper;
+}
+
+.vw-region__container {
+  @apply tw-shared-region-country-site__container;
+}
+
+.vw-region__overview {
+  @apply tw-shared-region-country-site__overview;
+}

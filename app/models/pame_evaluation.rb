@@ -184,7 +184,7 @@ class PameEvaluation < ApplicationRecord
     end.to_json
   end
 
-  def self.filters_to_json
+  def self.filters
     methods = PameMethod.pluck(:name).compact.sort
     unique_countries = Country.pluck(:name).compact.uniq.sort
     unique_year = PameEvaluation.pluck(:asmt_year).uniq.map(&:to_s).sort
@@ -220,7 +220,7 @@ class PameEvaluation < ApplicationRecord
         options: ['Protected Area', 'OECM'],
         type: 'multiple'
       }
-    ].to_json
+    ]
   end
 
   def self.generate_csv(where_statement)

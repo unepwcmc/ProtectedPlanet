@@ -1,8 +1,5 @@
-<section class="container spacer-large--top">
-  <search-areas-home
-    :config="<%= config %>"
-    endpoint-autocomplete="<%= search_autocomplete_path %>"
-    endpoint-search="<%= search_areas_path(search_term: "SEARCHTERM", filters: @filters) %>"
-  >
-  </search-areas-home>
-</section>
+<%= turbo_mount "SearchAreas", props: {
+    config: config,
+    endpointAutocomplete: search_autocomplete_path,
+    endpointSearch: search_areas_path(search_term: "SEARCHTERM", filters: @filters)
+} %> 

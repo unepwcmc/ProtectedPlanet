@@ -28,7 +28,7 @@ describe('DownloadModal', () => {
   it('is inactive by default and shows the citation copy', () => {
     const wrapper = mountModal()
 
-    expect(wrapper.find('.modal--download').classes()).not.toContain('active')
+    expect(wrapper.find('.ct-download-modal').classes()).not.toContain('ct-download-modal--active')
     expect(wrapper.text()).toContain('Downloads')
     expect(wrapper.html()).toContain('Cite this')
   })
@@ -40,8 +40,8 @@ describe('DownloadModal', () => {
     store.addNewDownloadItem({ id: 1, domain: 'protected_area', format: 'csv', token: 'abc' })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('.modal--download').classes()).toContain('active')
-    expect(wrapper.find('.modal__ul').findAll('download-item-stub')).toHaveLength(1)
+    expect(wrapper.find('.ct-download-modal').classes()).toContain('ct-download-modal--active')
+    expect(wrapper.find('.ct-download-modal__list').findAll('download-item-stub')).toHaveLength(1)
   })
 
   it('closes and un-minimises itself once the last item is deleted', async () => {
@@ -61,10 +61,10 @@ describe('DownloadModal', () => {
     const store = useDownloadStore()
     const wrapper = mountModal()
 
-    await wrapper.find('.modal__minimise').trigger('click')
+    await wrapper.find('.ct-download-modal__minimise').trigger('click')
     expect(store.isModalMinimised).toBe(true)
 
-    await wrapper.find('.modal__minimise').trigger('click')
+    await wrapper.find('.ct-download-modal__minimise').trigger('click')
     expect(store.isModalMinimised).toBe(false)
   })
 

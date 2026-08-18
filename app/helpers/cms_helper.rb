@@ -1,6 +1,6 @@
 module CmsHelper
   def get_category_filters
-    category_groups = load_categories 
+    category_groups = load_categories
 
     [
       {
@@ -14,7 +14,7 @@ module CmsHelper
           }
         end
       }
-    ].to_json
+    ]
   end
 
   def load_categories
@@ -61,8 +61,8 @@ module CmsHelper
     @cta_api ||= CallToAction.find_by(css_class: PageSlugs::Cta::API)
   end
 
-  def cta_live_report
-    @cta_live_report ||= CallToAction.find_by(css_class: PageSlugs::Cta::LIVE_REPORT)
+  def cta_protected_planet_report
+    @cta_protected_planet_report ||= CallToAction.find_by(css_class: PageSlugs::Cta::PROTECTED_PLANET_REPORT)
   end
 
   def cta_mpa 

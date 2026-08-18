@@ -1,0 +1,63 @@
+/* The classes here are used directly from rails to frontend */
+.tw-shared-chart-legend-colour-aqua {
+  @apply bg-theme-chart-aqua;
+}
+
+.tw-shared-chart-legend-colour-blue {
+  @apply bg-theme-chart-blue;
+}
+
+.tw-shared-chart-legend-colour-purple {
+  @apply bg-theme-chart-purple;
+}
+
+/* Matches $theme-chart in app/assets/stylesheets/_settings.scss (12-colour
+   designation palette), indexed 1-12. Shared by ChartRowStacked's per-bar
+   colouring and StatsDesignations' own legend-key swatches. */
+.tw-shared-chart-theme-1 {
+  @apply bg-[#64BAD9];
+}
+
+.tw-shared-chart-theme-2 {
+  @apply bg-[#A54897];
+}
+
+.tw-shared-chart-theme-3 {
+  @apply bg-[#65C9B2];
+}
+
+.tw-shared-chart-theme-4 {
+  @apply bg-[#5F81CB];
+}
+
+.tw-shared-chart-theme-5 {
+  @apply bg-[#FAA51B];
+}
+
+.tw-shared-chart-theme-6 {
+  @apply bg-[#EF5F6C];
+}
+
+.tw-shared-chart-theme-7 {
+  @apply bg-[#151617];
+}
+
+.tw-shared-chart-theme-8 {
+  @apply bg-[#71A22B];
+}
+
+.tw-shared-chart-theme-9 {
+  @apply bg-[#F5F58A];
+}
+
+.tw-shared-chart-theme-10 {
+  @apply bg-[#EF266C];
+}
+
+.tw-shared-chart-theme-11 {
+  @apply bg-[#1A4D9F];
+}
+
+.tw-shared-chart-theme-12 {
+  @apply bg-[#E57133];
+}

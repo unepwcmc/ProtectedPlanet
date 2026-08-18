@@ -30,10 +30,47 @@ export function postJson<T>(url: string, body?: unknown): Promise<T> {
   }).then(parseJsonResponse<T>)
 }
 
-export function getJson<T>(url: string, params?: Record<string, string>): Promise<T> {
+export function getJson<T>(url: string, params?: Record<string, string> | URLSearchParams): Promise<T> {
   const query = params ? `?${new URLSearchParams(params).toString()}` : ''
 
   return fetch(`${url}${query}`, {
     headers: { 'X-CSRF-Token': csrfToken() }
   }).then(parseJsonResponse<T>)
+}
+
+export interface BlobDownload {
+  filename: string
+  blob: Blob
+}
+
+// For endpoints that return a file (e.g. CSV export) rather than JSON —
+// reads the filename back out of Content-Disposition, same contract the
+// legacy axios-based PAME download used.
+export async function postBlob(url: string, body?: unknown): Promise<BlobDownload> {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken()
+    },
+    body: JSON.stringify(body ?? {})
+  })
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`)
+  }
+
+  const disposition = response.headers.get('content-disposition') ?? ''
+  const match = disposition.match(/filename="?([^"]+)"?/)
+
+  return { filename: match ? match[1] : 'download.csv', blob: await response.blob() }
+}
+
+// For external (non-Rails) hosts, e.g. the ArcGIS point-query services — sending
+// our CSRF header there fails their CORS preflight (`request-helpers.js`'s
+// axiosGetWithoutCSRF was the same fix for the legacy axios-based code).
+export function getJsonExternal<T>(url: string, params?: Record<string, string> | URLSearchParams): Promise<T> {
+  const query = params ? `?${new URLSearchParams(params).toString()}` : ''
+
+  return fetch(`${url}${query}`).then(parseJsonResponse<T>)
 }

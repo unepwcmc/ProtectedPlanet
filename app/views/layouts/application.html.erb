@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <%= render "layouts/partials/head" %>
-  </head>
-
-  <body>
-
-    <%= render "layouts/partials/cookieconsent" %>
-
+  <%= render "layouts/partials/head" %>
+  <body class="<%= 'tw-global-pdf-export' if @for_pdf %>">
+    <% unless @cms_page&.slug == PageSlugs::LEGAL %>
+      <%= render "layouts/partials/cookie_consent" %>
+    <% end %>
     <% unless @for_pdf %>
       <%= render "layouts/partials/banner" %>
     <% end %>
-
     <%= render "layouts/partials/topbar" %>
-
-    <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
+    <div class="vw-layouts-application">
       <%= yield %>
-
-      <%= render "layouts/partials/footer" %>
+      <%= render "layouts/partials/footer/index" %>
     </div>
-
-    <%= frontend_mount "DownloadModal", props: {
+    <%= turbo_mount "DownloadModal", props: {
       endpointCreate: '/downloads',
       endpointPoll: '/downloads/poll',
       gaId: 'Download modal',

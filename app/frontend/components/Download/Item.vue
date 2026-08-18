@@ -1,51 +1,62 @@
 <template>
   <li class="ct-download-item">
     <span
-      class="modal__li-title"
+      class="ct-download-item__title"
       v-text="title"
     />
     <p
       v-show="hasFailed"
-      class="modal__li-failed"
+      class="ct-download-item__status ct-download-item__status--failed"
     >
+      <IconWarning class="ct-download-item__status-icon ct-download-item__status-icon--failed" />
       <span
-        class="modal__li-text"
+        class="ct-download-item__status-text"
         v-text="text.failed"
       />
     </p>
     <p
       v-show="isGenerating"
-      class="modal__li-generating"
+      class="ct-download-item__status ct-download-item__status--generating"
     >
+      <IconLoadingSpinner class="ct-download-item__status-icon ct-download-item__status-icon--generating" />
       <span
-        class="modal__li-text"
+        class="ct-download-item__status-text"
         v-text="text.generating"
       />
     </p>
     <a
       v-show="isReady"
-      class="modal__li-download"
+      class="ct-download-item__link"
       :href="url"
       @click="trackDownloadClick"
     >
       <span
-        class="modal__li-text"
+        class="ct-download-item__link-text"
         v-text="text.download"
       />
+      <IconDownload class="ct-download-item__link-icon" />
     </a>
-    <span
-      class="modal__li-delete"
+    <button
+      class="ct-download-item__delete"
       @click="deleteItem"
-    />
+    >
+      <IconCircleClose class="ct-download-item__delete-icon" />
+    </button>
   </li>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { getJson, postJson } from '@/lib/http'
-import { trackEvent } from '@/lib/analytics'
+import useAnalytics from '@/composables/useAnalytics'
+import IconCircleClose from '@/components/Icon/CircleClose.vue'
+import IconDownload from '@/components/Icon/Download.vue'
+import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
+import IconWarning from '@/components/Icon/Warning.vue'
 import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
 import type { DownloadModalProps } from '@/types/backend'
+
+const { trackEvent } = useAnalytics()
 
 const props = defineProps<{
   endpointCreate: string
@@ -144,3 +155,84 @@ onMounted(ajaxRequestDownload)
 
 onUnmounted(stopPolling)
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-download-item {
+  @apply
+  bg-theme-grey-xlight
+  tw-shared-base-flex-gap-3
+  items-center
+  justify-end
+  tw-shared-font-hind-siliguri__light-base-md-xl-grey-black
+  min-h-10
+  px-2.5
+  md:h-15.5
+  md:px-5.5;
+}
+
+.ct-download-item__title {
+  @apply
+  grow
+  overflow-hidden
+  text-ellipsis
+  whitespace-nowrap;
+}
+
+.ct-download-item__status {
+  @apply
+  tw-shared-base-flex-gap-3
+  items-center;
+}
+
+.ct-download-item__status-icon--failed {
+  @apply
+  w-5.5
+  h-4.75
+  text-theme-red;
+}
+
+.ct-download-item__status-icon--generating {
+  @apply
+  size-10
+  text-theme-grey-dark;
+}
+
+.ct-download-item__status-text {
+  @apply
+  hidden
+  md:inline;
+}
+
+.ct-download-item__link {
+  @apply
+  tw-shared-button--download
+  shrink-0
+  gap-2.5
+  size-8
+  px-0
+  md:w-auto
+  md:px-6.75;
+}
+
+.ct-download-item__link-text {
+  @apply
+  hidden
+  md:inline;
+}
+
+.ct-download-item__link-icon {
+  @apply size-4.75;
+}
+
+.ct-download-item__delete {
+  @apply tw-shared-button-basic;
+}
+
+.ct-download-item__delete-icon {
+  @apply
+  size-7.25
+  text-theme-grey-xdark;
+}
+</style>

@@ -1,0 +1,10 @@
+.vw-search {
+  @apply 
+  tw-shared-base-container--medium
+  pt-7.5
+  md:pt-15
+  lg:pt-20
+  pb-6 
+  md:pb-8.5 
+  lg:pb-12.5;
+}

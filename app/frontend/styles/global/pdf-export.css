@@ -1,0 +1,77 @@
+.tw-global-pdf-export .vw-layouts-partials-topbar,
+.tw-global-pdf-export .vw-partials-bars-topbar-secondary,
+.tw-global-pdf-export .ct-map-baselayer-controls,
+.tw-global-pdf-export .maplibregl-ctrl-top-right {
+  @apply hidden!;
+}
+
+.tw-global-pdf-export .pdf-break-after {
+  @apply break-after-page!;
+}
+
+.tw-global-pdf-export .pdf-break-before {
+  @apply break-before-page!;
+}
+
+.tw-global-pdf-export .pdf-break-inside-avoid {
+  @apply break-inside-avoid!;
+}
+
+.tw-global-pdf-export .vw-country,
+.tw-global-pdf-export .vw-protected-areas,
+.tw-global-pdf-export .vw-region {
+  @apply bg-transparent!;
+}
+
+.tw-global-pdf-export .vw-country__container,
+.tw-global-pdf-export .vw-region__container,
+.tw-global-pdf-export .vw-protected-areas__container {
+  @apply w-full!;
+}
+
+.tw-global-pdf-export .vw-protected-areas__col-1 {
+  @apply mr-7.5!
+    w-138.75!;
+}
+
+.tw-global-pdf-export .vw-protected-areas__col-2 {
+  @apply w-138.75!;
+}
+
+.tw-global-pdf-export .tw-shared-card-stats {
+  @apply
+  border!
+  border-theme-grey!
+  bg-transparent!
+  text-theme-grey-black!;
+}
+
+.tw-global-pdf-export .tw-shared-card-stats-half {
+  @apply w-138.75!;
+}
+
+.tw-global-pdf-export .tw-shared-card-stats-wrapper {
+  @apply justify-normal!;
+}
+
+.tw-global-pdf-export .vw-partials-stats-stats-overview {
+  @apply
+  border!
+  border-theme-grey!
+  bg-transparent!
+  text-theme-grey-black!
+  w-94!;
+}
+
+.tw-global-pdf-export .ct-map-disclaimer--country-region-pa {
+  @apply
+  border!
+  border-theme-grey-black!;
+}
+
+.tw-global-pdf-export .vw-partials-stats-stats-overview__title,
+.tw-global-pdf-export .vw-partials-stats-stats-overview__subtitle,
+.tw-global-pdf-export .vw-partials-stats-stats-overview__text,
+.tw-global-pdf-export .vw-partials-charts-chart-legend__title {
+  @apply text-theme-grey-black!;
+}

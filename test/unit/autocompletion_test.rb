@@ -10,6 +10,9 @@ class AutocompletionTest < ActiveSupport::TestCase
     expected_response = [{
       id: pa.site_id,
       is_pa: true,
+      # Only a ProtectedArea carries a site_pid; it is threaded through for the
+      # map's "jump to result" popup. nil here because the factory sets none.
+      site_pid: pa.site_pid,
       extent_url: pa.extent_url,
       title: 'San Guillermo',
       url: "/#{pa.site_id}"

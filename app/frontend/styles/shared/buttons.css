@@ -1,0 +1,127 @@
+/* shared across every button: legacy `button-basic` mixin */
+@utility tw-shared-button-basic {
+  @apply
+  bg-transparent
+  cursor-pointer
+  font-sans
+  no-underline
+  hover:no-underline
+  focus:outline-none
+  disabled:cursor-not-allowed
+  disabled:opacity-20;
+}
+
+/* shared across the fixed-height buttons only: `button-basic` + `button-height` + `button-font` + `button-padding` + `button-radius` */
+@utility tw-shared-button-sized {
+  @apply
+  tw-shared-button-basic
+  flex
+  items-center
+  h-11.5
+  md:h-14
+  px-5
+  md:px-6.75
+  rounded-[0.1875rem]
+  tw-shared-font-hind-siliguri__light-base-md-lg-white
+  disabled:cursor-not-allowed
+  disabled:opacity-20;
+}
+
+@utility tw-shared-button--theme-purple {
+  @apply
+  tw-shared-button-sized
+  bg-theme-purple
+  text-white;
+}
+
+@utility tw-shared-button--outline-black {
+  @apply
+  tw-shared-button-sized
+  border
+  border-black
+  text-black;
+}
+
+@utility tw-shared-button--outline-white {
+  @apply
+  tw-shared-button-sized
+  border
+  border-white
+  text-white;
+}
+
+@utility tw-shared-button--border-theme-primary {
+  @apply
+  tw-shared-button-basic
+  flex
+  justify-between
+  gap-2
+  w-full
+  rounded-[0.1875rem]
+  border
+  border-theme-primary
+  py-3
+  px-4
+  text-sm;
+}
+
+@utility tw-shared-button--bg-theme-primary {
+  @apply 
+  tw-shared-button-basic
+  flex
+  justify-between
+  gap-2
+  w-full
+  rounded-[0.1875rem]
+bg-theme-primary
+  py-3
+  px-4
+  text-sm;
+} 
+  
+
+@utility tw-shared-button--disabled {
+  @apply
+  cursor-not-allowed
+  opacity-20
+  disabled:cursor-not-allowed
+  disabled:opacity-20;
+}
+
+@utility tw-shared-button--all {
+  @apply
+  tw-shared-button-basic
+  tw-shared-font-hind-siliguri__light-base-lg-lg
+  tw-shared-base-flex-gap-3
+  items-center
+  shrink-0;
+}
+
+@utility tw-shared-button--external {
+  @apply
+  tw-shared-button-sized
+  bg-theme-purple
+  tw-shared-font-hind-siliguri__light-lg-white;
+}
+
+/* legacy `button-download` — icon is a real element, see Icon/Download.vue / tw-shared-icon-download-black */
+@utility tw-shared-button--download {
+  @apply
+  tw-shared-button-basic
+  flex
+  items-center
+  justify-center
+  h-11.5
+  md:h-14
+  px-6.75
+  rounded-[0.1875rem]
+  bg-theme-primary
+  text-lg;
+}
+
+/* legacy `button-external` alone (no color/font of its own) — just enough flex to line up the real icon element next to the text */
+@utility tw-shared-button--link-external {
+  @apply
+  flex
+  items-center;
+}

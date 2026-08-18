@@ -5,7 +5,7 @@ class HomeController < ApplicationController
     @config_search_areas = {
       id: 'all',
       placeholder: I18n.t('global.placeholder.search-wdpca')
-    }.to_json
+    }
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
@@ -21,7 +21,9 @@ class HomeController < ApplicationController
       overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'all',
-      point_query_services: all_services_for_point_query
+      point_query_services: all_services_for_point_query,
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
   end
 

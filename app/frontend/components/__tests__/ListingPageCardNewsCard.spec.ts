@@ -15,11 +15,11 @@ describe('ListingPageCardNewsCard', () => {
     })
 
     expect(wrapper.attributes('href')).toBe('/news/1')
-    expect(wrapper.find('.card__date').text()).toBe('01 January 26')
-    expect(wrapper.find('.card__h3').text()).toBe('Some headline')
-    expect(wrapper.find('.card__summary').text()).toBe('A short summary')
-    expect(wrapper.find('.card__image').attributes('style')).toContain('/img/news.png')
-    expect(wrapper.find('.card__icon').exists()).toBe(false)
+    expect(wrapper.find('.ct-listing-page-card-news-card__date').text()).toBe('01 January 26')
+    expect(wrapper.find('.ct-listing-page-card-news-card__title').text()).toBe('Some headline')
+    expect(wrapper.find('.ct-listing-page-card-news-card__summary').text()).toBe('A short summary')
+    expect(wrapper.find('.ct-listing-page-card-news-card__image').attributes('style')).toContain('/img/news.png')
+    expect(wrapper.find('.ct-listing-page-card-news-card__placeholder-icon').exists()).toBe(false)
   })
 
   it('falls back to a placeholder icon when there is no image', () => {
@@ -27,7 +27,7 @@ describe('ListingPageCardNewsCard', () => {
       props: { summary: 'Summary', title: 'Title', url: '/news/2' }
     })
 
-    expect(wrapper.find('.card__icon').exists()).toBe(true)
-    expect(wrapper.find('.card__date').exists()).toBe(false)
+    expect(wrapper.find('.ct-listing-page-card-news-card__placeholder-icon').exists()).toBe(true)
+    expect(wrapper.find('.ct-listing-page-card-news-card__date').exists()).toBe(false)
   })
 })

@@ -1,0 +1,55 @@
+@utility tw-shared-card-stats {
+  @apply
+  relative
+  bg-white
+  px-4.5
+  py-4
+  md:px-7.5
+  md:py-7
+  tw-shared-base-flex-col-gap-6;
+}
+
+@utility tw-shared-card-stats--row-center {
+  @apply
+  relative
+  bg-white
+  px-4.5
+  py-4
+  md:px-7.5
+  md:py-7
+  flex
+  justify-center;
+}
+
+@utility tw-shared-card-stats-half {
+  @apply 
+  w-full 
+  md:w-[calc(50%-0.9375rem)];
+}
+
+@utility tw-shared-card-stats-wrapper {
+  @apply 
+  flex 
+  flex-wrap
+  gap-3
+  md:gap-0
+  md:flex-nowrap 
+  md:justify-between;
+}
+
+@utility tw-shared-card-title {
+  @apply tw-shared-font-playfair__semi-bold-xl-md-2xl-grey-black;
+}
+
+@utility tw-shared-card-sub-title {
+  @apply tw-shared-font-hind-siliguri__semibold-base-md-xl-grey-black;
+}
+
+
+@utility tw-shared-card-no-info-text {
+  @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+}
+
+@utility tw-shared-card-stats-for-pdf {
+  @apply tw-shared-base-flex-col-gap-12;
+}

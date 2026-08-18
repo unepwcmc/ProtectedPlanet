@@ -1,0 +1,23 @@
+.vw-protected-areas {
+  @apply tw-shared-region-country-site__wrapper;
+}
+
+.vw-protected-areas__container {
+  @apply tw-shared-region-country-site__container;
+}
+
+.vw-protected-areas__overview {
+  @apply tw-shared-region-country-site__overview;
+}
+
+.vw-protected-areas__col-wrapper {
+  @apply flex flex-wrap lg:flex-nowrap;
+}
+
+.vw-protected-areas__col-1 {
+  @apply w-full lg:w-[calc(50%_-_15px)];
+}
+
+.vw-protected-areas__col-2 {
+  @apply w-full lg:ml-auto lg:w-[calc(50%_-_15px)] lg:block;
+}

@@ -1,0 +1,43 @@
+.vw-home {
+  @apply 
+  tw-shared-base-wrapper
+  tw-shared-base-flex-col-gap-6-and-9;
+}
+
+.vw-home__container {
+  @apply
+  tw-shared-base-container
+  tw-shared-base-flex-col-gap-9;
+}
+
+.vw-home__download {
+  @apply 
+  tw-shared-base-flex-gap-3
+  tw-shared-font-hind-siliguri__light-lg-grey-black;
+}
+
+.vw-home__download-label {
+  @apply tw-shared-base-flex-gap-1;
+}
+
+.vw-home__download-label-title {
+   @apply font-bold;
+}
+
+.vw-home__download-link {
+   @apply underline;
+}
+
+.vw-home__download-link:hover {
+   @apply no-underline;
+}
+
+.vw-home__search {
+   @apply 
+   lg:self-center 
+   lg:w-3xl;
+}
+
+.vw-home__map {
+  @apply tw-shared-map-section;
+}
