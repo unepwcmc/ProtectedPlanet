@@ -41,15 +41,6 @@ class ProtectedAreasController < ApplicationController
     helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
     respond_to do |format|
       format.html
-      # format.pdf {
-      #   rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
-      #   url = url_for(action: :show, id: @protected_area.site_id, for_pdf: true)
-      #   dest_pdf = Rails.root.join("tmp/#{@protected_area.site_id}-site.pdf").to_s
-      #   byebug
-      #   `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
-
-      #   send_file dest_pdf, type: 'application/pdf'
-      # }
     end
   end
 

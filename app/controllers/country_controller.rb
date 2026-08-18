@@ -43,15 +43,6 @@ class CountryController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf do
-        rasterizer_name = Rails.env.development? ? 'rasterize_dev_mode.js' : 'rasterize.js'
-        rasterizer = Rails.root.join('app/frontend/backend-scripts', rasterizer_name)
-        url = url_for(action: :pdf, iso: @country.iso)
-        dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
-
-        `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
-        send_file dest_pdf, type: 'application/pdf'
-      end
     end
   end
 
@@ -79,10 +70,6 @@ class CountryController < ApplicationController
     @tabs = cached[:tabs]
     @stats_data = cached[:stats_data]
     @total_oecm = cached[:total_oecm]
-  end
-
-  def pdf
-    @for_pdf = true
   end
 
   def protected_areas
