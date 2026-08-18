@@ -10,7 +10,9 @@
 /db/structure.sql
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
+# Match rotated logs too (test.log.0, production.log.1, ...): the bare *.log
+# pattern missed them, which is how a 246MB log/test.log.0 got committed once.
+/log/*.log*
 
 /tmp/*
 !/tmp/.gitkeep
