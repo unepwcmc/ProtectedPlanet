@@ -3,6 +3,11 @@
 >
   <div class="vw-layouts-partials-hero-basic__container <%= 'vw-layouts-partials-hero-basic__container--items-centre' if local_assigns[:items_centre]%>">
     <div class="vw-layouts-partials-hero-basic__content <%= 'vw-layouts-partials-hero-basic__content--centre-text' if local_assigns[:centre_text] %><%= 'vw-layouts-partials-hero-basic__content--limited-width' if local_assigns[:limited_title_width] %>">
+      <% if local_assigns[:date].present? %>
+        <p class="vw-layouts-partials-hero-basic__date">
+          <%= date %>
+        </p>
+      <% end %>
       <h1 class="vw-layouts-partials-hero-basic__title">
         <%= title %>
       </h1>

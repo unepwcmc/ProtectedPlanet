@@ -35,6 +35,10 @@
   text-center;
 }
 
+.vw-layouts-partials-hero-basic__date {
+  @apply tw-shared-font-hind-siliguri__light-sm-grey;
+}
+
 .vw-layouts-partials-hero-basic__title {
   @apply tw-shared-font-playfair__bold-3xl-md-4xl-grey-black;
 }

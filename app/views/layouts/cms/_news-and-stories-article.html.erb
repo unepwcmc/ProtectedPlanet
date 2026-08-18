@@ -2,6 +2,7 @@
   <%= render partial: "layouts/partials/hero/basic", locals: {
     image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label,
+    date: cms_fragment_content_datetime(:published_date, @cms_page)&.strftime('%d %B %y'),
     items_centre: true,
     limited_title_width: true
   } %>
