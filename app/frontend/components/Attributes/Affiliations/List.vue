@@ -8,11 +8,13 @@
     <li
       v-for="(links, sitePid) in affiliationsByParcel"
       :key="sitePid"
-      class="ct-attributes-affiliations-list__item"
+      class="ct-attributes-affiliations-list__item
+      tw-global-pdf-export__break-inside-avoid"
     >
       <h3
         v-if="subTitle"
-        class="ct-attributes-affiliations-list__subtitle"
+        class="ct-attributes-affiliations-list__subtitle
+        tw-global-pdf-export__break-after-avoid"
         v-text="subTitleMerge(sitePid)"
       />
       <ul class="ct-attributes-affiliations-list__affiliations">

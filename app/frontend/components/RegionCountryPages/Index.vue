@@ -21,10 +21,7 @@
       />
     </div>
     <StatsMessage v-bind="activeDatabase.message" />
-    <div
-      class="ct-region-country-pages__stats
-            pdf-break-before"
-    >
+    <div class="ct-region-country-pages__stats">
       <StatsIucnCategories
         v-if="activeDatabase.iucn"
         v-bind="iucnProps"

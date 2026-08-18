@@ -1,7 +1,8 @@
 <template>
   <div class="ct-stats-designations">
     <h2
-      class="ct-stats-designations__title"
+      class="ct-stats-designations__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <ChartRowStacked
@@ -13,7 +14,7 @@
         v-for="(designation, i) in designations"
         :key="i"
         class="ct-stats-designations__legend-group
-        pdf-break-inside-avoid"
+        tw-global-pdf-export__break-inside-avoid"
       >
         <div class="ct-stats-designations__legend-header">
           <span

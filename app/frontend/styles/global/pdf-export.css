@@ -5,22 +5,25 @@
   @apply hidden!;
 }
 
-.tw-global-pdf-export .pdf-break-after {
-  @apply break-after-page!;
-}
-
-.tw-global-pdf-export .pdf-break-before {
-  @apply break-before-page!;
-}
-
-.tw-global-pdf-export .pdf-break-inside-avoid {
+.tw-global-pdf-export .tw-global-pdf-export__break-inside-avoid {
   @apply break-inside-avoid!;
 }
 
+.tw-global-pdf-export .tw-global-pdf-export__break-after-avoid {
+  @apply break-after-avoid!;
+}
+
+/*
+ * The wrapper own top/bottom padding only paints on the first/last page fragment of
+ * the box (Chromium slices padding at page breaks) - every other page would render
+ * with zero top whitespace. Puppeteers page.pdf margin already gives every page a
+ * uniform gutter, so drop the content-side padding for PDF mode instead of
+ * double-applying it.
+ */
 .tw-global-pdf-export .vw-country,
 .tw-global-pdf-export .vw-protected-areas,
 .tw-global-pdf-export .vw-region {
-  @apply bg-transparent!;
+  @apply bg-transparent! pt-0! pb-0!;
 }
 
 .tw-global-pdf-export .vw-country__container,

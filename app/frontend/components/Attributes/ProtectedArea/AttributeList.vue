@@ -9,7 +9,8 @@
     >
       <li
         v-if="forPdf || !attribute.is_site_pid"
-        class="ct-attributes-protected-area-list__item"
+        class="ct-attributes-protected-area-list__item
+        tw-global-pdf-export__break-inside-avoid"
         :class="{
           'ct-attributes-protected-area-list__item--for-pdf': forPdf
         }"

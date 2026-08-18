@@ -2,7 +2,8 @@
   <div class="ct-attributes-pame">
     <h3
       v-if="title"
-      class="ct-attributes-pame__title"
+      class="ct-attributes-pame__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <ul
@@ -12,7 +13,8 @@
       <li
         v-for="(years, methodology) in pameAttributes"
         :key="methodology"
-        class="ct-attributes-pame__item"
+        class="ct-attributes-pame__item
+        tw-global-pdf-export__break-inside-avoid"
         :class="{
           'ct-attributes-pame__item--for-pdf': forPdf
         }"

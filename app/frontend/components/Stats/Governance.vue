@@ -1,7 +1,8 @@
 <template>
   <div class="ct-stats-governance">
     <h2
-      class="ct-stats-governance__title"
+      class="ct-stats-governance__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <AmChartPie
@@ -13,7 +14,8 @@
       <li
         v-for="(type, i) in governance"
         :key="i"
-        class="ct-stats-governance__item"
+        class="ct-stats-governance__item
+        tw-global-pdf-export__break-inside-avoid"
       >
         <i
           class="ct-stats-governance__item-icon"

@@ -1,17 +1,16 @@
 <template>
-  <div
-    class="ct-stats-sources
-  pdf-break-inside-avoid"
-  >
+  <div class="ct-stats-sources">
     <h2
-      class="ct-stats-sources__title"
+      class="ct-stats-sources__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="`${title} ${count}`"
     />
     <ul class="ct-stats-sources__list">
       <li
         v-for="(source, i) in sources"
         :key="i"
-        class="ct-stats-sources__item"
+        class="ct-stats-sources__item
+        tw-global-pdf-export__break-inside-avoid"
       >
         <span
           class="ct-stats-sources__item-title"

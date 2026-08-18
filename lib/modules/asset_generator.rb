@@ -41,10 +41,13 @@ module AssetGenerator
     raise AssetGenerationFailedError unless geojson.present?
 
     # The GeoJSON goes inside the URL path and always contains characters that are
-    # not legal in a URI (notably { and }), so it has to be escaped here. Escaping
+    # not legal in a URI (notably {, }, [, ]), so it has to be escaped here. Escaping
     # the whole URL afterwards is not an option: it would also escape the ? and =
-    # of the query string.
-    tile_url = base_url + "geojson(#{URI::DEFAULT_PARSER.escape(geojson)})/auto/#{size[:x]}x#{size[:y]}@2x"
+    # of the query string. URI::DEFAULT_PARSER.escape (nee URI.escape) only escapes
+    # a narrow "unsafe" set and leaves reserved chars like [ ] : , untouched, which
+    # the stricter RFC3986 URI parser on Ruby 3.3 then rejects as an invalid URI -
+    # ERB::Util.url_encode percent-encodes everything outside RFC 3986 unreserved chars.
+    tile_url = base_url + "geojson(#{ERB::Util.url_encode(geojson)})/auto/#{size[:x]}x#{size[:y]}@2x"
     tile_url << "?access_token=#{access_token}"
   end
 

@@ -6,14 +6,16 @@
   >
     <h2
       v-if="title"
-      class="ct-attributes-protected-area-source__title"
+      class="ct-attributes-protected-area-source__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <ul class="ct-attributes-protected-area-source__list">
       <li
         v-for="(source, index) in sourceAttributes"
         :key="`${index}sourceAttributes`"
-        class="ct-attributes-protected-area-source__item"
+        class="ct-attributes-protected-area-source__item
+        tw-global-pdf-export__break-inside-avoid"
       >
         <span
           class="ct-attributes-protected-area-source__item-title"

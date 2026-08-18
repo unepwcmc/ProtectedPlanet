@@ -1,7 +1,8 @@
 <template>
   <div class="ct-attributes-protected-area">
     <h2
-      class="ct-attributes-protected-area__title"
+      class="ct-attributes-protected-area__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <div
