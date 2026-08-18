@@ -108,11 +108,17 @@ step "5. build-time asset compile (the deploy image's environment)"
 # failed:" while sprockets itself succeeds. So the exit code is NOT the signal —
 # the Dockerfile tolerates it and asserts the outputs instead. Do the same, or
 # this reports a false failure on every run.
+# Mirror the Dockerfile's order exactly, including comfy:compile_assets. Media
+# Surfer ships no prebuilt admin assets, so without that step the CMS admin CSS/JS
+# never gets built -- and locally it can appear to work anyway because a previous
+# run left the gem's builds/ dir populated in the shared bundler volume. Wiping
+# it first makes this check behave like a fresh image build.
+GEM_BUILDS=$(docker compose run --rm --no-deps -T web bash -lc 'echo $(bundle show comfortable_media_surfer 2>/dev/null)/app/assets/builds' 2>/dev/null | tr -d '\r' | tail -1)
 rm -rf public/assets
 docker compose run --rm --no-deps \
       -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
       -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
-      web bash -lc "bundle exec rails assets:precompile" >/tmp/preflight-assets.log 2>&1 || true
+      web bash -lc "rm -rf '$GEM_BUILDS'/comfy && bundle exec rails comfy:compile_assets && (bundle exec rails assets:precompile || true)" >/tmp/preflight-assets.log 2>&1 || true
 ASSET_COUNT=$(ls public/assets 2>/dev/null | wc -l | tr -d ' ')
 # Sprockets owns the Comfy CMS admin bundle; the site CSS moved to Vite/Tailwind,
 # so public/assets/application-*.css no longer exists.

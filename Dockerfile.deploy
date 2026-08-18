@@ -149,7 +149,18 @@ ENV AWS_S3_REGION=eu-west-1 \
 # So the binary is invoked directly and every output is asserted afterwards.
 # Sprockets still goes through assets:precompile, whose exit code is tolerated
 # because its enhancement re-runs the same failing wrapper.
+# comfy:compile_assets FIRST. Comfortable Media Surfer ships no prebuilt admin
+# assets -- its app/assets/builds/ is empty in a freshly installed gem, and its
+# admin JS is esbuild/ES-modules with dart-sass CSS that sprockets cannot compile
+# from source. This rake task runs esbuild + dart-sass to populate the gem's
+# builds/ dir; assets:precompile then digests the result.
+#
+# Until the Vite cutover the admin CSS/JS happened to come out of the app's own
+# app/assets/{javascripts,stylesheets}/comfy/ overrides, so this step was never
+# needed here. The frontend rewrite removed those, which is why the CMS admin
+# assets vanished from the image and the assertion below started failing.
 RUN rm -rf public/assets public/vite tmp/cache/vite \
+ && bundle exec rails comfy:compile_assets \
  && (bundle exec rails assets:precompile || echo "note: sprockets done; ignoring the wrapper's bogus exit, outputs asserted below") \
  && ./node_modules/.bin/vite build --mode production \
  && test -s public/vite/.vite/manifest.json \
