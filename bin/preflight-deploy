@@ -114,7 +114,9 @@ docker compose run --rm --no-deps \
       -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
       web bash -lc "bundle exec rails assets:precompile" >/tmp/preflight-assets.log 2>&1 || true
 ASSET_COUNT=$(ls public/assets 2>/dev/null | wc -l | tr -d ' ')
-if compgen -G "public/assets/application-*.css" >/dev/null && [[ "$ASSET_COUNT" -gt 10 ]]; then
+# Sprockets owns the Comfy CMS admin bundle; the site CSS moved to Vite/Tailwind,
+# so public/assets/application-*.css no longer exists.
+if compgen -G "public/assets/comfy/admin/cms/application-*.css" >/dev/null && [[ "$ASSET_COUNT" -gt 10 ]]; then
   ok "sprockets precompiles in the build environment ($ASSET_COUNT assets)"
 else
   bad "assets:precompile produced no sprockets output — the deploy will fail the same way"

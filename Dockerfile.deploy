@@ -135,6 +135,11 @@ ENV AWS_S3_REGION=eu-west-1 \
 # This app now has TWO asset pipelines: sprockets and vite. (webpacker 4 was
 # removed at the Vite cutover, along with config/webpack/* and babel.config.js.)
 #
+# Sprockets no longer builds the site CSS -- app/assets/stylesheets/application.scss
+# went to Vite/Tailwind with the frontend rewrite, so there is no public/assets/
+# application-*.css any more. What sprockets still owns is the Comfy CMS admin
+# bundle, so that is what the assertion below checks.
+#
 # vite_ruby's vite:build_all wrapper fails here with a bare "Compilation failed:"
 # and no stderr, while the underlying binary succeeds. Verified in the image:
 #
@@ -148,7 +153,7 @@ RUN rm -rf public/assets public/vite tmp/cache/vite \
  && (bundle exec rails assets:precompile || echo "note: sprockets done; ignoring the wrapper's bogus exit, outputs asserted below") \
  && ./node_modules/.bin/vite build --mode production \
  && test -s public/vite/.vite/manifest.json \
- && ls public/assets/application-*.css >/dev/null \
+ && ls public/assets/comfy/admin/cms/application-*.css >/dev/null \
  && test "$(ls public/assets | wc -l)" -gt 10 \
  && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite manifest present" \
  && rm -rf node_modules tmp/cache
