@@ -21,7 +21,7 @@ class AssetsController < ApplicationController
     end
 
     if image.blank?
-      redirect_to ActionController::Base.helpers.asset_path('search-placeholder-country.png', type: :image)
+      redirect_to '/images/search-placeholder-country.png'
       return
     end
 
@@ -29,7 +29,7 @@ class AssetsController < ApplicationController
 
     send_data image, type: 'image/png', disposition: 'inline'
   rescue AssetGenerator::AssetGenerationFailedError
-    redirect_to ActionController::Base.helpers.asset_path('search-placeholder-country.png', type: :image)
+    redirect_to '/images/search-placeholder-country.png'
   end
 
   private

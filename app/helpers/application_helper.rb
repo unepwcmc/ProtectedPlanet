@@ -9,9 +9,9 @@ module ApplicationHelper
   }.freeze
 
   PLACEHOLDERS = {
-    ProtectedArea => 'search-placeholder-country.png',
-    Country => 'search-placeholder-country.png',
-    Region => 'search-placeholder-region.png'
+    ProtectedArea => '/images/search-placeholder-country.png',
+    Country => '/images/search-placeholder-country.png',
+    Region => '/images/search-placeholder-region.png'
   }.freeze
 
   def get_square_side(area)

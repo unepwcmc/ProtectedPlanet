@@ -32,11 +32,11 @@ module GeometryConcern
     return nil unless geojson.present?
     geometry = JSON.parse(geojson)
 
-    URI.encode({
+    {
       "type" => "Feature",
       "properties" => geo_properties || geometry_properties,
       "geometry" => geometry
-    }.to_json)
+    }.to_json
   end
 
   private

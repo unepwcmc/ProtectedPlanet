@@ -1,6 +1,6 @@
 module AssetGenerator
   class AssetGenerationFailedError < StandardError; end;
-  FALLBACK_PATH = Rails.root.join('app/assets/images', 'search-placeholder-country.png')
+  FALLBACK_PATH = Rails.root.join('public/images', 'search-placeholder-country.png')
 
   def self.protected_area_tile protected_area
     raise AssetGenerationFailedError if protected_area.nil?

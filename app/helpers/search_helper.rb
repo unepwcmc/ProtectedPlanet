@@ -121,7 +121,7 @@ module SearchHelper
 
     link_to protected_area_url(result[:identifier]), class: 'autocompletion__result' do
       image = image_tag(
-        'search-placeholder-country.png',
+        '/images/search-placeholder-country.png',
         alt: result[:name],
         data: { async: tiles_path(image_params) },
         class: 'autocompletion__image'
@@ -141,7 +141,7 @@ module SearchHelper
 
     link_to country_url(result[:identifier]), class: 'autocompletion__result' do
       image = image_tag(
-        'search-placeholder-country.png',
+        '/images/search-placeholder-country.png',
         alt: result[:name],
         data: { async: tiles_path(image_params) },
         class: 'autocompletion__image'
