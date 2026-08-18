@@ -131,6 +131,5 @@ gem 'rails-i18n', '~> 8.0'
 # also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
 gem 'nokogiri', '~> 1.16'
 gem 'loofah', '~> 2.22'
-gem 'phantompdf', '~> 1.2.2'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 gem 'ed25519', '>= 1.2', '< 2.0'
