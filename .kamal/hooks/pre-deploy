@@ -28,8 +28,13 @@ set -euo pipefail
 
 echo "==> Running migrations for version ${KAMAL_VERSION} (destination: ${KAMAL_DESTINATION:-none})"
 
+# --primary is essential: without it `app exec` fans out to EVERY role (web,
+# job_default, job_import), so three containers run db:migrate at once, race for
+# the migration advisory lock, and the loser dies with
+# ActiveRecord::ConcurrentMigrationError. --primary runs it once, on the primary host.
 kamal app exec \
   ${KAMAL_DESTINATION:+--destination "$KAMAL_DESTINATION"} \
+  --primary \
   --version "$KAMAL_VERSION" \
   "bundle exec rails db:migrate"
 
