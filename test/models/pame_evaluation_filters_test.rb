@@ -1,13 +1,14 @@
 require 'test_helper'
 
 class PameEvaluationFiltersTest < ActiveSupport::TestCase
-  test 'filters_to_json includes site_type filter with Protected Area and OECM' do
-    json = PameEvaluation.filters_to_json
-    filters = JSON.parse(json)
+  # `filters_to_json` was renamed to `filters` and now returns the array directly
+  # (symbol keys) rather than a JSON string — the serialisation moved to the caller.
+  test 'filters includes site_type filter with Protected Area and OECM' do
+    filters = PameEvaluation.filters
 
-    site_type_filter = filters.detect { |f| f['name'] == 'site_type' }
+    site_type_filter = filters.detect { |f| f[:name] == 'site_type' }
     refute_nil site_type_filter
-    assert_equal ['Protected Area', 'OECM'], site_type_filter['options']
+    assert_equal ['Protected Area', 'OECM'], site_type_filter[:options]
   end
 
   test 'parse_filters builds correct where for site_type Protected Area and OECM' do
