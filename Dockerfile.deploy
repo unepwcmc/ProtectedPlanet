@@ -84,6 +84,14 @@ RUN gem install bundler --no-document \
  && rm -rf "${BUNDLE_PATH}"/ruby/*/cache
 
 # Then JS deps
+#
+# PUPPETEER_CACHE_DIR must point inside /app. Puppeteer 19 moved the bundled
+# browser out of node_modules/puppeteer/.local-chromium and into
+# $HOME/.cache/puppeteer; the runtime stage only does `COPY --from=build /app /app`,
+# so a browser under /root/.cache would be silently left behind and every PDF would
+# fail at launch with "Could not find Chrome".
+ENV PUPPETEER_CACHE_DIR=/app/.cache/puppeteer
+
 COPY package.json yarn.lock .yarnrc.yml* ./
 RUN yarn install --immutable || yarn install
 
@@ -174,7 +182,7 @@ RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
      || (echo "ERROR: no Mapbox token in the built bundle -- the map will not render. Is MAPBOX_ACCESS_TOKEN passed as a builder secret?" && exit 1)) \
  && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite manifest + mapbox token present" \
  && yarn workspaces focus --production \
- && node -e "require('puppeteer')" \
+ && node -e "const p=require('puppeteer'); p.launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b => { console.log('puppeteer launches:', await b.version()); await b.close(); }).catch(e => { console.error('ERROR: puppeteer cannot launch -- every PDF export would fail. ' + e.message); process.exit(1); })" \
  && rm -rf tmp/cache
 
 # ---------------------------------------------------------------------------
@@ -184,6 +192,9 @@ FROM base AS runtime
 ARG RUBY_VERSION
 ARG RAILS_ENV=staging
 ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
+# Build-stage ENV is not inherited, and puppeteer resolves its browser from this
+# variable at RUNTIME too -- without it the copied browser under /app is ignored.
+ENV PUPPETEER_CACHE_DIR=/app/.cache/puppeteer
 # ENV from the build stage is not inherited. Without this, config/puma.rb falls
 # back to ENV.fetch("RAILS_ENV") { "development" } and Puma boots the wrong env
 # if the orchestrator's env file is ever missing it.

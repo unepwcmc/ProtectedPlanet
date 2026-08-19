@@ -233,6 +233,27 @@ else
   grep -iE "error|exception" /tmp/preflight-boot.log | head -5 | sed 's/^/       /'
 fi
 
+step "8. puppeteer can launch a browser (PDF exports)"
+# Both PDF paths shell out to `node app/frontend/backend-scripts/rasterize.js`,
+# which requires puppeteer and launches its bundled Chrome. Two ways that breaks
+# silently, both of which have happened:
+#   * the browser is missing (node_modules pruned, or downloaded outside
+#     PUPPETEER_CACHE_DIR so `COPY --from=build /app /app` leaves it behind)
+#   * the browser exists but the base image lacks a shared library it needs
+# Neither shows up as a failed request: the endpoint still returns 200 and the job
+# still "succeeds", it just produces a PDF with no map -- which is exactly how
+# puppeteer 5 / Chromium 88 went unnoticed. Launching for real is the only check
+# that covers both.
+if docker compose run --rm --no-deps -T \
+      -e PUPPETEER_CACHE_DIR=/ProtectedPlanet/.cache/puppeteer \
+      web bash -lc "node -e \"require('puppeteer').launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b=>{console.log(await b.version());await b.close()}).catch(e=>{console.error(e.message);process.exit(1)})\"" \
+      >/tmp/preflight-puppeteer.log 2>&1; then
+  ok "puppeteer launches ($(grep -oE 'Chrome/[0-9.]+|HeadlessChrome/[0-9.]+' /tmp/preflight-puppeteer.log | head -1))"
+else
+  bad "puppeteer cannot launch a browser — every PDF export would render without its map"
+  tail -3 /tmp/preflight-puppeteer.log | sed 's/^/       /'
+fi
+
 echo
 echo "──────────────────────────────────"
 echo "  passed: $PASS   warnings: $WARN   failed: $FAIL"

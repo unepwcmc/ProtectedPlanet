@@ -4,6 +4,28 @@ const address = process.argv[2];
 const captureDelay = 10000;
 const output = process.argv[3];
 
+// page.waitFor() was renamed to waitForTimeout in puppeteer 10 and removed in 22,
+// so use a plain timer -- it works on every version and has no deprecation path.
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// The whole point of rasterising is to capture the rendered page, and the map is
+// the slowest thing on it. Under puppeteer 5 (Chromium 88) the Map chunk could not
+// even be parsed, so every PDF silently came out without a map; waiting for the
+// canvas makes that failure loud instead of invisible. Best-effort: pages that
+// legitimately have no map must still render, so a miss is not fatal.
+async function waitForMapIfPresent(page, timeout) {
+  const hasMapHost = await page.evaluate(
+    () => !!document.querySelector('[data-controller="turbo-mount-map"]')
+  );
+  if (!hasMapHost) return 'no map on this page';
+  try {
+    await page.waitForSelector('.maplibregl-canvas', { timeout });
+    return 'map canvas rendered';
+  } catch (e) {
+    return 'WARNING: map host present but no canvas after ' + timeout + 'ms';
+  }
+}
+
 (async () => {
   const browser = await puppeteer.launch({
     args: [
@@ -22,7 +44,9 @@ const output = process.argv[3];
 
   await page.goto(address, {waitUntil: 'networkidle2'});
 
-  await page.waitFor(captureDelay);
+  const mapStatus = await waitForMapIfPresent(page, captureDelay);
+  console.error('[rasterize] ' + mapStatus);
+  await sleep(captureDelay);
 
   const headerHTML = `<div style="padding-top:10px; padding-right:26px; width: 100%;">
     <p style="float:right; margin-bottom:0;">

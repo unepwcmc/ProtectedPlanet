@@ -929,3 +929,133 @@ what `#filters` returns, since that value also feeds the query builder and `''` 
   completely broken country section (§8k) — every country page was down and nothing
   reported it. Consider re-raising in staging, or reporting to AppSignal before
   redirecting.
+
+### 8o. Deploy 8430f49d0 — smoke fully green on staging (Aug 2026)
+
+`rake smoke:routes` on the deployed image: **37 walked, 37 healthy, 0 failed.**
+First green run against real staging. Hooks both ran (migrations, `Cache flushed`),
+and `MAPBOX_STATIC_IMAGE_URL` was delivered.
+
+| endpoint | before | now |
+|---|---|---|
+| `/assets/tiles/:id` ×3 types | 500 | **200, real PNGs** (8.4 KB / 54 KB / 47 KB) |
+| `/en/country/:iso` | 302 to homepage | **200** |
+| `/en/country/:iso/pdf` | 204 empty | **200** |
+| `/en/search-cms` (+query) | 500 | **200** |
+
+`/assets/tiles/667` returns 302 to `search-placeholder-country.png`. That is the
+designed fallback in `AssetsController#tiles` for a record with no usable geometry,
+not a failure.
+
+### 8p. PDF exports render without the map — NOT FIXED
+
+Found while trying to get extension-free browser evidence for the map, by running a
+headless browser inside the container. **First, a correction worth recording:** that
+probe reported `SyntaxError: Unexpected token '{'` loading the Map chunk, which
+looked like a real bug. It was not:
+
+```
+puppeteer 5.5.0  ->  HeadlessChrome/88.0.4298.0   (Jan 2021)
+class A { static { } }  ->  "Unexpected token '{'"
+```
+
+Chromium 88 cannot parse ES2022, which the Vite 7 output uses. Always check the
+browser version before trusting a headless probe.
+
+**But `rasterize.js` uses that same `require('puppeteer')`**, so Chromium 88 is what
+renders every PDF. Measured on the live page:
+
+```
+{"islandHosts":13,"islandsWithContent":11,"mapCanvas":false}
+```
+
+11 of 13 Vue islands mount (the entrypoint parses fine); only the lazily-imported
+Map chunk fails, because it bundles maplibre-gl's modern syntax. So **every PDF
+export is missing its map**, while generating successfully — 11.4 MB, no error, 200
+from the endpoint. Invisible to `smoke:routes` and to byte-count checks.
+
+Note this also qualifies the §8l verification: "pdf 11.4 MB via Puppeteer in 12.1s"
+proved the path *generated*, not that the output was correct.
+
+Fix: bump `puppeteer` from `^5.5.0` (2020). Needs code changes — `page.waitFor()`
+was renamed to `waitForTimeout` in v10 and removed in v22 — plus re-verifying the
+bundled Chromium download in the image build, and an assertion on PDF *content*
+rather than size.
+
+### 8q. Still unexplained: the base map does not render in a real browser
+
+Every server-side link verified healthy on the deployed image: HTML asset digests,
+all assets 200, `VITE_MAPBOX_TOKEN` inlined, Mapbox styles 200, `composite` vector
+source 200, glyphs 200, no Referer/URL restriction, `data-gis` overlays 200, map
+component mounts with well-formed props, all 44 built JS files parse, and the Map
+chunk is served byte-identical to disk over both plain and brotli.
+
+The headless probe cannot settle it (Chromium 88, see 8p) and the in-app browser
+pane blocks the bundle with `ERR_BLOCKED_BY_CLIENT`. Needs a real modern browser
+with extensions disabled: incognito, Network tab filtered to `mapbox` —
+- no `api.mapbox.com` requests at all -> map never initialises, look for a JS
+  exception above it
+- 401 or `access_token=undefined` -> the token is not reaching `transformRequest`
+- 200s and still blank -> Vue sizing/render bug in `Map/Base.vue`
+
+Both browsers seen so far carry heavy extension interference (MetaMask
+`ObjectMultiplex`, rokt.com, "Host is not in insights whitelist"), so an extension
+remains a live possibility.
+
+### 8r. puppeteer 5.5.0 -> 25.8.0 — FIXED (§8p)
+
+`package.json` pinned `"puppeteer": "^5.5.0"` (2020), which bundles **Chromium 88**.
+That predates ES2022, so it could not parse the Map chunk Vite 7 emits, and every
+PDF export rendered without its map while still returning 200 and a plausible file
+size.
+
+Changes:
+
+- `package.json`: `^5.5.0` -> `^25.8.0` (Chrome 152). Lockfile shrinks by ~450
+  lines; puppeteer 5's dependency tree was largely obsolete.
+- `rasterize.js` + `rasterize_dev_mode.js`: `page.waitFor()` was renamed to
+  `waitForTimeout` in puppeteer 10 and removed in 22 — replaced with a plain timer
+  promise, which is version-proof.
+- `rasterize_dev_mode.js` also hardcoded
+  `node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux/chrome`. That
+  path stopped existing in puppeteer 19; removed so the resolver finds the browser.
+- Both scripts now wait for `.maplibregl-canvas` when the page has a map host, and
+  log `[rasterize] map canvas rendered` / a WARNING otherwise. A fixed 10s delay
+  cannot tell "map drawn" from "map never loaded", which is precisely how this hid.
+- `Dockerfile.deploy`: `PUPPETEER_CACHE_DIR=/app/.cache/puppeteer` in **both** the
+  build and runtime stages. Puppeteer 19 moved the browser out of node_modules and
+  into `$HOME/.cache/puppeteer`; the runtime stage only does
+  `COPY --from=build /app /app`, so a browser under `/root/.cache` would be left
+  behind and every PDF would fail with "Could not find Chrome". Verified the
+  browser does land in that directory.
+- The build assertion now **launches** the browser rather than just requiring the
+  module, so a missing shared library fails the build instead of shipping.
+- `bin/preflight-deploy` step 8 does the same check locally (~10s), so this is
+  caught before a 15-minute deploy.
+
+**Verified end to end on the staging host**, not just locally: a throwaway
+container sharing the app's network namespace, with puppeteer 25 installed, ran the
+real `rasterize.js` against the live PA page:
+
+```
+[rasterize] map canvas rendered
+exit=0   pdf bytes: 372094
+```
+
+Under Chromium 88 the same page gave `mapCanvas: false`.
+
+### 8s. Note on headless-browser evidence
+
+Two separate false leads came from headless probes in this session, both worth
+remembering:
+
+1. **Chromium 88** (puppeteer 5) reported `SyntaxError: Unexpected token '{'`
+   loading the Map chunk. That was the browser being nine years old, not a bug in
+   the bundle. Always print `browser.version()` before trusting a probe.
+2. **Chrome 152 headless on the staging host falls back to software WebGL**
+   ("Automatic fallback to software WebGL has been deprecated") and shows an
+   unrelated `ERR_SSL_PROTOCOL_ERROR`. It loads the style, sprites and TileJSON
+   (all 200) but requests **zero vector tiles**. That is not sound evidence about a
+   real GPU browser, so it must NOT be used to diagnose §8q.
+
+The user's own browser remains the only reliable source for the map question.
