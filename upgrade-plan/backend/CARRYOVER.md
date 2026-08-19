@@ -465,3 +465,163 @@ exercising on staging: search (autocomplete, filters, infinite scroll), maps, th
 ## 7. Dead code found during the upgrade (already removed — for reference)
 - `Search::ParallelIndexer` (dead + `require 'thwait'` unloadable on 2.7) — removed.
 - `best_in_place` gem (unused; its railtie caused the ActionText/ActionView boot deprecations) — removed.
+
+---
+
+## 8. Staging runtime audit (Aug 2026) — shared Redis, dead PDF paths, gem bloat
+
+Triggered by a download on staging that span "Generating..." forever. The audit
+that followed looked for the general class of problem: code no test covers and no
+build step validates, which therefore only fails on a server.
+
+### 8a. Shared Redis across co-located Kamal apps — FIXED (code), needs deploy
+
+Three of our apps on `pp-web-staging-01` were handed the same Redis URL, all on
+logical database **0**:
+
+| app | var | db | queues | sidekiq |
+|---|---|---|---|---|
+| protectedplanet | `REDIS_URL` | 0 | `default`, `import` (+ `$redis` downloads) | 7.3.9 |
+| wdpa-pp-data-management-portal | `SIDEKIQ_REDIS_URL` | 0 | `upload`, `default` | 7.2.2 |
+| api-pp-authentication | `SIDEKIQ_REDIS_URL` | 0 | `default` | 7.3.2 |
+
+`pp-digital-report`, `pp-data-management-portal` and `protectedplanet-api` use no
+Redis. All three affected apps are ours (`unepwcmc/*`), so this is fixable without
+devops beyond env values.
+
+Sidekiq 7 removed namespace support, so `queue:default` was ONE physical Redis
+list shared by three different Rails apps. Whichever process popped a job first
+won it. The two that could not resolve the job's constant raised `NameError`, and
+`DownloadWorkers::Base` sets `retry: false`, so the job was discarded with no
+trace — observed as `processed=8 failed=7` with `retry=0 dead=0`.
+
+Because nothing wrote the result key, it stayed `generating` with **no TTL**
+(`ttl=-1`), and `Download::Requesters::Base#enqueue_generation_once` then refused
+every later request for that download. Permanently wedged.
+
+Fix, in `config/initializers/redis.rb` + `sidekiq.rb`: `PPRedis.url` pins this app
+to its own logical DB (default **3**, override with `REDIS_DB`). Both
+`configure_server` AND `configure_client` now use it — previously only the server
+was configured and the client fell back to Sidekiq's raw `REDIS_URL` default,
+which would have split enqueue and run across two databases.
+
+- Production runs its own Redis, so set `REDIS_DB=0` there to keep using the
+  database its existing keys live in, or accept a one-time reset of download
+  status keys (they regenerate).
+- The other two apps still collide with each other on db 0. Separate ticket in
+  their repos: move them to db 1 and 2.
+
+### 8b. Download keys never expired — FIXED (code)
+
+The staging Redis runs `--maxmemory 2gb --maxmemory-policy noeviction`. PP wrote
+`downloads:*` keys with no TTL at all, so the keyspace only grew; at the ceiling
+Redis starts refusing writes **for all three apps**, not just PP.
+
+- `Download::Utils.write` is now the single write path and always sets an expiry
+  (`READY_TTL` 30d / `GENERATING_TTL` 24h / `FAILED_TTL` 1h).
+- `#stale_generation?` lets a wedged key recover: past a 15-minute grace it asks
+  Sidekiq whether the jid is still alive, and only then re-enqueues. Age alone is
+  never the test — a full-WDPA `.gdb` export legitimately runs for hours.
+- `job_alive?` assumes **alive** if Sidekiq is unreachable, so a blip cannot cause
+  an enqueue stampede; `GENERATING_TTL` is the backstop.
+- `while_generating` now rescues `Exception`, not `StandardError`.
+  `NotImplementedError` is a `ScriptError` and sailed straight past the old
+  rescue, stranding the key. Signals are re-raised after the key is marked.
+
+Covered by `test/unit/download/requesters/stale_generation_test.rb` (8 tests) and
+3 new TTL tests in `utils_test.rb`. Before this there was **no** test of
+`enqueue_generation_once` at all.
+
+### 8c. Both PDF paths were broken on staging — FIXED (code), needs deploy
+
+`Dockerfile.deploy` ended the asset build with `rm -rf node_modules`, on the
+assumption Vite had bundled everything into `public/vite`. True for the frontend,
+but **puppeteer is a runtime dependency**: both PDF paths shell out to
+`node app/frontend/backend-scripts/rasterize.js`, which does
+`require('puppeteer')`. Confirmed in the running container:
+
+```
+ls: cannot access 'node_modules': No such file or directory
+require("puppeteer") -> MODULE_NOT_FOUND
+```
+
+- `rm -rf node_modules` → `yarn workspaces focus --production` (keeps the 11
+  runtime deps, drops the 24 dev ones), followed by a hard
+  `node -e "require('puppeteer')"` assertion so a bad prune fails the build.
+- `app/controllers/country_controller.rb` still shelled out to **`phantomjs`** —
+  a binary that is not in the image at all (`command -v phantomjs` → not found).
+  `rasterize.js` was ported from PhantomJS to Puppeteer and this call site was
+  missed while `Download::Generators::Pdf` was updated. Now uses `node`, and
+  raises instead of `send_file`-ing a file that was never written.
+
+### 8d. Deprecated-API sweep — CLEAN
+
+Scanned `app lib config db` for Ruby 3.0–3.3 and Rails 5.2–8.0 removals:
+`URI.escape/encode`, `taint/untaint`, `Fixnum/Bignum`, `Random::DEFAULT`,
+`BigDecimal.new`, `File/Dir.exists?`, `YAML.load`, `update_attributes`,
+`*_filter`, `render text:`, `alias_method_chain`, `errors.keys`, `serialize`
+without coder, positional `enum`, `legacy_connection_handling`,
+`ActiveSupport::Deprecation` singleton, `Rails.application.secrets`.
+
+Live hits: **none**. `URI.encode` was the only one and is fixed.
+
+- `lib/modules/search.rb:18` uses `YAML.load`, safe only because `psych` is
+  pinned `~> 3.3`. Under Psych 4 that becomes `safe_load`. `config/search.yml`
+  has no aliases, symbols or `!ruby` tags, so it is safe to unpin — but change
+  this line at the same time.
+- `ActiveRecord::Base.connection` — 21 sites. Soft-deprecated in 7.2, works in
+  8.0, will break later. Migrate to `lease_connection`/`with_connection`.
+- One `update_attributes` in a 2017 migration. `schema_format = :sql` means
+  migrations never replay, so it is inert; all 204 are version-bracketed.
+
+**Conclusion: grep is exhausted as a technique here.** The remaining risk is
+runtime-only, so the next net must be empirical — see 8f.
+
+### 8e. Gem bloat / dead deploy system — NOT STARTED
+
+- **`gem 'aws-sdk', '3.0.1'` is the v3 meta-gem: 664 `aws-sdk-*` gems in
+  `Gemfile.lock`.** Code uses `Aws::S3` only → `aws-sdk-s3`. Big win on bundle
+  install time, image size and boot.
+- **Capistrano is still fully wired post-Kamal**: `Capfile`, `config/deploy.rb`,
+  `config/deploy/{production,staging}.rb`, `config/deploy/ansible/`, 8
+  `capistrano-*` gems plus `net-scp`, `net-sftp`, `bcrypt_pbkdf`. Two deploy
+  systems in one repo is a live footgun — delete.
+- Confirm individually then drop: `phantompdf` (PhantomJS is gone),
+  `jquery-rails` (no sprockets refs post-Vite), `sinatra` (Sidekiq 7 web is pure
+  Rack), `httmultiparty`, `slack-notifier`, `levenshtein`, `awesome_print`,
+  `timecop`, `selenium-webdriver`.
+- Then unpin `psych` (webpacker is gone; appsignal was the other blocker).
+
+Needs `bundle install` via docker-compose — ruby 3.3.7 is not installed locally
+(rbenv has 3.3.2), so all verification runs in the container.
+
+### 8f. Route smoke test — NOT STARTED (highest value next)
+
+`URI.encode` (tiles 500), the phantomjs shellout and the puppeteer prune were all
+the same shape: no test, no build assertion, only fails on a real server. A smoke
+test that walks every GET route on staging and reports non-2xx would have caught
+all three in one pass. Build it, then run it after every deploy.
+
+### 8g. Bundler binstubs — NOT STARTED
+
+`bin/rails` / `bin/bundle` are Bundler-generated, not Rails-generated, so any
+`bin/rails` invocation prints the `rails new` help text instead of running.
+It made `rails runner` on staging look like it had failed when it had not, and
+`bin/rails test` unusable in docker-compose (`bundle exec` is the workaround).
+Fix: `bundle binstubs bundler --force` + `rails app:update:bin`.
+
+### 8h. Sidekiq scheduler thread is dead on every boot — NOT STARTED
+
+Both job containers log at startup:
+
+```
+connection_pool-3.0.2/lib/connection_pool/timed_stack.rb:62:in `pop':
+  wrong number of arguments (given 1, expected 0) (ArgumentError)
+  from sidekiq-7.3.9/lib/sidekiq/scheduled.rb:226:in `initial_wait'
+```
+
+connection_pool 3.0 dropped the positional-timeout `pop(t)`; sidekiq 7.3.x still
+calls it. The **scheduler thread dies at boot**, so scheduled and retry sets never
+fire. Did not cause the download bug (those jobs go straight to a queue) but any
+`perform_in`/`perform_at` and every Sidekiq retry is silently dead.
+Fix: pin `connection_pool ~> 2.4` (or move to Sidekiq 8, which supports 3.x).
