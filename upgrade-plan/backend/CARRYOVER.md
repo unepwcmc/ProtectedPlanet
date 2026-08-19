@@ -595,12 +595,57 @@ runtime-only, so the next net must be empirical — see 8f.
 Needs `bundle install` via docker-compose — ruby 3.3.7 is not installed locally
 (rbenv has 3.3.2), so all verification runs in the container.
 
-### 8f. Route smoke test — NOT STARTED (highest value next)
+### 8f. Route smoke test — BUILT (Aug 2026)
 
-`URI.encode` (tiles 500), the phantomjs shellout and the puppeteer prune were all
-the same shape: no test, no build assertion, only fails on a real server. A smoke
-test that walks every GET route on staging and reports non-2xx would have caught
-all three in one pass. Build it, then run it after every deploy.
+`lib/smoke/route_walker.rb` + `lib/tasks/smoke.rake`. Run it inside the container
+it is testing, because it reads real fixtures (a protected area, a country iso,
+CMS page paths) out of the database and then drives the app over HTTP:
+
+```
+kamal app exec --destination staging --primary --roles web \
+  "bundle exec rake smoke:routes"
+```
+
+Env: `BASE_URL` (default http://localhost:3000), `CMS_SAMPLE`, `TIMEOUT`,
+`INSECURE`. Exits non-zero on any failure, so it can gate a deploy.
+
+**The design property that matters is coverage enforcement.** Every GET route
+must either be walked or appear in `SKIP_CONTROLLERS`/`SKIP_PATHS` with a stated
+reason; anything else is reported UNCLASSIFIED and fails the run. Adding a route
+to the app therefore forces a decision about smoking it, instead of the net
+silently shrinking. `test/unit/smoke/route_walker_test.rb` (12 tests) asserts
+that property directly.
+
+Two things had to be got right, both found by running it and disbelieving the
+output:
+
+- **Locale prefix.** `get '/:id'` is declared at the top of routes.rb, ABOVE the
+  `scope '(:locale)'` block, so it shadows every single-segment path: bare
+  `/search`, `/terms`, `/search-areas` and every CMS slug resolve to
+  protected_areas#show and 404. Only the `/en/...` form reaches the route that
+  was declared. Confirmed against production, which behaves identically (it 500s
+  rather than 404s). The walker substitutes a locale rather than stripping it.
+- **204 is a failure.** Rails answers `204 No Content` when an action runs with
+  no template. The first version scored that "ok" and walked straight past a
+  broken page — see country#pdf below.
+
+Current staging result: **34 walked, 27 healthy, 7 failed.**
+
+| endpoint | status | verdict |
+|---|---|---|
+| `/assets/tiles/:id?type=protected_area\|country\|region` | 500 | the `URI.encode` bug — fix committed (27778c9e9), not yet deployed. The smoke test found it unprompted, which is the validation that it works. |
+| `/country/:iso/pdf` | 204 | **FIXED.** `country#pdf` was just `@for_pdf = true`; `app/views/country/pdf.*` does not exist and Rails answers 204 when an action renders nothing, so the page the rasterizer captured was empty. It also sat outside the `only: :show` before_actions, so `@tabs`/`@stats_data` were never built. Now shares `load_show_data` with `#show` and does `render :show`, so the two cannot drift. Was broken twice over: this AND the §8c missing binary. |
+| `/country/:iso/compare/:iso_to_compare` | 404 | **FIXED (removed).** Route was declared at routes.rb:31 but CountryController never had a `compare` action, and nothing in app/, lib/, test/ or the frontend referenced `compare_countries_path`. Deleted, with a note left at the declaration site. |
+| `/en/search-cms` | 500 | **NEW**, pre-existing (production 500s identically). `TypeError (String does not have #dig method)` at `app/serializers/search/cms_serializer.rb:101` — `@search.options` is a String, so `.dig(:filters, :ancestor)` raises. Works in practice only because the frontend always sends filters. |
+
+None of the three new ones are upgrade regressions; all four had zero test
+coverage and would not have surfaced without this.
+
+Two of the four are now fixed (country#pdf, the dead compare route). Remaining
+red: the tiles 500 (clears on the next deploy, fix already committed) and
+`/en/search-cms` (pre-existing, 500s on production too). Once those are clear,
+wire the walk into `bin/preflight-deploy` or a post-deploy hook so a red run
+means something new.
 
 ### 8g. Bundler binstubs — NOT STARTED
 

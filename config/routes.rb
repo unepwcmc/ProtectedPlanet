@@ -28,7 +28,10 @@ Rails.application.routes.draw do
 
     get '/country/:iso', to: 'country#show', as: 'country'
     get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
-    get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
+    # NB: '/country/:iso/compare(/:iso_to_compare)' was declared here and removed.
+    # CountryController has never had a `compare` action, so the route 404'd on
+    # every request, and nothing in app/, lib/ or the frontend referenced
+    # compare_countries_path.
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
     get '/global_statistics_download', to: 'global_statistics#download'
