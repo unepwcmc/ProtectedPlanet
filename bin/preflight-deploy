@@ -249,9 +249,20 @@ step "8. puppeteer can launch a browser (PDF exports)"
 # failed download leaves the version directory in place without the executable
 # inside it, which is what made two deploys fail while every directory-level check
 # passed. See the puppeteer block in Dockerfile.deploy.
+# Mirrors the Dockerfile's assertion chain, not just the launch: resolve
+# executablePath() exactly as the build does, check the file is executable, THEN
+# launch. executablePath() returns a Promise in puppeteer 25, and an earlier
+# version of the build assertion wrote it straight to stdout and blew up with
+# ERR_INVALID_ARG_TYPE -- a deploy-breaking bug in the CHECK, which a
+# launch-only test here could never have caught.
+# The browser is not re-downloaded (the Dockerfile does that from scratch); this
+# only validates the resolution + exec + launch path, which is the part that broke.
 if docker compose run --rm --no-deps -T \
       -e PUPPETEER_CACHE_DIR=/ProtectedPlanet/.cache/puppeteer \
-      web bash -lc "node -e \"require('puppeteer').launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b=>{console.log(await b.version());await b.close()}).catch(e=>{console.error(e.message);process.exit(1)})\"" \
+      web bash -lc "EXE=\"\$(node -e \"Promise.resolve(require('puppeteer').executablePath()).then(p => process.stdout.write(String(p)))\")\" \
+        && echo \"executablePath: \$EXE\" \
+        && test -x \"\$EXE\" \
+        && node -e \"require('puppeteer').launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b=>{console.log(await b.version());await b.close()}).catch(e=>{console.error(e.message);process.exit(1)})\"" \
       >/tmp/preflight-puppeteer.log 2>&1; then
   ok "puppeteer launches ($(grep -oE 'Chrome/[0-9.]+|HeadlessChrome/[0-9.]+' /tmp/preflight-puppeteer.log | head -1))"
 else

@@ -1213,3 +1213,22 @@ was verified against both shapes before committing.
 Running tally on this one bug: the missing package cost three deploys, and my own
 checks cost two more — one asserting on the directory instead of the executable
 (§8u), one that could not print the executable path at all (this).
+
+### 8x. preflight step 8 now mirrors the build's assertion chain
+
+Step 8 originally only called `launch()`, so it could not have caught the
+`executablePath()` Promise bug (§8w) — that lived in the assertion, not the
+browser. It now runs the same three steps the Dockerfile does: resolve
+`executablePath()` via `Promise.resolve`, `test -x` the result, then launch. It
+does NOT re-download the browser (the build does that from scratch); it validates
+the resolution + exec + launch path, which is the part that has actually broken.
+
+Confirmed working in both directions: with the local browser deleted it failed and
+printed the resolved path; with it restored it reports
+`puppeteer launches (Chrome/152.0.7977.42)`.
+
+Full local run after the Docker restart: 5/5 substantive checks green. Two
+environment notes for whoever runs this next — `docker compose up -d db` is needed
+first (step 7 uses `--no-deps` and will otherwise fail on
+`protectedplanet-db`), and the puppeteer browser must exist locally
+(`./node_modules/.bin/puppeteer browsers install chrome`).
