@@ -89,10 +89,19 @@ class ApplicationController < ActionController::Base
     raise PageNotFound
   end
 
-  rescue_from StandardError do
-    render_error_page(500)
+  # Production only: a blanket StandardError handler swallows every exception, so in
+  # development it hides the Rails error page/backtrace and in test it turns genuine
+  # failures into a rendered 500 instead of failing loudly.
+  if Rails.env.production?
+    rescue_from StandardError do
+      render_error_page(500)
+    end
   end
 
+  # Declared AFTER StandardError deliberately: rescue_from matches the most recently
+  # registered handler first, and PageNotFound < StandardError — reverse the order and
+  # every 404 would render as a 500 in production.
+  # Unguarded, so a missing record renders the styled 404 page in every environment.
   rescue_from PageNotFound do
     render_error_page(404)
   end

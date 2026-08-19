@@ -36,11 +36,11 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     get :show, params: {id: protected_area.site_id}
   end
 
-  test '#show, given a PA that does not exist, raises PageNotFound' do
-    # ApplicationController only rescues PageNotFound into a rendered 404 page in
-    # production, so in the test environment the exception propagates.
-    assert_raises(ApplicationController::PageNotFound) do
-      get :show, params: {id: 'flarglearg'}
-    end
+  test '#show, given a PA that does not exist, renders the 404 page' do
+    # PageNotFound is rescued into the styled 404 page in every environment (the
+    # StandardError handler stays production-only), so assert the response rather
+    # than expecting the exception to propagate.
+    get :show, params: {id: 'flarglearg'}
+    assert_response :not_found
   end
 end
