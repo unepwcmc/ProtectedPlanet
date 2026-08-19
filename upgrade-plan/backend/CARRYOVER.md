@@ -1139,8 +1139,49 @@ Fix (Dockerfile.deploy):
 
 All four are hard gates now; no tolerated exit codes.
 
-**Not verified locally.** The dev machine's disk is full (1.3 GB free of 228 GB;
-Docker.raw is 127 GB), and Docker's own buildkit is failing with
-`input/output error` — `docker builder prune` cannot even run. Deleting the 651MB
-repo `.cache` did not move `df`, so APFS local snapshots are likely holding it.
-Local verification is blocked until that is cleared.
+**That fix was still not the cause.** See 8v.
+
+### 8v. ROOT CAUSE: `unzip` is not installed in the image
+
+Three deploys failed with "Could not find Chrome (ver. 152.0.7977.42)". Removing
+the stale cache directory (§8u) finally let the underlying error surface:
+
+```
+Error: All providers failed for chrome 152.0.7977.42:
+  - DefaultProvider: Extraction failed: no zip archiver is available.
+    Install `unzip` (or `tar.exe`/Powershell on Windows), or add the optional
+    `yauzl` dependency.
+```
+
+**Chrome is distributed as a .zip, and the image has no extractor.** The base layer
+installs `zip` — for the .gdb download bundles — but `unzip` is a SEPARATE package
+and was never added. Confirmed on the running staging container: `/usr/bin/zip`
+exists, `unzip` does not.
+
+The full chain, which is why this took three cycles to see:
+
+1. puppeteer downloads chrome.zip during `yarn install`
+2. extraction fails; yarn's build step does not surface it
+3. the version directory is left behind with no executable inside
+4. `puppeteer browsers install chrome` sees that directory and reports
+   `IncompleteInstallationError` instead of re-downloading
+5. the launch assertion reports the generic "Could not find Chrome"
+
+Every layer of that reports something other than "no unzip".
+
+Fix: add `unzip` to the base apt install. One word.
+
+**Why local runs never hit it:** the docker-compose dev image is Debian-based and
+already includes unzip, which is why puppeteer 25 installed and launched cleanly
+there while failing in the deploy image every time.
+
+**Lesson, consistent with the rest of this session:** the §8t/§8u checks asserted
+on the browser DIRECTORY, which is precisely what exists when extraction fails.
+`test -x` on `executablePath()` (added in §8u) is the assertion that would have
+pointed here immediately.
+
+**Still not verified locally.** Docker's buildkit metadata DB is corrupted from the
+disk-full episode (`write /var/lib/docker/buildkit/containerdmeta.db: input/output
+error`) and freeing space does not repair it — Docker Desktop needs a restart.
+Unlike the previous two attempts, though, this fix is not inference: the tool named
+the missing package, and its absence is confirmed in the shipped image.

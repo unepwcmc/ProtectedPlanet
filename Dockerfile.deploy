@@ -39,8 +39,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       # the shared library or Puma dies with
       # "libyaml-0.so.2: cannot open shared object file".
       libyaml-0-2 \
-      # image/asset handling and zip for the .gdb download bundles
-      shared-mime-info zip \
+      # image/asset handling, and zip for the .gdb download bundles.
+      #
+      # unzip is NOT the same package as zip, and puppeteer needs it: Chrome is
+      # distributed as a .zip, and with no extractor available the download
+      # "succeeds" but leaves the version directory with no executable inside --
+      #   DefaultProvider: Extraction failed: no zip archiver is available.
+      # which then surfaces much later, and very confusingly, as
+      #   Could not find Chrome (ver. 152.0.7977.42)
+      # Three deploys failed on that before the extraction error itself surfaced.
+      shared-mime-info zip unzip \
       # Chromium runtime deps — the /country/*.pdf endpoint drives Puppeteer
       fonts-liberation libgtk-3-0t64 libcups2t64 libx11-xcb1 libxcomposite1 \
       libxdamage1 libxfixes3 libxrandr2 libgbm1 libnss3 libasound2t64 \
