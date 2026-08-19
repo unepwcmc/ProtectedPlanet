@@ -65,6 +65,14 @@ env:
     - MAILER_HOST
     - MAILER_ASSET_HOST
     - MAPBOX_ACCESS_TOKEN
+    # Server-side base URL for the Mapbox Static Images API, read by
+    # AssetGenerator.mapbox_url via app_secrets (mapbox.base_url). It was never
+    # declared here, so it was UNSET on staging and `base_url + "geojson(...)"`
+    # raised NoMethodError on nil -- every /assets/tiles/:id request 500'd, which
+    # is the map overlay and the search-result card thumbnails. Distinct from
+    # MAPBOX_ACCESS_TOKEN: that one is also a BUILD secret (Vite inlines it into
+    # the client bundle); this one is runtime-only.
+    - MAPBOX_STATIC_IMAGE_URL
     - CARTODB_API_KEY
     - APPSIGNAL_PUSH_API_KEY
     - SLACK_WEBHOOK_URL

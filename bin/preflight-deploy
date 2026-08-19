@@ -129,7 +129,13 @@ while read -r secret; do
   [[ -z "$secret" ]] && continue
   [[ "$secret" =~ ^($BUILD_PROVIDED)$ ]] && continue
   BUILD_ENV_CLEAR+=( -e "${secret}=" )
-done < <(awk '/^env:/{e=1} e&&/^  secret:/{s=1;next} s&&/^    - /{print $2;next} s&&!/^    - /{s=0}' config/deploy.yml)
+# Comment and blank lines inside the list must not terminate the scan — an inline
+# comment between two entries silently truncated this list once.
+done < <(awk '/^env:/{e=1}
+              e&&/^  secret:/{s=1;next}
+              s&&/^[[:space:]]*(#|$)/{next}
+              s&&/^    - /{print $2;next}
+              s&&!/^    - /{s=0}' config/deploy.yml)
 
 step "5. build-time asset compile (the deploy image's environment)"
 # Dockerfile.deploy precompiles with RAILS_ENV=staging, no SECRET_KEY_BASE and

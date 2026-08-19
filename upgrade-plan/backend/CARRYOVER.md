@@ -727,3 +727,104 @@ the `raise` reinstated, not just that it passes without it.
 Gap 2 is the important one: `-e REDIS_URL=` *looked* like it worked and silently did
 nothing, so the build-env checks had been running against a runtime environment all
 along. With both fixes, the failure reproduces locally in ~20s instead of 13min.
+
+### 8j. Post-deploy verification of the §8 fixes (Aug 2026) — a5c4bc774
+
+Deploy succeeded. Verified against a baseline captured on the previous image:
+
+| check | before | after |
+|---|---|---|
+| Redis logical DB | shared `/0` with 2 other apps | **`/3`, PP only** |
+| `Sidekiq::ProcessSet` | 4 processes (7.2.2, 7.3.2, 7.3.9 ×2) | **2 processes, both ours** |
+| sidekiq `initial_wait` crash | present every boot | **0 occurrences** |
+| `node_modules` / puppeteer | absent, MODULE_NOT_FOUND | **present (161 pkgs), requires OK** |
+| `/country/:iso/pdf` | 204 empty | no longer empty (see 8k) |
+| `/country/:iso/compare/:iso` | 404 dead route | route removed |
+| download `14426` csv | stuck "generating" forever | **ready in 4s, ttl 2591997** |
+| pre-deploy hook | — | migrations ran, `--roles web`, no lock race |
+| post-deploy hook | — | `==> Cache flushed` |
+
+`yarn workspaces focus --production` worked; the `require('puppeteer')` assertion
+in the build passed, so both PDF paths now have their runtime dependency.
+
+Smoke test: **33 walked, 28 healthy, 5 failed** (was 7). Remaining failures are
+`/en/search-cms` (§8f, pre-existing, 500s on production too) and 3× `assets#tiles`
+— which turned out NOT to be the URI.encode bug. See 8k.
+
+### 8k. Two findings the post-deploy smoke run exposed
+
+**1. `MAPBOX_STATIC_IMAGE_URL` was missing from the deploy config — FIXED, needs a GitHub secret**
+
+The `URI.encode` fix worked; that exception is gone. Behind it sat a second,
+pre-existing failure:
+
+```
+NoMethodError (undefined method `+' for nil)
+lib/modules/asset_generator.rb:47:in `mapbox_url'
+```
+
+`base_url` comes from `ENV["MAPBOX_STATIC_IMAGE_URL"]` (config/app_secrets.yml
+default block). That variable is in `.env` and `.env.example` but was never added
+to `config/deploy.yml`, so it is UNSET on staging and `nil + String` raises. The
+static-image tiles (map overlay thumbnails, search-result cards) have therefore
+never worked on staging.
+
+Value is `https://api.mapbox.com/styles/v1/unepwcmc/<style_id>/static/` — a style
+URL used server-side, not a credential, but org-specific, so it is wired as a
+secret rather than committed. THREE places had to change; missing any one of them
+means Kamal never receives it:
+
+1. `.kamal/secrets-common` — `MAPBOX_STATIC_IMAGE_URL=$MAPBOX_STATIC_IMAGE_URL`
+2. `config/deploy.yml` — under `env.secret`
+3. `.github/workflows/deploy-staging-kamal.yml` — `${{ secrets.MAPBOX_STATIC_IMAGE_URL }}`
+
+Still required: add `MAPBOX_STATIC_IMAGE_URL` to the **`staging_proxmox`
+environment** secrets on GitHub, not the repository secrets — environment secrets
+override repository ones, and getting that backwards cost a full deploy cycle with
+MAPBOX_ACCESS_TOKEN (see §8/5b). Production needs it too, or its tiles break the
+same way when it moves.
+
+Note: distinct from MAPBOX_ACCESS_TOKEN, which is BOTH a builder secret (Vite
+inlines it into the client bundle at build time) and a runtime secret. This one is
+runtime-only — it is read server-side by AssetGenerator — so it does NOT belong
+under `builder.secrets`.
+
+**2. EVERY country page 302'd to the homepage — FIXED**
+
+`app/models/country.rb#coverage_growth` relied on PostgreSQL's implicit output
+name for an unaliased `EXTRACT(...)`, which was `date_part`. **PostgreSQL 14
+renamed it to `extract`**, so on staging:
+
+```
+PG::UndefinedColumn: ERROR:  column "date_part" does not exist
+LINE 1: SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year...
+```
+
+ApplicationController rescues it into a redirect, so every country page silently
+302'd to `/en` with no visible error and a 200-looking smoke result.
+
+Three PostgreSQL majors are in play and they disagree:
+
+| environment | PostgreSQL | implicit EXTRACT column |
+|---|---|---|
+| production | 10 | `date_part` |
+| local docker-compose | 11.7 | `date_part` |
+| **staging (Kamal/Proxmox)** | **17.5** | **`extract`** |
+
+So this could not reproduce locally, and production is unaffected — it only
+appears on the new infrastructure. Fixed by aliasing the grouped expression
+explicitly (`AS year_part`); `protected_areas_inner_join` takes an optional
+`alias_as:` and the GROUP BY keeps the raw expression, since
+`GROUP BY <expr> AS <name>` is invalid SQL.
+
+Verified both shapes against the real PG 17 staging database: the old one fails
+with the exact error, the new one returns 6 rows. Also confirmed still working on
+local PG 11, so no regression for production's PG 10.
+
+Guarded by SQL-shape assertions in `test/models/country_test.rb`, not a functional
+test — on PG 11 the old SQL passes, so a functional test would have stayed green
+while staging was broken.
+
+**Worth noting separately:** ApplicationController's blanket rescue turned a 500
+into a 302 and hid this completely. Consider letting it re-raise in staging, or at
+least reporting to AppSignal before redirecting.

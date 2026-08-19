@@ -153,4 +153,47 @@ class CountryTest < ActiveSupport::TestCase
 
     assert_same_elements expected_groups, country.protected_areas_per_governance.to_a
   end
+
+  # The local dev database is PostgreSQL 11 and production is PostgreSQL 10, where
+  # an unaliased EXTRACT(...) is implicitly named `date_part`. PostgreSQL 14
+  # renamed it to `extract`, so on the PG 17 staging database this query raised
+  # "PG::UndefinedColumn: column \"date_part\" does not exist" -- and because
+  # ApplicationController rescues it, EVERY country page silently 302'd to the
+  # homepage instead of erroring.
+  #
+  # A purely functional assertion cannot guard this: on PG 11 the old SQL works
+  # fine, so the test would pass while staging stayed broken. Assert the SQL shape
+  # instead, which holds on every PostgreSQL version.
+  test '#coverage_growth does not depend on PostgreSQL\'s implicit EXTRACT column name' do
+    country = FactoryBot.create(:country)
+
+    sql = country.send(:protected_areas_inner_join,
+                       'EXTRACT(year from legal_status_updated_at)',
+                       false,
+                       alias_as: Country::YEAR_COLUMN)
+
+    assert_includes sql, "AS #{Country::YEAR_COLUMN}",
+                    'the grouped expression must be aliased explicitly'
+    assert_includes sql, 'GROUP BY EXTRACT(year from legal_status_updated_at)',
+                    'GROUP BY keeps the raw expression -- "GROUP BY <expr> AS <name>" is invalid SQL'
+  end
+
+  test '#coverage_growth runs against the real database' do
+    country = FactoryBot.create(:country)
+
+    rows = nil
+    assert_nothing_raised { rows = country.send(:coverage_growth, false).to_a }
+    assert_kind_of Array, rows
+  end
+
+  test 'protected_areas_inner_join stays unaliased for plain column callers' do
+    country = FactoryBot.create(:country)
+
+    sql = country.send(:protected_areas_inner_join, :designation_id, false)
+
+    assert_includes sql, 'SELECT designation_id,'
+    # The COUNT(...) AS count alias is always there; what must NOT appear is an
+    # alias on the grouped column itself.
+    refute_includes sql, 'designation_id AS'
+  end
 end
