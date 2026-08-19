@@ -49,7 +49,19 @@ class CountryController < ApplicationController
         url = url_for(action: :pdf, iso: @country.iso)
         dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
 
-        `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
+        # rasterize.js was ported from PhantomJS to Puppeteer, but this call site
+        # was missed and kept shelling out to `phantomjs`, a binary that is not in
+        # the deploy image at all. The backticks returned empty, no PDF was
+        # written, and send_file then raised -- so this endpoint 500'd on every
+        # request. Matches Download::Generators::Pdf#generate, which was ported.
+        # (rasterize.js reads only argv[2]=url and argv[3]=output; the old
+        # trailing "A4" was a PhantomJS argument and is dropped.)
+        `node --trace-warnings #{rasterizer} '#{url}' #{dest_pdf}`
+
+        unless File.exist?(dest_pdf)
+          raise ActionController::RoutingError, "PDF rasterizer produced no output for #{@country.iso}"
+        end
+
         send_file dest_pdf, type: 'application/pdf'
       end
     end
