@@ -688,3 +688,42 @@ tripwire so a future `bundle update` cannot reintroduce it silently.
 
 Lift the pin when we move to Sidekiq 8, which supports connection_pool 3.x — the
 third test in that file asserts the Sidekiq major so it fails as a reminder.
+
+### 8i. Deploy of the §8 fixes FAILED first time — my bug (Aug 2026)
+
+`config/initializers/redis.rb` raised on a blank `REDIS_URL`. The image build boots
+the whole Rails app during `assets:precompile` / `vite:build_all` with **no runtime
+secrets** — the same reason `SECRET_KEY_BASE_DUMMY` exists — so the build died ~13
+minutes in:
+
+```
+rake aborted!
+REDIS_URL is not set -- cannot configure Redis
+/app/config/initializers/redis.rb:32:in `url'
+Tasks: TOP => vite:build_all => vite:verify_install => environment
+```
+
+Same class as the deploy-#1 `secret_key_base` crash recorded in §5b: a hard failure
+added to an initializer that also runs at build time. Fixed by falling back to
+redis-rb's own default host/port instead of raising — `Redis.new` never connects on
+instantiation, so a genuinely missing URL still surfaces at first use, which is the
+behaviour that existed before this file pinned a database.
+
+`test/unit/pp_redis_test.rb` (5 tests) locks both directions: blank URL must not
+raise, configured URL must still land on our database. Verified the test fails with
+the `raise` reinstated, not just that it passes without it.
+
+**Why preflight did not catch it — two independent gaps, both now closed:**
+
+1. It cleared only `SECRET_KEY_BASE`. It now blanks **every** secret declared under
+   `env.secret` in `config/deploy.yml` except the four `Dockerfile.deploy` provides
+   itself, derived from the YAML so a newly added secret is covered automatically.
+2. Clearing the shell environment was not enough on its own. The `dotenv` gem
+   re-reads `.env` during Rails boot and docker-compose bind-mounts the repo, so
+   `ENV` was repopulated from the file regardless of `-e`. `.dockerignore` excludes
+   `.env*`, so the real image has no such file. Preflight now bind-mounts an empty
+   file over `.env` for the build-environment steps.
+
+Gap 2 is the important one: `-e REDIS_URL=` *looked* like it worked and silently did
+nothing, so the build-env checks had been running against a runtime environment all
+along. With both fixes, the failure reproduces locally in ~20s instead of 13min.

@@ -26,15 +26,32 @@ require 'uri'
 module PPRedis
   DEFAULT_DB = 3
 
+  # NB: this must not raise when REDIS_URL is missing.
+  #
+  # assets:precompile and vite:build_all boot the whole Rails application inside
+  # the image build, where no runtime secrets exist -- that is the same reason
+  # SECRET_KEY_BASE_DUMMY has to be set in Dockerfile.deploy. An earlier version
+  # of this file raised on a blank REDIS_URL and broke the build at
+  # `rake vite:build_all` with "REDIS_URL is not set".
+  #
+  # Falling back to redis-rb's own default host/port restores the previous
+  # behaviour exactly: Redis.new never connects on instantiation, so a genuinely
+  # missing URL surfaces at the first real command instead of at boot.
+  FALLBACK_URL = 'redis://127.0.0.1:6379'.freeze
+
   def self.url
     @url ||= begin
-      raw = AppSecrets.redis[:url].presence || ENV['REDIS_URL'].presence
-      raise 'REDIS_URL is not set -- cannot configure Redis' if raw.blank?
+      raw = AppSecrets.redis[:url].presence || ENV['REDIS_URL'].presence || FALLBACK_URL
 
       uri = URI.parse(raw)
       uri.path = "/#{(ENV['REDIS_DB'].presence || DEFAULT_DB).to_i}"
       uri.to_s
     end
+  end
+
+  # True when we are running on the fallback, i.e. nothing configured a URL.
+  def self.configured?
+    (AppSecrets.redis[:url].presence || ENV['REDIS_URL'].presence).present?
   end
 
   # Host/port/db only -- safe to log, no credentials.

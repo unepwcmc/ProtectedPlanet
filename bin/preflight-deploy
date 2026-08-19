@@ -98,6 +98,39 @@ else
   fi
 fi
 
+# The image build has NONE of the runtime secrets: config/deploy.yml lists them
+# under env.secret, and Kamal injects those when the CONTAINER starts, long after
+# the image is built. docker-compose, by contrast, hands the web service the whole
+# of .env via env_file, so a naive `docker compose run` is NOT a build environment
+# — it is a runtime one, and it will happily boot on secrets the real build lacks.
+#
+# Clearing SECRET_KEY_BASE alone was not enough. An initializer that raised on a
+# blank REDIS_URL passed preflight (compose supplied REDIS_URL from .env) and then
+# failed the real build ~13 minutes in at `rake vite:build_all`. So blank EVERY
+# declared runtime secret, except the few Dockerfile.deploy sets for itself.
+#
+# Derived from deploy.yml rather than hard-coded, so a newly added secret is
+# covered without anyone remembering to update this list.
+#
+# Clearing the shell environment is still not sufficient on its own: the `dotenv`
+# gem re-reads .env during Rails boot, and docker-compose bind-mounts the repo, so
+# ENV gets repopulated from the file no matter what -e says. .dockerignore excludes
+# .env* from the image, so the real build has no such file. Mask it with an empty
+# one for the build-environment steps. Without this, `-e REDIS_URL=` looks like it
+# works and silently does nothing.
+EMPTY_ENV=/tmp/preflight-empty.env
+: > "$EMPTY_ENV"
+# /ProtectedPlanet is where docker-compose.yml mounts the repo.
+MASK_DOTENV=( -v "$EMPTY_ENV:/ProtectedPlanet/.env:ro" )
+
+BUILD_PROVIDED='SECRET_KEY_BASE|AWS_REGION|AWS_S3_REGION|MAPBOX_ACCESS_TOKEN'
+BUILD_ENV_CLEAR=()
+while read -r secret; do
+  [[ -z "$secret" ]] && continue
+  [[ "$secret" =~ ^($BUILD_PROVIDED)$ ]] && continue
+  BUILD_ENV_CLEAR+=( -e "${secret}=" )
+done < <(awk '/^env:/{e=1} e&&/^  secret:/{s=1;next} s&&/^    - /{print $2;next} s&&!/^    - /{s=0}' config/deploy.yml)
+
 step "5. build-time asset compile (the deploy image's environment)"
 # Dockerfile.deploy precompiles with RAILS_ENV=staging, no SECRET_KEY_BASE and
 # SECRET_KEY_BASE_DUMMY=1 (Rails' escape hatch for generating a throwaway key).
@@ -116,7 +149,9 @@ step "5. build-time asset compile (the deploy image's environment)"
 GEM_BUILDS=$(docker compose run --rm --no-deps -T web bash -lc 'echo $(bundle show comfortable_media_surfer 2>/dev/null)/app/assets/builds' 2>/dev/null | tr -d '\r' | tail -1)
 rm -rf public/assets
 docker compose run --rm --no-deps \
+      "${MASK_DOTENV[@]}" \
       -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
+      "${BUILD_ENV_CLEAR[@]}" \
       -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
       web bash -lc "rm -rf '$GEM_BUILDS'/comfy && bundle exec rails comfy:compile_assets && (bundle exec rails assets:precompile || true)" >/tmp/preflight-assets.log 2>&1 || true
 ASSET_COUNT=$(ls public/assets 2>/dev/null | wc -l | tr -d ' ')
@@ -140,7 +175,9 @@ if [[ -z "${MAPBOX_ACCESS_TOKEN:-}" ]] && ! grep -qE "^MAPBOX_ACCESS_TOKEN=.+" .
 else
   rm -rf public/vite
   docker compose run --rm --no-deps \
+        "${MASK_DOTENV[@]}" \
         -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
+        "${BUILD_ENV_CLEAR[@]}" \
         -e VITE_RUBY_MODE=production \
         -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
         web bash -lc "bundle exec rake vite:build_all" >/tmp/preflight-vite.log 2>&1 || true
