@@ -244,6 +244,11 @@ step "8. puppeteer can launch a browser (PDF exports)"
 # still "succeeds", it just produces a PDF with no map -- which is exactly how
 # puppeteer 5 / Chromium 88 went unnoticed. Launching for real is the only check
 # that covers both.
+#
+# Launching, specifically -- NOT checking that the browser directory exists. A
+# failed download leaves the version directory in place without the executable
+# inside it, which is what made two deploys fail while every directory-level check
+# passed. See the puppeteer block in Dockerfile.deploy.
 if docker compose run --rm --no-deps -T \
       -e PUPPETEER_CACHE_DIR=/ProtectedPlanet/.cache/puppeteer \
       web bash -lc "node -e \"require('puppeteer').launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b=>{console.log(await b.version());await b.close()}).catch(e=>{console.error(e.message);process.exit(1)})\"" \

@@ -1102,3 +1102,45 @@ puppeteer browser cache lives in the repo root by design (so the bind mount keep
 it between local runs) and is ~650MB; it was untracked but NOT ignored, i.e. one
 `git add .` from being committed, and without the dockerignore rule a local
 `docker build` would ship the host's browser over the image's own.
+
+### 8u. "Could not find Chrome" — ROOT CAUSE FOUND (deploy 251b52b7a)
+
+The second failure produced the actual error, which the first had truncated:
+
+```
+IncompleteInstallationError: All providers failed for chrome 152.0.7977.42:
+  - DefaultProvider: The browser folder
+    (/app/.cache/puppeteer/chrome/linux-152.0.7977.42) exists but the
+    executable ... is missing
+```
+
+**The version directory is created; the executable inside it is not.** `yarn install`
+runs puppeteer's postinstall, reports success, and leaves a half-finished download.
+`puppeteer browsers install chrome` then refuses to repair it, because a present
+directory reads as "already installed" — so the defensive step added in §8t was a
+no-op and printed the CLI usage text.
+
+**Two of my own checks were wrong, and both failed the same way:**
+
+- The amd64 layer replay in §8t asserted with `ls -d /app/.cache/puppeteer/chrome/*`
+  — the DIRECTORY, which is precisely what exists when the download has failed. It
+  reported success against a broken install.
+- The claim that the CLI "returns 1 even on success" was wrong. It returned 1
+  because of this error, not as normal behaviour.
+
+Fix (Dockerfile.deploy):
+
+```
+&& rm -rf "$PUPPETEER_CACHE_DIR"                                    # no half-finished install survives
+&& ./node_modules/.bin/puppeteer browsers install chrome            # hard gate
+&& test -x "$(node -e "...require('puppeteer').executablePath()")"  # the EXECUTABLE, not the folder
+&& node -e "...launch()..."                                         # and it must actually run
+```
+
+All four are hard gates now; no tolerated exit codes.
+
+**Not verified locally.** The dev machine's disk is full (1.3 GB free of 228 GB;
+Docker.raw is 127 GB), and Docker's own buildkit is failing with
+`input/output error` — `docker builder prune` cannot even run. Deleting the 651MB
+repo `.cache` did not move `df`, so APFS local snapshots are likely holding it.
+Local verification is blocked until that is cleared.
