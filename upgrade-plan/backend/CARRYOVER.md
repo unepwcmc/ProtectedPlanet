@@ -828,3 +828,104 @@ while staging was broken.
 **Worth noting separately:** ApplicationController's blanket rescue turned a 500
 into a 302 and hid this completely. Consider letting it re-raise in staging, or at
 least reporting to AppSignal before redirecting.
+
+### 8l. Pre-deploy shadow verification (Aug 2026) — smoke went fully green
+
+Deploy cycles cost ~15 min, so instead of pushing and discovering failures, the
+not-yet-deployed code was verified against the real staging database first.
+
+**Technique — worth reusing.** Create a container from the CURRENTLY DEPLOYED image
+on the staging host, `docker cp` the changed files in *before* `docker start` (so
+eager-load picks them up), give it the Kamal role env file plus any new secret, and
+run `rake smoke:routes` against its own Puma. The live containers are untouched.
+
+```
+docker create --name pp-shadow --network kamal \
+  --env-file .kamal/apps/protectedplanet-staging/env/roles/web.env \
+  --env-file /tmp/extra.env -e MEMCACHE_SERVERS=host.docker.internal:11211 \
+  --add-host host.docker.internal:host-gateway \
+  --volume /data/pp-imports:/app/tmp/imports \
+  <image> bundle exec puma -C config/puma.rb
+docker cp <changed files> pp-shadow:/app/...
+docker start pp-shadow
+docker exec pp-shadow bash -lc 'cd /app && bundle exec rake smoke:routes'
+```
+
+This gives real PG 17, real data, real Elasticsearch and real S3 without a deploy.
+It found two further bugs that would otherwise have cost two more cycles.
+
+**Confirmed working pre-deploy:** country pages 200 (were 302), country PDF 200
+(was 204), all three tile types 200 with real PNG bytes, and every download format
+generated — csv 11.2 MB, shp 11.2 MB, gdb 11.2 MB (OpenFileGDB), **pdf 11.4 MB via
+Puppeteer in 12.1s**, which is the path that had no runtime dependency in the image
+until this round.
+
+**POST endpoints, which smoke:routes does not cover**, tested with a real CSRF token
+and session: `search#autocomplete` 200 (7.4 KB JSON), `pame#list` 200 (16.8 KB),
+`pame#download` 200 (13.9 KB CSV), `downloads#create` 200.
+
+Final: **37 walked, 37 healthy, 0 failed — smoke:routes passed.**
+
+### 8m. Three more bugs the shadow run exposed — ALL FIXED
+
+**1. `AssetGenerator` — square brackets broke the tile URL (Ruby 3)**
+
+Fixing `URI.encode` and adding `MAPBOX_STATIC_IMAGE_URL` still left tiles at 500:
+
+```
+URI::InvalidURIError (bad URI (is not URI?): ".../geojson(%7B..."coordinates":
+  [[[-61.825,17.185],...]]]%7D%7D)/auto/304x138@2x?access_token=...")
+lib/modules/asset_generator.rb:53:in `request_tile'
+```
+
+`URI::DEFAULT_PARSER.escape` leaves `[` and `]` alone — RFC 2396 reserves them for
+IPv6 literals in the HOST component — and every GeoJSON geometry is full of them.
+Fixed with `UNSAFE_IN_PATH`, the RFC 2396 default set minus `\[\]`. Four escape
+strategies were tested against the live Mapbox API: the old one fails to parse, the
+new one returns HTTP 200 with 8483 bytes of PNG. This is the THIRD distinct bug
+behind /assets/tiles/:id, each hidden by the one before it.
+
+**2. `ActiveStorage::Blob#service_url` — removed in Rails 7.0**
+
+```
+NoMethodError (undefined method `service_url' for an instance of ActiveStorage::Blob)
+app/models/comfy/cms/searchable_page.rb:52:in `image'
+```
+
+Three call sites (`searchable_page.rb`, `cms_serializer.rb`, `cms_helper.rb`), all
+on the non-development branch, so they only ever raised on staging/production.
+`/search-cms?search_term=...` 500'd as soon as any result carried an image.
+Renamed to `#url`.
+
+**This one is a genuine miss in the §8d static sweep** — `service_url` was not on
+the list of removed APIs scanned for. Guarded now by a test that greps app/ and
+lib/ for it, which is cheap and version-proof.
+
+**3. `Search::CmsSerializer` — `''` is not a Hash**
+
+`Searchable#filters` returns `''` (not `{}`) when no filters are supplied, so
+`options` is `{filters: ''}` and `Hash#dig(:filters, :ancestor)` called
+`''.dig(:ancestor)`:
+
+```
+TypeError (String does not have #dig method)
+app/serializers/search/cms_serializer.rb:101
+```
+
+An unfiltered `/search-cms` 500'd on production too — it only ever worked because
+the frontend always sends filters. Guarded in the serializer rather than changing
+what `#filters` returns, since that value also feeds the query builder and `''` vs
+`{}` is not a change worth making blind.
+
+### 8n. Latent fragilities noted, not fixed
+
+- `Ogr::Postgres.get_feature_name` raises `IndexError` on any filename that does
+  not follow `WDPA_MmmYYYY_Public[_id][_geom]`. Unreachable in normal flow (callers
+  go through `Download::Utils.filename`), but it fails loudly and unhelpfully.
+- `PameEvaluation.paginate_evaluations` reads `requested_page`; anything else gives
+  `nil.to_i == 0` and `RangeError (invalid page: 0)`. `page_number || 1` does not
+  help because `0` is truthy in Ruby.
+- **ApplicationController's blanket rescue turns 500s into redirects.** It hid a
+  completely broken country section (§8k) — every country page was down and nothing
+  reported it. Consider re-raising in staging, or reporting to AppSignal before
+  redirecting.

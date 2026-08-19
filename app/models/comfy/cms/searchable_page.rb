@@ -49,7 +49,11 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
     if Rails.env.development?
       Rails.application.routes.url_helpers.rails_blob_path(fragment.attachments_blobs.first)
     else
-      fragment.attachments_blobs.first.service_url&.split('?')&.first
+      # ActiveStorage::Blob#service_url was deprecated in Rails 6.1 and REMOVED
+      # in 7.0, renamed to #url. This branch only runs outside development, so it
+      # raised NoMethodError on staging/production only -- GET /search-cms with a
+      # search term 500'd as soon as any result had an image.
+      fragment.attachments_blobs.first.url&.split('?')&.first
     end
   end
 

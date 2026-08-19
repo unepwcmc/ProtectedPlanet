@@ -44,8 +44,27 @@ module AssetGenerator
     # not legal in a URI (notably { and }), so it has to be escaped here. Escaping
     # the whole URL afterwards is not an option: it would also escape the ? and =
     # of the query string.
-    tile_url = base_url + "geojson(#{URI::DEFAULT_PARSER.escape(geojson)})/auto/#{size[:x]}x#{size[:y]}@2x"
+    tile_url = base_url + "geojson(#{escape_for_path(geojson)})/auto/#{size[:x]}x#{size[:y]}@2x"
     tile_url << "?access_token=#{access_token}"
+  end
+
+  # URI::DEFAULT_PARSER.escape leaves [ and ] alone: its default unsafe pattern
+  # treats them as safe because RFC 2396 reserves them for IPv6 literals in the
+  # HOST component. Every GeoJSON geometry is full of them -- "coordinates":
+  # [[[-61.8,17.1],...]] -- so they survived into the path, and URI() then
+  # rejected the result outright:
+  #
+  #   URI::InvalidURIError (bad URI (is not URI?): "https://api.mapbox.com/...
+  #     geojson(%7B..."coordinates":[[[-61.825,17.185],...]]]%7D%7D)/auto/304x138@2x...")
+  #
+  # so /assets/tiles/:id 500'd for every area type. This is the RFC 2396 default
+  # unsafe set with \[ and \] removed, i.e. identical behaviour except brackets are
+  # now percent-encoded. Verified against the live Mapbox API: the previous form
+  # fails to parse, this one returns a 200 with real PNG bytes.
+  UNSAFE_IN_PATH = /[^\-_.!~*'()a-zA-Z\d;\/?:@&=+$,]/
+
+  def self.escape_for_path(value)
+    URI::DEFAULT_PARSER.escape(value, UNSAFE_IN_PATH)
   end
 
   def self.request_tile tile_url
