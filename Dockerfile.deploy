@@ -169,6 +169,20 @@ ENV AWS_S3_REGION=eu-west-1 \
 # failed on staging. `yarn workspaces focus --production` keeps the 11 runtime
 # dependencies and drops the 24 dev ones; the require below is the assertion that
 # the prune actually left puppeteer -- and its bundled Chromium -- intact.
+#
+# The explicit `browsers install chrome` before that assertion is deliberate. The
+# first deploy of puppeteer 25 failed here with "Could not find Chrome (ver.
+# 152.0.7977.42)", even though yarn reported building puppeteer successfully.
+# Reproducing the exact layer sequence on linux/amd64 shows the browser DOES land
+# in /app/.cache/puppeteer during `yarn install` and DOES survive
+# `yarn workspaces focus --production` -- so the most likely explanation is that
+# yarn's build step swallowed a failed download on the builder. This step makes the
+# image independent of that: it is idempotent when the browser is already present,
+# and re-fetches it when it is not.
+#
+# Its exit code is tolerated on purpose -- the CLI returns 1 even on success
+# (verified: it restored a deliberately wiped cache and still exited 1). The launch
+# assertion below is the real gate, same as with the asset outputs.
 RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
     export MAPBOX_ACCESS_TOKEN="$(cat /run/secrets/MAPBOX_ACCESS_TOKEN 2>/dev/null || true)" \
  && rm -rf public/assets public/vite tmp/cache/vite \
@@ -182,6 +196,8 @@ RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
      || (echo "ERROR: no Mapbox token in the built bundle -- the map will not render. Is MAPBOX_ACCESS_TOKEN passed as a builder secret?" && exit 1)) \
  && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite manifest + mapbox token present" \
  && yarn workspaces focus --production \
+ && (./node_modules/.bin/puppeteer browsers install chrome \
+     || echo "note: browsers install returned non-zero (it does that even on success); the launch assertion below is the real gate") \
  && node -e "const p=require('puppeteer'); p.launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b => { console.log('puppeteer launches:', await b.version()); await b.close(); }).catch(e => { console.error('ERROR: puppeteer cannot launch -- every PDF export would fail. ' + e.message); process.exit(1); })" \
  && rm -rf tmp/cache
 

@@ -12,6 +12,10 @@ docker-compose.yml
 # stalled builds.
 node_modules/
 chrome/
+# Puppeteer's browser cache (~650MB). The image downloads its own Linux Chrome into
+# /app/.cache/puppeteer during `yarn install`; sending a local copy would both bloat
+# the context and let `COPY . .` overwrite the image's browser with the host's.
+.cache/
 
 # ActiveStorage runtime uploads — never needed at build time
 storage/

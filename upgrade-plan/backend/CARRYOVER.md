@@ -1059,3 +1059,46 @@ remembering:
    real GPU browser, so it must NOT be used to diagnose §8q.
 
 The user's own browser remains the only reliable source for the map question.
+
+### 8t. Deploy eb8b6abd6 FAILED — "Could not find Chrome" — defensive fix applied
+
+The puppeteer-25 deploy failed at the build's own assertion:
+
+```
+ERROR: puppeteer cannot launch -- every PDF export would fail.
+Could not find Chrome (ver. 152.0.7977.42). ... your cache path is
+incorrectly configured (which is: /app/.cache/puppeteer).
+```
+
+**The assertion did its job** — it caught this instead of shipping an image whose
+PDFs silently lose their map, which is exactly the failure it was written for.
+
+**Root cause NOT reproduced.** The exact layer sequence was replayed on
+`linux/amd64` (the CI platform) in a cut-down image — ubuntu 24.04 + node 24 +
+corepack yarn 4.17.1 + the same ENV, `yarn install --immutable`, then
+`yarn workspaces focus --production`:
+
+```
+AFTER-INSTALL:  /app/.cache/puppeteer/chrome/linux-152.0.7977.42
+AFTER-PRUNE:    /app/.cache/puppeteer/chrome/linux-152.0.7977.42
+```
+
+So the browser DOES land in PUPPETEER_CACHE_DIR and DOES survive the prune. CI's
+own log shows `puppeteer@npm:25.8.0 must be built` and no build failure. The most
+plausible remaining explanation is that yarn's build step swallowed a failed
+download on the self-hosted builder — but that is inference, not evidence.
+
+**Fix: stop depending on the download having worked earlier in the build.** An
+explicit `./node_modules/.bin/puppeteer browsers install chrome` now runs
+immediately before the launch assertion. Verified on amd64: idempotent when the
+browser is present, and it restores a deliberately wiped cache.
+
+Its exit code is tolerated on purpose — the CLI returns **1 even on success**
+(verified: it recovered a wiped cache and still exited 1). The launch assertion
+stays the real gate, matching how the asset outputs are handled in the same RUN.
+
+Also added `/.cache/` to `.gitignore` and `.cache/` to `.dockerignore`. The
+puppeteer browser cache lives in the repo root by design (so the bind mount keeps
+it between local runs) and is ~650MB; it was untracked but NOT ignored, i.e. one
+`git add .` from being committed, and without the dockerignore rule a local
+`docker build` would ship the host's browser over the image's own.
