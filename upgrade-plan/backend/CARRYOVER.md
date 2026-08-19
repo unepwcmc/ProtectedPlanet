@@ -1185,3 +1185,31 @@ disk-full episode (`write /var/lib/docker/buildkit/containerdmeta.db: input/outp
 error`) and freeing space does not repair it — Docker Desktop needs a restart.
 Unlike the previous two attempts, though, this fix is not inference: the tool named
 the missing package, and its absence is confirmed in the shipped image.
+
+### 8w. `unzip` confirmed as the cause; one more self-inflicted failure after it
+
+Deploy `7ae24a544` (with `unzip` added) got the install through cleanly:
+
+```
+chrome@152.0.7977.42 /app/.cache/puppeteer/chrome/linux-152.0.7977.42/chrome-linux64/chrome
+```
+
+That is the CLI's success output with a real executable path — so §8v was correct:
+missing `unzip` was what broke the extraction.
+
+The RUN still failed, on the very next line, in the assertion added in §8u:
+
+```
+TypeError [ERR_INVALID_ARG_TYPE]: The "chunk" argument must be of type string
+or an instance of Buffer... Received an instance of Promise
+```
+
+`executablePath()` returns a **Promise** in puppeteer 25, and
+`process.stdout.write()` of a Promise throws. My assertion was broken, not the
+image. Fixed by wrapping in `Promise.resolve(...)`, which handles the sync and
+async forms both, so it will not break again if the API changes back. The pattern
+was verified against both shapes before committing.
+
+Running tally on this one bug: the missing package cost three deploys, and my own
+checks cost two more — one asserting on the directory instead of the executable
+(§8u), one that could not print the executable path at all (this).

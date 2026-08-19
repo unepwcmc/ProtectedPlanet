@@ -193,10 +193,15 @@ ENV AWS_S3_REGION=eu-west-1 \
 # directory-level check said the browser was there. `rm -rf` first makes the
 # install unconditional, so a half-finished download cannot persist.
 #
-# All three steps are hard gates -- no tolerated exit codes. `test -x` on
-# executablePath() is the check that actually matters: the earlier version asserted
+# All steps are hard gates -- no tolerated exit codes. `test -x` on
+# executablePath() is the check that actually matters: an earlier version asserted
 # on the DIRECTORY, which is exactly the thing that exists when the download has
 # failed.
+#
+# executablePath() is wrapped in Promise.resolve() because puppeteer 25 returns a
+# Promise from it; writing that straight to stdout throws
+# "ERR_INVALID_ARG_TYPE ... Received an instance of Promise". Promise.resolve()
+# handles both the sync and async forms, so this does not break if it changes back.
 RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
     export MAPBOX_ACCESS_TOKEN="$(cat /run/secrets/MAPBOX_ACCESS_TOKEN 2>/dev/null || true)" \
  && rm -rf public/assets public/vite tmp/cache/vite \
@@ -212,7 +217,7 @@ RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
  && yarn workspaces focus --production \
  && rm -rf "$PUPPETEER_CACHE_DIR" \
  && ./node_modules/.bin/puppeteer browsers install chrome \
- && test -x "$(node -e "process.stdout.write(require('puppeteer').executablePath())")" \
+ && test -x "$(node -e "Promise.resolve(require('puppeteer').executablePath()).then(p => process.stdout.write(String(p)))")" \
  && node -e "const p=require('puppeteer'); p.launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b => { console.log('puppeteer launches:', await b.version()); await b.close(); }).catch(e => { console.error('ERROR: puppeteer cannot launch -- every PDF export would fail. ' + e.message); process.exit(1); })" \
  && rm -rf tmp/cache
 
