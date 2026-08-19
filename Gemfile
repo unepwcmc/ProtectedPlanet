@@ -130,6 +130,19 @@ gem 'sidekiq', '~> 7.0'
 # Sidekiq 7 dropped its redis-rb dependency (it uses redis-client internally), but the
 # app talks to Redis directly via $redis / Redis.new, so require redis-rb explicitly.
 gem 'redis', '~> 5.0'
+# connection_pool is only ever a transitive dependency (activesupport >= 2.2.5,
+# sidekiq >= 2.3.0 -- both open-ended), so bundler happily resolved 3.0.2, which
+# is incompatible with Sidekiq 7.x:
+#
+#   connection_pool 3.0.2  def pop(timeout: 0.5, exception: ..., **)   # keyword-only
+#   sidekiq 7.3.9          @sleeper.pop(total)                         # positional
+#
+# Every job container therefore died in Sidekiq::Scheduled::Poller#initial_wait at
+# boot with "ArgumentError: wrong number of arguments (given 1, expected 0)". The
+# poller thread never entered its loop, so the scheduled and retry sets were never
+# polled: perform_in/perform_at did nothing and no failed job was ever retried,
+# silently. Pin to 2.x until we move to Sidekiq 8, which supports connection_pool 3.
+gem 'connection_pool', '~> 2.5'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 

@@ -610,7 +610,7 @@ It made `rails runner` on staging look like it had failed when it had not, and
 `bin/rails test` unusable in docker-compose (`bundle exec` is the workaround).
 Fix: `bundle binstubs bundler --force` + `rails app:update:bin`.
 
-### 8h. Sidekiq scheduler thread is dead on every boot — NOT STARTED
+### 8h. Sidekiq scheduler thread is dead on every boot — FIXED (code), needs deploy
 
 Both job containers log at startup:
 
@@ -620,8 +620,26 @@ connection_pool-3.0.2/lib/connection_pool/timed_stack.rb:62:in `pop':
   from sidekiq-7.3.9/lib/sidekiq/scheduled.rb:226:in `initial_wait'
 ```
 
-connection_pool 3.0 dropped the positional-timeout `pop(t)`; sidekiq 7.3.x still
-calls it. The **scheduler thread dies at boot**, so scheduled and retry sets never
-fire. Did not cause the download bug (those jobs go straight to a queue) but any
-`perform_in`/`perform_at` and every Sidekiq retry is silently dead.
-Fix: pin `connection_pool ~> 2.4` (or move to Sidekiq 8, which supports 3.x).
+Verified against the gem sources on staging rather than inferred from the trace:
+
+```ruby
+# connection_pool 3.0.2 -- keyword-only
+def pop(timeout: 0.5, exception: ConnectionPool::TimeoutError, **)
+# sidekiq 7.3.9 scheduled.rb:226 -- positional
+@sleeper.pop(total)
+```
+
+connection_pool is only ever transitive here (activesupport `>= 2.2.5`, sidekiq
+`>= 2.3.0`, both open-ended), so bundler resolved 3.0.2 unchallenged. The
+**scheduler thread died at boot**, so the scheduled and retry sets were never
+polled: `perform_in`/`perform_at` silently did nothing and no failed job was ever
+retried. Nothing surfaced in the UI — only a stack trace on stdout at container
+start. Did not cause the download bug (those jobs go straight to a queue).
+
+Fixed by pinning `connection_pool ~> 2.5` in the Gemfile (resolves 2.5.5;
+`pop params: [[:opt, :timeout], [:opt, :options]]`, verified under bundler). The
+lock diff is two lines. `test/unit/sidekiq_connection_pool_test.rb` is the
+tripwire so a future `bundle update` cannot reintroduce it silently.
+
+Lift the pin when we move to Sidekiq 8, which supports connection_pool 3.x — the
+third test in that file asserts the Sidekiq major so it fails as a reminder.
