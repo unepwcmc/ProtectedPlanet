@@ -32,11 +32,15 @@ module GeometryConcern
     return nil unless geojson.present?
     geometry = JSON.parse(geojson)
 
-    URI.encode({
+    # Raw JSON on purpose -- the only caller (AssetGenerator.mapbox_url) escapes it
+    # for the URL path itself. URI.encode used to do that here, but it was removed
+    # in Ruby 3.0 and raised NoMethodError on every map tile request; escaping here
+    # as well would double-escape the payload Mapbox receives.
+    {
       "type" => "Feature",
       "properties" => geo_properties || geometry_properties,
       "geometry" => geometry
-    }.to_json)
+    }.to_json
   end
 
   private
