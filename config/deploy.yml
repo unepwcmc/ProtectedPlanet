@@ -24,6 +24,14 @@ builder:
     RUBY_VERSION: 3.3.7
     NODE_VERSION: 24.4.1
     RAILS_ENV: staging
+  # Vite INLINES import.meta.env.VITE_* at build time, so the Mapbox token has to
+  # be present while the image is built -- having it only at runtime leaves the
+  # bundle with no token and the map silently never renders. config/vite.rb reads
+  # it from app_secrets (ENV["MAPBOX_ACCESS_TOKEN"]) and hands it to Vite.
+  # It is a public token by nature (it ships inside the client JS either way), but
+  # passed as a build secret rather than an arg so it stays out of image history.
+  secrets:
+    - MAPBOX_ACCESS_TOKEN
 
 env:
   clear:

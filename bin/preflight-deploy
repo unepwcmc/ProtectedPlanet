@@ -129,7 +129,31 @@ else
   grep -iE "aborted|ArgumentError|Missing|error" /tmp/preflight-assets.log | head -5 | sed 's/^/       /'
 fi
 
-step "6. staging boot with real secrets present"
+step "6. vite build injects the client env (map token)"
+# Vite INLINES import.meta.env.VITE_* at build time. Those values only exist if the
+# build runs through vite_ruby (rake vite:build_all), which loads config/vite.rb --
+# calling ./node_modules/.bin/vite directly silently produces a bundle with no
+# Mapbox token, and the map then never renders with no error anywhere. That shipped
+# to staging once; this check exists so it cannot ship again.
+if [[ -z "${MAPBOX_ACCESS_TOKEN:-}" ]] && ! grep -qE "^MAPBOX_ACCESS_TOKEN=.+" .env 2>/dev/null; then
+  warn "MAPBOX_ACCESS_TOKEN not set locally — skipping the client-env check (CI/deploy passes it as a builder secret)"
+else
+  rm -rf public/vite
+  docker compose run --rm --no-deps \
+        -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
+        -e VITE_RUBY_MODE=production \
+        -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
+        web bash -lc "bundle exec rake vite:build_all" >/tmp/preflight-vite.log 2>&1 || true
+  if grep -rqE "VITE_MAPBOX_TOKEN:\`?pk\." public/vite/assets/ 2>/dev/null; then
+    ok "vite bundle contains the Mapbox token (map will render)"
+  else
+    bad "vite bundle has NO Mapbox token — the map will silently not render"
+    echo "       is the build going through 'rake vite:build_all' (not the vite binary)?" | sed 's/^/       /'
+    tail -3 /tmp/preflight-vite.log | sed 's/^/       /'
+  fi
+fi
+
+step "7. staging boot with real secrets present"
 if docker compose run --rm --no-deps \
       -e RAILS_ENV=staging -e SECRET_KEY_BASE=preflight_dummy_key_0123456789 \
       -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \

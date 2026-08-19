@@ -1,10 +1,11 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-10 (Rails 8.0 phase).
+Keep this current as phases land. Last updated: 2026-08-18 (staging deploys, phases 1 + 2).
 
 Status at this point: **Rails 8.0.5**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.0`,
-postgis-adapter 11.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+postgis-adapter 11.0. Suite **714 runs, 0 failures, 7 skips**; coverage ~65.4%, SimpleCov floor 62.
+**Live on staging** (`pp-web-staging-01`, Kamal v2) with the Vite/Vue-3 frontend — see §5b.
 **Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0.**
 
 ### Rails 8.0 phase — DONE
@@ -46,7 +47,9 @@ Cannot be closed locally; they need a deploy target and a decision. Track agains
 [03 exit criteria](./03-rails-6.md).
 
 - [ ] **Import pipeline + download workers smoke-tested** on a real environment (real WDPA import subset + generate each download type).
-- [ ] **Staging deploy on Rails 6.1 confirmed.** Blocked: staging is Ubuntu 18.04 / Ruby 2.6.3 (no 2.7) — see [11](./11-deploy-and-devops.md) and the server audit.
+- [x] **DONE (superseded) — staging deploy.** The Ubuntu 18.04 / Ruby 2.6.3 blocker is gone: staging
+      moved to the Proxmox Kamal host (`pp-web-staging-01`, Ubuntu 24.04) and now runs
+      **Rails 8.0.5 / Ruby 3.3.7**, well past the 6.1 milestone this line was waiting on. See §5b.
 - [ ] **4 EM decisions** (from [00 "Facts still needed"](./00-scope-and-shared-milestones.md)): infra scope + budget; container registry (GHCR vs Docker Hub); WDPA release cadence (switchover window); data-team acceptance criteria for `.gdb` downloads.
 
 ## 2. Ruby 2.7 → 3.3 — DONE (Jul 2026, Ruby 3.3.7)
@@ -64,6 +67,8 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
       break — so the pin **cannot be removed at Rails 7.0** (tried; boots red).
       Remove when webpacker is dropped at the Vite cutover (B5) and appsignal is
       bumped to a Psych-5-safe version.
+      **UPDATE (Aug 2026): webpacker is GONE** (Vite cutover shipped in phase 2), so only
+      `appsignal ~> 3.3.11` still blocks the pin. Bump appsignal, then try removing it.
 - [x] ~~Comfy routing kwarg patch~~ — **removed at Rails 7.0** (Media Surfer's
       `comfy_route` is Ruby-3-native).
 - [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation** — still
@@ -138,7 +143,7 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       sandbox existing. The fragile *logic* is already covered by the geometry-importer +
       table-service unit tests, so this is end-to-end confidence, not a correctness gap.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
-- [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, currently 54) as coverage improves. Never lower it.
+- [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.
 
 ## 4. Deferred gem / asset bumps (own phases — reasoned deferrals)
 - [ ] **sass-rails 5.0.8 → 6 + Sprockets 4** — needs a `manifest.js` this app lacks; Ruby-Sass → LibSass migration across 129 SCSS files with **no visual tests**. Pair with the Vite/asset work, not the Rails bump. sass-rails 5.0.8 works fine on Rails 6.1.
@@ -152,9 +157,15 @@ Its admin JS is esbuild/ES-modules and its CSS is dart-sass (`@import "codemirro
   `app/assets/builds/comfy/admin/cms/application.{js,css}`); Sprockets/Propshaft
   then serve the built files. Wired into the `install` service (docker-compose) and
   CI `prepare()` (Jenkinsfile).
-- [ ] **Production/deploy must run `comfy:compile_assets` before `assets:precompile`**
-  (Capistrano now; Docker/Kamal later). The build lands in the gem dir, which is
-  not version-controlled, so every fresh environment must run it.
+- [x] **DONE — deploy runs `comfy:compile_assets` before `assets:precompile`.** Added to
+  `Dockerfile.deploy` (Aug 2026). This bit us for real: the Kamal image never ran it, and
+  the CMS admin CSS/JS only appeared because the app carried its own
+  `app/assets/{javascripts,stylesheets}/comfy/` overrides. The Vite cutover deleted those,
+  the admin assets vanished, and the phase-2 image build failed on the asset assertion.
+  Verified after the fix: the gem's `app/assets/builds/comfy/admin/cms/` is populated in the
+  deployed image (it never was before, phase 1 included). `bin/preflight-deploy` mirrors
+  the same order **and wipes the gem builds dir first**, because a stale populated dir in
+  the shared bundler volume made the check pass locally while the real build failed.
 - [ ] **Optional refinement:** build into our own `app/assets/builds/` from the gem
   source instead of the gem dir, to fully decouple from the read-only bundle. Not
   required — the current approach works in dev/CI.
@@ -375,6 +386,63 @@ upgrade-plan and still committing daily — waiting only grows that merge.
 the PG 10→17 story); whether the `staging_proxmox` env/secrets are populated. Also note the deploy
 config still assumes **host Memcached + a single Redis** — our two-Redis / drop-Memcached decision
 (§4e) is not reflected there yet; that's the follow-up once devops provisions them.
+
+### 5b. Staging deploys — SHIPPED (Aug 2026)
+Both phases are live on `pp-web-staging-01`. Prerequisites that were open in §5a resolved
+themselves: SSH access granted, `staging_proxmox` secrets populated, self-hosted runner working,
+DB reachable with **all 204 migrations already applied**.
+
+**Phase 1 (backend only)** — `staging_kamal` @ `a0a1f3b9`. Rails 7.1.6 → **8.0.5.1**, Ruby 3.3.7,
+redis 5 / Sidekiq 7, secrets→`config_for`. Verified live: containers healthy (web + job_default +
+job_import), and a `.gdb` export **through the app's own `Ogr::Postgres.export`** against the real
+staging DB produced `Geometry Column = SHAPE` — the end-to-end GDAL validation that could not be
+done locally. Before the deploy, staging was emitting `the_geom`.
+
+**Phase 2 (frontend + backend)** — `staging_kamal` @ `a88a1d99`. Adds the Vite/Vue 3/Turbo frontend,
+**webpacker fully removed** (gem, `config/webpack/*`, `babel.config.js`, and its build step), so the
+image now builds **two** asset pipelines instead of three. `.gdb` re-verified: still `SHAPE`.
+
+**Four failed attempts before phase 1 landed — each a real bug, and staging was never broken
+(every failure hit before the container swap):**
+1. `config.secret_key_base = config_for(...)` assigned nil during `assets:precompile`, which runs
+   with `SECRET_KEY_BASE` unset and `SECRET_KEY_BASE_DUMMY=1`. Rails 8's setter raises on blank
+   outside dev/test, bypassing that escape hatch. Fixed: only assign when present.
+2. + 3. The pre-deploy hook's `kamal app exec` fans out to **every role**, so web + job_default +
+   job_import each ran `db:migrate` concurrently and raced the advisory lock
+   (`ActiveRecord::ConcurrentMigrationError`). `--primary` was NOT enough — it narrows *hosts*, and
+   all three roles share one host. `--roles web` is what reduces it to a single container.
+4. (phase 2) `comfy:compile_assets` missing from the image — see §4b.
+
+**`bin/preflight-deploy`** was added after #1–3 and encodes all of it: hooks executable + mode 100755
++ no `app exec` without `--roles`; workflow submodule checkout; the suite; `assets:precompile` in the
+build environment; staging boot. It has since caught two phase-2 breakages before they cost a deploy
+cycle (the stale `application-*.css` assertion, and the comfy step). Run it before every push:
+`./bin/preflight-deploy` — it prints `✅ ready: git push origin staging_kamal` or refuses.
+
+**Follow-ups from these deploys:**
+- [ ] **Runner locale — for devops.** Kamal reported
+      `ERROR (Encoding::CompatibilityError): invalid byte sequence in US-ASCII` (sshkit
+      `String#strip`) *instead of* the real error, twice. The self-hosted runner's locale is
+      US-ASCII, so any non-ASCII build output masks the genuine failure. Set `LANG=C.UTF-8` /
+      `LC_ALL=C.UTF-8` on the runner. Turned a 30-second diagnosis into a 4,600-line log dig.
+- [ ] **`public/packs` is committed** — 15 stale webpack outputs, dead since the Vite cutover and
+      still shipped in the image. `git rm -r --cached public/packs` + gitignore it. Nothing
+      references them (0 `*_pack_tag` calls anywhere).
+- [ ] **Narrow the `assets:precompile ||` tolerance in `Dockerfile.deploy`.** It exists for
+      vite_ruby's nested `vite:build_all`, which always exits non-zero with a bare
+      "Compilation failed:" while sprockets succeeds — but it also swallowed the genuine
+      `secret_key_base` crash in failure #1. The output assertions catch it eventually; a tighter
+      guard would surface it immediately.
+- [x] **DONE — `.gitignore` missed rotated logs.** `/log/*.log` matches `test.log` but not
+      `test.log.0`, so a **246 MB** `log/test.log.0` became tracked and GitHub rejected the push
+      (100 MB limit). Purged from the 4 local-only commits with `filter-branch` (nothing already on
+      origin was rewritten; verified the only tree difference was that file) and the pattern is now
+      `/log/*.log*`.
+
+**Still unverified — needs a human at a browser.** The suite is rack-test only, so Vue 3 + Turbo
+runtime behaviour is genuinely untested (see the "no system/browser tests" item in §3). Worth
+exercising on staging: search (autocomplete, filters, infinite scroll), maps, the download modal
+(CSV/SHP/GDB), and **`/en/admin`** in particular — its assets are newly built as of phase 2.
 
 ## 6. Minor code items (low priority, clear opportunistically)
 - [ ] **`belongs_to_required_by_default` opted out** (`config/application.rb`) — revisit as a data-integrity pass measured against a **production** dump. 4 associations have real NULLs: `Country#parent` (199/248), `Designation#jurisdiction` (57/1831), `pame_statistics.country`, `country_statistics.country`.
