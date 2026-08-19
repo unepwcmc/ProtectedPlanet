@@ -144,8 +144,34 @@ else
         -e VITE_RUBY_MODE=production \
         -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
         web bash -lc "bundle exec rake vite:build_all" >/tmp/preflight-vite.log 2>&1 || true
-  if grep -rqE "VITE_MAPBOX_TOKEN:\`?pk\." public/vite/assets/ 2>/dev/null; then
-    ok "vite bundle contains the Mapbox token (map will render)"
+  BUNDLE_TOKEN=$(grep -rhoE "pk\.ey[A-Za-z0-9._-]+" public/vite/assets/ 2>/dev/null | head -1)
+  if [[ -n "$BUNDLE_TOKEN" ]]; then
+    ok "vite bundle contains a Mapbox token"
+
+    # Presence is not enough. A token can read the style and sprites while being
+    # Forbidden on the composite tile source (the private unepwcmc.* tilesets) —
+    # MapLibre then initialises, draws its controls, and leaves the canvas blank
+    # with no console error. That shipped to staging once. So actually call the
+    # endpoint MapLibre paints from and require a 200.
+    STYLE_ID="cko1hsfi50vog17l697cr4d6p"
+    STYLE_JSON=$(curl -s --max-time 20 "https://api.mapbox.com/styles/v1/unepwcmc/${STYLE_ID}?access_token=${BUNDLE_TOKEN}" 2>/dev/null)
+    SRC=$(printf '%s' "$STYLE_JSON" | python3 -c "import sys,json
+try:
+    d=json.load(sys.stdin); print(d['sources']['composite']['url'].replace('mapbox://',''))
+except Exception: print('')" 2>/dev/null)
+    if [[ -z "$SRC" ]]; then
+      warn "could not read the style's tile source (offline, or the style id changed) — skipping the tile check"
+    else
+      TILE_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
+        "https://api.mapbox.com/v4/${SRC}.json?secure&access_token=${BUNDLE_TOKEN}" 2>/dev/null)
+      if [[ "$TILE_CODE" == "200" ]]; then
+        ok "Mapbox token can fetch the map tiles (HTTP 200)"
+      else
+        bad "Mapbox token is REJECTED for the map tiles (HTTP $TILE_CODE) — map renders blank"
+        echo "       the token reaches the browser but lacks access to the unepwcmc.* tilesets." | sed 's/^/       /'
+        echo "       fix the MAPBOX_ACCESS_TOKEN secret (see docs), not the code." | sed 's/^/       /'
+      fi
+    fi
   else
     bad "vite bundle has NO Mapbox token — the map will silently not render"
     echo "       is the build going through 'rake vite:build_all' (not the vite binary)?" | sed 's/^/       /'
