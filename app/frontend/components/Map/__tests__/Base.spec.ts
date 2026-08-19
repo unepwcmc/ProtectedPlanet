@@ -38,7 +38,10 @@ vi.mock('maplibre-gl', () => ({
   NavigationControl: vi.fn(),
   Marker: MarkerConstructor,
   Popup: PopupConstructor,
-  setRTLTextPlugin: vi.fn()
+  setRTLTextPlugin: vi.fn(),
+  // useMapInstance calls this at module scope to point MapLibre at the
+  // Vite-emitted worker; without it here the module throws on import.
+  setWorkerUrl: vi.fn()
 }))
 
 vi.mock('maplibregl-mapbox-request-transformer', () => ({
