@@ -181,3 +181,9 @@
   tw-shared-base-flex-col-gap-3
   md:flex-row;
 }
+
+@utility tw-shared-base-flex-col-md-row-gap-6 {
+  @apply
+  tw-shared-base-flex-col-gap-6
+  md:flex-row;
+}
