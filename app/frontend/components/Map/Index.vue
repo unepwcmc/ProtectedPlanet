@@ -31,13 +31,14 @@
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef } from 'vue'
+import { onBeforeMount, useTemplateRef } from 'vue'
 import MapHeader from '@/components/Map/Header.vue'
 import MapBase from '@/components/Map/Base.vue'
 import MapDisclaimer from '@/components/Map/Disclaimer.vue'
 import MapPanel from '@/components/Map/Panel.vue'
 import type { MapProps } from '@/types/backend'
 import type { ZoomToOptions } from '@/composables/useMapBoundingBox'
+import { useMapStore } from '@/stores/useMapStore'
 
 type Map = MapProps
 withDefaults(defineProps<Map>(), {
@@ -52,6 +53,13 @@ withDefaults(defineProps<Map>(), {
   autocompletePlaceholder: undefined,
   mapiIsForRegionCountryPA: false
 })
+
+const mapStore = useMapStore()
+
+// onBeforeMount, not onMounted: a parent's beforeMount runs BEFORE any child
+// mounts, whereas its mounted runs AFTER them -- clearing in onMounted would wipe
+// the overlays this page's own Overlay.vue children just registered.
+onBeforeMount(() => mapStore.reset())
 
 const mapBaseRef = useTemplateRef('mapBaseRef')
 

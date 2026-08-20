@@ -1,4 +1,6 @@
-require 'gdal-ruby/ogr'
+# The gdal gem is gone (it only builds against GDAL 2.x); Ogr::Info now shells
+# out to the ogrinfo CLI, and this file only used the gem via Ogr::Info anyway.
+require_relative 'info'
 # Rails 7.1 load_defaults sets add_autoload_paths_to_load_path=false, so lib/modules
 # subdirs are no longer on $LOAD_PATH -- use require_relative for sibling files.
 require_relative 'shapefile'

@@ -1,0 +1,5 @@
+# Kamal pinned outside the app bundle so its dependency tree stays out of the
+# application's Gemfile.lock, and so the app can run a different Ruby.
+source 'https://rubygems.org'
+
+gem 'kamal', '~> 2.10'

@@ -31,9 +31,19 @@ class Download::Requesters::Base
   #
   def enqueue_generation_once
     status = generation_info['status']
-    return false if %w[ready generating].include?(status)
+    return false if status == 'ready'
 
     lock_key = Download::Utils.enqueue_lock_key(generation_key)
+
+    if status == 'generating'
+      return false unless stale_generation?
+
+      # The job backing this key is gone. Drop the enqueue lock too, otherwise
+      # its 30-minute TTL would keep blocking the retry we just decided to allow.
+      Rails.logger.warn("Download #{generation_key} was stuck in 'generating' with no live job; re-enqueueing")
+      $redis.del(lock_key)
+    end
+
     acquired = $redis.set(lock_key, Time.now.to_i, nx: true, ex: ENQUEUE_LOCK_TTL_SECONDS)
     return false unless acquired
 
@@ -106,7 +116,7 @@ class Download::Requesters::Base
     )
     generating_properties['jid'] = jid if jid.present?
     generating_properties['enqueued_at'] = enqueued_at if enqueued_at.present?
-    $redis.set(generation_key, generating_properties.to_json)
+    Download::Utils.write(generation_key, generating_properties)
   end
 
   def mark_failed!(error)
@@ -116,6 +126,47 @@ class Download::Requesters::Base
       'error' => error.message,
       'failed_at' => Time.now.utc.iso8601
     )
-    $redis.set(generation_key, failed_properties.to_json)
+    Download::Utils.write(generation_key, failed_properties)
+  end
+
+  # True when a key claims "generating" but nothing is actually working on it.
+  #
+  # This existed as a permanent dead end: co-located apps sharing Redis were
+  # popping our jobs, failing to resolve the constant, and (retry: false)
+  # dropping them. The key kept saying "generating" with no TTL, so every later
+  # request short-circuited and the UI span forever.
+  #
+  # Age alone is not the test -- a full-WDPA export runs for hours and is
+  # perfectly healthy. Past the grace period we ask Sidekiq whether the jid is
+  # still alive, and only then declare it dead.
+  def stale_generation?
+    info = generation_info
+    started_at = begin
+      Time.parse(info['generating_at'].to_s)
+    rescue ArgumentError, TypeError
+      nil
+    end
+
+    # No timestamp means the key predates this code (or was hand-written); it
+    # cannot be shown to be alive, so let it be retried.
+    return true if started_at.nil?
+    return false if Time.now.utc - started_at.utc < Download::Utils::GENERATING_GRACE
+
+    !job_alive?(info['jid'])
+  end
+
+  def job_alive?(jid)
+    return false if jid.blank?
+
+    require 'sidekiq/api'
+    return true if Sidekiq::Workers.new.any? { |_process, _thread, work| work.dig('payload', 'jid') == jid }
+
+    Sidekiq::Queue.all.any? { |queue| queue.any? { |job| job.jid == jid } }
+  rescue StandardError => e
+    # If Sidekiq cannot be reached we must not conclude "dead" -- that would let
+    # every polling request re-enqueue and stampede. Assume alive and let the
+    # 24h GENERATING_TTL be the backstop.
+    Rails.logger.warn("Could not determine liveness of download job #{jid}: #{e.message}")
+    true
   end
 end

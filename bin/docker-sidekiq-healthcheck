@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Cannot use `sidekiqmon`: it relies on REDIS_URL being readable in the same
+# shape Sidekiq uses, and the URL carries a password. Checking for a live
+# sidekiq process is enough for a container healthcheck.
+if [ "$(ps aux | grep 'sidekiq ' | grep -v grep | wc -l)" -gt 0 ]; then
+  exit 0
+else
+  exit 1
+fi

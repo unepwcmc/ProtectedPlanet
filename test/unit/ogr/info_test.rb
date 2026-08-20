@@ -1,67 +1,53 @@
 require 'test_helper'
 
+# Ogr::Info no longer binds the `gdal` Ruby gem (pinned ~> 2.0, only compiles against
+# GDAL 2.x — the image moved to GDAL 3.8.4 for OpenFileGDB). It shells out to the
+# `ogrinfo -json` CLI instead, so these tests stub Open3.capture3 rather than the old
+# Gdal::Ogr.open -> get_layer -> get_* chain.
 class TestOgrInfo < ActiveSupport::TestCase
+  def stub_ogrinfo(json, success: true)
+    status = mock('status')
+    status.stubs(:success?).returns(success)
+    Open3.stubs(:capture3).returns([json.to_json, success ? '' : 'boom', status])
+  end
+
   test '.layers returns an array of layer names' do
-    filename = '/tmp/whatever.gdb'
+    stub_ogrinfo({ 'layers' => [{ 'name' => 'Alan' }, { 'name' => 'Kay' }] })
+    assert_equal %w[Alan Kay], Ogr::Info.new('/tmp/whatever.gdb').layers
+  end
 
-    ogr_mock = mock()
-    ogr_mock.stubs(:get_layer_count).returns(2)
-
-    first_layer_mock = mock()
-    first_layer_mock.stubs(:get_name).returns("Alan")
-    second_layer_mock = mock()
-    second_layer_mock.stubs(:get_name).returns("Kay")
-    ogr_mock.stubs(:get_layer).
-      returns(first_layer_mock).returns(second_layer_mock)
-
-    Gdal::Ogr.
-      expects(:open).
-      with(filename).
-      returns(ogr_mock)
-
-    ogr_info = Ogr::Info.new filename
-    assert_equal ["Alan", "Kay"], ogr_info.layers
+  test '.layers is empty when the dataset reports no layers' do
+    stub_ogrinfo({})
+    assert_equal [], Ogr::Info.new('/tmp/whatever.gdb').layers
   end
 
   test '.layers_matching returns layers that match the given regex' do
-    Ogr::Info.
-      any_instance.
-      expects(:layers).
-      returns(["wdpapolygons", "wdpa_points", "wdpa_source"])
+    Ogr::Info.any_instance.expects(:layers)
+      .returns(%w[wdpapolygons wdpa_points wdpa_source])
 
     ogr_info = Ogr::Info.new 'filename'
-    assert_equal ["wdpapolygons", "wdpa_points"], ogr_info.layers_matching(/wdpa_?po/)
+    assert_equal %w[wdpapolygons wdpa_points], ogr_info.layers_matching(/wdpa_?po/)
   end
 
   test '.layer_count returns the number of layers' do
-    filename = '/tmp/whatever.gdb'
-
-    ogr_mock = mock()
-    ogr_mock.stubs(:get_layer_count).returns(3)
-
-    Gdal::Ogr.
-      expects(:open).
-      with(filename).
-      returns(ogr_mock)
-
-    ogr_info = Ogr::Info.new filename
-    assert_equal 3, ogr_info.layer_count
+    stub_ogrinfo({ 'layers' => [{ 'name' => 'a' }, { 'name' => 'b' }, { 'name' => 'c' }] })
+    assert_equal 3, Ogr::Info.new('/tmp/whatever.gdb').layer_count
   end
 
   test '.feature_count returns the feature count for the given layer' do
-    filename = '/tmp/whatever.gdb'
+    stub_ogrinfo({ 'layers' => [{ 'name' => 'layer_name', 'featureCount' => 24 }] })
+    assert_equal 24, Ogr::Info.new('/tmp/whatever.gdb').feature_count('layer_name')
+  end
 
-    layer_mock = mock()
-    layer_mock.stubs(:get_feature_count).returns(24)
-    ogr_mock = mock()
-    ogr_mock.stubs(:get_layer).returns(layer_mock)
+  test '.feature_count raises when the layer is not in the dataset' do
+    stub_ogrinfo({ 'layers' => [] })
+    assert_raises(Ogr::Info::OgrInfoError) do
+      Ogr::Info.new('/tmp/whatever.gdb').feature_count('missing')
+    end
+  end
 
-    Gdal::Ogr.
-      expects(:open).
-      with(filename).
-      returns(ogr_mock)
-
-    ogr_info = Ogr::Info.new filename
-    assert_equal 24, ogr_info.feature_count('layer_name')
+  test 'raises OgrInfoError when the ogrinfo command fails' do
+    stub_ogrinfo({}, success: false)
+    assert_raises(Ogr::Info::OgrInfoError) { Ogr::Info.new('/tmp/whatever.gdb').layers }
   end
 end

@@ -23,7 +23,10 @@ vi.mock('maplibre-gl', () => ({
   NavigationControl: vi.fn(),
   Marker: vi.fn(),
   Popup: vi.fn(),
-  setRTLTextPlugin: vi.fn()
+  setRTLTextPlugin: vi.fn(),
+  // useMapInstance calls this at module scope to point MapLibre at the
+  // Vite-emitted worker; without it here the module throws on import.
+  setWorkerUrl: vi.fn()
 }))
 
 vi.mock('maplibregl-mapbox-request-transformer', () => ({
@@ -122,5 +125,25 @@ describe('Map', () => {
     })
 
     expect(hidden.find('.ct-map-pa-search').exists()).toBe(false)
+  })
+
+  // Every protected-area page ships an overlay with the SAME id
+  // ("individual_site") but a DIFFERENT site-specific geometry URL, and the pinia
+  // store survives Turbo Drive navigation. addOverlay is idempotent by id, so
+  // without clearing first the second site kept the FIRST site's polygon --
+  // rendered off-screen, which looked like "the highlight disappeared".
+  it('clears overlays left over from a previously visited map page', async () => {
+    const { useMapStore } = await import('@/stores/useMapStore')
+    const store = useMapStore()
+    store.addOverlay({
+      id: 'individual_site',
+      layers: [{ id: 'individual_site_0', type: 'raster_data', url: 'https://old/site_id=1' }]
+    })
+    expect(store.visibleLayers).toHaveLength(1)
+
+    mount(Map, { props: { title: 'Protected Area', overlays } })
+
+    // onBeforeMount runs before any child registers this page's own overlay.
+    expect(store.visibleLayers.some(l => l.url === 'https://old/site_id=1')).toBe(false)
   })
 })

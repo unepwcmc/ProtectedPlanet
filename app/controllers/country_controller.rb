@@ -3,8 +3,10 @@
 class CountryController < ApplicationController
   after_action :enable_caching
   before_action :load_essential_vars
-  before_action :build_stats, only: :show
-  before_action :calculate_national_designations_counts, only: :show
+  # :pdf renders the same template as :show, so it needs the same data. It was
+  # missing from these lists, which is one of two reasons the endpoint was broken.
+  before_action :build_stats, only: %i[show pdf]
+  before_action :calculate_national_designations_counts, only: %i[show pdf]
 
   include MapHelper
   include CountriesHelper
@@ -12,34 +14,7 @@ class CountryController < ApplicationController
   TABS_KEYS = %i[coverage message iucn governance sources designations growth sites].freeze
 
   def show
-    # Components above tabs
-    @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', @country.iso_3)
-
-    @flag_path = flag_path(@country.name)
-
-    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
-    @total_pame = @country
-      .protected_areas
-      .pas_with_pame_on_self_only
-      .joins(pame_evaluations: :countries)
-      .where(countries: { id: @country.id })
-      .distinct
-      .count
-    @total_wdpa = @country.protected_areas.wdpas.count
-
-    @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: all_services_for_point_query,
-      title: map_yml[:title],
-      popup_attributes: map_yml[:popup_attributes],
-      disclaimer: map_yml[:disclaimer]
-    }
-
-    @map_options = {
-      map: { boundsUrl: @country.extent_url }
-    }
-
-    helpers.opengraph_title_and_description_with_suffix(@country.name)
+    load_show_data
 
     respond_to do |format|
       format.html
@@ -77,6 +52,38 @@ class CountryController < ApplicationController
   end
 
   private
+
+  # Shared by :show and :pdf, which render the same template.
+  def load_show_data
+    # Components above tabs
+    @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', @country.iso_3)
+
+    @flag_path = flag_path(@country.name)
+
+    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
+    @total_pame = @country
+      .protected_areas
+      .pas_with_pame_on_self_only
+      .joins(pame_evaluations: :countries)
+      .where(countries: { id: @country.id })
+      .distinct
+      .count
+    @total_wdpa = @country.protected_areas.wdpas.count
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: all_services_for_point_query,
+      title: map_yml[:title],
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
+    }
+
+    @map_options = {
+      map: { boundsUrl: @country.extent_url }
+    }
+
+    helpers.opengraph_title_and_description_with_suffix(@country.name)
+  end
 
   def calculate_national_designations_counts
     # ['National'] -> all avaliable juriidctions are in /app/presenters/designations_presenter.rb

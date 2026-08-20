@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Flush the cache after the new containers are live.
+#
+# WHY THIS IS NOT OPTIONAL:
+# staging/production enable Rack::Cache with Memcached as the metastore AND
+# entitystore (config/environments/staging.rb), and `enable_caching` serves pages
+# with `Cache-Control: public, max-age=2592000` -- 30 days. Rack::Cache keys those
+# full HTML responses by URL, and the HTML embeds digest-stamped asset paths
+# (/vite/assets/application-<hash>.js).
+#
+# Every build produces new hashes and deletes the old files. So without this flush a
+# deploy leaves Rack::Cache serving last deploy's HTML, pointing at assets that no
+# longer exist -> application-<old>.js 404s -> the Vue app never boots -> the site
+# renders but is inert (this is exactly what happened after the Vite cutover, and
+# had to be flushed by hand).
+#
+# Rails.cache.clear issues Dalli's flush_all, which clears the Rails cache and the
+# Rack::Cache stores in one go -- they share the same memcached server.
+#
+# NB: flush_all clears the WHOLE memcached instance. Today only ProtectedPlanet
+# points at this host's memcached (verified: no other container defines MEMCACHE_*).
+# If another app is ever pointed at it, give it its own instance or a namespace
+# rather than making this flush narrower -- stale HTML here is worse than a cold
+# cache elsewhere.
+#
+# --primary --roles web for the same reason as pre-deploy: `app exec` otherwise
+# fans out to every role and runs this once per role.
+
+echo "==> Flushing cache after deploy of ${KAMAL_VERSION} (destination: ${KAMAL_DESTINATION:-none})"
+
+if kamal app exec \
+     ${KAMAL_DESTINATION:+--destination "$KAMAL_DESTINATION"} \
+     --primary \
+     --roles web \
+     --version "$KAMAL_VERSION" \
+     "bundle exec rails runner 'Rails.cache.clear'"; then
+  echo "==> Cache flushed"
+else
+  # The containers are already live at this point, so this cannot roll anything
+  # back -- but it must be loud, because the symptom (a site that loads and does
+  # nothing) looks nothing like a failed deploy.
+  echo "!!! CACHE FLUSH FAILED — Rack::Cache may still be serving HTML that references"
+  echo "!!! asset digests from the previous build, which will 404 and leave the page inert."
+  echo "!!! Flush manually, e.g.:"
+  echo "!!!   kamal app exec --primary --roles web \"bundle exec rails runner 'Rails.cache.clear'\""
+  exit 1
+fi

@@ -26,3 +26,11 @@ test:
 production:
   <<: *default
   database: pp_production
+
+# The Capistrano deploy symlinked a staging database.yml in from shared/, so this
+# file never carried a staging block. Containerised deploys have no shared/ —
+# config comes from the environment, using the same POSTGRES_* names the rest of
+# the file already uses.
+staging:
+  <<: *default
+  database: <%= ENV['POSTGRES_DBNAME'] %>

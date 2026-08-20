@@ -277,12 +277,26 @@ class Country < ApplicationRecord
     ")
   end
 
+  # NB: the inner EXTRACT is aliased explicitly. It used to rely on PostgreSQL's
+  # implicit output name for an unaliased EXTRACT(...), which was `date_part`
+  # because EXTRACT was implemented via the date_part() function. PostgreSQL 14
+  # renamed that implicit column to `extract`, so on the PG 17 staging database
+  # this query raised
+  #
+  #   PG::UndefinedColumn: ERROR: column "date_part" does not exist
+  #
+  # ApplicationController rescues it into a redirect, so EVERY country page 302'd
+  # to the homepage with no visible error. Production is still on PG 10, where the
+  # old name holds -- which is why this only appeared on the new infrastructure.
+  YEAR_COLUMN = 'year_part'.freeze
+
   def coverage_growth(exclude_oecms)
     _year = 'EXTRACT(year from legal_status_updated_at)'
     ActiveRecord::Base.connection.execute(
       <<-SQL
-        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count
-        FROM (#{protected_areas_inner_join(_year, exclude_oecms)}) t
+        SELECT TO_TIMESTAMP(#{YEAR_COLUMN}::text, 'YYYY') AS year,
+               SUM(count) OVER (ORDER BY #{YEAR_COLUMN}::INT) AS count
+        FROM (#{protected_areas_inner_join(_year, exclude_oecms, alias_as: YEAR_COLUMN)}) t
         ORDER BY year
       SQL
     )
@@ -290,9 +304,13 @@ class Country < ApplicationRecord
 
   private
 
-  def protected_areas_inner_join(group_by, exclude_oecms)
+  # alias_as names the grouped expression so an outer query can refer to it. Only
+  # the GROUP BY keeps the raw expression -- "GROUP BY <expr> AS <name>" is not
+  # valid SQL. Callers that group by a plain column do not need it.
+  def protected_areas_inner_join(group_by, exclude_oecms, alias_as: nil)
+    selected = alias_as ? "#{group_by} AS #{alias_as}" : group_by
     "
-      SELECT #{group_by}, COUNT(protected_areas.id) AS count
+      SELECT #{selected}, COUNT(protected_areas.id) AS count
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id
