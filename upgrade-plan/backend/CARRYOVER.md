@@ -1310,3 +1310,44 @@ Verified in both directions: the test fails with the reset commented out.
 Same pattern as the 204 that scored "ok", the 11.4 MB PDF that proved nothing, and
 the browser directory that existed without an executable: measuring something
 adjacent to the thing.
+
+### 8aa. Polygon fixed; console 404s after a deploy — missing `data-turbo-track`
+
+The per-page store reset (§8z) is confirmed working: the correct polygon now renders
+on every site.
+
+The remaining console errors are a different problem, and a recurring one:
+
+```
+Refused to apply style from '.../vite/assets/vitecss-608EvYdl.css' because its
+MIME type ('text/html') is not a supported stylesheet MIME type
+GET .../vite/assets/application-lAkyF3J8.js  net::ERR_ABORTED 404
+GET .../vite/assets/dist-CKo7fAqw.js         net::ERR_ABORTED 404
+```
+
+The MIME complaint is the 404 page being served in place of the CSS. All the
+failing digests are from PREVIOUS builds; the server is serving fresh HTML
+(`age: 0`) pointing at current, existing assets.
+
+**Cause:** Turbo Drive caches page snapshots for the session and restores them on
+back/forward and repeat visits. Every deploy changes the Vite digests, so a restored
+snapshot's `<head>` references files that no longer exist. Anyone with a tab open
+across a deploy hits this until they hard-refresh.
+
+**Fix:** `data-turbo-track: 'reload'` on `vite_stylesheet_tag` and
+`vite_typescript_tag` in `app/views/layouts/partials/_head.html.erb`. Turbo then
+compares those elements between the cached page and the incoming one and performs a
+FULL page load when they differ, instead of a Turbo visit reusing the stale head.
+Verified in rendered output — the attribute lands on the stylesheet, the entrypoint
+script AND every modulepreload (the preloads were among the 404s).
+
+**Separately: a flaky test of my own, found by this run.** The §8i
+`StatementInvalidRescueTest` passed or failed by seed. `CountryController#build_stats`
+wraps its work in `Rails.cache.fetch`, so a cached entry from an earlier test in a
+randomly-ordered run meant `coverage_growth` -- and the stubbed raise -- never ran.
+Fixed with `setup { Rails.cache.clear }`; verified across three seeds.
+
+**Still open:** the `turboMount.ts` registration race (`Unknown component: Map`).
+`ensureRegistered` adds the name to its `registered` set synchronously and loads the
+chunk asynchronously, so Stimulus can connect a controller before
+`registerComponent()` has run.

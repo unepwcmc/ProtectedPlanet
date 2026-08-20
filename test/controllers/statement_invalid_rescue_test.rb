@@ -14,6 +14,12 @@ require 'test_helper'
 class StatementInvalidRescueTest < ActionController::TestCase
   tests CountryController
 
+  # CountryController#build_stats wraps its work in Rails.cache.fetch, so a cached
+  # entry from an earlier test in a randomly-ordered run makes coverage_growth --
+  # and therefore the stubbed raise -- never execute. Clear it, or this passes or
+  # fails depending on the seed.
+  setup { Rails.cache.clear }
+
   test 'a database error outside the Comfy form is raised, not silently redirected' do
     Country.any_instance.stubs(:coverage_growth)
            .raises(ActiveRecord::StatementInvalid, 'PG::UndefinedColumn: column "date_part" does not exist')
