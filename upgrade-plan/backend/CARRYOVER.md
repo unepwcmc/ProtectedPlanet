@@ -1347,7 +1347,38 @@ wraps its work in `Rails.cache.fetch`, so a cached entry from an earlier test in
 randomly-ordered run meant `coverage_growth` -- and the stubbed raise -- never ran.
 Fixed with `setup { Rails.cache.clear }`; verified across three seeds.
 
-**Still open:** the `turboMount.ts` registration race (`Unknown component: Map`).
-`ensureRegistered` adds the name to its `registered` set synchronously and loads the
-chunk asynchronously, so Stimulus can connect a controller before
-`registerComponent()` has run.
+### 8ab. `Unknown component: Map` — not a race, a second TurboMount instance
+
+The earlier "registration race" theory was wrong. All host elements use
+per-component controllers (`turbo-mount-map`), never the generic `turbo-mount`, and
+`TurboMount.register()` populates `components` BEFORE registering the controller —
+so ordering was never the problem.
+
+The real mechanism:
+
+```js
+constructor() { ... this.application.turboMount = this }
+resolve(name) { const c = this.components.get(name); if (!c) throw `Unknown component: ${name}` }
+```
+
+`new TurboMount()` overwrites `application.turboMount` on the shared Stimulus
+application. When the entrypoint is evaluated TWICE, instance B replaces A while A's
+controllers are already registered; those controllers then resolve against B's empty
+component map and throw on connect. That also explains the paired
+`[turboMount] failed to load component "Download"` — our own `.catch` reporting the
+throw that `application.register()` raised when Stimulus immediately connected the
+element.
+
+Why it ran twice: Turbo restored a page whose `<head>` referenced a previous
+deploy's `application-*.js`, pulling in a second bundle — the same stale-asset
+problem as §8aa. So `data-turbo-track` removes the cause; this makes the module
+idempotent regardless:
+
+- reuse `window.Stimulus.turboMount` when present instead of always constructing one
+- gate on the shared instance's `components` map rather than a per-call Set (a second
+  evaluation gets a fresh Set but the same instance, and re-registering throws
+  "Component 'X' is already registered")
+- an `inFlight` set so the MutationObserver's rescans cannot start the same dynamic
+  import twice
+
+Typed via turbo-mount's own exported `ApplicationWithTurboMount`, so no casts.
