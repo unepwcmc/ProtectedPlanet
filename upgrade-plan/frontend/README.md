@@ -19,12 +19,14 @@ Total around 6 months for frontend if no surprises then it can be shorter to 5 m
 
 ## Status — Vue migration + SCSS→Tailwind both fully done (re-verified 2026-08-14)
 
-**Stack today:** Rails 8.0.5.1, Ruby 3.3.7, Node 24.4.1, Vite 7 + `vite-plugin-rails` (`vite_rails`
-3.11.1). **Webpacker is gone** — `app/javascript` no longer exists, there is no dual bundler, no
-`#v-app`, no Vue 2 anywhere in the tree (`bin/webpack`, `config/webpacker.yml`, the `webpacker`
-Docker service, and `gem 'webpacker'` are all removed). Islands foundation —
-`frontend_mount` helper + `readMountProps` + `app/frontend/lib/islands.ts` (registry, lazy Vue,
-`MutationObserver`), registered in `entrypoints/layout.ts` — is now the *only* mount path. Tailwind v4
+**Stack today:** Rails 8.0.5.1, Ruby 3.3.7, Node 24.4.1, Vite 8.2.2 + `vite-plugin-rails`
+(`vite_rails` 3.11.1). **Webpacker is gone** — `app/javascript` no longer exists, there is no dual
+bundler, no `#v-app`, no Vue 2 anywhere in the tree (`bin/webpack`, `config/webpacker.yml`, the
+`webpacker` Docker service, and `gem 'webpacker'` are all removed). Islands foundation — the
+`turbo_mount` helper (`turbo-mount` gem) + `app/frontend/lib/turboMount.ts` (registry, lazy
+loaders, shared-Pinia plugin, `MutationObserver`), registered in
+`entrypoints/application.ts` — is the *only* mount path. The homegrown
+`frontend_mount`/`readMountProps`/`islands.ts` mounter it replaced was deleted 2026-08-20. Tailwind v4
 is the **only** styling system: `app/assets/stylesheets/` contains nothing but the out-of-scope
 `comfy/admin/cms/custom.scss`, and preflight is enabled (`tailwind.css` uses the plain
 `@import "tailwindcss";` shorthand — confirmed live, not disabled). Vitest is set up and green (test
@@ -81,7 +83,7 @@ Remaining frontend work is smaller than previously tracked:
 - **Analytics — `vue-gtag`** (GA4) replaces `vue-analytics`. Detail: [04](./04-vue3-and-state.md#dependency-replacements).
 
 ### Decisions to revisit later
-- **Mounting library — homegrown for now; `turbo-mount`'s gem-version blocker is gone.** We use a small in-house mounter (`frontend_mount` + `islands.ts`). [`turbo-mount`](https://github.com/skryukov/turbo-mount) (Evil Martians, Stimulus-based) is the "batteries-included" equivalent — its gem requires Ruby ≥ 3.0 and railties ≥ 6.0, which was the original reason it was rejected on **Ruby 2.7.8 / Rails 5.2**. **The backend has since moved to Ruby 3.3.7 / Rails 8.0.5.1** (verified via `.ruby-version`/`Gemfile.lock`, 2026-08-14) — that gate no longer applies. Still not adopted because it pulls in Hotwire/Stimulus and the homegrown mounter already works; this is now a pure cost/benefit call, not a version blocker. Because views only ever call `frontend_mount`, adopting it later remains a ~2-file swap (Vue SFCs never move). Detail: [14 Architecture](./14-architecture-and-design.md#mounting-mechanism-and-the-turbo-mount-decision).
+- **Mounting library — `turbo-mount` adopted (2026-08-17); Turbo Drive removed (2026-08-20).** Every view mounts islands via the `turbo_mount` helper, wired in `entrypoints/application.ts` through `lib/turboMount.ts`. The old in-house mounter (`frontend_mount` + `islands.ts`, plus `readMountProps.ts` and `app/helpers/frontend_helper.rb`) was deleted on 2026-08-20. [`turbo-mount`](https://github.com/skryukov/turbo-mount) (Evil Martians) needed Ruby ≥ 3.0 / railties ≥ 6.0, which blocked it on Ruby 2.7.8 / Rails 5.2; the backend's move to Ruby 3.3.7 / Rails 8.0.5.1 lifted that. It depends on **Stimulus only** — Turbo Drive was a separate experiment and has been removed (`@hotwired/turbo-rails` + the `turbo-rails` gem are gone), so navigation is a plain full document load. Detail: [14 Architecture](./14-architecture-and-design.md#decision-turbo-mount--adopted-2026-08-17-turbo-drive--removed-2026-08-20).
 
 ---
 

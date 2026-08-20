@@ -8,9 +8,34 @@
     "typescript",
     "vue"
   ],
-  "css.validate": false,
+  // On, so .css files get the same diagnostics Volar already gives SFC <style>
+  // blocks - mainly invalid property VALUES, which stylelint-config-standard does
+  // not check. Some findings will be reported twice, once here and once by
+  // stylelint. less/scss stay off: the only SCSS left is the Comfy admin override
+  // app/assets/stylesheets/comfy/admin/cms/custom.scss, which is not Tailwind.
+  "css.validate": true,
   "less.validate": false,
   "scss.validate": false,
+  // Silences Tailwind's @reference/@apply/@utility "Unknown at rule" warnings in
+  // .css files. NOTE: these copies only reach the built-in CSS extension, which
+  // resolves settings against the real file URI. Volar needs the same three keys
+  // at WORKSPACE level - see protected-planet-family-apps.code-workspace for why.
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  // Tailwind CSS IntelliSense: treat SFCs as HTML so class + @apply completions
+  // work inside <template>/<style>, and point it at OUR v4 CSS entry (the same
+  // file the "#importtailwindcss" Vite alias resolves to) since it cannot follow
+  // Vite aliases itself.
+  "tailwindCSS.includeLanguages": {
+    "vue": "html"
+  },
+  "tailwindCSS.experimental.configFile": "app/frontend/styles/tailwind.css",
+  // Tailwind's documented recommendation - without it, class suggestions do not
+  // trigger inside quoted strings.
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
   "stylelint.validate": [
     "postcss",
     "pcss",

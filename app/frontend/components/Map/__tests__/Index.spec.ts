@@ -128,11 +128,12 @@ describe('Map', () => {
 
   // Every protected-area page ships an overlay with the SAME id ("individual_site")
   // but a DIFFERENT site-specific geometry URL, and addOverlay is idempotent by id.
-  // Back when this state was an app-wide pinia store -- which survives Turbo Drive
-  // navigation while this island is rebuilt -- the second site kept the FIRST site's
-  // polygon, rendered off-screen, which looked like "the highlight disappeared".
-  // Scoping it to the tree means a new mount cannot see the previous one's overlays.
-  it('gives each mount its own overlay state, isolated from a previously visited map page', () => {
+  // Back when this state was an app-wide pinia store -- which outlives any single
+  // island while this island is rebuilt per mount -- the second site kept the FIRST
+  // site's polygon, rendered off-screen, which looked like "the highlight
+  // disappeared". Scoping it to the tree means a new mount cannot see the previous
+  // one's overlays.
+  it('gives each mount its own overlay state, isolated from any other map mount', () => {
     // Stands in for MapBase so it can read what Index provides to its children.
     const captured: MapOverlaysContext[] = []
     const Probe = defineComponent({

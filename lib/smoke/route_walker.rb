@@ -46,7 +46,6 @@ module Smoke
       %r{\Aactive_storage/} => 'ActiveStorage blob/representation serving, needs signed ids',
       %r{\Aaction_mailbox/} => 'ActionMailbox ingress endpoints, not user-facing',
       %r{\Aaction_cable/} => 'ActionCable mount, not an HTTP GET surface',
-      %r{\Aturbo/native/} => 'Turbo native navigation shims, no server-rendered body',
       %r{\Acomfy/admin/} => 'CMS admin, behind HTTP basic auth (see the /admin probe)'
     }.freeze
 

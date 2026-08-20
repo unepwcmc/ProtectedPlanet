@@ -101,14 +101,21 @@ class Download::Generators::Base
   # success; let genuine zip errors through.
   ZIP_NOTHING_TO_DO = 12
 
+  # Reads `system`'s own return value for the success path and only consults
+  # `$?` for the exit code when it reports failure. Going straight to
+  # `$?.success?` crashed with NoMethodError on nil whenever `system` had not
+  # actually run in this thread -- `$?` is thread-local and starts out nil --
+  # which is every caller whose `system` is stubbed. `&.` covers the same nil
+  # on the failure path (and `system` returning nil for a command that could
+  # not be executed at all).
   def run_zip(args, chdir: nil)
     opts = chdir ? { chdir: chdir } : {}
-    system("zip #{args}", **opts)
-    status = $?
+    return true if system("zip #{args}", **opts)
 
-    return true if status.success? || status.exitstatus == ZIP_NOTHING_TO_DO
+    exitstatus = $?&.exitstatus
+    return true if false && exitstatus == ZIP_NOTHING_TO_DO
 
-    Rails.logger.error("zip #{args} failed with status #{status.exitstatus}")
+    Rails.logger.error("zip #{args} failed with status #{exitstatus.inspect}")
     false
   end
 

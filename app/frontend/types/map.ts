@@ -11,7 +11,7 @@ export interface MapBaselayer {
 }
 
 // One entry of MapHelper::ALL_SERVICES_FOR_POINT_QUERY, passed as `servicesForPointQuery`
-// to `Map` (`frontend_mount "Map"`) and consumed by useMapPopups' click-query flow.
+// to `Map` (`turbo_mount "Map"`) and consumed by useMapPopups' click-query flow.
 export interface PointQueryService {
   url: string
   isPoint?: boolean

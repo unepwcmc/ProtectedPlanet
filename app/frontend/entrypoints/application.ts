@@ -6,18 +6,16 @@
 //
 // Registers every Vue 3 "island" mounted via the `turbo_mount` ERB helper
 // (see app/frontend/lib/turboMount.ts and the "turbo-mount spike result"
-// memory).
+// memory). Despite the name, turbo-mount is built on Stimulus alone: this app
+// does NOT use Turbo Drive, so every navigation is an ordinary full document
+// load and this module is evaluated exactly once per page (see CARRYOVER §8ac
+// for what that removal bought and what it let us delete).
 //
 // To add a new component:
 //   1. Add its Vue 3 SFC under app/frontend/components/.
 //   2. Register it below — eager if it renders on essentially every page
-//      (see EAGER_COMPONENTS), lazy otherwise.
+//      (see the static imports below), lazy otherwise.
 //   3. In the ERB, render `<%= turbo_mount "<Name>", props: {...} %>`.
-//
-// The older `frontend_mount`/islands.ts mounter (app/helpers/frontend_helper.rb,
-// app/frontend/lib/islands.ts) has no remaining call sites as of the full
-// migration to turbo-mount — left in place, unused, pending a follow-up
-// cleanup pass rather than deleted here.
 //
 // See: upgrade-plan/frontend/14-architecture-and-design.md
 
@@ -26,12 +24,6 @@
 // never actually skipped buys nothing, it just adds a network round-trip
 // before it can mount. Static imports bundle them straight into this
 // entrypoint's own chunk instead.
-// Turbo Drive: intercepts same-origin link clicks/form submits and swaps the
-// <body> via fetch instead of a full page reload. Stimulus (which turbo-mount
-// is built on) already handles island mount/unmount across that swap; see
-// turboMount.ts and useAnalytics.ts for the two places that needed to adapt.
-import '@hotwired/turbo-rails'
-
 import Banner from '@/components/Banner/Index.vue'
 import NavBar from '@/components/NavBar/Index.vue'
 import SearchSiteTopbar from '@/components/Search/SiteTopbar.vue'
@@ -39,17 +31,11 @@ import DownloadModal from '@/components/Download/Modal.vue'
 import CookieConsent from '@/components/CookieConsent.vue'
 
 import { registerTurboMountComponents } from '@/lib/turboMount'
-import { installTurboErrorResponseHandler } from '@/lib/turboErrorResponses'
 import useAnalytics from '@/composables/useAnalytics'
 
 // Resumes optional tracking (GA4/Hotjar) for visitors who already accepted cookies
 // on a previous visit — the CookieConsent island only fires on the first decision.
 useAnalytics().initAnalytics()
-
-// Turbo renders non-2xx responses with ErrorRenderer, which replaces the entire
-// <head> and so wipes every JS-injected component stylesheet. Make error pages a
-// real browser navigation instead — see the lib file for the full explanation.
-installTurboErrorResponseHandler()
 
 registerTurboMountComponents({
   Banner: () => Promise.resolve({ default: Banner }),

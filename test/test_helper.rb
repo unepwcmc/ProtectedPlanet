@@ -84,6 +84,23 @@ class ActiveSupport::TestCase
     )
   end
 
+  # Runs a block that reaps a real child process (Process.wait, or a real
+  # `system` call) without leaving its exit status in `$?` for the rest of the
+  # suite.
+  #
+  # `$?` is thread-local and starts out nil, so a test that genuinely waits on
+  # a child leaves a status behind that the NEXT test inherits. Code that reads
+  # `$?` after a stubbed `system` -- which never sets it -- then silently sees
+  # the previous test's exit code instead of nil. Confining the real process
+  # work to its own thread keeps `$?` where it belongs. Thread#value re-raises
+  # in the caller, so assert_raises still works across the boundary.
+  def without_leaking_child_status
+    Thread.new do
+      Thread.current.report_on_exception = false
+      yield
+    end.value
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms

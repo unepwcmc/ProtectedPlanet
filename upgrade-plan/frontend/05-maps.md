@@ -65,8 +65,8 @@ Recorded in [14](./14-architecture-and-design.md#maps-decision-framework-for-pp)
 `visibleOverlays`/`visibleLayers` are shared between `MapBase` (draws the layers) and
 `MapPanel > MapOverlay` (toggles them) — two sibling subtrees of the same
 `Map/Index.vue`, and nothing outside it. As a Pinia store that state was an app-wide
-singleton surviving Turbo Drive navigation while the island itself was rebuilt per
-page, which produced two separate "the highlighted area disappeared" bugs (see
+singleton outliving any single island mount while the island itself was rebuilt per
+map, which produced two separate "the highlighted area disappeared" bugs (see
 `upgrade-plan/backend/CARRYOVER.md` §8y and its follow-up) — each patched with a
 manual `reset()` plus a resync-on-init.
 

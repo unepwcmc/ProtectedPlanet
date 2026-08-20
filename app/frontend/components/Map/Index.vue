@@ -56,8 +56,8 @@ withDefaults(defineProps<Map>(), {
 
 // Owns the overlay/layer state shared by this composition's MapBase (which draws the
 // layers) and its MapPanel > MapOverlay children (which toggle them). Scoped to this
-// tree, so a fresh mount -- a new Turbo Drive page, a re-opened tab -- always starts
-// empty instead of inheriting the previous map's overlays. See useMapOverlays.ts.
+// tree, so a fresh mount -- a second map on the same page, a re-opened tab -- always
+// starts empty instead of inheriting the previous map's overlays. See useMapOverlays.ts.
 provideMapOverlays()
 
 const mapBaseRef = useTemplateRef('mapBaseRef')

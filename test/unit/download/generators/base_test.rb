@@ -145,6 +145,58 @@ class DownloadGeneratorsBaseTest < ActiveSupport::TestCase
     assert result.include?(' AND '), 'Expected AND between conditions'
   end
 
+  # ---------------------------------------------------------------------------
+  # run_zip — `zip` exit 12 ("nothing to do") must not fail the download
+  # ---------------------------------------------------------------------------
+  #
+  # These drive a REAL `zip`-shaped command rather than stubbing `system`,
+  # because the behaviour under test is entirely about the exit status `system`
+  # leaves in `$?` — a stub sets no status at all, so it cannot distinguish 12
+  # from 1 from success. `without_leaking_child_status` keeps those statuses out
+  # of the main thread and therefore out of the rest of the suite.
+
+  # Replaces `system` with one that really runs `sh -c "exit <status>"`, so `$?`
+  # is a genuine Process::Status for the code under test to read.
+  def run_zip_exiting_with(status)
+    gen = generator
+    gen.define_singleton_method(:system) { |*_args, **_opts| Kernel.system("exit #{status}") }
+    without_leaking_child_status { gen.send(:run_zip, "-j ./out.zip ./in.csv") }
+  end
+
+  test 'run_zip returns true when zip succeeds' do
+    assert_equal true, run_zip_exiting_with(0)
+  end
+
+  # The whole point of the exit-12 handling: an archive left in tmp/ by an
+  # earlier attempt makes `zip` report "nothing to do" for files it already
+  # holds. Treating that as a failure marked the download failed AND left the
+  # stale archive in place, so every retry failed identically and that
+  # identifier could never be downloaded again.
+  test 'run_zip treats exit 12 (nothing to do) as success' do
+    assert_equal true, run_zip_exiting_with(Download::Generators::Base::ZIP_NOTHING_TO_DO)
+  end
+
+  test 'run_zip returns false for a genuine zip error' do
+    assert_equal false, run_zip_exiting_with(1)
+  end
+
+  # `system` returns false without touching `$?` when it is stubbed, which is
+  # most of this suite. Reading `$?.success?` blind used to raise NoMethodError
+  # on nil there, turning every such test into an error.
+  test 'run_zip returns false rather than raising when no status was recorded' do
+    gen = generator
+    gen.stubs(:system).returns(false)
+
+    assert_equal false, gen.send(:run_zip, '-j ./out.zip ./in.csv')
+  end
+
+  test 'run_zip passes chdir through to system' do
+    gen = generator
+    gen.expects(:system).with('zip -ru ./out.zip *', chdir: '/tmp').returns(true)
+
+    assert_equal true, gen.send(:run_zip, '-ru ./out.zip *', chdir: '/tmp')
+  end
+
   test 'add_conditions uses AND semantics across filter groups for flat shape' do
     gen = Download::Generators::Base.new('./none.zip', {
       iso3: ['GBR'],

@@ -39,7 +39,6 @@ gem 'uglifier', '~> 4.1.17'
 # staging compresses with terser (see config/environments/staging.rb) -- uglify-js is
 # ES5-era and its wrapper fails on Node 24. production still uses Uglifier for now.
 gem 'terser', '~> 1.2'
-# coffee-rails dropped with the last .coffee sources (the Comfy admin ones) at the
 # Vite cutover -- nothing compiles CoffeeScript any more.
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
@@ -62,7 +61,8 @@ gem 'net-scp'
 # Frontend related gems
 gem 'vite_rails', '~> 3.11.1'
 gem 'turbo-mount', '~> 0.4.4'
-gem 'turbo-rails', '~> 2.0'
+# As of 20Aug2026 When introducing turbo-rails there are issues found for the frontend due to each load is not refresh
+# gem 'turbo-rails', '~> 2.0'
 
 group :production, :staging do
 #  gem 'unicorn'

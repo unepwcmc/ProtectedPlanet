@@ -113,7 +113,7 @@ that is a separate redesign. Both run side by side during the migration.
 
 **Setup (branch `feat/upgrade-frontend`):**
 - `tailwindcss` v4 + `@tailwindcss/vite` plugin in `vite.config.mts`.
-- `app/frontend/styles/tailwind.css`, imported from `entrypoints/layout.ts` (loads on every page).
+- `app/frontend/styles/tailwind.css`, imported from the `entrypoints/vitecss.css` entrypoint, which the layout renders as a real blocking `<link>` (loads on every page, before first paint).
 - **Preflight (base reset) is DISABLED** — the expanded `@import "tailwindcss/theme.css" layer(theme)`
   + `utilities.css layer(utilities)` form, omitting `preflight.css` — so Tailwind's reset does not
   fight the global SCSS. Re-enable preflight only once the legacy SCSS is retired.

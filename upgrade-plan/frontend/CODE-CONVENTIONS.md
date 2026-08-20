@@ -12,8 +12,8 @@ FORMAT PER RULE: RULE (imperative, always true) / WHY (only when non-obvious) / 
 
 2. TYPE OWNERSHIP.
    RULE: no inline types in components/composables. All types live under `app/frontend/types/` OR colocated with their owning module, per split below.
-   2a. Backend-shaped (Rails `frontend_mount` props payload, serializer JSON, controller-built hash) → `app/frontend/types/backend.ts`, even for a single consumer. Required: a comment above each type naming the producing `frontend_mount` call / controller / serializer.
-       EXAMPLE: `MapProps`/`MapBaseProps` ← `frontend_mount "Map"`; `MapFilterProps` ← one item of `@main_map[:overlays]` (MapOverlaysSerializer); `PointQueryService` ← one entry of `MapHelper::ALL_SERVICES_FOR_POINT_QUERY`.
+   2a. Backend-shaped (Rails `turbo_mount` props payload, serializer JSON, controller-built hash) → `app/frontend/types/backend.ts`, even for a single consumer. Required: a comment above each type naming the producing `turbo_mount` call / controller / serializer.
+       EXAMPLE: `MapProps`/`MapBaseProps` ← `turbo_mount "Map"`; `MapFilterProps` ← one item of `@main_map[:overlays]` (MapOverlaysSerializer); `PointQueryService` ← one entry of `MapHelper::ALL_SERVICES_FOR_POINT_QUERY`.
    2b. Frontend-only shared types → colocated with the composable/store/lib file that owns the behavior; import with `import type { X } from '@/composables/useX'`. Never copy-paste. Promote to `app/frontend/types/` only once a type has no single clear owner (≥2 unrelated features need it independently).
        EXAMPLE: `MapControlsOptions` (useMapInstance.ts), `MapLayer` (useMapLayers.ts), `BoundsUrl`/`ZoomToOptions` (useMapBoundingBox.ts), `MapOverlay` (useMapOverlays.ts), `MapBaselayer` (lib/mapDefaultOptions.ts) — Map-internal, stay put despite cross-component imports.
    2c. Type used by exactly one component → may stay defined in that component's own file (see rule 12).

@@ -55,5 +55,10 @@
 	],
 	"settings": {
 		"window.title": "Protected Planet Family of Apps",
+		// Tailwind's @reference/@apply/@utility "Unknown at rule" warnings in .vue
+		// files while .css files (resolved against a real file URI) stayed quiet.
+		"css.lint.unknownAtRules": "ignore",
+		"scss.lint.unknownAtRules": "ignore",
+		"less.lint.unknownAtRules": "ignore",
 	}
 }

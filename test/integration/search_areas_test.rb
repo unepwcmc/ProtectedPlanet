@@ -62,7 +62,7 @@ class SearchAreasTest < ActionDispatch::IntegrationTest
     get '/en/search-areas?search_term=nonexistent'
     assert_response :success
     # The download button's disabled state is derived client-side from the results
-    # total handed to the SearchAreasPage component. Before the Vite/Turbo rewrite
+    # total handed to the SearchAreasPage component. Before the Vite/Vue 3 rewrite
     # this was the Vue 2 attribute :download-disabled="downloadDisabled"; the page
     # now mounts the component with props, so assert the empty total it keys off.
     assert_includes response.body, 'turbo-mount-search-areas-page'

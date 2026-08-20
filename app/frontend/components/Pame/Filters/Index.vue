@@ -37,7 +37,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  apply: [name: string, options: string[]]
+  'apply': [name: string, options: string[]]
   'update:isFetching': [value: boolean]
 }>()
 

@@ -71,13 +71,18 @@ class Download::Generators::Pdf < Download::Generators::Base
     raise "PDF rasterizer exited with status #{$?.exitstatus} for #{url}" unless $?.success?
   end
 
-  # Puppeteer runs inside this same app container, requesting the page from
-  # itself - MAILER_HOST (Routeable's default, meant for links a user clicks
-  # from their own machine, e.g. `host.docker.internal` in dev) can't reliably
-  # hairpin back into the container it came from. PDF_RASTERIZER_HOST is the
-  # internal address (e.g. the docker-compose service name) for this
-  # container-to-itself request; falls back to the normal host when unset
-  # (e.g. production, where the app's own host works fine either way).
+  # Puppeteer renders the page by requesting it over HTTP, so it needs a host
+  # that resolves from wherever the job runs. MAILER_HOST (Routeable's default)
+  # is written for links a user clicks on their own machine - in dev that is
+  # `host.docker.internal`, which cannot hairpin back into the compose network
+  # the request came from. PDF_RASTERIZER_HOST overrides it for that hop.
+  #
+  # It is an override, not a requirement, and the dev value is NOT portable:
+  # .env.example sets `protectedplanet-web:3000`, a docker-compose service name
+  # that exists only on the compose network. Setting that under Kamal breaks
+  # every PDF download, because Chrome cannot resolve the name at all. Under
+  # Kamal, leaving it unset is the expected configuration - MAILER_HOST
+  # hairpins out through kamal-proxy and back in ~0.11s from the job container.
   def default_url_options
     { host: ENV['PDF_RASTERIZER_HOST'].presence || super[:host] }
   end

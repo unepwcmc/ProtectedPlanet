@@ -34,7 +34,7 @@ export interface CounterProps {
 
 // Props for `GaLink`, rendered wherever a link needs a GA click event
 // (see app/frontend/composables/useAnalytics.ts). `text` carries the link's HTML label since
-// a `frontend_mount` island has no server-rendered slot content to project into.
+// a `turbo_mount` island has no server-rendered slot content to project into.
 export interface GaLinkProps {
   gaId?: string
   href: string
@@ -44,7 +44,7 @@ export interface GaLinkProps {
 // Props for `CookieConsent` (app/frontend/components/CookieConsent.vue), sourced
 // from config/locales/global/en.yml so the copy lives in the same place as the
 // rest of the site's i18n strings. `description` carries the Privacy policy
-// link as HTML since a `frontend_mount` island has no server-rendered slot
+// link as HTML since a `turbo_mount` island has no server-rendered slot
 // content to project into.
 export interface CookieConsentProps {
   description: string
@@ -86,7 +86,7 @@ export interface ListingPageCardResourcesListProps {
 }
 
 // Shape produced by ApplicationHelper#map_page (used by #get_nav_primary),
-// passed as the `links` prop to the `NavBar` island (frontend_mount "NavBar").
+// passed as the `links` prop to the `NavBar` island (turbo_mount "NavBar").
 // See app/helpers/application_helper.rb.
 export interface NavLink {
   id: string
@@ -96,15 +96,15 @@ export interface NavLink {
   children?: NavLink[]
 }
 
-// Props for `frontend_mount "SearchSiteTopbar"` — see _topbar.html.erb.
+// Props for `turbo_mount "SearchSiteTopbar"` — see _topbar.html.erb.
 export interface SearchSiteTopbarProps {
   endpoint: string
   placeholder: string
 }
 
-// Anticipated shape for a `frontend_mount "Tabs"` prop payload. No Rails code
-// builds this yet (Tabs.vue is not wired to a live page — see Tabs.vue header
-// comment); this is the contract the first real tab-page migration should produce.
+// One entry of `turbo_mount "Tabs"`'s `tabs` prop, built by
+// `thematic_and_data_area_vue_tabs` — see
+// `partials/thematic_and_data_area/_tabs.html.erb`.
 export interface Tab {
   id: number
   // HTML allowed — rendered with v-html.
@@ -122,7 +122,7 @@ export interface TabsProps {
 }
 
 // One entry of DownloadsHelper::DEFAULT_OPTIONS merged with #download_params,
-// passed to `Download` (`frontend_mount "Download"`) as `options`.
+// passed to `Download` (`turbo_mount "Download"`) as `options`.
 export interface DownloadOption {
   isDownload?: boolean
   isMap?: boolean
@@ -159,7 +159,7 @@ export interface DownloadProps {
   compact?: boolean
 }
 
-// Props for `DownloadModal` (`frontend_mount "DownloadModal"`, mounted once
+// Props for `DownloadModal` (`turbo_mount "DownloadModal"`, mounted once
 // globally in application.html.erb).
 export interface DownloadModalProps {
   endpointCreate: string
@@ -255,8 +255,9 @@ export interface MapDisclaimerProps {
   mapiIsForRegionCountryPA: boolean
 }
 
-// Props for `frontend_mount "MapPanel"` (formerly "MapFilters") — see
-// home_controller.rb's `@main_map`.
+// Props for `MapPanel` (formerly "MapFilters") — not its own mount point:
+// the `Map` island renders it as a child, threaded through `MapProps`. Built on
+// the Rails side, see home_controller.rb's `@main_map`.
 export interface MapPanelProps {
   overlays: MapFilterProps[]
   title: string
@@ -271,7 +272,7 @@ export interface MapPanelProps {
   mapiIsForRegionCountryPA?: boolean
 }
 
-// Props for `frontend_mount "Map"` — the single top-level map composition
+// Props for `turbo_mount "Map"` — the single top-level map composition
 // (MapBase + MapDisclaimer + MapPanel) used by every page that shows a map,
 // identically. See partials/maps/_main.html.erb / partials/maps/_header.html.erb
 // for the legacy Vue2 equivalents this replaces.
@@ -297,7 +298,7 @@ export interface MapProps {
 }
 
 // Props for `MapPaSearch` — the "search & jump to a PA/country/region on the
-// map" box. Not its own `frontend_mount` entry: `MapPanel` renders it directly
+// map" box. Not its own `turbo_mount` entry: `MapPanel` renders it directly
 // (as a normal child component) when `type`/autocomplete-copy props are
 // present, threaded through `MapPanelProps`/`MapProps` above. See
 // `partials/maps/_main.html.erb`'s `<v-map-pa-search>` for the legacy Vue2 tag
@@ -325,7 +326,7 @@ export interface AutocompleteResult {
   url: string
 }
 
-// Props for `frontend_mount "Listing"` — the news/resources listing pages
+// Props for `turbo_mount "Listing"` — the news/resources listing pages
 // (filters + ajax pagination). Rendered by
 // app/views/layouts/cms/{_news-and-stories,_resources}.html.erb.
 export interface ListingProps {
@@ -355,7 +356,7 @@ export interface SearchAreaResult {
 }
 
 // Search::AreasSerializer#serialize — one geo-type "page" of area search
-// results (site/country/region), passed as `results` to `frontend_mount
+// results (site/country/region), passed as `results` to `turbo_mount
 // "SearchAreas"` and returned by SearchAreasController#search_results as
 // `{ areas: ... }`.
 export interface SearchAreasResults {
@@ -406,7 +407,7 @@ export interface SearchAreasTab {
   title: string
 }
 
-// Props for `frontend_mount "SearchAreasPage"` (search_areas/index.html.erb).
+// Props for `turbo_mount "SearchAreasPage"` (search_areas/index.html.erb).
 // `downloadButtonText`/`downloadTextCommercial` are new here (Wave 7) — the
 // legacy Vue2 version rendered `<Download>` via an ERB partial + `v-slot`
 // (partials/download/_download.html.erb), which read `download_text`/
@@ -431,7 +432,7 @@ export interface SearchAreasPageProps {
   textFilters: string
 }
 
-// Props for `frontend_mount "SearchAreas"`
+// Props for `turbo_mount "SearchAreas"`
 // (partials/search/_protected-areas.html.erb).
 export interface SearchAreasProps {
   config: SearchAreasConfig
@@ -447,7 +448,7 @@ export interface SearchSiteResult {
   image?: string
 }
 
-// Search::FullSerializer#serialize — passed as `dataPageLoad` to `frontend_mount
+// Search::FullSerializer#serialize — passed as `dataPageLoad` to `turbo_mount
 // "SearchSite"` and returned by SearchController#search_results.
 export interface SearchSiteResultsData {
   searchTerm: string
@@ -464,7 +465,7 @@ export interface SearchSiteCategory {
   title: string
 }
 
-// Props for `frontend_mount "SearchSite"` (search/index.html.erb).
+// Props for `turbo_mount "SearchSite"` (search/index.html.erb).
 export interface SearchSiteProps {
   categories: SearchSiteCategory[]
   dataPageLoad: SearchSiteResultsData
@@ -482,7 +483,7 @@ export interface SearchSiteProps {
 // helper. `title` doubles as this bar's legend label. `value` is numeric on
 // the Rails side (GlobalStatistic-derived percentages) — unlike the Vue2
 // original, where every ERB attribute was coerced to a string,
-// `frontend_mount` sends the Ruby value's native JSON type straight through,
+// `turbo_mount` sends the Ruby value's native JSON type straight through,
 // so callers here can produce a number.
 export interface ChartTotalCoverageChartBar {
   legend_colour_class: string
@@ -533,7 +534,7 @@ export interface AmChartMultilineDatapoint {
   [seriesIndex: string]: number | string
 }
 
-// Props for `frontend_mount "AmChartMultiline"` — mounted directly inside
+// Props for `turbo_mount "AmChartMultiline"` — mounted directly inside
 // partials/charts/_chart-coverage-growth.html.erb (marine coverage growth),
 // title/content left as plain ERB around the chart mount.
 export interface AmChartMultilineProps {
@@ -685,7 +686,7 @@ export interface StatsSiteDetail {
   thumbnail_link: string
 }
 
-// TabPresenter#sites, or `frontend_mount "StatsSites"` fed by
+// TabPresenter#sites, or `turbo_mount "StatsSites"` fed by
 // ApplicationHelper#site_card_details for a direct (non-RegionCountryPages) mount.
 export interface StatsSitesProps {
   siteDetails: StatsSiteDetail[]
@@ -694,7 +695,7 @@ export interface StatsSitesProps {
   viewAll: string
 }
 
-// One entry of `frontend_mount "RegionCountryPages"`'s `data` hash — keyed by
+// One entry of `turbo_mount "RegionCountryPages"`'s `data` hash — keyed by
 // database id ('wdpa'/'wdpa_oecm'), built by CountryController#build_hash /
 // TabPresenter. `growth` (TabPresenter#growth) is omitted — its only consumer,
 // StatsGrowth/AmChartLine (ticket #265), was removed as dead code.
@@ -730,13 +731,13 @@ export interface RegionCountryPagesTab {
   title: string
 }
 
-// Props for `frontend_mount "RegionCountryPages"` (country#show / region#show).
+// Props for `turbo_mount "RegionCountryPages"` (country#show / region#show).
 export interface RegionCountryPagesProps {
   data: Record<string, RegionCountryPagesDatabase>
   gaId?: string
   // Rendered HTML of partials/stats/_stats-related-countries.html.erb (country
   // page only) — replaces the legacy `related_countries` Vue2 slot, since
-  // `frontend_mount` has no slot-content equivalent. Trusted server-rendered
+  // `turbo_mount` has no slot-content equivalent. Trusted server-rendered
   // markup, not user input.
   relatedCountriesHtml?: string
   tabs: RegionCountryPagesTab[]
@@ -916,7 +917,7 @@ export interface PameModalTranslations {
   language: string
 }
 
-// Props for `frontend_mount "PameTable"` (Data::GdpameController#index, via
+// Props for `turbo_mount "PameTable"` (Data::GdpameController#index, via
 // partials/data/gdpame/_tab_content).
 export interface PameTableProps {
   endpoint: string
@@ -941,7 +942,7 @@ export interface CarouselThemeCard {
   slug: string
 }
 
-// Props for `frontend_mount "CarouselThemes"` and `frontend_mount "CardsThemes"`.
+// Props for `turbo_mount "CarouselThemes"` and `turbo_mount "CardsThemes"`.
 export interface CarouselThemesProps {
   cards: CarouselThemeCard[]
   areaTypeLabel: string

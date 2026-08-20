@@ -1387,3 +1387,89 @@ idempotent regardless:
   import twice
 
 Typed via turbo-mount's own exported `ApplicationWithTurboMount`, so no casts.
+
+### 8ac. Turbo Drive removed outright — and what came out with it
+
+Turbo Drive was disabled on 2026-08-20 (`Turbo.session.drive = false`) while we
+decided whether it paid for itself, then removed entirely. The ledger:
+
+- **Benefit measured:** skipping the parse of ~355 KB of eager JS and ~228 KB of CSS
+  per navigation. Not the server render, and not the eager island mounts — a `<body>`
+  swap re-runs those anyway.
+- **Cost measured:** five production incidents in the three days after it landed
+  (§8y, §8z, §8aa, §8ab, plus the error-page style wipe). Every one of them was state
+  or assets outliving a navigation — the exact class of bug Turbo introduces and a
+  full document load cannot have.
+
+**Removed:** the `@hotwired/turbo-rails` npm package (which pulled `@hotwired/turbo`
+and `@rails/actioncable` with it) and the `turbo-rails` gem. `turbo-mount` stays: its
+only runtime dependency is Stimulus, which needs nothing from Turbo, and it keeps
+providing the `turbo_mount` helper every view uses. Nothing server-side used Turbo
+Streams or Frames, so there was nothing to port.
+
+**Deletions this enabled** — each of these existed *only* to survive a Turbo visit:
+
+| Gone | Was there because |
+|------|-------------------|
+| `lib/turboErrorResponses.ts` + spec (~130 lines) | Turbo's `ErrorRenderer` replaces the whole `<head>`, wiping every JS-injected component stylesheet, so non-2xx responses had to be forced into a real browser navigation. A full load renders its own error page correctly. |
+| `data-turbo-track="reload"` on both Vite tags in `_head.html.erb` (§8aa) | A restored snapshot's `<head>` pointed at a previous deploy's Vite digests and 404'd. Every navigation now fetches current HTML with current digests. |
+| The `window.Stimulus.turboMount` reuse guard in `turboMount.ts` (§8ab) | A restored stale `<head>` could pull in a second copy of the entrypoint bundle, so a second `TurboMount` instance shadowed the first. The module is now evaluated exactly once per page. |
+| `send_page_view: false` + the `turbo:load` listener in `useAnalytics.ts` | Module state survived Turbo's no-reload navigations, so gtag's automatic `page_view` only covered the first page in a tab and every view had to be re-sent by hand. One `gtag('config', ...)` per document load is now exactly one `page_view` per page view. |
+| The `turbo/native/` skip entry in `lib/smoke/route_walker.rb` | Those routes came from the `turbo-rails` engine and no longer exist (verified: the walker's route list has no `turbo` controller left). |
+
+The `MutationObserver` in `turboMount.ts` **stays**. Its Turbo-specific rationale
+(`<body>` is replaced wholesale on a visit, so an observer bound to the original
+`document.body` would watch a detached node) is gone, but its original reason is not:
+a `turbo_mount` div can enter the DOM after first paint from another island's
+`v-html` prop — see `RegionCountryPages`' `relatedCountriesHtml`.
+
+**Verified:** `yarn typecheck` clean · `yarn vite:build` succeeds and the built bundles
+contain no Turbo runtime · Rails boots with no `turbo` controller in the route set
+(the surviving `Turbo` constant is `turbo-mount`'s own `Turbo::Mount` namespace) ·
+`bundle check` satisfied · vitest 373/374, the one failure being a pre-existing
+`Map/Base.spec.ts` container-id assertion unrelated to this change.
+
+**Re-enabling is no longer a one-line revert.** If Turbo Drive is ever reconsidered,
+it means re-adding both dependencies and re-deriving the five mitigations above —
+treat the table as the checklist.
+
+### 8ad. Dead mounter deleted — `frontend_mount` / `islands.ts` / `readMountProps`
+
+Follow-up cleanup to §8ac. The homegrown island mounter had no call sites left once
+every view moved to `turbo_mount` (§8ab-era migration), and was being kept "pending a
+follow-up pass". Deleted:
+
+| File | Lines | Was |
+|------|-------|-----|
+| `app/helpers/frontend_helper.rb` | 47 | the `frontend_mount(name, props:, tag:, key:, **html)` helper |
+| `app/frontend/lib/islands.ts` | 150 | registry + lazy `createApp` + mount/unmount `MutationObserver` + wrapper-unwrap |
+| `app/frontend/lib/readMountProps.ts` | 28 | parsed the `<script type="application/json">` props block |
+| `app/frontend/lib/__tests__/islands.spec.ts` | 195 | its only remaining consumer |
+
+Checked before deleting: no ERB calls `frontend_mount`, nothing imports `islands.ts`
+or `readMountProps`, nothing references `data-mount`, no `FrontendHelper` reference
+outside a comment, and `banner_signature` — the other method `_banner.html.erb` needs
+— lives in `application_helper.rb`, not in the deleted file.
+
+**Comment/type debt this exposed and fixed.** 25 comments across
+`types/backend.ts`/`types/map.ts` documented props as belonging to
+`frontend_mount "X"` calls; all now name `turbo_mount`. Three were wrong beyond the
+rename and were rewritten, not renamed:
+- `Tab` was described as an "anticipated shape… no Rails code builds this yet", but
+  `_tabs.html.erb` has been feeding it live via `thematic_and_data_area_vue_tabs`.
+- `MapPanelProps`/`MapPaSearchProps` were described as mount points; neither is
+  registered — `Map` renders them as children.
+
+Also re-pointed the headers of `stores/pinia.ts`, `styles/global/turbo-mount.css` and
+`lib/turboMount.ts`, all of which explained themselves by comparison to `islands.ts`.
+
+**Docs.** `docs/workflow.md`'s frontend section still described Sprockets SCSS, Vue
+2.7 + Vuex in `app/javascript`, Webpacker, and `axios` — none of which exist — and
+claimed there are no frontend tests (there are 374). Rewritten. In
+`upgrade-plan/frontend/` the *prescriptive* docs were corrected (README stack
+summary, 14-architecture's folder layout / props-passing / CMS patterns,
+CODE-CONVENTIONS rule 2a, 08-styles' Tailwind entrypoint) while the *historical*
+ones — CHANGELOG, wave plans, inventories — were deliberately left as the record of
+what was true when written. Two version drifts fixed in passing: Vite is 8.2.2, not
+7, and the "one entrypoint per page type" plan was never built (there is one
+`application.ts`, with per-page splitting done by lazy loaders at runtime instead).

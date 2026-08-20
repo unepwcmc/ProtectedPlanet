@@ -104,7 +104,7 @@
 ## Alignment checklist (revisit before B0)
 
 - [ ] Backend contact + target date for B0 communicated to frontend colleague (informational — no longer a gate).
-- [ ] **Vite/Vue 3 island setup re-smoke-tested after every Rails bump** — `vite_client_tag`, `vite_typescript_tag 'entrypoints/layout'`, `frontend_mount` output, and at least one live island (Banner). This is the live cross-team dependency now.
+- [ ] **Vite/Vue 3 island setup re-smoke-tested after every Rails bump** — `vite_client_tag`, `vite_typescript_tag 'application.ts'`, `turbo_mount` output, and at least one live island (Banner). This is the live cross-team dependency now.
 - [ ] CI (GitHub Actions or equivalent) configured to run against upgrade branch.
 - [ ] Comfy admin asset-pipeline outcome under Media Surfer communicated to frontend — see [09](./09-cms-comfy.md).
 

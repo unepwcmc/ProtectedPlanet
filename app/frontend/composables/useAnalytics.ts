@@ -1,9 +1,9 @@
 // Optional (non-essential) tracking scripts, gated on cookie consent. Nothing
 // in this file runs any analytics until the user has explicitly accepted —
 // see the CookieConsent island (app/frontend/components/CookieConsent.vue)
-// for the UI that calls acceptAnalytics()/rejectAnalytics(), and layout.ts,
-// which calls initAnalytics() on every page load to resume tracking for
-// returning visitors who already opted in.
+// for the UI that calls acceptAnalytics()/rejectAnalytics(), and
+// entrypoints/application.ts, which calls initAnalytics() on every page load
+// to resume tracking for returning visitors who already opted in.
 import { getConsent, setConsent } from '@/lib/cookieConsent'
 import useEnv from '@/composables/useEnvs'
 import { Environment } from '@/constants/environment'
@@ -65,24 +65,18 @@ export default function () {
       window.dataLayer!.push(args)
     }
     window.gtag('js', new Date())
-    // send_page_view: false — with Turbo Drive, this config call and its
-    // script tag only ever run once per browser tab (module state survives
-    // Turbo's no-reload navigations), so the auto page_view it would normally
-    // send only covers the very first page. Every page view, including this
-    // first one, is instead sent explicitly below on turbo:load.
-    window.gtag('config', measurementId, { send_page_view: false })
+    // No send_page_view override: every navigation on this site is a full
+    // document load, so this config call runs once per page view and gtag's
+    // own automatic page_view is exactly one per page. (While Turbo Drive was
+    // briefly in use it had to be suppressed and re-sent by hand on
+    // `turbo:load`, because module state survived Turbo's no-reload
+    // navigations and the auto event only covered the first page in a tab.)
+    window.gtag('config', measurementId)
 
     const script = document.createElement('script')
     script.async = true
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
     document.head.appendChild(script)
-
-    document.addEventListener('turbo:load', () => {
-      window.gtag?.('event', 'page_view', {
-        page_location: window.location.href,
-        page_title: document.title
-      })
-    })
   }
 
   function loadOptionalScripts() {

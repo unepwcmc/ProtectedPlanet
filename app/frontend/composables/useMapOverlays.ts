@@ -1,9 +1,9 @@
 // Shared overlay/layer state for ONE map composition.
 //
 // This was previously a Pinia store (`stores/useMapStore.ts`, itself a port of the
-// legacy Vuex `map` module). Pinia stores are app-wide singletons that survive Turbo
-// Drive navigation, while the Map island is torn down and rebuilt on every page --
-// a mismatch that caused two separate "the highlighted area disappeared" bugs
+// legacy Vuex `map` module). Pinia stores are app-wide singletons, outliving any
+// single Map island, which is torn down and rebuilt per mount -- a mismatch that
+// caused two separate "the highlighted area disappeared" bugs
 // (the second site inheriting the first site's geometry, because `addOverlay` is
 // idempotent by id and every PA page ships the same overlay id with a different
 // site-specific url). Both were patched with a manual reset + a resync-on-init.
