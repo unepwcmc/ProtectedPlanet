@@ -9,7 +9,10 @@ const fakeMapInstance = {
   fitBounds: vi.fn(),
   resize: vi.fn(),
   getLayer: vi.fn(),
-  getStyle: vi.fn(() => ({ layers: [] })),
+  addLayer: vi.fn(),
+  addSource: vi.fn(),
+  getSource: vi.fn(),
+  getStyle: vi.fn((): { layers: Array<{ id: string, type: string }> } => ({ layers: [] })),
   isStyleLoaded: vi.fn(() => true)
 }
 
@@ -92,6 +95,39 @@ describe('Map Base', () => {
     const [options] = MapConstructor.mock.calls[0]
     expect(options?.container).toMatch(/^map-target-\d+$/)
     expect(options?.style).toBe('mapbox://styles/unepwcmc/cko1hsfi50vog17l697cr4d6p')
+  })
+
+  // The pinia store is app-wide and survives Turbo Drive navigation, while this
+  // island is rebuilt on every page. addOverlay is idempotent, so on a second visit
+  // the overlay is already stored, visibleLayers never changes, and the
+  // visibleLayers watcher never fires -- the new map has to sync itself to the
+  // store on init instead. Without that, the highlighted area disappeared from
+  // every map after the first one.
+  it('applies overlays already in the store to a newly created map', async () => {
+    const { useMapStore } = await import('@/stores/useMapStore')
+    const store = useMapStore()
+    store.addOverlay({
+      id: 'wdpa',
+      layers: [{ id: 'wdpa-poly', type: 'raster_tile', url: 'https://x/{z}/{x}/{y}' }]
+    })
+
+    fakeMapInstance.getLayer.mockReturnValue(undefined)
+    // addLayerBeneathBoundariesAndLabels waits for a foreground layer id before
+    // inserting; give the style one so it resolves on the first 200ms poll instead
+    // of burning all 10 attempts.
+    fakeMapInstance.getStyle.mockReturnValue({ layers: [{ id: 'admin-boundary', type: 'line' }] })
+    // Baselayer controls are disabled on purpose: their selectedBaselayer watcher
+    // also calls showLayers, which would make this pass regardless of the init sync.
+    mount(MapBase, { props: { options: { controls: { showBaselayerControls: false } } } })
+    await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
+
+    // initMap registers the style.load handler; fire it as MapLibre would.
+    const styleLoad = fakeMapInstance.on.mock.calls.find(c => c[0] === 'style.load')
+    expect(styleLoad, 'a style.load handler must be registered').toBeTruthy()
+    styleLoad![1]()
+
+    // showLayers defers through executeAfterStyleLoad, which polls — so this is async.
+    await vi.waitFor(() => expect(fakeMapInstance.addLayer).toHaveBeenCalled(), { timeout: 4000 })
   })
 
   it('renders baselayer controls by default', () => {

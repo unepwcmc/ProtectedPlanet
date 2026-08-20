@@ -1,6 +1,6 @@
 // Vue3/MapLibre port of app/javascript/components/map/mixins/mixin-controls.js
 // and the mapboxgl.Map setup previously inlined in VMap.vue.
-import { ref, type Ref } from 'vue'
+import { shallowRef, type Ref } from 'vue'
 import {
   Map as MapLibreMap,
   AttributionControl,
@@ -52,7 +52,19 @@ let rtlPluginRegistered = false
 
 export default function () {
   const { VITE_MAPBOX_TOKEN: accessToken } = useEnvs()
-  const map = ref<MapLibreMap | null>(null) as Ref<MapLibreMap | null>
+  // shallowRef, NOT ref. ref() makes the assigned value deeply reactive, so the
+  // whole MapLibre Map -- including internal frozen objects like Color, whose `rgb`
+  // is a read-only non-configurable property -- gets wrapped in a Proxy. Reading it
+  // then violates the Proxy invariant and throws:
+  //
+  //   TypeError: 'get' on proxy: property 'rgb' is a read-only and non-configurable
+  //   data property on the proxy target but the proxy did not return its actual
+  //   value (expected '[object Array]' but got '[object Object]')
+  //
+  // shallowRef keeps .value assignment reactive (watchers and templates still fire)
+  // without proxying the instance's internals. The `as Ref<...>` cast this line used
+  // to carry was a symptom of the same problem.
+  const map = shallowRef<MapLibreMap | null>(null) as Ref<MapLibreMap | null>
 
   function addControls(controlsOptions: MapControlsOptions) {
     if (!map.value) return

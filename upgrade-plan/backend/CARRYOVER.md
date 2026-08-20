@@ -1232,3 +1232,41 @@ environment notes for whoever runs this next — `docker compose up -d db` is ne
 first (step 7 uses `--no-deps` and will otherwise fail on
 `protectedplanet-db`), and the puppeteer browser must exist locally
 (`./node_modules/.bin/puppeteer browsers install chrome`).
+
+### 8y. Map renders — two follow-on bugs after the worker fix
+
+The worker fix (§8x/063b05d77) got tiles loading, which exposed two more:
+
+**1. `'get' on proxy: property 'rgb'` — Vue was deep-proxying the MapLibre instance**
+
+```
+TypeError: 'get' on proxy: property 'rgb' is a read-only and non-configurable data
+property on the proxy target but the proxy did not return its actual value
+```
+
+`useMapInstance` held the map in `ref()`, which makes the assigned value DEEPLY
+reactive — so the whole MapLibre Map, including internal frozen objects like
+`Color` (whose `rgb` is read-only and non-configurable), got wrapped in a Proxy.
+Reading it violates the Proxy invariant and throws. `shallowRef` keeps `.value`
+assignment reactive without proxying the internals. The `as Ref<...>` cast that
+line already carried was a symptom of the same problem.
+
+**2. The highlighted area vanished from every map after the first**
+
+The pinia store is an app-wide singleton and **survives Turbo Drive navigation**
+(only the body is swapped; the JS context persists), while the map island is torn
+down and rebuilt per page. `addOverlay` is idempotent, so on the second visit to a
+map page the overlay was already in the store, `visibleLayers` never changed, the
+watcher in `Base.vue` never fired, and the brand-new map never received its layers.
+First visit worked; every subsequent one showed a basemap with no highlight —
+exactly as reported.
+
+Fixed by syncing the new map to the store's current state inside the `style.load`
+callback, alongside `setFirstForegroundLayerId`.
+
+**Note on the regression test.** The first version passed with AND without the fix:
+`MapBaselayerControls` mounts by default and its `selectedBaselayer` watcher also
+calls `showLayers`, so the assertion was satisfied by an unrelated path. Disabling
+those controls in the test isolates the init path. Verified in both directions —
+passes with the fix, fails without it. A guard that has not been seen to fail is
+not a guard.
