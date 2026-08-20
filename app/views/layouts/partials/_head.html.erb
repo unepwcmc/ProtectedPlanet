@@ -17,7 +17,19 @@
   <% end %>
   <link rel="manifest" href="/manifest.json">
   <%= csrf_meta_tags %>
+  <%# data-turbo-track="reload" is what stops a deploy from breaking open tabs.
+      Turbo Drive caches page snapshots for the session and restores them on
+      back/forward and repeat visits. Every deploy changes the Vite asset digests,
+      so a restored snapshot points at files that no longer exist and the browser
+      404s them -- observed on staging as
+        Refused to apply style from '.../vitecss-608EvYdl.css' because its MIME
+        type ('text/html') is not a supported stylesheet MIME type
+      (the 404 page being served in place of the CSS), plus ERR_ABORTED 404 for
+      application-*.js and its module preloads.
+      With the tracking attribute Turbo compares these elements between the cached
+      page and the incoming one and does a FULL page load when they differ, instead
+      of a Turbo visit that reuses the stale head. %>
   <%= vite_client_tag %>
-  <%= vite_stylesheet_tag 'vitecss.css' %>
-  <%= vite_typescript_tag 'application.ts' %>
+  <%= vite_stylesheet_tag 'vitecss.css', data: { turbo_track: 'reload' } %>
+  <%= vite_typescript_tag 'application.ts', data: { turbo_track: 'reload' } %>
 </head>

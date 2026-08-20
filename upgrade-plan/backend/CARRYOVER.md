@@ -1315,3 +1315,75 @@ construction, which removes the root cause of both this bug and the §8y one abo
 Same pattern as the 204 that scored "ok", the 11.4 MB PDF that proved nothing, and
 the browser directory that existed without an executable: measuring something
 adjacent to the thing.
+
+### 8aa. Polygon fixed; console 404s after a deploy — missing `data-turbo-track`
+
+The per-page store reset (§8z) is confirmed working: the correct polygon now renders
+on every site.
+
+The remaining console errors are a different problem, and a recurring one:
+
+```
+Refused to apply style from '.../vite/assets/vitecss-608EvYdl.css' because its
+MIME type ('text/html') is not a supported stylesheet MIME type
+GET .../vite/assets/application-lAkyF3J8.js  net::ERR_ABORTED 404
+GET .../vite/assets/dist-CKo7fAqw.js         net::ERR_ABORTED 404
+```
+
+The MIME complaint is the 404 page being served in place of the CSS. All the
+failing digests are from PREVIOUS builds; the server is serving fresh HTML
+(`age: 0`) pointing at current, existing assets.
+
+**Cause:** Turbo Drive caches page snapshots for the session and restores them on
+back/forward and repeat visits. Every deploy changes the Vite digests, so a restored
+snapshot's `<head>` references files that no longer exist. Anyone with a tab open
+across a deploy hits this until they hard-refresh.
+
+**Fix:** `data-turbo-track: 'reload'` on `vite_stylesheet_tag` and
+`vite_typescript_tag` in `app/views/layouts/partials/_head.html.erb`. Turbo then
+compares those elements between the cached page and the incoming one and performs a
+FULL page load when they differ, instead of a Turbo visit reusing the stale head.
+Verified in rendered output — the attribute lands on the stylesheet, the entrypoint
+script AND every modulepreload (the preloads were among the 404s).
+
+**Separately: a flaky test of my own, found by this run.** The §8i
+`StatementInvalidRescueTest` passed or failed by seed. `CountryController#build_stats`
+wraps its work in `Rails.cache.fetch`, so a cached entry from an earlier test in a
+randomly-ordered run meant `coverage_growth` -- and the stubbed raise -- never ran.
+Fixed with `setup { Rails.cache.clear }`; verified across three seeds.
+
+### 8ab. `Unknown component: Map` — not a race, a second TurboMount instance
+
+The earlier "registration race" theory was wrong. All host elements use
+per-component controllers (`turbo-mount-map`), never the generic `turbo-mount`, and
+`TurboMount.register()` populates `components` BEFORE registering the controller —
+so ordering was never the problem.
+
+The real mechanism:
+
+```js
+constructor() { ... this.application.turboMount = this }
+resolve(name) { const c = this.components.get(name); if (!c) throw `Unknown component: ${name}` }
+```
+
+`new TurboMount()` overwrites `application.turboMount` on the shared Stimulus
+application. When the entrypoint is evaluated TWICE, instance B replaces A while A's
+controllers are already registered; those controllers then resolve against B's empty
+component map and throw on connect. That also explains the paired
+`[turboMount] failed to load component "Download"` — our own `.catch` reporting the
+throw that `application.register()` raised when Stimulus immediately connected the
+element.
+
+Why it ran twice: Turbo restored a page whose `<head>` referenced a previous
+deploy's `application-*.js`, pulling in a second bundle — the same stale-asset
+problem as §8aa. So `data-turbo-track` removes the cause; this makes the module
+idempotent regardless:
+
+- reuse `window.Stimulus.turboMount` when present instead of always constructing one
+- gate on the shared instance's `components` map rather than a per-call Set (a second
+  evaluation gets a fresh Set but the same instance, and re-registering throws
+  "Component 'X' is already registered")
+- an `inFlight` set so the MutationObserver's rescans cannot start the same dynamic
+  import twice
+
+Typed via turbo-mount's own exported `ApplicationWithTurboMount`, so no casts.
