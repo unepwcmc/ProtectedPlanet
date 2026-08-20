@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
+import { createMapOverlays, MAP_OVERLAYS_KEY, type MapOverlaysContext } from '@/composables/useMapOverlays'
+import type { MapBaseProps } from '@/types/backend'
 
 const fakeMapInstance = {
   addControl: vi.fn(),
@@ -76,8 +77,15 @@ class FakeIntersectionObserver {
   }
 }
 
+// MapBase is only ever rendered inside a Map/Index.vue tree, which provides this;
+// standalone it throws on purpose (see useMapOverlays.ts).
+let context: MapOverlaysContext
+
+const mountBase = (props: MapBaseProps = {}) =>
+  mount(MapBase, { props, global: { provide: { [MAP_OVERLAYS_KEY as symbol]: context } } })
+
 beforeEach(() => {
-  setActivePinia(createPinia())
+  context = createMapOverlays()
   vi.clearAllMocks()
   FakeIntersectionObserver.instances = []
   vi.stubGlobal('IntersectionObserver', FakeIntersectionObserver)
@@ -89,7 +97,7 @@ afterEach(() => {
 
 describe('Map Base', () => {
   it('creates a MapLibre map with the container id and first baselayer style', async () => {
-    mount(MapBase, { props: {} })
+    mountBase()
 
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
@@ -98,16 +106,13 @@ describe('Map Base', () => {
     expect(options?.style).toBe('mapbox://styles/unepwcmc/cko1hsfi50vog17l697cr4d6p')
   })
 
-  // The pinia store is app-wide and survives Turbo Drive navigation, while this
-  // island is rebuilt on every page. addOverlay is idempotent, so on a second visit
-  // the overlay is already stored, visibleLayers never changes, and the
-  // visibleLayers watcher never fires -- the new map has to sync itself to the
-  // store on init instead. Without that, the highlighted area disappeared from
-  // every map after the first one.
-  it('applies overlays already in the store to a newly created map', async () => {
-    const { useMapStore } = await import('@/stores/useMapStore')
-    const store = useMapStore()
-    store.addOverlay({
+  // Map creation is async (it waits on initBoundingBoxAndMap's bounds fetch), so the
+  // MapOverlay children normally finish registering the page's overlays BEFORE there
+  // is a map to draw them on. The visibleLayers watcher only fires on changes, so the
+  // new map has to sync itself on init -- without that, the highlighted area never
+  // appeared at all.
+  it('applies already-registered overlays to a newly created map', async () => {
+    context.addOverlay({
       id: 'wdpa',
       layers: [{ id: 'wdpa-poly', type: 'raster_tile', url: 'https://x/{z}/{x}/{y}' }]
     })
@@ -119,7 +124,7 @@ describe('Map Base', () => {
     fakeMapInstance.getStyle.mockReturnValue({ layers: [{ id: 'admin-boundary', type: 'line' }] })
     // Baselayer controls are disabled on purpose: their selectedBaselayer watcher
     // also calls showLayers, which would make this pass regardless of the init sync.
-    mount(MapBase, { props: { options: { controls: { showBaselayerControls: false } } } })
+    mountBase({ options: { controls: { showBaselayerControls: false } } })
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
     // initMap registers the style.load handler; fire it as MapLibre would.
@@ -132,21 +137,19 @@ describe('Map Base', () => {
   })
 
   it('renders baselayer controls by default', () => {
-    const wrapper = mount(MapBase, { props: {} })
+    const wrapper = mountBase()
 
     expect(wrapper.find('.ct-map-baselayer-controls').exists()).toBe(true)
   })
 
   it('hides baselayer controls when disabled via options', () => {
-    const wrapper = mount(MapBase, {
-      props: { options: { controls: { showBaselayerControls: false } } }
-    })
+    const wrapper = mountBase({ options: { controls: { showBaselayerControls: false } } })
 
     expect(wrapper.find('.ct-map-baselayer-controls').exists()).toBe(false)
   })
 
   it('exposes zoomTo and resize for the panel search box to call', async () => {
-    const wrapper = mount(MapBase, { props: {} })
+    const wrapper = mountBase()
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
     wrapper.vm.resize()
@@ -155,7 +158,7 @@ describe('Map Base', () => {
   })
 
   it('resizes the map once its (initially hidden, e.g. inactive-tab) container becomes visible', async () => {
-    mount(MapBase, { props: {} })
+    mountBase()
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
     expect(FakeIntersectionObserver.instances).toHaveLength(1)
@@ -171,7 +174,7 @@ describe('Map Base', () => {
       json: () => Promise.resolve({ extent: { xmin: -10, xmax: 10, ymin: -5, ymax: 5 } })
     }))
 
-    const wrapper = mount(MapBase, { props: {} })
+    const wrapper = mountBase()
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
     await wrapper.vm.zoomTo({
@@ -198,7 +201,7 @@ describe('Map Base', () => {
       json: () => Promise.resolve({ extent: { xmin: -10, xmax: 10, ymin: -5, ymax: 5 } })
     }))
 
-    const wrapper = mount(MapBase, { props: {} })
+    const wrapper = mountBase()
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
     await wrapper.vm.zoomTo({

@@ -21,7 +21,7 @@ export const RTL_TEXT_PLUGIN_URL
   = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
 
 export const MAP_OPTIONS_DEFAULT = {
-  container: 'map-target',
+  container: 'maplibre-container-id',
   scrollZoom: false,
   attributionControl: false as const,
   preserveDrawingBuffer: true, // needed for PDF rendering

@@ -39,11 +39,17 @@ import DownloadModal from '@/components/Download/Modal.vue'
 import CookieConsent from '@/components/CookieConsent.vue'
 
 import { registerTurboMountComponents } from '@/lib/turboMount'
+import { installTurboErrorResponseHandler } from '@/lib/turboErrorResponses'
 import useAnalytics from '@/composables/useAnalytics'
 
 // Resumes optional tracking (GA4/Hotjar) for visitors who already accepted cookies
 // on a previous visit — the CookieConsent island only fires on the first decision.
 useAnalytics().initAnalytics()
+
+// Turbo renders non-2xx responses with ErrorRenderer, which replaces the entire
+// <head> and so wipes every JS-injected component stylesheet. Make error pages a
+// real browser navigation instead — see the lib file for the full explanation.
+installTurboErrorResponseHandler()
 
 registerTurboMountComponents({
   Banner: () => Promise.resolve({ default: Banner }),

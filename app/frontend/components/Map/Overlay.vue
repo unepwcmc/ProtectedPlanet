@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import MapToggler from '@/components/Map/Toggler.vue'
-import { useMapStore, type MapOverlay } from '@/stores/useMapStore'
+import { useMapOverlays, type MapOverlay } from '@/composables/useMapOverlays'
 import type { MapFilterProps } from '@/types/backend'
 
 type MapFilter = MapFilterProps
@@ -38,18 +38,18 @@ const props = withDefaults(defineProps<MapFilter>(), {
   isToggleable: true
 })
 
-const mapStore = useMapStore()
+const { visibleOverlays, addOverlay, removeOverlay } = useMapOverlays()
 
-const overlayForStore = computed<MapOverlay>(() => ({ layers: props.layers, id: props.id }))
+const overlay = computed<MapOverlay>(() => ({ layers: props.layers, id: props.id }))
 
-const isShown = computed(() => mapStore.visibleOverlays.some(o => o.id === props.id))
+const isShown = computed(() => visibleOverlays.value.some(o => o.id === props.id))
 
 function setShown(shown: boolean) {
   if (shown) {
-    mapStore.addOverlay(overlayForStore.value)
+    addOverlay(overlay.value)
   }
   else {
-    mapStore.removeOverlay(overlayForStore.value)
+    removeOverlay(overlay.value)
   }
 }
 

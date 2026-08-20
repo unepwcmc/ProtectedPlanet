@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
+import { useMapOverlays, type MapOverlaysContext } from '@/composables/useMapOverlays'
 
 const fakeMapInstance = {
   addControl: vi.fn(),
@@ -47,10 +48,6 @@ const overlays = [
     type: 'raster_tile'
   }
 ]
-
-beforeEach(() => {
-  setActivePinia(createPinia())
-})
 
 describe('Map', () => {
   it('renders the mobile-only title, the map, and the panel with the disclaimer inside it', () => {
@@ -129,23 +126,31 @@ describe('Map', () => {
     expect(hidden.find('.ct-map-pa-search').exists()).toBe(false)
   })
 
-  // Every protected-area page ships an overlay with the SAME id
-  // ("individual_site") but a DIFFERENT site-specific geometry URL, and the pinia
-  // store survives Turbo Drive navigation. addOverlay is idempotent by id, so
-  // without clearing first the second site kept the FIRST site's polygon --
-  // rendered off-screen, which looked like "the highlight disappeared".
-  it('clears overlays left over from a previously visited map page', async () => {
-    const { useMapStore } = await import('@/stores/useMapStore')
-    const store = useMapStore()
-    store.addOverlay({
-      id: 'individual_site',
-      layers: [{ id: 'individual_site_0', type: 'raster_data', url: 'https://old/site_id=1' }]
+  // Every protected-area page ships an overlay with the SAME id ("individual_site")
+  // but a DIFFERENT site-specific geometry URL, and addOverlay is idempotent by id.
+  // Back when this state was an app-wide pinia store -- which survives Turbo Drive
+  // navigation while this island is rebuilt -- the second site kept the FIRST site's
+  // polygon, rendered off-screen, which looked like "the highlight disappeared".
+  // Scoping it to the tree means a new mount cannot see the previous one's overlays.
+  it('gives each mount its own overlay state, isolated from a previously visited map page', () => {
+    // Stands in for MapBase so it can read what Index provides to its children.
+    const captured: MapOverlaysContext[] = []
+    const Probe = defineComponent({
+      setup() {
+        captured.push(useMapOverlays())
+        return () => h('div')
+      }
     })
-    expect(store.visibleLayers).toHaveLength(1)
+    const stubs = { MapBase: Probe }
 
-    mount(Map, { props: { title: 'Protected Area', overlays } })
+    const first = mount(Map, { props: { title: 'Protected Area', overlays }, global: { stubs } })
+    expect(captured[0].visibleLayers.value).toEqual(overlays[0].layers)
+    first.unmount()
 
-    // onBeforeMount runs before any child registers this page's own overlay.
-    expect(store.visibleLayers.some(l => l.url === 'https://old/site_id=1')).toBe(false)
+    mount(Map, { props: { title: 'Protected Area', overlays }, global: { stubs } })
+
+    expect(captured).toHaveLength(2)
+    expect(captured[1]).not.toBe(captured[0])
+    expect(captured[1].visibleLayers.value).toEqual(overlays[0].layers)
   })
 })

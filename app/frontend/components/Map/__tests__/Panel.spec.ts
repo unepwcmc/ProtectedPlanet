@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import Panel from '@/components/Map/Panel.vue'
+import { createMapOverlays, MAP_OVERLAYS_KEY } from '@/composables/useMapOverlays'
+import type { MapPanelProps } from '@/types/backend'
 
 const overlays = [
   {
@@ -12,13 +13,14 @@ const overlays = [
   }
 ]
 
-beforeEach(() => {
-  setActivePinia(createPinia())
-})
+// Panel's MapOverlay children read the state Map/Index.vue provides; standalone they
+// throw on purpose (see useMapOverlays.ts).
+const mountPanel = (props: MapPanelProps) =>
+  mount(Panel, { props, global: { provide: { [MAP_OVERLAYS_KEY as symbol]: createMapOverlays() } } })
 
 describe('Map Panel', () => {
   it('renders the title and one MapFilter per overlay, body shown by default', () => {
-    const wrapper = mount(Panel, { props: { overlays, title: 'Filters' } })
+    const wrapper = mountPanel({ overlays, title: 'Filters' })
 
     expect(wrapper.find('.ct-map-header__title').text()).toBe('Filters')
     expect(wrapper.findAll('.ct-map-overlay')).toHaveLength(1)
@@ -26,7 +28,7 @@ describe('Map Panel', () => {
   })
 
   it('toggles the body visibility when the header close control is clicked', async () => {
-    const wrapper = mount(Panel, { props: { overlays, title: 'Filters' } })
+    const wrapper = mountPanel({ overlays, title: 'Filters' })
 
     await wrapper.find('.ct-map-header__close').trigger('click')
 
@@ -34,22 +36,24 @@ describe('Map Panel', () => {
   })
 
   it('pulls focusable descendants out of tab order when isHidden is true', () => {
-    const wrapper = mount(Panel, { props: { overlays, title: 'Filters', isHidden: true } })
+    const wrapper = mountPanel({ overlays, title: 'Filters', isHidden: true })
 
     const toggler = wrapper.find('.ct-map-toggler')
     expect(toggler.attributes('tabindex')).toBe('-5')
   })
 
   it('renders the disclaimer inside the panel when provided', () => {
-    const wrapper = mount(Panel, {
-      props: { overlays, title: 'Filters', disclaimer: { heading: 'Map Disclaimer', body: 'Some legal text' } }
+    const wrapper = mountPanel({
+      overlays,
+      title: 'Filters',
+      disclaimer: { heading: 'Map Disclaimer', body: 'Some legal text' }
     })
 
     expect(wrapper.find('.ct-map-panel .ct-map-disclaimer__heading').text()).toBe('Map Disclaimer')
   })
 
   it('does not render a disclaimer when none is provided', () => {
-    const wrapper = mount(Panel, { props: { overlays, title: 'Filters' } })
+    const wrapper = mountPanel({ overlays, title: 'Filters' })
 
     expect(wrapper.find('.ct-map-disclaimer').exists()).toBe(false)
   })

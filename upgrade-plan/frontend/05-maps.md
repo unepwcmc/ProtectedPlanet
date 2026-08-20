@@ -58,12 +58,34 @@ Recorded in [14](./14-architecture-and-design.md#maps-decision-framework-for-pp)
 
 - [x] `Map/Index.vue` (not `MapPage.vue`) composes `MapHeader`, `MapBase`, `MapPanel` (which renders `MapFilter`×N + `MapDisclaimer` internally) + `MapPaSearch` (in the panel's top slot, gated on `type`/autocomplete props being provided and `!isHidden`) — the Vue3 equivalents of `VMapHeader`/`VMap`/`VMapFilters`/`VMapPASearch`/`VMapDisclaimer`.
 - [x] Single `frontend_mount "Map"` call replaces both `_main.html.erb` (home, wdpca tab 1, marine, Green List tab — all now on Vue3) and `_header.html.erb` (PA show/country/region, via `showHeader: false`) — no separate `map.ts` entrypoint; `Map` is registered as an island in `layout.ts` like everything else.
-- [x] Mixins → composables: `useMapInstance`, `useMapLayers`, `useMapBoundingBox`, `useMapPopups`, `useMapStore` (Pinia, replaces the Vuex `map` module).
+- [x] Mixins → composables: `useMapInstance`, `useMapLayers`, `useMapBoundingBox`, `useMapPopups`, `useMapOverlays` (replaces the Vuex `map` module). Shipped first as a Pinia store (`useMapStore`); **retired 2026-08-20** in favour of provide/inject scoped to the `Map/Index.vue` tree — see "Overlay state is tree-scoped, not app-scoped" below.
+
+#### Overlay state is tree-scoped, not app-scoped
+
+`visibleOverlays`/`visibleLayers` are shared between `MapBase` (draws the layers) and
+`MapPanel > MapOverlay` (toggles them) — two sibling subtrees of the same
+`Map/Index.vue`, and nothing outside it. As a Pinia store that state was an app-wide
+singleton surviving Turbo Drive navigation while the island itself was rebuilt per
+page, which produced two separate "the highlighted area disappeared" bugs (see
+`upgrade-plan/backend/CARRYOVER.md` §8y and its follow-up) — each patched with a
+manual `reset()` plus a resync-on-init.
+
+`composables/useMapOverlays.ts` replaces it: `Map/Index.vue` calls
+`provideMapOverlays()`, `MapBase`/`MapOverlay` call `useMapOverlays()`. Every mount
+gets its own state, so there is nothing stale to reset, and two maps on one page no
+longer share one global. `useMapOverlays()` **throws** outside a `Map/Index.vue` tree
+rather than falling back to a private instance — the silent-fallback version of that
+mistake is what made the original bugs hard to find. Tests mounting `MapBase`,
+`MapPanel` or `MapOverlay` standalone pass a context via `global.provide`.
+
+Baselayer selection did not need shared state at all: `MapBase` owns the ref (it is
+what swaps the MapLibre style) and `MapBaselayerControls` is a `v-model` picker for it.
+
 
 ### Vue 3 / Map API
 
 - [x] Popup HTML generation ported to `useMapPopups.ts` (click-to-query) — plain template strings, same escaping behaviour as the legacy mixin (attribute values are trusted backend data, not user input).
-- [x] Layer visibility toggling retested — `useMapLayers` + `useMapStore.visibleLayers` watcher in `Base.vue`, covered by Vitest.
+- [x] Layer visibility toggling retested — `useMapLayers` + `useMapOverlays().visibleLayers` watcher in `Base.vue`, covered by Vitest.
 - [x] `MapPaSearch.vue` (not `VMapPASearch`) — autocomplete error messages/placeholder threaded through `MapProps`/`map_yml` from Rails, same as the legacy component.
 - [x] A map mounted inside a CSS-hidden inactive tab (`.tab__target { display: none }` — wdpca/Green List tab extras still render via the **legacy Vue2** `<tabs>`/`<tab-target>` slot-scope pattern, since they have `tab_extras`; see `_tabs.html.erb`) now resizes itself via an `IntersectionObserver` in `Map/Base.vue` once its container gets a real layout box — replaces the legacy `TabTarget.vue`'s `$eventHub.emit('map:resize')`, decoupled from that specific Vue2 component.
 

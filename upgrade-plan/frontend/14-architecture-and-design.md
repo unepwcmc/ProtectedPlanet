@@ -153,11 +153,18 @@ Refs: `turbo-mount.gemspec` (`required_ruby_version >= 3.0.0`, `railties >= 6.0.
 | Store | Replaces Vuex | Loaded by |
 |-------|---------------|-----------|
 | `useDownloadStore` | `download` | `layout.ts` |
-| `useMapStore` | `map` | `map.ts` (or layout if needed globally) |
 | `usePameStore` | `pame` | `pame.ts` entrypoint |
 | `useTableStore` | `table` | pages with `VTable` |
 
 Use **setup stores** + composables for map layer logic (replaces mixins).
+
+Pinia is for state that genuinely outlives a single component tree (downloads span
+pages). The `map` module was ported to a store and then moved back out (2026-08-20):
+every reader and writer lived inside the one `Map/Index.vue` tree, and the store's
+app-wide, Turbo-Drive-surviving lifetime caused two "the highlighted area
+disappeared" bugs. It is now `composables/useMapOverlays.ts` — provide/inject scoped
+to that tree. Default to tree-scoped provide/inject; reach for a store only when two
+independently-mounted islands must share state.
 
 ---
 

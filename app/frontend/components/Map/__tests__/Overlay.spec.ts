@@ -1,53 +1,56 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import Overlay from '@/components/Map/Overlay.vue'
-import { useMapStore } from '@/stores/useMapStore'
+import { createMapOverlays, MAP_OVERLAYS_KEY, type MapOverlaysContext } from '@/composables/useMapOverlays'
+import type { MapFilterProps } from '@/types/backend'
 
 const layers = [{ id: 'layer-1', type: 'raster_tile' as const, url: 'https://tiles.example/{z}/{x}/{y}.png' }]
 
+// Overlay.vue is only ever rendered inside a Map/Index.vue tree, which provides this;
+// standalone it throws on purpose (see useMapOverlays.ts).
+let context: MapOverlaysContext
+
 beforeEach(() => {
-  setActivePinia(createPinia())
+  context = createMapOverlays()
 })
 
+const mountOverlay = (props: Partial<MapFilterProps> = {}) =>
+  mount(Overlay, {
+    props: { title: 'Terrestrial', layers, id: 'terrestrial', type: 'raster_tile', ...props },
+    global: { provide: { [MAP_OVERLAYS_KEY as symbol]: context } }
+  })
+
 describe('Map Overlay', () => {
-  it('adds its overlay to the store on mount when shown by default', () => {
-    mount(Overlay, { props: { title: 'Terrestrial', layers, id: 'terrestrial', type: 'raster_tile' } })
-    const store = useMapStore()
+  it('registers its overlay on mount when shown by default', () => {
+    mountOverlay()
 
-    expect(store.visibleOverlays).toEqual([{ id: 'terrestrial', layers }])
-    expect(store.visibleLayers).toEqual(layers)
+    expect(context.visibleOverlays.value).toEqual([{ id: 'terrestrial', layers }])
+    expect(context.visibleLayers.value).toEqual(layers)
   })
 
-  it('does not add its overlay when isShownByDefault is false', () => {
-    mount(Overlay, {
-      props: { title: 'Terrestrial', layers, id: 'terrestrial', type: 'raster_tile', isShownByDefault: false }
-    })
-    const store = useMapStore()
+  it('does not register its overlay when isShownByDefault is false', () => {
+    mountOverlay({ isShownByDefault: false })
 
-    expect(store.visibleOverlays).toEqual([])
+    expect(context.visibleOverlays.value).toEqual([])
   })
 
-  it('toggles the overlay off the store when the toggler is switched off', async () => {
-    const wrapper = mount(Overlay, { props: { title: 'Terrestrial', layers, id: 'terrestrial', type: 'raster_tile' } })
-    const store = useMapStore()
+  it('deregisters the overlay when the toggler is switched off', async () => {
+    const wrapper = mountOverlay()
     await flushPromises()
 
     await wrapper.find('.ct-map-toggler').trigger('click')
 
-    expect(store.visibleOverlays.some(o => o.id === 'terrestrial')).toBe(false)
+    expect(context.visibleOverlays.value.some(o => o.id === 'terrestrial')).toBe(false)
+    expect(context.visibleLayers.value).toEqual([])
   })
 
   it('does not render a toggler when isToggleable is false, and clicking has no effect', async () => {
-    const wrapper = mount(Overlay, {
-      props: { title: 'Terrestrial', layers, id: 'terrestrial', type: 'raster_tile', isToggleable: false }
-    })
-    const store = useMapStore()
+    const wrapper = mountOverlay({ isToggleable: false })
 
     expect(wrapper.find('.ct-map-toggler').exists()).toBe(false)
 
     await wrapper.trigger('click')
 
-    expect(store.visibleOverlays).toEqual([{ id: 'terrestrial', layers }])
+    expect(context.visibleOverlays.value).toEqual([{ id: 'terrestrial', layers }])
   })
 })

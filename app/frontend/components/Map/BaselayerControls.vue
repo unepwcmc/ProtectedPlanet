@@ -4,7 +4,7 @@
       v-for="layer in baselayers"
       :key="`baselayer-toggle-${layer.id}`"
       class="ct-map-baselayer-controls__control"
-      :class="{ 'ct-map-baselayer-controls__control--selected': layer.id === mapStore.selectedBaselayer.id }"
+      :class="{ 'ct-map-baselayer-controls__control--selected': layer.id === selected.id }"
       @click="selectBaselayer(layer)"
     >
       <span v-text="layer.name" />
@@ -13,21 +13,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useMapStore } from '@/stores/useMapStore'
 import type { MapBaselayer } from '@/types/map'
 
-const props = defineProps<{
+defineProps<{
   baselayers: MapBaselayer[]
 }>()
 
-const mapStore = useMapStore()
+// MapBase owns the selection (it's what swaps the MapLibre style); this component is
+// only the picker for it, so a v-model is the whole contract between them.
+const selected = defineModel<MapBaselayer>({ required: true })
 
-onMounted(() => {
-  mapStore.updateSelectedBaselayer(props.baselayers[0])
-})
-
-const selectBaselayer = (layer: MapBaselayer) => mapStore.updateSelectedBaselayer(layer)
+const selectBaselayer = (layer: MapBaselayer) => (selected.value = layer)
 </script>
 
 <style scoped lang="css">

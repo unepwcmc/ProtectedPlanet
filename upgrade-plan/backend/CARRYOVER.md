@@ -1295,6 +1295,11 @@ children just registered.
 
 Verified in both directions: the test fails with the reset commented out.
 
+**Follow-up (2026-08-20):** the reset is gone, and so is the store. This state was
+never app-wide — every reader/writer is inside the `Map/Index.vue` tree — so it moved
+to `composables/useMapOverlays.ts` (provide/inject). A fresh mount now starts empty by
+construction, which removes the root cause of both this bug and the §8y one above.
+
 **Two verification failures of mine on this one, worth recording:**
 
 1. The headless check in §8y reported `overlayRequests: 1` and I read it as

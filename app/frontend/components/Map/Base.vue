@@ -7,15 +7,21 @@
     />
     <MapBaselayerControls
       v-if="controlsOptions.showBaselayerControls"
+      v-model="selectedBaselayer"
       :baselayers
     />
   </div>
 </template>
 
+<script lang="ts">
+// Module scope: shared by every instance of this component (see containerId below).
+let mapInstanceCount = 0
+</script>
+
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import MapBaselayerControls from '@/components/Map/BaselayerControls.vue'
-import { useMapStore } from '@/stores/useMapStore'
+import { useMapOverlays } from '@/composables/useMapOverlays'
 import useMapInstance from '@/composables/useMapInstance'
 import useMapLayers from '@/composables/useMapLayers'
 import useMapBoundingBox from '@/composables/useMapBoundingBox'
@@ -25,6 +31,7 @@ import { BASELAYERS_DEFAULT, CONTROLS_OPTIONS_DEFAULT, MAP_OPTIONS_DEFAULT } fro
 import { transformMapboxStyle } from 'maplibregl-mapbox-request-transformer'
 import type { MapOptions, StyleSpecification } from 'maplibre-gl'
 import type { MapBaseProps } from '@/types/backend'
+import type { MapBaselayer } from '@/types/map'
 
 type MapBase = MapBaseProps
 const props = withDefaults(defineProps<MapBase>(), {
@@ -33,12 +40,13 @@ const props = withDefaults(defineProps<MapBase>(), {
   popupAttributes: undefined
 })
 
-// A hardcoded id would collide if more than one Map instance (or the still-live
-// legacy `v-map`) is on the same page — getElementById returns the first match,
-// silently mounting this instance's canvas into someone else's container.
-let mapInstanceCount = 0
+// A hardcoded id would collide if more than one Map instance is on the same page —
+// getElementById returns the first match, silently mounting this instance's canvas
+// into someone else's container. The counter lives at MODULE scope on purpose:
+// everything inside `<script setup>` is compiled into `setup()` and so re-runs per
+// instance, which would reset it to 0 and hand every map the same id.
 const containerId = `${MAP_OPTIONS_DEFAULT.container}-${mapInstanceCount++}`
-const mapStore = useMapStore()
+const { visibleLayers } = useMapOverlays()
 
 // Holds the PDF rasterizer's readiness flag open until the map has actually
 // finished loading tiles (MapLibre's 'idle' event, below) - registered here
@@ -47,6 +55,9 @@ const mapStore = useMapStore()
 const markMapRenderDone = registerPendingRender()
 
 const baselayers = computed(() => props.options.baselayers ?? BASELAYERS_DEFAULT)
+// The map is built with the first baselayer's style (see mapOptions), so the selection
+// starts there too — the watcher below only has work to do once the user picks another.
+const selectedBaselayer = ref<MapBaselayer>(baselayers.value[0])
 const controlsOptions = computed(() => ({ ...CONTROLS_OPTIONS_DEFAULT, ...props.options.controls }))
 
 const { map, initMap } = useMapInstance()
@@ -86,7 +97,7 @@ const mapOptions = computed<MapOptions>(() => {
 })
 
 watch(
-  () => mapStore.visibleLayers,
+  visibleLayers,
   (newLayers, oldLayers) => {
     const layersToHide = oldLayers.filter(oL => !newLayers.some(nL => nL.id === oL.id))
     hideLayers(layersToHide)
@@ -95,7 +106,7 @@ watch(
 )
 
 watch(
-  () => mapStore.selectedBaselayer,
+  selectedBaselayer,
   (layer) => {
     if (!layer?.style || !map.value) return
 
@@ -110,7 +121,7 @@ watch(
           next: StyleSpecification) =>
           transformMapboxStyle(previous ?? next, next)
       })
-      showLayers(mapStore.visibleLayers)
+      showLayers(visibleLayers.value)
     })
   }
 )
@@ -129,17 +140,14 @@ const mapContainer = useTemplateRef('mapContainer')
 onMounted(() => {
   initBoundingBoxAndMap(props.options.map?.boundsUrl, () => {
     try {
-      // The pinia store is an app-wide singleton and SURVIVES Turbo Drive navigation
-    // (only the body is swapped, the JS context persists), while this map island is
-    // torn down and rebuilt. addOverlay is idempotent, so on a second visit to a map
-    // page the overlay is already in the store, visibleLayers never changes, the
-    // watcher above never fires, and this brand new map never gets its layers --
-    // which is why the highlighted area vanished from every map after the first.
-    // Sync the new instance to whatever the store already holds, once the style is
-    // ready to accept layers.
+      // Sync the new instance to whatever is already registered, once the style is
+      // ready to accept layers. The watcher above only fires on CHANGES, and map
+      // creation is async (it waits on initBoundingBoxAndMap's bounds fetch), so the
+      // MapOverlay children usually finish registering this page's overlays well
+      // before there is a map to draw them on — nothing would ever add them.
       initMap(mapOptions.value, controlsOptions.value, onPopupClick, () => {
         setFirstForegroundLayerId()
-        showLayers(mapStore.visibleLayers)
+        showLayers(visibleLayers.value)
       })
     }
     catch (error) {
@@ -162,14 +170,14 @@ onMounted(() => {
     }
     // 'idle' fires once the map has settled all tile requests for the current
     // view, but the FIRST idle only covers the base style - overlays from
-    // mapStore.visibleLayers are added asynchronously (useMapLayers polls for
+    // visibleLayers are added asynchronously (useMapLayers polls for
     // style-load/foreground-layer readiness before calling addLayer), so they
     // can still be mid-flight at that point. Keep listening across idle
     // cycles until every currently-expected layer has actually been added to
     // the style; idle firing at that point guarantees its tiles are loaded
     // too, since idle means zero outstanding requests map-wide.
     const onIdle = () => {
-      const allLayersReady = mapStore.visibleLayers.every(layer => map.value?.getLayer(layer.id))
+      const allLayersReady = visibleLayers.value.every(layer => map.value?.getLayer(layer.id))
       if (!allLayersReady) return
 
       map.value?.off('idle', onIdle)
