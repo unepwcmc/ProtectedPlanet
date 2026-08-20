@@ -21,6 +21,13 @@ set -e
 # 9222 together, and must be set for both if it is set at all.
 PORT="${PDF_BROWSER_PORT:-9222}"
 
+# Resolved from this script's own location rather than hardcoded, because the app
+# lives at /ProtectedPlanet in the dev image and /app in the deploy one
+# (Dockerfile.deploy). `cd` there as well: the `node -e` calls below resolve
+# `puppeteer` from the cwd, so they only find it from the app root.
+APP_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$APP_ROOT"
+
 # puppeteer.executablePath() returns a promise in Puppeteer 25; Promise.resolve
 # handles both that and the older synchronous form.
 CHROME=$(node -e "Promise.resolve(require('puppeteer').executablePath()).then(p => console.log(p))")
@@ -32,7 +39,7 @@ fi
 
 # Flags come from the same module rasterize.js uses, so the shared browser and a
 # fallback private one are always configured identically.
-mapfile -t CHROME_ARGS < <(node -e "require('/ProtectedPlanet/app/frontend/backend-scripts/chrome-args').forEach(a => console.log(a))")
+mapfile -t CHROME_ARGS < <(node -e "require('$APP_ROOT/app/frontend/backend-scripts/chrome-args').forEach(a => console.log(a))")
 
 echo "pdf-chrome: starting $CHROME on port $PORT"
 

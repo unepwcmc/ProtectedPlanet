@@ -37,7 +37,12 @@ servers:
       health-retries: 3
       health-start-period: 10s
       health-timeout: 3s
-    cmd: bundle exec sidekiq -C config/sidekiq.yml
+    # Not bare sidekiq: this role runs the `pdf` capsule, and the wrapper starts
+    # the shared headless Chrome those jobs render in (see
+    # bin/docker-sidekiq-with-pdf-chrome) before handing the process over to
+    # Sidekiq. Without it every PDF job launches a browser of its own - ~440MB
+    # each, against ~90MB for a page in the shared one.
+    cmd: bin/docker-sidekiq-with-pdf-chrome bundle exec sidekiq -C config/sidekiq.yml
 
   job_import:
     hosts:

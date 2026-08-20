@@ -19,7 +19,7 @@ async function acquireBrowser () {
   } catch (err) {
     console.error(`No shared browser at ${BROWSER_URL} (${err.message}); launching a private one.`);
   }
-
+  console.warn("Couldn't use the shared Chrome launching its own Chrome now.")
   return { browser: await puppeteer.launch({ args: CHROME_ARGS, ...options }), shared: false };
 }
 function freezeMapCanvases (page) {

@@ -255,7 +255,7 @@ RUN groupadd -g 1000 -r app 2>/dev/null || true \
  && mkdir -p tmp/pids log storage \
  # entrypoint.sh is mode 644 in git (the compose setup invoked it as
  # `bash entrypoint.sh`), so set the bit here rather than relying on the repo.
- && chmod +x entrypoint.sh bin/docker-sidekiq-healthcheck \
+ && chmod +x entrypoint.sh bin/docker-sidekiq-healthcheck bin/docker-sidekiq-with-pdf-chrome docker/scripts/pdf-chrome \
  && chown -R 1000:1000 /app
 USER 1000:1000
 

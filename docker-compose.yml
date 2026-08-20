@@ -7,7 +7,7 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-install
     image: protectedplanet-app
-    command: /bin/bash -l -c "bundle install && yarn install --frozen-lockfile && bundle exec rails comfy:compile_assets"
+    command: /bin/bash -l -c "bundle install && yarn install && bundle exec rails comfy:compile_assets"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
@@ -119,6 +119,9 @@ services:
       - PDF_NAVIGATION_TIMEOUT_MS=120000
       - PDF_READY_TIMEOUT_MS=240000
       - PDF_RASTERIZE_TIMEOUT_SECONDS=660
+      # Dev-only: keep Chrome's output out of the sidekiq log. Unset in
+      # deployment, where it goes to stdout so `kamal app logs` picks it up.
+      - PDF_CHROME_LOG=/tmp/pdf-chrome.log
     depends_on:
       install:
         condition: service_completed_successfully
@@ -126,10 +129,11 @@ services:
         condition: service_started
       redis:
         condition: service_started
-    # Chrome is backgrounded (its own log, so it doesn't interleave with
-    # sidekiq's) and sidekiq stays the foreground process that defines the
-    # container's lifetime.
-    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/pdf-chrome >> /tmp/pdf-chrome.log 2>&1 & bundle exec sidekiq"
+    # Same wrapper the Kamal job_default role uses (config/deploy.staging.yml):
+    # it backgrounds Chrome and leaves sidekiq as the foreground process that
+    # defines the container's lifetime. PDF_CHROME_LOG (set above) keeps Chrome's
+    # output in its own file here so it doesn't interleave with sidekiq's.
+    command: /bin/bash -l -c "/ProtectedPlanet/bin/docker-sidekiq-with-pdf-chrome"
     stdin_open: true
     tty: true
     extra_hosts:
