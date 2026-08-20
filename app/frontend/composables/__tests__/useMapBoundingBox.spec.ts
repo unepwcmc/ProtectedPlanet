@@ -65,6 +65,63 @@ describe('useMapBoundingBox', () => {
     expect(fetch).not.toHaveBeenCalled()
   })
 
+  // ArcGIS answers an extent query for a site_id it does not hold with corners
+  // that are the strings "NaN". Left unchecked these reached MapLibre's
+  // constructor and killed the map, which in turn hung the PDF rasterizer
+  // waiting on a readiness signal the dead map could never send.
+  it('ignores an extent whose corners are not finite numbers and still builds the map', async () => {
+    vi.mocked(fetch).mockResolvedValue(jsonResponse({
+      extent: { xmin: 'NaN', xmax: 'NaN', ymin: 'NaN', ymax: 'NaN' }
+    }))
+    const map = ref(null)
+    const { initBoundingBoxAndMap, initBounds } = useMapBoundingBox(map as never)
+    const initMap = vi.fn()
+
+    await initBoundingBoxAndMap({ url: '/extent' }, initMap)
+
+    expect(initBounds.value).toBeNull()
+    expect(initMap).toHaveBeenCalledOnce()
+  })
+
+  it('accepts an extent whose corners arrive as numeric strings', async () => {
+    vi.mocked(fetch).mockResolvedValue(jsonResponse({
+      extent: { xmin: '-10', xmax: '10', ymin: '-5', ymax: '5' }
+    }))
+    const map = ref(null)
+    const { initBoundingBoxAndMap, initBounds } = useMapBoundingBox(map as never)
+
+    await initBoundingBoxAndMap({ url: '/extent' }, vi.fn())
+
+    expect(initBounds.value).toEqual([[-15, -10], [15, 10]])
+  })
+
+  it('still builds the map when the bounds lookup fails outright', async () => {
+    vi.mocked(fetch).mockRejectedValue(new Error('ArcGIS unreachable'))
+    const map = ref(null)
+    const { initBoundingBoxAndMap, initBounds } = useMapBoundingBox(map as never)
+    const initMap = vi.fn()
+
+    await initBoundingBoxAndMap({ url: '/extent' }, initMap)
+
+    expect(initBounds.value).toBeNull()
+    expect(initMap).toHaveBeenCalledOnce()
+  })
+
+  it('does not move the map when zoomTo gets a non-finite extent', async () => {
+    vi.mocked(fetch).mockResolvedValue(jsonResponse({
+      extent: { xmin: 'NaN', xmax: 'NaN', ymin: 'NaN', ymax: 'NaN' }
+    }))
+    const fitBounds = vi.fn()
+    const map = ref({ fitBounds })
+    const onPopupFromExtent = vi.fn()
+    const { zoomTo } = useMapBoundingBox(map as never, onPopupFromExtent)
+
+    await zoomTo({ extent_url: { url: '/extent' }, name: 'My PA', addPopup: true })
+
+    expect(fitBounds).not.toHaveBeenCalled()
+    expect(onPopupFromExtent).not.toHaveBeenCalled()
+  })
+
   it('fits the map to bounds and invokes the popup callback when zoomTo resolves with addPopup', async () => {
     vi.mocked(fetch).mockResolvedValue(jsonResponse({ extent: { xmin: -10, xmax: 10, ymin: -5, ymax: 5 } }))
     const fitBounds = vi.fn()

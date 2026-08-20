@@ -128,7 +128,27 @@ const mapContainer = useTemplateRef('mapContainer')
 
 onMounted(() => {
   initBoundingBoxAndMap(props.options.map?.boundsUrl, () => {
-    initMap(mapOptions.value, controlsOptions.value, onPopupClick, setFirstForegroundLayerId)
+    try {
+      initMap(mapOptions.value, controlsOptions.value, onPopupClick, setFirstForegroundLayerId)
+    }
+    catch (error) {
+      // A map that fails to build must not hold the PDF readiness flag open: the
+      // rasterizer would wait out its whole budget for an 'idle' event that can
+      // never fire, fail by timeout with no hint of the cause, and do it again on
+      // every retry - so that page's PDF could never be generated at all. Release
+      // the flag and let the rest of the page be printed without a map.
+      console.error('Map failed to initialise; continuing without it', error)
+      markMapRenderDone()
+      return
+    }
+
+    // Same reasoning: every listener below is optional-chained off map.value, so
+    // without this a null map would silently register nothing and hang the wait.
+    if (!map.value) {
+      console.error('Map initialised without an instance; continuing without it')
+      markMapRenderDone()
+      return
+    }
     // 'idle' fires once the map has settled all tile requests for the current
     // view, but the FIRST idle only covers the base style - overlays from
     // mapStore.visibleLayers are added asynchronously (useMapLayers polls for
