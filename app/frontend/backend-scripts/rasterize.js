@@ -108,6 +108,16 @@ function freezeMapCanvases (page) {
     context = shared ? await browser.createBrowserContext() : browser.defaultBrowserContext();
     page = await context.newPage();
 
+    // Kept so a readiness timeout can report what actually broke. Without this
+    // the failure is just "waited N ms", when the page itself said exactly what
+    // went wrong (an uncaught error in a component, a script that 404'd) and
+    // nobody was listening.
+    const pageErrors = [];
+    page.on('pageerror', (err) => pageErrors.push(err.message));
+    page.on('requestfailed', (request) => {
+      pageErrors.push(`failed to load ${request.url()} (${(request.failure() || {}).errorText})`);
+    });
+
     page.setDefaultNavigationTimeout(NAVIGATION_TIMEOUT);
     // A separate budget from the navigation one, defaulting to 30s. page.pdf()
     // takes its timeout from here - and spends part of it on its own internal
@@ -150,7 +160,14 @@ function freezeMapCanvases (page) {
     // never resolves (bundle failed to load, a component never signals done),
     // throwing here surfaces a failed PDF rather than silently shipping a broken
     // one.
-    await page.waitForFunction(() => window.__PDF_READY__ === true, { timeout: PDF_READY_TIMEOUT });
+    try {
+      await page.waitForFunction(() => window.__PDF_READY__ === true, { timeout: PDF_READY_TIMEOUT });
+    } catch (err) {
+      if (pageErrors.length) {
+        throw new Error(`${err.message}. The page reported: ${pageErrors.join(' | ')}`);
+      }
+      throw err;
+    }
 
     // After __PDF_READY__, not before: we now navigate on 'domcontentloaded', so
     // ahead of this point the stylesheets carrying the @font-face rules may not
