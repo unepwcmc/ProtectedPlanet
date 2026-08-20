@@ -32,9 +32,21 @@ export const useMapStore = defineStore('map', () => {
     })
   }
 
+  // The store is an app-wide singleton and survives Turbo Drive navigation, but its
+  // contents are per-page: every protected-area page ships an overlay with the SAME
+  // id ("individual_site" / "individual_site_0") and a DIFFERENT, site-specific
+  // geometry URL. addOverlay is idempotent by id, so without clearing first the
+  // second site kept the FIRST site's geometry -- the map showed the right place
+  // with the previous site's polygon sitting off-screen, which read as "the
+  // highlight disappeared". Map/Index.vue clears this before its children mount.
+  function reset() {
+    visibleOverlays.value = []
+    visibleLayers.value = []
+  }
+
   function updateSelectedBaselayer(layer: MapBaselayer) {
     selectedBaselayer.value = layer
   }
 
-  return { visibleOverlays, visibleLayers, selectedBaselayer, addOverlay, removeOverlay, updateSelectedBaselayer }
+  return { visibleOverlays, visibleLayers, selectedBaselayer, addOverlay, removeOverlay, updateSelectedBaselayer, reset }
 })

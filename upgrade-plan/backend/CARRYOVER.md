@@ -1270,3 +1270,43 @@ calls `showLayers`, so the assertion was satisfied by an unrelated path. Disabli
 those controls in the test isolates the init path. Verified in both directions —
 passes with the fix, fails without it. A guard that has not been seen to fail is
 not a guard.
+
+### 8z. The polygon really was the overlay id — my §8y fix targeted the wrong thing
+
+§8y assumed the second visit failed because the store was never re-applied to the
+new map. Wrong. The actual data:
+
+```json
+"id": "individual_site",
+"layers": [{ "id": "individual_site_0",
+             "url": ".../query?where=site_id+%3D+14426...&f=geojson" }]
+```
+
+**Every protected-area page ships the same overlay id with a different,
+site-specific geometry URL.** `addOverlay` is idempotent by id and the store
+survives Turbo Drive navigation, so on the second site it kept the FIRST site's
+geometry. The polygon was not missing — the map was showing site B with site A's
+shape rendered off-screen.
+
+Fix: `useMapStore.reset()`, called from `Map/Index.vue` in **onBeforeMount** — a
+parent's beforeMount runs before any child mounts, whereas its mounted runs after,
+so clearing in onMounted would wipe the overlays this page's own Overlay.vue
+children just registered.
+
+Verified in both directions: the test fails with the reset commented out.
+
+**Two verification failures of mine on this one, worth recording:**
+
+1. The headless check in §8y reported `overlayRequests: 1` and I read it as
+   success. That single request was the BOUNDS query; an added overlay layer would
+   have produced many raster requests. The probe reproduced the bug and I scored it
+   green, because I measured canvas presence and basemap tiles — neither of which
+   involves the overlay.
+2. `shallowRef` (§8y) fixed a real Vue/MapLibre proxy problem but was NOT the cause
+   of this. My headless run showed 0 `rgb` errors while the user's browser still
+   showed them, which should have told me the probe was not exercising the layer-add
+   path at all.
+
+Same pattern as the 204 that scored "ok", the 11.4 MB PDF that proved nothing, and
+the browser directory that existed without an executable: measuring something
+adjacent to the thing.
