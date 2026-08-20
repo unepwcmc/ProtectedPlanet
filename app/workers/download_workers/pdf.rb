@@ -1,4 +1,6 @@
 class DownloadWorkers::Pdf < DownloadWorkers::Base
+  sidekiq_options queue: 'pdf'
+
   def perform identifier
     while_generating(key(identifier, format)) do
       success = Download.generate format, filename(identifier, format), {identifier: identifier}

@@ -1,5 +1,8 @@
 <template>
-  <div class="ct-stats-sites">
+  <div
+    class="ct-stats-sites
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <div class="ct-stats-sites__header">
       <h2
         class="ct-stats-sites__title"

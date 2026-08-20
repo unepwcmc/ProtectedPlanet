@@ -1,12 +1,14 @@
 <template>
   <div
-    class="ct-attributes-pame-list"
+    class="ct-attributes-pame-list
+    tw-global-pdf-export__break-inside-avoid"
     :class="{
       'ct-attributes-pame-list--pdf': forPdf
     }"
   >
     <h2
-      class="ct-attributes-pame-list__title"
+      class="ct-attributes-pame-list__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <template v-if="forPdf">

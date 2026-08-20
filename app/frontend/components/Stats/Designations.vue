@@ -1,5 +1,8 @@
 <template>
-  <div class="ct-stats-designations">
+  <div
+    class="ct-stats-designations
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <h2
       class="ct-stats-designations__title
       tw-global-pdf-export__break-after-avoid"
@@ -37,7 +40,8 @@
           <li
             v-for="(jurisdiction, j) in designation.jurisdictions"
             :key="j"
-            class="ct-stats-designations__jurisdiction"
+            class="ct-stats-designations__jurisdiction
+            tw-global-pdf-export__break-inside-avoid"
           >
             <span
               class="ct-stats-designations__jurisdiction-name"

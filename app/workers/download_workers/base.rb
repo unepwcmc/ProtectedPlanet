@@ -32,7 +32,7 @@ class DownloadWorkers::Base
               args.pop unless keep_last_arg args
               'import'
             else
-              'default'
+              get_sidekiq_options['queue'] || 'default'
             end
 
     jid = Sidekiq::Client.push('class' => self, 'queue' => queue, 'args' => args)

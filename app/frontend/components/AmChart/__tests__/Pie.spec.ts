@@ -13,7 +13,8 @@ function createSeriesMock() {
     },
     labels: { template: { set: vi.fn() } },
     ticks: { template: { set: vi.fn() } },
-    set: vi.fn()
+    set: vi.fn(),
+    events: { once: vi.fn() }
   }
 }
 
@@ -76,6 +77,11 @@ vi.mock('@amcharts/amcharts5/percent', () => ({
   PieSeries: { new: vi.fn(() => createSeriesMock()) }
 }))
 
+const markRenderDone = vi.fn()
+vi.mock('@/lib/pdfReady', () => ({
+  registerPendingRender: vi.fn(() => markRenderDone)
+}))
+
 const { default: AmChartPie } = await import('@/components/AmChart/Pie.vue')
 
 describe('AmChartPie', () => {
@@ -127,5 +133,18 @@ describe('AmChartPie', () => {
     wrapper.unmount()
 
     expect(root.dispose).toHaveBeenCalled()
+  })
+
+  it('holds the PDF-ready flag open until amCharts reports the series drawn', () => {
+    mount(AmChartPie, { props: { dataset: [{ id: 1, title: 'A', value: 5 }] } })
+    const pieSeries = lastPieSeries()
+
+    expect(markRenderDone).not.toHaveBeenCalled()
+
+    const [event, callback] = pieSeries.events.once.mock.calls[0]
+    expect(event).toBe('datavalidated')
+    callback()
+
+    expect(markRenderDone).toHaveBeenCalled()
   })
 })

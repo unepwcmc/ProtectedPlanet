@@ -25,19 +25,17 @@ export default defineConfig({
     vue(),
   ],
   optimizeDeps: {
-    // maplibre-gl ships its own worker as a separate chunk (maplibre-gl-worker.mjs)
-    // that the dev-server optimizer doesn't handle correctly — pre-bundling it
-    // produces a reference to a deps-cache file that never actually gets written,
-    // 404ing every request until excluded.
-    //
-    // pinia's dev-server pre-bundle statically resolves its devtools-api import
-    // even though pinia only actually calls it behind a dev-only guard — the
-    // rolldown-vite optimizer fails to resolve that import from within its own
-    // .vite/deps cache dir, 500ing every page load. Confirmed this persists even
-    // after the Vue 2/3 coexistence alias hack was fully removed (2026-07-31
-    // Webpacker teardown), so it isn't the alias-resolution bug documented for
-    // the other excludes here — it's pinia's own optimizer interaction.
-    exclude: ['maplibre-gl', 'pinia'],
+    // maplibre-gl ships its own worker as a separate chunk that the optimizer
+    // doesn't handle correctly — pre-bundling 404s every request until excluded.
+    exclude: ['maplibre-gl'],
+    // pinia's own dist file statically imports devtools-api, which lazily
+    // imports devtools-kit at runtime (on first app mount) — invisible to the
+    // optimizer's static crawl, so it got discovered mid-request and stalled
+    // every in-flight request ~20-25s while esbuild re-bundled. Including it
+    // upfront pre-bundles it on cold start instead. (pinia itself used to be
+    // excluded for a related resolve failure; removed 2026-08-19 after
+    // confirming clean across a cold restart + cache clear.)
+    include: ['@vue/devtools-kit'],
   },
   resolve: {
     alias: [

@@ -92,6 +92,11 @@ Rails.application.configure do
   config.active_storage.service = :local
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Host Authorization's built-in allowance only covers loopback/private IPs, not DNS
+  # names - so the PDF generator's requests (running in the sidekiq container, addressed
+  # by Docker service name) get 403'd without this explicit allowance.
+  config.hosts << "protectedplanet-web"
+
   config.log_formatter  = ::Logger::Formatter.new
   logger                = ActiveSupport::Logger.new(STDOUT)
   logger.formatter      = config.log_formatter

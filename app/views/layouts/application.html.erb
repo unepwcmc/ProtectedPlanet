@@ -2,7 +2,7 @@
 <html>
   <%= render "layouts/partials/head" %>
   <body class="<%= 'tw-global-pdf-export' if @for_pdf %>">
-    <% unless @cms_page&.slug == PageSlugs::LEGAL %>
+    <% unless @for_pdf || @cms_page&.slug == PageSlugs::LEGAL %>
       <%= render "layouts/partials/cookie_consent" %>
     <% end %>
     <% unless @for_pdf %>
@@ -19,6 +19,6 @@
       gaId: 'Download modal',
       textDownload: download_text[:download],
       textStatus: download_text[:status]
-    } %>
+    } unless @for_pdf %>
   </body>
 </html>

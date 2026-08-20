@@ -20,6 +20,7 @@ import useMapInstance from '@/composables/useMapInstance'
 import useMapLayers from '@/composables/useMapLayers'
 import useMapBoundingBox from '@/composables/useMapBoundingBox'
 import useMapPopups from '@/composables/useMapPopups'
+import { registerPendingRender } from '@/lib/pdfReady'
 import { BASELAYERS_DEFAULT, CONTROLS_OPTIONS_DEFAULT, MAP_OPTIONS_DEFAULT } from '@/constants/map'
 import { transformMapboxStyle } from 'maplibregl-mapbox-request-transformer'
 import type { MapOptions, StyleSpecification } from 'maplibre-gl'
@@ -38,6 +39,12 @@ const props = withDefaults(defineProps<MapBase>(), {
 let mapInstanceCount = 0
 const containerId = `${MAP_OPTIONS_DEFAULT.container}-${mapInstanceCount++}`
 const mapStore = useMapStore()
+
+// Holds the PDF rasterizer's readiness flag open until the map has actually
+// finished loading tiles (MapLibre's 'idle' event, below) - registered here
+// rather than inside onMounted so there's no gap between mount and this
+// component reporting itself busy. See pdfReady.ts.
+const markMapRenderDone = registerPendingRender()
 
 const baselayers = computed(() => props.options.baselayers ?? BASELAYERS_DEFAULT)
 const controlsOptions = computed(() => ({ ...CONTROLS_OPTIONS_DEFAULT, ...props.options.controls }))
@@ -68,7 +75,9 @@ const mapOptions = computed<MapOptions>(() => {
     ...MAP_OPTIONS_DEFAULT,
     ...props.options.map,
     container: containerId,
-    style: baselayers.value[0].style
+    style: baselayers.value[0].style,
+    attributionControl: false,
+    maplibreLogo: false
   }
 
   if (initBounds.value) opts.bounds = initBounds.value
@@ -120,6 +129,22 @@ const mapContainer = useTemplateRef('mapContainer')
 onMounted(() => {
   initBoundingBoxAndMap(props.options.map?.boundsUrl, () => {
     initMap(mapOptions.value, controlsOptions.value, onPopupClick, setFirstForegroundLayerId)
+    // 'idle' fires once the map has settled all tile requests for the current
+    // view, but the FIRST idle only covers the base style - overlays from
+    // mapStore.visibleLayers are added asynchronously (useMapLayers polls for
+    // style-load/foreground-layer readiness before calling addLayer), so they
+    // can still be mid-flight at that point. Keep listening across idle
+    // cycles until every currently-expected layer has actually been added to
+    // the style; idle firing at that point guarantees its tiles are loaded
+    // too, since idle means zero outstanding requests map-wide.
+    const onIdle = () => {
+      const allLayersReady = mapStore.visibleLayers.every(layer => map.value?.getLayer(layer.id))
+      if (!allLayersReady) return
+
+      map.value?.off('idle', onIdle)
+      markMapRenderDone()
+    }
+    map.value?.on('idle', onIdle)
 
     if (!mapContainer.value || typeof IntersectionObserver === 'undefined') return
 

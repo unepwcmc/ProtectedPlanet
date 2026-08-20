@@ -6,6 +6,7 @@
 import { TurboMount, buildRegisterFunction, type Plugin } from 'turbo-mount'
 import { createApp, type Component } from 'vue'
 import { pinia } from '@/stores/pinia'
+import { markIslandScanComplete } from '@/lib/pdfReady'
 
 export type TurboMountLoader = () => Promise<{ default: Component }>
 
@@ -59,6 +60,13 @@ const TURBO_MOUNT_SELECTOR = '[data-controller^="turbo-mount-"]'
 export function registerTurboMountComponents(map: Record<string, TurboMountLoader>): void {
   const turboMount = new TurboMount()
   const registered = new Set<string>()
+  // Collects only the mount promises triggered by the initial synchronous
+  // scan below - see pdfReady.ts. Once those all settle we know every island
+  // that was actually present at load has at least had its createApp().mount()
+  // call run (Stimulus connects controllers synchronously on registration for
+  // already-present elements), which is what markIslandScanComplete signals.
+  const initialScanPromises: Promise<void>[] = []
+  let trackingInitialScan = true
 
   function ensureRegistered(name: string): void {
     const loader = map[name]
@@ -68,9 +76,11 @@ export function registerTurboMountComponents(map: Record<string, TurboMountLoade
     // (e.g. a bad import path) fails silently: its data-controller stays
     // registered as "seen" but never actually connects, so the mount point
     // just sits empty forever with nothing in the console to explain why.
-    loader()
+    const promise = loader()
       .then(mod => registerComponent(turboMount, name, mod.default))
       .catch(e => console.error(`[turboMount] failed to load component "${name}"`, e))
+
+    if (trackingInitialScan) initialScanPromises.push(promise)
   }
 
   function componentNamesOn(el: HTMLElement): string[] {
@@ -88,6 +98,9 @@ export function registerTurboMountComponents(map: Record<string, TurboMountLoade
   }
 
   scan(document)
+  trackingInitialScan = false
+  Promise.all(initialScanPromises).then(markIslandScanComplete)
+
   if (typeof MutationObserver === 'undefined' || !document.documentElement) return
   // Observe <html>, not <body>: Turbo Drive replaces the whole <body> element
   // on navigation (it doesn't just mutate its children), so an observer bound

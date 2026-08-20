@@ -10,7 +10,7 @@
 <%= render partial: "partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 <div class="vw-protected-areas">
   <div class="vw-protected-areas__container">
-    <section class="vw-protected-areas__overview">
+    <section class="vw-protected-areas__overview tw-global-pdf-export__break-inside-avoid">
       <%= render partial: "partials/stats/stats-overview", locals: {
         area: reported_area,
         location: @locations.html_safe,
@@ -38,13 +38,13 @@
         } %>
     </section>
     <div class="vw-protected-areas__col-wrapper">
-      <div class="vw-protected-areas__col-1">
+      <div class="vw-protected-areas__col-left">
         <%= render partial: "partials/attributes/attributes-protected-area", locals: {
           current_pa_and_parcels_attributes: @presenter.current_pa_and_parcels_attributes,
           for_pdf: @for_pdf
        } %>
       </div>
-      <div class="vw-protected-areas__col-2">
+      <div class="vw-protected-areas__col-right">
         <%= render partial: "partials/attributes/attributes-pame-list" , locals: {
           for_pdf: @for_pdf
           } %>
@@ -64,7 +64,7 @@
           title: t('thematic_area.wdpa.other_protected_areas'),
           viewAll: @otherWdpasViewAllUrl
         } %>
-    <section class="vw-protected-areas__citation">
+    <section class="vw-protected-areas__citation tw-global-pdf-export__break-inside-avoid">
       <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
     </section>
   </div>

@@ -19,7 +19,7 @@
     "maplibre-gl": "^6.1.0",
     "maplibregl-mapbox-request-transformer": "^0.0.3",
     "pinia": "^4.0.2",
-    "puppeteer": "^5.5.0",
+    "puppeteer": "25.7.0",
     "swiper": "^14.0.7",
     "turbo-mount": "^0.4.4",
     "vue": "^3.5.41"

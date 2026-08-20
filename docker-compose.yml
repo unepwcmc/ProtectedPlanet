@@ -51,11 +51,6 @@ services:
       - SSH_AUTH_SOCK=/ssh-agent
       # https://vite-ruby.netlify.app/guide/troubleshooting.html#making-hmr-work-in-docker-compose
       - VITE_RUBY_HOST=vite
-      # Constrain vite_ruby's on-demand autoBuild (esbuild + Tailwind oxide) so it
-      # doesn't OOM-kill this container under x86 emulation. Mirrors the vite service:
-      # GOMAXPROCS caps the Go native threads; max-old-space-size caps the Node heap.
-      - GOMAXPROCS=1
-      - NODE_OPTIONS=--max-old-space-size=2560
     depends_on:
       install:
         condition: service_completed_successfully
@@ -106,12 +101,24 @@ services:
       - .:/ProtectedPlanet
       - ./node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
-      # See ## Step 5: Set up Chromium Binary for more info
-      - ./chrome:/ProtectedPlanet/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux
     networks:
       - protectedplanet
     env_file:
       - '.env'
+    environment:
+      # Dev-only, much larger render budget than the production default. Here the
+      # page's whole module graph is compiled on demand by the Vite dev server and
+      # served through the same 5-thread Puma the renders come from, so two
+      # concurrent PDFs take minutes where production - serving precompiled
+      # assets - takes seconds. With the production default (90s) most of a
+      # concurrent burst failed on pages that render perfectly one at a time.
+      # The three waits are sequential (fetch the HTML, render it, print it) and
+      # PDF_RASTERIZE_TIMEOUT_SECONDS has to sit above their sum plus zip time, or
+      # it kills renders that were still working. A render that is going to succeed
+      # here takes 100-250s, so the ceiling only ever fires on a genuine wedge.
+      - PDF_NAVIGATION_TIMEOUT_MS=120000
+      - PDF_READY_TIMEOUT_MS=240000
+      - PDF_RASTERIZE_TIMEOUT_SECONDS=660
     depends_on:
       install:
         condition: service_completed_successfully
@@ -119,7 +126,10 @@ services:
         condition: service_started
       redis:
         condition: service_started
-    command: /bin/bash -l -c "bundle exec sidekiq"
+    # Chrome is backgrounded (its own log, so it doesn't interleave with
+    # sidekiq's) and sidekiq stays the foreground process that defines the
+    # container's lifetime.
+    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/pdf-chrome >> /tmp/pdf-chrome.log 2>&1 & bundle exec sidekiq"
     stdin_open: true
     tty: true
     extra_hosts:
@@ -167,11 +177,6 @@ services:
     env_file:
       - '.env'
     environment:
-      # esbuild (Go binary) crashes under heavy parallel load when the x86 image
-      # runs under Apple-Silicon emulation. Single-threading it keeps `vite build`
-      # stable. Harmless on native amd64 (dev builds are tiny). A faster alternative
-      # is enabling Rosetta in Docker Desktop.
-      - GOMAXPROCS=1
       - VITE_RUBY_HOST=0.0.0.0
     networks:
       - protectedplanet

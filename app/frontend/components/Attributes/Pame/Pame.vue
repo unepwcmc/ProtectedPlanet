@@ -1,5 +1,8 @@
 <template>
-  <div class="ct-attributes-pame">
+  <div
+    class="ct-attributes-pame
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <h3
       v-if="title"
       class="ct-attributes-pame__title

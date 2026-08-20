@@ -1,6 +1,7 @@
 <template>
   <a
-    class="ct-card-item"
+    class="ct-card-item
+    tw-global-pdf-export__break-inside-avoid"
     :class="[
       hasSecondaryLine && 'ct-card-item--has-secondary-line',
       modifier && `ct-card-item--${modifier}`,

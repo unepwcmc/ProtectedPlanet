@@ -1,6 +1,9 @@
 <template>
   <div
-    class="ct-attributes-protected-area-source"
+    class="
+    ct-attributes-protected-area-source
+    tw-global-pdf-export__break-after-avoid
+    tw-global-pdf-export__break-inside-avoid"
     :class="
       { 'ct-attributes-protected-area-source--for-pdf': forPdf }"
   >

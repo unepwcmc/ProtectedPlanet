@@ -1,6 +1,4 @@
-// Vue3/MapLibre port of app/javascript/components/map/mixins/mixin-controls.js
-// and the mapboxgl.Map setup previously inlined in VMap.vue.
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 import {
   Map as MapLibreMap,
   AttributionControl,
@@ -12,10 +10,6 @@ import {
 import { isMapboxURL, transformMapboxUrl } from 'maplibregl-mapbox-request-transformer'
 import { RTL_TEXT_PLUGIN_URL } from '@/constants/map'
 import useEnvs from '@/composables/useEnvs'
-// Base positioning CSS for controls/popups/markers (.maplibregl-ctrl, .maplibregl-popup,
-// ...). The legacy Vue2 map gets the mapbox-gl equivalent from a CDN <link> in
-// _head.html.erb; this island needs its own since it's a different library/prefix
-// (.maplibregl-* not .mapboxgl-*) never pulled in via npm before.
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 export interface MapControlsOptions {
@@ -29,7 +23,7 @@ let rtlPluginRegistered = false
 
 export default function () {
   const { VITE_MAPBOX_TOKEN: accessToken } = useEnvs()
-  const map = ref<MapLibreMap | null>(null) as Ref<MapLibreMap | null>
+  const map = ref<MapLibreMap | null>(null)
 
   function addControls(controlsOptions: MapControlsOptions) {
     if (!map.value) return
@@ -38,7 +32,7 @@ export default function () {
       map.value.addControl(new NavigationControl({ showCompass: controlsOptions.showCompass }))
     }
 
-    map.value.addControl(new AttributionControl(), controlsOptions.attributionLocation)
+    map.value.addControl(new AttributionControl({ compact: true }), controlsOptions.attributionLocation)
   }
 
   function initMap(
@@ -54,6 +48,15 @@ export default function () {
 
     map.value = new MapLibreMap({
       ...mapOptions,
+      // Without this, WebGL discards its drawing buffer after each frame -
+      // fine for normal interactive use, but the PDF export (rasterize.js)
+      // captures the page well after the map's last render call (once
+      // 'idle' fires), by which point the buffer would otherwise already be
+      // cleared, producing a blank map in the exported PDF. Must be nested
+      // under canvasContextAttributes, not a top-level MapOptions key - this
+      // library moved WebGL context attributes here and silently ignores a
+      // top-level preserveDrawingBuffer.
+      canvasContextAttributes: { preserveDrawingBuffer: true },
       transformRequest: (url, resourceType) =>
         isMapboxURL(url) ? transformMapboxUrl(url, resourceType, accessToken) : undefined
     })

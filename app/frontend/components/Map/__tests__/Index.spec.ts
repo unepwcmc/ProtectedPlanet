@@ -5,6 +5,8 @@ import { createPinia, setActivePinia } from 'pinia'
 const fakeMapInstance = {
   addControl: vi.fn(),
   on: vi.fn(),
+  off: vi.fn(),
+  once: vi.fn(),
   setStyle: vi.fn(),
   fitBounds: vi.fn(),
   resize: vi.fn(),

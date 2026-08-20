@@ -51,5 +51,5 @@
 }
 
 @utility tw-shared-card-stats-for-pdf {
-  @apply tw-shared-base-flex-col-gap-12;
+  @apply tw-shared-base-flex-col-gap-9;
 }

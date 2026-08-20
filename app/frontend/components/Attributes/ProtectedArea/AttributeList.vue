@@ -1,7 +1,8 @@
 <template>
   <ul
     v-if="attributes.length > 0"
-    class="ct-attributes-protected-area-list"
+    class="ct-attributes-protected-area-list
+    tw-global-pdf-export__break-inside-avoid"
   >
     <template
       v-for="(attribute, index) in attributes"

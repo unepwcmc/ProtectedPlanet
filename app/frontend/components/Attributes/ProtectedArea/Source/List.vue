@@ -1,7 +1,12 @@
 <template>
-  <div class="ct-attributes-protected-area-sources">
+  <div
+    class="ct-attributes-protected-area-sources
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <h2
-      class="ct-attributes-protected-area-sources__title"
+      class="
+      ct-attributes-protected-area-sources__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="`${translations.title} (${forPdf ? totalCount : currentSources.length})`"
     />
     <div

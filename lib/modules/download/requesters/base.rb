@@ -1,4 +1,5 @@
 require 'time'
+require 'sidekiq/api'
 
 class Download::Requesters::Base
   ENQUEUE_LOCK_TTL_SECONDS = 30 * 60 # prevent enqueue stampedes under concurrent requests
@@ -30,8 +31,10 @@ class Download::Requesters::Base
   #   enqueue_generation_once { DownloadWorkers::X.perform_async(...) }
   #
   def enqueue_generation_once
-    status = generation_info['status']
-    return false if %w[ready generating].include?(status)
+    info = generation_info
+    status = info['status']
+    return false if status == 'ready'
+    return false if status == 'generating' && generation_in_flight?(info)
 
     lock_key = Download::Utils.enqueue_lock_key(generation_key)
     acquired = $redis.set(lock_key, Time.now.to_i, nx: true, ex: ENQUEUE_LOCK_TTL_SECONDS)
@@ -53,6 +56,33 @@ class Download::Requesters::Base
   rescue StandardError => e
     Rails.logger.error("Download enqueue lock failed for #{generation_key}: #{e.message}")
     false
+  end
+
+  # A 'generating' status is only worth trusting while the job behind it still
+  # exists. These workers run with retry: false, so a worker killed mid-render
+  # (container restart, OOM) leaves the status at 'generating' with nobody left to
+  # move it on - and since we refuse to enqueue while it says 'generating', that
+  # download could never be requested again without someone deleting the Redis key
+  # by hand.
+  #
+  # Two things keep a live job from being duplicated: the enqueue lock, which
+  # exists from the moment we push until the worker's ensure block clears it (so it
+  # covers the queued-but-not-started window a hard-killed worker leaves behind
+  # too), and the Sidekiq work set, which lists jobs actually running right now and
+  # is backed by a process heartbeat - so a job that outlives the lock's TTL still
+  # reads as in-flight, while one whose process died drops out of it.
+  def generation_in_flight?(info)
+    return true if $redis.exists?(Download::Utils.enqueue_lock_key(generation_key))
+
+    jid = info['jid']
+    # Records written before jids were tracked tell us nothing; keep the old,
+    # conservative behaviour rather than risk enqueueing a duplicate.
+    return true if jid.blank?
+
+    Sidekiq::Workers.new.any? { |_process, _thread, work| work.job.jid == jid }
+  rescue StandardError => e
+    Rails.logger.warn("Could not verify in-flight download #{generation_key}: #{e.message}")
+    true
   end
 
   def json_response

@@ -12,6 +12,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import * as am5 from '@amcharts/amcharts5'
 import * as am5percent from '@amcharts/amcharts5/percent'
 import { PIE_COLOURS } from '@/constants/charts'
+import { registerPendingRender } from '@/lib/pdfReady'
 import type { AmChartPieProps } from '@/types/backend'
 
 type AmChartPie = AmChartPieProps
@@ -24,6 +25,11 @@ const chartEl = ref<HTMLElement | null>(null)
 let root: am5.Root | null = null
 let pieSeries: am5percent.PieSeries | null = null
 
+// amCharts draws the actual slices asynchronously (its own render tick, not
+// synchronously inside createChart()) - hold the PDF rasterizer's readiness
+// flag open until that first draw genuinely lands. See pdfReady.ts.
+const markChartRenderDone = registerPendingRender()
+
 onMounted(createChart)
 onUnmounted(() => root?.dispose())
 
@@ -32,7 +38,10 @@ watch(() => props.dataset, (dataset) => {
 })
 
 function createChart() {
-  if (!chartEl.value) return
+  if (!chartEl.value) {
+    markChartRenderDone()
+    return
+  }
 
   root = am5.Root.new(chartEl.value)
   root.setThemes([])
@@ -46,6 +55,9 @@ function createChart() {
     categoryField: 'title',
     valueField: 'value'
   }))
+  // Fires once amCharts has processed `dataset` into actual slices - the real
+  // "chart is visually drawn" signal, as opposed to this function returning.
+  pieSeries.events.once('datavalidated', markChartRenderDone)
   pieSeries.data.setAll(props.dataset)
 
   removeActiveState()

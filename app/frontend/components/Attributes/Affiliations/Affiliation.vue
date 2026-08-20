@@ -1,5 +1,8 @@
 <template>
-  <li class="ct-attributes-affiliations-affiliation">
+  <li
+    class="ct-attributes-affiliations-affiliation
+  tw-global-pdf-export__break-inside-avoid"
+  >
     <img
       class="ct-attributes-affiliations-affiliation__image"
       :src="link.image_url"

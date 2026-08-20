@@ -2,7 +2,8 @@
   <div class="ct-region-country-pages">
     <div
       v-if="tabs.length > 1"
-      class="ct-region-country-pages__toggle"
+      class="ct-region-country-pages__toggle
+      tw-global-pdf-export__break-inside-avoid"
     >
       <TabStrip
         :children="tabs"
@@ -12,7 +13,8 @@
     </div>
     <div
       v-if="hasCoverageStats"
-      class="ct-region-country-pages__coverage"
+      class="ct-region-country-pages__coverage
+      tw-global-pdf-export__break-inside-avoid"
     >
       <StatsCoverage
         v-for="(stat, i) in coverageProps"
@@ -21,7 +23,10 @@
       />
     </div>
     <StatsMessage v-bind="activeDatabase.message" />
-    <div class="ct-region-country-pages__stats">
+    <div
+      class="ct-region-country-pages__stats
+      tw-global-pdf-export__break-inside-avoid"
+    >
       <StatsIucnCategories
         v-if="activeDatabase.iucn"
         v-bind="iucnProps"
@@ -41,6 +46,8 @@
     />
     <div
       v-if="relatedCountriesHtml"
+      class="ct-region-country-pages__related_countries
+      tw-global-pdf-export__break-inside-avoid"
       v-html="relatedCountriesHtml"
     />
     <StatsSites

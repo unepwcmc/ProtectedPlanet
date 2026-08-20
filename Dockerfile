@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Debian buster base. We compile Ruby 3.3 further down via ruby-build rather than
 # using a ruby:3.3-* image, because those are bookworm-based and would break the
 # GDAL 2.2.3 + ESRI FileGDB source build below (RHEL7 SDK needs old glibc). Keeping
@@ -96,7 +97,7 @@ RUN cd ./gdal-2.2.3 && ./configure \
 --without-xml2 \ 
 && make && make install && ldconfig
 
-# This is required for Chromium to work (puppeter triggers Chromium then Chromium needs the following)
+# This is required for Chromium to work (puppeteer triggers Chromium then Chromium needs the following).
 RUN apt-get update && \
     apt-get install -y \
         ca-certificates \
@@ -152,6 +153,16 @@ ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
 ADD package.json /ProtectedPlanet/package.json
 ADD yarn.lock /ProtectedPlanet/yarn.lock
+# .yarnrc.yml sets nodeLinker: node-modules; it must be present before `yarn
+# install` runs below, or Yarn Berry silently defaults to PnP (.pnp.cjs, no
+# node_modules/.bin) instead. That broke `npx puppeteer` resolution entirely --
+# with no local puppeteer bin to find, it fell back to fetching an arbitrary,
+# unpinned puppeteer version from the npm registry at build time instead of
+# using the one locked in yarn.lock. .puppeteerrc.cjs is added here too so its
+# pinned Chrome version is honored by the same `yarn install`-installed
+# puppeteer, not copied in only after the fact.
+ADD .yarnrc.yml /ProtectedPlanet/.yarnrc.yml
+ADD .puppeteerrc.cjs /ProtectedPlanet/.puppeteerrc.cjs
 ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 # We need the following to avoid bundler install error
@@ -171,8 +182,37 @@ RUN gem install bundler -v 2.4.22
 RUN bundle _2.4.22_ config build.nokogiri --use-system-libraries
 RUN bundle _2.4.22_ install
 
-# As it fails for not able to download r809590 during first time of yarn install so we need to skip it and install it manually later
+# Additional shared libs modern Chrome for Testing needs (puppeteer >=20) beyond the
+# pre-existing pre-Chrome-113-era list above. Kept as its own late layer rather than
+# folded into that block, so bumping Puppeteer doesn't invalidate the Ruby/GDAL build
+# cache above it.
+RUN apt-get update && \
+    apt-get install -y \
+        libatk-bridge2.0-0 \
+        libpango-1.0-0 \
+        libcairo2 \
+        libxshmfence1 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Chrome for Testing (puppeteer's modern download path, replacing the old
+# unreliable-mirror workaround) is cached inside node_modules so it lands in the
+# host-bind-mounted volume and survives container restarts like the rest of node_modules.
+ENV PUPPETEER_CACHE_DIR=/ProtectedPlanet/node_modules/.puppeteer-cache
+# Skip puppeteer's own postinstall download here -- it has no retry and isn't
+# routed through the build cache mount below. Chrome is installed explicitly,
+# right after, in a controlled step instead.
 RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install
+
+RUN --mount=type=cache,target=/puppeteer-dl-cache \
+    n=0; \
+    until PUPPETEER_CACHE_DIR=/puppeteer-dl-cache npx puppeteer browsers install chrome; do \
+        n=$((n+1)); \
+        if [ "$n" -ge 3 ]; then echo "Chrome download failed after 3 attempts" >&2; exit 1; fi; \
+        echo "Chrome download attempt $n failed, retrying in 5s..."; \
+        sleep 5; \
+    done \
+    && mkdir -p "$PUPPETEER_CACHE_DIR" \
+    && cp -a /puppeteer-dl-cache/. "$PUPPETEER_CACHE_DIR/"
 
 
 COPY . /ProtectedPlanet

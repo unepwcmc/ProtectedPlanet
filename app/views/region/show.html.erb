@@ -1,7 +1,7 @@
 <%= render partial: "partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 <div class="vw-region">
   <div class="vw-region__container">
-    <section class="vw-region__overview">
+    <section class="vw-region__overview tw-global-pdf-export__break-inside-avoid">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         chart_point_poly: @presenter.chart_point_poly,
         legend_map: map_legend,
@@ -23,7 +23,7 @@
           isHidden: true,
           showHeader: false,
           mapiIsForRegionCountryPA: true
-        } unless @for_pdf %>
+        } %>
     </section>
     <section>
       <%= turbo_mount "RegionCountryPages", props: {

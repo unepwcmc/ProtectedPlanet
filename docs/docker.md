@@ -82,17 +82,28 @@ SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run api
 For debugging with byebug, attach to the server console:
 `docker attach protectedplanet-web`
 
-## Step 5: Set up Chromium Binary (optional)
+## Step 5: PDF generator setup (optional)
 
-- If you need the pdf generator to generate PDFs then you need to do the following
-- In `.env`, set `MAILER_HOST=protectedplanet-web:3000` so the PDF generator uses `protectedplanet-web:3000/2222?for_pdf=true`. If it stays as `localhost:3000`, the container cannot reach it as it is triggered inside container.
-- The PDF generator needs a Chromium binary. Because this project is old, Puppeteer's download can fail so we set PUPPETEER_SKIP_DOWNLOAD=true when running yarn install in dockerfile.
-- To make it working, copy all files inside `/home/wcmc/ProtectedPlanet/current/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux` folder from the production server to `./chrome` folder in this project:
-  - In local machine terminal, `cd` to the project root.
-  - Run:
-    `scp -r username@server:/home/wcmc/ProtectedPlanet/current/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux ./chrome`
-  - This creates a local `./chrome` folder with the binary.
-- sidekiq setup in `docker-compose.yml` mounts `./chrome` into the container at the expected path.
+- If you need the pdf generator to generate PDFs then you need to do the following.
+- The Chromium binary Puppeteer needs is downloaded automatically at image build time
+  (`npx puppeteer browsers install chrome` in the `Dockerfile`, cached under
+  `node_modules/.puppeteer-cache` so it survives container restarts) — no manual setup required.
+  The download itself retries 3x and goes through a Docker build cache mount, so a rebuild
+  doesn't need Google's Chrome-for-Testing bucket to still have that exact build once it's been
+  fetched successfully once on a given host — see the comment above that `RUN` step in the
+  `Dockerfile` for why that matters on this project's Jenkins setup.
+- In `.env`, set `PDF_RASTERIZER_HOST=protectedplanet-web:3000` so the PDF generator (running inside
+  the `sidekiq` container) reaches the app directly over the internal Docker network instead of
+  round-tripping through the public site domain. This is deliberately separate from `MAILER_HOST`
+  (`config/app_secrets.yml`'s `mailer.host`, which is what `default_url_options` actually resolves
+  to for every other absolute URL the app generates, including real outgoing email links) — don't
+  repurpose `MAILER_HOST` for this, or you'll silently redirect those emails too. If
+  `PDF_RASTERIZER_HOST` is unset, the PDF generator falls back to `MAILER_HOST`.
+- Rails 8's Host Authorization middleware rejects any Host header not on its allowlist, and a Docker
+  service name like `protectedplanet-web` isn't covered by its built-in loopback/private-IP allowance
+  (that only covers literal IPs, not DNS names) — `config/environments/development.rb` explicitly
+  allows it for this reason. If you rename the `web` service or point `PDF_RASTERIZER_HOST` at
+  something else, add that hostname there too.
 
 # Deployment
 To deploy PP.net with docker:

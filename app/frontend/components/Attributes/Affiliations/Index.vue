@@ -6,7 +6,8 @@
     }"
   >
     <h2
-      class="ct-attributes-affiliations__title"
+      class="ct-attributes-affiliations__title
+      tw-global-pdf-export__break-after-avoid"
       v-text="title"
     />
     <template v-if="forPdf">

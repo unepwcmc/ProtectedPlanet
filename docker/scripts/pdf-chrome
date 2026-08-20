@@ -1,0 +1,44 @@
+#!/bin/bash
+set -e
+
+# Long-lived headless Chrome for the PDF workers to render in, started alongside
+# sidekiq (see the sidekiq service in docker-compose.yml). rasterize.js connects
+# to it on this port instead of launching its own.
+#
+# The point is memory, not startup time: a browser sitting on a blank page costs
+# ~440MB of anonymous memory here, while an actual page - map, charts and all -
+# adds only ~90MB on top. Three PDFs at once therefore need ~1.6GB of browsers if
+# every job launches one, which does not fit in a default Docker Desktop VM and
+# shows up as every job timing out at once. Sharing one browser makes the same
+# three cost ~550MB in total.
+#
+# If this process dies, rasterize.js just falls back to launching its own
+# browser per job - slower and heavier, but not broken.
+
+# Same default as rasterize.js, so running this script is the whole of the
+# configuration: start it and jobs share this browser, leave it unstarted and
+# they each launch their own. PDF_BROWSER_PORT exists only to move both ends off
+# 9222 together, and must be set for both if it is set at all.
+PORT="${PDF_BROWSER_PORT:-9222}"
+
+# puppeteer.executablePath() returns a promise in Puppeteer 25; Promise.resolve
+# handles both that and the older synchronous form.
+CHROME=$(node -e "Promise.resolve(require('puppeteer').executablePath()).then(p => console.log(p))")
+
+if [ ! -x "$CHROME" ]; then
+  echo "pdf-chrome: no Chrome at '$CHROME' - PDF jobs will launch their own browser" >&2
+  exit 1
+fi
+
+# Flags come from the same module rasterize.js uses, so the shared browser and a
+# fallback private one are always configured identically.
+mapfile -t CHROME_ARGS < <(node -e "require('/ProtectedPlanet/app/frontend/backend-scripts/chrome-args').forEach(a => console.log(a))")
+
+echo "pdf-chrome: starting $CHROME on port $PORT"
+
+exec "$CHROME" \
+  --headless=new \
+  --log-level=3 \
+  "${CHROME_ARGS[@]}" \
+  --user-data-dir=/tmp/pdf-chrome-profile \
+  --remote-debugging-port="$PORT"

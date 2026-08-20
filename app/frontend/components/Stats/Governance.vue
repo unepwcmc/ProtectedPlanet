@@ -1,5 +1,8 @@
 <template>
-  <div class="ct-stats-governance">
+  <div
+    class="ct-stats-governance
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <h2
       class="ct-stats-governance__title
       tw-global-pdf-export__break-after-avoid"

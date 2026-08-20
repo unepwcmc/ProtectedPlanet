@@ -4,7 +4,7 @@
   <% if country_children %>
     <ul class="vw-partials-stats-stats-related-countries__list">
       <% country_children.each do |child| %>
-        <li class="vw-partials-stats-stats-related-countries__item">
+        <li class="vw-partials-stats-stats-related-countries__item tw-global-pdf-export__break-inside-avoid">
           <span class="vw-partials-stats-stats-related-countries__item-title"><%= child['name'] %></span>
           <span class="vw-partials-stats-stats-related-countries__item-value"><%= child['iso_3'] %></span>
           <%= link_to 'View', country_path(child['iso_3']), title: '', class: 'vw-partials-stats-stats-related-countries__item-link' %>

@@ -1,14 +1,15 @@
 /* app/views/partials/stats/_stats-overview.html.erb */
 .vw-partials-stats-stats-overview {
   @apply
+  grow
   relative
   bg-theme-grey-black
-  w-full
   px-4.5
   py-4
   md:px-7.5
   md:py-7
-  lg:w-[33%]
+  md:max-w-[40%]
+  lg:max-w-[33%]
   md:shrink-0
   tw-shared-base-flex-col-gap-7;
 }

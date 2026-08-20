@@ -89,9 +89,27 @@ class Download::Generators::Base
   end
 
   def zip
-    system("zip -j #{zip_path} #{path}")
-    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-    system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+    run_zip("-j #{zip_path} #{path}") && add_sources && add_attachments
+  end
+
+  # `zip` exits 12 ("nothing to do") when every file named on the command line is
+  # already in the archive, byte-identical -- which is exactly what a leftover
+  # archive from an earlier attempt in tmp/ looks like. That is not a failure,
+  # but `system` reports it as one: the download was then marked failed *and* the
+  # stale archive was left in place, so every retry failed again for the same
+  # reason and that identifier could never be downloaded again. Treat 12 as
+  # success; let genuine zip errors through.
+  ZIP_NOTHING_TO_DO = 12
+
+  def run_zip(args, chdir: nil)
+    opts = chdir ? { chdir: chdir } : {}
+    system("zip #{args}", **opts)
+    status = $?
+
+    return true if status.success? || status.exitstatus == ZIP_NOTHING_TO_DO
+
+    Rails.logger.error("zip #{args} failed with status #{status.exitstatus}")
+    false
   end
 
   def query(conditions = [])
@@ -244,15 +262,15 @@ class Download::Generators::Base
   end
 
   def add_sources
-    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+    run_zip("-ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
   end
 
   def add_attachments
-    system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+    run_zip("-ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
   def add_shapefile_readme
-    system("zip -j #{zip_path} #{SHAPEFILE_README_PATH}")
+    run_zip("-j #{zip_path} #{SHAPEFILE_README_PATH}")
   end
 
   def path_without_extension

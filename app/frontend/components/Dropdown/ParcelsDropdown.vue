@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import DropdownBase from '@/components/Dropdown/Base.vue'
 import useParcelSelection from '@/composables/useParcelSelection'
 import type { AttributesParcelsDropdownProps } from '@/types/backend'
@@ -37,7 +37,7 @@ const { selectedParcelId, selectParcel } = useParcelSelection()
 const chosenParcelId = ref<string | undefined>(undefined)
 
 const moreThanOneParcels = props.sitePids.length > 1
-const showDropdown = moreThanOneParcels && !props.forPdf
+const showDropdown = computed(() => moreThanOneParcels && !props.forPdf)
 const showDescription = moreThanOneParcels && !!props.description
 
 watch(chosenParcelId, (newParcelId) => {

@@ -1,5 +1,8 @@
 <template>
-  <div class="ct-stats-message">
+  <div
+    class="ct-stats-message
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <p
       class="ct-stats-message__warning"
     >
@@ -19,7 +22,8 @@
       <li
         v-for="(document, i) in documents"
         :key="i"
-        class="ct-stats-message__item"
+        class="ct-stats-message__item
+        tw-global-pdf-export__break-inside-avoid"
       >
         <span
           class="ct-stats-message__file-name"

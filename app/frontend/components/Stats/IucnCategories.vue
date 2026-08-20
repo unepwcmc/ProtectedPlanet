@@ -1,5 +1,8 @@
 <template>
-  <div class="ct-stats-iucn-categories">
+  <div
+    class="ct-stats-iucn-categories
+    tw-global-pdf-export__break-inside-avoid"
+  >
     <h2
       class="ct-stats-iucn-categories__title
       tw-global-pdf-export__break-after-avoid"
