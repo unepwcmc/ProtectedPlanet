@@ -7,49 +7,11 @@ const puppeteer = require('puppeteer');
 const CHROME_ARGS = require('./chrome-args');
 const address = process.argv[2];
 const output = process.argv[3];
-
-// Only bounds fetching the HTML document itself (see the goto below), not the
-// assets or the render - so it can stay short even on a loaded machine.
 const NAVIGATION_TIMEOUT = Number(process.env.PDF_NAVIGATION_TIMEOUT_MS || 60000);
-// Generous enough to survive several renders running at once - a page that is
-// merely queued behind its siblings for CPU (software WebGL is expensive and
-// there are only a handful of cores) is not a broken page. Kept configurable so
-// a machine running a higher PDF_CONCURRENCY can raise it without a code change.
-// This is the *whole* budget for loading assets, mounting and rendering, so in
-// dev it also has to cover every module being compiled on demand by the Vite
-// dev server (docker-compose.yml raises it there for exactly that reason).
 const PDF_READY_TIMEOUT = Number(process.env.PDF_READY_TIMEOUT_MS || 90000);
-
-// A long-lived, shared Chrome to render in, when one is listening here
-// (docker/scripts/pdf-chrome, which defaults to the same port - starting that
-// script is the whole of the configuration). Only the port is worth an env var
-// because the browser always lives next to the worker that drives it - the same
-// container in dev, the same host in production - so the address is never
-// anything but loopback.
-//
-// Launching a browser per job is what actually costs memory: measured on the dev
-// stack, a fresh browser sitting on a blank page is ~440MB of anonymous memory
-// while the page's own content - map, charts, everything - adds only ~90MB on
-// top. Three concurrent jobs therefore need ~1.6GB if each launches its own
-// browser, but ~550MB total if they share one. Nothing listening (production,
-// which starts no shared Chrome) falls back to launching one per job.
 const BROWSER_PORT = process.env.PDF_BROWSER_PORT || 9222;
 const BROWSER_URL = `http://127.0.0.1:${BROWSER_PORT}`;
-
-// Returns the browser plus whether we are borrowing someone else's - a shared
-// browser must be *disconnected* from at the end, never closed, or the next job
-// finds a dead endpoint. Failing to connect is an expected state rather than a
-// misconfiguration: where no shared Chrome runs the connect is refused on
-// loopback in a few hundred ms - nothing against a render measured in tens of
-// seconds - and each job launches its own browser.
 async function acquireBrowser () {
-  // protocolTimeout bounds every individual CDP round-trip (each page.evaluate,
-  // each waitForFunction poll) and defaults to 180s, independently of any timeout
-  // passed to a specific call. On a machine loaded enough for one round-trip to
-  // take that long, jobs died with a bare "Waiting failed" whose real cause -
-  // "Runtime.callFunctionOn timed out" - was only visible in the error's `cause`.
-  // Tied to the render budget so one knob scales every wait a busy machine can
-  // stretch. It can only be set here, at launch/connect time.
   const options = { protocolTimeout: PDF_READY_TIMEOUT };
 
   try {
@@ -60,14 +22,6 @@ async function acquireBrowser () {
 
   return { browser: await puppeteer.launch({ args: CHROME_ARGS, ...options }), shared: false };
 }
-
-// Swaps every live MapLibre canvas for a static <img> of the same pixels, then
-// force-loses its WebGL context. The map is finished by this point (that is what
-// __PDF_READY__ means), so the context is pure overhead - and page.pdf() below
-// re-lays-out and rasterises the whole document, which is the worst moment to
-// still be holding a drawing buffer. Relies on the map being created with
-// preserveDrawingBuffer (see useMapInstance.ts), without which toDataURL would
-// return a blank image.
 function freezeMapCanvases (page) {
   return page.evaluate(async () => {
     const canvases = Array.from(document.querySelectorAll('canvas.maplibregl-canvas'));
@@ -101,7 +55,6 @@ function freezeMapCanvases (page) {
 
   try {
     ({ browser, shared } = await acquireBrowser());
-
     // A throwaway context per job when sharing, so concurrent renders can't see
     // each other's cookies/storage and everything the job allocated is released
     // by the single context.close() below.

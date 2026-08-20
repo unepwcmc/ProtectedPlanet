@@ -102,7 +102,8 @@ module CmsHelper
       if Rails.env.development?
         return rails_blob_path(fragment_link.attachments.first)
       else
-        return fragment_link.attachments.first.service_url&.split('?')&.first
+        # #service_url was removed in Rails 7.0; #url replaces it.
+        return fragment_link.attachments.first.url&.split('?')&.first
       end
     else
       fragment_link.content

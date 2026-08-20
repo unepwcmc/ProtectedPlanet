@@ -60,6 +60,40 @@ module Download
       "#{generation_key}:#{ENQUEUE_LOCK_SUFFIX}"
     end
 
+    # Redis on the shared host runs with `--maxmemory 2gb --maxmemory-policy
+    # noeviction`, so a key that never expires is not merely untidy: once the
+    # ceiling is reached Redis refuses writes for every app on the box. These
+    # keys were previously written with no TTL at all (`ttl=-1`), so the
+    # downloads keyspace only ever grew. Everything gets an expiry now.
+    READY_TTL      = 30.days
+    GENERATING_TTL = 24.hours
+    FAILED_TTL     = 1.hour
+
+    # A download that has claimed "generating" for longer than this, with no live
+    # Sidekiq worker holding its jid, is treated as dead and may be re-enqueued.
+    # Deliberately generous: a full-WDPA .gdb export legitimately runs a long
+    # time. Age alone never decides -- liveness does. See
+    # Download::Requesters::Base#stale_generation?
+    GENERATING_GRACE = 15.minutes
+
+    def self.ttl_for(status)
+      case status
+      when 'ready'      then READY_TTL
+      when 'generating' then GENERATING_TTL
+      else                   FAILED_TTL
+      end
+    end
+
+    # Single write path for download status keys, so no caller can reintroduce a
+    # TTL-less key. Accepts either a Hash or an already-encoded JSON String,
+    # because the workers hand back whatever the generator returned.
+    def self.write(key, payload)
+      hash = payload.is_a?(Hash) ? payload : (JSON.parse(payload.to_s) rescue nil)
+      body = payload.is_a?(Hash) ? payload.to_json : payload.to_s
+
+      $redis.set(key, body, ex: ttl_for(hash.is_a?(Hash) ? hash['status'] : nil).to_i)
+    end
+
     BASENAMES = {
       'wdpa' => 'WDPA',
       'oecm' => 'WDOECM',

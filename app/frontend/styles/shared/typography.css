@@ -117,12 +117,12 @@ text-theme-grey-black;
   text-theme-primary;
 }
 
-@utility tw-shared-font-hind-siliguri__leading-none-semibold-xl-md-3xl-lg-4xl-green {
+@utility tw-shared-font-hind-siliguri__leading-none-semibold-xl-md-3xl-lg-4xl-stat-number-green {
   @apply
   tw-shared-font-hind-siliguri__leading-none-semibold
   md:text-3xl
   lg:text-4xl
-  text-theme-chart-green;
+  text-theme-stat-number-green;
 }
 
 @utility tw-shared-font-hind-siliguri__leading-none-light {
@@ -342,13 +342,6 @@ text-theme-grey-black;
   text-white;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-md-lg-white {
-  @apply
-  tw-shared-font-hind-siliguri__normal-base
-  md:text-lg
-  text-white;
-}
-
 @utility tw-shared-font-hind-siliguri__normal-base-lg-lg-grey-black {
   @apply
   tw-shared-font-hind-siliguri__normal-base
@@ -426,13 +419,6 @@ text-white;
   @apply
   tw-shared-font-hind-siliguri__normal
   text-3xl;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-3xl-lg-4xl-green {
-  @apply
-  tw-shared-font-hind-siliguri__normal-3xl
-  lg:text-4xl
-  text-theme-chart-green;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-3xl-lg-6xl-green {

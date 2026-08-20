@@ -57,6 +57,15 @@ module ProtectedPlanet
     # secret_key_base used to come from config/secrets.yml via Rails' auto-load. That
     # is deprecated (7.1) / removed (7.2), and we renamed the file to app_secrets.yml,
     # so set it explicitly from the same YAML (ENV-driven for prod/staging).
-    config.secret_key_base = config_for(:app_secrets)[:secret_key_base]
+    #
+    # Only assign when we actually have one. `assets:precompile` in the deploy image
+    # runs with SECRET_KEY_BASE unset and SECRET_KEY_BASE_DUMMY=1 -- Rails' escape
+    # hatch for generating a throwaway key at build time. Assigning nil here bypasses
+    # that hatch: Rails 8's secret_key_base= raises on a blank value outside dev/test,
+    # which broke the image build. Leaving it unset lets Rails resolve it itself
+    # (SECRET_KEY_BASE_DUMMY at build, ENV["SECRET_KEY_BASE"] at runtime).
+    if (key = config_for(:app_secrets)[:secret_key_base]).present?
+      config.secret_key_base = key
+    end
   end
 end

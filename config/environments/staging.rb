@@ -35,7 +35,9 @@ Rails.application.configure do
   config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(:harmony => true)
+  # Terser rather than Uglifier: uglify-js is ES5-era and its Ruby wrapper is
+  # unmaintained, failing opaquely on Node 24. Terser handles ES6+ natively.
+  config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.

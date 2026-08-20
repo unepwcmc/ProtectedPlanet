@@ -195,9 +195,14 @@ This error should now be resolved.
 
 ### Configuration and Secrets
 
-Application config is stored in `config/secrets.yml`, along with certain
+Application config is stored in `config/app_secrets.yml`, along with certain
 required secrets (such as AWS keys). To make development easier, the
-secrets.yml file uses environment variables to set secret config keys.
+app_secrets.yml file uses environment variables to set secret config keys.
+
+Read it with `Rails.application.config_for(:app_secrets)`, or the `AppSecrets`
+constant (set up in `config/initializers/00_app_secrets.rb`) from app code.
+It was `config/secrets.yml` + `Rails.application.secrets` until Rails 7.2, which
+removed that API.
 
 In development, these can be easily setup using a
 [dotenv](https://github.com/bkeepers/dotenv) file in the project root.

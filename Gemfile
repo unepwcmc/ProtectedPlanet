@@ -2,6 +2,11 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 8.0.0'
 
+# App server. The legacy deploy ran under system-installed Passenger via nginx,
+# so no server gem was ever in the bundle — but config/puma.rb has been here all
+# along, waiting for one. Containerised deploys need the server in the image.
+gem 'puma', '~> 6.4'
+
 # Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
 # its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
 # appsignal 3 call plain YAML.load on their aliased configs at boot and break.
@@ -23,7 +28,19 @@ gem 'faraday', '~> 1.10'
 #
 gem 'sprockets-rails', '~> 3.2'
 
+# Uglifier 4.x wraps uglify-js via ExecJS and is unmaintained since 2019. Under
+# Node 24 its error handling breaks -- it reads result['error']['message'], which
+# is nil for the error shape modern Node returns, so any compression failure
+# surfaces as `undefined method 'start_with?' for nil` rather than the real
+# problem. Terser is the maintained ES6+ successor. Uglifier is kept in the
+# bundle only because config/environments/production.rb still references it;
+# that should move to terser too when production migrates.
 gem 'uglifier', '~> 4.1.17'
+# staging compresses with terser (see config/environments/staging.rb) -- uglify-js is
+# ES5-era and its wrapper fails on Node 24. production still uses Uglifier for now.
+gem 'terser', '~> 1.2'
+# coffee-rails dropped with the last .coffee sources (the Comfy admin ones) at the
+# Vite cutover -- nothing compiles CoffeeScript any more.
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
 gem "slack-notifier", "~> 1.5.1"
@@ -35,7 +52,10 @@ gem 'levenshtein', '~> 0.2.2'
 
 gem 'rails-controller-testing'
 
-gem 'gdal', '~> 2.0'
+# The `gdal` gem is removed: it is pinned to GDAL 2.x and calls C API functions
+# (OSRStripCTParms, OSRFixup, OPTGetParameterInfo, ...) deleted in GDAL 3, so it
+# cannot compile against the 3.8.4 the image now ships. Its only use was
+# Ogr::Info, which shells out to the ogrinfo CLI instead.
 gem 'net-sftp'
 gem 'net-scp'
 
@@ -110,6 +130,19 @@ gem 'sidekiq', '~> 7.0'
 # Sidekiq 7 dropped its redis-rb dependency (it uses redis-client internally), but the
 # app talks to Redis directly via $redis / Redis.new, so require redis-rb explicitly.
 gem 'redis', '~> 5.0'
+# connection_pool is only ever a transitive dependency (activesupport >= 2.2.5,
+# sidekiq >= 2.3.0 -- both open-ended), so bundler happily resolved 3.0.2, which
+# is incompatible with Sidekiq 7.x:
+#
+#   connection_pool 3.0.2  def pop(timeout: 0.5, exception: ..., **)   # keyword-only
+#   sidekiq 7.3.9          @sleeper.pop(total)                         # positional
+#
+# Every job container therefore died in Sidekiq::Scheduled::Poller#initial_wait at
+# boot with "ArgumentError: wrong number of arguments (given 1, expected 0)". The
+# poller thread never entered its loop, so the scheduled and retry sets were never
+# polled: perform_in/perform_at did nothing and no failed job was ever retried,
+# silently. Pin to 2.x until we move to Sidekiq 8, which supports connection_pool 3.
+gem 'connection_pool', '~> 2.5'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 

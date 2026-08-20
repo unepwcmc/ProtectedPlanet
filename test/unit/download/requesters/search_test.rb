@@ -25,7 +25,12 @@ class DownloadRequestersSearchTest < ActiveSupport::TestCase
   end
 
   test '#request, given a search term and filters, returns an existing download when found' do
-    $redis.stubs(:get).returns('{"status":"generating"}')
+    # generating_at must be present and recent: a key that only says "generating"
+    # carries no evidence that anything is still working on it, and is now
+    # treated as stale so a stranded download can recover. See
+    # Download::Requesters::Base#stale_generation?
+    in_flight = { 'status' => 'generating', 'generating_at' => Time.now.utc.iso8601 }.to_json
+    $redis.stubs(:get).returns(in_flight)
     DownloadWorkers::Search.expects(:perform_async).never
 
     Download::Requesters::Search.new('shp', 'san guillermo', {}).request

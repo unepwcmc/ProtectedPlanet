@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Run database migrations before the new containers take traffic.
+#
+# Kamal does not migrate for you (Capistrano's deploy:migrate had no equivalent
+# here), and this app DOES have migrations that a production snapshot predates —
+# e.g. the three ActiveStorage ones added during the Rails 6.x upgrade:
+#   add_service_name_to_active_storage_blobs
+#   create_active_storage_variant_records
+#   remove_not_null_on_active_storage_blobs_checksum
+# Without them ActiveStorage raises and CMS (Media Surfer) file uploads/images
+# break, even though the app boots fine.
+#
+# Kamal runs hooks in this order: build -> push -> pre-deploy -> boot -> post-deploy.
+# So at this point the image for $KAMAL_VERSION exists but is not serving yet —
+# exactly the right window. `kamal app exec --version` starts a one-off container
+# from that new image, so migrations run against the code about to go live.
+#
+# `bundle exec rails` rather than `bin/rails`: the checked-in binstubs are not
+# Bundler-generated (bin/vite hits the same problem, which is why Dockerfile.deploy
+# invokes the asset binaries directly).
+#
+# NOTE: migrations live in the `db` git submodule (unepwcmc/protectedplanet-db).
+# If the CI checkout does not pull submodules, db/migrate is empty in the image and
+# this becomes a silent no-op — see the `submodules: recursive` option on
+# actions/checkout in .github/workflows/deploy-staging-kamal.yml.
+
+echo "==> Running migrations for version ${KAMAL_VERSION} (destination: ${KAMAL_DESTINATION:-none})"
+
+# Restrict to a SINGLE execution. `app exec` otherwise fans out to every role
+# (web, job_default, job_import); three containers then run db:migrate at once,
+# race for the migration advisory lock, and the losers die with
+# ActiveRecord::ConcurrentMigrationError.
+#
+# `--primary` alone is NOT enough here: it narrows to the primary *host*, but all
+# three roles run on that same single host, so it still executes once per role.
+# `--roles web` is what actually reduces it to one container. Both are passed so
+# this stays correct if the web role ever spans multiple hosts.
+kamal app exec \
+  ${KAMAL_DESTINATION:+--destination "$KAMAL_DESTINATION"} \
+  --primary \
+  --roles web \
+  --version "$KAMAL_VERSION" \
+  "bundle exec rails db:migrate"
+
+echo "==> Migrations complete"

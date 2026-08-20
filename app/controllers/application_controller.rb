@@ -157,9 +157,30 @@ class ApplicationController < ActionController::Base
         end
       end
       message = "The following fields cannot be empty: #{null_fragments.join(', ')}"
-    elsif exception
-      Rails.logger.error("record_invalid_error: #{exception.class}: #{exception.message}")
+      return redirect_to(request.referrer || root_path, alert: message)
     end
+
+    # Anything that is NOT the Comfy fragment case is a genuine database error and
+    # must surface. This used to log and redirect, which meant a broken query was
+    # indistinguishable from a normal 302.
+    #
+    # That is not hypothetical: after the move to the PostgreSQL 17 staging host,
+    # Country#coverage_growth raised
+    #   PG::UndefinedColumn: ERROR: column "date_part" does not exist
+    # on EVERY country page. All of them silently redirected to the homepage, no
+    # error reached AppSignal, and nothing looked wrong from the outside -- it was
+    # found only because a route smoke test compared against production.
+    #
+    # NB: raising from inside a rescue_from handler propagates straight to the error
+    # middleware -- it is NOT re-dispatched to the StandardError handler above -- so
+    # a bare re-raise in production would lose the styled error page. Hence: report
+    # explicitly, then raise in development/test where a loud backtrace is what you
+    # want, and render the normal 500 page in production.
+    Rails.logger.error("record_invalid_error: #{exception.class}: #{exception.message}") if exception
+    Appsignal.send_error(exception) if exception && defined?(Appsignal)
+
+    raise exception if exception && !Rails.env.production?
+    return render_error_page(500) if exception
 
     redirect_to(request.referrer || root_path, alert: message)
   end

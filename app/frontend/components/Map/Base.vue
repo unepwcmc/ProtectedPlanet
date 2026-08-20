@@ -129,7 +129,18 @@ const mapContainer = useTemplateRef('mapContainer')
 onMounted(() => {
   initBoundingBoxAndMap(props.options.map?.boundsUrl, () => {
     try {
-      initMap(mapOptions.value, controlsOptions.value, onPopupClick, setFirstForegroundLayerId)
+      // The pinia store is an app-wide singleton and SURVIVES Turbo Drive navigation
+    // (only the body is swapped, the JS context persists), while this map island is
+    // torn down and rebuilt. addOverlay is idempotent, so on a second visit to a map
+    // page the overlay is already in the store, visibleLayers never changes, the
+    // watcher above never fires, and this brand new map never gets its layers --
+    // which is why the highlighted area vanished from every map after the first.
+    // Sync the new instance to whatever the store already holds, once the style is
+    // ready to accept layers.
+      initMap(mapOptions.value, controlsOptions.value, onPopupClick, () => {
+        setFirstForegroundLayerId()
+        showLayers(mapStore.visibleLayers)
+      })
     }
     catch (error) {
       // A map that fails to build must not hold the PDF readiness flag open: the

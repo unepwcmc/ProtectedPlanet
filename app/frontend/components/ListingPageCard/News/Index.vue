@@ -20,6 +20,6 @@ defineProps<ListingPageCardNewsList>()
 @reference "#importtailwindcss";
 
 .ct-listing-page-card-news {
-  @apply tw-shared-base-flex-col-md-row-gap-1;
+  @apply tw-shared-base-flex-col-md-row-gap-6;
 }
 </style>

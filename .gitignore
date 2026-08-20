@@ -10,7 +10,9 @@
 /db/structure.sql
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
+# Match rotated logs too (test.log.0, production.log.1, ...): the bare *.log
+# pattern missed them, which is how a 246MB log/test.log.0 got committed once.
+/log/*.log*
 
 /tmp/*
 !/tmp/.gitkeep
@@ -29,6 +31,12 @@ node_modules
 /public/system
 /storage
 /node_modules
+
+# Puppeteer's browser download. Since puppeteer 19 the bundled Chrome lives in
+# PUPPETEER_CACHE_DIR rather than node_modules, and both Dockerfile.deploy and the
+# local docker-compose runs point that at the repo root so it survives the bind
+# mount instead of being re-downloaded every time. That is ~650MB of binaries.
+/.cache/
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity

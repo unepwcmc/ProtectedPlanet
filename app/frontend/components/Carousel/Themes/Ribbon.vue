@@ -62,7 +62,7 @@ defineProps<CarouselThemesCard>()
 }
 
 .ct-carousel-themes-ribbon__number {
-  @apply tw-shared-font-hind-siliguri__leading-none-semibold-xl-md-3xl-lg-4xl-green;
+  @apply tw-shared-font-hind-siliguri__leading-none-semibold-xl-md-3xl-lg-4xl-stat-number-green;
 }
 
 .ct-carousel-themes-ribbon__label {

@@ -1,10 +1,11 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-10 (Rails 8.0 phase).
+Keep this current as phases land. Last updated: 2026-08-18 (staging deploys, phases 1 + 2).
 
 Status at this point: **Rails 8.0.5**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.0`,
-postgis-adapter 11.0. Suite **653 runs, 0 failures, 7 skips**. SimpleCov gate in CI.
+postgis-adapter 11.0. Suite **714 runs, 0 failures, 7 skips**; coverage ~65.4%, SimpleCov floor 62.
+**Live on staging** (`pp-web-staging-01`, Kamal v2) with the Vite/Vue-3 frontend — see §5b.
 **Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0.**
 
 ### Rails 8.0 phase — DONE
@@ -46,7 +47,9 @@ Cannot be closed locally; they need a deploy target and a decision. Track agains
 [03 exit criteria](./03-rails-6.md).
 
 - [ ] **Import pipeline + download workers smoke-tested** on a real environment (real WDPA import subset + generate each download type).
-- [ ] **Staging deploy on Rails 6.1 confirmed.** Blocked: staging is Ubuntu 18.04 / Ruby 2.6.3 (no 2.7) — see [11](./11-deploy-and-devops.md) and the server audit.
+- [x] **DONE (superseded) — staging deploy.** The Ubuntu 18.04 / Ruby 2.6.3 blocker is gone: staging
+      moved to the Proxmox Kamal host (`pp-web-staging-01`, Ubuntu 24.04) and now runs
+      **Rails 8.0.5 / Ruby 3.3.7**, well past the 6.1 milestone this line was waiting on. See §5b.
 - [ ] **4 EM decisions** (from [00 "Facts still needed"](./00-scope-and-shared-milestones.md)): infra scope + budget; container registry (GHCR vs Docker Hub); WDPA release cadence (switchover window); data-team acceptance criteria for `.gdb` downloads.
 
 ## 2. Ruby 2.7 → 3.3 — DONE (Jul 2026, Ruby 3.3.7)
@@ -64,6 +67,8 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
       break — so the pin **cannot be removed at Rails 7.0** (tried; boots red).
       Remove when webpacker is dropped at the Vite cutover (B5) and appsignal is
       bumped to a Psych-5-safe version.
+      **UPDATE (Aug 2026): webpacker is GONE** (Vite cutover shipped in phase 2), so only
+      `appsignal ~> 3.3.11` still blocks the pin. Bump appsignal, then try removing it.
 - [x] ~~Comfy routing kwarg patch~~ — **removed at Rails 7.0** (Media Surfer's
       `comfy_route` is Ruby-3-native).
 - [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation** — still
@@ -102,23 +107,27 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       site-not-found, invalid site_id), `protected_areas_related_source` (invalid env, missing file,
       empty CSV soft-warn, live/staging update_table dispatch). Suite 708/0. **Coverage 65.43%**
       (SimpleCov floor raised 54 → 62 this session).
-- [ ] **GDAL `.gdb` driver swap: `FileGDB` (Esri SDK) → `OpenFileGDB` — scoped Aug 2026, NOT started.**
-      Two refs name the driver: `lib/modules/ogr/postgres.rb` (`DRIVERS = { gdb: 'FileGDB' }`) and
-      `lib/modules/ogr/command_templates/postgres_gdb_export.erb` (`-f "FileGDB"`). The Esri-SDK driver
-      is why the Docker image source-builds GDAL 2.2.3 + links the RHEL7 FileGDB SDK — which won't
-      build on Ubuntu 24.04. Target: stock apt GDAL 3.8 (24.04) / 3.6+ (bookworm) + OpenFileGDB (write
-      support since GDAL 3.6).
-      **REFERENCE IMPLEMENTATION EXISTS — `wdpa-data-management-portal`** already generates the *same*
-      WDPA `.gdb` (same 3 layers: poly/point/source) with **`-f OpenFileGDB`** on **apt GDAL (Debian
-      bookworm), no Esri SDK**, in production — see `app/services/downloads/gdb_exporter.rb`
-      (`build_ogr2ogr_command`). So the swap is **proven, not blind**: mirror the portal's command
-      (it adds `-lco GEOMETRY_NAME=wkb_geometry`, `-lco FID=OBJECTID`, `-a_srs EPSG:4326`,
-      `--config PG_USE_COPY YES`, `-nlt <type>`, `-nln <layer>` — richer than PP's current template).
-      **Locally verifiable now** (was wrong to call it blind/infra-gated): run against a standalone
-      `ghcr.io/osgeo/gdal:*-3.8` container + our Postgres, and diff output vs the portal's known-good
-      `.gdb`. NOTE: PP's current dev image has GDAL 2.2.3 (OpenFileGDB read-only there) so the swap
-      can't be tested on *that* image — use a GDAL 3.6+ container (or the eventual 3.8 app image).
-      Data-team `.gdb` sign-off largely pre-answered since the portal's OpenFileGDB output already ships.
+- [x] **DONE (code) — GDAL `.gdb` driver swap: `FileGDB` (Esri SDK) → `OpenFileGDB`.** Changed
+      `lib/modules/ogr/postgres.rb` `DRIVERS[:gdb]` → `'OpenFileGDB'` and made
+      `postgres_gdb_export.erb` read `-f "<%= DRIVERS[:gdb] %>"` (single source of truth, was a
+      hardcoded `-f "FileGDB"`). **Added `-lco "GEOMETRY_NAME=SHAPE"`** — this was NOT optional:
+      without it OpenFileGDB names the geometry column after the source (`the_geom`), whereas the Esri
+      SDK named it `SHAPE`; the LCO restores exact parity. Added `test/unit/ogr/postgres_gdb_export_test.rb`
+      (3 tests, `system` mocked — the gdb path had NO test before) asserting driver + SHAPE lco + `-update`.
+      **Before/after verified byte-schema-identical** by generating both on the same data: OLD via
+      FileGDB on PP's image (GDAL 2.2.3, Esri SDK) vs NEW via OpenFileGDB on Debian bookworm (GDAL 3.6.2,
+      apt, no SDK). All three layer types match — **poly** (Multi Polygon, 20 feat), **point** (Multi
+      Point, 5 feat), **source** (non-spatial) — same geometry type, feature count, `FID=OBJECTID`,
+      `Geometry Column=SHAPE`, fields, and CRS (WGS84/EPSG:4326; the only textual diff is GDAL 3.6 WKT2
+      `GEOGCRS` vs 2.2.3 WKT1 `GEOGCS` — same CRS, cosmetic). Multi-layer `-update` append confirmed.
+      **Other download formats unaffected** — the swap only touches `DRIVERS[:gdb]` + the gdb template;
+      CSV (`'CSV'`) and Shapefile (`'ESRI Shapefile'`) use unchanged drivers + `postgres_export.erb`,
+      PDF is a separate generator. Suite 711/0.
+      Reference: `wdpa-data-management-portal` already ships the same WDPA `.gdb` via OpenFileGDB on bookworm.
+      **STILL TO DO (gated):** (1) can't run on PP's *current* dev image (GDAL 2.2.3 = OpenFileGDB
+      read-only) — needs the **GDAL 3.8 app image** (Dockerfile modernization, infra track) for in-app
+      end-to-end; (2) **data-team ArcGIS sign-off** on a real `.gdb` (largely pre-answered — portal output
+      already consumed); (3) diffs above used samples (20 poly / 5 point) not a full release volume.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
 - [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
       `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
@@ -134,7 +143,7 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       sandbox existing. The fragile *logic* is already covered by the geometry-importer +
       table-service unit tests, so this is end-to-end confidence, not a correctness gap.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
-- [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, currently 54) as coverage improves. Never lower it.
+- [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.
 
 ## 4. Deferred gem / asset bumps (own phases — reasoned deferrals)
 - [ ] **sass-rails 5.0.8 → 6 + Sprockets 4** — needs a `manifest.js` this app lacks; Ruby-Sass → LibSass migration across 129 SCSS files with **no visual tests**. Pair with the Vite/asset work, not the Rails bump. sass-rails 5.0.8 works fine on Rails 6.1.
@@ -148,9 +157,15 @@ Its admin JS is esbuild/ES-modules and its CSS is dart-sass (`@import "codemirro
   `app/assets/builds/comfy/admin/cms/application.{js,css}`); Sprockets/Propshaft
   then serve the built files. Wired into the `install` service (docker-compose) and
   CI `prepare()` (Jenkinsfile).
-- [ ] **Production/deploy must run `comfy:compile_assets` before `assets:precompile`**
-  (Capistrano now; Docker/Kamal later). The build lands in the gem dir, which is
-  not version-controlled, so every fresh environment must run it.
+- [x] **DONE — deploy runs `comfy:compile_assets` before `assets:precompile`.** Added to
+  `Dockerfile.deploy` (Aug 2026). This bit us for real: the Kamal image never ran it, and
+  the CMS admin CSS/JS only appeared because the app carried its own
+  `app/assets/{javascripts,stylesheets}/comfy/` overrides. The Vite cutover deleted those,
+  the admin assets vanished, and the phase-2 image build failed on the asset assertion.
+  Verified after the fix: the gem's `app/assets/builds/comfy/admin/cms/` is populated in the
+  deployed image (it never was before, phase 1 included). `bin/preflight-deploy` mirrors
+  the same order **and wipes the gem builds dir first**, because a stale populated dir in
+  the shared bundler volume made the check pass locally while the real build failed.
 - [ ] **Optional refinement:** build into our own `app/assets/builds/` from the gem
   source instead of the gem dir, to fully decouple from the read-only bundle. Not
   required — the current approach works in dev/CI.
@@ -318,6 +333,117 @@ public CMS pages render; **page save + `assign_layout_categories` run clean (#3)
 - CI now runs **`bin/rails test`** (not `rake test`) so SimpleCov starts before app load (`Jenkinsfile` `rakeTest()`). Both run the same set (no `test/acceptance`). Don't revert to `rake test` without moving SimpleCov's start.
 - Coverage is gated: `COVERAGE=1` fails the build below the floor.
 
+### 5a. `staging_kamal` convergence — Kamal v2 on Proxmox staging (scoped Aug 2026)
+DevOps stood up Proxmox/Kamal-v2 staging; **`pp-web-staging-01.internal.unep-wcmc.org` (172.20.0.160)
+is ProtectedPlanet**, `api-pp-web-staging-01` is protectedplanet-api, DB is
+`pp-db-staging-01.internal.unep-wcmc.org` (172.20.0.159). The other four FQDNs are the
+already-dockerised fleet (digital-report, api-pp-authentication, wdpa-api, pp-data-management-portal).
+
+PP's Kamal config lives on the **`staging_kamal` branch** (not master, not upgrade-plan):
+`config/deploy.yml` + `deploy.staging.yml`, `Dockerfile.deploy`, `.kamal/secrets-common`,
+`.github/workflows/deploy-staging-kamal.yml`, web + **two Sidekiq roles**, **ES 7.17 accessory**,
+host-bound Redis/Memcached via `host.docker.internal`.
+**Its `Dockerfile.deploy` already does the GDAL modernisation** — Ubuntu 24.04, distro **GDAL 3.8.4,
+OpenFileGDB, no ESRI SDK**, Ruby 3.3.7 via ruby-build, Node 24 + yarn 4.
+It branched from our **Rails 7.1 (B0)** commit, so it lacks the 7.2→8.0 / redis-5 / Sidekiq-7 /
+secrets→config_for / test-net / GDAL work.
+
+⚠️ **The two halves are incompatible apart:** staging_kamal ships GDAL 3.8 *without* the ESRI SDK while
+its app code still asks for the `FileGDB` driver → **`.gdb` downloads would fail on staging**. Our
+OpenFileGDB swap is the missing app-side half.
+
+**Merge scope (dry-run verified, `git merge-tree`): mechanically CLEAN, no conflicts.** Only two files
+touched by both sides since the merge base (`b6d3fcbc1`): `config/environments/staging.rb` (ours: L1 +
+21–27 secrets→config_for/dalli; theirs: L36–39 Uglifier→`:terser` — different regions) and `Gemfile`
+(both kept: rails 8 + sidekiq 7 + redis 5 from us, `terser` from them).
+`config/secrets.yml` resolves correctly: ours was a **pure rename** (100% similarity) to
+`app_secrets.yml`, theirs edited the content (`MEMCACHE_SERVERS` env-overridable) — the merged
+`app_secrets.yml` keeps **their** edit. Verified.
+
+**Sequence (steps 1–5 are ours; keep LOCAL until we're ready to push):**
+1. ~~Commit + push the GDAL OpenFileGDB swap to `upgrade-plan`~~ — **DONE locally (merged, not pushed).**
+   Was the blocker: `origin/upgrade-plan` still had `gdb: 'FileGDB'`.
+2. Merge `upgrade-plan` → `staging_kamal`.
+3. **`bundle install` + commit the regenerated `Gemfile.lock`.** ⚠️ The lock merges "cleanly" but is
+   **inconsistent** — the merged Gemfile has `terser` while the merged lock does not (git keeps our
+   lock). `bundle check` fails until regenerated. Classic trap; don't skip.
+4. Run the full suite on the merged branch.
+5. Fix stale comments referencing the old `config/secrets.yml` path: `Dockerfile.deploy:110`,
+   `config/deploy.staging.yml:57`. (Also: `Dockerfile.deploy` cites `docs/GDAL-openfilegdb-migration.md`,
+   which does not exist in that tree.)
+6. Push `staging_kamal` → the GH Action deploys to `pp-web-staging-01`. **Needs devops**: the
+   `staging_proxmox` GitHub environment + secrets (registry creds, SSH key) populated.
+7. **Verify `.gdb` download end-to-end on staging** — the in-app GDAL 3.8 / OpenFileGDB validation we
+   cannot do locally (PP's dev image is GDAL 2.2.3, OpenFileGDB read-only there). This also serves the
+   data-team ArcGIS sign-off.
+
+**Not blocked on the frontend.** `staging_kamal`'s Dockerfile builds *both* webpacker and Vite, matching
+`upgrade-plan`'s current asset setup. `feat/upgrade-frontend` (which removes webpacker) is a separate,
+later change needing its own Dockerfile update + the psych unpin. Frontend was **97 ahead / 64 behind**
+upgrade-plan and still committing daily — waiting only grows that merge.
+
+**Open questions for devops:** PG version/PostGIS on `pp-db-staging-01` (drives postgis-adapter 11 and
+the PG 10→17 story); whether the `staging_proxmox` env/secrets are populated. Also note the deploy
+config still assumes **host Memcached + a single Redis** — our two-Redis / drop-Memcached decision
+(§4e) is not reflected there yet; that's the follow-up once devops provisions them.
+
+### 5b. Staging deploys — SHIPPED (Aug 2026)
+Both phases are live on `pp-web-staging-01`. Prerequisites that were open in §5a resolved
+themselves: SSH access granted, `staging_proxmox` secrets populated, self-hosted runner working,
+DB reachable with **all 204 migrations already applied**.
+
+**Phase 1 (backend only)** — `staging_kamal` @ `a0a1f3b9`. Rails 7.1.6 → **8.0.5.1**, Ruby 3.3.7,
+redis 5 / Sidekiq 7, secrets→`config_for`. Verified live: containers healthy (web + job_default +
+job_import), and a `.gdb` export **through the app's own `Ogr::Postgres.export`** against the real
+staging DB produced `Geometry Column = SHAPE` — the end-to-end GDAL validation that could not be
+done locally. Before the deploy, staging was emitting `the_geom`.
+
+**Phase 2 (frontend + backend)** — `staging_kamal` @ `a88a1d99`. Adds the Vite/Vue 3/Turbo frontend,
+**webpacker fully removed** (gem, `config/webpack/*`, `babel.config.js`, and its build step), so the
+image now builds **two** asset pipelines instead of three. `.gdb` re-verified: still `SHAPE`.
+
+**Four failed attempts before phase 1 landed — each a real bug, and staging was never broken
+(every failure hit before the container swap):**
+1. `config.secret_key_base = config_for(...)` assigned nil during `assets:precompile`, which runs
+   with `SECRET_KEY_BASE` unset and `SECRET_KEY_BASE_DUMMY=1`. Rails 8's setter raises on blank
+   outside dev/test, bypassing that escape hatch. Fixed: only assign when present.
+2. + 3. The pre-deploy hook's `kamal app exec` fans out to **every role**, so web + job_default +
+   job_import each ran `db:migrate` concurrently and raced the advisory lock
+   (`ActiveRecord::ConcurrentMigrationError`). `--primary` was NOT enough — it narrows *hosts*, and
+   all three roles share one host. `--roles web` is what reduces it to a single container.
+4. (phase 2) `comfy:compile_assets` missing from the image — see §4b.
+
+**`bin/preflight-deploy`** was added after #1–3 and encodes all of it: hooks executable + mode 100755
++ no `app exec` without `--roles`; workflow submodule checkout; the suite; `assets:precompile` in the
+build environment; staging boot. It has since caught two phase-2 breakages before they cost a deploy
+cycle (the stale `application-*.css` assertion, and the comfy step). Run it before every push:
+`./bin/preflight-deploy` — it prints `✅ ready: git push origin staging_kamal` or refuses.
+
+**Follow-ups from these deploys:**
+- [ ] **Runner locale — for devops.** Kamal reported
+      `ERROR (Encoding::CompatibilityError): invalid byte sequence in US-ASCII` (sshkit
+      `String#strip`) *instead of* the real error, twice. The self-hosted runner's locale is
+      US-ASCII, so any non-ASCII build output masks the genuine failure. Set `LANG=C.UTF-8` /
+      `LC_ALL=C.UTF-8` on the runner. Turned a 30-second diagnosis into a 4,600-line log dig.
+- [ ] **`public/packs` is committed** — 15 stale webpack outputs, dead since the Vite cutover and
+      still shipped in the image. `git rm -r --cached public/packs` + gitignore it. Nothing
+      references them (0 `*_pack_tag` calls anywhere).
+- [ ] **Narrow the `assets:precompile ||` tolerance in `Dockerfile.deploy`.** It exists for
+      vite_ruby's nested `vite:build_all`, which always exits non-zero with a bare
+      "Compilation failed:" while sprockets succeeds — but it also swallowed the genuine
+      `secret_key_base` crash in failure #1. The output assertions catch it eventually; a tighter
+      guard would surface it immediately.
+- [x] **DONE — `.gitignore` missed rotated logs.** `/log/*.log` matches `test.log` but not
+      `test.log.0`, so a **246 MB** `log/test.log.0` became tracked and GitHub rejected the push
+      (100 MB limit). Purged from the 4 local-only commits with `filter-branch` (nothing already on
+      origin was rewritten; verified the only tree difference was that file) and the pattern is now
+      `/log/*.log*`.
+
+**Still unverified — needs a human at a browser.** The suite is rack-test only, so Vue 3 + Turbo
+runtime behaviour is genuinely untested (see the "no system/browser tests" item in §3). Worth
+exercising on staging: search (autocomplete, filters, infinite scroll), maps, the download modal
+(CSV/SHP/GDB), and **`/en/admin`** in particular — its assets are newly built as of phase 2.
+
 ## 6. Minor code items (low priority, clear opportunistically)
 - [ ] **`belongs_to_required_by_default` opted out** (`config/application.rb`) — revisit as a data-integrity pass measured against a **production** dump. 4 associations have real NULLs: `Country#parent` (199/248), `Designation#jurisdiction` (57/1831), `pame_statistics.country`, `country_statistics.country`.
 - [ ] **`_info.svg` orphan partial** — `app/views/partials/svgs/_info.svg` is not rendered via `render` (only an unrelated SCSS `info.svg` asset ref exists). Confirm unused, then remove. (`_pin.svg` was renamed to `_pin.html.erb` to clear the dotted-template deprecation — do the same or delete `_info.svg`.)
@@ -339,3 +465,848 @@ public CMS pages render; **page save + `assign_layout_categories` run clean (#3)
 ## 7. Dead code found during the upgrade (already removed — for reference)
 - `Search::ParallelIndexer` (dead + `require 'thwait'` unloadable on 2.7) — removed.
 - `best_in_place` gem (unused; its railtie caused the ActionText/ActionView boot deprecations) — removed.
+
+---
+
+## 8. Staging runtime audit (Aug 2026) — shared Redis, dead PDF paths, gem bloat
+
+Triggered by a download on staging that span "Generating..." forever. The audit
+that followed looked for the general class of problem: code no test covers and no
+build step validates, which therefore only fails on a server.
+
+### 8a. Shared Redis across co-located Kamal apps — FIXED (code), needs deploy
+
+Three of our apps on `pp-web-staging-01` were handed the same Redis URL, all on
+logical database **0**:
+
+| app | var | db | queues | sidekiq |
+|---|---|---|---|---|
+| protectedplanet | `REDIS_URL` | 0 | `default`, `import` (+ `$redis` downloads) | 7.3.9 |
+| wdpa-pp-data-management-portal | `SIDEKIQ_REDIS_URL` | 0 | `upload`, `default` | 7.2.2 |
+| api-pp-authentication | `SIDEKIQ_REDIS_URL` | 0 | `default` | 7.3.2 |
+
+`pp-digital-report`, `pp-data-management-portal` and `protectedplanet-api` use no
+Redis. All three affected apps are ours (`unepwcmc/*`), so this is fixable without
+devops beyond env values.
+
+Sidekiq 7 removed namespace support, so `queue:default` was ONE physical Redis
+list shared by three different Rails apps. Whichever process popped a job first
+won it. The two that could not resolve the job's constant raised `NameError`, and
+`DownloadWorkers::Base` sets `retry: false`, so the job was discarded with no
+trace — observed as `processed=8 failed=7` with `retry=0 dead=0`.
+
+Because nothing wrote the result key, it stayed `generating` with **no TTL**
+(`ttl=-1`), and `Download::Requesters::Base#enqueue_generation_once` then refused
+every later request for that download. Permanently wedged.
+
+Fix, in `config/initializers/redis.rb` + `sidekiq.rb`: `PPRedis.url` pins this app
+to its own logical DB (default **3**, override with `REDIS_DB`). Both
+`configure_server` AND `configure_client` now use it — previously only the server
+was configured and the client fell back to Sidekiq's raw `REDIS_URL` default,
+which would have split enqueue and run across two databases.
+
+- Production runs its own Redis, so set `REDIS_DB=0` there to keep using the
+  database its existing keys live in, or accept a one-time reset of download
+  status keys (they regenerate).
+- The other two apps still collide with each other on db 0. Separate ticket in
+  their repos: move them to db 1 and 2.
+
+### 8b. Download keys never expired — FIXED (code)
+
+The staging Redis runs `--maxmemory 2gb --maxmemory-policy noeviction`. PP wrote
+`downloads:*` keys with no TTL at all, so the keyspace only grew; at the ceiling
+Redis starts refusing writes **for all three apps**, not just PP.
+
+- `Download::Utils.write` is now the single write path and always sets an expiry
+  (`READY_TTL` 30d / `GENERATING_TTL` 24h / `FAILED_TTL` 1h).
+- `#stale_generation?` lets a wedged key recover: past a 15-minute grace it asks
+  Sidekiq whether the jid is still alive, and only then re-enqueues. Age alone is
+  never the test — a full-WDPA `.gdb` export legitimately runs for hours.
+- `job_alive?` assumes **alive** if Sidekiq is unreachable, so a blip cannot cause
+  an enqueue stampede; `GENERATING_TTL` is the backstop.
+- `while_generating` now rescues `Exception`, not `StandardError`.
+  `NotImplementedError` is a `ScriptError` and sailed straight past the old
+  rescue, stranding the key. Signals are re-raised after the key is marked.
+
+Covered by `test/unit/download/requesters/stale_generation_test.rb` (8 tests) and
+3 new TTL tests in `utils_test.rb`. Before this there was **no** test of
+`enqueue_generation_once` at all.
+
+### 8c. Both PDF paths were broken on staging — FIXED (code), needs deploy
+
+`Dockerfile.deploy` ended the asset build with `rm -rf node_modules`, on the
+assumption Vite had bundled everything into `public/vite`. True for the frontend,
+but **puppeteer is a runtime dependency**: both PDF paths shell out to
+`node app/frontend/backend-scripts/rasterize.js`, which does
+`require('puppeteer')`. Confirmed in the running container:
+
+```
+ls: cannot access 'node_modules': No such file or directory
+require("puppeteer") -> MODULE_NOT_FOUND
+```
+
+- `rm -rf node_modules` → `yarn workspaces focus --production` (keeps the 11
+  runtime deps, drops the 24 dev ones), followed by a hard
+  `node -e "require('puppeteer')"` assertion so a bad prune fails the build.
+- `app/controllers/country_controller.rb` still shelled out to **`phantomjs`** —
+  a binary that is not in the image at all (`command -v phantomjs` → not found).
+  `rasterize.js` was ported from PhantomJS to Puppeteer and this call site was
+  missed while `Download::Generators::Pdf` was updated. Now uses `node`, and
+  raises instead of `send_file`-ing a file that was never written.
+
+### 8d. Deprecated-API sweep — CLEAN
+
+Scanned `app lib config db` for Ruby 3.0–3.3 and Rails 5.2–8.0 removals:
+`URI.escape/encode`, `taint/untaint`, `Fixnum/Bignum`, `Random::DEFAULT`,
+`BigDecimal.new`, `File/Dir.exists?`, `YAML.load`, `update_attributes`,
+`*_filter`, `render text:`, `alias_method_chain`, `errors.keys`, `serialize`
+without coder, positional `enum`, `legacy_connection_handling`,
+`ActiveSupport::Deprecation` singleton, `Rails.application.secrets`.
+
+Live hits: **none**. `URI.encode` was the only one and is fixed.
+
+- `lib/modules/search.rb:18` uses `YAML.load`, safe only because `psych` is
+  pinned `~> 3.3`. Under Psych 4 that becomes `safe_load`. `config/search.yml`
+  has no aliases, symbols or `!ruby` tags, so it is safe to unpin — but change
+  this line at the same time.
+- `ActiveRecord::Base.connection` — 21 sites. Soft-deprecated in 7.2, works in
+  8.0, will break later. Migrate to `lease_connection`/`with_connection`.
+- One `update_attributes` in a 2017 migration. `schema_format = :sql` means
+  migrations never replay, so it is inert; all 204 are version-bracketed.
+
+**Conclusion: grep is exhausted as a technique here.** The remaining risk is
+runtime-only, so the next net must be empirical — see 8f.
+
+### 8e. Gem bloat / dead deploy system — NOT STARTED
+
+- **`gem 'aws-sdk', '3.0.1'` is the v3 meta-gem: 664 `aws-sdk-*` gems in
+  `Gemfile.lock`.** Code uses `Aws::S3` only → `aws-sdk-s3`. Big win on bundle
+  install time, image size and boot.
+- **Capistrano is still fully wired post-Kamal**: `Capfile`, `config/deploy.rb`,
+  `config/deploy/{production,staging}.rb`, `config/deploy/ansible/`, 8
+  `capistrano-*` gems plus `net-scp`, `net-sftp`, `bcrypt_pbkdf`. Two deploy
+  systems in one repo is a live footgun — delete.
+- Confirm individually then drop: `phantompdf` (PhantomJS is gone),
+  `jquery-rails` (no sprockets refs post-Vite), `sinatra` (Sidekiq 7 web is pure
+  Rack), `httmultiparty`, `slack-notifier`, `levenshtein`, `awesome_print`,
+  `timecop`, `selenium-webdriver`.
+- Then unpin `psych` (webpacker is gone; appsignal was the other blocker).
+
+Needs `bundle install` via docker-compose — ruby 3.3.7 is not installed locally
+(rbenv has 3.3.2), so all verification runs in the container.
+
+### 8f. Route smoke test — BUILT (Aug 2026)
+
+`lib/smoke/route_walker.rb` + `lib/tasks/smoke.rake`. Run it inside the container
+it is testing, because it reads real fixtures (a protected area, a country iso,
+CMS page paths) out of the database and then drives the app over HTTP:
+
+```
+kamal app exec --destination staging --primary --roles web \
+  "bundle exec rake smoke:routes"
+```
+
+Env: `BASE_URL` (default http://localhost:3000), `CMS_SAMPLE`, `TIMEOUT`,
+`INSECURE`. Exits non-zero on any failure, so it can gate a deploy.
+
+**The design property that matters is coverage enforcement.** Every GET route
+must either be walked or appear in `SKIP_CONTROLLERS`/`SKIP_PATHS` with a stated
+reason; anything else is reported UNCLASSIFIED and fails the run. Adding a route
+to the app therefore forces a decision about smoking it, instead of the net
+silently shrinking. `test/unit/smoke/route_walker_test.rb` (12 tests) asserts
+that property directly.
+
+Two things had to be got right, both found by running it and disbelieving the
+output:
+
+- **Locale prefix.** `get '/:id'` is declared at the top of routes.rb, ABOVE the
+  `scope '(:locale)'` block, so it shadows every single-segment path: bare
+  `/search`, `/terms`, `/search-areas` and every CMS slug resolve to
+  protected_areas#show and 404. Only the `/en/...` form reaches the route that
+  was declared. Confirmed against production, which behaves identically (it 500s
+  rather than 404s). The walker substitutes a locale rather than stripping it.
+- **204 is a failure.** Rails answers `204 No Content` when an action runs with
+  no template. The first version scored that "ok" and walked straight past a
+  broken page — see country#pdf below.
+
+Current staging result: **34 walked, 27 healthy, 7 failed.**
+
+| endpoint | status | verdict |
+|---|---|---|
+| `/assets/tiles/:id?type=protected_area\|country\|region` | 500 | the `URI.encode` bug — fix committed (27778c9e9), not yet deployed. The smoke test found it unprompted, which is the validation that it works. |
+| `/country/:iso/pdf` | 204 | **FIXED.** `country#pdf` was just `@for_pdf = true`; `app/views/country/pdf.*` does not exist and Rails answers 204 when an action renders nothing, so the page the rasterizer captured was empty. It also sat outside the `only: :show` before_actions, so `@tabs`/`@stats_data` were never built. Now shares `load_show_data` with `#show` and does `render :show`, so the two cannot drift. Was broken twice over: this AND the §8c missing binary. |
+| `/country/:iso/compare/:iso_to_compare` | 404 | **FIXED (removed).** Route was declared at routes.rb:31 but CountryController never had a `compare` action, and nothing in app/, lib/, test/ or the frontend referenced `compare_countries_path`. Deleted, with a note left at the declaration site. |
+| `/en/search-cms` | 500 | **NEW**, pre-existing (production 500s identically). `TypeError (String does not have #dig method)` at `app/serializers/search/cms_serializer.rb:101` — `@search.options` is a String, so `.dig(:filters, :ancestor)` raises. Works in practice only because the frontend always sends filters. |
+
+None of the three new ones are upgrade regressions; all four had zero test
+coverage and would not have surfaced without this.
+
+Two of the four are now fixed (country#pdf, the dead compare route). Remaining
+red: the tiles 500 (clears on the next deploy, fix already committed) and
+`/en/search-cms` (pre-existing, 500s on production too). Once those are clear,
+wire the walk into `bin/preflight-deploy` or a post-deploy hook so a red run
+means something new.
+
+### 8g. Bundler binstubs — NOT STARTED
+
+`bin/rails` / `bin/bundle` are Bundler-generated, not Rails-generated, so any
+`bin/rails` invocation prints the `rails new` help text instead of running.
+It made `rails runner` on staging look like it had failed when it had not, and
+`bin/rails test` unusable in docker-compose (`bundle exec` is the workaround).
+Fix: `bundle binstubs bundler --force` + `rails app:update:bin`.
+
+### 8h. Sidekiq scheduler thread is dead on every boot — FIXED (code), needs deploy
+
+Both job containers log at startup:
+
+```
+connection_pool-3.0.2/lib/connection_pool/timed_stack.rb:62:in `pop':
+  wrong number of arguments (given 1, expected 0) (ArgumentError)
+  from sidekiq-7.3.9/lib/sidekiq/scheduled.rb:226:in `initial_wait'
+```
+
+Verified against the gem sources on staging rather than inferred from the trace:
+
+```ruby
+# connection_pool 3.0.2 -- keyword-only
+def pop(timeout: 0.5, exception: ConnectionPool::TimeoutError, **)
+# sidekiq 7.3.9 scheduled.rb:226 -- positional
+@sleeper.pop(total)
+```
+
+connection_pool is only ever transitive here (activesupport `>= 2.2.5`, sidekiq
+`>= 2.3.0`, both open-ended), so bundler resolved 3.0.2 unchallenged. The
+**scheduler thread died at boot**, so the scheduled and retry sets were never
+polled: `perform_in`/`perform_at` silently did nothing and no failed job was ever
+retried. Nothing surfaced in the UI — only a stack trace on stdout at container
+start. Did not cause the download bug (those jobs go straight to a queue).
+
+Fixed by pinning `connection_pool ~> 2.5` in the Gemfile (resolves 2.5.5;
+`pop params: [[:opt, :timeout], [:opt, :options]]`, verified under bundler). The
+lock diff is two lines. `test/unit/sidekiq_connection_pool_test.rb` is the
+tripwire so a future `bundle update` cannot reintroduce it silently.
+
+Lift the pin when we move to Sidekiq 8, which supports connection_pool 3.x — the
+third test in that file asserts the Sidekiq major so it fails as a reminder.
+
+### 8i. Deploy of the §8 fixes FAILED first time — my bug (Aug 2026)
+
+`config/initializers/redis.rb` raised on a blank `REDIS_URL`. The image build boots
+the whole Rails app during `assets:precompile` / `vite:build_all` with **no runtime
+secrets** — the same reason `SECRET_KEY_BASE_DUMMY` exists — so the build died ~13
+minutes in:
+
+```
+rake aborted!
+REDIS_URL is not set -- cannot configure Redis
+/app/config/initializers/redis.rb:32:in `url'
+Tasks: TOP => vite:build_all => vite:verify_install => environment
+```
+
+Same class as the deploy-#1 `secret_key_base` crash recorded in §5b: a hard failure
+added to an initializer that also runs at build time. Fixed by falling back to
+redis-rb's own default host/port instead of raising — `Redis.new` never connects on
+instantiation, so a genuinely missing URL still surfaces at first use, which is the
+behaviour that existed before this file pinned a database.
+
+`test/unit/pp_redis_test.rb` (5 tests) locks both directions: blank URL must not
+raise, configured URL must still land on our database. Verified the test fails with
+the `raise` reinstated, not just that it passes without it.
+
+**Why preflight did not catch it — two independent gaps, both now closed:**
+
+1. It cleared only `SECRET_KEY_BASE`. It now blanks **every** secret declared under
+   `env.secret` in `config/deploy.yml` except the four `Dockerfile.deploy` provides
+   itself, derived from the YAML so a newly added secret is covered automatically.
+2. Clearing the shell environment was not enough on its own. The `dotenv` gem
+   re-reads `.env` during Rails boot and docker-compose bind-mounts the repo, so
+   `ENV` was repopulated from the file regardless of `-e`. `.dockerignore` excludes
+   `.env*`, so the real image has no such file. Preflight now bind-mounts an empty
+   file over `.env` for the build-environment steps.
+
+Gap 2 is the important one: `-e REDIS_URL=` *looked* like it worked and silently did
+nothing, so the build-env checks had been running against a runtime environment all
+along. With both fixes, the failure reproduces locally in ~20s instead of 13min.
+
+### 8j. Post-deploy verification of the §8 fixes (Aug 2026) — a5c4bc774
+
+Deploy succeeded. Verified against a baseline captured on the previous image:
+
+| check | before | after |
+|---|---|---|
+| Redis logical DB | shared `/0` with 2 other apps | **`/3`, PP only** |
+| `Sidekiq::ProcessSet` | 4 processes (7.2.2, 7.3.2, 7.3.9 ×2) | **2 processes, both ours** |
+| sidekiq `initial_wait` crash | present every boot | **0 occurrences** |
+| `node_modules` / puppeteer | absent, MODULE_NOT_FOUND | **present (161 pkgs), requires OK** |
+| `/country/:iso/pdf` | 204 empty | no longer empty (see 8k) |
+| `/country/:iso/compare/:iso` | 404 dead route | route removed |
+| download `14426` csv | stuck "generating" forever | **ready in 4s, ttl 2591997** |
+| pre-deploy hook | — | migrations ran, `--roles web`, no lock race |
+| post-deploy hook | — | `==> Cache flushed` |
+
+`yarn workspaces focus --production` worked; the `require('puppeteer')` assertion
+in the build passed, so both PDF paths now have their runtime dependency.
+
+Smoke test: **33 walked, 28 healthy, 5 failed** (was 7). Remaining failures are
+`/en/search-cms` (§8f, pre-existing, 500s on production too) and 3× `assets#tiles`
+— which turned out NOT to be the URI.encode bug. See 8k.
+
+### 8k. Two findings the post-deploy smoke run exposed
+
+**1. `MAPBOX_STATIC_IMAGE_URL` was missing from the deploy config — FIXED, needs a GitHub secret**
+
+The `URI.encode` fix worked; that exception is gone. Behind it sat a second,
+pre-existing failure:
+
+```
+NoMethodError (undefined method `+' for nil)
+lib/modules/asset_generator.rb:47:in `mapbox_url'
+```
+
+`base_url` comes from `ENV["MAPBOX_STATIC_IMAGE_URL"]` (config/app_secrets.yml
+default block). That variable is in `.env` and `.env.example` but was never added
+to `config/deploy.yml`, so it is UNSET on staging and `nil + String` raises. The
+static-image tiles (map overlay thumbnails, search-result cards) have therefore
+never worked on staging.
+
+Value is `https://api.mapbox.com/styles/v1/unepwcmc/<style_id>/static/` — a style
+URL used server-side, not a credential, but org-specific, so it is wired as a
+secret rather than committed. THREE places had to change; missing any one of them
+means Kamal never receives it:
+
+1. `.kamal/secrets-common` — `MAPBOX_STATIC_IMAGE_URL=$MAPBOX_STATIC_IMAGE_URL`
+2. `config/deploy.yml` — under `env.secret`
+3. `.github/workflows/deploy-staging-kamal.yml` — `${{ secrets.MAPBOX_STATIC_IMAGE_URL }}`
+
+Still required: add `MAPBOX_STATIC_IMAGE_URL` to the **`staging_proxmox`
+environment** secrets on GitHub, not the repository secrets — environment secrets
+override repository ones, and getting that backwards cost a full deploy cycle with
+MAPBOX_ACCESS_TOKEN (see §8/5b). Production needs it too, or its tiles break the
+same way when it moves.
+
+Note: distinct from MAPBOX_ACCESS_TOKEN, which is BOTH a builder secret (Vite
+inlines it into the client bundle at build time) and a runtime secret. This one is
+runtime-only — it is read server-side by AssetGenerator — so it does NOT belong
+under `builder.secrets`.
+
+**2. EVERY country page 302'd to the homepage — FIXED**
+
+`app/models/country.rb#coverage_growth` relied on PostgreSQL's implicit output
+name for an unaliased `EXTRACT(...)`, which was `date_part`. **PostgreSQL 14
+renamed it to `extract`**, so on staging:
+
+```
+PG::UndefinedColumn: ERROR:  column "date_part" does not exist
+LINE 1: SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year...
+```
+
+ApplicationController rescues it into a redirect, so every country page silently
+302'd to `/en` with no visible error and a 200-looking smoke result.
+
+Three PostgreSQL majors are in play and they disagree:
+
+| environment | PostgreSQL | implicit EXTRACT column |
+|---|---|---|
+| production | 10 | `date_part` |
+| local docker-compose | 11.7 | `date_part` |
+| **staging (Kamal/Proxmox)** | **17.5** | **`extract`** |
+
+So this could not reproduce locally, and production is unaffected — it only
+appears on the new infrastructure. Fixed by aliasing the grouped expression
+explicitly (`AS year_part`); `protected_areas_inner_join` takes an optional
+`alias_as:` and the GROUP BY keeps the raw expression, since
+`GROUP BY <expr> AS <name>` is invalid SQL.
+
+Verified both shapes against the real PG 17 staging database: the old one fails
+with the exact error, the new one returns 6 rows. Also confirmed still working on
+local PG 11, so no regression for production's PG 10.
+
+Guarded by SQL-shape assertions in `test/models/country_test.rb`, not a functional
+test — on PG 11 the old SQL passes, so a functional test would have stayed green
+while staging was broken.
+
+**Worth noting separately:** ApplicationController's blanket rescue turned a 500
+into a 302 and hid this completely. Consider letting it re-raise in staging, or at
+least reporting to AppSignal before redirecting.
+
+### 8l. Pre-deploy shadow verification (Aug 2026) — smoke went fully green
+
+Deploy cycles cost ~15 min, so instead of pushing and discovering failures, the
+not-yet-deployed code was verified against the real staging database first.
+
+**Technique — worth reusing.** Create a container from the CURRENTLY DEPLOYED image
+on the staging host, `docker cp` the changed files in *before* `docker start` (so
+eager-load picks them up), give it the Kamal role env file plus any new secret, and
+run `rake smoke:routes` against its own Puma. The live containers are untouched.
+
+```
+docker create --name pp-shadow --network kamal \
+  --env-file .kamal/apps/protectedplanet-staging/env/roles/web.env \
+  --env-file /tmp/extra.env -e MEMCACHE_SERVERS=host.docker.internal:11211 \
+  --add-host host.docker.internal:host-gateway \
+  --volume /data/pp-imports:/app/tmp/imports \
+  <image> bundle exec puma -C config/puma.rb
+docker cp <changed files> pp-shadow:/app/...
+docker start pp-shadow
+docker exec pp-shadow bash -lc 'cd /app && bundle exec rake smoke:routes'
+```
+
+This gives real PG 17, real data, real Elasticsearch and real S3 without a deploy.
+It found two further bugs that would otherwise have cost two more cycles.
+
+**Confirmed working pre-deploy:** country pages 200 (were 302), country PDF 200
+(was 204), all three tile types 200 with real PNG bytes, and every download format
+generated — csv 11.2 MB, shp 11.2 MB, gdb 11.2 MB (OpenFileGDB), **pdf 11.4 MB via
+Puppeteer in 12.1s**, which is the path that had no runtime dependency in the image
+until this round.
+
+**POST endpoints, which smoke:routes does not cover**, tested with a real CSRF token
+and session: `search#autocomplete` 200 (7.4 KB JSON), `pame#list` 200 (16.8 KB),
+`pame#download` 200 (13.9 KB CSV), `downloads#create` 200.
+
+Final: **37 walked, 37 healthy, 0 failed — smoke:routes passed.**
+
+### 8m. Three more bugs the shadow run exposed — ALL FIXED
+
+**1. `AssetGenerator` — square brackets broke the tile URL (Ruby 3)**
+
+Fixing `URI.encode` and adding `MAPBOX_STATIC_IMAGE_URL` still left tiles at 500:
+
+```
+URI::InvalidURIError (bad URI (is not URI?): ".../geojson(%7B..."coordinates":
+  [[[-61.825,17.185],...]]]%7D%7D)/auto/304x138@2x?access_token=...")
+lib/modules/asset_generator.rb:53:in `request_tile'
+```
+
+`URI::DEFAULT_PARSER.escape` leaves `[` and `]` alone — RFC 2396 reserves them for
+IPv6 literals in the HOST component — and every GeoJSON geometry is full of them.
+Fixed with `UNSAFE_IN_PATH`, the RFC 2396 default set minus `\[\]`. Four escape
+strategies were tested against the live Mapbox API: the old one fails to parse, the
+new one returns HTTP 200 with 8483 bytes of PNG. This is the THIRD distinct bug
+behind /assets/tiles/:id, each hidden by the one before it.
+
+**2. `ActiveStorage::Blob#service_url` — removed in Rails 7.0**
+
+```
+NoMethodError (undefined method `service_url' for an instance of ActiveStorage::Blob)
+app/models/comfy/cms/searchable_page.rb:52:in `image'
+```
+
+Three call sites (`searchable_page.rb`, `cms_serializer.rb`, `cms_helper.rb`), all
+on the non-development branch, so they only ever raised on staging/production.
+`/search-cms?search_term=...` 500'd as soon as any result carried an image.
+Renamed to `#url`.
+
+**This one is a genuine miss in the §8d static sweep** — `service_url` was not on
+the list of removed APIs scanned for. Guarded now by a test that greps app/ and
+lib/ for it, which is cheap and version-proof.
+
+**3. `Search::CmsSerializer` — `''` is not a Hash**
+
+`Searchable#filters` returns `''` (not `{}`) when no filters are supplied, so
+`options` is `{filters: ''}` and `Hash#dig(:filters, :ancestor)` called
+`''.dig(:ancestor)`:
+
+```
+TypeError (String does not have #dig method)
+app/serializers/search/cms_serializer.rb:101
+```
+
+An unfiltered `/search-cms` 500'd on production too — it only ever worked because
+the frontend always sends filters. Guarded in the serializer rather than changing
+what `#filters` returns, since that value also feeds the query builder and `''` vs
+`{}` is not a change worth making blind.
+
+### 8n. Latent fragilities noted, not fixed
+
+- `Ogr::Postgres.get_feature_name` raises `IndexError` on any filename that does
+  not follow `WDPA_MmmYYYY_Public[_id][_geom]`. Unreachable in normal flow (callers
+  go through `Download::Utils.filename`), but it fails loudly and unhelpfully.
+- `PameEvaluation.paginate_evaluations` reads `requested_page`; anything else gives
+  `nil.to_i == 0` and `RangeError (invalid page: 0)`. `page_number || 1` does not
+  help because `0` is truthy in Ruby.
+- **ApplicationController's blanket rescue turns 500s into redirects.** It hid a
+  completely broken country section (§8k) — every country page was down and nothing
+  reported it. Consider re-raising in staging, or reporting to AppSignal before
+  redirecting.
+
+### 8o. Deploy 8430f49d0 — smoke fully green on staging (Aug 2026)
+
+`rake smoke:routes` on the deployed image: **37 walked, 37 healthy, 0 failed.**
+First green run against real staging. Hooks both ran (migrations, `Cache flushed`),
+and `MAPBOX_STATIC_IMAGE_URL` was delivered.
+
+| endpoint | before | now |
+|---|---|---|
+| `/assets/tiles/:id` ×3 types | 500 | **200, real PNGs** (8.4 KB / 54 KB / 47 KB) |
+| `/en/country/:iso` | 302 to homepage | **200** |
+| `/en/country/:iso/pdf` | 204 empty | **200** |
+| `/en/search-cms` (+query) | 500 | **200** |
+
+`/assets/tiles/667` returns 302 to `search-placeholder-country.png`. That is the
+designed fallback in `AssetsController#tiles` for a record with no usable geometry,
+not a failure.
+
+### 8p. PDF exports render without the map — NOT FIXED
+
+Found while trying to get extension-free browser evidence for the map, by running a
+headless browser inside the container. **First, a correction worth recording:** that
+probe reported `SyntaxError: Unexpected token '{'` loading the Map chunk, which
+looked like a real bug. It was not:
+
+```
+puppeteer 5.5.0  ->  HeadlessChrome/88.0.4298.0   (Jan 2021)
+class A { static { } }  ->  "Unexpected token '{'"
+```
+
+Chromium 88 cannot parse ES2022, which the Vite 7 output uses. Always check the
+browser version before trusting a headless probe.
+
+**But `rasterize.js` uses that same `require('puppeteer')`**, so Chromium 88 is what
+renders every PDF. Measured on the live page:
+
+```
+{"islandHosts":13,"islandsWithContent":11,"mapCanvas":false}
+```
+
+11 of 13 Vue islands mount (the entrypoint parses fine); only the lazily-imported
+Map chunk fails, because it bundles maplibre-gl's modern syntax. So **every PDF
+export is missing its map**, while generating successfully — 11.4 MB, no error, 200
+from the endpoint. Invisible to `smoke:routes` and to byte-count checks.
+
+Note this also qualifies the §8l verification: "pdf 11.4 MB via Puppeteer in 12.1s"
+proved the path *generated*, not that the output was correct.
+
+Fix: bump `puppeteer` from `^5.5.0` (2020). Needs code changes — `page.waitFor()`
+was renamed to `waitForTimeout` in v10 and removed in v22 — plus re-verifying the
+bundled Chromium download in the image build, and an assertion on PDF *content*
+rather than size.
+
+### 8q. Still unexplained: the base map does not render in a real browser
+
+Every server-side link verified healthy on the deployed image: HTML asset digests,
+all assets 200, `VITE_MAPBOX_TOKEN` inlined, Mapbox styles 200, `composite` vector
+source 200, glyphs 200, no Referer/URL restriction, `data-gis` overlays 200, map
+component mounts with well-formed props, all 44 built JS files parse, and the Map
+chunk is served byte-identical to disk over both plain and brotli.
+
+The headless probe cannot settle it (Chromium 88, see 8p) and the in-app browser
+pane blocks the bundle with `ERR_BLOCKED_BY_CLIENT`. Needs a real modern browser
+with extensions disabled: incognito, Network tab filtered to `mapbox` —
+- no `api.mapbox.com` requests at all -> map never initialises, look for a JS
+  exception above it
+- 401 or `access_token=undefined` -> the token is not reaching `transformRequest`
+- 200s and still blank -> Vue sizing/render bug in `Map/Base.vue`
+
+Both browsers seen so far carry heavy extension interference (MetaMask
+`ObjectMultiplex`, rokt.com, "Host is not in insights whitelist"), so an extension
+remains a live possibility.
+
+### 8r. puppeteer 5.5.0 -> 25.8.0 — FIXED (§8p)
+
+`package.json` pinned `"puppeteer": "^5.5.0"` (2020), which bundles **Chromium 88**.
+That predates ES2022, so it could not parse the Map chunk Vite 7 emits, and every
+PDF export rendered without its map while still returning 200 and a plausible file
+size.
+
+Changes:
+
+- `package.json`: `^5.5.0` -> `^25.8.0` (Chrome 152). Lockfile shrinks by ~450
+  lines; puppeteer 5's dependency tree was largely obsolete.
+- `rasterize.js` + `rasterize_dev_mode.js`: `page.waitFor()` was renamed to
+  `waitForTimeout` in puppeteer 10 and removed in 22 — replaced with a plain timer
+  promise, which is version-proof.
+- `rasterize_dev_mode.js` also hardcoded
+  `node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux/chrome`. That
+  path stopped existing in puppeteer 19; removed so the resolver finds the browser.
+- Both scripts now wait for `.maplibregl-canvas` when the page has a map host, and
+  log `[rasterize] map canvas rendered` / a WARNING otherwise. A fixed 10s delay
+  cannot tell "map drawn" from "map never loaded", which is precisely how this hid.
+- `Dockerfile.deploy`: `PUPPETEER_CACHE_DIR=/app/.cache/puppeteer` in **both** the
+  build and runtime stages. Puppeteer 19 moved the browser out of node_modules and
+  into `$HOME/.cache/puppeteer`; the runtime stage only does
+  `COPY --from=build /app /app`, so a browser under `/root/.cache` would be left
+  behind and every PDF would fail with "Could not find Chrome". Verified the
+  browser does land in that directory.
+- The build assertion now **launches** the browser rather than just requiring the
+  module, so a missing shared library fails the build instead of shipping.
+- `bin/preflight-deploy` step 8 does the same check locally (~10s), so this is
+  caught before a 15-minute deploy.
+
+**Verified end to end on the staging host**, not just locally: a throwaway
+container sharing the app's network namespace, with puppeteer 25 installed, ran the
+real `rasterize.js` against the live PA page:
+
+```
+[rasterize] map canvas rendered
+exit=0   pdf bytes: 372094
+```
+
+Under Chromium 88 the same page gave `mapCanvas: false`.
+
+### 8s. Note on headless-browser evidence
+
+Two separate false leads came from headless probes in this session, both worth
+remembering:
+
+1. **Chromium 88** (puppeteer 5) reported `SyntaxError: Unexpected token '{'`
+   loading the Map chunk. That was the browser being nine years old, not a bug in
+   the bundle. Always print `browser.version()` before trusting a probe.
+2. **Chrome 152 headless on the staging host falls back to software WebGL**
+   ("Automatic fallback to software WebGL has been deprecated") and shows an
+   unrelated `ERR_SSL_PROTOCOL_ERROR`. It loads the style, sprites and TileJSON
+   (all 200) but requests **zero vector tiles**. That is not sound evidence about a
+   real GPU browser, so it must NOT be used to diagnose §8q.
+
+The user's own browser remains the only reliable source for the map question.
+
+### 8t. Deploy eb8b6abd6 FAILED — "Could not find Chrome" — defensive fix applied
+
+The puppeteer-25 deploy failed at the build's own assertion:
+
+```
+ERROR: puppeteer cannot launch -- every PDF export would fail.
+Could not find Chrome (ver. 152.0.7977.42). ... your cache path is
+incorrectly configured (which is: /app/.cache/puppeteer).
+```
+
+**The assertion did its job** — it caught this instead of shipping an image whose
+PDFs silently lose their map, which is exactly the failure it was written for.
+
+**Root cause NOT reproduced.** The exact layer sequence was replayed on
+`linux/amd64` (the CI platform) in a cut-down image — ubuntu 24.04 + node 24 +
+corepack yarn 4.17.1 + the same ENV, `yarn install --immutable`, then
+`yarn workspaces focus --production`:
+
+```
+AFTER-INSTALL:  /app/.cache/puppeteer/chrome/linux-152.0.7977.42
+AFTER-PRUNE:    /app/.cache/puppeteer/chrome/linux-152.0.7977.42
+```
+
+So the browser DOES land in PUPPETEER_CACHE_DIR and DOES survive the prune. CI's
+own log shows `puppeteer@npm:25.8.0 must be built` and no build failure. The most
+plausible remaining explanation is that yarn's build step swallowed a failed
+download on the self-hosted builder — but that is inference, not evidence.
+
+**Fix: stop depending on the download having worked earlier in the build.** An
+explicit `./node_modules/.bin/puppeteer browsers install chrome` now runs
+immediately before the launch assertion. Verified on amd64: idempotent when the
+browser is present, and it restores a deliberately wiped cache.
+
+Its exit code is tolerated on purpose — the CLI returns **1 even on success**
+(verified: it recovered a wiped cache and still exited 1). The launch assertion
+stays the real gate, matching how the asset outputs are handled in the same RUN.
+
+Also added `/.cache/` to `.gitignore` and `.cache/` to `.dockerignore`. The
+puppeteer browser cache lives in the repo root by design (so the bind mount keeps
+it between local runs) and is ~650MB; it was untracked but NOT ignored, i.e. one
+`git add .` from being committed, and without the dockerignore rule a local
+`docker build` would ship the host's browser over the image's own.
+
+### 8u. "Could not find Chrome" — ROOT CAUSE FOUND (deploy 251b52b7a)
+
+The second failure produced the actual error, which the first had truncated:
+
+```
+IncompleteInstallationError: All providers failed for chrome 152.0.7977.42:
+  - DefaultProvider: The browser folder
+    (/app/.cache/puppeteer/chrome/linux-152.0.7977.42) exists but the
+    executable ... is missing
+```
+
+**The version directory is created; the executable inside it is not.** `yarn install`
+runs puppeteer's postinstall, reports success, and leaves a half-finished download.
+`puppeteer browsers install chrome` then refuses to repair it, because a present
+directory reads as "already installed" — so the defensive step added in §8t was a
+no-op and printed the CLI usage text.
+
+**Two of my own checks were wrong, and both failed the same way:**
+
+- The amd64 layer replay in §8t asserted with `ls -d /app/.cache/puppeteer/chrome/*`
+  — the DIRECTORY, which is precisely what exists when the download has failed. It
+  reported success against a broken install.
+- The claim that the CLI "returns 1 even on success" was wrong. It returned 1
+  because of this error, not as normal behaviour.
+
+Fix (Dockerfile.deploy):
+
+```
+&& rm -rf "$PUPPETEER_CACHE_DIR"                                    # no half-finished install survives
+&& ./node_modules/.bin/puppeteer browsers install chrome            # hard gate
+&& test -x "$(node -e "...require('puppeteer').executablePath()")"  # the EXECUTABLE, not the folder
+&& node -e "...launch()..."                                         # and it must actually run
+```
+
+All four are hard gates now; no tolerated exit codes.
+
+**That fix was still not the cause.** See 8v.
+
+### 8v. ROOT CAUSE: `unzip` is not installed in the image
+
+Three deploys failed with "Could not find Chrome (ver. 152.0.7977.42)". Removing
+the stale cache directory (§8u) finally let the underlying error surface:
+
+```
+Error: All providers failed for chrome 152.0.7977.42:
+  - DefaultProvider: Extraction failed: no zip archiver is available.
+    Install `unzip` (or `tar.exe`/Powershell on Windows), or add the optional
+    `yauzl` dependency.
+```
+
+**Chrome is distributed as a .zip, and the image has no extractor.** The base layer
+installs `zip` — for the .gdb download bundles — but `unzip` is a SEPARATE package
+and was never added. Confirmed on the running staging container: `/usr/bin/zip`
+exists, `unzip` does not.
+
+The full chain, which is why this took three cycles to see:
+
+1. puppeteer downloads chrome.zip during `yarn install`
+2. extraction fails; yarn's build step does not surface it
+3. the version directory is left behind with no executable inside
+4. `puppeteer browsers install chrome` sees that directory and reports
+   `IncompleteInstallationError` instead of re-downloading
+5. the launch assertion reports the generic "Could not find Chrome"
+
+Every layer of that reports something other than "no unzip".
+
+Fix: add `unzip` to the base apt install. One word.
+
+**Why local runs never hit it:** the docker-compose dev image is Debian-based and
+already includes unzip, which is why puppeteer 25 installed and launched cleanly
+there while failing in the deploy image every time.
+
+**Lesson, consistent with the rest of this session:** the §8t/§8u checks asserted
+on the browser DIRECTORY, which is precisely what exists when extraction fails.
+`test -x` on `executablePath()` (added in §8u) is the assertion that would have
+pointed here immediately.
+
+**Still not verified locally.** Docker's buildkit metadata DB is corrupted from the
+disk-full episode (`write /var/lib/docker/buildkit/containerdmeta.db: input/output
+error`) and freeing space does not repair it — Docker Desktop needs a restart.
+Unlike the previous two attempts, though, this fix is not inference: the tool named
+the missing package, and its absence is confirmed in the shipped image.
+
+### 8w. `unzip` confirmed as the cause; one more self-inflicted failure after it
+
+Deploy `7ae24a544` (with `unzip` added) got the install through cleanly:
+
+```
+chrome@152.0.7977.42 /app/.cache/puppeteer/chrome/linux-152.0.7977.42/chrome-linux64/chrome
+```
+
+That is the CLI's success output with a real executable path — so §8v was correct:
+missing `unzip` was what broke the extraction.
+
+The RUN still failed, on the very next line, in the assertion added in §8u:
+
+```
+TypeError [ERR_INVALID_ARG_TYPE]: The "chunk" argument must be of type string
+or an instance of Buffer... Received an instance of Promise
+```
+
+`executablePath()` returns a **Promise** in puppeteer 25, and
+`process.stdout.write()` of a Promise throws. My assertion was broken, not the
+image. Fixed by wrapping in `Promise.resolve(...)`, which handles the sync and
+async forms both, so it will not break again if the API changes back. The pattern
+was verified against both shapes before committing.
+
+Running tally on this one bug: the missing package cost three deploys, and my own
+checks cost two more — one asserting on the directory instead of the executable
+(§8u), one that could not print the executable path at all (this).
+
+### 8x. preflight step 8 now mirrors the build's assertion chain
+
+Step 8 originally only called `launch()`, so it could not have caught the
+`executablePath()` Promise bug (§8w) — that lived in the assertion, not the
+browser. It now runs the same three steps the Dockerfile does: resolve
+`executablePath()` via `Promise.resolve`, `test -x` the result, then launch. It
+does NOT re-download the browser (the build does that from scratch); it validates
+the resolution + exec + launch path, which is the part that has actually broken.
+
+Confirmed working in both directions: with the local browser deleted it failed and
+printed the resolved path; with it restored it reports
+`puppeteer launches (Chrome/152.0.7977.42)`.
+
+Full local run after the Docker restart: 5/5 substantive checks green. Two
+environment notes for whoever runs this next — `docker compose up -d db` is needed
+first (step 7 uses `--no-deps` and will otherwise fail on
+`protectedplanet-db`), and the puppeteer browser must exist locally
+(`./node_modules/.bin/puppeteer browsers install chrome`).
+
+### 8y. Map renders — two follow-on bugs after the worker fix
+
+The worker fix (§8x/063b05d77) got tiles loading, which exposed two more:
+
+**1. `'get' on proxy: property 'rgb'` — Vue was deep-proxying the MapLibre instance**
+
+```
+TypeError: 'get' on proxy: property 'rgb' is a read-only and non-configurable data
+property on the proxy target but the proxy did not return its actual value
+```
+
+`useMapInstance` held the map in `ref()`, which makes the assigned value DEEPLY
+reactive — so the whole MapLibre Map, including internal frozen objects like
+`Color` (whose `rgb` is read-only and non-configurable), got wrapped in a Proxy.
+Reading it violates the Proxy invariant and throws. `shallowRef` keeps `.value`
+assignment reactive without proxying the internals. The `as Ref<...>` cast that
+line already carried was a symptom of the same problem.
+
+**2. The highlighted area vanished from every map after the first**
+
+The pinia store is an app-wide singleton and **survives Turbo Drive navigation**
+(only the body is swapped; the JS context persists), while the map island is torn
+down and rebuilt per page. `addOverlay` is idempotent, so on the second visit to a
+map page the overlay was already in the store, `visibleLayers` never changed, the
+watcher in `Base.vue` never fired, and the brand-new map never received its layers.
+First visit worked; every subsequent one showed a basemap with no highlight —
+exactly as reported.
+
+Fixed by syncing the new map to the store's current state inside the `style.load`
+callback, alongside `setFirstForegroundLayerId`.
+
+**Note on the regression test.** The first version passed with AND without the fix:
+`MapBaselayerControls` mounts by default and its `selectedBaselayer` watcher also
+calls `showLayers`, so the assertion was satisfied by an unrelated path. Disabling
+those controls in the test isolates the init path. Verified in both directions —
+passes with the fix, fails without it. A guard that has not been seen to fail is
+not a guard.
+
+### 8z. The polygon really was the overlay id — my §8y fix targeted the wrong thing
+
+§8y assumed the second visit failed because the store was never re-applied to the
+new map. Wrong. The actual data:
+
+```json
+"id": "individual_site",
+"layers": [{ "id": "individual_site_0",
+             "url": ".../query?where=site_id+%3D+14426...&f=geojson" }]
+```
+
+**Every protected-area page ships the same overlay id with a different,
+site-specific geometry URL.** `addOverlay` is idempotent by id and the store
+survives Turbo Drive navigation, so on the second site it kept the FIRST site's
+geometry. The polygon was not missing — the map was showing site B with site A's
+shape rendered off-screen.
+
+Fix: `useMapStore.reset()`, called from `Map/Index.vue` in **onBeforeMount** — a
+parent's beforeMount runs before any child mounts, whereas its mounted runs after,
+so clearing in onMounted would wipe the overlays this page's own Overlay.vue
+children just registered.
+
+Verified in both directions: the test fails with the reset commented out.
+
+**Two verification failures of mine on this one, worth recording:**
+
+1. The headless check in §8y reported `overlayRequests: 1` and I read it as
+   success. That single request was the BOUNDS query; an added overlay layer would
+   have produced many raster requests. The probe reproduced the bug and I scored it
+   green, because I measured canvas presence and basemap tiles — neither of which
+   involves the overlay.
+2. `shallowRef` (§8y) fixed a real Vue/MapLibre proxy problem but was NOT the cause
+   of this. My headless run showed 0 `rgb` errors while the user's browser still
+   showed them, which should have told me the probe was not exercising the layer-add
+   path at all.
+
+Same pattern as the 204 that scored "ok", the 11.4 MB PDF that proved nothing, and
+the browser directory that existed without an executable: measuring something
+adjacent to the thing.

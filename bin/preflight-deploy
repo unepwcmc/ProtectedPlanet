@@ -1,0 +1,280 @@
+#!/usr/bin/env bash
+# Pre-push checks for a Kamal staging deploy.
+#
+# Each deploy cycle costs ~15 minutes (remote image build) and a failure part-way
+# leaves you reading thousands of log lines. These checks reproduce, locally and
+# cheaply, the conditions that have actually broken deploys so far.
+#
+#   ./bin/preflight-deploy              # everything
+#   ./bin/preflight-deploy --skip-tests # skip the suite (~4 min) when it just ran
+#
+# NOT covered (deliberately): building Dockerfile.deploy itself. The image is
+# ~3.4GB plus build cache, and on Apple Silicon it builds under amd64 emulation —
+# slower than just deploying. The checks below target the failure modes that
+# build would have caught, without the cost.
+set -uo pipefail
+cd "$(dirname "$0")/.."
+
+SKIP_TESTS=0
+[[ "${1:-}" == "--skip-tests" ]] && SKIP_TESTS=1
+
+# The docker CLI symlink in /usr/local/bin can point at an unmounted DMG; fall
+# back to the app bundle.
+DOCKER="$(command -v docker 2>/dev/null || true)"
+[[ -x "$DOCKER" ]] || DOCKER=/Applications/Docker.app/Contents/Resources/bin/docker
+export PATH="$(dirname "$DOCKER"):$PATH"
+
+PASS=0; FAIL=0; WARN=0
+ok()   { echo "  ✅ $*"; PASS=$((PASS+1)); }
+bad()  { echo "  ❌ $*"; FAIL=$((FAIL+1)); }
+warn() { echo "  ⚠️  $*"; WARN=$((WARN+1)); }
+step() { echo; echo "── $* ──"; }
+
+step "0. environment"
+if docker info >/dev/null 2>&1; then ok "docker daemon reachable"; else bad "docker daemon not running"; exit 1; fi
+AVAIL_KB=$(df -k . | awk 'NR==2{print $4}')
+if [[ "$AVAIL_KB" -lt 5242880 ]]; then
+  warn "only $((AVAIL_KB/1024/1024))GB free — builds and asset compiles may fail (docker builder prune -af)"
+else
+  ok "disk: $((AVAIL_KB/1024/1024))GB free"
+fi
+
+step "1. git state"
+if [[ -n "$(git status --porcelain | grep -v '^??' || true)" ]]; then
+  warn "uncommitted changes — the deploy builds the PUSHED commit, not your working tree"
+  git status --short | grep -v '^??' | sed 's/^/       /'
+else
+  ok "working tree clean"
+fi
+
+step "2. kamal hooks"
+shopt -s nullglob
+HOOKS=(.kamal/hooks/*)
+if [[ ${#HOOKS[@]} -eq 0 ]]; then
+  ok "no hooks to check"
+else
+  for h in "${HOOKS[@]}"; do
+    [[ -d "$h" ]] && continue
+    # Kamal silently SKIPS a hook that is not executable, so a lost +x looks like
+    # "the hook never ran" rather than an error.
+    if [[ -x "$h" ]]; then ok "$h executable"; else bad "$h NOT executable (kamal will skip it silently): chmod +x $h"; fi
+    mode=$(git ls-files -s "$h" 2>/dev/null | awk '{print $1}')
+    [[ -n "$mode" && "$mode" != "100755" ]] && bad "$h exec bit not recorded in git (mode $mode)"
+    if bash -n "$h" 2>/dev/null; then ok "$h syntax"; else bad "$h has a bash syntax error"; fi
+    # app exec fans out across every role unless narrowed; concurrent db:migrate
+    # then races the advisory lock (ActiveRecord::ConcurrentMigrationError).
+    if grep -q "app exec" "$h" && grep -q "db:migrate" "$h" && ! grep -q -- "--roles" "$h"; then
+      bad "$h runs db:migrate via 'app exec' without --roles (will run once per role and race the migration lock)"
+    fi
+  done
+fi
+
+step "3. deploy config parses"
+for f in config/deploy.yml config/deploy.staging.yml .github/workflows/deploy-staging-kamal.yml; do
+  [[ -f "$f" ]] || continue
+  if ruby -ryaml -e "YAML.unsafe_load_file('$f')" >/dev/null 2>&1 \
+     || docker compose run --rm --no-deps -T web bash -lc "ruby -ryaml -e \"YAML.unsafe_load_file('$f')\"" >/dev/null 2>&1; then
+    ok "$f valid YAML"
+  else
+    bad "$f is not valid YAML"
+  fi
+done
+# db/ is a submodule holding db/migrate + db/structure.sql. Without a recursive
+# checkout the image ships an empty db/ and migrations become a silent no-op.
+if [[ -f .gitmodules ]] && ! grep -q "submodules" .github/workflows/deploy-staging-kamal.yml 2>/dev/null; then
+  bad "workflow checkout is missing 'submodules: recursive' (db/ submodule holds the migrations)"
+else
+  ok "workflow checks out submodules"
+fi
+
+step "4. test suite"
+if [[ "$SKIP_TESTS" -eq 1 ]]; then
+  warn "skipped (--skip-tests)"
+else
+  if docker compose run --rm --no-deps -e RAILS_ENV=test web bash -lc "bundle exec rails test" 2>&1 | tee /tmp/preflight-tests.log | tail -3; then
+    grep -qE "0 failures, 0 errors" /tmp/preflight-tests.log && ok "suite green" || bad "suite has failures (see /tmp/preflight-tests.log)"
+  else
+    bad "suite did not run (see /tmp/preflight-tests.log)"
+  fi
+fi
+
+# The image build has NONE of the runtime secrets: config/deploy.yml lists them
+# under env.secret, and Kamal injects those when the CONTAINER starts, long after
+# the image is built. docker-compose, by contrast, hands the web service the whole
+# of .env via env_file, so a naive `docker compose run` is NOT a build environment
+# — it is a runtime one, and it will happily boot on secrets the real build lacks.
+#
+# Clearing SECRET_KEY_BASE alone was not enough. An initializer that raised on a
+# blank REDIS_URL passed preflight (compose supplied REDIS_URL from .env) and then
+# failed the real build ~13 minutes in at `rake vite:build_all`. So blank EVERY
+# declared runtime secret, except the few Dockerfile.deploy sets for itself.
+#
+# Derived from deploy.yml rather than hard-coded, so a newly added secret is
+# covered without anyone remembering to update this list.
+#
+# Clearing the shell environment is still not sufficient on its own: the `dotenv`
+# gem re-reads .env during Rails boot, and docker-compose bind-mounts the repo, so
+# ENV gets repopulated from the file no matter what -e says. .dockerignore excludes
+# .env* from the image, so the real build has no such file. Mask it with an empty
+# one for the build-environment steps. Without this, `-e REDIS_URL=` looks like it
+# works and silently does nothing.
+EMPTY_ENV=/tmp/preflight-empty.env
+: > "$EMPTY_ENV"
+# /ProtectedPlanet is where docker-compose.yml mounts the repo.
+MASK_DOTENV=( -v "$EMPTY_ENV:/ProtectedPlanet/.env:ro" )
+
+BUILD_PROVIDED='SECRET_KEY_BASE|AWS_REGION|AWS_S3_REGION|MAPBOX_ACCESS_TOKEN'
+BUILD_ENV_CLEAR=()
+while read -r secret; do
+  [[ -z "$secret" ]] && continue
+  [[ "$secret" =~ ^($BUILD_PROVIDED)$ ]] && continue
+  BUILD_ENV_CLEAR+=( -e "${secret}=" )
+# Comment and blank lines inside the list must not terminate the scan — an inline
+# comment between two entries silently truncated this list once.
+done < <(awk '/^env:/{e=1}
+              e&&/^  secret:/{s=1;next}
+              s&&/^[[:space:]]*(#|$)/{next}
+              s&&/^    - /{print $2;next}
+              s&&!/^    - /{s=0}' config/deploy.yml)
+
+step "5. build-time asset compile (the deploy image's environment)"
+# Dockerfile.deploy precompiles with RAILS_ENV=staging, no SECRET_KEY_BASE and
+# SECRET_KEY_BASE_DUMMY=1 (Rails' escape hatch for generating a throwaway key).
+# Anything that assigns secret_key_base itself, or otherwise needs real secrets at
+# boot, blows up here — exactly how the first deploy failed, ~9 minutes in.
+# Mirror Dockerfile.deploy exactly: vite_ruby enhances assets:precompile with a
+# nested vite:build_all that always exits non-zero here with a bare "Compilation
+# failed:" while sprockets itself succeeds. So the exit code is NOT the signal —
+# the Dockerfile tolerates it and asserts the outputs instead. Do the same, or
+# this reports a false failure on every run.
+# Mirror the Dockerfile's order exactly, including comfy:compile_assets. Media
+# Surfer ships no prebuilt admin assets, so without that step the CMS admin CSS/JS
+# never gets built -- and locally it can appear to work anyway because a previous
+# run left the gem's builds/ dir populated in the shared bundler volume. Wiping
+# it first makes this check behave like a fresh image build.
+GEM_BUILDS=$(docker compose run --rm --no-deps -T web bash -lc 'echo $(bundle show comfortable_media_surfer 2>/dev/null)/app/assets/builds' 2>/dev/null | tr -d '\r' | tail -1)
+rm -rf public/assets
+docker compose run --rm --no-deps \
+      "${MASK_DOTENV[@]}" \
+      -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
+      "${BUILD_ENV_CLEAR[@]}" \
+      -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
+      web bash -lc "rm -rf '$GEM_BUILDS'/comfy && bundle exec rails comfy:compile_assets && (bundle exec rails assets:precompile || true)" >/tmp/preflight-assets.log 2>&1 || true
+ASSET_COUNT=$(ls public/assets 2>/dev/null | wc -l | tr -d ' ')
+# Sprockets owns the Comfy CMS admin bundle; the site CSS moved to Vite/Tailwind,
+# so public/assets/application-*.css no longer exists.
+if compgen -G "public/assets/comfy/admin/cms/application-*.css" >/dev/null && [[ "$ASSET_COUNT" -gt 10 ]]; then
+  ok "sprockets precompiles in the build environment ($ASSET_COUNT assets)"
+else
+  bad "assets:precompile produced no sprockets output — the deploy will fail the same way"
+  grep -iE "aborted|ArgumentError|Missing|error" /tmp/preflight-assets.log | head -5 | sed 's/^/       /'
+fi
+
+step "6. vite build injects the client env (map token)"
+# Vite INLINES import.meta.env.VITE_* at build time. Those values only exist if the
+# build runs through vite_ruby (rake vite:build_all), which loads config/vite.rb --
+# calling ./node_modules/.bin/vite directly silently produces a bundle with no
+# Mapbox token, and the map then never renders with no error anywhere. That shipped
+# to staging once; this check exists so it cannot ship again.
+if [[ -z "${MAPBOX_ACCESS_TOKEN:-}" ]] && ! grep -qE "^MAPBOX_ACCESS_TOKEN=.+" .env 2>/dev/null; then
+  warn "MAPBOX_ACCESS_TOKEN not set locally — skipping the client-env check (CI/deploy passes it as a builder secret)"
+else
+  rm -rf public/vite
+  docker compose run --rm --no-deps \
+        "${MASK_DOTENV[@]}" \
+        -e RAILS_ENV=staging -e SECRET_KEY_BASE_DUMMY=1 -e SECRET_KEY_BASE= \
+        "${BUILD_ENV_CLEAR[@]}" \
+        -e VITE_RUBY_MODE=production \
+        -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
+        web bash -lc "bundle exec rake vite:build_all" >/tmp/preflight-vite.log 2>&1 || true
+  BUNDLE_TOKEN=$(grep -rhoE "pk\.ey[A-Za-z0-9._-]+" public/vite/assets/ 2>/dev/null | head -1)
+  if [[ -n "$BUNDLE_TOKEN" ]]; then
+    ok "vite bundle contains a Mapbox token"
+
+    # Presence is not enough. A token can read the style and sprites while being
+    # Forbidden on the composite tile source (the private unepwcmc.* tilesets) —
+    # MapLibre then initialises, draws its controls, and leaves the canvas blank
+    # with no console error. That shipped to staging once. So actually call the
+    # endpoint MapLibre paints from and require a 200.
+    STYLE_ID="cko1hsfi50vog17l697cr4d6p"
+    STYLE_JSON=$(curl -s --max-time 20 "https://api.mapbox.com/styles/v1/unepwcmc/${STYLE_ID}?access_token=${BUNDLE_TOKEN}" 2>/dev/null)
+    SRC=$(printf '%s' "$STYLE_JSON" | python3 -c "import sys,json
+try:
+    d=json.load(sys.stdin); print(d['sources']['composite']['url'].replace('mapbox://',''))
+except Exception: print('')" 2>/dev/null)
+    if [[ -z "$SRC" ]]; then
+      warn "could not read the style's tile source (offline, or the style id changed) — skipping the tile check"
+    else
+      TILE_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
+        "https://api.mapbox.com/v4/${SRC}.json?secure&access_token=${BUNDLE_TOKEN}" 2>/dev/null)
+      if [[ "$TILE_CODE" == "200" ]]; then
+        ok "Mapbox token can fetch the map tiles (HTTP 200)"
+      else
+        bad "Mapbox token is REJECTED for the map tiles (HTTP $TILE_CODE) — map renders blank"
+        echo "       the token reaches the browser but lacks access to the unepwcmc.* tilesets." | sed 's/^/       /'
+        echo "       fix the MAPBOX_ACCESS_TOKEN secret (see docs), not the code." | sed 's/^/       /'
+      fi
+    fi
+  else
+    bad "vite bundle has NO Mapbox token — the map will silently not render"
+    echo "       is the build going through 'rake vite:build_all' (not the vite binary)?" | sed 's/^/       /'
+    tail -3 /tmp/preflight-vite.log | sed 's/^/       /'
+  fi
+fi
+
+step "7. staging boot with real secrets present"
+if docker compose run --rm --no-deps \
+      -e RAILS_ENV=staging -e SECRET_KEY_BASE=preflight_dummy_key_0123456789 \
+      -e AWS_REGION=eu-west-1 -e AWS_S3_REGION=eu-west-1 \
+      web bash -lc "bundle exec rails runner 'Rails.application.eager_load!; puts :ok'" >/tmp/preflight-boot.log 2>&1; then
+  ok "staging env boots + eager loads"
+else
+  bad "staging env fails to boot (see /tmp/preflight-boot.log)"
+  grep -iE "error|exception" /tmp/preflight-boot.log | head -5 | sed 's/^/       /'
+fi
+
+step "8. puppeteer can launch a browser (PDF exports)"
+# Both PDF paths shell out to `node app/frontend/backend-scripts/rasterize.js`,
+# which requires puppeteer and launches its bundled Chrome. Two ways that breaks
+# silently, both of which have happened:
+#   * the browser is missing (node_modules pruned, or downloaded outside
+#     PUPPETEER_CACHE_DIR so `COPY --from=build /app /app` leaves it behind)
+#   * the browser exists but the base image lacks a shared library it needs
+# Neither shows up as a failed request: the endpoint still returns 200 and the job
+# still "succeeds", it just produces a PDF with no map -- which is exactly how
+# puppeteer 5 / Chromium 88 went unnoticed. Launching for real is the only check
+# that covers both.
+#
+# Launching, specifically -- NOT checking that the browser directory exists. A
+# failed download leaves the version directory in place without the executable
+# inside it, which is what made two deploys fail while every directory-level check
+# passed. See the puppeteer block in Dockerfile.deploy.
+# Mirrors the Dockerfile's assertion chain, not just the launch: resolve
+# executablePath() exactly as the build does, check the file is executable, THEN
+# launch. executablePath() returns a Promise in puppeteer 25, and an earlier
+# version of the build assertion wrote it straight to stdout and blew up with
+# ERR_INVALID_ARG_TYPE -- a deploy-breaking bug in the CHECK, which a
+# launch-only test here could never have caught.
+# The browser is not re-downloaded (the Dockerfile does that from scratch); this
+# only validates the resolution + exec + launch path, which is the part that broke.
+if docker compose run --rm --no-deps -T \
+      -e PUPPETEER_CACHE_DIR=/ProtectedPlanet/.cache/puppeteer \
+      web bash -lc "EXE=\"\$(node -e \"Promise.resolve(require('puppeteer').executablePath()).then(p => process.stdout.write(String(p)))\")\" \
+        && echo \"executablePath: \$EXE\" \
+        && test -x \"\$EXE\" \
+        && node -e \"require('puppeteer').launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b=>{console.log(await b.version());await b.close()}).catch(e=>{console.error(e.message);process.exit(1)})\"" \
+      >/tmp/preflight-puppeteer.log 2>&1; then
+  ok "puppeteer launches ($(grep -oE 'Chrome/[0-9.]+|HeadlessChrome/[0-9.]+' /tmp/preflight-puppeteer.log | head -1))"
+else
+  bad "puppeteer cannot launch a browser — every PDF export would render without its map"
+  tail -3 /tmp/preflight-puppeteer.log | sed 's/^/       /'
+fi
+
+echo
+echo "──────────────────────────────────"
+echo "  passed: $PASS   warnings: $WARN   failed: $FAIL"
+if [[ "$FAIL" -gt 0 ]]; then
+  echo "  ❌ do NOT push — fix the above first"
+  exit 1
+fi
+echo "  ✅ ready: git push origin staging_kamal"

@@ -1,0 +1,264 @@
+# ProtectedPlanet — production/staging image for Kamal 2.
+#
+# This replaces the buster + GDAL-2.2.3-from-source + ESRI FileGDB SDK chain the
+# development Dockerfile still carries. That chain cannot be built on a current
+# base: ESRI ship FileGDB as a RHEL7 binary linked against an old glibc.
+#
+# Instead: Ubuntu 24.04 (matching the host), distro GDAL 3.8.4, and GDAL's
+# built-in OpenFileGDB driver, which has written .gdb since 3.6 and reports as
+# `rw+v` here. Verified end to end against the staging database — a 500-feature
+# Multi Polygon layer plus a second layer appended with -update, read back
+# cleanly. See docs/GDAL-openfilegdb-migration.md.
+#
+# Ruby is built with ruby-build rather than taken from a ruby:* image, because
+# those are Debian-based and we want the 24.04 GDAL. The dev Dockerfile already
+# uses ruby-build for 3.3.7, so the approach is proven in this repo.
+
+ARG RUBY_VERSION=3.3.7
+ARG NODE_VERSION=24.4.1
+
+# ---------------------------------------------------------------------------
+# base — runtime libraries only, shared by build and final stages
+# ---------------------------------------------------------------------------
+FROM ubuntu:24.04 AS base
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_WITHOUT="development:test" \
+    RAILS_LOG_TO_STDOUT=1 \
+    RAILS_SERVE_STATIC_FILES=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates curl gnupg tzdata \
+      # GDAL 3.8.4 + its geo stack. OpenFileGDB is built in — no ESRI SDK.
+      gdal-bin libgdal34 libproj25 proj-data libgeos-c1v5 \
+      # PostGIS client (pg gem) and spatialite
+      libpq5 libsqlite3-0 libspatialite8t64 \
+      # psych/YAML. The build stage gets libyaml-dev, but the runtime stage needs
+      # the shared library or Puma dies with
+      # "libyaml-0.so.2: cannot open shared object file".
+      libyaml-0-2 \
+      # image/asset handling, and zip for the .gdb download bundles.
+      #
+      # unzip is NOT the same package as zip, and puppeteer needs it: Chrome is
+      # distributed as a .zip, and with no extractor available the download
+      # "succeeds" but leaves the version directory with no executable inside --
+      #   DefaultProvider: Extraction failed: no zip archiver is available.
+      # which then surfaces much later, and very confusingly, as
+      #   Could not find Chrome (ver. 152.0.7977.42)
+      # Three deploys failed on that before the extraction error itself surfaced.
+      shared-mime-info zip unzip \
+      # Chromium runtime deps — the /country/*.pdf endpoint drives Puppeteer
+      fonts-liberation libgtk-3-0t64 libcups2t64 libx11-xcb1 libxcomposite1 \
+      libxdamage1 libxfixes3 libxrandr2 libgbm1 libnss3 libasound2t64 \
+      libdrm2 libxkbcommon0 \
+ && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------------------------
+# build — toolchain, Ruby, Node, gems, assets
+# ---------------------------------------------------------------------------
+FROM base AS build
+ARG RUBY_VERSION
+ARG NODE_VERSION
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential git pkg-config \
+      autoconf bison libssl-dev libyaml-dev zlib1g-dev libreadline-dev \
+      libffi-dev libgmp-dev libpq-dev libgdal-dev libsqlite3-dev \
+      libxml2-dev libxslt1-dev xz-utils \
+ && rm -rf /var/lib/apt/lists/*
+
+# Ruby via ruby-build
+RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
+ && PREFIX=/usr/local /tmp/ruby-build/install.sh \
+ && ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
+ && rm -rf /tmp/ruby-build
+ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
+
+# Node 24 from the official tarball (Vite 5 needs 18+).
+RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
+ && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
+ && rm /tmp/node.tar.xz \
+ && corepack enable && corepack prepare yarn@4.17.1 --activate
+
+WORKDIR /app
+
+# Gems first so the layer caches independently of app code
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler --no-document \
+ && bundle config set --local without "${BUNDLE_WITHOUT}" \
+ && bundle install --jobs 4 --retry 3 \
+ && rm -rf "${BUNDLE_PATH}"/ruby/*/cache
+
+# Then JS deps
+#
+# PUPPETEER_CACHE_DIR must point inside /app. Puppeteer 19 moved the bundled
+# browser out of node_modules/puppeteer/.local-chromium and into
+# $HOME/.cache/puppeteer; the runtime stage only does `COPY --from=build /app /app`,
+# so a browser under /root/.cache would be silently left behind and every PDF would
+# fail at launch with "Could not find Chrome".
+ENV PUPPETEER_CACHE_DIR=/app/.cache/puppeteer
+
+COPY package.json yarn.lock .yarnrc.yml* ./
+RUN yarn install --immutable || yarn install
+
+COPY . .
+
+# Asset build. SECRET_KEY_BASE_DUMMY lets Rails boot for assets:precompile
+# without a real key. (NODE_OPTIONS=--openssl-legacy-provider is gone with
+# webpacker 4 — Vite needs no such workaround on Node 24.)
+ARG RAILS_ENV=staging
+ENV RAILS_ENV=${RAILS_ENV} \
+    SECRET_KEY_BASE_DUMMY=1 \
+    VITE_RUBY_VERBOSE=true
+
+# vite_ruby derives its build mode from RAILS_ENV, so under RAILS_ENV=staging it
+# runs `vite build --mode staging`. config/vite.json defines only all/development/
+# test, and the staging-mode build fails where `--mode production` succeeds.
+# Pin the mode rather than inventing a staging section in vite.json.
+ENV VITE_RUBY_MODE=production
+
+# vite_rails boots the full Rails app before building, which initialises the
+# ActiveStorage S3 service. config/storage.yml takes its region from
+# Rails.application.config_for(:app_secrets).s3_region, which config/app_secrets.yml populates from
+# ENV["AWS_S3_REGION"] — so with that unset the service is built with an
+# explicit region: nil and aws-sdk raises "missing region". An explicit nil also
+# defeats the SDK's own AWS_REGION fallback, so AWS_S3_REGION is the one that
+# matters here. Build-time placeholder; the real value is injected at runtime.
+#
+# NB: separate ENV instruction on purpose — a comment inside a backslash-
+# continued ENV breaks the continuation and the variable never gets set.
+ENV AWS_S3_REGION=eu-west-1 \
+    AWS_REGION=eu-west-1
+
+# Assets are built in explicit steps rather than one assets:precompile, and every
+# output is asserted afterwards so a tolerated exit code cannot hide a real break.
+#
+# This app now has TWO asset pipelines: sprockets and vite. (webpacker 4 was
+# removed at the Vite cutover, along with config/webpack/* and babel.config.js.)
+#
+# Sprockets no longer builds the site CSS -- app/assets/stylesheets/application.scss
+# went to Vite/Tailwind with the frontend rewrite, so there is no public/assets/
+# application-*.css any more. What sprockets still owns is the Comfy CMS admin
+# bundle, so that is what the assertion below checks.
+#
+# The vite build MUST go through vite_ruby (rake vite:build_all), not the vite
+# binary directly. Only the Ruby entry point loads config/vite.rb, which sets
+# ViteRuby.env['VITE_MAPBOX_TOKEN'] / ['VITE_RAILS_ENV']; vite.config.mts then
+# forwards those from process.env so Vite can INLINE them into the bundle.
+# Calling ./node_modules/.bin/vite directly skips config/vite.rb entirely, and the
+# bundle ships with no Mapbox token -- the map then silently never renders, which
+# is exactly what happened on staging.
+#
+# This previously failed with a bare "Compilation failed:", which is why the direct
+# binary was used. That failure was the secret_key_base crash (Rails could not boot
+# inside the rake task); with that fixed, vite:build_all succeeds again.
+# Sprockets still goes through assets:precompile, whose exit code is tolerated
+# because vite_ruby enhances it and the enhancement can exit non-zero -- the output
+# assertions below are the real gate.
+# comfy:compile_assets FIRST. Comfortable Media Surfer ships no prebuilt admin
+# assets -- its app/assets/builds/ is empty in a freshly installed gem, and its
+# admin JS is esbuild/ES-modules with dart-sass CSS that sprockets cannot compile
+# from source. This rake task runs esbuild + dart-sass to populate the gem's
+# builds/ dir; assets:precompile then digests the result.
+#
+# Until the Vite cutover the admin CSS/JS happened to come out of the app's own
+# app/assets/{javascripts,stylesheets}/comfy/ overrides, so this step was never
+# needed here. The frontend rewrite removed those, which is why the CMS admin
+# assets vanished from the image and the assertion below started failing.
+#
+# node_modules is PRUNED, not deleted. It used to be `rm -rf node_modules`, on the
+# assumption that Vite had bundled everything that mattered into public/vite --
+# true for the frontend, but puppeteer is a RUNTIME dependency: both PDF paths
+# shell out to `node app/frontend/backend-scripts/rasterize.js`, which does
+# `require('puppeteer')`. With node_modules gone that threw MODULE_NOT_FOUND, so
+# every PDF (the /country/:iso.pdf endpoint and the PDF download generator)
+# failed on staging. `yarn workspaces focus --production` keeps the 11 runtime
+# dependencies and drops the 24 dev ones; the require below is the assertion that
+# the prune actually left puppeteer -- and its bundled Chromium -- intact.
+#
+# The browser is re-installed from scratch here, on purpose.
+#
+# `yarn install` runs puppeteer's postinstall and reports success, but on the
+# builder it leaves an INCOMPLETE download: the version directory is created and
+# the executable inside it is not. The CLI then refuses to repair it, because a
+# present directory reads as "already installed":
+#
+#   IncompleteInstallationError: All providers failed for chrome 152.0.7977.42:
+#     - DefaultProvider: The browser folder (/app/.cache/puppeteer/chrome/
+#       linux-152.0.7977.42) exists but the executable ... is missing
+#
+# That is why two deploys failed with "Could not find Chrome" while every
+# directory-level check said the browser was there. `rm -rf` first makes the
+# install unconditional, so a half-finished download cannot persist.
+#
+# All steps are hard gates -- no tolerated exit codes. `test -x` on
+# executablePath() is the check that actually matters: an earlier version asserted
+# on the DIRECTORY, which is exactly the thing that exists when the download has
+# failed.
+#
+# executablePath() is wrapped in Promise.resolve() because puppeteer 25 returns a
+# Promise from it; writing that straight to stdout throws
+# "ERR_INVALID_ARG_TYPE ... Received an instance of Promise". Promise.resolve()
+# handles both the sync and async forms, so this does not break if it changes back.
+RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
+    export MAPBOX_ACCESS_TOKEN="$(cat /run/secrets/MAPBOX_ACCESS_TOKEN 2>/dev/null || true)" \
+ && rm -rf public/assets public/vite tmp/cache/vite \
+ && bundle exec rails comfy:compile_assets \
+ && (bundle exec rails assets:precompile || echo "note: sprockets done; ignoring the wrapper's bogus exit, outputs asserted below") \
+ && bundle exec rake vite:build_all \
+ && test -s public/vite/.vite/manifest.json \
+ && ls public/assets/comfy/admin/cms/application-*.css >/dev/null \
+ && test "$(ls public/assets | wc -l)" -gt 10 \
+ && (grep -rq "VITE_MAPBOX_TOKEN:\`\?pk\." public/vite/assets/ \
+     || (echo "ERROR: no Mapbox token in the built bundle -- the map will not render. Is MAPBOX_ACCESS_TOKEN passed as a builder secret?" && exit 1)) \
+ && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite manifest + mapbox token present" \
+ && yarn workspaces focus --production \
+ && rm -rf "$PUPPETEER_CACHE_DIR" \
+ && ./node_modules/.bin/puppeteer browsers install chrome \
+ && test -x "$(node -e "Promise.resolve(require('puppeteer').executablePath()).then(p => process.stdout.write(String(p)))")" \
+ && node -e "const p=require('puppeteer'); p.launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b => { console.log('puppeteer launches:', await b.version()); await b.close(); }).catch(e => { console.error('ERROR: puppeteer cannot launch -- every PDF export would fail. ' + e.message); process.exit(1); })" \
+ && rm -rf tmp/cache
+
+# ---------------------------------------------------------------------------
+# runtime
+# ---------------------------------------------------------------------------
+FROM base AS runtime
+ARG RUBY_VERSION
+ARG RAILS_ENV=staging
+ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
+# Build-stage ENV is not inherited, and puppeteer resolves its browser from this
+# variable at RUNTIME too -- without it the copied browser under /app is ignored.
+ENV PUPPETEER_CACHE_DIR=/app/.cache/puppeteer
+# ENV from the build stage is not inherited. Without this, config/puma.rb falls
+# back to ENV.fetch("RAILS_ENV") { "development" } and Puma boots the wrong env
+# if the orchestrator's env file is ever missing it.
+ENV RAILS_ENV=${RAILS_ENV}
+
+COPY --from=build /usr/local/ruby-${RUBY_VERSION} /usr/local/ruby-${RUBY_VERSION}
+COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}
+COPY --from=build /app /app
+
+# A JavaScript runtime is required at BOOT, not just at build time: terser and
+# coffee-rails initialise ExecJS when Rails loads, so without a `node` on PATH
+# Puma dies with ExecJS::RuntimeUnavailable even though assets are precompiled.
+# Taking the binary from the build stage keeps the version identical.
+COPY --from=build /usr/local/bin/node /usr/local/bin/node
+
+WORKDIR /app
+
+# Non-root. uid 1000 matches the ownership cloud-init sets on /data/pp-imports,
+# so the Kamal volume is writable without a chown at boot.
+RUN groupadd -g 1000 -r app 2>/dev/null || true \
+ && useradd -u 1000 -g 1000 --create-home --shell /bin/bash app 2>/dev/null || true \
+ && mkdir -p tmp/pids log storage \
+ # entrypoint.sh is mode 644 in git (the compose setup invoked it as
+ # `bash entrypoint.sh`), so set the bit here rather than relying on the repo.
+ && chmod +x entrypoint.sh bin/docker-sidekiq-healthcheck \
+ && chown -R 1000:1000 /app
+USER 1000:1000
+
+EXPOSE 3000
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

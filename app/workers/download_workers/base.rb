@@ -52,16 +52,27 @@ class DownloadWorkers::Base
   def while_generating(key)
     properties = Download::Utils.properties(key)
     generating_properties = properties.merge({ 'status' => 'generating' })
-    $redis.set(key, generating_properties.to_json)
+    Download::Utils.write(key, generating_properties)
 
     begin
       result_json = yield
-      $redis.set(key, result_json)
-    rescue StandardError => e
+      Download::Utils.write(key, result_json)
+    # Exception, not StandardError. NotImplementedError is a ScriptError, so an
+    # unimplemented generator hook sailed straight past the old rescue and left
+    # the key pinned at "generating" forever -- which then blocked every future
+    # request for that download. Anything that is not a clean success must land
+    # the key in a retryable state.
+    rescue Exception => e # rubocop:disable Lint/RescueException
       failed_properties = properties.merge({ 'status' => 'failed', 'error' => e.message })
-      $redis.set(key, failed_properties.to_json)
-      Rails.logger.error("Download generation failed for #{key}: #{e.message}")
-      # Do not re-raise so status remains failed and future requests can re-enqueue
+      Download::Utils.write(key, failed_properties)
+      Rails.logger.error("Download generation failed for #{key}: #{e.class}: #{e.message}")
+
+      # Shutdown signals are not download failures: let Sidekiq's own handling
+      # take over once the key is safely marked retryable.
+      raise if e.is_a?(SignalException) || e.is_a?(SystemExit) || e.is_a?(Interrupt)
+
+      # Otherwise do not re-raise, so status stays "failed" and future requests
+      # can re-enqueue immediately.
       failed_properties.to_json
     ensure
       # Clear the enqueue lock (if any) so failed downloads can be retried immediately.
