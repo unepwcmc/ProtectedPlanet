@@ -3,11 +3,12 @@
 // Loaders are lazy (`() => import(...)`), same as islands.ts's IslandLoader —
 // see below for why a DOM scan (not just calling every loader up front) is
 // needed to actually keep that laziness.
-import { TurboMount, buildRegisterFunction, type Plugin } from 'turbo-mount'
+import { TurboMount, buildRegisterFunction, type ApplicationWithTurboMount, type Plugin } from 'turbo-mount'
 import { createApp, type Component } from 'vue'
 import { pinia } from '@/stores/pinia'
 
 export type TurboMountLoader = () => Promise<{ default: Component }>
+
 
 // Why a custom Vue plugin instead of turbo-mount's stock `turbo-mount/vue`:
 // islands.ts installs the app-wide `pinia` singleton into every island's own
@@ -57,20 +58,47 @@ const TURBO_MOUNT_SELECTOR = '[data-controller^="turbo-mount-"]'
  * register).
  */
 export function registerTurboMountComponents(map: Record<string, TurboMountLoader>): void {
-  const turboMount = new TurboMount()
-  const registered = new Set<string>()
+  // Reuse an existing instance rather than always constructing one.
+  //
+  // TurboMount's constructor does `application.turboMount = this`, and its
+  // controllers resolve components through THAT pointer:
+  //
+  //   resolve(name) { const c = this.components.get(name); if (!c) throw `Unknown component: ${name}` }
+  //
+  // So if this entrypoint is evaluated twice — which happens when Turbo Drive
+  // restores a page whose <head> references a previous deploy's application-*.js
+  // and pulls in a second bundle — instance B replaces A on the shared Stimulus
+  // application while A's controllers are already registered. Those controllers
+  // then resolve against B's EMPTY component map and throw
+  // "Unknown component: Map" / "Unknown component: Download" on connect.
+  //
+  // data-turbo-track="reload" in the layout stops the double-load itself; this
+  // makes the module idempotent regardless of why it runs twice.
+  // window.Stimulus is typed as a plain Application; turbo-mount's own
+  // ApplicationWithTurboMount is the interface that exposes the attached instance.
+  const turboMount = (window.Stimulus as ApplicationWithTurboMount | undefined)?.turboMount
+    ?? new TurboMount()
+  const inFlight = new Set<string>()
 
   function ensureRegistered(name: string): void {
     const loader = map[name]
-    if (!loader || registered.has(name)) return
-    registered.add(name)
-    // Without this, a component whose chunk 404s or has a load-time error
-    // (e.g. a bad import path) fails silently: its data-controller stays
-    // registered as "seen" but never actually connects, so the mount point
-    // just sits empty forever with nothing in the console to explain why.
+    // Ask the shared instance, not a per-call Set: a second evaluation of this
+    // module gets a fresh Set but the same TurboMount, and re-registering throws
+    // "Component 'X' is already registered."
+    if (!loader || turboMount.components.has(name)) return
+    // components.has() only turns true once the chunk resolves, so an in-flight
+    // load needs its own guard: the MutationObserver below rescans on every DOM
+    // change and would otherwise start the same import again.
+    if (inFlight.has(name)) return
+    inFlight.add(name)
+
+    // The .catch matters: a component whose chunk 404s or throws at load time
+    // otherwise fails silently -- the mount point just sits empty forever with
+    // nothing in the console to explain why.
     loader()
       .then(mod => registerComponent(turboMount, name, mod.default))
       .catch(e => console.error(`[turboMount] failed to load component "${name}"`, e))
+      .finally(() => inFlight.delete(name))
   }
 
   function componentNamesOn(el: HTMLElement): string[] {
