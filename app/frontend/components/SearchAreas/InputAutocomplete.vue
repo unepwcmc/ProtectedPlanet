@@ -182,7 +182,7 @@ watch(() => props.prePopulatedSearchTerm, () => {
 .ct-search-areas-autocomplete__list {
   @apply
   max-h-72
-  overflow-y-scroll
+  overflow-y-auto
   pt-6
   tw-shared-base-flex-col;
 }

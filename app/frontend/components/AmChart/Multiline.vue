@@ -146,7 +146,7 @@ function createLegend(chart: am5xy.XYChart) {
   @apply
   overflow-x-auto
   overflow-y-hidden
-  md:overflow-hidden;
+  md:overflow-auto;
 }
 
 .ct-am-chart-multiline__chart {

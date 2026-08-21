@@ -242,7 +242,7 @@ function submit(result: AutocompleteResult) {
   absolute
   top-[60%]
   left-0
-  overflow-y-scroll
+  overflow-y-auto
   h-70
   tw-shared-base-flex-col-gap-1;
 }

@@ -34,7 +34,7 @@ function onOptionClick(option: string, checked: boolean) {
   @apply
   list-none
   max-h-[85vh]
-  overflow-y-scroll
+  overflow-y-auto
   overflow-x-hidden
   lg:max-h-90
   tw-shared-base-flex-col;

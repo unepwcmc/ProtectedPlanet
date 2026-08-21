@@ -107,13 +107,12 @@ function onToggle() {
   rounded-[0.1875rem]
   border
   border-black
-  text-black
-  h-8.5
-  px-2.75
-  text-base
-  lg:h-14
-  lg:px-6.75
-  lg:text-lg
+  tw-shared-font-hind-siliguri__light-base-md-lg-grey-black
+  h-11.5
+  md:h-14
+  p-3
+  md:px-6
+  md:py-4
   hover:bg-theme-primary
   hover:border-theme-primary
   hover:text-white;
@@ -136,8 +135,8 @@ function onToggle() {
 
 .ct-pame-filter__icon {
   @apply
-  invisible
-  lg:visible
+  hidden
+  lg:block
   size-2;
 }
 

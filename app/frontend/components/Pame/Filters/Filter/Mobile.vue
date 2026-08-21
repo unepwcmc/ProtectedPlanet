@@ -7,6 +7,7 @@
       :options
       :selectedOptions="pendingOptions"
       :groupId="name"
+      class="ct-pame-filter-mobile__options"
       @click="onOptionClick"
     />
     <div class="ct-pame-filter-mobile__buttons">
@@ -104,7 +105,8 @@ function onApply() {
   py-7.5
   px-6.25
   text-base
-  tw-shared-base-flex-col-gap-3;
+  tw-shared-base-flex-col-gap-3
+  justify-between;
 }
 
 .ct-pame-filter-mobile--active {
