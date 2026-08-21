@@ -13,8 +13,7 @@ export interface Banner {
 
 export interface BannerProps {
   banners: Banner[]
-  // SHA1 hex digest of the visible banners' ids — used to key the "closed" cookie
-  // for the carousel case (see FrontendHelper#banner_signature).
+  // Keys the "closed" cookie — FrontendHelper#banner_signature.
   signature: string
 }
 
@@ -27,33 +26,28 @@ export interface CounterProps {
   config?: CounterConfig
   decimal?: number
   total: number
-  // Class name of the element that triggers the count-up once it scrolls into view.
+  // Class of the element whose scroll-into-view starts the count-up.
   trigger: string
   animate?: boolean
 }
 
-// Props for `GaLink`, rendered wherever a link needs a GA click event
-// (see app/frontend/composables/useAnalytics.ts). `text` carries the link's HTML label since
-// a `turbo_mount` island has no server-rendered slot content to project into.
+// A link with a GA click event (useAnalytics.ts). `text` is the HTML label —
+// turbo_mount islands have no slot content.
 export interface GaLinkProps {
   gaId?: string
   href: string
   text: string
 }
 
-// Props for `CookieConsent` (app/frontend/components/CookieConsent.vue), sourced
-// from config/locales/global/en.yml so the copy lives in the same place as the
-// rest of the site's i18n strings. `description` carries the Privacy policy
-// link as HTML since a `turbo_mount` island has no server-rendered slot
-// content to project into.
+// Copy from config/locales/global/en.yml. `description` is HTML (carries the
+// Privacy policy link).
 export interface CookieConsentProps {
   description: string
   accept: string
   reject: string
 }
 
-// Props for `listing-page-card-news`, rendered by
-// app/views/partials/cards/_articles.html.erb.
+// partials/cards/_articles.html.erb.
 export interface ListingPageCardNewsProps {
   date?: string
   image?: string
@@ -62,8 +56,7 @@ export interface ListingPageCardNewsProps {
   url: string
 }
 
-// Props for `listing-page-card-resources`, rendered by
-// app/views/partials/cards/_resources.html.erb.
+// partials/cards/_resources.html.erb.
 export interface ListingPageCardResourcesProps {
   date?: string
   fileUrl?: string
@@ -74,8 +67,7 @@ export interface ListingPageCardResourcesProps {
   url?: string
 }
 
-// Props for the `listing-page-card-news`/`listing-page-card-resources` list
-// wrappers — one mount per `cards__cards` grid, rendering a `Card` per item.
+// One mount per `cards__cards` grid, rendering a `Card` per item.
 export interface ListingPageCardNewsListProps {
   cards: ListingPageCardNewsProps[]
 }
@@ -85,9 +77,7 @@ export interface ListingPageCardResourcesListProps {
   preview?: boolean
 }
 
-// Shape produced by ApplicationHelper#map_page (used by #get_nav_primary),
-// passed as the `links` prop to the `NavBar` island (turbo_mount "NavBar").
-// See app/helpers/application_helper.rb.
+// ApplicationHelper#map_page, via #get_nav_primary — NavBar's `links` prop.
 export interface NavLink {
   id: string
   label: string
@@ -96,33 +86,30 @@ export interface NavLink {
   children?: NavLink[]
 }
 
-// Props for `turbo_mount "SearchSiteTopbar"` — see _topbar.html.erb.
+// partials/_topbar.html.erb.
 export interface SearchSiteTopbarProps {
   endpoint: string
   placeholder: string
 }
 
-// One entry of `turbo_mount "Tabs"`'s `tabs` prop, built by
-// `thematic_and_data_area_vue_tabs` — see
-// `partials/thematic_and_data_area/_tabs.html.erb`.
+// ThematicAndDataAreaHelper#thematic_and_data_area_vue_tabs.
 export interface Tab {
   id: number
-  // HTML allowed — rendered with v-html.
+  // Rendered with v-html.
   title: string
-  // Trusted CMS copy for the tab, rendered with v-html when present.
+  // Trusted CMS copy, rendered with v-html.
   bodyHtml?: string
 }
 
 export interface TabsProps {
   tabs: Tab[]
-  // Matches by id or by title, mirroring the legacy `?tab=` query param.
+  // Matches by id or title, mirroring the `?tab=` query param.
   preselectedTab?: number | string | null
-  // GA event label prefix, e.g. "Slug: about-us". Omit to skip tracking.
+  // GA label prefix, e.g. "Slug: about-us". Omit to skip tracking.
   gaId?: string
 }
 
-// One entry of DownloadsHelper::DEFAULT_OPTIONS merged with #download_params,
-// passed to `Download` (`turbo_mount "Download"`) as `options`.
+// DownloadsHelper::DEFAULT_OPTIONS merged with #download_params.
 export interface DownloadOption {
   isDownload?: boolean
   isMap?: boolean
@@ -133,8 +120,7 @@ export interface DownloadOption {
     domain: string
     format: string
     token: string
-    // Attached for the 'search' domain option — see Download/Index.vue's
-    // clickNonCommercial, sourced from useDownloadStore's search bridge.
+    // 'search' domain only — from useDownloadStore, see Download/Index.vue.
     filters?: unknown
     search?: string
   }
@@ -154,13 +140,12 @@ export interface DownloadProps {
   }
   downloadDisabled?: boolean
   gaId: string
-  // Shrinks the trigger to a fixed-size icon-only square below the `md:` breakpoint
-  // (the secondary topbar's tighter layout) instead of the default auto-width button.
+  // Icon-only square below `md:` instead of the auto-width button — for the
+  // secondary topbar's tighter layout.
   compact?: boolean
 }
 
-// Props for `DownloadModal` (`turbo_mount "DownloadModal"`, mounted once
-// globally in application.html.erb).
+// Mounted once globally in application.html.erb.
 export interface DownloadModalProps {
   endpointCreate: string
   endpointPoll: string
@@ -179,15 +164,13 @@ export interface DownloadModalProps {
   }
 }
 
-// One item from Search::CmsSerializer#serialize (SearchCmsController#index,
-// and the initial page load via SearchHelper#cms_pages_for_search).
+// Search::CmsSerializer#serialize — SearchCmsController#index, and the initial
+// load via SearchHelper#cms_pages_for_search.
 export interface ListingResult {
   date?: string
   fileUrl?: string
   linkUrl?: string
-  // Serializer bug: the JSON key is actually `linktTile` (typo), so this is
-  // always undefined in practice — pre-existing on the backend, not a
-  // regression introduced by this migration.
+  // Always undefined: the serializer emits `linktTile` (pre-existing typo).
   linkTitle?: string
   title: string
   url?: string
@@ -201,9 +184,8 @@ export interface ListingResults {
   results: ListingResult[]
 }
 
-// Shared shape for Filters/Checkboxes' options — kept broad (id can be a
-// number) because CmsHelper#get_category_filters sources ListingFilterOption
-// from Comfy::Cms::PageCategory#id (an integer primary key), not a string slug.
+// Filters/Checkboxes options. `id` allows number because
+// CmsHelper#get_category_filters uses Comfy::Cms::PageCategory#id.
 export interface FilterOption {
   id: string | number
   title: string
@@ -211,9 +193,8 @@ export interface FilterOption {
 
 export type ListingFilterOption = FilterOption
 
-// Only `type: 'checkbox'` is ever sent for the news/resources listing pages
-// (see CmsHelper#get_category_filters) — `radio`/`checkbox-search` are only
-// used by the still-Vue2 search-areas filters (Search::FiltersSerializer).
+// CmsHelper#get_category_filters only ever sends `checkbox`; the other types
+// belong to the search-areas filters (Search::FiltersSerializer).
 export interface ListingFilter {
   id: string
   title?: string
@@ -226,16 +207,14 @@ export interface ListingFilterGroup {
   filters: ListingFilter[]
 }
 
-// Props for `MapBase` (the bare MapLibre instance, no panel/disclaimer/header) —
-// see home_controller.rb.
+// The bare MapLibre instance — no panel, disclaimer or header.
 export interface MapBaseProps {
   options?: MapOptionsPayload
   servicesForPointQuery?: PointQueryService[]
   popupAttributes?: PopupAttributeLabels
 }
 
-// One entry of MapOverlaysSerializer#serialize (MapHelper::OVERLAYS), rendered as an
-// item of `MapPanelProps['overlays']` — see home_controller.rb's `@main_map[:overlays]`.
+// MapOverlaysSerializer#serialize (MapHelper::OVERLAYS) — one `overlays` item.
 export interface MapFilterProps {
   color?: string
   title: string
@@ -247,24 +226,21 @@ export interface MapFilterProps {
 }
 
 export type DisclaimerText = { heading: string, body: string } | null
-// `map_yml[:disclaimer]` (config/locales/map/*.yml) — passed as `disclaimer` to
-// `Map`, forwarded to `MapDisclaimer` (rendered directly below the map, always
-// in the same place, for every page — no per-page slotting/placement variance).
+// `map_yml[:disclaimer]` (config/locales/map/*.yml) — rendered directly below
+// the map on every page.
 export interface MapDisclaimerProps {
   disclaimer?: DisclaimerText
   mapiIsForRegionCountryPA: boolean
 }
 
-// Props for `MapPanel` (formerly "MapFilters") — not its own mount point:
-// the `Map` island renders it as a child, threaded through `MapProps`. Built on
-// the Rails side, see home_controller.rb's `@main_map`.
+// Not a mount point — `Map` renders it, threaded through `MapProps`. Built by
+// home_controller.rb's `@main_map`.
 export interface MapPanelProps {
   overlays: MapFilterProps[]
   title: string
   isHidden?: boolean
-  // The PA-search box (`MapPaSearch`) only appears when these are provided —
-  // omitted on the header-map layout, which has no search box. See
-  // `Autocompletion.get_filters` for the `type` values.
+  // `MapPaSearch` only renders when these are set (the header-map layout has
+  // no search box). `type` values: Autocompletion.get_filters.
   type?: string
   autocompleteErrorMessages?: AutocompleteErrorMessages
   autocompletePlaceholder?: string
@@ -272,10 +248,8 @@ export interface MapPanelProps {
   mapiIsForRegionCountryPA?: boolean
 }
 
-// Props for `turbo_mount "Map"` — the single top-level map composition
-// (MapBase + MapDisclaimer + MapPanel) used by every page that shows a map,
-// identically. See partials/maps/_main.html.erb / partials/maps/_header.html.erb
-// for the legacy Vue2 equivalents this replaces.
+// The top-level map composition (MapBase + MapDisclaimer + MapPanel) used by
+// every page with a map.
 export interface MapProps {
   options?: MapOptionsPayload
   servicesForPointQuery?: PointQueryService[]
@@ -284,25 +258,19 @@ export interface MapProps {
   overlays: MapFilterProps[]
   disclaimer?: DisclaimerText
   isHidden?: boolean
-  // Set false on protected_areas/show, region/show, country/show — those
-  // pages show the disclaimer-only layout (isHidden: true) with no standalone
-  // map title.
+  // False on protected_areas/region/country show — those use the
+  // disclaimer-only layout (isHidden) with no standalone map title.
   showHeader?: boolean
-  // The PA-search box (`MapPaSearch`, rendered inside `MapPanel`) only appears
-  // when these are provided — omitted on the header-map layout, which has no
-  // search box. See `Autocompletion.get_filters` for the `type` values.
+  // `MapPaSearch` only renders when these are set (the header-map layout has
+  // no search box). `type` values: Autocompletion.get_filters.
   type?: string
   autocompleteErrorMessages?: AutocompleteErrorMessages
   autocompletePlaceholder?: string
   mapiIsForRegionCountryPA?: boolean
 }
 
-// Props for `MapPaSearch` — the "search & jump to a PA/country/region on the
-// map" box. Not its own `turbo_mount` entry: `MapPanel` renders it directly
-// (as a normal child component) when `type`/autocomplete-copy props are
-// present, threaded through `MapPanelProps`/`MapProps` above. See
-// `partials/maps/_main.html.erb`'s `<v-map-pa-search>` for the legacy Vue2 tag
-// this replaces.
+// The "jump to a PA/country/region" box. Not a mount point — `MapPanel`
+// renders it when `type` and the autocomplete copy are present.
 export interface MapPaSearchProps {
   autocompleteErrorMessages: AutocompleteErrorMessages
   autocompletePlaceholder: string
@@ -314,21 +282,20 @@ export interface AutocompleteErrorMessages {
   invalid_search_string: string
 }
 
-// One item of `SearchController#autocomplete`'s JSON (`Autocompletion.lookup`) —
-// `POST /search/autocomplete`.
+// POST /search/autocomplete — SearchController#autocomplete, via
+// Autocompletion.lookup.
 export interface AutocompleteResult {
   id: string | number
   is_pa: boolean
-  // Only set when is_pa — a region/country result has no site_pid.
+  // Only set when is_pa.
   site_pid: string | null
   extent_url: BoundsUrl
   title: string
   url: string
 }
 
-// Props for `turbo_mount "Listing"` — the news/resources listing pages
-// (filters + ajax pagination). Rendered by
-// app/views/layouts/cms/{_news-and-stories,_resources}.html.erb.
+// The news/resources listing pages (filters + ajax pagination) —
+// layouts/cms/{_news-and-stories,_resources}.html.erb.
 export interface ListingProps {
   endpointSearch: string
   filterGroups: ListingFilterGroup[]
@@ -343,10 +310,8 @@ export interface ListingProps {
   textNoResults: string
 }
 
-// One item of Search::AreasSerializer#serialize's `areas` array — shape
-// differs slightly per `geoType` (region/country hashes carry `countryFlag`/
-// `totalAreas`, a site hash carries neither), so every field but the shared
-// `image`/`title`/`url` is optional here rather than a discriminated union.
+// One item of Search::AreasSerializer#serialize's `areas`. Optional rather
+// than a discriminated union: only region/country carry countryFlag/totalAreas.
 export interface SearchAreaResult {
   title: string
   url: string
@@ -355,10 +320,8 @@ export interface SearchAreaResult {
   totalAreas?: string
 }
 
-// Search::AreasSerializer#serialize — one geo-type "page" of area search
-// results (site/country/region), passed as `results` to `turbo_mount
-// "SearchAreas"` and returned by SearchAreasController#search_results as
-// `{ areas: ... }`.
+// Search::AreasSerializer#serialize — one geo-type page of results, also the
+// `{ areas: ... }` body of SearchAreasController#search_results.
 export interface SearchAreasResults {
   geoType: string
   title: string
@@ -367,24 +330,20 @@ export interface SearchAreasResults {
   areas: SearchAreaResult[]
 }
 
-// One option of a Search::FiltersSerializer filter — `autocomplete` is only
-// present on the `location` filter's `country`/`region` options (type
-// `checkbox-search`).
+// `autocomplete` is only on the `location` filter's country/region options.
 export interface SearchFilterOption extends FilterOption {
   id: string
   autocomplete?: SearchFilterOption[]
 }
 
-// One entry of Search::FiltersSerializer#serialize's `filters` array.
+// Search::FiltersSerializer#serialize's `filters` entry.
 export interface SearchFilter {
   id: string
   name?: string
   title?: string
   type: 'checkbox' | 'radio' | 'checkbox-search'
   options: SearchFilterOption[]
-  // Set by SearchAreas/Page.vue from the `?filters[...]` query string before
-  // handing filterGroups down to Filters/Index.vue — not part of the
-  // serializer's own JSON.
+  // Not from the serializer — SearchAreas/Page.vue sets it from `?filters[...]`.
   preSelected?: string[] | [{ type: string, options: string[] }]
 }
 
@@ -393,27 +352,22 @@ export interface SearchFilterGroup {
   filters: SearchFilter[]
 }
 
-// SearchAreasController#index's `@config_search_areas` / the home page's
-// `config` (partials/search/_protected-areas.html.erb) — also read directly
-// by `SearchAreasInputAutocomplete` for its POST body's `type`.
+// SearchAreasController#index's `@config_search_areas`, and the home page's
+// `config`. `SearchAreasInputAutocomplete` reads `id` as its POST body `type`.
 export interface SearchAreasConfig {
   id: string
   placeholder: string
 }
 
-// SearchAreasController#index's `@tabs` (geo_type switcher: region/country/site).
+// SearchAreasController#index's `@tabs` — the region/country/site switcher.
 export interface SearchAreasTab {
   id: string
   title: string
 }
 
-// Props for `turbo_mount "SearchAreasPage"` (search_areas/index.html.erb).
-// `downloadButtonText`/`downloadTextCommercial` are new here (Wave 7) — the
-// legacy Vue2 version rendered `<Download>` via an ERB partial + `v-slot`
-// (partials/download/_download.html.erb), which read `download_text`/
-// `t('global.button.download')` itself; now that SearchAreas/Page.vue
-// composes `Download` directly as a normal child, those two need threading
-// through as props instead. See DownloadsHelper#download_text.
+// search_areas/index.html.erb. `downloadButtonText`/`downloadTextCommercial`
+// are threaded through because Page.vue composes `Download` itself — see
+// DownloadsHelper#download_text.
 export interface SearchAreasPageProps {
   configAutocomplete: SearchAreasConfig
   downloadButtonText: string
@@ -432,15 +386,14 @@ export interface SearchAreasPageProps {
   textFilters: string
 }
 
-// Props for `turbo_mount "SearchAreas"`
-// (partials/search/_protected-areas.html.erb).
+// partials/search/_protected-areas.html.erb.
 export interface SearchAreasProps {
   config: SearchAreasConfig
   endpointAutocomplete: string
   endpointSearch: string
 }
 
-// One entry of Search::FullSerializer#serialize's `results` array.
+// Search::FullSerializer#serialize's `results` entry.
 export interface SearchSiteResult {
   title: string
   url: string
@@ -448,8 +401,8 @@ export interface SearchSiteResult {
   image?: string
 }
 
-// Search::FullSerializer#serialize — passed as `dataPageLoad` to `turbo_mount
-// "SearchSite"` and returned by SearchController#search_results.
+// Search::FullSerializer#serialize — `SearchSite`'s `dataPageLoad`, and the
+// body of SearchController#search_results.
 export interface SearchSiteResultsData {
   searchTerm: string
   currentPage: number
@@ -459,13 +412,13 @@ export interface SearchSiteResultsData {
   results: SearchSiteResult[]
 }
 
-// SearchController#index's `@categories` (site-wide search category tabs).
+// SearchController#index's `@categories`.
 export interface SearchSiteCategory {
   id: string
   title: string
 }
 
-// Props for `turbo_mount "SearchSite"` (search/index.html.erb).
+// search/index.html.erb.
 export interface SearchSiteProps {
   categories: SearchSiteCategory[]
   dataPageLoad: SearchSiteResultsData
@@ -478,30 +431,22 @@ export interface SearchSiteProps {
 }
 
 // One bar of `ChartTotalCoverageChart`. `legend_colour_class` is a
-// `tw-shared-chart-legend-colour-*` class (see
-// app/frontend/styles/shared/themes.css) sent straight from the Rails
-// helper. `title` doubles as this bar's legend label. `value` is numeric on
-// the Rails side (GlobalStatistic-derived percentages) — unlike the Vue2
-// original, where every ERB attribute was coerced to a string,
-// `turbo_mount` sends the Ruby value's native JSON type straight through,
-// so callers here can produce a number.
+// `tw-shared-chart-legend-colour-*` class (styles/shared/themes.css) from the
+// Rails helper; `title` doubles as the legend label.
 export interface ChartTotalCoverageChartBar {
   legend_colour_class: string
   title: string
   value: number | string
 }
 
-// Props for `ChartTotalCoverageChart` — a total-vs-coverage bar pair (an
-// outer "total" bar with a narrower "coverage" bar drawn inside it), mounted
-// directly inside partials/charts/_total-coverage-chart.html.erb (marine
-// ocean coverage, Green List tab) with the surrounding chart title/content
-// left as plain ERB since those aren't dynamic/animated.
+// A "total" bar with a narrower "coverage" bar drawn inside it. Mounted inside
+// partials/charts/_total-coverage-chart.html.erb; the title stays plain ERB.
 export interface ChartTotalCoverageChartProps {
   total: ChartTotalCoverageChartBar
   coverage: ChartTotalCoverageChartBar
 }
 
-// One row of `ChartRowStacked` — TabPresenter#designations' `designation_percentages`.
+// TabPresenter#designations' `designation_percentages`.
 export interface ChartRowStackedRow {
   percent: number
 }
@@ -512,8 +457,7 @@ export interface ChartRowStackedProps {
   rows: ChartRowStackedRow[]
 }
 
-// One entry of AmChartPie's `dataset` — CountryPresenter/RegionPresenter's
-// `iucn_categories_chart`/`governance_chart`.
+// CountryPresenter/RegionPresenter's `iucn_categories_chart`/`governance_chart`.
 export interface AmChartPieDatum {
   id: number | string
   title: string
@@ -526,17 +470,15 @@ export interface AmChartPieProps {
   spacers?: boolean
 }
 
-// One datapoint of `AmChartMultiline`'s `data.datapoints` — numeric series keys
-// ("1"/"2"/"3") are threaded straight from Thematic::MarineController's CSV
-// parse, `x` is the date axis value.
+// `AmChartMultiline`'s `data.datapoints`. `x` is the date axis; the numeric
+// series keys come straight from Thematic::MarineController's CSV parse.
 export interface AmChartMultilineDatapoint {
   x: string
   [seriesIndex: string]: number | string
 }
 
-// Props for `turbo_mount "AmChartMultiline"` — mounted directly inside
-// partials/charts/_chart-coverage-growth.html.erb (marine coverage growth),
-// title/content left as plain ERB around the chart mount.
+// partials/charts/_chart-coverage-growth.html.erb; the surrounding
+// title/content stays plain ERB.
 export interface AmChartMultilineProps {
   data: {
     units: string
@@ -547,9 +489,8 @@ export interface AmChartMultilineProps {
   chartBackgroundColour?: string
 }
 
-// One item of TabPresenter#coverage (CountryPresenter/RegionPresenter#build_stats
-// / #build_combined_stats) — snake_case straight from Rails, remapped to
-// `StatsCoverageProps` (camelCase) by RegionCountryPages/Index.vue.
+// TabPresenter#coverage — snake_case from Rails, remapped to
+// `StatsCoverageProps` by RegionCountryPages/Index.vue.
 export interface StatsCoverageDatum {
   national_report_version?: number
   pame_km2?: string
@@ -600,9 +541,8 @@ export interface StatsMessageProps {
   text: string
 }
 
-// Shared link fields CountriesHelper#chart_link merges onto iucn/governance/
-// designation-jurisdiction items — `title` here is a search-page tooltip title
-// ("View the X sites for Y"), not a display label.
+// CountriesHelper#chart_link, merged onto iucn/governance/jurisdiction items.
+// `title` is a tooltip ("View the X sites for Y"), not a display label.
 export interface StatsChartLink {
   link: string
   title?: string
@@ -621,10 +561,9 @@ export interface StatsIucnCategoriesProps {
   title: string
 }
 
-// Raw TabPresenter#iucn shape — also carries `country` (unused by the
-// component; TabPresenter builds it for every geo-entity type), picked down
-// to StatsIucnCategoriesProps by RegionCountryPages/Index.vue instead of
-// spread wholesale, so `country` doesn't fall through onto the DOM.
+// Raw TabPresenter#iucn. RegionCountryPages/Index.vue picks fields down to
+// StatsIucnCategoriesProps rather than spreading, so `country` (unused) does
+// not fall through onto the DOM.
 export interface StatsIucnCategoriesData extends StatsIucnCategoriesProps {
   country?: string
 }
@@ -641,8 +580,7 @@ export interface StatsGovernanceProps {
   title: string
 }
 
-// Raw TabPresenter#governance shape — see StatsIucnCategoriesData above for
-// why `country` is picked out rather than spread wholesale.
+// Raw TabPresenter#governance — see StatsIucnCategoriesData on `country`.
 export interface StatsGovernanceData extends StatsGovernanceProps {
   country?: string
 }
@@ -686,8 +624,8 @@ export interface StatsSiteDetail {
   thumbnail_link: string
 }
 
-// TabPresenter#sites, or `turbo_mount "StatsSites"` fed by
-// ApplicationHelper#site_card_details for a direct (non-RegionCountryPages) mount.
+// TabPresenter#sites, or ApplicationHelper#site_card_details for a direct
+// (non-RegionCountryPages) mount.
 export interface StatsSitesProps {
   siteDetails: StatsSiteDetail[]
   textViewAll: string
@@ -695,10 +633,9 @@ export interface StatsSitesProps {
   viewAll: string
 }
 
-// One entry of `turbo_mount "RegionCountryPages"`'s `data` hash — keyed by
-// database id ('wdpa'/'wdpa_oecm'), built by CountryController#build_hash /
-// TabPresenter. `growth` (TabPresenter#growth) is omitted — its only consumer,
-// StatsGrowth/AmChartLine (ticket #265), was removed as dead code.
+// One entry of RegionCountryPages' `data`, keyed by database id
+// ('wdpa'/'wdpa_oecm') — CountryController#build_hash / TabPresenter.
+// TabPresenter#growth is omitted: its only consumer was removed as dead code.
 export interface RegionCountryPagesDatabase {
   coverage?: StatsCoverageDatum[]
   message: StatsMessageProps
@@ -709,9 +646,8 @@ export interface RegionCountryPagesDatabase {
   sites?: StatsSitesData
 }
 
-// Raw (snake_case) shapes for the two `RegionCountryPagesDatabase` entries that
-// need remapping to camelCase component props (sources → StatsSourcesProps,
-// sites → StatsSitesProps) inside RegionCountryPages/Index.vue.
+// The two `RegionCountryPagesDatabase` entries RegionCountryPages/Index.vue
+// remaps to camelCase props (StatsSourcesProps / StatsSitesProps).
 export interface StatsSourcesData {
   count: number
   source_updated: string
@@ -731,33 +667,28 @@ export interface RegionCountryPagesTab {
   title: string
 }
 
-// Props for `turbo_mount "RegionCountryPages"` (country#show / region#show).
+// country#show / region#show.
 export interface RegionCountryPagesProps {
   data: Record<string, RegionCountryPagesDatabase>
   gaId?: string
-  // Rendered HTML of partials/stats/_stats-related-countries.html.erb (country
-  // page only) — replaces the legacy `related_countries` Vue2 slot, since
-  // `turbo_mount` has no slot-content equivalent. Trusted server-rendered
-  // markup, not user input.
+  // Rendered partials/stats/_stats-related-countries.html.erb (country page
+  // only) — trusted server markup, passed as a prop since turbo_mount has no
+  // slot equivalent.
   relatedCountriesHtml?: string
   tabs: RegionCountryPagesTab[]
 }
 
-// Props for `StatsTooltipInfo` — the WDPA/OECM info tooltip in
-// partials/stats/_stats-overview.html.erb (country#show only, gated on
-// wdpa/oecm_national_designations_count locals), replacing the legacy
-// `<tooltip-second>` + ERB-in-slot markup (see Pattern B note in
-// 14-architecture-and-design.md) with a single props-driven island.
+// The WDPA/OECM info tooltip in partials/stats/_stats-overview.html.erb —
+// country#show only, gated on the *_national_designations_count locals.
 export interface StatsTooltipInfoProps {
   description: string
   designationsLabel: string
   designationsCount: number
 }
 
-// PA show `attributes-*` family (Wave 9). Shared `forPdf` flag switches every
-// island between "current selected parcel only" (site view) and "every
-// parcel, one section each" (PDF export) — selection itself is read from the
-// `site_pid` URL param via `useParcelSelection`, not passed as a prop.
+// PA show `attributes-*` family. `forPdf` switches every island between the
+// selected parcel only (site view) and one section per parcel (PDF export).
+// Selection comes from the `site_pid` URL param via `useParcelSelection`.
 
 // ProtectedAreasHelper#attributes_parcels_dropdown_descriptions.
 export interface AttributesParcelsDropdownProps {
@@ -786,8 +717,7 @@ export interface AttributesProtectedAreaProps {
   attributesList: AttributesParcelAttributeSet[]
 }
 
-// ProtectedAreasHelper#current_pa_and_all_parcels_pame_evaluations_attributes:
-// { site_pid => { method => [years...] } }.
+// ProtectedAreasHelper#current_pa_and_all_parcels_pame_evaluations_attributes.
 export type AttributesPameYearsByMethod = Record<string, (string | number)[]>
 
 export interface AttributesPameListTranslations {
@@ -833,8 +763,7 @@ export interface AttributesAffiliationsProps {
   translations: AttributesAffiliationsTranslations
 }
 
-// ProtectedArea#sources_attributes_for_current_pa_and_all_parcels:
-// { site_pid => StatsSourceItem[] }.
+// ProtectedArea#sources_attributes_for_current_pa_and_all_parcels.
 export interface AttributesProtectedAreaSourcesTranslations {
   title: string
   total: string
@@ -848,18 +777,16 @@ export interface AttributesProtectedAreaSourcesProps {
   translations: AttributesProtectedAreaSourcesTranslations
 }
 
-// PameEvaluation::TABLE_ATTRIBUTES entry (column definitions for the gdpame
-// filtered table — `title` is the header, `tooltip` only present on one column).
+// PameEvaluation::TABLE_ATTRIBUTES — a gdpame table column. `title` is the
+// header; only one column has a `tooltip`.
 export interface PameTableAttribute {
   title: string
   field: string
   tooltip?: string
 }
 
-// PameEvaluation.filters_to_json entry — plain string options, unlike
-// ListingFilter/SearchFilter's `{id, title}` shape, since the values here ARE
-// the filter values sent back in `PameFilterSelection.options` (method names,
-// country names, years-as-strings, etc.).
+// PameEvaluation.filters_to_json. Options are plain strings, not
+// `{id, title}` — they are the values sent back in PameFilterSelection.
 export interface PameFilter {
   name: string
   title: string
@@ -867,15 +794,15 @@ export interface PameFilter {
   type: string
 }
 
-// One entry of the `filters` array sent to/from `/pame/list` and `/pame/download`
-// (PameEvaluation.parse_filters reads `name`/`options`).
+// The `filters` array for `/pame/list` and `/pame/download` —
+// PameEvaluation.parse_filters reads `name`/`options`.
 export interface PameFilterSelection {
   name: string
   options: Array<string | number>
   type?: string
 }
 
-// PameEvaluation.serialise entry (one row of the gdpame table / PameModal detail).
+// PameEvaluation.serialise — one gdpame table row / PameModal detail.
 export interface PameEvaluationItem {
   id: number
   asmt_id: string
@@ -896,8 +823,8 @@ export interface PameEvaluationItem {
   source_year: number | null
 }
 
-// PameEvaluation.structure_data — shape returned by `/pame/list` and the
-// initial `@json` prop from Data::GdpameController#index.
+// PameEvaluation.structure_data — `/pame/list`, and Data::GdpameController's
+// initial `@json`.
 export interface PameTablePage {
   current_page: number
   per_page: number
@@ -906,8 +833,7 @@ export interface PameTablePage {
   items: PameEvaluationItem[]
 }
 
-// I18n `thematic_area.pame.modal` — Data::GdpameController#index /
-// views/data/gdpame/_tab_content.html.erb.
+// I18n `thematic_area.pame.modal`.
 export interface PameModalTranslations {
   modal_title: string
   id: string
@@ -917,8 +843,7 @@ export interface PameModalTranslations {
   language: string
 }
 
-// Props for `turbo_mount "PameTable"` (Data::GdpameController#index, via
-// partials/data/gdpame/_tab_content).
+// Data::GdpameController#index, via partials/data/gdpame/_tab_content.
 export interface PameTableProps {
   endpoint: string
   filters: PameFilter[]
@@ -927,11 +852,9 @@ export interface PameTableProps {
   modalText: PameModalTranslations
 }
 
-// One card built from ThematicAreasPresenter (via ApplicationHelper#theme_cards_vue_props)
-// — shared by the "themes" carousel (partials/carousels/_themes) and the CMS
-// data-areas/thematic-areas card grid (partials/cards/themes/_index). `pasNo`
-// is -1 when the theme has no protected-area count to show (ribbon is hidden
-// in that case).
+// ApplicationHelper#theme_cards_vue_props, from ThematicAreasPresenter —
+// shared by the themes carousel and the CMS themes card grid. `pasNo` is -1
+// when there is no protected-area count, which hides the ribbon.
 export interface CarouselThemeCard {
   url: string
   linkTitle: string
@@ -942,16 +865,14 @@ export interface CarouselThemeCard {
   slug: string
 }
 
-// Props for `turbo_mount "CarouselThemes"` and `turbo_mount "CardsThemes"`.
+// Shared by the `CarouselThemes` and `CardsThemes` mounts.
 export interface CarouselThemesProps {
   cards: CarouselThemeCard[]
   areaTypeLabel: string
 }
 
-// Props for Carousel/Themes/Card.vue — a single card plus the list-level
-// `areaTypeLabel` forwarded down by Carousel/Themes/Index.vue. `featured` is
-// grid-only (Cards/Themes/Index.vue, every 3rd card) — the Swiper carousel
-// never sets it, so cards there stay a uniform size.
+// One card plus the list-level `areaTypeLabel`. `featured` is grid-only
+// (Cards/Themes/Index.vue, every 3rd card); the carousel keeps cards uniform.
 export interface CarouselThemesCardProps extends CarouselThemeCard {
   areaTypeLabel: string
   featured?: boolean

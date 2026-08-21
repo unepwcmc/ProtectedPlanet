@@ -8,23 +8,12 @@ import {
   type MapOptions,
   type MapMouseEvent
 } from 'maplibre-gl'
-// MapLibre fetches every vector tile from a Web Worker, and it derives that
-// worker's URL at runtime:
-//
-//   const t = url.endsWith('-dev.mjs') ? 'maplibre-gl-worker-dev.mjs' : 'maplibre-gl-worker.mjs'
-//   return new URL(`./${t}`, import.meta.url).href
-//
-// That is a TEMPLATE LITERAL, so Vite cannot statically analyse it and never emits
-// the worker as an asset. In the built bundle the request resolved to
-// /vite/assets/maplibre-gl-worker.mjs -> 404, the worker never started, and the map
-// rendered its style's background layer and nothing else: style, sprites and
-// TileJSON all load on the MAIN thread (all 200), while tile requests -- which only
-// the worker makes -- never happened at all. No console error, correct canvas size,
-// valid bounds; just an empty map.
-//
-// `?worker&url` makes Vite bundle the worker (resolving its own
-// `./maplibre-gl-shared.mjs` import, which is equally absent from the build) and
-// hand back the hashed URL of the emitted file.
+// MapLibre builds its tile worker's URL from a template literal
+// (`new URL(`./${t}`, import.meta.url)`), which Vite cannot statically analyse,
+// so the worker was never emitted and 404'd in the build. Tiles are fetched
+// only by the worker, so the map rendered its background layer and nothing
+// else, with no console error. `?worker&url` makes Vite bundle it (along with
+// its own maplibre-gl-shared.mjs import) and return the hashed URL.
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { isMapboxURL, transformMapboxUrl } from 'maplibregl-mapbox-request-transformer'
 import { RTL_TEXT_PLUGIN_URL } from '@/constants/map'
@@ -38,26 +27,17 @@ export interface MapControlsOptions {
   attributionLocation: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 }
 
-// Must run before any Map is constructed -- MapLibre resolves the worker URL once
-// and caches it.
+// Must run before any Map is constructed — MapLibre caches the worker URL.
 setWorkerUrl(maplibreWorkerUrl)
 
 let rtlPluginRegistered = false
 
 export default function () {
   const { VITE_MAPBOX_TOKEN: accessToken } = useEnvs()
-  // shallowRef, NOT ref. ref() makes the assigned value deeply reactive, so the
-  // whole MapLibre Map -- including internal frozen objects like Color, whose `rgb`
-  // is a read-only non-configurable property -- gets wrapped in a Proxy. Reading it
-  // then violates the Proxy invariant and throws:
-  //
-  //   TypeError: 'get' on proxy: property 'rgb' is a read-only and non-configurable
-  //   data property on the proxy target but the proxy did not return its actual
-  //   value (expected '[object Array]' but got '[object Object]')
-  //
-  // shallowRef keeps .value assignment reactive (watchers and templates still fire)
-  // without proxying the instance's internals. The `as Ref<...>` cast this line used
-  // to carry was a symptom of the same problem.
+  // shallowRef, not ref: deep reactivity proxies the whole MapLibre Map,
+  // including frozen internals like Color, whose read-only non-configurable
+  // `rgb` then breaks the Proxy invariant and throws on read. shallowRef keeps
+  // .value assignment reactive without proxying the instance's internals.
   const map = shallowRef<MapLibreMap | null>(null)
 
   function addControls(controlsOptions: MapControlsOptions) {
@@ -83,14 +63,10 @@ export default function () {
 
     map.value = new MapLibreMap({
       ...mapOptions,
-      // Without this, WebGL discards its drawing buffer after each frame -
-      // fine for normal interactive use, but the PDF export (rasterize.js)
-      // captures the page well after the map's last render call (once
-      // 'idle' fires), by which point the buffer would otherwise already be
-      // cleared, producing a blank map in the exported PDF. Must be nested
-      // under canvasContextAttributes, not a top-level MapOptions key - this
-      // library moved WebGL context attributes here and silently ignores a
-      // top-level preserveDrawingBuffer.
+      // WebGL otherwise discards its drawing buffer after each frame, and the
+      // PDF export captures the page after the last render, so the map comes
+      // out blank. Must be nested here, not a top-level MapOptions key —
+      // MapLibre silently ignores a top-level preserveDrawingBuffer.
       canvasContextAttributes: { preserveDrawingBuffer: true },
       transformRequest: (url, resourceType) =>
         isMapboxURL(url) ? transformMapboxUrl(url, resourceType, accessToken) : undefined

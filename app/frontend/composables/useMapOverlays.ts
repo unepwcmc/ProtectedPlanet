@@ -1,18 +1,11 @@
 // Shared overlay/layer state for ONE map composition.
 //
-// This was previously a Pinia store (`stores/useMapStore.ts`, itself a port of the
-// legacy Vuex `map` module). Pinia stores are app-wide singletons, outliving any
-// single Map island, which is torn down and rebuilt per mount -- a mismatch that
-// caused two separate "the highlighted area disappeared" bugs
-// (the second site inheriting the first site's geometry, because `addOverlay` is
-// idempotent by id and every PA page ships the same overlay id with a different
-// site-specific url). Both were patched with a manual reset + a resync-on-init.
-//
-// The state was never actually app-wide: every reader and writer lives inside the
-// `Map/Index.vue` tree, which is always mounted whole (`turbo_mount "Map"`).
-// Scoping it to that tree via provide/inject removes the mismatch at the root --
-// each mount gets its own state, so there is nothing stale to reset -- and lets two
-// maps coexist on one page without fighting over a single global.
+// Provide/inject rather than a Pinia store: a store is an app-wide singleton
+// outliving the Map island, which caused sites to inherit the previous site's
+// geometry (addOverlay is idempotent by id, and every PA page ships the same
+// overlay id with a different url). Every reader and writer lives inside the
+// `Map/Index.vue` tree, so scoping the state there leaves nothing stale to
+// reset and lets two maps coexist on a page.
 import { inject, provide, ref, type InjectionKey, type Ref } from 'vue'
 import type { MapLayer } from '@/composables/useMapLayers'
 
@@ -66,10 +59,9 @@ export function provideMapOverlays(): MapOverlaysContext {
 /**
  * Read/write the enclosing map's overlay state.
  *
- * Throws rather than falling back to a private instance: a `MapOverlay` or `MapBase`
- * outside a `Map/Index.vue` tree would otherwise silently talk to state nothing else
- * can see -- exactly the class of "the layer never showed up" bug this replaced.
- * Tests mounting these components standalone should pass the context via
+ * Throws rather than falling back to a private instance, which would let a
+ * component outside a `Map/Index.vue` tree silently talk to state nothing else
+ * can see. Tests mounting standalone should pass the context via
  * `global.provide`.
  */
 export function useMapOverlays(): MapOverlaysContext {

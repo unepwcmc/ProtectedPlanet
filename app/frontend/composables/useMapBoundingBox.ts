@@ -1,4 +1,3 @@
-// Vue3 port of app/javascript/components/map/mixins/mixin-bounding-box.js
 import { ref, type Ref } from 'vue'
 import type { LngLatBoundsLike, Map as MapLibreMap } from 'maplibre-gl'
 import { getJsonExternal } from '@/lib/http'
@@ -28,15 +27,12 @@ export default function (
 ) {
   const initBounds = ref<LngLatBoundsLike | null>(null)
 
-  // ArcGIS answers an extent query for a site_id it doesn't hold with a
-  // perfectly well-formed extent whose corners are the *strings* "NaN" - which
-  // happens whenever our DB is ahead of the published service (a newly added
-  // site, a retired one, a sync lag). That object is truthy and its members
-  // survive arithmetic as NaN, so the bounds reached MapLibre's constructor and
-  // threw "Invalid LngLat object: (NaN, NaN)" - taking out the whole map, and
-  // with it the PDF rasterizer, which waited out its entire budget for a
-  // readiness signal the dead map could no longer send. Numbers also arrive as
-  // strings for some fields, hence coercing rather than type-checking.
+  // For a site_id it doesn't hold — our DB being ahead of the published
+  // service — ArcGIS returns a well-formed extent whose corners are the
+  // *strings* "NaN". That object is truthy and survives arithmetic, so the
+  // bounds reached MapLibre and threw "Invalid LngLat object", killing the map
+  // and hanging the PDF rasterizer. Some fields legitimately arrive as strings,
+  // hence coercing rather than type-checking.
   function normaliseExtent(extent: Extent | undefined | null): Extent | null {
     if (!extent) return null
 
@@ -69,12 +65,10 @@ export default function (
       return
     }
 
-    // These are external ArcGIS hosts, not our Rails app — sending our CSRF
-    // header fails their CORS preflight (same fix as useMapPopups.ts).
-    // Wrapped because initMap() below MUST still run if the lookup fails: an
-    // unreachable ArcGIS would otherwise leave the map unbuilt and the PDF
-    // rasterizer waiting for a readiness signal that can never come. A map at
-    // its default view is a far better outcome than no map at all.
+    // External ArcGIS hosts, not our Rails app — our CSRF header fails their
+    // CORS preflight (same fix as useMapPopups.ts). Wrapped so initMap() still
+    // runs on failure: a map at its default view beats no map at all, and an
+    // unbuilt map hangs the PDF rasterizer.
     let extent: Extent | null = null
 
     try {
