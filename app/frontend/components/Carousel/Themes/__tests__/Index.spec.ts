@@ -13,17 +13,14 @@ const CARDS = [1, 2, 3, 4].map(n => ({
 }))
 
 beforeEach(() => {
-  // Swiper measures slide/container dimensions during mount; jsdom's default
-  // (all-zero) getBoundingClientRect/offsetWidth are fine functionally, but a
-  // real width avoids Swiper's own "no width, can't compute" warnings.
+  // Swiper measures dimensions on mount; jsdom's all-zero defaults work, but a
+  // real width avoids its "no width" warnings.
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
     width: 300, height: 300, top: 0, left: 0, right: 0, bottom: 0, x: 0, y: 0, toJSON: () => {}
   } as DOMRect)
 
-  // jsdom doesn't implement matchMedia at all; Swiper's `breakpoints` feature
-  // calls it directly to decide which breakpoint is active, so mounting
-  // throws without this stub. `matches: false` is fine for these tests —
-  // they don't assert breakpoint-specific behaviour.
+  // jsdom has no matchMedia, and Swiper's `breakpoints` calls it directly, so
+  // mounting throws without this. These tests assert nothing per-breakpoint.
   vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
@@ -45,10 +42,8 @@ describe('Carousel/Themes/Index', () => {
   it('renders every card', () => {
     const wrapper = mount(CarouselThemesIndex, { props: { cards: CARDS, areaTypeLabel: 'protected areas' } })
 
-    // Not asserting DOM order: Swiper's `loop: true` is free to reorder/
-    // duplicate slides internally for its own wrap-around illusion — that's
-    // its concern, not this component's. What matters here is that every
-    // card's data made it into a slide somewhere.
+    // Not asserting DOM order: `loop: true` lets Swiper reorder and duplicate
+    // slides internally. What matters is every card reached a slide.
     const cellsText = wrapper.findAll('.ct-carousel-themes__cell').map(cell => cell.text())
     CARDS.forEach((card) => {
       expect(cellsText.some(text => text.includes(card.label))).toBe(true)

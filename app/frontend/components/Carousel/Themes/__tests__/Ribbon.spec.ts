@@ -2,10 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import CarouselThemesRibbon from '@/components/Carousel/Themes/Ribbon.vue'
 
-// Ribbon.vue takes the full CarouselThemesCardProps shape (it's `v-bind="props"`
-// from Card.vue) even though it only reads pasNo/areaTypeLabel itself — the
-// rest are passed here just to match the real prop contract and avoid noisy
-// "missing required prop" warnings.
+// Ribbon.vue is `v-bind="props"`'d from Card.vue, so it takes the full
+// CarouselThemesCardProps shape though it only reads pasNo/areaTypeLabel. The
+// rest are passed to match that contract and silence prop warnings.
 const BASE_PROPS = {
   url: '/thematic-areas/marine',
   linkTitle: 'View the Marine page',

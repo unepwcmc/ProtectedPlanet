@@ -12,9 +12,8 @@ const text = {
 }
 
 describe('DownloadCommercial', () => {
-  // Commercial.vue no longer owns an `isActive` prop/toggle — the parent
-  // (Download/Index.vue) controls visibility itself via `v-if`, so the
-  // component always renders its content once mounted.
+  // Download/Index.vue controls visibility with `v-if`, so this component has
+  // no `isActive` of its own and always renders once mounted.
   it('renders its content when mounted', () => {
     const wrapper = mount(DownloadCommercial, { props: { text } })
     expect(wrapper.find('.ct-download-commercial').exists()).toBe(true)

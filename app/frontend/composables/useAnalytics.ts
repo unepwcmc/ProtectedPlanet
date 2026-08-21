@@ -1,9 +1,7 @@
-// Optional (non-essential) tracking scripts, gated on cookie consent. Nothing
-// in this file runs any analytics until the user has explicitly accepted —
-// see the CookieConsent island (app/frontend/components/CookieConsent.vue)
-// for the UI that calls acceptAnalytics()/rejectAnalytics(), and
-// entrypoints/application.ts, which calls initAnalytics() on every page load
-// to resume tracking for returning visitors who already opted in.
+// Non-essential tracking, gated on cookie consent — nothing here runs until
+// the user has explicitly accepted. CookieConsent.vue calls
+// acceptAnalytics()/rejectAnalytics(); application.ts calls initAnalytics() on
+// every page load to resume tracking for visitors who already opted in.
 import { getConsent, setConsent } from '@/lib/cookieConsent'
 import useEnv from '@/composables/useEnvs'
 import { Environment } from '@/constants/environment'
@@ -27,8 +25,8 @@ interface HotjarWindow extends Window {
   _hjSettings?: { hjid: number, hjsv: number }
 }
 
-// Shared across every useAnalytics() call — scripts must load at most once
-// per page regardless of how many components call acceptAnalytics()/initAnalytics().
+// Shared across every useAnalytics() call: the scripts must load at most once
+// per page however many components call in.
 let optionalScriptsLoaded = false
 
 function loadHotjar() {
@@ -65,12 +63,9 @@ export default function () {
       window.dataLayer!.push(args)
     }
     window.gtag('js', new Date())
-    // No send_page_view override: every navigation on this site is a full
-    // document load, so this config call runs once per page view and gtag's
-    // own automatic page_view is exactly one per page. (While Turbo Drive was
-    // briefly in use it had to be suppressed and re-sent by hand on
-    // `turbo:load`, because module state survived Turbo's no-reload
-    // navigations and the auto event only covered the first page in a tab.)
+    // No send_page_view override needed: every navigation is a full document
+    // load, so this runs once per page view and gtag's automatic page_view is
+    // already exactly one per page.
     window.gtag('config', measurementId)
 
     const script = document.createElement('script')

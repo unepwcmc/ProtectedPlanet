@@ -1,4 +1,3 @@
-// Vue3/MapLibre port of app/javascript/components/map/default-options.js
 import type { Offset } from 'maplibre-gl'
 import type { MapBaselayer } from '@/types/map'
 
@@ -15,8 +14,8 @@ export const BASELAYERS_DEFAULT: MapBaselayer[] = [
   }
 ]
 
-// Same plugin the legacy Mapbox GL build used — MapLibre's setRTLTextPlugin has an
-// identical signature and the plugin build itself is GL-implementation agnostic.
+// The Mapbox plugin build; it is GL-implementation agnostic and MapLibre's
+// setRTLTextPlugin takes the same signature.
 export const RTL_TEXT_PLUGIN_URL
   = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
 

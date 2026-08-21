@@ -54,10 +54,9 @@ withDefaults(defineProps<Map>(), {
   mapiIsForRegionCountryPA: false
 })
 
-// Owns the overlay/layer state shared by this composition's MapBase (which draws the
-// layers) and its MapPanel > MapOverlay children (which toggle them). Scoped to this
-// tree, so a fresh mount -- a second map on the same page, a re-opened tab -- always
-// starts empty instead of inheriting the previous map's overlays. See useMapOverlays.ts.
+// Owns the overlay state shared by MapBase (which draws the layers) and the
+// MapPanel > MapOverlay children (which toggle them). Scoped to this tree, so a
+// fresh mount starts empty rather than inheriting the previous map's overlays.
 provideMapOverlays()
 
 const mapBaseRef = useTemplateRef('mapBaseRef')

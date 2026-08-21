@@ -44,8 +44,8 @@ function createChart() {
     fillOpacity: 1
   }))
 
-  // Data comes from a yearly CSV (Thematic::MarineController#marine_growth_datapoints_from_csv),
-  // so a fixed 1-year base interval is correct for this chart's only real caller.
+  // The data is a yearly CSV (Thematic::MarineController), so a fixed 1-year
+  // base interval is right for this chart's only caller.
   const data = props.data.datapoints.map(datapoint => ({
     ...datapoint,
     x: new Date(datapoint.x).getTime()

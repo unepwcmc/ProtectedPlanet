@@ -25,9 +25,8 @@ const chartEl = ref<HTMLElement | null>(null)
 let root: am5.Root | null = null
 let pieSeries: am5percent.PieSeries | null = null
 
-// amCharts draws the actual slices asynchronously (its own render tick, not
-// synchronously inside createChart()) - hold the PDF rasterizer's readiness
-// flag open until that first draw genuinely lands. See pdfReady.ts.
+// amCharts draws slices on its own render tick, not inside createChart(), so
+// hold the PDF readiness flag open until the first draw lands. See pdfReady.ts.
 const markChartRenderDone = registerPendingRender()
 
 onMounted(createChart)
@@ -55,8 +54,8 @@ function createChart() {
     categoryField: 'title',
     valueField: 'value'
   }))
-  // Fires once amCharts has processed `dataset` into actual slices - the real
-  // "chart is visually drawn" signal, as opposed to this function returning.
+  // Fires once amCharts has turned `dataset` into slices — the real "drawn"
+  // signal, unlike this function returning.
   pieSeries.events.once('datavalidated', markChartRenderDone)
   pieSeries.data.setAll(props.dataset)
 

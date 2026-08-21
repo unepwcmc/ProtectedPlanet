@@ -28,9 +28,8 @@ describe('Carousel/Themes/Card', () => {
   it('forwards every prop to the ribbon, including the areaTypeLabel Card.vue itself has no other use for', () => {
     const wrapper = mount(CarouselThemesCard, { props: BASE_PROPS })
 
-    // Ribbon.vue's own spec covers the pasNo/-1 hide behaviour and internal
-    // markup in detail — this just confirms Card.vue wires it up at all,
-    // with the card-level `ct-theme-card__ribbon` class layered on top.
+    // Ribbon.spec.ts covers its pasNo/-1 behaviour; this only checks Card.vue
+    // wires it up, with the card-level class layered on.
     const ribbon = wrapper.find('.ct-theme-card__ribbon')
     expect(ribbon.exists()).toBe(true)
     expect(ribbon.text()).toContain('1234')

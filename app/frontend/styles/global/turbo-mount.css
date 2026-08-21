@@ -1,23 +1,16 @@
 /*
- * turbo-mount's Stimulus controller needs its host element to keep the
- * `data-controller` attribute in order to track it, so every `turbo_mount(...)`
- * call leaves a permanent wrapper <div> around the component's real root. (The
- * mounter this replaced unwrapped itself, swapping the wrapper for the mounted
- * component's own root; that is not possible here without breaking Stimulus's
- * lifecycle tracking.)
+ * turbo-mount's Stimulus controller must keep `data-controller` on its host to
+ * track it, so every `turbo_mount(...)` leaves a permanent wrapper <div> around
+ * the component's real root — it cannot unwrap itself without breaking
+ * Stimulus's lifecycle tracking.
  *
- * `display: contents` makes Grid/Flexbox treat the *promoted* real root as
- * the actual grid/flex item, so a sibling lands at the same position it would
- * have with no wrapper at all. Confirmed live in the 2026-08-17 spike (see
- * "turbo-mount spike result" memory) with a real 2-column CSS Grid.
+ * `display: contents` makes Grid/Flexbox treat the promoted real root as the
+ * grid/flex item, so siblings land where they would with no wrapper.
  *
- * Residual risk (also confirmed in that spike): this changes box generation,
- * not the DOM tree, so structural CSS selectors that target a sibling by
- * position (:first-child, :nth-child, `+`/`~` combinators, Tailwind's
- * first:/last:/odd:/even:) still resolve against this wrapper, not the
- * promoted content. A same-day audit of the whole app found zero real cases
- * of a structural selector styling one of several `turbo_mount` calls sitting
- * as ERB-level siblings — re-check if that pattern shows up.
+ * Residual risk: this changes box generation, not the DOM, so positional
+ * selectors (:first-child, :nth-child, `+`/`~`, Tailwind's first:/last:/
+ * odd:/even:) still resolve against the wrapper. An app-wide audit found no
+ * real cases of one — re-check if the pattern shows up.
  */
 [data-controller^='turbo-mount-'] {
   display: contents;

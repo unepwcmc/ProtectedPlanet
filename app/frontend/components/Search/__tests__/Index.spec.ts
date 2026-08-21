@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import SearchSite from '@/components/Search/Index.vue'
-import type { SearchSiteProps } from '@/types/backend'
 
 function jsonResponse(data: unknown) {
   return { ok: true, status: 200, json: () => Promise.resolve(data) } as Response

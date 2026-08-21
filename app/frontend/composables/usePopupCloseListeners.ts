@@ -1,6 +1,4 @@
-// Vue 3 replacement for the legacy Vue 2 `mixin-popup-close-listeners` mixin
-// (app/javascript/mixins/mixin-popup-close-listeners.js). Closes an open popup
-// (tooltip, dropdown, ...) when the user clicks outside it or presses Escape.
+// Closes an open popup (tooltip, dropdown, ...) on an outside click or Escape.
 import type { Ref } from 'vue'
 import { onClickOutside, onKeyStroke } from '@vueuse/core'
 

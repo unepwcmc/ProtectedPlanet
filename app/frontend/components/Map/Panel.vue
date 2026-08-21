@@ -64,9 +64,8 @@ const root = ref<HTMLElement | null>(null)
 const toggleShow = () => (isVisible.value = !isVisible.value)
 const onZoomTo = (options: ZoomToOptions) => emit('zoomTo', options)
 
-// Matches the legacy `v-if="!areFiltersHidden"` on `<v-map-pa-search>` — the
-// header-map layout (PA show, country, region) omits these props entirely
-// rather than passing isHidden, so both conditions are checked.
+// The header-map layout (PA show, country, region) omits these props rather
+// than passing isHidden, so both conditions are checked.
 const hasPaSearch = computed(() =>
   !props.isHidden && !!props.type && !!props.autocompleteErrorMessages && !!props.autocompletePlaceholder
 )

@@ -100,8 +100,7 @@ function updateFilter(updatedOptions: unknown) {
   emit('update:filter', { id: props.id, options })
 }
 
-// Primes the parent's active-filter state from a URL-preselected value, same
-// as the legacy vFilter component's `created()` hook.
+// Primes the parent's active-filter state from a URL-preselected value.
 onMounted(() => {
   if (props.preSelected) {
     const preselected = props.type === 'checkbox-search' ? preSelectedCheckboxSearch.value : preSelectedArray.value

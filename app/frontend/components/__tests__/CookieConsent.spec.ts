@@ -2,8 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import CookieConsent from '@/components/CookieConsent.vue'
 
-// Mirrors the props passed by app/views/layouts/partials/_cookie_consent.html.erb
-// from config/locales/global/en.yml — see types/backend.ts's CookieConsentProps.
+// Mirrors what layouts/partials/_cookie_consent.html.erb passes.
 const props = {
   description: 'See our <a href="/legal">Privacy policy</a> page.',
   accept: 'Accept',

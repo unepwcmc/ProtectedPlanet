@@ -1,4 +1,3 @@
-// Vue3 port of app/javascript/helpers/timing-helpers.js
 export function executeAfterCondition(condition: () => boolean, onReady: () => void, maxAttempts = 0): void {
   let attempts = 0
 

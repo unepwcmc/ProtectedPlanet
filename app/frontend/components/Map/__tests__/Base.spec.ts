@@ -44,8 +44,8 @@ vi.mock('maplibre-gl', () => ({
   Marker: MarkerConstructor,
   Popup: PopupConstructor,
   setRTLTextPlugin: vi.fn(),
-  // useMapInstance calls this at module scope to point MapLibre at the
-  // Vite-emitted worker; without it here the module throws on import.
+  // useMapInstance calls this at module scope, so the module throws on import
+  // without it.
   setWorkerUrl: vi.fn()
 }))
 
@@ -57,8 +57,8 @@ vi.mock('maplibregl-mapbox-request-transformer', () => ({
 
 const { default: MapBase } = await import('@/components/Map/Base.vue')
 
-// Stand-in for the browser's IntersectionObserver so a test can trigger the
-// "container became visible" path itself — same pattern as Counter.spec.ts.
+// Stand-in for IntersectionObserver, so a test can trigger the
+// "container became visible" path itself.
 class FakeIntersectionObserver {
   static instances: FakeIntersectionObserver[] = []
   callback: IntersectionObserverCallback
@@ -77,8 +77,8 @@ class FakeIntersectionObserver {
   }
 }
 
-// MapBase is only ever rendered inside a Map/Index.vue tree, which provides this;
-// standalone it throws on purpose (see useMapOverlays.ts).
+// MapBase only ever renders inside a Map/Index.vue tree, which provides this;
+// standalone it throws on purpose.
 let context: MapOverlaysContext
 
 const mountBase = (props: MapBaseProps = {}) =>
@@ -106,11 +106,9 @@ describe('Map Base', () => {
     expect(options?.style).toBe('mapbox://styles/unepwcmc/cko1hsfi50vog17l697cr4d6p')
   })
 
-  // Map creation is async (it waits on initBoundingBoxAndMap's bounds fetch), so the
-  // MapOverlay children normally finish registering the page's overlays BEFORE there
-  // is a map to draw them on. The visibleLayers watcher only fires on changes, so the
-  // new map has to sync itself on init -- without that, the highlighted area never
-  // appeared at all.
+  // Map creation waits on the bounds fetch, so children normally register their
+  // overlays before there is a map to draw them on. The visibleLayers watcher
+  // only fires on changes, so a new map must sync itself on init.
   it('applies already-registered overlays to a newly created map', async () => {
     context.addOverlay({
       id: 'wdpa',
@@ -118,12 +116,11 @@ describe('Map Base', () => {
     })
 
     fakeMapInstance.getLayer.mockReturnValue(undefined)
-    // addLayerBeneathBoundariesAndLabels waits for a foreground layer id before
-    // inserting; give the style one so it resolves on the first 200ms poll instead
-    // of burning all 10 attempts.
+    // addLayerBeneathBoundariesAndLabels waits for a foreground layer id, so
+    // give the style one and it resolves on the first poll.
     fakeMapInstance.getStyle.mockReturnValue({ layers: [{ id: 'admin-boundary', type: 'line' }] })
-    // Baselayer controls are disabled on purpose: their selectedBaselayer watcher
-    // also calls showLayers, which would make this pass regardless of the init sync.
+    // Disabled on purpose: the selectedBaselayer watcher also calls showLayers,
+    // which would make this pass regardless of the init sync.
     mountBase({ options: { controls: { showBaselayerControls: false } } })
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
@@ -132,7 +129,7 @@ describe('Map Base', () => {
     expect(styleLoad, 'a style.load handler must be registered').toBeTruthy()
     styleLoad![1]()
 
-    // showLayers defers through executeAfterStyleLoad, which polls — so this is async.
+    // showLayers defers through executeAfterStyleLoad, which polls.
     await vi.waitFor(() => expect(fakeMapInstance.addLayer).toHaveBeenCalled(), { timeout: 4000 })
   })
 

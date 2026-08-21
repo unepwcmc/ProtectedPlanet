@@ -2,9 +2,7 @@
   @apply tw-shared-base-container--px;
 }
 
-/*
- * The following has to be directly registered to the map
- */
+/* The following must be registered directly on the map. */
 .maplibregl-ctrl-top-right .maplibregl-ctrl.maplibregl-ctrl-group {
   @apply 
   mt-3.25 

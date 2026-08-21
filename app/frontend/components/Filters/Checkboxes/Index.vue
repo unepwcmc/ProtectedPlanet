@@ -32,8 +32,7 @@ const emit = defineEmits<{ 'update:options': [ids: Array<string | number>] }>()
 const selected = ref<Array<string | number>>(props.preSelected ?? [])
 
 watch(() => props.resetKey, () => {
-  // Guards against firing a redundant search request when Clear is clicked
-  // again on a group that's already empty.
+  // Avoids a redundant request when Clear is clicked on an empty group.
   if (!selected.value.length) return
 
   selected.value = []
@@ -44,9 +43,8 @@ watch(() => props.preSelected, (value) => {
   selected.value = value ?? []
 })
 
-// Filter option ids can be numbers (Comfy::Cms::PageCategory#id), but values
-// round-tripped through the URL query string are always strings, so
-// selection checks must compare by String() rather than strict equality.
+// Option ids can be numbers (Comfy::Cms::PageCategory#id) but always come back
+// from the query string as strings, so compare by String(), not strict equality.
 function isSelected(id: string | number) {
   return selected.value.some(selectedId => String(selectedId) === String(id))
 }
@@ -73,9 +71,8 @@ function emitChange() {
   }
 }
 
-// Used by SearchAreas/CheckboxSearch.vue to clear a hidden filter group's
-// selection when the user switches tabs, without bumping resetKey (which
-// would also clear the visible group's own state).
+// Lets SearchAreas/CheckboxSearch.vue clear a hidden group on a tab switch
+// without bumping resetKey, which would clear the visible group too.
 function reset() {
   selected.value = []
 }

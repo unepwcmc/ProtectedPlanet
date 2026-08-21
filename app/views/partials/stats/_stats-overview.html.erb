@@ -23,7 +23,7 @@
           <span class="vw-partials-stats-stats-overview__subtitle">
             <%= t('stats.wdpa.total') %>
           </span>
-          <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
+          <%# Built by calculate_national_designations_counts. %>
           <%= turbo_mount "StatsTooltipInfo", props: {
               description: t('stats.wdpa_tooltip.description'),
               designationsLabel: t('stats.wdpa_tooltip.designations'),
@@ -121,7 +121,7 @@
             <%= t('stats.oecm.title') %>
           </span>
           <div>
-            <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
+            <%# Built by calculate_national_designations_counts. %>
             <%= turbo_mount "StatsTooltipInfo", props: {
                 description: t('stats.oecm_tooltip.description'),
                 designationsLabel: t('stats.oecm_tooltip.designations'),

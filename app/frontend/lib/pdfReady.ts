@@ -1,28 +1,29 @@
-// Lets the PDF rasterizer (rasterize.js) wait for a real "the page is actually
-// done rendering" signal instead of a fixed sleep. `window.__PDF_READY__` only
-// flips true once every turbo-mount island's mount promise has settled
-// (markIslandScanComplete, called from turboMount.ts) AND every component
-// that does its own post-mount async work (data fetches, map tile loading)
-// has told us it's finished (registerPendingRender's returned callback).
+// Gives the PDF rasterizer a real "done rendering" signal instead of a fixed
+// sleep. `window.__PDF_READY__` flips true once every island's mount promise
+// has settled (markIslandScanComplete, from turboMount.ts) and every component
+// doing post-mount async work has reported in (registerPendingRender).
 //
-// Set eagerly (not left undefined) so a page with no async work still ends
-// up with a defined `false` the instant this module runs, then `true` once
-// the initial scan's promises resolve — a page whose bundle fails to load at
-// all correctly leaves this undefined forever, which is exactly the "fail
-// loudly rather than ship a broken PDF" behaviour rasterize.js wants.
+// Set eagerly rather than left undefined, so a page with no async work gets a
+// defined `false` immediately. A page whose bundle never loads leaves it
+// undefined forever — the fail-loudly case rasterize.js wants.
 const pending = new Set<symbol>()
 let scanComplete = false
 
 function updateFlag(): void {
-  ;(window as unknown as { __PDF_READY__?: boolean }).__PDF_READY__ = scanComplete && pending.size === 0
+  const ready = scanComplete && pending.size === 0
+  const wasReady = (window as unknown as { __PDF_READY__?: boolean }).__PDF_READY__
+  ;(window as unknown as { __PDF_READY__?: boolean }).__PDF_READY__ = ready
+
+  // Dev only — Vite replaces this with `false` in a build, so the log is dropped
+  // from the production bundle rather than firing on every visitor's page load.
+  if (import.meta.env.DEV && ready && !wasReady) console.log('[pdfReady] __PDF_READY__ = true')
 }
 
 updateFlag()
 
-// Call at the top of a component's <script setup> (synchronously, before
-// onMounted) so it's registered before anything can race past it, then call
-// the returned callback once that component's own async work is truly done
-// (e.g. MapLibre's 'idle' event after tiles finish loading).
+// Call synchronously at the top of <script setup>, before onMounted, so it
+// registers before anything can race past it. Call the returned callback once
+// the component's async work is done (e.g. MapLibre's 'idle' after tiles load).
 export function registerPendingRender(): () => void {
   const token = Symbol()
   pending.add(token)

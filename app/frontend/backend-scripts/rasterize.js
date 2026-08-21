@@ -1,7 +1,5 @@
-/**
- * In dev mode if you give Docker all containers too low 
- * memory to use it will likely to timeout or fail on multiple PDF generation requests
- */
+// Note: in dev, a Docker memory allowance that is too low makes concurrent PDF
+// requests time out or fail.
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 const CHROME_ARGS = require('./chrome-args');
@@ -39,8 +37,7 @@ function freezeMapCanvases (page) {
       return image;
     });
 
-    // Decode before returning: printing a not-yet-decoded <img> would put a
-    // blank rectangle where the map should be.
+    // Printing a not-yet-decoded <img> leaves a blank rectangle.
     await Promise.all(images.map((image) => image.decode().catch(() => {})));
 
     return canvases.length;
@@ -55,16 +52,13 @@ function freezeMapCanvases (page) {
 
   try {
     ({ browser, shared } = await acquireBrowser());
-    // A throwaway context per job when sharing, so concurrent renders can't see
-    // each other's cookies/storage and everything the job allocated is released
-    // by the single context.close() below.
+    // A throwaway context per job so concurrent renders can't see each other's
+    // cookies/storage, and one context.close() releases all the job allocated.
     context = shared ? await browser.createBrowserContext() : browser.defaultBrowserContext();
     page = await context.newPage();
 
-    // Kept so a readiness timeout can report what actually broke. Without this
-    // the failure is just "waited N ms", when the page itself said exactly what
-    // went wrong (an uncaught error in a component, a script that 404'd) and
-    // nobody was listening.
+    // So a readiness timeout can report what actually broke rather than just
+    // "waited N ms" — the page usually says (component error, script 404).
     const pageErrors = [];
     page.on('pageerror', (err) => pageErrors.push(err.message));
     page.on('requestfailed', (request) => {
@@ -72,11 +66,10 @@ function freezeMapCanvases (page) {
     });
 
     page.setDefaultNavigationTimeout(NAVIGATION_TIMEOUT);
-    // A separate budget from the navigation one, defaulting to 30s. page.pdf()
-    // takes its timeout from here - and spends part of it on its own internal
-    // document.fonts.ready wait - so on a loaded machine the print step itself
-    // failed with "Timed out after waiting 30000ms" long after the page had
-    // finished rendering. Same budget as the render, for consistency.
+    // page.pdf() takes its timeout from here, not from the navigation one, and
+    // spends part of it on an internal document.fonts.ready wait — under the
+    // 30s default the print step timed out on a loaded machine long after the
+    // page had rendered. Same budget as the render.
     page.setDefaultTimeout(PDF_READY_TIMEOUT);
 
     page.setViewport({
@@ -85,34 +78,26 @@ function freezeMapCanvases (page) {
       deviceScaleFactor: 2
     });
 
-    // 'domcontentloaded' (the HTML is parsed) rather than 'load' or 'networkidle2'.
-    // 'networkidle2' is fooled by anything that keeps reconnecting in the background
-    // (e.g. Vite's dev-server HMR client retrying indefinitely) and never settles at
-    // all. 'load' does settle, but it waits for every asset - the same work that
-    // __PDF_READY__ below already waits for, only under a second, shorter budget. In
-    // dev, where each module is compiled on demand by the Vite dev server, two
-    // concurrent renders routinely blew that 60s budget on pages that then rendered
-    // fine. Waiting once, on the signal that actually means "rendered", removes the
-    // duplicate deadline; nothing between here and there needs assets to be loaded.
+    // 'domcontentloaded', not 'load' or 'networkidle2'. 'networkidle2' never
+    // settles behind anything that keeps reconnecting (Vite's HMR client).
+    // 'load' waits for every asset — the same work __PDF_READY__ below waits
+    // for, but under a second, shorter budget that concurrent dev renders
+    // routinely blew on pages that then rendered fine. Nothing between here and
+    // there needs assets loaded.
     const response = await page.goto(address, {waitUntil: 'domcontentloaded'});
 
-    // page.goto() resolves for error pages too, and an error page is still a
-    // full app page: it mounts the same islands, so __PDF_READY__ flips and
-    // everything below happily prints it. Without this check a 404 (retired
-    // site id, typo'd ISO) or a transient 500 from the app is handed to the
-    // user as a completed, several-hundred-KB download.
+    // page.goto() resolves for error pages too, and an error page mounts the
+    // same islands, so __PDF_READY__ flips and the code below prints it —
+    // handing the user a 404 or a transient 500 as a completed download.
     if (response && !response.ok()) {
       throw new Error(`${address} returned HTTP ${response.status()}`);
     }
 
-    // `window.__PDF_READY__` (app/frontend/lib/pdfReady.ts) only flips true once
-    // every Vue island has mounted AND anything doing its own post-mount async
-    // work (map tile loading, data fetches) has reported itself done - a real
-    // "is it actually rendered" signal instead of a fixed sleep that either
-    // wastes time on fast pages or ships an incomplete PDF on slow ones. If this
-    // never resolves (bundle failed to load, a component never signals done),
-    // throwing here surfaces a failed PDF rather than silently shipping a broken
-    // one.
+    // `window.__PDF_READY__` (app/frontend/lib/pdfReady.ts) flips once every
+    // island has mounted and anything doing post-mount async work (tiles, data
+    // fetches) has reported itself done — a real "is it rendered" signal rather
+    // than a fixed sleep. Throwing on timeout surfaces a failed PDF instead of
+    // silently shipping a broken one.
     try {
       await page.waitForFunction(() => window.__PDF_READY__ === true, { timeout: PDF_READY_TIMEOUT });
     } catch (err) {
@@ -122,16 +107,13 @@ function freezeMapCanvases (page) {
       throw err;
     }
 
-    // After __PDF_READY__, not before: we now navigate on 'domcontentloaded', so
-    // ahead of this point the stylesheets carrying the @font-face rules may not
-    // even be parsed yet and document.fonts.ready would resolve on an empty font
-    // set. By here every island has mounted, so the fonts they need are known
-    // and requested, and this waits for the ones still in flight.
+    // Must come after __PDF_READY__: on 'domcontentloaded' the stylesheets
+    // carrying @font-face may not be parsed yet, so document.fonts.ready would
+    // resolve on an empty font set.
     await page.evaluate(() => document.fonts.ready.then(() => true));
 
-    // One more frame so the final paint after __PDF_READY__ flips (e.g. the
-    // map's own re-render once its 'idle' handler runs) actually lands before
-    // the screenshot is taken.
+    // One more frame so the final paint after __PDF_READY__ (e.g. the map's
+    // re-render on 'idle') lands before the print.
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 
     await freezeMapCanvases(page);
@@ -168,8 +150,8 @@ function freezeMapCanvases (page) {
     console.error(`rasterize.js failed for ${address}:`, err);
     process.exitCode = 1;
   } finally {
-    // Order matters: tear our own page/context down first so a shared browser is
-    // left clean, then let go of the browser itself.
+    // Order matters: tear our page/context down first, so a shared browser is
+    // left clean, then let go of the browser.
     try {
       if (page && !page.isClosed()) await page.close();
       if (shared && context) await context.close();

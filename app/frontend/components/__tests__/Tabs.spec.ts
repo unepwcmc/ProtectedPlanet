@@ -3,8 +3,8 @@ import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import Tabs from '@/components/Tabs.vue'
 
-// Real tab panels hold components. This one records its own mount/unmount so we can
-// prove a hidden tab's components are never created until the tab is shown.
+// Records its own mount/unmount, to prove a hidden tab's components are never
+// created until the tab is shown.
 const lifecycle: string[] = []
 const PanelWidget = defineComponent({
   props: { label: { type: String, required: true } },
@@ -34,10 +34,9 @@ describe('Tabs (v-if panels)', () => {
   it('renders ONLY the active panel in the DOM; hidden panels are absent', () => {
     const wrapper = mount(Tabs, { props: { tabs } })
 
-    // Active (tab 1) present…
     expect(wrapper.find('[data-tab-panel="1"]').exists()).toBe(true)
     expect(wrapper.find('.c1').exists()).toBe(true)
-    // …the others are NOT in the DOM at all (true v-if, not hidden with v-show).
+    // The others are not in the DOM at all — a real v-if, not v-show.
     expect(wrapper.find('[data-tab-panel="2"]').exists()).toBe(false)
     expect(wrapper.find('[data-tab-panel="3"]').exists()).toBe(false)
     expect(wrapper.find('.c2').exists()).toBe(false)
@@ -49,7 +48,6 @@ describe('Tabs (v-if panels)', () => {
     const secondTrigger = wrapper.findAll('.ct-tabs__trigger')[1]
     await secondTrigger.trigger('click')
 
-    // Panel 2 now exists and its body rendered; panel 1 was torn down.
     expect(wrapper.find('[data-tab-panel="2"]').exists()).toBe(true)
     expect(wrapper.find('.c2').text()).toBe('two')
     expect(wrapper.find('[data-tab-panel="1"]').exists()).toBe(false)
@@ -104,13 +102,12 @@ describe('Tabs (v-if panels)', () => {
       }
     })
 
-    // Tab 1 active: only widget A was ever created. Widget B does not exist —
-    // its slot outlet is inside the v-if that is false, so it is never invoked.
+    // Only widget A was ever created: B's slot outlet sits inside the false
+    // v-if, so it is never invoked.
     expect(lifecycle).toEqual(['mount:A'])
     expect(wrapper.findAll('.widget')).toHaveLength(1)
     expect(wrapper.find('.widget').text()).toBe('widget:A')
 
-    // Reveal tab 2: A unmounts, B mounts for the first time.
     await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
 
     expect(lifecycle).toEqual(['mount:A', 'unmount:A', 'mount:B'])

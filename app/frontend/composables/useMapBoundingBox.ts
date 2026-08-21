@@ -74,7 +74,8 @@ export default function (
     try {
       const res = await getJsonExternal<{ extent: Extent }>(boundsUrl.url)
       extent = normaliseExtent(res.extent)
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Could not fetch map bounds from ${boundsUrl.url}`, error)
     }
 

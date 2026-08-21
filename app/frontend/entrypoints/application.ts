@@ -1,29 +1,20 @@
-// Anything frontend code other than Vue can be in here, but you shouldn't need
-// to add anything as all frontend should be without Vue (erb view + tailwind
-// css) or Vue + tailwind. Tailwind itself and the turbo-mount wrapper-div CSS
-// rule are loaded from vitecss.css (a real blocking <link>, not a JS import
-// here) so they're in effect before first paint — see that file's header.
+// Registers every Vue 3 island mounted via the `turbo_mount` ERB helper (see
+// lib/turboMount.ts). Despite the name, turbo-mount is Stimulus-only: this app
+// has no Turbo Drive, so every navigation is a full document load and this
+// module is evaluated exactly once per page.
 //
-// Registers every Vue 3 "island" mounted via the `turbo_mount` ERB helper
-// (see app/frontend/lib/turboMount.ts and the "turbo-mount spike result"
-// memory). Despite the name, turbo-mount is built on Stimulus alone: this app
-// does NOT use Turbo Drive, so every navigation is an ordinary full document
-// load and this module is evaluated exactly once per page (see CARRYOVER §8ac
-// for what that removal bought and what it let us delete).
+// Tailwind and the turbo-mount wrapper-div rule load from vitecss.css as a
+// blocking <link>, not from here, so they apply before first paint.
 //
-// To add a new component:
-//   1. Add its Vue 3 SFC under app/frontend/components/.
-//   2. Register it below — eager if it renders on essentially every page
-//      (see the static imports below), lazy otherwise.
-//   3. In the ERB, render `<%= turbo_mount "<Name>", props: {...} %>`.
+// To add a component: put its SFC under app/frontend/components/, register it
+// below (eager only if it renders on nearly every page), then render
+// `<%= turbo_mount "<Name>", props: {...} %>` in the ERB.
 //
 // See: upgrade-plan/frontend/14-architecture-and-design.md
 
-// These five render on essentially every page (banner/nav/search bar/download
-// modal/cookie banner in the shared layout) — lazy-loading something that's
-// never actually skipped buys nothing, it just adds a network round-trip
-// before it can mount. Static imports bundle them straight into this
-// entrypoint's own chunk instead.
+// These five are in the shared layout, so they render on nearly every page.
+// Static imports bundle them into this entrypoint's chunk — lazy-loading
+// something never skipped only adds a round-trip before it can mount.
 import Banner from '@/components/Banner/Index.vue'
 import NavBar from '@/components/NavBar/Index.vue'
 import SearchSiteTopbar from '@/components/Search/SiteTopbar.vue'
@@ -33,8 +24,8 @@ import CookieConsent from '@/components/CookieConsent.vue'
 import { registerTurboMountComponents } from '@/lib/turboMount'
 import useAnalytics from '@/composables/useAnalytics'
 
-// Resumes optional tracking (GA4/Hotjar) for visitors who already accepted cookies
-// on a previous visit — the CookieConsent island only fires on the first decision.
+// Resumes GA4/Hotjar for visitors who accepted on a previous visit — the
+// CookieConsent island only fires on the first decision.
 useAnalytics().initAnalytics()
 
 registerTurboMountComponents({
@@ -44,8 +35,8 @@ registerTurboMountComponents({
   DownloadModal: () => Promise.resolve({ default: DownloadModal }),
   CookieConsent: () => Promise.resolve({ default: CookieConsent }),
 
-  // Everything below is page-specific — stays lazy, only fetched when a page
-  // actually renders it (see turboMount.ts's DOM-scan for why that matters).
+  // Page-specific: stays lazy, fetched only when a page renders it (see the
+  // DOM scan in turboMount.ts).
   Tabs: () => import('@/components/Tabs.vue'),
   Download: () => import('@/components/Download/Index.vue'),
   GaLink: () => import('@/components/GaLink.vue'),

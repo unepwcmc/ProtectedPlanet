@@ -1,12 +1,9 @@
-// Vue 3 replacement for the legacy Vue 2 `mixin-responsive` mixin
-// (app/javascript/mixins/mixin-responsive.js). That mixin broadcast resize via
-// a global `$eventHub` so several component instances could share one resize
-// listener; Vue 3 has no such global bus here, so each caller gets its own
-// listener — negligible cost for the handful of components that need this.
+// Reactive viewport breakpoint. Each caller gets its own resize listener —
+// negligible for the handful of components that need this.
 import { computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 
-// MUST match the breakpoints in app/assets/stylesheets/_settings.
+// MUST match Tailwind's breakpoints.
 const BREAKPOINTS = { small: 767, medium: 1024, large: 1200 }
 
 export default function () {

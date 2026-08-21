@@ -1,7 +1,5 @@
-// Vue3/Pinia port of the legacy Vuex `download` module
-// (app/javascript/store/_store-download.js) — same state shape and behaviour,
-// including the localStorage persistence contract, so existing in-flight
-// downloads survive the Webpacker->Vite cutover for a given browser session.
+// In-flight download state, persisted to localStorage so a download survives a
+// page load for the rest of the browser session.
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -32,8 +30,7 @@ export const useDownloadStore = defineStore('download', () => {
     downloadItems.value = downloadItems.value.filter(download => download.id !== item.id)
   }
 
-  // Mirrors the legacy per-key try/catch: a corrupt value for one key resets
-  // only that key, it doesn't abort initialising the others.
+  // Per-key: a corrupt value resets only that key, without aborting the rest.
   function initialiseStore() {
     if (localStorage.getItem('downloadItems') !== null) {
       try {

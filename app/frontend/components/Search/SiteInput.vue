@@ -99,9 +99,8 @@ function submit() {
 
 function toggleInput() {
   isActive.value = !isActive.value
-  // Matches the legacy component's own setTimeout(0): waits a macrotask past
-  // Vue's render flush so the popout pane's CSS transition has started before
-  // focusing, not just nextTick's "DOM updated" point.
+  // A macrotask past Vue's render flush, so the popout's CSS transition has
+  // started before focusing — nextTick alone only means "DOM updated".
   setTimeout(() => inputEl.value?.focus(), 0)
 }
 </script>

@@ -1,4 +1,4 @@
-/* shared across every button: legacy `button-basic` mixin */
+/* Shared by every button. */
 @utility tw-shared-button-basic {
   @apply
   bg-transparent
@@ -11,7 +11,7 @@
   disabled:opacity-20;
 }
 
-/* shared across the fixed-height buttons only: `button-basic` + `button-height` + `button-font` + `button-padding` + `button-radius` */
+/* Shared by the fixed-height buttons only. */
 @utility tw-shared-button-sized {
   @apply
   tw-shared-button-basic
@@ -104,7 +104,7 @@ bg-theme-primary
   tw-shared-font-hind-siliguri__light-lg-white;
 }
 
-/* legacy `button-download` — icon is a real element, see Icon/Download.vue / tw-shared-icon-download-black */
+/* The icon is a real element — see Icon/Download.vue. */
 @utility tw-shared-button--download {
   @apply
   tw-shared-button-basic
@@ -119,7 +119,8 @@ bg-theme-primary
   text-lg;
 }
 
-/* legacy `button-external` alone (no color/font of its own) — just enough flex to line up the real icon element next to the text */
+/* No colour or font of its own — just enough flex to line the icon up with the
+   text. */
 @utility tw-shared-button--link-external {
   @apply
   flex

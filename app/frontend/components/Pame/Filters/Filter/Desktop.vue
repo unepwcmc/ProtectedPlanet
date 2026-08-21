@@ -53,11 +53,9 @@ const emit = defineEmits<{
   apply: [options: string[]]
 }>()
 
-// Seeded from `appliedOptions` (ultimately sourced from the URL, see
-// Pame/Table/Index.vue) rather than an empty array — this component is
-// destroyed and recreated every time its dropdown opens (see the
-// `v-if="isOpen"` in Filter/Index.vue), so a fresh mount is the only place
-// this can pick up the filter's real current value.
+// Seeded from `appliedOptions` (sourced from the URL) rather than empty:
+// Filter/Index.vue's `v-if="isOpen"` recreates this on every open, so a fresh
+// mount is the only place it can pick up the filter's current value.
 const pendingOptions = ref<string[]>([...props.appliedOptions])
 
 const filterClass = computed(() => `ct-pame-filter-desktop--${props.name.replace(/[\s()_]/g, '-').toLowerCase()}`)

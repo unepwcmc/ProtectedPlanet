@@ -63,11 +63,8 @@
 </template>
 
 <script setup lang="ts">
-// Vue 3 port of the legacy VMapPASearch.vue + Autocomplete.vue pair
-// (app/javascript/components/map/VMapPASearch.vue) — merged into one component
-// since only the map PA-search box uses this markup here (site/area search
-// has its own equivalent, SearchAreas/InputAutocomplete.vue, whose structure
-// this mirrors).
+// The map's own search box, input and autocomplete in one component. Mirrors
+// the structure of SearchAreas/InputAutocomplete.vue, the site/area equivalent.
 import { ref, computed } from 'vue'
 import { onClickOutside, useDebounceFn } from '@vueuse/core'
 import IconClose from '@/components/Icon/Close.vue'
@@ -124,8 +121,8 @@ const runAutocomplete = useDebounceFn(async () => {
       index: 'areas'
     })
 
-    // The term may have changed while the request was in flight — a stale
-    // response should not overwrite a newer (or cleared) search.
+    // The term may have changed in flight; a stale response must not overwrite
+    // a newer or cleared search.
     if (search.value !== searchTerm) return
 
     results.value = response

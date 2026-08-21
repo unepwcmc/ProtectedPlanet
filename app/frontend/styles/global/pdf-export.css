@@ -12,12 +12,9 @@
   @apply hidden!;
 }
 
-/* page-break-inside/-after are the pre-Fragmentation-spec names for
-   break-inside/-after - superseded everywhere, but WebKit's break-inside
-   support is unreliable specifically on elements that are themselves flex/grid
-   containers (most of these are), and it's this legacy alias that still gets
-   honoured there in practice. Both are set; no browser needs only the legacy
-   one, so this is additive, not a replacement. */
+/* Both the modern break-inside/-after and the legacy page-break-* aliases are
+   set: WebKit's break-inside is unreliable on flex/grid containers, which most
+   of these are, and honours the legacy name there. Additive, not a fallback. */
 .tw-global-pdf-export .tw-global-pdf-export__break-inside-avoid {
   @apply break-inside-avoid!;
   page-break-inside: avoid !important;

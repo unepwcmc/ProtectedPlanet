@@ -79,10 +79,9 @@ import type { PameEvaluationItem, PameFilterSelection, PameTablePage, PameTableP
 type PameTable = PameTableProps
 const props = defineProps<PameTable>()
 
-// The one shared in-flight flag every PAME control (table, pagination, filters,
-// CSV download) disables itself against — owned here since this is the common
-// ancestor of all of them, and passed down as a prop (DownloadCsv writes back to
-// it via `update:isFetching`, bubbled up through PameFilters).
+// The shared in-flight flag every PAME control disables itself against. Owned
+// here as their common ancestor and passed down; DownloadCsv writes back via
+// `update:isFetching`, bubbled up through PameFilters.
 const isFetching = ref(false)
 
 const currentPage = ref(props.json.current_page)
@@ -91,8 +90,8 @@ const totalItems = ref(props.json.total_entries)
 const totalPages = ref(props.json.total_pages)
 const items = ref(props.json.items)
 
-// PameModal is a direct sibling here, same as the rows that open it — owning
-// this locally instead of in the store keeps that connection explicit.
+// PameModal is a direct sibling, like the rows that open it, so this stays
+// local rather than going in the store.
 const modalContent = ref<PameEvaluationItem | null>(null)
 const isModalOpen = ref(false)
 
@@ -105,16 +104,16 @@ function onCloseModal() {
   isModalOpen.value = false
 }
 
-// The URL is the only place applied filters are stored — no Pinia state for
-// them. Read on load so a bookmarked/shared/back-navigated link reproduces the
-// same filtered table, and written back out on every apply (see updateQueryString).
+// The URL is the only store for applied filters. Read on load so a bookmarked
+// or back-navigated link reproduces the same table, written back on every
+// apply (see updateQueryString).
 const FILTER_PARAM_PREFIX = 'pame_filters'
 const requestedPage = ref(1)
 const selectedFilterOptions = ref<PameFilterSelection[]>(readFiltersFromUrl())
 
 function defaultFilterOptions(): PameFilterSelection[] {
-  // PameEvaluation.generate_query only reads filters that are present in this
-  // array, so every real filter needs a (possibly empty) entry.
+  // PameEvaluation.generate_query only reads filters present in this array, so
+  // every filter needs a (possibly empty) entry.
   return props.filters
     .filter(filter => filter.options.length > 0)
     .map(filter => ({ name: filter.name, options: [], type: filter.type }))
@@ -150,9 +149,8 @@ function updatePage(data: PameTablePage) {
   items.value = data.items
 }
 
-// Guarded against overlapping requests (not just disabled buttons) since a filter
-// apply and a pagination click can race each other, not only repeat clicks on the
-// same control.
+// Guarded against overlapping requests, not just repeat clicks: a filter apply
+// and a pagination click can race each other.
 function fetchItems(page = requestedPage.value) {
   if (isFetching.value) return
 
@@ -175,9 +173,9 @@ function onApplyFilter(name: string, options: string[]) {
   fetchItems(1)
 }
 
-// The initial `json` prop is always the unfiltered SSR default (Data::GdpameController#index
-// ignores query params), so re-fetch immediately when the page loads with filters
-// already in the URL — otherwise a bookmarked/shared filtered link shows unfiltered results.
+// Data::GdpameController#index ignores query params, so the initial `json` prop
+// is always unfiltered — re-fetch at once when the URL already has filters, or
+// a shared filtered link shows unfiltered results.
 if (selectedFilterOptions.value.some(filter => filter.options.length > 0)) fetchItems(1)
 </script>
 

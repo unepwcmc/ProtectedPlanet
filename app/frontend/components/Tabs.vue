@@ -49,15 +49,14 @@ import type { TabsProps } from '@/types/backend'
 
 const { trackEvent } = useAnalytics()
 
+// Match by id or by title, mirroring the `?tab=` param.
 type Tabs = TabsProps
-// Match by id or by title (mirrors the legacy ?tab= param behaviour).
 const props = defineProps<Tabs>()
 const emit = defineEmits<{ change: [id: number] }>()
 
-// Hero partials render an empty #vw-hero-tabs-target for the trigger row to teleport
-// into, so it visually sits at the bottom of the hero while panel content (this
-// component's actual mount point) stays where it was rendered. Falls back to
-// rendering triggers in place when no hero target exists (e.g. component tests).
+// Hero partials render an empty #vw-hero-tabs-target for the trigger row to
+// teleport into, so it sits at the bottom of the hero while the panels stay at
+// this component's mount point. Renders in place when there is no hero target.
 const hasHeroTabsTarget = ref(false)
 onMounted(() => {
   hasHeroTabsTarget.value = document.querySelector('#vw-hero-tabs-target') !== null
@@ -72,8 +71,7 @@ function initialTabId() {
 
 const selectedId = ref(initialTabId())
 
-// Strips non-ASCII chars/newlines from CMS titles before putting them in the
-// URL, matching the legacy Vue2 Tabs component's `removeEncodedChars`.
+// Strips non-ASCII chars and newlines from CMS titles used in the URL.
 function sanitizeTabParam(title: string) {
   return title.replace(/[^\x00-\x7F]|\n/g, '')
 }

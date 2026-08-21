@@ -1,4 +1,4 @@
-/* The classes here are used directly from rails to frontend */
+/* These classes are sent straight from Rails helpers to the frontend. */
 .tw-shared-chart-legend-colour-aqua {
   @apply bg-theme-chart-aqua;
 }
@@ -11,9 +11,8 @@
   @apply bg-theme-chart-purple;
 }
 
-/* Matches $theme-chart in app/assets/stylesheets/_settings.scss (12-colour
-   designation palette), indexed 1-12. Shared by ChartRowStacked's per-bar
-   colouring and StatsDesignations' own legend-key swatches. */
+/* The 12-colour designation palette, indexed 1-12. Shared by ChartRowStacked's
+   per-bar colouring and StatsDesignations' legend swatches. */
 .tw-shared-chart-theme-1 {
   @apply bg-[#64BAD9];
 }

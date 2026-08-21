@@ -27,8 +27,8 @@ vi.mock('maplibre-gl', () => ({
   Marker: vi.fn(),
   Popup: vi.fn(),
   setRTLTextPlugin: vi.fn(),
-  // useMapInstance calls this at module scope to point MapLibre at the
-  // Vite-emitted worker; without it here the module throws on import.
+  // useMapInstance calls this at module scope, so the module throws on import
+  // without it.
   setWorkerUrl: vi.fn()
 }))
 
@@ -126,13 +126,10 @@ describe('Map', () => {
     expect(hidden.find('.ct-map-pa-search').exists()).toBe(false)
   })
 
-  // Every protected-area page ships an overlay with the SAME id ("individual_site")
-  // but a DIFFERENT site-specific geometry URL, and addOverlay is idempotent by id.
-  // Back when this state was an app-wide pinia store -- which outlives any single
-  // island while this island is rebuilt per mount -- the second site kept the FIRST
-  // site's polygon, rendered off-screen, which looked like "the highlight
-  // disappeared". Scoping it to the tree means a new mount cannot see the previous
-  // one's overlays.
+  // Every PA page ships an overlay with the same id ("individual_site") but a
+  // different geometry URL, and addOverlay is idempotent by id. While this
+  // state was an app-wide store it outlived the island, so the second site kept
+  // the first site's polygon and its highlight looked like it had vanished.
   it('gives each mount its own overlay state, isolated from any other map mount', () => {
     // Stands in for MapBase so it can read what Index provides to its children.
     const captured: MapOverlaysContext[] = []

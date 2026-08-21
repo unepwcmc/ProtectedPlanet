@@ -1,5 +1,4 @@
-// Vue3 replacement for app/javascript/helpers/axios-helpers.js — same CSRF
-// header contract, backed by native fetch instead of axios.
+// Shared fetch wrappers, applying the app's CSRF header contract.
 function csrfToken(): string {
   const token = document.head.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')
 
@@ -43,9 +42,8 @@ export interface BlobDownload {
   blob: Blob
 }
 
-// For endpoints that return a file (e.g. CSV export) rather than JSON —
-// reads the filename back out of Content-Disposition, same contract the
-// legacy axios-based PAME download used.
+// For endpoints returning a file (e.g. CSV export) rather than JSON — reads the
+// filename back out of Content-Disposition.
 export async function postBlob(url: string, body?: unknown): Promise<BlobDownload> {
   const response = await fetch(url, {
     method: 'POST',
@@ -66,9 +64,8 @@ export async function postBlob(url: string, body?: unknown): Promise<BlobDownloa
   return { filename: match ? match[1] : 'download.csv', blob: await response.blob() }
 }
 
-// For external (non-Rails) hosts, e.g. the ArcGIS point-query services — sending
-// our CSRF header there fails their CORS preflight (`request-helpers.js`'s
-// axiosGetWithoutCSRF was the same fix for the legacy axios-based code).
+// For external (non-Rails) hosts, e.g. the ArcGIS point-query services —
+// sending our CSRF header there fails their CORS preflight.
 export function getJsonExternal<T>(url: string, params?: Record<string, string> | URLSearchParams): Promise<T> {
   const query = params ? `?${new URLSearchParams(params).toString()}` : ''
 

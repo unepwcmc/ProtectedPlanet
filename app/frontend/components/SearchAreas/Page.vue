@@ -88,31 +88,30 @@ const QUERY_STRING_PARAMS_FILTERS = ['db_type', 'is_type', 'special_status', 'de
 
 const downloadStore = useDownloadStore()
 
-// The hero partial renders an empty #vw-hero-search-target for this bar to teleport
-// into, so it visually sits inside the hero while the rest of this component's tree
-// (filters panel, tabs, results) stays at its own mount point below. Falls back to
-// rendering the bar in place when no hero target exists (e.g. component tests).
+// The hero partial renders an empty #vw-hero-search-target for this bar to
+// teleport into, so it sits inside the hero while the rest of the tree stays at
+// the mount point below. Renders in place when no hero target exists (tests).
 const hasHeroSearchTarget = ref(false)
 onMounted(() => {
   hasHeroSearchTarget.value = document.querySelector('#vw-hero-search-target') !== null
 })
 
 const activeFilterOptions = ref<Record<string, unknown>>({})
-// The backend always returns at most one filter group (Search::FiltersSerializer#serialize
-// is a hardcoded single-element array, never a real multi-group structure) — flatten it here
-// once so the rest of this component and the FiltersPanel tree work with a plain filter list.
+// Search::FiltersSerializer#serialize is a hardcoded single-element array, not
+// a real multi-group structure, so flatten it once here and let the rest of the
+// tree work with a plain filter list.
 const filtersTitle = props.filterGroups[0]?.title ?? ''
 const filters = ref<SearchFilter[]>(props.filterGroups[0]?.filters ?? [])
 const isFilterPaneActive = ref(false)
 const isFilterPaneDisabled = ref(false)
 const isLoadingResults = ref(false)
-const newResults = ref<SearchAreasResultsData>(props.results)
+const newResults = ref<SearchAreasResults>(props.results)
 const searchTerm = ref('')
 const tabIdDefault = props.tabs[2].id
 const tabIdSelected = ref(tabIdDefault)
-// Replace the legacy $eventHub 'reset:filter-options'/'reset:pagination'
-// broadcasts — bumping these props down the Filters/Results trees stands in
-// for the global bus (removed in Vue 3, see 14-architecture-and-design.md).
+// Vue 3 has no global event bus: bumping these props down the Filters/Results
+// trees stands in for the old 'reset:filter-options'/'reset:pagination'
+// broadcasts.
 const filterResetKey = ref(0)
 const paginationResetKey = ref(0)
 
@@ -161,8 +160,7 @@ function getQueryStringParams(paramsFromUrl: URLSearchParams) {
   return QUERY_STRING_PARAMS.filter(param => paramsFromUrl.has(param))
 }
 
-// If a query string is present in the URL, initialise the state of the
-// component based on its parameters — see the top-level call below.
+// Initialise from the URL's query params, if any — called at the end of setup.
 function handleQueryString() {
   const paramsFromUrl = new URLSearchParams(window.location.search)
   const params = getQueryStringParams(paramsFromUrl)
@@ -219,10 +217,9 @@ function updateFilters(filters: Record<string, unknown>) {
   getFilteredSearchResults()
   updateQueryString({ filters })
   handleQueryString()
-  // useDownloadStore#searchFilters is typed `unknown[]` from its Vuex-module
-  // port (Wave 4), but the actual payload Download/Index.vue forwards to the
-  // download endpoint is this `{ [filterId]: options }` dict — same shape the
-  // legacy window.__downloadStoreBridge passed through untouched.
+  // useDownloadStore#searchFilters is typed `unknown[]`, but what
+  // Download/Index.vue forwards to the endpoint is this
+  // `{ [filterId]: options }` dict.
   downloadStore.updateSearchFilters(filters as unknown as unknown[])
 }
 

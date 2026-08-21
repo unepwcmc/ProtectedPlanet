@@ -53,9 +53,8 @@ describe('NavBarDropdownMobile', () => {
     expect(wrapper.find('.ct-nav-bar-dropdown-mobile__wrapper').classes())
       .toContain('ct-nav-bar-dropdown-mobile__wrapper--active')
 
-    // vueuse's onClickOutside briefly guards against double-firing for the same
-    // click sequence (touch+click), so a synchronous second click right after the
-    // first is ignored — let a macrotask pass first, same as a real user would.
+    // onClickOutside ignores a second click in the same tick (its touch+click
+    // guard), so let a macrotask pass, as a real user would.
     await new Promise(resolve => setTimeout(resolve, 0))
 
     document.body.click()

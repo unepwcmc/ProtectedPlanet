@@ -33,9 +33,9 @@ const props = defineProps<{
   option: FilterOption
 }>()
 
-// The desktop and mobile filter panels render the same options
-// simultaneously (visibility toggled by CSS), so a plain groupId+title id
-// would collide across the two trees and mis-associate label clicks.
+// The desktop and mobile panels render the same options at once (CSS toggles
+// visibility), so a plain groupId+title id would collide and mis-associate
+// label clicks.
 const inputId = `${props.groupId}-${props.option.title}-${useId()}`
 
 const emit = defineEmits<{ click: [checked: boolean] }>()

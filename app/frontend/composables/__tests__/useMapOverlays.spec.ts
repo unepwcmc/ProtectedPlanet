@@ -16,8 +16,8 @@ describe('createMapOverlays', () => {
     expect(visibleLayers.value).toEqual([terrestrial])
   })
 
-  // Overlay.vue re-registers on every toggle-on, and two overlays can legitimately
-  // share a layer — neither should produce a duplicate MapLibre layer id.
+  // Overlay.vue re-registers on every toggle-on, and two overlays can share a
+  // layer — neither may produce a duplicate MapLibre layer id.
   it('ignores a repeat registration of the same overlay or layer id', () => {
     const { visibleOverlays, visibleLayers, addOverlay } = createMapOverlays()
 
@@ -40,8 +40,8 @@ describe('createMapOverlays', () => {
     expect(visibleLayers.value).toEqual([marine])
   })
 
-  // MapBase watches `visibleLayers` — an in-place push would not trigger it, so both
-  // mutators must replace the array rather than mutate it.
+  // MapBase watches `visibleLayers`, and an in-place push would not trigger it,
+  // so both mutators must replace the array.
   it('replaces the layer array rather than mutating it, so watchers fire', () => {
     const { visibleLayers, addOverlay } = createMapOverlays()
     const before = visibleLayers.value
@@ -74,8 +74,8 @@ describe('useMapOverlays', () => {
     expect(provided!.visibleLayers.value).toEqual([terrestrial])
   })
 
-  // A map component rendered outside a Map/Index.vue tree would otherwise talk to
-  // state nothing else can see, which is silent and very hard to debug.
+  // Outside a Map/Index.vue tree a map component would otherwise talk to state
+  // nothing else can see — silent and hard to debug.
   it('throws when there is no enclosing map', () => {
     const Orphan = defineComponent({
       setup() {

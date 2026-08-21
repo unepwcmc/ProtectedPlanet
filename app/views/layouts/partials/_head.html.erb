@@ -17,12 +17,6 @@
   <% end %>
   <link rel="manifest" href="/manifest.json">
   <%= csrf_meta_tags %>
-  <%# These two carried data-turbo-track="reload" while Turbo Drive was in use:
-      Turbo cached page snapshots for the session, and a snapshot restored after
-      a deploy still pointed at the previous build's Vite digests, so the browser
-      404'd them (CARRYOVER §8aa/§8ab). Turbo Drive is gone, so every navigation
-      is a real document load that always fetches current HTML with current
-      digests, and the attribute has nothing left to compare. %>
   <%= vite_client_tag %>
   <%= vite_stylesheet_tag 'vitecss.css' %>
   <%= vite_typescript_tag 'application.ts' %>

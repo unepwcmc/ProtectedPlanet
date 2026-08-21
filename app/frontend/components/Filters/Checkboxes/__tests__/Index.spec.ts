@@ -64,9 +64,8 @@ describe('FiltersCheckboxes', () => {
     expect(window.gtag).not.toHaveBeenCalled()
   })
 
-  // Filter ids from Comfy::Cms::PageCategory are numbers, but preSelected
-  // comes back from the URL query string as strings (e.g. after Listing/Index
-  // re-reads it post round-trip) — checked state and toggling must still work.
+  // Comfy::Cms::PageCategory ids are numbers but come back from the query
+  // string as strings, and checked state and toggling must still work.
   it('reflects checked state and toggles off correctly when option ids are numbers but preSelected is stringified', async () => {
     const numericOptions = [
       { id: 1, title: 'WDPA' },

@@ -25,8 +25,7 @@ import CarouselThemesCard from '@/components/Carousel/Themes/Card.vue'
 type CardsThemes = CarouselThemesProps
 defineProps<CardsThemes>()
 
-// Every 3rd card spans the full row at the two-column breakpoint (ported
-// from the legacy `.card--theme:nth-child(3n)` rule).
+// Every 3rd card spans the full row at the two-column breakpoint.
 const isFeatured = (index: number) => (index + 1) % 3 === 0
 </script>
 

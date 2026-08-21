@@ -80,8 +80,7 @@ describe('SearchSiteInput', () => {
     await wrapper.find('.ct-search__trigger').trigger('click')
     expect(wrapper.find('.ct-search__pane').classes()).toContain('ct-search__pane--popout-active')
 
-    // onClickOutside guards against double-firing within the same tick (see
-    // vueuse-adoption memory) — wait a macrotask so it doesn't ignore this click.
+    // onClickOutside ignores a second click in the same tick — wait a macrotask.
     await new Promise(resolve => setTimeout(resolve, 0))
     document.body.click()
     await wrapper.vm.$nextTick()

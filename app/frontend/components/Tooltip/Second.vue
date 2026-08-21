@@ -83,9 +83,8 @@ function toggleTooltip(value?: boolean) {
   if (isActive.value) nextTick(updateShift)
 }
 
-// The target is centered on the trigger by default (see CSS). If that would
-// push it past the viewport edge, shift the box (not the arrow, which stays
-// pinned to the trigger) just enough to keep it fully on screen.
+// Centered on the trigger by default (see CSS). If that overflows the viewport,
+// shift the box just enough to fit — the arrow stays pinned to the trigger.
 function updateShift() {
   if (!triggerEl.value || !targetEl.value) return
 

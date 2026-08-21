@@ -1,8 +1,6 @@
-// Cookie-consent status storage. Pure — reading or writing the consent value
-// here has no side effects on tracking scripts. See composables/useAnalytics.ts for the
-// code that reacts to consent and loads GA4/Hotjar, and the CookieConsent
-// island (app/frontend/components/CookieConsent.vue) for the UI that records
-// the user's decision.
+// Cookie-consent storage only — reading or writing here has no effect on any
+// tracking script. useAnalytics.ts reacts to consent; CookieConsent.vue is the
+// UI that records the decision.
 import { ConsentStatus, CONSENT_COOKIE, CONSENT_MAX_AGE } from '@/constants/analytics'
 
 function readCookie(name: string): string | null {

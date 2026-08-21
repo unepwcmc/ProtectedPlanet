@@ -53,16 +53,15 @@ import type { ListingProps, ListingResults } from '@/types/backend'
 type Listing = ListingProps
 const props = defineProps<Listing>()
 
-// The backend always returns at most one filter group (CmsHelper#get_category_filters is a
-// hardcoded single-element array, never a real multi-group structure) — flatten it here once
-// so the FiltersPanel tree works with a plain filter list instead of looping over groups.
+// CmsHelper#get_category_filters is a hardcoded single-element array, not a real
+// multi-group structure, so flatten it once here and let the FiltersPanel tree
+// work with a plain filter list.
 const filters = props.filterGroups[0]?.filters ?? []
 const filtersTitle = props.filterGroups[0]?.title ?? ''
 
 const currentResults = ref<ListingResults>(props.results)
-// The URL query string is the single source of truth for active filters.
-// activeFilterOptions is never mutated directly — it's always reassigned by
-// re-reading the URL, so Vue state can't drift from what's in the address bar.
+// The query string is the single source of truth: activeFilterOptions is never
+// mutated in place, only reassigned by re-reading the URL, so it can't drift.
 const activeFilterOptions = ref<Record<string, Array<string | number>>>(readFiltersFromUrl())
 const isFilterPaneActive = ref(false)
 const isLoadingMoreResults = ref(false)

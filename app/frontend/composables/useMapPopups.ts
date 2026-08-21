@@ -1,4 +1,3 @@
-// Vue3 port of app/javascript/components/map/mixins/mixin-pa-popup.js
 import { shallowRef, type Ref } from 'vue'
 import { Marker, Popup, type Map as MapLibreMap, type MapMouseEvent } from 'maplibre-gl'
 import { getJsonExternal } from '@/lib/http'
@@ -53,9 +52,8 @@ export default function (
   servicesForPointQuery: PointQueryService[],
   popupAttributes: PopupAttributeLabels = { name: 'Name', site_id: 'ID', site_pid: 'SITE_PID (Parcel ID)' }
 ) {
-  // shallowRef: Marker/Popup are external GL class instances with deep circular
-  // internal structure — Vue's UnwrapRef on a plain ref() blows past TS's
-  // recursion limit trying to make them reactive, which we don't need anyway.
+  // shallowRef: Marker/Popup are GL instances with deep circular internals, and
+  // a plain ref()'s UnwrapRef blows past TS's recursion limit on them.
   const markers = shallowRef<Marker[]>([])
   const popups = shallowRef<Popup[]>([])
 

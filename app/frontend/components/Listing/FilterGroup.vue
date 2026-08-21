@@ -53,8 +53,7 @@ function onUpdate(options: Array<string | number>) {
   emit('update:filter', { id: props.filter.id, options })
 }
 
-// Primes the parent's active-filter state from a URL-preselected value, same
-// as the legacy vFilter component's `created()` hook.
+// Primes the parent's active-filter state from a URL-preselected value.
 onMounted(() => {
   if (props.preSelected?.length) onUpdate(props.preSelected)
 })

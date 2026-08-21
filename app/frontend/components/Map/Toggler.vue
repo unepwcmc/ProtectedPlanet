@@ -88,10 +88,7 @@ function toggle(newState?: boolean) {
   @apply bg-theme-grey-xlight ml-0 mr-auto transition-all duration-100 ease-in-out;
 }
 
-/* The legacy `&:hover { &__switch {...} &__active {...} }` block is dropped,
-   not ported — a genuine pre-existing Sass nesting bug (confirmed by
-   compiling the source) concatenated `&__switch`/`&__active` directly onto
-   `:hover` with no combinator, producing the invalid selectors
-   `:hover__switch`/`:hover__active` that never matched anything in any
-   browser. The toggler has never actually had a working hover state. */
+/* No hover state, deliberately: the legacy Sass nested `&__switch`/`&__active`
+   straight onto `:hover` with no combinator, compiling to the invalid
+   `:hover__switch`/`:hover__active`, so the hover never worked in any browser. */
 </style>

@@ -32,9 +32,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{ 'update:isFetching': [value: boolean] }>()
 
-// Own flag for the spinner (this download specifically); `isFetching` is the
-// shared flag every PAME control disables against, so a table fetch or filter
-// apply also disables this button, not just its own download.
+// Own flag for the spinner; `isFetching` is the shared one, so a table fetch or
+// filter apply disables this button too.
 const isDownloading = ref(false)
 
 const hasNoResults = computed(() => props.totalItems === 0)

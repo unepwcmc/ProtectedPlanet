@@ -139,11 +139,9 @@ const swiperSettings = {
 }
 
 /*
- * Fixed px margins matching slidesOffsetBefore/slidesOffsetAfter in <script>
- * exactly at every tier (not percentages, which drift out of alignment
- * everywhere in a breakpoint's range except the one width they were
- * eyeballed at, since a % scales with container width but a fixed px offset
- * doesn't). Keep these in sync by hand with the JS breakpoints object above.
+ * Fixed px, matching slidesOffsetBefore/slidesOffsetAfter in <script> at every
+ * tier — a % offset scales with container width and drifts out of alignment
+ * across a breakpoint's range. Keep these in sync with the JS by hand.
  */
 .ct-carousel-themes__button--previous {
   @apply

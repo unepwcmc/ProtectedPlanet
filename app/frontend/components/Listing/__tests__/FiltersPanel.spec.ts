@@ -11,14 +11,10 @@ const filters = [
   }
 ]
 
-// FiltersPanel/Index.vue picks Mobile vs Desktop via useBreakpoint(), which
-// reads real window dimensions through vueuse's useWindowSize. Driving that
-// with actual window.innerWidth + a dispatched `resize` event would also
-// reach every other still-mounted wrapper in this file (several tests below
-// intentionally don't unmount), flipping their v-if/v-else branch and
-// re-triggering Mobile's scroll-lock watcher outside of their own test. A
-// mocked composable only affects wrappers mounted after it's set, so it
-// can't leak.
+// useBreakpoint is mocked rather than driven by window.innerWidth + a `resize`
+// event: a real resize also reaches the wrappers other tests here deliberately
+// leave mounted, flipping their branch and re-firing Mobile's scroll-lock
+// watcher. A mocked composable only affects wrappers mounted after it is set.
 const breakpoint = { isSmall: false, isMedium: true }
 
 vi.mock('@/composables/useBreakpoint', () => ({
@@ -31,9 +27,8 @@ function setBreakpoint(next: { isSmall: boolean, isMedium: boolean }) {
 }
 
 describe('Listing FiltersPanel', () => {
-  // Several tests below mount with isActive: true and don't unmount — since
-  // jsdom's `document` is shared across tests in this file, that would leak
-  // a locked body scroll into later tests' initial-state assertions.
+  // jsdom's `document` is shared, and several tests below mount with
+  // isActive: true without unmounting — otherwise a locked body scroll leaks.
   afterEach(() => {
     document.body.style.overflow = ''
     setBreakpoint({ isSmall: false, isMedium: true })

@@ -65,10 +65,9 @@ describe('useMapBoundingBox', () => {
     expect(fetch).not.toHaveBeenCalled()
   })
 
-  // ArcGIS answers an extent query for a site_id it does not hold with corners
-  // that are the strings "NaN". Left unchecked these reached MapLibre's
-  // constructor and killed the map, which in turn hung the PDF rasterizer
-  // waiting on a readiness signal the dead map could never send.
+  // For a site_id it does not hold, ArcGIS returns corners that are the strings
+  // "NaN". Unchecked they reached MapLibre's constructor, killing the map and
+  // hanging the PDF rasterizer.
   it('ignores an extent whose corners are not finite numbers and still builds the map', async () => {
     vi.mocked(fetch).mockResolvedValue(jsonResponse({
       extent: { xmin: 'NaN', xmax: 'NaN', ymin: 'NaN', ymax: 'NaN' }

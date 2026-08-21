@@ -13,10 +13,9 @@ const links = [
   }
 ]
 
-// Mobile/desktop switching is pure CSS (`.ct-nav-bar__mobile`/`.ct-nav-bar__desktop` in
-// Index.vue's <style>, `lg:hidden`/`hidden lg:block`) — both trees are always mounted, jsdom
-// doesn't evaluate media queries, so these tests only confirm both trees render with the
-// breakpoint-toggle class wired on, not actual computed visibility at a given width.
+// Mobile/desktop switching is pure CSS and both trees are always mounted, so
+// with no media queries in jsdom these tests only confirm both trees render
+// with the toggle class wired on, not visibility at a given width.
 describe('NavBar', () => {
   it('renders both the mobile and desktop nav, each passed the same links', () => {
     const wrapper = mount(NavBar, { props: { links } })

@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import StatsIucnCategories from '@/components/Stats/IucnCategories.vue'
 
-// AmChartPie's own chart-building behaviour is covered by AmChart/__tests__/Pie.spec.ts;
-// stubbed here since a real amCharts5 Root needs a canvas jsdom doesn't implement.
+// Stubbed because a real amCharts5 Root needs a canvas jsdom lacks;
+// AmChart/__tests__/Pie.spec.ts covers its chart building.
 const stubs = { AmChartPie: true }
 
 describe('StatsIucnCategories', () => {

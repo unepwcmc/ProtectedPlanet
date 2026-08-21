@@ -71,7 +71,6 @@ function setCookie(name: string, value: string) {
 }
 
 function closeBanner() {
-  // Set cookie based on single vs multiple banners
   if (props.banners.length === 1) {
     setCookie('banner_closed', props.banners[0].id.toString())
   }
@@ -79,7 +78,6 @@ function closeBanner() {
     setCookie('banner_closed_sig', props.signature)
   }
 
-  // Hide with animation
   isVisible.value = false
 }
 </script>
