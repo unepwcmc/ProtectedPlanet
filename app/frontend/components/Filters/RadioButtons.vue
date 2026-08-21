@@ -1,28 +1,28 @@
 <template>
   <div
     v-show="options.length > 0"
-    class="ct-search-areas-radio-buttons"
+    class="ct-filters-radio-buttons"
   >
     <p
       v-for="option in options"
       :key="radioId(option)"
-      class="ct-search-areas-radio-buttons__option"
+      class="ct-filters-radio-buttons__option"
     >
       <label
         :for="radioId(option)"
-        class="ct-search-areas-radio-buttons__label"
+        class="ct-filters-radio-buttons__label"
       >
         <input
           :id="radioId(option)"
           v-model="input"
           required
           type="radio"
-          class="ct-search-areas-radio-buttons__input"
+          class="ct-filters-radio-buttons__input"
           :value="option.id"
           :name
           @click="changeInput(option.id)"
         >
-        <span class="ct-search-areas-radio-buttons__input-fake" />
+        <span class="ct-filters-radio-buttons__input-fake" />
         <span v-text="option.title" />
       </label>
     </p>
@@ -73,15 +73,15 @@ changeInput(props.preSelected)
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-search-areas-radio-buttons {
+.ct-filters-radio-buttons {
   @apply flex flex-col flex-wrap;
 }
 
-.ct-search-areas-radio-buttons__option {
+.ct-filters-radio-buttons__option {
   @apply m-0;
 }
 
-.ct-search-areas-radio-buttons__label {
+.ct-filters-radio-buttons__label {
   @apply
   relative
   flex
@@ -89,11 +89,11 @@ changeInput(props.preSelected)
   tw-shared-font-hind-siliguri__light-sm-grey-black;
 }
 
-.ct-search-areas-radio-buttons__input {
+.ct-filters-radio-buttons__input {
   @apply sr-only;
 }
 
-.ct-search-areas-radio-buttons__input-fake {
+.ct-filters-radio-buttons__input-fake {
   @apply
   inline-block
   relative
@@ -109,7 +109,7 @@ changeInput(props.preSelected)
   border-theme-grey;
 }
 
-.ct-search-areas-radio-buttons__input:checked + .ct-search-areas-radio-buttons__input-fake::before {
+.ct-filters-radio-buttons__input:checked + .ct-filters-radio-buttons__input-fake::before {
   @apply
   content-['']
   block
@@ -123,7 +123,7 @@ changeInput(props.preSelected)
   bg-theme-primary;
 }
 
-.ct-search-areas-radio-buttons__input:focus + .ct-search-areas-radio-buttons__input-fake {
+.ct-filters-radio-buttons__input:focus + .ct-filters-radio-buttons__input-fake {
   @apply outline-none;
 }
 </style>

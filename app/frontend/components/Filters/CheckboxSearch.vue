@@ -1,5 +1,5 @@
 <template>
-  <div class="ct-search-areas-checkbox-search">
+  <div class="ct-filters-checkbox-search">
     <TabStrip
       :children="tabs"
       :gaId
@@ -8,14 +8,14 @@
     />
     <input
       v-model="searchTerm"
-      class="ct-search-areas-checkbox-search__input"
+      class="ct-filters-checkbox-search__input"
       type="text"
     >
     <FiltersCheckboxes
       :id
       ref="checkboxesEl"
       :gaId
-      class="ct-search-areas-checkbox-search__options"
+      class="ct-filters-checkbox-search__options"
       :options="autocompleteOptions"
       :preSelected="preSelectedCheckboxes ?? undefined"
       :resetKey
@@ -84,11 +84,11 @@ watch(() => props.resetKey, () => {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-search-areas-checkbox-search {
+.ct-filters-checkbox-search {
   @apply tw-shared-base-flex-col-gap-3;
 }
 
-.ct-search-areas-checkbox-search__input {
+.ct-filters-checkbox-search__input {
   @apply
   block
   w-full
@@ -105,7 +105,7 @@ watch(() => props.resetKey, () => {
   text-theme-grey-black;
 }
 
-.ct-search-areas-checkbox-search__options {
+.ct-filters-checkbox-search__options {
   @apply
   overflow-y-auto
   max-h-62.5;

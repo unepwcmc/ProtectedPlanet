@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import SearchAreasRadioButtons from '@/components/SearchAreas/RadioButtons.vue'
+import FiltersRadioButtons from '@/components/Filters/RadioButtons.vue'
 
 const options = [
   { id: 'wdpa', title: 'WDPA' },
   { id: 'oecm', title: 'OECM' }
 ]
 
-describe('SearchAreasRadioButtons', () => {
+describe('FiltersRadioButtons', () => {
   it('emits update:options and checks the clicked radio', async () => {
-    const wrapper = mount(SearchAreasRadioButtons, { props: { id: 'db_type', name: 'db_type', options } })
+    const wrapper = mount(FiltersRadioButtons, { props: { id: 'db_type', name: 'db_type', options } })
 
     await wrapper.findAll('input[type="radio"]')[1].trigger('click')
 
@@ -18,14 +18,14 @@ describe('SearchAreasRadioButtons', () => {
   })
 
   it('emits the preSelected value on mount', () => {
-    const wrapper = mount(SearchAreasRadioButtons, { props: { id: 'db_type', name: 'db_type', options, preSelected: 'oecm' } })
+    const wrapper = mount(FiltersRadioButtons, { props: { id: 'db_type', name: 'db_type', options, preSelected: 'oecm' } })
 
     expect(wrapper.emitted('update:options')?.[0]).toEqual(['oecm'])
     expect((wrapper.findAll('input[type="radio"]')[1].element as HTMLInputElement).checked).toBe(true)
   })
 
   it('clears the selection and re-emits an empty value when resetKey changes', async () => {
-    const wrapper = mount(SearchAreasRadioButtons, { props: { id: 'db_type', name: 'db_type', options, preSelected: 'wdpa' } })
+    const wrapper = mount(FiltersRadioButtons, { props: { id: 'db_type', name: 'db_type', options, preSelected: 'wdpa' } })
 
     await wrapper.setProps({ resetKey: 1 })
 
@@ -34,8 +34,8 @@ describe('SearchAreasRadioButtons', () => {
   })
 
   it('hides itself when there are no options', () => {
-    const wrapper = mount(SearchAreasRadioButtons, { props: { id: 'db_type', name: 'db_type', options: [] } })
+    const wrapper = mount(FiltersRadioButtons, { props: { id: 'db_type', name: 'db_type', options: [] } })
 
-    expect(wrapper.find('.ct-search-areas-radio-buttons').isVisible()).toBe(false)
+    expect(wrapper.find('.ct-filters-radio-buttons').isVisible()).toBe(false)
   })
 })

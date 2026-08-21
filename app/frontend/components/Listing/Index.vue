@@ -9,13 +9,15 @@
       </div>
     </div>
     <div class="ct-listing__main">
-      <ListingFiltersPanel
+      <FiltersPanel
         class="ct-listing__filters"
         :filterCloseText="textFiltersClose"
         :filters
         :filtersTitle
         :gaId
         :isActive="isFilterPaneActive"
+        keepMounted
+        modifier="listing"
         :preSelected="activeFilterOptions"
         :textClear
         :title="textFilterTrigger"
@@ -44,11 +46,11 @@
 import { computed, ref } from 'vue'
 import { getJson } from '@/lib/http'
 import { QUERY_STRING_FILTER_IDS } from '@/constants/listing'
+import FiltersPanel from '@/components/Filters/Panel/Index.vue'
 import FiltersTrigger from '@/components/Filters/Trigger.vue'
 import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
-import ListingFiltersPanel from '@/components/Listing/FiltersPanel/Index.vue'
 import ListingList from '@/components/Listing/List.vue'
-import type { ListingProps, ListingResults } from '@/types/backend'
+import type { FilterGroupSelection, ListingProps, ListingResults } from '@/types/backend'
 
 type Listing = ListingProps
 const props = defineProps<Listing>()
@@ -143,9 +145,10 @@ function requestMore(requestedPage: number) {
   requestSearch(true, requestedPage)
 }
 
-function updateFilters(payload: { id: string, options: Array<string | number> }) {
+function updateFilters(payload: { id: string, options: FilterGroupSelection }) {
   paginationResetKey.value++
-  writeFilterToUrl(payload.id, payload.options)
+  // The CMS only sends checkbox groups, so the selection is always an id array.
+  writeFilterToUrl(payload.id, Array.isArray(payload.options) ? payload.options : [])
   activeFilterOptions.value = readFiltersFromUrl()
   requestSearch()
 }

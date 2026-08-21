@@ -141,6 +141,66 @@ describe('SearchAreasPage', () => {
     expect(downloadStore.searchFilters).toEqual({ db_type: ['wdpa'] })
   })
 
+  it('does not re-fetch when opening the filters panel on a URL-preselected filter', async () => {
+    window.history.replaceState({}, '', '/search-areas?filters%5Bdb_type%5D%5B%5D=wdpa')
+    const wrapper = mountSearchAreas()
+    const downloadStore = useDownloadStore()
+
+    expect(downloadStore.searchFilters).toEqual({ db_type: ['wdpa'] })
+
+    await wrapper.find('.ct-filters-trigger').trigger('click')
+    await new Promise(resolve => setTimeout(resolve, 0))
+
+    expect(wrapper.find('input[value="wdpa"]').element).toHaveProperty('checked', true)
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('clears active filters when switching tabs', async () => {
+    vi.mocked(fetch).mockResolvedValue(jsonResponse({
+      areas: { geoType: 'site', title: 'Protected areas', total: 1, totalPages: 1, areas: [] },
+      filters: baseProps.filterGroups
+    }))
+    const wrapper = mountSearchAreas()
+    const downloadStore = useDownloadStore()
+
+    await wrapper.find('.ct-filters-trigger').trigger('click')
+    await wrapper.find('input[value="wdpa"]').setValue(true)
+    await vi.waitFor(() => expect(window.location.search).toContain('filters%5Bdb_type%5D%5B%5D=wdpa'))
+
+    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
+    await vi.waitFor(() => expect(window.location.search).toContain('geo_type=country'))
+
+    const [url] = vi.mocked(fetch).mock.calls.at(-1)!
+    expect(String(url)).toContain(`filters=${encodeURIComponent('{}')}`)
+    expect(window.location.search).not.toContain('db_type')
+    expect(downloadStore.searchFilters).toEqual({})
+    // One request for the tab switch, not a second from the filter groups
+    // re-emitting their cleared selection.
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('hides the previous results and shows the spinner while re-fetching', async () => {
+    let resolveFetch: (value: Response) => void = () => {}
+    vi.mocked(fetch).mockReturnValue(new Promise<Response>((resolve) => { resolveFetch = resolve }))
+    const wrapper = mountSearchAreas()
+
+    expect(wrapper.text()).toContain('Yosemite')
+
+    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
+    await vi.waitFor(() => expect(wrapper.find('.ct-search-areas-page__spinner').exists()).toBe(true))
+
+    expect(wrapper.find('.ct-search-areas-results').attributes('style')).toContain('display: none')
+
+    resolveFetch(jsonResponse({
+      areas: { geoType: 'country', title: 'Countries', total: 1, totalPages: 1, areas: [{ title: 'Kenya', url: '/ke', image: '/ke.jpg' }] },
+      filters: baseProps.filterGroups
+    }))
+    await vi.waitFor(() => expect(wrapper.find('.ct-search-areas-results').attributes('style') ?? '').not.toContain('display: none'))
+
+    expect(wrapper.find('.ct-search-areas-page__spinner').exists()).toBe(false)
+    expect(wrapper.text()).toContain('Kenya')
+  })
+
   it('requests the next page and appends results on infinite scroll', async () => {
     class FakeIntersectionObserver {
       callback: IntersectionObserverCallback

@@ -36,7 +36,7 @@ describe('FiltersCheckboxes', () => {
     expect(wrapper.emitted('update:options')?.at(-1)).toEqual([[]])
   })
 
-  it('resets via an exposed reset() (used by SearchAreas/CheckboxSearch.vue on tab switch)', async () => {
+  it('resets via an exposed reset() (used by Filters/CheckboxSearch.vue on tab switch)', async () => {
     const wrapper = mount(FiltersCheckboxes, { props: { id: 'topics', options, preSelected: ['wdpa'] } })
 
     await wrapper.find('input[value="wdpa"]').setValue(true)

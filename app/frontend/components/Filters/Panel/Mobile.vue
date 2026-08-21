@@ -1,26 +1,25 @@
 <template>
-  <div class="ct-search-areas-filters-panel-mobile">
-    <div class="ct-search-areas-filters-panel-mobile__topbar">
+  <div class="ct-filters-panel-mobile">
+    <div class="ct-filters-panel-mobile__topbar">
       <span
-        class="ct-search-areas-filters-panel-mobile__title"
+        class="ct-filters-panel-mobile__title"
         v-text="title"
       />
     </div>
-    <div class="ct-search-areas-filters-panel-mobile__groups">
+    <div class="ct-filters-panel-mobile__groups">
       <h3
-        class="ct-search-areas-filters-panel-mobile__group-title"
+        class="ct-filters-panel-mobile__group-title"
         v-text="filtersTitle"
       />
-      <ul class="ct-search-areas-filters-panel-mobile__list">
-        <SearchAreasFilterGroup
+      <ul class="ct-filters-panel-mobile__list">
+        <FiltersGroup
           v-for="filter in filters"
           :id="filter.id"
           :key="filter.id"
-          class="ct-search-areas-filters-panel-mobile__item"
           :gaId
           :name="filter.name"
           :options="filter.options"
-          :preSelected="filter.preSelected"
+          :preSelected="preSelectedFor(filter)"
           :resetKey
           :textClear
           :title="filter.title"
@@ -30,38 +29,45 @@
       </ul>
     </div>
     <span
-      class="ct-search-areas-filters-panel-mobile__footer"
+      class="ct-filters-panel-mobile__footer"
       @click="onToggleFilterPane"
-      v-text="filterCloseText"
+      v-html="filterCloseText"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { toRef } from 'vue'
-import SearchAreasFilterGroup from '@/components/SearchAreas/FilterGroup.vue'
-import type { SearchFilter } from '@/types/backend'
+import FiltersGroup from '@/components/Filters/Group.vue'
 import useFreezeBackground from '@/composables/useFreezeBackground'
+import type { FilterGroupFilter, FilterGroupSelection } from '@/types/backend'
 
 const props = defineProps<{
   filterCloseText: string
-  filters: SearchFilter[]
-  filtersTitle: string
-  gaId: string
+  filters: FilterGroupFilter[]
+  filtersTitle?: string
+  gaId?: string
+  isActive: boolean
+  preSelected?: Record<string, Array<string | number>>
   resetKey?: number
   textClear: string
   title: string
-  isActive: boolean
 }>()
 
 useFreezeBackground(toRef(props, 'isActive'))
 
 const emit = defineEmits<{
   'toggle:filterPane': []
-  'update:filter': [payload: { id: string, options: unknown }]
+  'update:filter': [payload: { id: string, options: FilterGroupSelection }]
 }>()
 
-function onUpdateFilter(payload: { id: string, options: unknown }) {
+// The CMS listing keeps its selection in one map on the page and passes it in;
+// the search-areas serializer bakes it into each filter instead.
+function preSelectedFor(filter: FilterGroupFilter) {
+  return props.preSelected?.[filter.id] ?? filter.preSelected
+}
+
+function onUpdateFilter(payload: { id: string, options: FilterGroupSelection }) {
   emit('update:filter', payload)
 }
 
@@ -73,62 +79,62 @@ function onToggleFilterPane() {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-search-areas-filters-panel-mobile {
+.ct-filters-panel-mobile {
   @apply
   fixed
   top-0
   left-0
-  right-0
+  z-10
   w-full
   h-full
   bg-theme-grey-xlight
-  tw-shared-base-flex-col-gap-6
-  z-10;
+  tw-shared-base-flex-col-gap-6;
 }
 
-.ct-search-areas-filters-panel-mobile__topbar {
+.ct-filters-panel-mobile__topbar {
   @apply
   flex
   items-center
+  justify-center
+  w-full
+  bg-white
   border-b
-  border-solid
-  border-theme-grey
-  p-6
+  border-theme-grey-light
   h-13.5;
 }
 
-.ct-search-areas-filters-panel-mobile__title {
+.ct-filters-panel-mobile__title {
   @apply tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black;
 }
 
-.ct-search-areas-filters-panel-mobile__groups {
+.ct-filters-panel-mobile__groups {
   @apply
+  h-[85%]
   w-full
-  tw-shared-base-flex-col-gap-6
   overflow-y-auto
   pr-5.5
   pb-6
   pl-5.5
-  h-[85%];
+  tw-shared-base-flex-col-gap-6;
 }
 
-.ct-search-areas-filters-panel-mobile__group-title {
+.ct-filters-panel-mobile__group-title {
   @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
 }
 
-.ct-search-areas-filters-panel-mobile__list {
+.ct-filters-panel-mobile__list {
   @apply
   tw-shared-base-flex-col-gap-9
   m-0
   p-0;
 }
 
-.ct-search-areas-filters-panel-mobile__footer {
+.ct-filters-panel-mobile__footer {
   @apply
   flex
   items-center
   justify-center
-  absolute
+  fixed
   bottom-0
   w-full
   h-15.75

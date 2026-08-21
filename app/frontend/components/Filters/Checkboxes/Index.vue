@@ -71,7 +71,7 @@ function emitChange() {
   }
 }
 
-// Lets SearchAreas/CheckboxSearch.vue clear a hidden group on a tab switch
+// Lets Filters/CheckboxSearch.vue clear a hidden group on a tab switch
 // without bumping resetKey, which would clear the visible group too.
 function reset() {
   selected.value = []

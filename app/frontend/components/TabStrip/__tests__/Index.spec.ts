@@ -29,6 +29,24 @@ describe('TabStrip', () => {
     expect(wrapper.findAll('li')[2].classes()).toContain('ct-tab-strip-tab--active')
   })
 
+  it('ignores a click on the already-active tab', async () => {
+    const wrapper = mountTabStrip({ defaultSelectedId: 'country' })
+
+    await wrapper.findAll('li')[1].trigger('click')
+
+    expect(wrapper.emitted('click:tab')).toBeUndefined()
+    expect(window.gtag).not.toHaveBeenCalled()
+  })
+
+  it('does not re-emit when the parent mirrors the emitted id back into preSelectedId', async () => {
+    const wrapper = mountTabStrip()
+
+    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.setProps({ preSelectedId: 'country' })
+
+    expect(wrapper.emitted('click:tab')).toHaveLength(1)
+  })
+
   it('emits click:tab and updates the active tab on click', async () => {
     const wrapper = mountTabStrip()
 

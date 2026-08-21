@@ -140,9 +140,6 @@ export interface DownloadProps {
   }
   downloadDisabled?: boolean
   gaId: string
-  // Icon-only square below `md:` instead of the auto-width button — for the
-  // secondary topbar's tighter layout.
-  compact?: boolean
 }
 
 // Mounted once globally in application.html.erb.
@@ -206,6 +203,23 @@ export interface ListingFilterGroup {
   title?: string
   filters: ListingFilter[]
 }
+
+// What `Filters/Group.vue` accepts: the union of the CMS listing's filters
+// (checkbox only, numeric Comfy category ids) and the search-areas serializer's
+// (three widget types, string ids). Both `ListingFilter` and `SearchFilter` are
+// assignable to it.
+export interface FilterGroupFilter {
+  id: string
+  name?: string
+  title?: string
+  type: 'checkbox' | 'radio' | 'checkbox-search'
+  options: FilterOption[]
+  preSelected?: Array<string | number> | [{ type: string, options: string[] }]
+}
+
+// One group's current selection: option ids for checkbox/radio groups, and the
+// {type, options} pair a checkbox-search group resolves to.
+export type FilterGroupSelection = Array<string | number> | { type: string, options: string[] }
 
 // The bare MapLibre instance — no panel, disclaimer or header.
 export interface MapBaseProps {

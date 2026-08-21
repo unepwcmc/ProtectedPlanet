@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import FiltersPanel from '@/components/Listing/FiltersPanel/Index.vue'
+import FiltersPanel from '@/components/Filters/Panel/Index.vue'
 
 const filters = [
   {
@@ -26,7 +26,7 @@ function setBreakpoint(next: { isSmall: boolean, isMedium: boolean }) {
   breakpoint.isMedium = next.isMedium
 }
 
-describe('Listing FiltersPanel', () => {
+describe('FiltersPanel', () => {
   // jsdom's `document` is shared, and several tests below mount with
   // isActive: true without unmounting — otherwise a locked body scroll leaks.
   afterEach(() => {
@@ -41,6 +41,7 @@ describe('Listing FiltersPanel', () => {
         filters,
         filtersTitle: 'Filter by',
         isActive: false,
+        keepMounted: true,
         preSelected: { topics: ['wdpa'] },
         textClear: 'Clear',
         title: 'Filters'
@@ -49,6 +50,23 @@ describe('Listing FiltersPanel', () => {
 
     expect(wrapper.attributes('style')).toContain('display: none')
     expect(wrapper.emitted('update:filterGroup')?.[0]).toEqual([{ id: 'topics', options: ['wdpa'] }])
+  })
+
+  it('is not rendered at all when inactive without keepMounted', () => {
+    const wrapper = mount(FiltersPanel, {
+      props: {
+        filterCloseText: 'View results',
+        filters,
+        filtersTitle: 'Filter by',
+        isActive: false,
+        preSelected: { topics: ['wdpa'] },
+        textClear: 'Clear',
+        title: 'Filters'
+      }
+    })
+
+    expect(wrapper.find('.ct-filters-panel').exists()).toBe(false)
+    expect(wrapper.emitted('update:filterGroup')).toBeUndefined()
   })
 
   it('emits update:filterGroup with the id and selected options for the changed group', async () => {
@@ -80,7 +98,7 @@ describe('Listing FiltersPanel', () => {
       }
     })
 
-    await wrapper.find('.ct-listing-filters-panel-mobile__footer').trigger('click')
+    await wrapper.find('.ct-filters-panel-mobile__footer').trigger('click')
 
     expect(wrapper.emitted('toggle:filterPane')).toHaveLength(1)
   })
@@ -98,8 +116,8 @@ describe('Listing FiltersPanel', () => {
       }
     })
 
-    expect(mobile.find('.ct-listing-filters-panel-mobile').exists()).toBe(true)
-    expect(mobile.find('.ct-listing-filters-panel-desktop').exists()).toBe(false)
+    expect(mobile.find('.ct-filters-panel-mobile').exists()).toBe(true)
+    expect(mobile.find('.ct-filters-panel-desktop').exists()).toBe(false)
     mobile.unmount()
 
     setBreakpoint({ isSmall: false, isMedium: false })
@@ -114,8 +132,8 @@ describe('Listing FiltersPanel', () => {
       }
     })
 
-    expect(desktop.find('.ct-listing-filters-panel-desktop').exists()).toBe(true)
-    expect(desktop.find('.ct-listing-filters-panel-mobile').exists()).toBe(false)
+    expect(desktop.find('.ct-filters-panel-desktop').exists()).toBe(true)
+    expect(desktop.find('.ct-filters-panel-mobile').exists()).toBe(false)
     desktop.unmount()
   })
 
@@ -126,6 +144,7 @@ describe('Listing FiltersPanel', () => {
         filters,
         filtersTitle: 'Filter by',
         isActive: false,
+        keepMounted: true,
         textClear: 'Clear',
         title: 'Filters'
       }

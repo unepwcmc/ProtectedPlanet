@@ -78,11 +78,11 @@ describe('Listing Index', () => {
   it('toggles the filter pane on trigger click', async () => {
     const wrapper = mount(Listing, { props: baseProps })
 
-    expect(wrapper.find('[class*="ct-listing-filters-panel"]').attributes('style')).toContain('display: none')
+    expect(wrapper.find('[class*="ct-filters-panel"]').attributes('style')).toContain('display: none')
 
     await wrapper.find('.ct-filters-trigger').trigger('click')
 
-    expect(wrapper.find('[class*="ct-listing-filters-panel"]').attributes('style')).not.toContain('display: none')
+    expect(wrapper.find('[class*="ct-filters-panel"]').attributes('style')).not.toContain('display: none')
   })
 
   it('requests search results with the selected filters and syncs the URL', async () => {

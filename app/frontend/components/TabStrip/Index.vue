@@ -51,6 +51,10 @@ function initialSelectedId() {
 }
 
 function click(selectedTabId: string) {
+  // Re-selecting the current tab changes nothing, and parents mirror our emit
+  // back into preSelectedId — either way there is no work for them to redo.
+  if (selectedTabId === selectedId.value) return
+
   selectedId.value = selectedTabId
   emit('click:tab', selectedTabId)
 
@@ -64,8 +68,8 @@ function googleAnalyticsId(child: TabStripChild) {
   return `${props.gaId} - ${child.title}`
 }
 
-watch(() => props.preSelectedId, () => {
-  click(props.preSelectedId)
+watch(() => props.preSelectedId, (value) => {
+  if (value) click(value)
 })
 </script>
 
