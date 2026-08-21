@@ -23,6 +23,15 @@ class Download::Requesters::Base
     Download.generation_info(domain, identifier, format)
   end
 
+  # The current status of this download's Redis key, or nil when no key exists.
+  # enqueue_generation_once depends on this: without it every request raised
+  # NoMethodError into its own `rescue StandardError`, which logged and returned
+  # false, so no job was ever pushed and the UI polled a download that had never
+  # been enqueued.
+  def status
+    generation_info['status']
+  end
+
   # Atomically ensure only one generation job is enqueued per download key.
   # This prevents a race where multiple web requests observe a non-generating status
   # and enqueue duplicate Sidekiq jobs before the worker has a chance to set status.
@@ -57,36 +66,17 @@ class Download::Requesters::Base
       Rails.logger.error("Download enqueue failed for #{generation_key}: #{e.message}")
       false
     end
-  rescue StandardError => e
-    Rails.logger.error("Download enqueue lock failed for #{generation_key}: #{e.message}")
-    false
-  end
-
-  # A 'generating' status is only worth trusting while the job behind it still
-  # exists. These workers run with retry: false, so a worker killed mid-render
-  # (container restart, OOM) leaves the status at 'generating' with nobody left to
-  # move it on - and since we refuse to enqueue while it says 'generating', that
-  # download could never be requested again without someone deleting the Redis key
-  # by hand.
+  # Only Redis transport failures are swallowed here: a blip must not 500 the
+  # download endpoint, and returning false lets the next poll try again.
   #
-  # Two things keep a live job from being duplicated: the enqueue lock, which
-  # exists from the moment we push until the worker's ensure block clears it (so it
-  # covers the queued-but-not-started window a hard-killed worker leaves behind
-  # too), and the Sidekiq work set, which lists jobs actually running right now and
-  # is backed by a process heartbeat - so a job that outlives the lock's TTL still
-  # reads as in-flight, while one whose process died drops out of it.
-  def generation_in_flight?(info)
-    return true if $redis.exists?(Download::Utils.enqueue_lock_key(generation_key))
-
-    jid = info['jid']
-    # Records written before jids were tracked tell us nothing; keep the old,
-    # conservative behaviour rather than risk enqueueing a duplicate.
-    return true if jid.blank?
-
-    Sidekiq::Workers.new.any? { |_process, _thread, work| work.job.jid == jid }
-  rescue StandardError => e
-    Rails.logger.warn("Could not verify in-flight download #{generation_key}: #{e.message}")
-    true
+  # Anything else is a bug and must surface. This used to rescue StandardError,
+  # and `status` was missing from every requester -- so each request raised
+  # NoMethodError in here, logged one line, returned false and rendered HTTP 200
+  # with an empty url. No job was ever pushed, nothing reached Appsignal, and the
+  # UI polled a download that had never been enqueued.
+  rescue Redis::BaseError, RedisClient::Error => e
+    Rails.logger.error("Download enqueue lock failed for #{generation_key}: #{e.class}: #{e.message}")
+    false
   end
 
   def json_response

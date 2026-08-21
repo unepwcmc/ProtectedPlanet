@@ -35,7 +35,10 @@ module Download
     end
 
     def self.properties(key)
-      JSON.parse($redis.get(key))
+      parsed = JSON.parse($redis.get(key))
+      # JSON.parse("null") returns nil rather than raising, and every caller
+      # treats this as a Hash (properties['status'], properties.merge).
+      parsed.is_a?(Hash) ? parsed : {}
     rescue StandardError
       {}
     end

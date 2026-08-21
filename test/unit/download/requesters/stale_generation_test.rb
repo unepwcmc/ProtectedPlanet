@@ -40,6 +40,12 @@ class DownloadRequestersStaleGenerationTest < ActiveSupport::TestCase
     $redis.stubs(:get).returns(payload.is_a?(String) ? payload : payload.to_json)
   end
 
+  # An absent key is redis GET returning nil -- not the string "null" that
+  # stub_key would produce for a nil payload.
+  def stub_missing_key
+    $redis.stubs(:get).returns(nil)
+  end
+
   def generating(age_seconds, jid: 'abc123')
     { 'status' => 'generating',
       'jid' => jid,
@@ -85,6 +91,31 @@ class DownloadRequestersStaleGenerationTest < ActiveSupport::TestCase
     $redis.stubs(:set).returns(true)
 
     assert @requester.enqueue_generation_once { 'new-jid' }
+  end
+
+  # Covers the plain first-request path -- no Redis key exists yet -- which
+  # nothing else did.
+  #
+  # Requesters had no `status` method at all while enqueue_generation_once called
+  # one, so every request raised NoMethodError into that method's own rescue,
+  # logged a line, returned false, and pushed nothing. Most of the suite stayed
+  # green through it: 'a ready download is never re-enqueued' expects false
+  # anyway, and general_test.rb asserts a payload built from the stubbed key
+  # rather than from the push. ('a stale key is re-enqueued' above does assert
+  # true, so it was failing -- red on a path used by every download.)
+  test 'a first request with no key at all pushes to Sidekiq' do
+    stub_missing_key
+    $redis.stubs(:set).returns(true)
+
+    pushed = false
+    assert @requester.enqueue_generation_once { pushed = true; 'jid-1' },
+           'a fresh download must report that it was enqueued'
+    assert pushed, 'the block that pushes the Sidekiq job must actually run'
+  end
+
+  test 'the status of a key that does not exist is nil, not an exception' do
+    stub_missing_key
+    assert_nil @requester.send(:status)
   end
 
   test 'a ready download is never re-enqueued' do
