@@ -18,6 +18,12 @@
   gap-2;
 }
 
+@utility tw-shared-base-flex-gap-2-5 {
+  @apply
+  flex
+  gap-2.5;
+}
+
 @utility tw-shared-base-flex-gap-3 {
   @apply
   flex

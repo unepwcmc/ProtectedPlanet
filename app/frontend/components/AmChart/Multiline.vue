@@ -143,7 +143,10 @@ function createLegend(chart: am5xy.XYChart) {
 @reference "#importtailwindcss";
 
 .ct-am-chart-multiline {
-  @apply overflow-x-auto overflow-y-hidden md:overflow-hidden;
+  @apply
+  overflow-x-auto
+  overflow-y-hidden
+  md:overflow-hidden;
 }
 
 .ct-am-chart-multiline__chart {

@@ -1,11 +1,15 @@
- 
-
 .vw-partials-ctas-protected-planet-report {
   @apply tw-shared-bg--grey-xdark 
   tw-shared-bg-image-overlay--black
   tw-shared-bg-center-no-repeat-cover
   min-h-73; 
   background-image: url('../../../../assets/ctas/protected-planet-report.jpg');
+}
+
+.vw-partials-ctas-protected-planet-report--flex-centre {
+  @apply 
+  tw-shared-base-flex-col
+  justify-center;
 }
 
 .vw-partials-ctas-protected-planet-report__container {
@@ -15,9 +19,7 @@
 
 .vw-partials-ctas-protected-planet-report__content {
   @apply 
-  flex 
-  flex-col
-  gap-3
+  tw-shared-base-flex-col-gap-3
   pt-16.5 
   pb-10
   md:p-0 
@@ -31,7 +33,7 @@
   @apply self-start 
   text-[1.125rem] 
   md:text-[1.25rem] 
-  bg-[#fa3232] 
+  bg-theme-red
   text-white 
   font-bold 
   py-3.5

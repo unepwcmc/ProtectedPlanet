@@ -108,15 +108,17 @@ bg-theme-primary
 @utility tw-shared-button--download {
   @apply
   tw-shared-button-basic
-  flex
+  tw-shared-base-flex-gap-2-5
   items-center
   justify-center
   h-11.5
   md:h-14
-  px-6.75
+  p-3
+  md:px-6
+  md:py-4
   rounded-[0.1875rem]
   bg-theme-primary
-  text-lg;
+  tw-shared-font-hind-siliguri__light-lg-grey-black;
 }
 
 /* No colour or font of its own — just enough flex to line the icon up with the

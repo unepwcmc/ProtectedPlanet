@@ -3,7 +3,6 @@
     <button
       class="ct-download__trigger"
       :class="{
-        'ct-download__trigger--compact': compact,
         'ct-download__trigger--disabled': downloadDisabled
       }"
       :disabled="downloadDisabled"
@@ -42,7 +41,6 @@ const { trackEvent } = useAnalytics()
 
 type Download = DownloadProps
 const props = withDefaults(defineProps<Download>(), {
-  compact: false,
   downloadDisabled: false
 })
 
@@ -113,19 +111,8 @@ function toggleDownloadPane() {
 
 .ct-download__trigger {
   @apply
-  tw-shared-button--download
-  gap-2.5
-  w-11.5
-  px-0
-  md:w-auto
-  md:px-6.75;
-}
-
-.ct-download__trigger--compact {
-  @apply
-  size-9.5
-  md:h-14
-  md:w-auto;
+  shrink-0
+  tw-shared-button--download;
 }
 
 .ct-download__trigger--disabled {
@@ -140,6 +127,7 @@ function toggleDownloadPane() {
 
 .ct-download__trigger-icon {
   @apply
+  shrink-0
   w-5
   h-4.75;
 }

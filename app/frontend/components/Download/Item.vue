@@ -5,27 +5,35 @@
       v-text="title"
     />
     <p
-      v-show="hasFailed"
-      class="ct-download-item__status ct-download-item__status--failed"
+      v-if="hasFailed"
+      class="ct-download-item__status
+      ct-download-item__status--failed"
     >
-      <IconWarning class="ct-download-item__status-icon ct-download-item__status-icon--failed" />
+      <IconWarning
+        class="ct-download-item__status-icon
+      ct-download-item__status-icon--failed"
+      />
       <span
         class="ct-download-item__status-text"
         v-text="text.failed"
       />
     </p>
     <p
-      v-show="isGenerating"
-      class="ct-download-item__status ct-download-item__status--generating"
+      v-else-if="isGenerating"
+      class="ct-download-item__status
+      ct-download-item__status--generating"
     >
-      <IconLoadingSpinner class="ct-download-item__status-icon ct-download-item__status-icon--generating" />
+      <IconLoadingSpinner
+        class="ct-download-item__status-icon
+      ct-download-item__status-icon--generating"
+      />
       <span
         class="ct-download-item__status-text"
         v-text="text.generating"
       />
     </p>
     <a
-      v-show="isReady"
+      v-else-if="isReady"
       class="ct-download-item__link"
       :href="url"
       @click="trackDownloadClick"
@@ -208,12 +216,7 @@ onUnmounted(stopPolling)
 .ct-download-item__link {
   @apply
   tw-shared-button--download
-  shrink-0
-  gap-2.5
-  size-8
-  px-0
-  md:w-auto
-  md:px-6.75;
+  shrink-0;
 }
 
 .ct-download-item__link-text {

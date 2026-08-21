@@ -1,8 +1,7 @@
 .vw-partials-cards-facts {
   @apply
   tw-shared-base-flex-gap-3
-  overflow-x-scroll 
-  lg:overflow-x-hidden;
+  overflow-x-auto;
 }
 
 .vw-partials-cards-facts__card {

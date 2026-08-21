@@ -70,15 +70,23 @@ async function onDownload() {
 @reference "#importtailwindcss";
 
 .ct-pame-table-download-csv__button {
-  @apply tw-shared-button--download;
+  @apply
+  shrink-0
+  tw-shared-button--download;
 }
 
 .ct-pame-table-download-csv__button-icon {
-  @apply w-5 h-4.75 ml-2.5 text-black;
+  @apply
+  w-5
+  h-4.75
+  ml-2.5
+  text-black;
 }
 
 .ct-pame-table-download-csv__spinner {
-  @apply tw-shared-icon-loading-spinner mx-auto;
+  @apply
+  tw-shared-icon-loading-spinner
+  mx-auto;
 }
 
 .ct-pame-table-download-csv__button--disabled {
