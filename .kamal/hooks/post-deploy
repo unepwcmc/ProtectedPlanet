@@ -47,3 +47,59 @@ else
   echo "!!!   kamal app exec --primary --roles web \"bundle exec rails runner 'Rails.cache.clear'\""
   exit 1
 fi
+
+# ---------------------------------------------------------------------------
+# Walk every GET route against the containers that just went live.
+#
+# WHY THIS IS HERE AND NOT IN pre-deploy:
+# pre-deploy runs migrations, so a blocking gate there could abort with staging
+# left on a migrated database and the OLD code still serving -- worse than the bug
+# it caught. This cannot block (traffic already cut over), so it exists to make a
+# bad deploy LOUD rather than something found by clicking around days later.
+# Kamal does not roll back on hook failure; the rollback command is printed below.
+#
+# WHY NOT A LOCAL PRE-PUSH GATE INSTEAD:
+# it would be green for the failures that actually cost deploy cycles. Local
+# docker-compose runs postgis:11.5 against staging's PG 17, with a different .env
+# and different CMS content -- so the PG17 date_part/extract rename, the unset
+# MAPBOX_STATIC_IMAGE_URL that 500'd every tile, and the search-cms failure would
+# all have passed locally. Anything local CAN see is already caught by the test
+# suite and bin/preflight-deploy steps 5-8.
+#
+# AFTER the cache flush, deliberately: Rack::Cache serves HTML for 30 days, so a
+# walk before the flush would grade last deploy's cached responses.
+
+# The scheme is explicit and MUST stay https. PP_HOST (config/deploy.staging.yml)
+# is a bare hostname; over http kamal-proxy 301s every route, and the walker counts
+# 3xx as healthy -- the smoke would report "37 healthy" having tested nothing.
+SMOKE_BASE_URL="https://pp-web-staging-01.internal.unep-wcmc.org"
+
+if [[ "${KAMAL_DESTINATION:-}" != "staging" ]]; then
+  echo "==> Skipping route smoke (no BASE_URL known for destination '${KAMAL_DESTINATION:-none}')"
+  exit 0
+fi
+
+echo "==> Walking routes against ${SMOKE_BASE_URL}"
+
+# Runs in a one-off container rather than `--reuse`, so this does not depend on a
+# kamal version that supports reusing the running container, and does not need the
+# live container's name (Kamal appends a hash to it). The task needs Rails loaded to
+# read real fixture ids -- a protected area, country isos, CMS page paths -- out of
+# the database before it walks, and that is the SAME database serving SMOKE_BASE_URL,
+# which is the condition the task's own docs require before pointing it at a hostname.
+if kamal app exec \
+     --destination "$KAMAL_DESTINATION" \
+     --primary \
+     --roles web \
+     --version "$KAMAL_VERSION" \
+     "bash -lc 'BASE_URL=${SMOKE_BASE_URL} bundle exec rake smoke:routes'"; then
+  echo "==> Route smoke passed"
+else
+  echo "!!! ROUTE SMOKE FAILED — ${KAMAL_VERSION} is live and serving at least one broken route."
+  echo "!!! The walker's FAILURES section is above; a route listed UNCLASSIFIED means a new"
+  echo "!!! GET route shipped with no resolver and no skip reason, so it went out untested."
+  echo "!!!"
+  echo "!!! Kamal does NOT roll back on hook failure. To go back to the previous version:"
+  echo "!!!   kamal rollback --destination ${KAMAL_DESTINATION}"
+  exit 1
+fi
