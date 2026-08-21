@@ -27,7 +27,8 @@ Rails.application.routes.draw do
     get '/region/:iso', to: 'region#show', as: 'region'
 
     get '/country/:iso', to: 'country#show', as: 'country'
-    get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
+    # No compare route: CountryController has never had a `compare` action, so it
+    # 404s. Removed once already and restored by a merge — see smoke:routes.
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
     get '/global_statistics_download', to: 'global_statistics#download'
