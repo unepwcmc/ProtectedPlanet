@@ -141,6 +141,10 @@ function toggleMinimise() {
 }
 
 .ct-download-modal__list {
-  @apply tw-shared-base-flex-col-gap-3;
+  @apply
+  tw-shared-base-flex-col-gap-3
+  overflow-y-auto
+  max-h-40
+  md:max-h-65;
 }
 </style>

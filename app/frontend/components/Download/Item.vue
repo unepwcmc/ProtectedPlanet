@@ -174,10 +174,9 @@ onUnmounted(stopPolling)
   items-center
   justify-end
   tw-shared-font-hind-siliguri__light-base-md-xl-grey-black
-  min-h-10
   px-2.5
-  md:h-15.5
-  md:px-5.5;
+  md:px-5.5
+  md:min-h-14;
 }
 
 .ct-download-item__title {
