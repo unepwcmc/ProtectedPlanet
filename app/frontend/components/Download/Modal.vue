@@ -1,7 +1,7 @@
 <template>
   <div
     class="ct-download-modal"
-    :class="{ 'ct-download-modal--active': downloadStore.isModalActive }"
+    :class="{ 'ct-download-modal--active': downloads.isModalActive }"
   >
     <div class="ct-download-modal__topbar">
       <span
@@ -17,7 +17,7 @@
     </div>
     <div
       class="ct-download-modal__content"
-      :class="{ 'ct-download-modal__content--minimised': downloadStore.isModalMinimised }"
+      :class="{ 'ct-download-modal__content--minimised': downloads.isModalMinimised }"
     >
       <span
         class="ct-download-modal__title"
@@ -30,7 +30,7 @@
 
       <ul class="ct-download-modal__list">
         <DownloadItem
-          v-for="download in downloadStore.downloadItems"
+          v-for="download in downloads.downloadItems"
           :key="download.id"
           :endpointCreate
           :endpointPoll
@@ -47,26 +47,25 @@
 import { watch } from 'vue'
 import DownloadItem from '@/components/Download/Item.vue'
 import IconMinus from '@/components/Icon/Minus.vue'
-import { useDownloadStore } from '@/stores/useDownloadStore'
+import { useDownloads } from '@/composables/useDownloads'
 import type { DownloadModalProps } from '@/types/backend'
 
 type DownloadModal = DownloadModalProps
 defineProps<DownloadModal>()
 
-const downloadStore = useDownloadStore()
+const downloads = useDownloads()
 
-downloadStore.initialiseStore()
-window.addEventListener('beforeunload', downloadStore.updateLocalStorage)
-
-watch(() => downloadStore.downloadItems, (items) => {
-  if (items.length === 0) {
-    downloadStore.toggleDownloadModal(false)
-    downloadStore.minimiseDownloadModal(false)
-  }
-})
+// The store persists itself, so there is nothing to restore here — only to
+// reflect. `immediate` covers the case this watcher exists for: a tab opened (or
+// reloaded) while downloads requested elsewhere are still in flight, which the
+// tab's own sessionStorage knows nothing about.
+watch(() => downloads.downloadItems.length, (count) => {
+  downloads.toggleDownloadModal(count > 0)
+  if (count === 0) downloads.minimiseDownloadModal(false)
+}, { immediate: true })
 
 function toggleMinimise() {
-  downloadStore.minimiseDownloadModal(!downloadStore.isModalMinimised)
+  downloads.minimiseDownloadModal(!downloads.isModalMinimised)
 }
 </script>
 

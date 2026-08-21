@@ -120,7 +120,8 @@ export interface DownloadOption {
     domain: string
     format: string
     token: string
-    // 'search' domain only — from useDownloadStore, see Download/Index.vue.
+    // 'search' domain only — attached by useDownloads#addNewDownloadItem,
+    // never sent by the server.
     filters?: unknown
     search?: string
   }

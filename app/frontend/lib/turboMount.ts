@@ -8,7 +8,11 @@ export type TurboMountLoader = () => Promise<{ default: Component }>
 
 // Replaces turbo-mount's stock `turbo-mount/vue` plugin, which doesn't install
 // anything into the per-island createApp(). Without the shared pinia, any
-// component using a store (e.g. Download) throws "no active Pinia".
+// component using a store throws "no active Pinia".
+//
+// No component uses a store today (see stores/pinia.ts) — this stays so that the
+// first one to need it works without having to rediscover why the stock plugin
+// isn't enough.
 const piniaAwareVuePlugin: Plugin<Component> = {
   mountComponent({ el, Component: mounted, props }) {
     // turbo-mount types `props` as bare `object`; cast to createApp's signature.

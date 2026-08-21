@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import DownloadModal from '@/components/Download/Modal.vue'
-import { useDownloadStore } from '@/stores/useDownloadStore'
+import { useDownloads, resetDownloads } from '@/composables/useDownloads'
 
 const props = {
   endpointCreate: '/downloads',
@@ -20,8 +19,9 @@ function mountModal() {
 }
 
 beforeEach(() => {
-  setActivePinia(createPinia())
   localStorage.clear()
+  sessionStorage.clear()
+  resetDownloads()
 })
 
 describe('DownloadModal', () => {
@@ -34,10 +34,10 @@ describe('DownloadModal', () => {
   })
 
   it('becomes active and renders an item per download when the store gains one', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const wrapper = mountModal()
 
-    store.addNewDownloadItem({ id: 1, domain: 'protected_area', format: 'csv', token: 'abc' })
+    store.addNewDownloadItem({ domain: 'protected_area', format: 'csv', token: 'abc' })
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.ct-download-modal').classes()).toContain('ct-download-modal--active')
@@ -45,12 +45,12 @@ describe('DownloadModal', () => {
   })
 
   it('closes and un-minimises itself once the last item is deleted', async () => {
-    const store = useDownloadStore()
-    store.addNewDownloadItem({ id: 1, domain: 'protected_area', format: 'csv', token: 'abc' })
+    const store = useDownloads()
+    const item = store.addNewDownloadItem({ domain: 'protected_area', format: 'csv', token: 'abc' })
     store.minimiseDownloadModal(true)
     const wrapper = mountModal()
 
-    store.deleteDownloadItem({ id: 1, domain: 'protected_area', format: 'csv', token: 'abc' })
+    store.deleteDownloadItem(item)
     await wrapper.vm.$nextTick()
 
     expect(store.isModalActive).toBe(false)
@@ -58,7 +58,7 @@ describe('DownloadModal', () => {
   })
 
   it('toggles minimised state when the topbar is clicked', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const wrapper = mountModal()
 
     await wrapper.find('.ct-download-modal__minimise').trigger('click')
@@ -68,14 +68,16 @@ describe('DownloadModal', () => {
     expect(store.isModalMinimised).toBe(false)
   })
 
-  it('restores persisted state from localStorage on mount', () => {
-    localStorage.setItem('downloadItems', JSON.stringify([{ id: 9, domain: 'protected_area', format: 'pdf', token: 'z' }]))
-    localStorage.setItem('isModalActive', 'true')
+  it('shows downloads a different tab requested, which this tab\'s own modal state knows nothing about', () => {
+    localStorage.setItem('downloadItems', JSON.stringify([
+      { id: 'from-b', domain: 'protected_area', format: 'pdf', token: 'z', createdAt: Date.now() }
+    ]))
 
-    const store = useDownloadStore()
-    mountModal()
+    const store = useDownloads()
+    const wrapper = mountModal()
 
-    expect(store.downloadItems).toEqual([{ id: 9, domain: 'protected_area', format: 'pdf', token: 'z' }])
+    expect(store.downloadItems).toHaveLength(1)
     expect(store.isModalActive).toBe(true)
+    expect(wrapper.find('.ct-download-modal').classes()).toContain('ct-download-modal--active')
   })
 })

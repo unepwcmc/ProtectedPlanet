@@ -61,7 +61,12 @@ import IconCircleClose from '@/components/Icon/CircleClose.vue'
 import IconDownload from '@/components/Icon/Download.vue'
 import IconLoadingSpinner from '@/components/Icon/LoadingSpinner.vue'
 import IconWarning from '@/components/Icon/Warning.vue'
-import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
+import {
+  useDownloads,
+  POLL_INTERVAL_MS,
+  POLL_TIMEOUT_MS,
+  type DownloadItemParams
+} from '@/composables/useDownloads'
 import type { DownloadModalProps } from '@/types/backend'
 
 const { trackEvent } = useAnalytics()
@@ -74,82 +79,128 @@ const props = defineProps<{
   text: DownloadModalProps['textStatus']
 }>()
 
-const downloadStore = useDownloadStore()
+const downloads = useDownloads()
 
+// props.params identifies the item; the live copy comes back out of the store so
+// this stays correct when another tab edits the list. It stands in if the item
+// has already been deleted.
+const item = computed(() => downloads.downloadItems.find(({ id }) => id === props.params.id) ?? props.params)
+
+// Status is never persisted — the server owns it, and a remembered "ready" url
+// can outlive the file. Every page load rediscovers it by polling.
 const hasFailed = ref(false)
-const id = ref<number | string>('')
-const title = ref('')
+const serverTitle = ref('')
 const url = ref('')
-const updatedParams = ref<DownloadItemParams | ''>('')
-let interval: ReturnType<typeof window.setInterval> | null = null
 
 const isGenerating = computed(() => !hasFailed.value && url.value === '')
 const isReady = computed(() => url.value !== '')
+const title = computed(() => serverTitle.value || `${item.value.token}.${item.value.format}`)
+
+let interval: ReturnType<typeof window.setInterval> | null = null
 
 interface DownloadResponseData {
   hasFailed: boolean
-  id?: number | string
   title: string
   url: string
   token?: string
 }
 
-function updateDownloadItem(data: DownloadResponseData) {
-  hasFailed.value = data.hasFailed
-  id.value = 'id' in data && data.id !== undefined ? data.id : Math.round(Math.random() * 100000)
-  title.value = data.title
-  url.value = data.url
-  updatedParams.value = { ...props.params, backEndToken: data.token }
+// Only what each endpoint reads. Download::Router::request keys off
+// filters/search, and Download::Poller keys 'search' off backEndToken.
+function createPayload(download: DownloadItemParams) {
+  return {
+    domain: download.domain,
+    format: download.format,
+    token: download.token,
+    filters: download.filters,
+    search: download.search
+  }
 }
 
-function startPolling() {
-  interval = window.setInterval(ajaxRequestDownloadStatus, 15000)
+function pollPayload(download: DownloadItemParams): Record<string, string> {
+  const payload: Record<string, string> = {
+    domain: download.domain,
+    format: download.format,
+    token: download.token
+  }
+  if (download.backEndToken !== undefined) payload.backEndToken = download.backEndToken
+
+  return payload
+}
+
+function applyResponse(data: DownloadResponseData) {
+  hasFailed.value = data.hasFailed
+  serverTitle.value = data.title
+  url.value = data.url
+
+  // The digest a 'search' download is polled by only ever comes back from the
+  // create request, so it has to outlive this page load. Every other domain is
+  // polled by the `token` it already has, and storing the response's copy of it
+  // would just be noise.
+  const isNewDigest = item.value.domain === 'search'
+    && data.token !== undefined
+    && data.token !== item.value.backEndToken
+
+  if (isNewDigest) downloads.patchDownloadItem(item.value.id, { backEndToken: data.token })
+}
+
+function markFailed() {
+  hasFailed.value = true
+  stopPolling()
 }
 
 function stopPolling() {
   if (interval !== null) window.clearInterval(interval)
+  interval = null
 }
 
-function toQueryParams(params: DownloadItemParams): Record<string, string> {
-  return Object.fromEntries(
-    Object.entries(params)
-      .filter(([, value]) => value !== undefined)
-      .map(([key, value]) => [key, typeof value === 'string' ? value : JSON.stringify(value)])
-  )
-}
-
-function ajaxRequestDownload() {
-  postJson<DownloadResponseData>(props.endpointCreate, props.params)
-    .then(updateDownloadItem)
+// Asking the server to generate the file. Only ever reached for the click that
+// requested this download — see useDownloads#consumeCreateRequest.
+function requestDownload() {
+  postJson<DownloadResponseData>(props.endpointCreate, createPayload(item.value))
+    .then(applyResponse)
     .catch((error) => {
       console.error(error)
-      updateDownloadItem({
-        hasFailed: true,
-        title: `${props.params.token} .${props.params.format}`,
-        url: ''
-      })
+      markFailed()
     })
-
-  startPolling()
 }
 
-function ajaxRequestDownloadStatus() {
+function pollDownloadStatus() {
+  // A 'search' download is keyed off a digest only the create response carries,
+  // so there is nothing to ask about until the tab that requested it stored one.
+  if (item.value.domain === 'search' && item.value.backEndToken === undefined) return
+
+  getJson<DownloadResponseData>(props.endpointPoll, pollPayload(item.value))
+    .then(applyResponse)
+    .catch((error) => {
+      console.error(error)
+      markFailed()
+    })
+}
+
+function tick() {
   if (isReady.value || hasFailed.value) {
     stopPolling()
     return
   }
 
-  getJson<DownloadResponseData>(props.endpointPoll, updatedParams.value ? toQueryParams(updatedParams.value) : undefined)
-    .then(updateDownloadItem)
-    .catch((error) => {
-      console.error('error', error)
-      stopPolling()
-      hasFailed.value = true
-    })
+  if (Date.now() - item.value.createdAt > POLL_TIMEOUT_MS) {
+    markFailed()
+    return
+  }
+
+  pollDownloadStatus()
+}
+
+function start() {
+  if (downloads.consumeCreateRequest(item.value.id)) requestDownload()
+  else tick()
+
+  interval = window.setInterval(tick, POLL_INTERVAL_MS)
 }
 
 function deleteItem() {
-  downloadStore.deleteDownloadItem(props.params)
+  downloads.deleteDownloadItem(item.value)
   stopPolling()
 }
 
@@ -159,7 +210,7 @@ function trackDownloadClick() {
   }
 }
 
-onMounted(ajaxRequestDownload)
+onMounted(start)
 
 onUnmounted(stopPolling)
 </script>

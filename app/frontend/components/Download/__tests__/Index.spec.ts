@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import Download from '@/components/Download/Index.vue'
-import { useDownloadStore } from '@/stores/useDownloadStore'
+import { useDownloads, resetDownloads } from '@/composables/useDownloads'
 import type { DownloadOption } from '@/types/backend'
 
 const textCommercial = {
@@ -35,7 +34,9 @@ function mountDownload(options: DownloadOption[] = [csvOption]) {
 }
 
 beforeEach(() => {
-  setActivePinia(createPinia())
+  localStorage.clear()
+  sessionStorage.clear()
+  resetDownloads()
 })
 
 describe('Download', () => {
@@ -58,7 +59,7 @@ describe('Download', () => {
   })
 
   it('opens the commercial modal for a commercial-available option instead of downloading immediately', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const wrapper = mountDownload()
 
     await wrapper.find('.ct-download__trigger').trigger('click')
@@ -69,7 +70,7 @@ describe('Download', () => {
   })
 
   it('adds a download item immediately for a non-commercial option', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const nonCommercial = { ...csvOption, commercialAvailable: false }
     const wrapper = mountDownload([nonCommercial])
 
@@ -81,7 +82,7 @@ describe('Download', () => {
   })
 
   it('adds the item once the commercial modal is dismissed non-commercially', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const wrapper = mountDownload()
 
     await wrapper.find('.ct-download__trigger').trigger('click')
@@ -93,7 +94,7 @@ describe('Download', () => {
   })
 
   it('attaches the store\'s search filters/term for a "search" domain option', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     store.updateSearchFilters([{ key: 'iucn_category', value: 'Ia' }])
     store.updateSearchTerm('coral reef')
     const wrapper = mountDownload([searchOption])

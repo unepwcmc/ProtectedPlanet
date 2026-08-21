@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import SearchAreasPage from '@/components/SearchAreas/Page.vue'
-import { useDownloadStore } from '@/stores/useDownloadStore'
+import { useDownloads, resetDownloads } from '@/composables/useDownloads'
 import type { SearchAreasPageProps } from '@/types/backend'
 
 function jsonResponse(data: unknown) {
@@ -50,7 +49,8 @@ class FakeIntersectionObserver {
 }
 
 beforeEach(() => {
-  setActivePinia(createPinia())
+  localStorage.clear()
+  resetDownloads()
   vi.stubGlobal('fetch', vi.fn())
   vi.stubGlobal('IntersectionObserver', FakeIntersectionObserver)
   meta()
@@ -116,13 +116,13 @@ describe('SearchAreasPage', () => {
       filters: baseProps.filterGroups
     }))
     const wrapper = mountSearchAreas()
-    const downloadStore = useDownloadStore()
+    const downloads = useDownloads()
 
     await wrapper.find('.ct-search-areas-autocomplete__input').setValue('yosemite')
     await wrapper.find('.ct-search-areas-autocomplete__input').trigger('keyup.enter')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
-    expect(downloadStore.searchTerm).toBe('yosemite')
+    expect(downloads.searchTerm).toBe('yosemite')
     expect(window.location.search).toContain('search_term=yosemite')
   })
 
@@ -132,21 +132,21 @@ describe('SearchAreasPage', () => {
       filters: baseProps.filterGroups
     }))
     const wrapper = mountSearchAreas()
-    const downloadStore = useDownloadStore()
+    const downloads = useDownloads()
 
     await wrapper.find('.ct-filters-trigger').trigger('click')
     await wrapper.find('input[value="wdpa"]').setValue(true)
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
-    expect(downloadStore.searchFilters).toEqual({ db_type: ['wdpa'] })
+    expect(downloads.searchFilters).toEqual({ db_type: ['wdpa'] })
   })
 
   it('does not re-fetch when opening the filters panel on a URL-preselected filter', async () => {
     window.history.replaceState({}, '', '/search-areas?filters%5Bdb_type%5D%5B%5D=wdpa')
     const wrapper = mountSearchAreas()
-    const downloadStore = useDownloadStore()
+    const downloads = useDownloads()
 
-    expect(downloadStore.searchFilters).toEqual({ db_type: ['wdpa'] })
+    expect(downloads.searchFilters).toEqual({ db_type: ['wdpa'] })
 
     await wrapper.find('.ct-filters-trigger').trigger('click')
     await new Promise(resolve => setTimeout(resolve, 0))
@@ -161,7 +161,7 @@ describe('SearchAreasPage', () => {
       filters: baseProps.filterGroups
     }))
     const wrapper = mountSearchAreas()
-    const downloadStore = useDownloadStore()
+    const downloads = useDownloads()
 
     await wrapper.find('.ct-filters-trigger').trigger('click')
     await wrapper.find('input[value="wdpa"]').setValue(true)
@@ -173,7 +173,7 @@ describe('SearchAreasPage', () => {
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
     expect(String(url)).toContain(`filters=${encodeURIComponent('{}')}`)
     expect(window.location.search).not.toContain('db_type')
-    expect(downloadStore.searchFilters).toEqual({})
+    expect(downloads.searchFilters).toEqual({})
     // One request for the tab switch, not a second from the filter groups
     // re-emitting their cleared selection.
     expect(fetch).toHaveBeenCalledTimes(2)

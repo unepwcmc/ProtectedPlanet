@@ -79,7 +79,7 @@ import SearchAreasResults from '@/components/SearchAreas/Results/Index.vue'
 import TabStrip from '@/components/TabStrip/Index.vue'
 import Download from '@/components/Download/Index.vue'
 import { getJson } from '@/lib/http'
-import { useDownloadStore } from '@/stores/useDownloadStore'
+import { useDownloads } from '@/composables/useDownloads'
 import type { FilterGroupSelection, SearchAreasPageProps, SearchAreasResults as SearchAreasResultsData, SearchFilter, SearchFilterGroup } from '@/types/backend'
 
 type SearchAreasPage = SearchAreasPageProps
@@ -88,7 +88,7 @@ const props = defineProps<SearchAreasPage>()
 const QUERY_STRING_PARAMS = ['search_term', 'geo_type']
 const QUERY_STRING_PARAMS_FILTERS = ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category']
 
-const downloadStore = useDownloadStore()
+const downloads = useDownloads()
 
 // The hero partial renders an empty #vw-hero-search-target for this bar to
 // teleport into, so it sits inside the hero while the rest of the tree stays at
@@ -110,7 +110,7 @@ const isLoadingResults = ref(false)
 // Pagination appends to the list, so the current cards stay put under the
 // spinner; every other request replaces them and should show the spinner alone.
 const isReplacingResults = ref(false)
-const newResults = ref<SearchAreasResults>(props.results)
+const newResults = ref<SearchAreasResultsData>(props.results)
 const searchTerm = ref('')
 const tabIdDefault = props.tabs[2].id
 const tabIdSelected = ref(tabIdDefault)
@@ -175,7 +175,7 @@ function handleQueryString() {
   if (params.includes('search_term')) {
     const urlSearchTerm = paramsFromUrl.get('search_term') ?? ''
     searchTerm.value = urlSearchTerm
-    downloadStore.updateSearchTerm(urlSearchTerm)
+    downloads.updateSearchTerm(urlSearchTerm)
   }
 
   if (params.includes('geo_type')) {
@@ -220,10 +220,10 @@ function handleQueryString() {
   // URL-preselected value on mount. Recording that value here keeps the emit a
   // no-op in updateFilters, so opening the panel does not re-run the search.
   activeFilterOptions.value = activeFromUrl
-  // useDownloadStore#searchFilters is typed `unknown[]`, but what
+  // useDownloads#searchFilters is typed `unknown[]`, but what
   // Download/Index.vue forwards to the endpoint is this
   // `{ [filterId]: options }` dict.
-  downloadStore.updateSearchFilters(activeFromUrl as unknown as unknown[])
+  downloads.updateSearchFilters(activeFromUrl as unknown as unknown[])
 }
 
 function updateDisabledComponents(selectedTabId: string) {
@@ -328,7 +328,7 @@ function updateSearchTerm(newSearchTerm: string) {
   searchTerm.value = newSearchTerm
   ajaxSubmission(true)
   updateQueryString({ search_term: newSearchTerm })
-  downloadStore.updateSearchTerm(newSearchTerm)
+  downloads.updateSearchTerm(newSearchTerm)
 }
 
 function requestMore(requestedPage: number) {
@@ -338,7 +338,7 @@ function requestMore(requestedPage: number) {
 function resetFilters() {
   activeFilterOptions.value = {}
   filterResetKey.value += 1
-  downloadStore.updateSearchFilters({} as unknown as unknown[])
+  downloads.updateSearchFilters({} as unknown as unknown[])
 }
 
 function resetPagination() {

@@ -34,7 +34,7 @@ import DownloadCommercial from '@/components/Download/Commercial.vue'
 import DownloadPopup from '@/components/Download/Popup.vue'
 import IconDownload from '@/components/Icon/Download.vue'
 import useAnalytics from '@/composables/useAnalytics'
-import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
+import { useDownloads } from '@/composables/useDownloads'
 import type { DownloadOption, DownloadProps } from '@/types/backend'
 
 const { trackEvent } = useAnalytics()
@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<Download>(), {
   downloadDisabled: false
 })
 
-const downloadStore = useDownloadStore()
+const downloads = useDownloads()
 
 const selectedDownloadOption = ref<DownloadOption | null>(null)
 const isCommercialModalVisible = ref(false)
@@ -54,8 +54,9 @@ function addNewDownloadItem() {
   const params = selectedDownloadOption.value?.params
   if (!params) return
 
-  const item: DownloadItemParams = { ...params, id: Math.round(Math.random() * 100000) }
-  downloadStore.addNewDownloadItem(item)
+  // The store owns the id, the timestamps and — for the 'search' domain — the
+  // search state the download has to carry.
+  downloads.addNewDownloadItem(params)
   selectedDownloadOption.value = null
 }
 
@@ -76,18 +77,6 @@ function clickDownloadOption(option: DownloadOption) {
 }
 
 function clickNonCommercial() {
-  const option = selectedDownloadOption.value
-  if (option?.params?.domain === 'search') {
-    selectedDownloadOption.value = {
-      ...option,
-      params: {
-        ...option.params,
-        filters: downloadStore.searchFilters,
-        search: downloadStore.searchTerm
-      }
-    }
-  }
-
   closeCommercialModal()
   addNewDownloadItem()
 }
