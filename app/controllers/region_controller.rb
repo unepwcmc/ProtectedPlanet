@@ -1,7 +1,8 @@
 class RegionController < ApplicationController
   before_action :load_vars
   before_action :build_stats, only: :show
-
+  after_action :enable_caching
+  
   TABS_KEYS = %i[coverage message iucn governance sources designations sites].freeze
 
   include MapHelper

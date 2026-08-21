@@ -106,8 +106,27 @@ class ApplicationController < ActionController::Base
     render_error_page(404)
   end
 
+  # max-age=0 + must-revalidate makes the BROWSER re-check the HTML on every
+  # navigation. Without it a visitor holds the page for cache_max_age (30 days),
+  # and since the HTML embeds digest-stamped asset paths
+  # (/vite/assets/application-<hash>.js) that the next build deletes, they keep
+  # requesting assets that no longer exist -- the 404 comes back as the styled
+  # error page, so the browser reports it as a text/html MIME mismatch.
+  #
+  # s-maxage keeps SHARED caches (Rack::Cache in memcached) serving the page for
+  # the full window, so the origin cost is unchanged -- these pages are slow to
+  # render. Revalidation is answered from that cache with a 304 via the ETag
+  # Rack::ETag digests from the body. .kamal/hooks/post-deploy flushes the shared
+  # store on every deploy, so the first request after a deploy re-renders and the
+  # browser picks up the new asset hashes immediately.
   def enable_caching
-    expires_in AppSecrets.cache_max_age, public: true
+    options = { public: true, must_revalidate: true }
+    # Only set in production_defaults (so staging/production); nil elsewhere, and
+    # an empty `s-maxage=` is a malformed directive.
+    shared_max_age = AppSecrets.cache_max_age
+    options['s-maxage'] = shared_max_age if shared_max_age.present?
+
+    expires_in 0, options
   end
 
   # as of 04Apr it doesn't seem to be used
