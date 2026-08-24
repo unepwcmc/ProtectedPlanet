@@ -2002,3 +2002,115 @@ flagged for a future session rather than chased here. Comfy admin confirmed unaf
 Sprockets/`sassc-rails`-served, the preflight boundary holds.
 
 **Every item in the entire SCSS→Tailwind plan (T0 through T10) is now done.**
+
+---
+
+## Post-plan cleanup — dead utility sweep + the checks that never ran (done, 2026-08-24)
+
+A dead-code audit of `app/frontend/styles/` after T0–T10 closed, plus wiring up the three
+frontend checks that existed in `package.json` and had no caller anywhere.
+
+**Dead `@utility` sweep — 39 removed, 234 → 195.** The bulk was `shared/icons.css`, the
+background-image icon family: **30 of its 45 utilities were unreferenced**, superseded by the
+`Icon/*.vue` components per CODE-CONVENTIONS rule 5b. That family was also the only thing keeping
+26 SVGs in `assets/icons/` alive (40 → 14 files), and — worth knowing — those SVGs *were* being
+emitted into the production build despite the CSS never being emitted: distinct SVG files in the
+build output dropped 47 → 21. Note this saves close to **zero CSS bytes**: Tailwind v4 emits an
+`@utility` only when a scanned source actually uses the class, so the dead ones were already
+contributing nothing to the bundle. The win is maintenance — 272 lines of `icons.css` that looked
+available but pointed at assets no consumer wanted.
+
+The remaining 9: two flex gaps, four `typography.css` font combos, and the whole
+`shared/input-custom-*` family — radio, radio-selected, and checkbox. `Filters/RadioButtons.vue`
+and `Filters/Checkboxes/Item.vue` style their inputs with their own scoped `ct-` BEM classes and
+never referenced the shared shells, so `shared/forms.css` had no live utility left and the file plus
+its `tailwind.css` import were deleted.
+
+**Rule 5b's ERB-view-chrome carve-out still stands** and the 15 surviving icon utilities are all
+consumed by it, via `@apply` from other CSS rather than from markup: `-area`/`-country`/`-earth`/
+`-circle-chevron-black` from `cards/circles.css`, `-pin-fact-*` from `cards/facts.css`,
+`-arrow-external` from `cms/resource.css` + `stats-overview.css`, `-plus-mapbox`/`-minus-mapbox` from
+`shared/map.css`, and `-base`/`-button-reset`/`-loading-spinner`/`-pin-map` from Vue components and
+`useMapPopups.ts`.
+
+**Methodology note, because the first two attempts at this audit were both wrong.** A naive grep
+under-reports usage two ways, and either one deletes a live utility. First, most of these utilities
+are consumed by `@apply` *from another CSS file*, not from markup — so any scan restricted to
+`.vue`/`.erb` calls them dead (`tw-shared-icon-area` is applied by `cards/circles.css`, and was
+wrongly flagged). Second, substring matching gets it backwards: `tw-shared-input-custom-radio` looks
+used because `...-radio-selected` contains it, and `tw-shared-hero-wrapper` looks used because
+`...-wrapper-common` does. A correct census needs exact-token matching plus a transitive closure over
+`@apply` chains from the live roots, over every file type (`.haml` is easy to omit from an
+`--include` list — there are five admin views). CMS-authored content was checked too: zero `tw-`/`vw-`
+hits across `comfy_cms_fragments`/`snippets`/`layouts`, and it would be moot anyway, since the
+database is not in Tailwind's `@source` scan and a class used only there emits no CSS at all.
+
+**`yarn lint` / `lint:css` / `typecheck` now run in CI, as required checks**, and **Vitest is now
+required too** — the JS suite is green at 396 tests / 88 files, so its `continue-on-error` was
+removed; only the Ruby job still carries one. All four scripts existed in `package.json` with no
+caller: not in a workflow, not in `Dockerfile.deploy`, and there are no git hooks (`.git/hooks` is
+all `.sample`, no husky/lefthook). For ESLint and Stylelint that remains the whole story — `vite
+build` loads neither plugin, so nothing but a developer's editor was reading them.
+
+Typecheck is the exception, and the timeline matters: `vite-plugin-checker({ vueTsc: true })` landed
+in `cb5585bda` *during* this cleanup, so the build now gates types on its own. It gates them
+thoroughly — planting a deliberate `const x: number = 'str'` in a file that nothing imports still
+exited the build with code 2, because `vue-tsc` checks everything in the `tsconfig` include rather
+than just the module graph, and that gate already runs on PRs through the Ruby job's "Build test
+assets" step. The standalone step is therefore redundant by design and cheap to drop; it is kept
+because it is a 40-second signal that names the failure directly instead of surfacing as a failed
+asset build deep inside a job that must first start Postgres, Elasticsearch and Redis. Before that
+plugin, coverage equalled "whatever the editor's language server flags in an open tab" — which is how
+two `vue-tsc` errors in a spec file sat on `staging_kamal` until `bfe92cd6e` fixed them.
+
+Fixed to get there: a `max-statements-per-line` error in `SearchAreas/__tests__/Page.spec.ts`,
+`Card/Item.vue`'s `linkTitle` missing from `withDefaults` while its sibling optional props all had
+entries, and `vue/one-component-per-file` firing on specs that legitimately declare throwaway
+components to exercise a composable's provide/inject contract — turned off for `__tests__` via an
+ESLint override, since the rule targets source files.
+
+**`useBreakpoint` trimmed.** It exported `windowWidth`, `isLarge` and `isXLarge` that no caller ever
+destructured (its only two consumers, `Filters/Panel/Index.vue` and `Pame/Filters/Filter/Index.vue`,
+take `isSmall`/`isMedium`), and a `large: 1200` threshold under a comment claiming the values "MUST
+match Tailwind's breakpoints" — 1200 is not one of them, and per [[no-custom-breakpoint-tokens]] the
+convention is to map onto the native scale rather than invent a value. Thresholds and implementation
+are otherwise untouched, including `isMedium`'s inclusive upper bound of 1024 — 1024 is `lg` in
+Tailwind's scale, so at exactly that width these components render their *mobile* variant. That is
+pre-existing behaviour and changing it silently would move which variant renders, so it is now
+documented in the composable rather than fixed.
+
+**A `useMediaQuery` rewrite was attempted here and reverted**, which is worth recording because the
+failure mode is invisible on inspection. Swapping `useWindowSize` + computeds for two
+`useMediaQuery` calls is the better primitive — it notifies only when a threshold is crossed instead
+of re-evaluating on every resize pixel — and it preserved the thresholds exactly, 1024 boundary
+included. It also broke 8 tests across 3 files. jsdom's `matchMedia` is a stub that always reports
+`matches: false`, so both flags came back false and every spec that does *not* mock this module
+(`Pame/Filters/{Index,Filter}`) silently rendered the **desktop** variant, where previously
+`useWindowSize` read jsdom's default `innerWidth` of 1024, made `isMedium` true, and exercised the
+mobile one. Production behaviour was identical at every width; only the tests moved. Making it work
+would mean a width-driven `matchMedia` emulator in a vitest setup file — real machinery, and the
+specs would then be asserting against a hand-rolled shim — for a per-pixel-recompute saving across
+two components. Not worth it; `useWindowSize` stays, with the reason recorded in the composable so
+the next person does not re-attempt it.
+
+**Production sourcemaps turned off.** `vite-plugin-ruby` defaults `build.sourcemap` to `!isLocal`, so
+every non-development/test build emitted a `.map` beside each chunk — 7.6MB of them plus `.gz`/`.br`
+copies, all served publicly out of `public/vite`, which effectively published the unminified sources
+of the whole frontend. Now pinned to `false` in `vite.config.mts`. The dev server is unaffected: it
+serves its own transform sourcemaps regardless of this setting.
+
+Overriding it there is safe because the plugin's config hook builds `{ sourcemap: !isLocal,
+...userConfig.build }` — our value spreads in afterwards and wins.
+
+**Verification caveat worth knowing for anything build-related.** This could not be verified
+end-to-end locally. Inside the dev container, `vite build` resolves to a *local* mode no matter what
+you pass — `--mode staging`, `--mode production`, even `VITE_RUBY_MODE=production` — and writes to
+`public/vite-dev` or `public/vite-test` rather than `public/vite`, because the deploy path goes
+through `rake vite:build_all`, and only that Ruby entry point loads `config/vite.rb` (see
+Dockerfile.deploy). A direct call to the `vite` binary skips it. So a staging-mode build is not
+reproducible in the dev container without a RAILS_ENV=staging environment and its secrets, and any
+"I ran the production build locally" claim about this repo is worth double-checking. What was
+verified instead: setting `sourcemap: true` in a mode whose *plugin* default is `false` emitted 44
+maps, which proves the merge direction — user config wins — and restoring `false` returned it to 0.
+Combined with the pre-change `public/vite` build having carried 50 maps, that pins down both the
+cause and the fix. Final confirmation is the next staging deploy's asset output.

@@ -170,12 +170,6 @@ text-theme-grey-black;
   text-theme-grey;
 }
 
-@utility tw-shared-font-hind-siliguri__light-sm-primary {
-  @apply
-  tw-shared-font-hind-siliguri__light-sm
-  text-theme-primary;
-}
-
 @utility tw-shared-font-hind-siliguri__light-sm-grey-xdark {
   @apply
   tw-shared-font-hind-siliguri__light-sm
@@ -317,23 +311,10 @@ text-theme-grey-black;
   text-white;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-sm-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal
-  text-sm
-  text-theme-grey-black;
-}
-
 @utility tw-shared-font-hind-siliguri__normal-base {
   @apply
   tw-shared-font-hind-siliguri__normal
   text-base;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal-base
-  text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-base-white {
@@ -362,7 +343,6 @@ text-theme-grey-black;
   md:text-xl
 text-white;
 }
-
 
 @utility tw-shared-font-hind-siliguri__normal-lg {
   @apply
@@ -400,12 +380,6 @@ text-white;
   @apply
   tw-shared-font-hind-siliguri__normal
   text-lg;
-}
-
-@utility tw-shared-font-hind-siliguri__normal-lg-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal-lg
-  text-theme-grey-black;
 }
 
 @utility tw-shared-font-hind-siliguri__normal-lg-md-xl-grey-dark {
@@ -527,7 +501,6 @@ text-white;
   tw-shared-font-hind-siliguri__semibold-4xl
   text-theme-grey-black;
 }
-
 
 /* default is leading 1.3 so the following has leading-1-6 in its name */
 @utility tw-shared-font-family-hind-siliguri__leading-1-6-light {

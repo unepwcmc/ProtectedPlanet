@@ -181,7 +181,9 @@ describe('SearchAreasPage', () => {
 
   it('hides the previous results and shows the spinner while re-fetching', async () => {
     let resolveFetch: (value: Response) => void = () => {}
-    vi.mocked(fetch).mockReturnValue(new Promise<Response>((resolve) => { resolveFetch = resolve }))
+    vi.mocked(fetch).mockReturnValue(new Promise<Response>((resolve) => {
+      resolveFetch = resolve
+    }))
     const wrapper = mountSearchAreas()
 
     expect(wrapper.text()).toContain('Yosemite')

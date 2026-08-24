@@ -35,5 +35,15 @@ export default tseslint.config(
 			commaDangle: "never",
 			blockSpacing: true
 		})
+	},
+	{
+		// Specs legitimately declare several throwaway components in one file to
+		// exercise a composable's provide/inject contract (see
+		// composables/__tests__/useMapOverlays.spec.ts) — the rule targets source
+		// files, where one SFC per file is the convention.
+		files: ["app/frontend/**/__tests__/**", "app/frontend/**/*.spec.ts"],
+		rules: {
+			"vue/one-component-per-file": "off"
+		}
 	}
 )

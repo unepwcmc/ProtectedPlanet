@@ -29,6 +29,9 @@ export default defineConfig({
     vue(),
     checker({ vueTsc: true /** or an object config */ })
   ],
+  build: {
+    sourcemap: false
+  },
   optimizeDeps: {
     // maplibre-gl ships its own worker as a separate chunk that the optimizer
     // doesn't handle correctly — pre-bundling 404s every request until excluded.

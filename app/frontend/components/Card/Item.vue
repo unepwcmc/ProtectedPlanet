@@ -55,6 +55,7 @@ withDefaults(defineProps<{
 }>(), {
   hasSecondaryLine: false,
   image: undefined,
+  linkTitle: undefined,
   modifier: undefined,
   secondaryText: undefined,
   titleIsHtml: false

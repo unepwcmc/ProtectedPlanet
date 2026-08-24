@@ -11,14 +11,16 @@ name: Tests
 # docs/dead-code.md section 8) without this workflow would remove the only guardrail
 # that work restored.
 #
-# NOT REQUIRED YET, DELIBERATELY. `continue-on-error` is set on the test steps so
-# this reports without blocking merges. The suite is red today for a known reason:
+# NOT REQUIRED YET, DELIBERATELY -- but only for the RUBY suite, which is the one
+# `continue-on-error` is still set on, so it reports without blocking merges. The
+# JavaScript job's four checks (vitest, eslint, stylelint, vue-tsc) are all green and
+# all required. The suite is red today for a known reason:
 # lib/tasks/db.rake enhances db:test:prepare to run db:seed, so every test database
 # is built with 248 seeded countries, and fixtures/factories then collide with them
 # ("duplicate key value violates unique constraint countries_pkey"). That hook dates
 # from 2019; what is new is ~150 tests added since the last green run. Fix the suite,
-# then delete the two `continue-on-error` lines and make this a required check --
-# a gate everyone has learned to ignore is worse than no gate.
+# then delete the one remaining `continue-on-error` line and make the Ruby job a
+# required check too -- a gate everyone has learned to ignore is worse than no gate.
 
 on:
   pull_request:
@@ -160,7 +162,40 @@ jobs:
           node-version: '24.4.1'
       - run: corepack enable
       - run: yarn install --immutable
-      # package.json defines `yarn test` (vitest) and no workflow has ever called it.
+      # package.json defines `yarn test` (vitest) and no workflow had ever called it.
+      # REQUIRED: unlike the Ruby suite this one is green -- 396 tests / 88 files, 0
+      # failures, verified in the project container (vitest needs the linux rolldown
+      # binding, so it cannot run on a macOS host against these node_modules).
       - name: Vitest
-        continue-on-error: true   # remove once green -- see header
         run: yarn test
+
+      # REQUIRED, like Vitest above and unlike the Ruby suite: all three are green as
+      # of this commit, so there is no red-gate-everyone-ignores problem to avoid.
+      # They had never run anywhere -- `yarn lint`, `lint:css` and `typecheck` sat in
+      # package.json with no caller, no git hook (.git/hooks is all .sample, no
+      # husky/lefthook) and no workflow.
+      #
+      # ESLint and Stylelint are the ones with no other gate: `vite build` loads
+      # neither, so nothing but a developer's editor was reading them.
+      #
+      # Typecheck is DELIBERATELY REDUNDANT and cheap to drop if CI minutes matter.
+      # Since vite-plugin-checker({ vueTsc: true }) landed in cb5585bda the build
+      # itself gates types, and it gates them thoroughly -- verified by planting a
+      # deliberate `const x: number = 'str'` in a file that nothing imports: the
+      # build exited 2, because vue-tsc checks everything in the tsconfig include,
+      # not just the module graph. That gate already runs on PRs via the Ruby job's
+      # "Build test assets" step. This step is kept only because it is a 40-second
+      # standalone signal that names the failure directly, instead of surfacing as a
+      # failed asset build deep inside a job that needs Postgres, Elasticsearch and
+      # Redis to start first.
+      #
+      # Ordered after Vitest so a real test failure is not masked by a style nit, and
+      # split into three steps so the log says which check failed.
+      - name: ESLint
+        run: yarn lint --max-warnings 0
+
+      - name: Stylelint
+        run: yarn lint:css
+
+      - name: Typecheck (vue-tsc)
+        run: yarn typecheck
