@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createMapOverlays, MAP_OVERLAYS_KEY, type MapOverlaysContext } from '@/composables/useMapOverlays'
+import { MAP_OPTIONS_DEFAULT } from '@/constants/map'
 import type { MapBaseProps } from '@/types/backend'
 
 const fakeMapInstance = {
@@ -102,7 +103,7 @@ describe('Map Base', () => {
     await vi.waitFor(() => expect(MapConstructor).toHaveBeenCalledTimes(1))
 
     const [options] = MapConstructor.mock.calls[0]
-    expect(options?.container).toMatch(/^map-target-\d+$/)
+    expect(options?.container).toMatch(new RegExp(`^${MAP_OPTIONS_DEFAULT.container}-\\d+$`))
     expect(options?.style).toBe('mapbox://styles/unepwcmc/cko1hsfi50vog17l697cr4d6p')
   })
 

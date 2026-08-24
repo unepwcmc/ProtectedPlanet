@@ -26,7 +26,11 @@ module PortalRelease
         check_geometry!
         check_duplicates!
 
-        release.update!(state: 'preflight_ok', stats_json: { source_counts: counts })
+        # Merge rather than replace. Preflight is the first writer on a brand-new
+        # Release row today, so there is nothing to preserve — but a bare replace
+        # is the kind of line that silently eats another phase's data the moment
+        # that stops being true.
+        release.update!(state: 'preflight_ok', stats_json: (release.stats_json || {}).merge({ source_counts: counts }))
         log.event('preflight_ok', payload: counts)
         notify.phase('Preflight OK — source views and geometry checks passed', counts: counts)
       end

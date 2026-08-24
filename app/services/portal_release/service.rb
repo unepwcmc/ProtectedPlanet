@@ -77,6 +77,18 @@ module PortalRelease
       phases = phases.select { |p| only_phases.include?(p.to_s) } unless only_phases.empty?
       phases = phases.drop_while { |p| !start_at.empty? && p.to_s != start_at } unless start_at.empty?
 
+      # Always take the lock, whatever subset of phases was asked for.
+      #
+      # Both filters above can drop acquire_lock: `drop_while` discards every
+      # phase before the start phase, so the runbook's go-live command
+      # (PP_RELEASE_START_AT=finalise_swap) ran the SWAP with no lock held at
+      # all, and PP_RELEASE_ONLY_PHASES does the same. That left the most
+      # destructive phase as the one moment nothing could tell was in progress —
+      # a second release could start on top of it, rollback's lock check
+      # (SwapManager#rollback_to!) would wave through, and the deploy gate in
+      # .kamal/hooks/pre-deploy would see nothing to block.
+      phases = [:acquire_lock] + phases unless phases.include?(:acquire_lock)
+
       phases.each do |phase|
         # Stop before starting phases after validate_and_manifest if dry run is enabled
         if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil))
@@ -166,6 +178,12 @@ module PortalRelease
     def import_core
       @ctx[:phase] = 'import_core'
       results = Importer.new(@log, label: @label, release_id: @release.id, notifier: @notify).run_core!
+      # Reload before merging. The import writes its checkpoints into this same
+      # stats_json column with update_columns, which leaves @release stale — so
+      # merging onto the in-memory copy silently dropped every checkpoint the
+      # import had just recorded, and PP_RELEASE_START_AT resumes re-did work
+      # that was already done.
+      @release.reload
       @release.update!(state: 'importing', stats_json: (@release.stats_json || {}).merge({ importer: results }))
       # Human-readable Slack summary for core import
       @notify.import_core_summary(results) if results.respond_to?(:each)

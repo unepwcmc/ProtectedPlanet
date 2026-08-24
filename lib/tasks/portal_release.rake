@@ -40,6 +40,23 @@ namespace :pp do
       PortalRelease::Service.rollback_to!(args[:timestamp])
     end
 
+    desc 'Exit non-zero while a release is running. Used by .kamal/hooks/pre-deploy to block deploys'
+    task deploy_gate: :environment do
+      # lock_available? answers by taking the lock and releasing it again. That is
+      # safe here: this task runs in its own container, so its own Postgres
+      # session, and from a different session pg_try_advisory_lock simply fails
+      # while a release holds the lock. Do NOT reuse this check from a process
+      # that might itself hold the lock — advisory locks are re-entrant, so it
+      # would take the count 1 -> 2, release 2 -> 1, and report "available".
+      unless PortalRelease::Lock.lock_available?
+        release = Release.order(created_at: :desc).first
+        warn "A portal release is currently running#{release ? " (#{release.label}, state '#{release.state}')" : ''}."
+        exit 1
+      end
+
+      puts 'No release running.'
+    end
+
     desc 'Show release status summary'
     task status: :environment do
       puts PortalRelease::Service.status_report

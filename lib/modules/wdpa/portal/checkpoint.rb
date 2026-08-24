@@ -17,10 +17,22 @@ module Wdpa
               stats['checkpoints'] ||= {}
               stats['checkpoints']
             else
+              # The file store is global — it is shared by every release, so a
+              # run that ends without reset_all! (a dry run, a crash) leaves
+              # offsets behind that make the NEXT release import 0 records. Say
+              # so loudly; reaching this branch during a release is a bug.
+              Rails.logger.warn(
+                "⚠️ Portal checkpoints falling back to the shared file store #{FILE_PATH} " \
+                "(release_id=#{Wdpa::Portal::ImportRuntimeConfig.release_id.inspect}). " \
+                'Stale offsets here can silently skip the whole import.'
+              )
               ensure_file_store
               JSON.parse(File.read(FILE_PATH))
             end
-          rescue StandardError
+          rescue StandardError => e
+            # Was a bare `rescue; {}`, which hid a NameError for years: importers
+            # then saw an empty store and quietly re-imported (or skipped) everything.
+            Rails.logger.warn("⚠️ Failed to load portal checkpoints, continuing with an empty store: #{e.class}: #{e.message}")
             {}
           end
         end
@@ -89,8 +101,10 @@ module Wdpa
         def current_release
           release_id = Wdpa::Portal::ImportRuntimeConfig.release_id
           return nil if release_id.nil?
-          Release.find_by(id: release_id)
-        rescue StandardError
+
+          ::Release.find_by(id: release_id)
+        rescue StandardError => e
+          Rails.logger.warn("⚠️ Could not load Release #{release_id.inspect} for portal checkpoints: #{e.class}: #{e.message}")
           nil
         end
 
