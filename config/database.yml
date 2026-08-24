@@ -21,6 +21,10 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  # Tests run against the db_test service (Postgres 17 + PostGIS 3.x), which matches
+  # staging; development stays on the older `db` service. Falls back to POSTGRES_HOST
+  # so nothing breaks where TEST_POSTGRES_HOST is not set.
+  host: <%= ENV['TEST_POSTGRES_HOST'].presence || ENV['POSTGRES_HOST'] %>
   database: pp_test
 
 production:

@@ -51,6 +51,8 @@ services:
       - SSH_AUTH_SOCK=/ssh-agent
       # https://vite-ruby.netlify.app/guide/troubleshooting.html#making-hmr-work-in-docker-compose
       - VITE_RUBY_HOST=vite
+      # Tests hit the Postgres 17 service; development stays on `db`.
+      - TEST_POSTGRES_HOST=db_test
     depends_on:
       install:
         condition: service_completed_successfully
@@ -82,6 +84,28 @@ services:
       - '.env'
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
+      - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # Postgres 17 + PostGIS 3.x, matching staging (17.5 / PostGIS 3.5.2). The `db`
+  # service above is still 11.7 / PostGIS 2.5.4 -- six majors behind -- which is why
+  # a green local test run proved nothing: the PG17 `date_part` -> `extract` rename
+  # broke country pages on staging while every local check passed.
+  #
+  # Separate service rather than bumping `db`, because a PG17 server cannot read a
+  # PG11 data directory and protectedplanet_pg_data holds ~27GB of real dev data.
+  # Only the TEST database moves here (see config/database.yml); development keeps
+  # using `db` until that data is dumped and reloaded deliberately.
+  db_test:
+    platform: linux/x86_64
+    container_name: protectedplanet-db-test
+    image: kartoza/postgis:17-3.5
+    ports:
+      - "5442:5432"
+    networks:
+      - protectedplanet
+    env_file:
+      - '.env'
+    volumes:
+      - protectedplanet_pg_test_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
     container_name: protectedplanet-redis
@@ -281,6 +305,7 @@ networks:
 
 volumes:
   protectedplanet_minio_data:
+  protectedplanet_pg_test_data:
   protectedplanet_pg_data:
   protectedplanet_redis_data:
   protectedplanet_es_data:

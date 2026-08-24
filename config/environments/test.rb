@@ -49,6 +49,14 @@ Rails.application.configure do
 
   config.active_storage.service = :test
 
+  # Do not regenerate db/structure.sql after migrating in test, matching staging and
+  # production. Two reasons: a test run should never rewrite a developer's schema
+  # file, and the dump shells out to pg_dump, which in the dev image is v11 and
+  # refuses to talk to a Postgres 17 server ("aborting because of server version
+  # mismatch"). Without this, `rake db:migrate` exits non-zero on PG17 even when all
+  # 204 migrations applied successfully -- which would fail CI on a green run.
+  config.active_record.dump_schema_after_migration = false
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
