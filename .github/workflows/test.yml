@@ -99,6 +99,14 @@ jobs:
       ELASTIC_SEARCH_URL: http://127.0.0.1:9200
       REDIS_URL: redis://127.0.0.1:6379
       PP_HOST: localhost
+      # Comfy reads these in config/initializers/comfortable_media_surfer.rb, and
+      # Admin::CallToActionsControllerTest builds its own Basic auth header from the
+      # same values. Left unset they are nil, Comfy denies, and ten admin tests fail
+      # with 401 -- a CI configuration gap that looks exactly like broken auth code.
+      COMFY_ADMIN_USERNAME: ci
+      COMFY_ADMIN_PASSWORD: ci
+      # AdminController#authenticated? compares against AppSecrets.maintenance_mode_key.
+      MAINTENANCE_MODE_KEY: ci-maintenance-key
 
     steps:
       # submodules: db/ is the unepwcmc/protectedplanet-db submodule and holds all
@@ -134,8 +142,14 @@ jobs:
       # skipping this does not fail -- it makes the first view-rendering test trigger
       # a full esbuild + Tailwind build mid-suite, which is slow and looks like a
       # hang. Building here keeps that cost visible as its own step.
+      # Both pipelines, not just Vite. sprockets-rails is still active and
+      # ApplicationController#og_tags calls helpers.image_path, so without a compiled
+      # Sprockets manifest Rails tries to compile on demand and dies with
+      # "LoadError: cannot load such file -- sass" -- which surfaces as ten controller
+      # errors and several 500s through the error page, none of which are code faults.
+      # assets:precompile runs the Vite build too (vite_rails hooks into it).
       - name: Build test assets
-        run: bundle exec vite build --mode test
+        run: bundle exec rails assets:precompile
 
       # Build the schema by RUNNING THE MIGRATIONS, not by loading db/structure.sql.
       # structure.sql is gitignored in the db submodule and is not committed, so a
@@ -146,6 +160,12 @@ jobs:
       # config/environments/test.rb sets dump_schema_after_migration = false. Without
       # it this step exits non-zero even on success, because the trailing schema dump
       # shells out to pg_dump.
+      # entrypoints/init.sql creates this alongside the dev database locally; the CI
+      # postgres service container never runs that file, so pg_dump calls against it
+      # spew "database pp_test_backup does not exist" through the suite.
+      - name: Create the auxiliary test database
+        run: PGPASSWORD=postgres createdb -h 127.0.0.1 -U postgres pp_test_backup || true
+
       - name: Build the test database from migrations
         run: bundle exec rake db:create db:migrate
 
