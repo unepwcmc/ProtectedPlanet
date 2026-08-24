@@ -36,8 +36,10 @@ jobs:
     # nothing here needs the internal network, and it keeps a long test run off the
     # deploy runner. It also matches Dockerfile.deploy's `FROM ubuntu:24.04`, so the
     # GDAL and libpq versions line up with staging. NB the local dev image
-    # (Dockerfile, `FROM ruby:2.7-buster`) does NOT -- it ships GDAL 2.2.3 from 2017
-    # and pg_dump 11, which is a separate problem worth fixing.
+    # (Dockerfile, `FROM ruby:2.7-buster`) does NOT -- it still ships GDAL 2.2.3 from
+    # 2017, which is a separate problem worth fixing. Its pg_dump is no longer one of
+    # them: buster has no PGDG build of 17, so the dev image compiles the 17 client from
+    # source.
     runs-on: ubuntu-24.04
 
     services:

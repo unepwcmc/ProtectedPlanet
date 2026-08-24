@@ -215,6 +215,53 @@ RUN --mount=type=cache,target=/puppeteer-dl-cache \
     && cp -a /puppeteer-dl-cache/. "$PUPPETEER_CACHE_DIR/"
 
 
+# PostgreSQL 17 client tools, compiled from source.
+#
+# Buster's own client is 11, and pg_dump refuses to talk to a server newer than itself
+# ("aborting because of server version mismatch"), so with the dev database and staging
+# both on 17 the packaged pg_dump is useless: `rake db:migrate` cannot regenerate
+# db/structure.sql, and the CmsTransfer / ApiTransfer / ActiveStorageTransfer dumps that
+# ImportWorkers::FinaliserWorker runs cannot work either.
+#
+# Source build rather than apt because PGDG has no PostgreSQL 17 for buster -- its buster
+# suite was frozen at 16 (bullseye and later have 17, but their binaries need a newer
+# glibc than 2.28). Only libpq and src/bin are built, not the server, which keeps this to
+# a couple of minutes.
+#
+# src/fe_utils is built on its own line before src/bin on purpose. `make -j` inside src/bin
+# is racy: its subdirectories each depend on libpgfeutils and on the flex-generated
+# psqlscan.c, with nothing serialising them, so parallel jobs collide with
+# "cannot find -lpgfeutils" and "opening psqlscan.c: No such file". Building fe_utils first
+# makes the shared prerequisite exist before anything competes for it.
+#
+# Installed under /usr/local/pgsql and left off the ld.so path deliberately: these
+# binaries find their own libpq via rpath, so the apt libpq 11 that the pg gem was
+# compiled against stays exactly where it is. libpq 11 talks to a 17 server perfectly
+# well -- it is only the client *tools* that have the version floor.
+ENV PG_CLIENT_VERSION=17.7
+# The apt lists are cleaned by earlier layers, so refresh them first -- and buster is EOL,
+# hence the Check-Valid-Until override that the rest of this file also uses.
+RUN apt-get -o Acquire::Check-Valid-Until=false update \
+ && apt-get install -y --no-install-recommends libreadline-dev zlib1g-dev libssl-dev bison flex \
+ && curl -fsSL "https://ftp.postgresql.org/pub/source/v${PG_CLIENT_VERSION}/postgresql-${PG_CLIENT_VERSION}.tar.bz2" -o /tmp/pg.tar.bz2 \
+ && tar -xjf /tmp/pg.tar.bz2 -C /tmp \
+ && cd "/tmp/postgresql-${PG_CLIENT_VERSION}" \
+ && ./configure --prefix=/usr/local/pgsql --without-icu --with-openssl --with-readline --with-zlib \
+ && make -j"$(nproc)" -C src/interfaces/libpq \
+ && make -j"$(nproc)" -C src/fe_utils \
+ && make -j"$(nproc)" -C src/bin \
+ && make -C src/interfaces/libpq install \
+ && make -C src/bin install \
+ && cd / && rm -rf "/tmp/postgresql-${PG_CLIENT_VERSION}" /tmp/pg.tar.bz2 \
+ && /usr/local/pgsql/bin/pg_dump --version
+# Ahead of /usr/bin so pg_dump, pg_restore and psql resolve to 17 rather than buster's 11.
+ENV PATH="/usr/local/pgsql/bin:${PATH}"
+# ...and again for login shells, for the same reason as ruby-3.3.sh above: the compose
+# commands run `bash -l -c`, which sources /etc/profile and rebuilds PATH from scratch,
+# discarding the ENV. Without this, `rails`/`rake` see buster's pg_dump 11 and the schema
+# dump fails against the 17 server even though the image ships 17.
+RUN printf 'export PATH=/usr/local/pgsql/bin:$PATH\n' > /etc/profile.d/pg-client-17.sh
+
 COPY . /ProtectedPlanet
 
 EXPOSE 3000

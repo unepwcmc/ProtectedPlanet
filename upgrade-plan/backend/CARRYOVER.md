@@ -204,12 +204,16 @@ is sound. Two real (pre-existing, not upgrade) bugs found + fixed:
   guards nil and logs the underlying exception.
 
 **DB-setup findings (environment, not code):**
-- [ ] **`pg_cron` in `db/structure.sql` breaks structure-based test setup.**
-  `db:test:prepare` / `db:schema:load` into `pp_test` fail: "can only create
-  extension pg_cron in database pp_development". CI is unaffected (it uses
-  `db:create db:migrate`, per Jenkinsfile). For local test DB use
-  `db:drop db:create db:migrate`, not `db:test:prepare`. Consider excluding
-  pg_cron from the schema dump, or scheduling pg_cron per-DB.
+- [x] ~~**`pg_cron` in `db/structure.sql` breaks structure-based test setup.**~~
+  **RESOLVED 2026-08-24** by the local PG 11 → 17 upgrade. `db:test:prepare` /
+  `db:schema:load` into `pp_test` used to fail with "can only create extension
+  pg_cron in database pp_development". The extension had to be dropped anyway for
+  the upgrade — PG17 ships pg_cron 1.6, which has no 1.2 install script, so
+  `pg_upgrade` refused the cluster while it was installed. It turned out never to
+  have worked here at all: not in `shared_preload_libraries`, no rows in
+  `cron.job`, and no application code referencing it. Dropped, and the regenerated
+  `structure.sql` no longer carries the extension line, so structure-based setup
+  works. See [06 — PostGIS & database](./06-postgis-and-database.md#local-dev-postgresql-11--17-done-2026-08-24--every-developer-must-run-it-once).
 - **Good news:** a fresh `db:migrate` creates PostGIS via the existing
   `create_extension_postgis` migration — so **adapter 8.x needs no manual
   `CREATE EXTENSION postgis`** for a migrate-based setup (the plan feared it would).
@@ -808,8 +812,13 @@ Three PostgreSQL majors are in play and they disagree:
 | environment | PostgreSQL | implicit EXTRACT column |
 |---|---|---|
 | production | 10 | `date_part` |
-| local docker-compose | 11.7 | `date_part` |
+| ~~local docker-compose~~ | ~~11.7~~ → **17.7** since 2026-08-24 | ~~`date_part`~~ → `extract` |
 | **staging (Kamal/Proxmox)** | **17.5** | **`extract`** |
+
+Local dev was upgraded to 17.7 on 2026-08-24 precisely so this class of divergence
+stops being invisible — a bug of this shape now reproduces locally. Production's PG 10
+remains the odd one out until the infrastructure migration. Procedure:
+[06 — PostGIS & database](./06-postgis-and-database.md#local-dev-postgresql-11--17-done-2026-08-24--every-developer-must-run-it-once).
 
 So this could not reproduce locally, and production is unaffected — it only
 appears on the new infrastructure. Fixed by aliasing the grouped expression

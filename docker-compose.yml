@@ -75,7 +75,16 @@ services:
   db:
     platform: linux/x86_64
     container_name: protectedplanet-db
-    image: kartoza/postgis:11.5-2.5
+    # Postgres 17 + PostGIS 3.5, matching staging (17.5 / PostGIS 3.5.2). Was
+    # kartoza/postgis:11.5-2.5 until the cluster in protectedplanet_pg_data was upgraded
+    # in place -- a PG17 server cannot read a PG11 data directory, so if this errors with
+    # "incompatible data directory" the upgrade has not been run yet:
+    #
+    #   docker compose stop db sidekiq web
+    #   docker compose --profile upgrade run --rm pg_upgrade
+    #
+    # See docker/pg-upgrade/ for what that does, and why PostGIS makes it a two-step.
+    image: kartoza/postgis:17-3.5
     ports:
       - "5441:5432"
     networks:
@@ -85,15 +94,16 @@ services:
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
-  # Postgres 17 + PostGIS 3.x, matching staging (17.5 / PostGIS 3.5.2). The `db`
-  # service above is still 11.7 / PostGIS 2.5.4 -- six majors behind -- which is why
-  # a green local test run proved nothing: the PG17 `date_part` -> `extract` rename
-  # broke country pages on staging while every local check passed.
+  # Postgres 17 + PostGIS 3.x for the test database. This existed because `db` was stuck
+  # on 11.7 / PostGIS 2.5.4 -- six majors behind staging -- which is why a green local test
+  # run proved nothing: the PG17 `date_part` -> `extract` rename broke country pages on
+  # staging while every local check passed.
   #
-  # Separate service rather than bumping `db`, because a PG17 server cannot read a
-  # PG11 data directory and protectedplanet_pg_data holds ~27GB of real dev data.
-  # Only the TEST database moves here (see config/database.yml); development keeps
-  # using `db` until that data is dumped and reloaded deliberately.
+  # `db` is now on 17-3.5 as well, so this is no longer what puts tests on 17; it stays
+  # only to keep test data on its own server and volume, where a test run physically
+  # cannot touch development data. If that is not worth a second Postgres container on
+  # this VM, delete this service, drop the protectedplanet_pg_test_data volume and the
+  # TEST_POSTGRES_HOST env var above, and tests fall back to `db` via config/database.yml.
   db_test:
     platform: linux/x86_64
     container_name: protectedplanet-db-test
@@ -107,6 +117,25 @@ services:
     volumes:
       - protectedplanet_pg_test_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # One-off PG11 -> PG17 in-place upgrade of the dev cluster. Behind a profile so it never
+  # runs as part of `docker compose up`. Mounts the same volume as `db`, which has to be
+  # stopped first -- pg_upgrade refuses to touch a cluster that was not shut down cleanly.
+  #
+  #   docker compose stop db sidekiq web
+  #   docker compose --profile upgrade run --rm pg_upgrade
+  #
+  # Env knobs: PG_UPGRADE_MODE (--copy by default, --link to hard-link instead),
+  # PG_UPGRADE_JOBS, PG_UPGRADE_SKIP_REINDEX.
+  pg_upgrade:
+    profiles: ["upgrade"]
+    platform: linux/x86_64
+    build:
+      context: ./docker/pg-upgrade
+    volumes:
+      - protectedplanet_pg_data:/var/lib/postgresql
+    networks:
+      - protectedplanet
+
   redis:
     container_name: protectedplanet-redis
     image: redis
