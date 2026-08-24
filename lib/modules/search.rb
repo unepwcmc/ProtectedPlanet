@@ -34,11 +34,61 @@ class Search
   end
 
   def search
-    @query_results ||= elastic_search.search(index: @index_name, body: query)
+    @query_results ||= fetch_query_results
   rescue Faraday::TimeoutError => e
     Rails.logger.warn 'timeout in search'
     Rails.logger.warn e
     @query_results ||= { 'hits' => { 'total' => 0, 'hits' => [] } }
+  end
+
+  # Cache the Elasticsearch response for searches with no search term.
+  #
+  # WHY: `optional_queries` attaches Search::Aggregation.all to every query -- nine
+  # aggregations, six of them `nested`
+  # (lib/modules/search/templates/aggregations.json). With a search term those run
+  # over the handful of matched documents and the request costs ~1.2s. With no term
+  # there is nothing to narrow the document set, so they run across the whole index
+  # (~317k protected areas) and the request costs seconds. Measured by the
+  # post-deploy route walk against staging:
+  #
+  #   /en/search-areas                        6497ms
+  #   /en/search-areas-results                8326ms
+  #   /en/search-areas-results?search_term=park 1208ms
+  #
+  # The aggregations cannot simply be dropped: `search_areas#index` feeds them to
+  # Search::FiltersSerializer to build the filter panel, and AreasSerializer#sites
+  # reads aggregations['governance'] for its total count.
+  #
+  # WHY ONLY BLANK TERMS: they are the expensive ones, they are identical for every
+  # visitor, and their number is bounded by the filter combinations. Caching typed
+  # terms would let any visitor grow the cache without limit, for queries that are
+  # already fast.
+  #
+  # Staleness is bounded by the TTL, and .kamal/hooks/post-deploy clears Rails.cache
+  # on every deploy, so shipping new data clears these entries too. This matters
+  # more since the move to `expires_in 0, must_revalidate` on the page itself --
+  # these responses are no longer sitting in Rack::Cache.
+  SEARCH_CACHE_TTL = 1.hour
+
+  def fetch_query_results
+    return run_query unless cache_query_results?
+
+    Rails.cache.fetch(query_results_cache_key, expires_in: SEARCH_CACHE_TTL) { run_query }
+  end
+
+  def run_query
+    elastic_search.search(index: @index_name, body: query)
+  end
+
+  def cache_query_results?
+    search_term.blank?
+  end
+
+  def query_results_cache_key
+    # The body carries everything that changes the result -- filters, paging, sort,
+    # and whether aggregations were asked for -- so digesting it is enough. The index
+    # name is separate because the same body is valid against several indices.
+    ['search', @index_name, Digest::SHA256.hexdigest(query.to_json)].join('/')
   end
 
   def results
