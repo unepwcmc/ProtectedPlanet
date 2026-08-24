@@ -142,24 +142,19 @@ jobs:
       # skipping this does not fail -- it makes the first view-rendering test trigger
       # a full esbuild + Tailwind build mid-suite, which is slow and looks like a
       # hang. Building here keeps that cost visible as its own step.
-      # Both pipelines, not just Vite. sprockets-rails is still active and
-      # ApplicationController#og_tags calls helpers.image_path, so without a compiled
-      # Sprockets manifest Rails tries to compile on demand and dies with
-      # "LoadError: cannot load such file -- sass" -- which surfaces as ten controller
-      # errors and several 500s through the error page, none of which are code faults.
-      # assets:precompile runs the Vite build too (vite_rails hooks into it).
+      # Vite only. An earlier version of this ran `rails assets:precompile` to fix
+      # "LoadError: cannot load such file -- sass" during the suite, but that was the
+      # wrong fix: the LoadError came from Sprockets initialising its processor set,
+      # which sassc-rails now satisfies (see the Gemfile). Precompiling additionally
+      # drags in comfortable_media_surfer's admin stylesheet, whose first line imports
+      # `codemirror/lib/codemirror` from a node_modules directory the gem does not
+      # ship -- verified absent from both a clean CI bundle and the deploy image. It
+      # cannot compile in any clean environment, which is why Dockerfile.deploy runs
+      # precompile as `|| echo ...`. Verified: with sassc-rails and NO precompiled
+      # assets at all, the controller tests pass.
       - name: Build test assets
-        run: bundle exec rails assets:precompile
+        run: bundle exec vite build --mode test
 
-      # Build the schema by RUNNING THE MIGRATIONS, not by loading db/structure.sql.
-      # structure.sql is gitignored in the db submodule and is not committed, so a
-      # fresh checkout has no schema file to load. Running migrations also keeps them
-      # continuously exercised -- with schema_format = :sql nothing else replays them,
-      # which is how the 2019-2020 view migrations went six years without executing.
-      #
-      # config/environments/test.rb sets dump_schema_after_migration = false. Without
-      # it this step exits non-zero even on success, because the trailing schema dump
-      # shells out to pg_dump.
       # entrypoints/init.sql creates this alongside the dev database locally; the CI
       # postgres service container never runs that file, so pg_dump calls against it
       # spew "database pp_test_backup does not exist" through the suite.
