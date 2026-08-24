@@ -1298,6 +1298,14 @@ GEM
       logger
     ruby2_keywords (0.0.5)
     rubyzip (2.1.0)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     securerandom (0.4.1)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
@@ -1434,6 +1442,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n (~> 8.0)
   redis (~> 5.0)
+  sassc-rails (~> 2.1)
   selenium-webdriver
   sidekiq (~> 7.0)
   simplecov

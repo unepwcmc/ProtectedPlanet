@@ -28,6 +28,21 @@ gem 'faraday', '~> 1.10'
 #
 gem 'sprockets-rails', '~> 3.2'
 
+# Sprockets needs a Sass compiler. comfortable_media_surfer ships its admin
+# stylesheet as .scss (plus a whole Bootstrap .scss tree), so `assets:precompile`
+# reaches Sprockets::Autoload::Sass, which does a bare `require 'sass'`. The `sass`
+# gem left the Gemfile during the Rails upgrade and nothing replaced it, so that
+# require raises LoadError.
+#
+# It went unnoticed because Dockerfile.deploy tolerates the failure
+# (`assets:precompile || echo ...`) and developers' bundles still carried stale
+# sass/sassc gems from before the upgrade -- so it only surfaced once CI installed
+# cleanly from the lockfile.
+#
+# sassc-rails registers its own SCSS processor, so Sprockets never reaches that
+# autoload. Asset-pipeline only: the app's own styles are Tailwind via Vite.
+gem 'sassc-rails', '~> 2.1'
+
 # Uglifier 4.x wraps uglify-js via ExecJS and is unmaintained since 2019. Under
 # Node 24 its error handling breaks -- it reads result['error']['message'], which
 # is nil for the error shape modern Node returns, so any compression failure
