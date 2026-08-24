@@ -11,13 +11,16 @@ name: Tests
 # docs/dead-code.md section 8) without this workflow would remove the only guardrail
 # that work restored.
 #
-# NOT REQUIRED YET, DELIBERATELY. `continue-on-error` is set on the test steps so
-# this reports without blocking merges. The suite is red today for a known reason:
+# NOT A REQUIRED CHECK YET, DELIBERATELY. These jobs will report red until the suite
+# is fixed; leave them out of the branch protection required-checks list so they
+# report without blocking merges. Do NOT use `continue-on-error` for this -- it makes
+# the run report success and the failures become invisible, which is how a suite rots
+# unnoticed in the first place. The suite is red today for a known reason:
 # lib/tasks/db.rake enhances db:test:prepare to run db:seed, so every test database
 # is built with 248 seeded countries, and fixtures/factories then collide with them
 # ("duplicate key value violates unique constraint countries_pkey"). That hook dates
 # from 2019; what is new is ~150 tests added since the last green run. Fix the suite,
-# then delete the two `continue-on-error` lines and make this a required check --
+# then add these jobs to the branch protection required-checks list --
 # a gate everyone has learned to ignore is worse than no gate.
 
 on:
@@ -146,9 +149,26 @@ jobs:
       - name: Build the test database from migrations
         run: bundle exec rake db:create db:migrate
 
+      # NOT continue-on-error. That was the first attempt, and it was wrong: a
+      # continue-on-error step reports conclusion "success", so the whole run showed
+      # a green tick over 18 failures and 10 errors and nobody would ever have looked.
+      # A red cross that is not a required check is honest and still blocks nothing;
+      # a green tick that hides failures is worse than no CI at all.
       - name: Ruby test suite
-        continue-on-error: true   # remove once the suite is green -- see header
-        run: bundle exec rails test
+        run: |
+          set -o pipefail
+          bundle exec rails test 2>&1 | tee /tmp/rails-test.log
+      - name: Summarise Ruby result
+        if: always()
+        run: |
+          line=$(grep -oE '[0-9]+ runs, [0-9]+ assertions, [0-9]+ failures, [0-9]+ errors, [0-9]+ skips' /tmp/rails-test.log | tail -1)
+          echo "### Ruby suite" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "${line:-no result line found}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Known baseline at the time this workflow landed: 18 failures, 10 errors." >> "$GITHUB_STEP_SUMMARY"
+          echo "Building the schema from migrations (rather than db:test:prepare, which" >> "$GITHUB_STEP_SUMMARY"
+          echo "seeds 248 countries and collides with fixtures) removes ~59 errors." >> "$GITHUB_STEP_SUMMARY"
 
   javascript:
     name: JavaScript test suite
@@ -161,6 +181,6 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       # package.json defines `yarn test` (vitest) and no workflow has ever called it.
+      # See the note on the Ruby step: not continue-on-error, for the same reason.
       - name: Vitest
-        continue-on-error: true   # remove once green -- see header
         run: yarn test
