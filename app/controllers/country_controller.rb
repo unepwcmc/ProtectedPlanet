@@ -2,10 +2,8 @@
 
 class CountryController < ApplicationController
   before_action :load_essential_vars
-  # :pdf renders the same template as :show, so it needs the same data. It was
-  # missing from these lists, which is one of two reasons the endpoint was broken.
-  before_action :build_stats, only: %i[show pdf]
-  before_action :calculate_national_designations_counts, only: %i[show pdf]
+  before_action :build_stats, only: %i[show]
+  before_action :calculate_national_designations_counts, only: %i[show]
   after_action :enable_caching
   
   include MapHelper
