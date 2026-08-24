@@ -24,9 +24,9 @@ Spatial data correctness is non-negotiable for Protected Planet. PostGIS queries
 | PostgreSQL gem | `pg` ~> 0.21 |
 | DB schema format | SQL (`config.active_record.schema_format = :sql`) |
 | PostGIS extension | On production (version unknown — check below) |
-| Local dev server | **PostgreSQL 17.7 / PostGIS 3.6** (`db` and `db_test`) since 2026-08-24 — was 11.7 / PostGIS 2.5.4; see [below](#local-dev-postgresql-11--17-done-2026-08-24--every-developer-must-run-it-once) |
-| CI server | PostgreSQL 17 / PostGIS 3.5 (`postgis/postgis:17-3.5`) |
-| Staging server | PostgreSQL 17.5 / PostGIS 3.5.2 |
+| Local dev server | **PostgreSQL 17.5 / PostGIS 3.5.2** (`db` and `db_test`, `postgis/postgis:17-3.5`) since 2026-08-24 — was 11.7 / PostGIS 2.5.4 on kartoza; see [below](#local-dev-postgresql-11--17-done-2026-08-24--every-developer-must-run-it-once) |
+| CI server | PostgreSQL 17 / PostGIS 3.5 (`postgis/postgis:17-3.5`) — same image as dev |
+| Staging server | PostgreSQL 17.5 / PostGIS 3.5.2 — PGDG apt packages on the host, not a container |
 | Spatial models | `ProtectedArea`, `ProtectedAreaParcel`, `Country`, likely others |
 
 ---
@@ -139,7 +139,7 @@ docker compose build web
 docker compose up -d
 ```
 
-You do **not** need to shut Postgres down cleanly by hand first: `docker compose stop db` leaves the cluster dirty (first gotcha below) and the script detects that and recovers it itself, since it carries the PG11 binaries. Doing it via the `db` service would only work while your `db` container is still the old 11 image — `docker-compose.yml` now names `17-3.5`, so a freshly created container refuses a PG11 data directory outright.
+You do **not** need to shut Postgres down cleanly by hand first: `docker compose stop db` leaves the cluster dirty (first gotcha below) and the script detects that and recovers it itself, since it carries the PG11 binaries. Doing it via the `db` service would only work while your `db` container is still the old kartoza 11 image — `docker-compose.yml` now names `postgis/postgis:17-3.5`, so a freshly created container refuses a PG11 data directory outright.
 
 ### Why it is not a straight pg_upgrade
 
@@ -149,7 +149,8 @@ You do **not** need to shut Postgres down cleanly by hand first: `docker compose
 
 | What | Why it matters |
 |---|---|
-| **`docker compose stop db` does not shut Postgres down cleanly** | kartoza's entrypoint does not forward SIGTERM, so docker SIGKILLs it after 10s and leaves the cluster `in production` with a stale `postmaster.pid`. `pg_upgrade` refuses that. The script recovers it automatically (`PG_UPGRADE_NO_AUTORECOVER=1` to opt out). Worth knowing outside this upgrade too — it means a dev database is routinely crash-recovering on start. |
+| **Your existing PG11 cluster is probably not cleanly shut down** | kartoza never forwarded SIGTERM, so docker SIGKILLed postgres after 10s and left the cluster `in production` with a stale `postmaster.pid`. `pg_upgrade` refuses that. The script recovers it automatically (`PG_UPGRADE_NO_AUTORECOVER=1` to opt out). Fixed going forward — `postgis/postgis` stops cleanly. |
+| **The data directory's `postgresql.conf` / `pg_hba.conf` are incomplete** | kartoza generated its real config into `/settings` on every start, so the on-disk copies never had `listen_addresses` or a non-localhost host rule. The official image reads the data directory, so the script writes both. Without them the server looks healthy in its own logs while every other container gets "Connection refused", then "no pg_hba.conf entry". |
 | **113 orphaned raster functions per database** | PostGIS 2.5 kept raster inside the `postgis` extension; the 2.5 → 3.x update *unpackages* them, leaving them bound to `$libdir/rtpostgis-2.5` with nothing owning them, so no later `ALTER EXTENSION` can fix it. The script adopts them with `CREATE EXTENSION postgis_raster FROM unpackaged` and drops that extension when no table stores a raster. |
 | **1GB WAL segments** | The old cluster is not on the 16MB default, `pg_upgrade` requires a match, and kartoza's `MIN_WAL_SIZE=1024MB` is then illegal (`min_wal_size must be at least twice wal_segment_size`) so the server won't start. The script matches for the upgrade then normalises to 32MB with `pg_resetwal`. |
 | **`pg_cron 1.2` must be dropped** | PG17 ships pg_cron 1.6, which has no 1.2 install script, so `pg_upgrade` refuses the cluster. It had never worked here — see the closed CARRYOVER item. |
@@ -157,25 +158,38 @@ You do **not** need to shut Postgres down cleanly by hand first: `docker compose
 
 ### What you get
 
-- `db` and `db_test` on PostgreSQL 17.7 / PostGIS 3.6, same data, no reimport
+- `db` and `db_test` on PostgreSQL 17.5 / PostGIS 3.5.2 — staging's exact versions — same data, no reimport
 - `rake db:migrate` exits 0 including the schema dump, and regenerates a **clean `structure.sql`** — mine went 341KB → 270KB with the `pg_cron` line and any `postgis-2.5` function bindings gone. Since `structure.sql` is untracked in the `db` submodule, each developer's copy differs; regenerating yours after the upgrade is the fix for stale `$libdir/postgis-2.5` references in it.
 - Rollback: the backup from step 2 restores and starts — **but only under the `docker/pg-upgrade` image**, not `kartoza/postgis:11.5-2.5`, because the upgrade moved that cluster's PostGIS to 3.3. Recipe in the tooling README.
 
-### Known drift, not yet resolved
+### Image choice: why `postgis/postgis`, not kartoza
 
-Dev is now on **PostGIS 3.6.1**, because `kartoza/postgis:17-3.5` is mistagged — its package is `3.6.1+dfsg-1~exp1.pgdg12+1`. So dev sits one PostGIS minor *ahead* of the other two environments — the opposite direction from the old problem, but it can hide staging issues the same way.
+Dev originally landed on `kartoza/postgis:17-3.5` simply because that is what the stack
+already used for PG11. That put dev on **PostGIS 3.6.1** — the tag is mistagged, its package
+is `3.6.1+dfsg-1~exp1.pgdg12+1` — leaving dev a minor *ahead* of staging and CI. Moved to the
+official `postgis/postgis:17-3.5` on the same day, which ships **PostgreSQL 17.5 + PostGIS
+3.5.2: staging's exact versions**, and is already what CI runs.
 
-Note the three are not comparable as images, only as versions:
+Since a PostGIS extension cannot be downgraded, this was not an image swap — the 17 cluster
+was rebuilt from the PG11 backup against the new image. Worth knowing if the same choice comes
+up again for another environment.
 
-| | How Postgres gets there | PostgreSQL | PostGIS |
-|---|---|---|---|
-| local dev | `kartoza/postgis:17-3.5` container | 17.7 | **3.6.1** (tag says 3.5) |
-| CI | `postgis/postgis:17-3.5` container (official) | 17.x | 3.5.x |
-| staging | **not a container** — PGDG apt packages on the Ubuntu host; Kamal's only accessory is Elasticsearch, and `POSTGRES_HOST` points at a separate box | 17.5 | 3.5.2 |
+Three kartoza behaviours disappeared with it, all of which had cost time:
 
-Switching dev to the official `postgis/postgis:17-3.5` would put dev and CI on the same 3.5.x and shed several kartoza quirks (no SIGTERM forwarding, config generated into `/settings` instead of the data directory, a 1GB `WAL_SEGSIZE` default). It is not a one-line image swap though: **a PostGIS extension cannot be downgraded**, so a cluster whose catalog says 3.6.1 cannot simply be served by a 3.5.x library. Doing it means re-running the upgrade from the PG11 backup against the official image, or a dump and reload — ~8GB, so either is feasible.
+- **It never forwarded SIGTERM**, so every `docker compose stop db` SIGKILLed postgres and left
+  the cluster requiring crash recovery. `postgis/postgis` stops cleanly.
+- **It generated its real config into `/settings` at each start** and ignored the data
+  directory's `postgresql.conf`. That makes the on-disk config quietly incomplete — no
+  `listen_addresses`, no non-localhost `pg_hba` rule (its "Add rule to pg_hba: 0.0.0.0/0" log
+  line was writing to the generated copy). The official image reads the data directory, so the
+  upgrade script now writes both explicitly.
+- **It defaulted to 1GB WAL segments**, which with `max_wal_size = 64GB` is how a dev data
+  directory reached 57GB holding 8GB of data.
 
-- [ ] Decide whether dev should move to `postgis/postgis` to match CI's PostGIS minor
+One thing the official image brings that kartoza did not: it declares
+`VOLUME /var/lib/postgresql/data`, so docker mounts an anonymous volume over that path and
+shadows the named volume mounted at the parent. Both `db` and `db_test` therefore set
+`PGDATA=/var/lib/postgresql/17/main`.
 
 ---
 

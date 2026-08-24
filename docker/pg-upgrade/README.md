@@ -1,12 +1,13 @@
 # Upgrading your local database: PostgreSQL 11 → 17
 
-**TL;DR** — local dev used to run PostgreSQL 11.7 / PostGIS 2.5.4 while staging runs 17.5 /
-PostGIS 3.5.2. Everyone has to upgrade their own database once. It takes about 10 minutes
-and does not reimport your data.
+**TL;DR** — local dev used to run PostgreSQL 11.7 / PostGIS 2.5.4 on `kartoza/postgis`.
+It now runs **PostgreSQL 17.5 / PostGIS 3.5.2 on `postgis/postgis`** — staging's exact
+versions, and the same image CI uses. Everyone has to upgrade their own database once. It
+takes about 10 minutes and does not reimport your data.
 
-Do it when you pull a branch where `docker-compose.yml` names `kartoza/postgis:17-3.5` and
-your `db` container refuses to start with **"incompatible data directory"**. That error means
-your volume still holds a PG11 cluster.
+Do it when you pull a branch where `docker-compose.yml` names `postgis/postgis:17-3.5` and
+`db` fails with **"database files are incompatible with server"** — that means your volume
+still holds a PG11 cluster.
 
 ## Run this
 
@@ -52,17 +53,20 @@ PG12). But every PostGIS 3.x names its library `postgis-3.so`, so the script upd
 to **3.3.4 while still on PG11**, and only then upgrades Postgres. Both steps are supported
 PostGIS paths — no symlink shims, no 57GB dump and reload.
 
-That is why this directory builds its own image: `kartoza/postgis:17-3.5` plus PG11 binaries
-and PostGIS 3.3 for PG11, so both majors are present in one container.
+That is why this directory builds its own image: `postgis/postgis:17-3.5` plus PG11 binaries
+and PostGIS 3.3 for PG11, so both majors are present in one container — and the new cluster is
+created by exactly the binaries and glibc that will serve it afterwards.
 
 ## Things that will surprise you
 
 | | |
 |---|---|
-| `docker compose stop db` **does not** shut Postgres down cleanly | kartoza's entrypoint never forwards SIGTERM, so docker SIGKILLs it and the cluster is left dirty. The script recovers it for you. It also means your dev database routinely crash-recovers on start. |
+| Your existing PG11 cluster is probably "dirty" | kartoza never forwarded SIGTERM, so every `docker compose stop db` SIGKILLed postgres and left the cluster mid-flight. `pg_upgrade` refuses that, so the script recovers it for you. Fixed going forward: `postgis/postgis` shuts down cleanly. |
+| The data directory's `postgresql.conf` and `pg_hba.conf` are **incomplete** | kartoza generated its real config into `/settings` at every start (that is what its "Add rule to pg_hba: 0.0.0.0/0" log line was doing), so the copies in the data directory never had `listen_addresses` or any non-localhost host rule. The official image reads the data directory instead, so the script adds both — without them the server starts happily and refuses every other container with "Connection refused", then "no pg_hba.conf entry". |
+| `postgis/postgis` declares `VOLUME /var/lib/postgresql/data` | Docker mounts a throwaway anonymous volume over that exact path, shadowing the named volume mounted at the parent. Both `db` and `db_test` therefore set `PGDATA=/var/lib/postgresql/17/main`. Point a cluster at the default and it lands in disposable storage — `--rm` deletes it, and `db` then initdb's a blank database that looks fine until you notice your tables are gone. |
 | 113 raster functions block the upgrade | PostGIS 3 detaches raster from the `postgis` extension and orphans it. Handled automatically. |
 | `pg_cron` gets dropped | PG17 ships pg_cron 1.6 and has no 1.2 install script. It never worked here anyway — not preloaded, no jobs, no code using it. |
-| Your `pg_wal` may be enormous | Mine was 50GB of a 57GB data directory. The upgrade normalises the WAL settings, so expect to get most of that back. |
+| Your `pg_wal` may be enormous | Mine was 50GB of a 57GB data directory — kartoza defaulted to 1GB WAL segments against `max_wal_size = 64GB`. The upgrade normalises the segment size to 16MB and the sizes to 2GB/192MB, so expect most of that back. |
 | The dev image's `pg_dump` was 11 | It refuses to dump a 17 server, so `rake db:migrate` failed at the schema dump even when the migrations succeeded. Hence `docker compose build web`. |
 | This VM has ~1.5GB RAM | Running a second cluster alongside the stack OOM-killed elasticsearch and took everything down. Keep `web sidekiq vite elasticsearch kibana` stopped while working on the database. |
 
@@ -115,5 +119,4 @@ docker compose --profile upgrade run --rm --entrypoint bash pg_upgrade \
 
 - [`upgrade.sh`](./upgrade.sh) — every step is commented with why it is there
 - [Plan: 06 — PostGIS & database](../../upgrade-plan/backend/06-postgis-and-database.md) —
-  where this sits in the backend upgrade, the spatial regression checklist, and the open
-  question of dev being on PostGIS 3.6.1 while CI is on 3.5.x
+  where this sits in the backend upgrade, and the spatial regression checklist

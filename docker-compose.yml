@@ -51,7 +51,8 @@ services:
       - SSH_AUTH_SOCK=/ssh-agent
       # https://vite-ruby.netlify.app/guide/troubleshooting.html#making-hmr-work-in-docker-compose
       - VITE_RUBY_HOST=vite
-      # Tests hit the Postgres 17 service; development stays on `db`.
+      # Tests hit the db_test service; development uses `db`. Both are
+      # postgis/postgis:17-3.5, so they cannot drift from each other.
       - TEST_POSTGRES_HOST=db_test
     depends_on:
       install:
@@ -75,22 +76,37 @@ services:
   db:
     platform: linux/x86_64
     container_name: protectedplanet-db
-    # Postgres 17 + PostGIS 3.5, matching staging (17.5 / PostGIS 3.5.2). Was
-    # kartoza/postgis:11.5-2.5 until the cluster in protectedplanet_pg_data was upgraded
-    # in place -- a PG17 server cannot read a PG11 data directory, so if this errors with
-    # "incompatible data directory" the upgrade has not been run yet:
+    # The official PostGIS image, which ships PostgreSQL 17.5 + PostGIS 3.5.2 -- staging's
+    # exact versions, and the same image CI uses. Was kartoza/postgis:11.5-2.5 (PG 11.7 /
+    # PostGIS 2.5.4) until the cluster in protectedplanet_pg_data was upgraded in place.
+    #
+    # kartoza was dropped rather than bumped: its `17-3.5` tag actually installs PostGIS
+    # 3.6.1, which put dev a minor *ahead* of staging, and it never forwards SIGTERM (so
+    # `docker compose stop db` left the cluster dirty every time), ignores the data
+    # directory's postgresql.conf in favour of one it generates into /settings, and defaults
+    # to 1GB WAL segments -- which is how the old data directory reached 57GB.
+    #
+    # A PG17 server cannot read a PG11 data directory, so if this errors with "incompatible
+    # data directory" or "database files are incompatible", the upgrade has not been run on
+    # this machine yet:
     #
     #   docker compose stop db sidekiq web
     #   docker compose --profile upgrade run --rm pg_upgrade
     #
-    # See docker/pg-upgrade/ for what that does, and why PostGIS makes it a two-step.
-    image: kartoza/postgis:17-3.5
+    # See docker/pg-upgrade/README.md -- it is a 10 minute job that keeps your data.
+    image: postgis/postgis:17-3.5
     ports:
       - "5441:5432"
     networks:
       - protectedplanet
     env_file:
       - '.env'
+    environment:
+      # postgis/postgis inherits `VOLUME /var/lib/postgresql/data` from the official postgres
+      # image, so docker mounts a throwaway anonymous volume over that path and shadows the
+      # named volume below. Left at the default, this service initdb's a blank database on
+      # every start and the real cluster is invisible. Point PGDATA one level up instead.
+      - PGDATA=/var/lib/postgresql/17/main
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -107,13 +123,19 @@ services:
   db_test:
     platform: linux/x86_64
     container_name: protectedplanet-db-test
-    image: kartoza/postgis:17-3.5
+    # Same image as `db` and as CI, so the test database is not a different PostGIS from the
+    # one development runs on. Test data is disposable, so this one just initdb's fresh --
+    # no upgrade needed. `rake db:create db:migrate` builds the schema.
+    image: postgis/postgis:17-3.5
     ports:
       - "5442:5432"
     networks:
       - protectedplanet
     env_file:
       - '.env'
+    environment:
+      # Same PGDATA reason as `db` above.
+      - PGDATA=/var/lib/postgresql/17/main
     volumes:
       - protectedplanet_pg_test_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql

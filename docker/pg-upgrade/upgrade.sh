@@ -33,6 +33,13 @@ set -euo pipefail
 OLD_BIN=/usr/lib/postgresql/11/bin
 NEW_BIN=/usr/lib/postgresql/17/bin
 OLD_DATA=/var/lib/postgresql/11/main
+# NOT the image's default PGDATA (/var/lib/postgresql/data). postgis/postgis inherits
+# `VOLUME /var/lib/postgresql/data` from the official postgres image, so docker mounts a
+# fresh ANONYMOUS volume over that exact path in every container -- silently shadowing the
+# named volume mounted at the parent. A cluster built there is written into throwaway
+# storage: `docker compose run --rm` deletes it on exit, and `db` then sees an empty PGDATA
+# and initdb's a blank database. Keeping the cluster one level up dodges the declared VOLUME
+# entirely; `db` and `db_test` set PGDATA to match.
 NEW_DATA=/var/lib/postgresql/17/main
 MODE="${PG_UPGRADE_MODE:---copy}"
 JOBS="${PG_UPGRADE_JOBS:-3}"
@@ -212,12 +219,36 @@ say "Carrying postgresql.conf and pg_hba.conf over"
 # between 12 and 17. If you have since added settings, check them before trusting this.
 cp "$OLD_DATA/postgresql.conf" "$NEW_DATA/postgresql.conf"
 
-# Note this only governs the standalone starts in this script and pg_upgrade itself. At
-# runtime the kartoza entrypoint ignores the config in the data directory entirely -- it
-# generates /settings/postgresql.conf from its own template and starts postgres with
-# `-c config_file=` pointing there, so WAL sizing and friends come from its MIN_WAL_SIZE /
-# WAL_SIZE / WAL_SEGSIZE environment variables, not from anything copied here.
+# listen_addresses has to be added, not carried: the old cluster never had it in this file.
+# kartoza injected it into the config it generated in /settings, so the data directory's
+# postgresql.conf is silently incomplete -- and the official image only sets listen_addresses
+# during a fresh initdb, not for an existing cluster. Without this the server comes up bound
+# to 127.0.0.1 only, and every other container gets "Connection refused" from a database that
+# looks perfectly healthy in its own logs.
+printf '\n# --- added during the PG11 -> PG17 upgrade: see upgrade.sh ---\n' >> "$NEW_DATA/postgresql.conf"
+printf "listen_addresses = '*'\n" >> "$NEW_DATA/postgresql.conf"
+
+# Unlike kartoza, the official image reads this file -- it does not generate a config of its
+# own -- so what lands here is what the server will actually run with. The WAL settings in it
+# are deliberately left alone until after pg_resetwal below: the old cluster's
+# min_wal_size = 5GB is required to stay >= 2x the 1GB segment size while pg_upgrade is
+# starting servers, and only becomes over-large once the segments shrink.
 cp "$OLD_DATA/pg_hba.conf"     "$NEW_DATA/pg_hba.conf"
+
+# Same story as listen_addresses: the old cluster's pg_hba.conf on disk is just initdb's
+# default (localhost + trust). kartoza logged "Add rule to pg_hba: 0.0.0.0/0" on every start
+# because it wrote that rule into the copy it generated, never into this file. Without the
+# rule below, every other container is refused with
+#   FATAL: no pg_hba.conf entry for host "172.x.x.x", user "postgres"
+# even though the server is listening and healthy.
+#
+# md5 rather than scram-sha-256 deliberately: the role passwords were hashed under PG11 and
+# are md5 (`select left(rolpassword, 3) from pg_authid`). The md5 method still negotiates
+# SCRAM for any role that does have a SCRAM verifier, so it is the compatible choice;
+# demanding scram-sha-256 here would lock out every existing md5 password.
+printf '\n# --- added during the PG11 -> PG17 upgrade: see upgrade.sh ---\n' >> "$NEW_DATA/pg_hba.conf"
+printf '# Dev-only: reachable from anywhere on the compose network, password required.\n' >> "$NEW_DATA/pg_hba.conf"
+printf 'host    all             all             all                     md5\n' >> "$NEW_DATA/pg_hba.conf"
 [ -f "$OLD_DATA/pg_ident.conf" ] && cp "$OLD_DATA/pg_ident.conf" "$NEW_DATA/pg_ident.conf"
 chown postgres:postgres "$NEW_DATA"/*.conf
 
@@ -250,11 +281,26 @@ su postgres -c "cd $WORKDIR && $NEW_BIN/pg_upgrade \
 #
 # 1GB segments are also half the reason the old data directory reached 57GB. pg_resetwal is
 # the only way to change the size after initdb; it discards WAL, which is exactly what we
-# want on a freshly upgraded, cleanly shut down cluster with nothing to replay. 32MB is the
-# kartoza image's own WAL_SEGSIZE default, so this leaves the cluster identical to what a
-# fresh container would have created.
-say "Normalising WAL segment size to 32MB (was ${wal_segsize_mb}MB, matched only for pg_upgrade)"
-su postgres -c "$NEW_BIN/pg_resetwal --wal-segsize=32 -D $NEW_DATA"
+# want on a freshly upgraded, cleanly shut down cluster with nothing to replay. 16MB is the
+# PostgreSQL default, so this leaves the cluster identical to what a fresh initdb would have
+# produced.
+say "Normalising WAL segment size to 16MB (was ${wal_segsize_mb}MB, matched only for pg_upgrade)"
+su postgres -c "$NEW_BIN/pg_resetwal --wal-segsize=16 -D $NEW_DATA"
+
+# Now the WAL sizing carried over from the old cluster can come down. It has to happen here,
+# after the segment size shrinks: min_wal_size must be at least twice the segment size, so
+# 192MB is legal against 16MB segments but would have refused to start against the 1GB ones
+# pg_upgrade required. Left at the old 64GB/5GB, a dev database grows a 50GB pg_wal -- which
+# is exactly what it had done.
+cat >> "$NEW_DATA/postgresql.conf" <<'PGCONF'
+
+# --- set during the PG11 -> PG17 upgrade (docker/pg-upgrade/upgrade.sh) ---
+# The PG11 cluster ran max_wal_size = 64GB / min_wal_size = 5GB against 1GB WAL segments,
+# which is how its data directory reached 57GB while holding ~8GB of data. These are sized
+# for the 16MB segments set above.
+max_wal_size = 2GB
+min_wal_size = 192MB
+PGCONF
 
 # ---------------------------------------------------------------------------
 # 7. PostGIS soft upgrade on the new side, and post-upgrade hygiene

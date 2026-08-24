@@ -812,10 +812,11 @@ Three PostgreSQL majors are in play and they disagree:
 | environment | PostgreSQL | implicit EXTRACT column |
 |---|---|---|
 | production | 10 | `date_part` |
-| ~~local docker-compose~~ | ~~11.7~~ → **17.7** since 2026-08-24 | ~~`date_part`~~ → `extract` |
+| ~~local docker-compose~~ | ~~11.7~~ → **17.5** since 2026-08-24 | ~~`date_part`~~ → `extract` |
 | **staging (Kamal/Proxmox)** | **17.5** | **`extract`** |
 
-Local dev was upgraded to 17.7 on 2026-08-24 precisely so this class of divergence
+Local dev was upgraded to 17.5 / PostGIS 3.5.2 — staging's exact versions, on the same
+`postgis/postgis:17-3.5` image CI uses — on 2026-08-24, precisely so this class of divergence
 stops being invisible — a bug of this shape now reproduces locally. Production's PG 10
 remains the odd one out until the infrastructure migration. Procedure:
 [06 — PostGIS & database](./06-postgis-and-database.md#local-dev-postgresql-11--17-done-2026-08-24--every-developer-must-run-it-once).
