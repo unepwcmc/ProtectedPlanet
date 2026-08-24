@@ -11,16 +11,17 @@ name: Tests
 # docs/dead-code.md section 8) without this workflow would remove the only guardrail
 # that work restored.
 #
-# NOT REQUIRED YET, DELIBERATELY -- but only for the RUBY suite, which is the one
-# `continue-on-error` is still set on, so it reports without blocking merges. The
-# JavaScript job's four checks (vitest, eslint, stylelint, vue-tsc) are all green and
-# all required. The suite is red today for a known reason:
+# NOT A REQUIRED CHECK YET, DELIBERATELY. These jobs will report red until the suite
+# is fixed; leave them out of the branch protection required-checks list so they
+# report without blocking merges. Do NOT use `continue-on-error` for this -- it makes
+# the run report success and the failures become invisible, which is how a suite rots
+# unnoticed in the first place. The suite is red today for a known reason:
 # lib/tasks/db.rake enhances db:test:prepare to run db:seed, so every test database
 # is built with 248 seeded countries, and fixtures/factories then collide with them
 # ("duplicate key value violates unique constraint countries_pkey"). That hook dates
 # from 2019; what is new is ~150 tests added since the last green run. Fix the suite,
-# then delete the one remaining `continue-on-error` line and make the Ruby job a
-# required check too -- a gate everyone has learned to ignore is worse than no gate.
+# then add these jobs to the branch protection required-checks list --
+# a gate everyone has learned to ignore is worse than no gate.
 
 on:
   pull_request:
@@ -98,6 +99,14 @@ jobs:
       ELASTIC_SEARCH_URL: http://127.0.0.1:9200
       REDIS_URL: redis://127.0.0.1:6379
       PP_HOST: localhost
+      # Comfy reads these in config/initializers/comfortable_media_surfer.rb, and
+      # Admin::CallToActionsControllerTest builds its own Basic auth header from the
+      # same values. Left unset they are nil, Comfy denies, and ten admin tests fail
+      # with 401 -- a CI configuration gap that looks exactly like broken auth code.
+      COMFY_ADMIN_USERNAME: ci
+      COMFY_ADMIN_PASSWORD: ci
+      # AdminController#authenticated? compares against AppSecrets.maintenance_mode_key.
+      MAINTENANCE_MODE_KEY: ci-maintenance-key
 
     steps:
       # submodules: db/ is the unepwcmc/protectedplanet-db submodule and holds all
@@ -133,8 +142,14 @@ jobs:
       # skipping this does not fail -- it makes the first view-rendering test trigger
       # a full esbuild + Tailwind build mid-suite, which is slow and looks like a
       # hang. Building here keeps that cost visible as its own step.
+      # Both pipelines, not just Vite. sprockets-rails is still active and
+      # ApplicationController#og_tags calls helpers.image_path, so without a compiled
+      # Sprockets manifest Rails tries to compile on demand and dies with
+      # "LoadError: cannot load such file -- sass" -- which surfaces as ten controller
+      # errors and several 500s through the error page, none of which are code faults.
+      # assets:precompile runs the Vite build too (vite_rails hooks into it).
       - name: Build test assets
-        run: bundle exec vite build --mode test
+        run: bundle exec rails assets:precompile
 
       # Build the schema by RUNNING THE MIGRATIONS, not by loading db/structure.sql.
       # structure.sql is gitignored in the db submodule and is not committed, so a
@@ -145,12 +160,35 @@ jobs:
       # config/environments/test.rb sets dump_schema_after_migration = false. Without
       # it this step exits non-zero even on success, because the trailing schema dump
       # shells out to pg_dump.
+      # entrypoints/init.sql creates this alongside the dev database locally; the CI
+      # postgres service container never runs that file, so pg_dump calls against it
+      # spew "database pp_test_backup does not exist" through the suite.
+      - name: Create the auxiliary test database
+        run: PGPASSWORD=postgres createdb -h 127.0.0.1 -U postgres pp_test_backup || true
+
       - name: Build the test database from migrations
         run: bundle exec rake db:create db:migrate
 
+      # NOT continue-on-error. That was the first attempt, and it was wrong: a
+      # continue-on-error step reports conclusion "success", so the whole run showed
+      # a green tick over 18 failures and 10 errors and nobody would ever have looked.
+      # A red cross that is not a required check is honest and still blocks nothing;
+      # a green tick that hides failures is worse than no CI at all.
       - name: Ruby test suite
-        continue-on-error: true   # remove once the suite is green -- see header
-        run: bundle exec rails test
+        run: |
+          set -o pipefail
+          bundle exec rails test 2>&1 | tee /tmp/rails-test.log
+      - name: Summarise Ruby result
+        if: always()
+        run: |
+          line=$(grep -oE '[0-9]+ runs, [0-9]+ assertions, [0-9]+ failures, [0-9]+ errors, [0-9]+ skips' /tmp/rails-test.log | tail -1)
+          echo "### Ruby suite" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "${line:-no result line found}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Known baseline at the time this workflow landed: 18 failures, 10 errors." >> "$GITHUB_STEP_SUMMARY"
+          echo "Building the schema from migrations (rather than db:test:prepare, which" >> "$GITHUB_STEP_SUMMARY"
+          echo "seeds 248 countries and collides with fixtures) removes ~59 errors." >> "$GITHUB_STEP_SUMMARY"
 
   javascript:
     name: JavaScript test suite
@@ -162,10 +200,8 @@ jobs:
           node-version: '24.4.1'
       - run: corepack enable
       - run: yarn install --immutable
-      # package.json defines `yarn test` (vitest) and no workflow had ever called it.
-      # REQUIRED: unlike the Ruby suite this one is green -- 396 tests / 88 files, 0
-      # failures, verified in the project container (vitest needs the linux rolldown
-      # binding, so it cannot run on a macOS host against these node_modules).
+      # package.json defines `yarn test` (vitest) and no workflow has ever called it.
+      # See the note on the Ruby step: not continue-on-error, for the same reason.
       - name: Vitest
         run: yarn test
 

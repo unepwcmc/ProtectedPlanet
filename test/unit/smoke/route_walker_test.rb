@@ -48,8 +48,19 @@ class SmokeRouteWalkerTest < ActiveSupport::TestCase
 
     # URI.encode removal in Ruby 3.0 made this 500 and killed the map overlay.
     assert paths.any? { |p| p.start_with?('/assets/tiles/') }, 'tiles endpoint must be smoked'
-    # Shelled out to a phantomjs binary absent from the image.
-    assert paths.any? { |p| p.end_with?('/pdf') }, 'country PDF must be smoked'
+
+    # The country page, which the PDF rasterizer captures. No locale prefix: the
+    # /:id catch-all only shadows SINGLE-segment paths, so /country/:iso reaches its
+    # own route unprefixed (see the #static_path test below for the ones that do not).
+    assert paths.any? { |p| p.start_with?('/country/') }, 'country page must be smoked'
+
+    # There is deliberately NO assertion for a /pdf path any more. The dedicated
+    # /country/:iso/pdf route (which broke by shelling out to a phantomjs binary the
+    # image did not have) has been removed: Download::Generators::Pdf now rasterizes
+    # the ordinary country page with `for_pdf=true`. That path starts with a POST to
+    # downloads#create and finishes in a Sidekiq job, and smoke:routes walks GET
+    # routes only -- so PDF export is out of this walker's scope by design, not by
+    # oversight. It is covered by test/unit/download/generators/pdf_test.rb.
   end
 
   test '#static_path substitutes a locale rather than stripping it' do
