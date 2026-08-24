@@ -1,0 +1,166 @@
+name: Tests
+
+# The repository had NO test CI. `.github/workflows/` contained only the deploy
+# workflow, so nothing ran `rails test` or `vitest` on a push or a pull request.
+#
+# That matters more here than usual: per upgrade-plan/backend/10-test-suite.md the
+# Ruby suite was silently skipped for years because the retired Jenkins pipeline
+# called `echo "rakeTest()"` instead of `rakeTest()`, which is why a 2021 breakage
+# went unnoticed. The suite was revived to 624 runs / 0 failures in Jul 2026 and has
+# since drifted again -- it currently fails ~81 tests. Retiring the Jenkinsfile (see
+# docs/dead-code.md section 8) without this workflow would remove the only guardrail
+# that work restored.
+#
+# NOT REQUIRED YET, DELIBERATELY. `continue-on-error` is set on the test steps so
+# this reports without blocking merges. The suite is red today for a known reason:
+# lib/tasks/db.rake enhances db:test:prepare to run db:seed, so every test database
+# is built with 248 seeded countries, and fixtures/factories then collide with them
+# ("duplicate key value violates unique constraint countries_pkey"). That hook dates
+# from 2019; what is new is ~150 tests added since the last green run. Fix the suite,
+# then delete the two `continue-on-error` lines and make this a required check --
+# a gate everyone has learned to ignore is worse than no gate.
+
+on:
+  pull_request:
+  push:
+    branches: [staging_kamal, master, develop]
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ruby:
+    name: Ruby test suite
+    # ubuntu-24.04 rather than the `self-hosted` runner the deploy workflow uses:
+    # nothing here needs the internal network, and it keeps a long test run off the
+    # deploy runner. It also matches Dockerfile.deploy's `FROM ubuntu:24.04`, so the
+    # GDAL and libpq versions line up with staging. NB the local dev image
+    # (Dockerfile, `FROM ruby:2.7-buster`) does NOT -- it ships GDAL 2.2.3 from 2017
+    # and pg_dump 11, which is a separate problem worth fixing.
+    runs-on: ubuntu-24.04
+
+    services:
+      # Postgres 17 + PostGIS 3.5, matching staging (17.5 / PostGIS 3.5.2).
+      # Verified: all 204 migrations apply cleanly on PG17/PostGIS 3.x, and the
+      # schema they produce is free of the PostGIS 2.5 residue carried by a
+      # developer's locally-generated db/structure.sql.
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      elasticsearch:
+        image: elasticsearch:8.6.0
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: 'false'
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+        ports: ['9200:9200']
+        options: >-
+          --health-cmd "curl -sf http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      RAILS_ENV: test
+      # Any value: staging/production read this from Kamal secrets, but the app must
+      # boot here and Rails refuses to start without it.
+      SECRET_KEY_BASE: ci_only_not_a_real_secret_0123456789abcdef
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DBNAME: pp_test
+      # config/database.yml prefers this for the test database; it is the same server
+      # here, but keeping it explicit mirrors docker-compose, where tests target the
+      # PG17 `db_test` service while development stays on the older `db` service.
+      TEST_POSTGRES_HOST: 127.0.0.1
+      ELASTIC_SEARCH_URL: http://127.0.0.1:9200
+      REDIS_URL: redis://127.0.0.1:6379
+      PP_HOST: localhost
+
+    steps:
+      # submodules: db/ is the unepwcmc/protectedplanet-db submodule and holds all
+      # 204 migrations. Without this the checkout has an empty db/migrate and the
+      # schema step below silently builds nothing. The deploy workflow needs this for
+      # the same reason.
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      # gdal-bin: the `gdal` gem was removed; Ogr::Info and the download generators
+      # shell out to the ogrinfo/ogr2ogr CLIs instead.
+      # libgeos-dev: needed by rgeo, which activerecord-postgis-adapter sits on.
+      - name: Install native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gdal-bin libgeos-dev libpq-dev
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.7'   # matches .ruby-version and Dockerfile.deploy's ARG
+          bundler-cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.4.1'   # matches NODE_VERSION in Dockerfile / Dockerfile.deploy
+      # package.json pins "packageManager": "yarn@4.17.1" (Yarn Berry), which ships
+      # via corepack rather than the classic yarn bundled with the runner.
+      - run: corepack enable
+      - run: yarn install --immutable
+
+      # Build assets up front. config/vite.json sets autoBuild=true for test, so
+      # skipping this does not fail -- it makes the first view-rendering test trigger
+      # a full esbuild + Tailwind build mid-suite, which is slow and looks like a
+      # hang. Building here keeps that cost visible as its own step.
+      - name: Build test assets
+        run: bundle exec vite build --mode test
+
+      # Build the schema by RUNNING THE MIGRATIONS, not by loading db/structure.sql.
+      # structure.sql is gitignored in the db submodule and is not committed, so a
+      # fresh checkout has no schema file to load. Running migrations also keeps them
+      # continuously exercised -- with schema_format = :sql nothing else replays them,
+      # which is how the 2019-2020 view migrations went six years without executing.
+      #
+      # config/environments/test.rb sets dump_schema_after_migration = false. Without
+      # it this step exits non-zero even on success, because the trailing schema dump
+      # shells out to pg_dump.
+      - name: Build the test database from migrations
+        run: bundle exec rake db:create db:migrate
+
+      - name: Ruby test suite
+        continue-on-error: true   # remove once the suite is green -- see header
+        run: bundle exec rails test
+
+  javascript:
+    name: JavaScript test suite
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.4.1'
+      - run: corepack enable
+      - run: yarn install --immutable
+      # package.json defines `yarn test` (vitest) and no workflow has ever called it.
+      - name: Vitest
+        continue-on-error: true   # remove once green -- see header
+        run: yarn test
