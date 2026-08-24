@@ -182,7 +182,7 @@ PP_RELEASE_START_AT=finalise_swap bundle exec rake 'pp:portal:release[Aug2026]'
 exit                              # back to the host
 tmux kill-session -t pp-release
 ```
-
+ 
 **Important Notes:**
 - The swap step now takes the release lock too, so it will refuse to start with
   `Another release is running` if the dry-run process is somehow still alive, or if a
