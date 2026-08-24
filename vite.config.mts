@@ -3,13 +3,17 @@ import { defineConfig } from 'vite'
 import rails from 'vite-plugin-rails'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
+import checker from 'vite-plugin-checker'
 
 // Values set via ViteRuby.env in config/vite.rb land in process.env here;
 // only VITE_-prefixed ones are forwarded so Vite exposes them to client code
 // as import.meta.env.VITE_* — see https://vite-ruby.netlify.app/guide/plugins.html#environment
-const ViteEnvs: Record<string, unknown> = {}
+const ViteEnvs: Record<string, string> = {}
 for (const envKey of Object.keys(process.env)) {
-  if (envKey.includes('VITE_')) ViteEnvs[envKey] = process.env[envKey]
+  const envValue = process.env[envKey]
+  if (envKey.includes('VITE_') && envValue !== undefined) {
+        ViteEnvs[envKey] = envValue
+  }
 }
 
 // Vite 7 + vite-plugin-rails, paired with the vite_ruby 3.x gem.
@@ -18,11 +22,12 @@ export default defineConfig({
 		// https://stackoverflow.com/questions/79372334/blocked-request-this-host-frontend-web-is-not-allowed
 		// New breaking change for newer vite version
 		allowedHosts: true
-	},
+	}, 
   plugins: [
     rails({ envVars: { ...ViteEnvs } }),
     tailwindcss(),
     vue(),
+    checker({ vueTsc: true /** or an object config */ })
   ],
   optimizeDeps: {
     // maplibre-gl ships its own worker as a separate chunk that the optimizer
