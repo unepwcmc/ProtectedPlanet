@@ -113,7 +113,7 @@ class Download::Generators::Base
     return true if system("zip #{args}", **opts)
 
     exitstatus = $?&.exitstatus
-    return true if false && exitstatus == ZIP_NOTHING_TO_DO
+    return true if exitstatus == ZIP_NOTHING_TO_DO
 
     Rails.logger.error("zip #{args} failed with status #{exitstatus.inspect}")
     false
