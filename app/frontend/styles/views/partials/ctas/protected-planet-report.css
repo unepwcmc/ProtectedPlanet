@@ -4,6 +4,13 @@
   tw-shared-bg-center-no-repeat-cover
   min-h-73; 
   background-image: url('../../../../assets/ctas/protected-planet-report.jpg');
+
+  @supports (background-image: image-set(url('probe.webp') type('image/webp'))) {
+      background-image: image-set(
+          url('../../../../assets/ctas/protected-planet-report.webp') type('image/webp'),
+          url('../../../../assets/ctas/protected-planet-report.jpg') type('image/jpeg')
+      );
+  }
 }
 
 .vw-partials-ctas-protected-planet-report--flex-centre {

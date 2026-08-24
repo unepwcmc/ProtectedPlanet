@@ -7,7 +7,13 @@
     <div
       v-if="closeable"
       class="ct-map-header__close"
+      role="button"
+      tabindex="0"
+      :aria-label="filtersShown ? 'Close panel' : 'Expand panel'"
+      :aria-expanded="filtersShown"
       @click="toggle"
+      @keydown.enter.prevent="toggle"
+      @keydown.space.prevent="toggle"
     >
       <IconClose
         v-if="filtersShown"

@@ -7,7 +7,11 @@
       <span
         v-if="option.isDownload"
         class="ct-download-popup__link"
+        role="button"
+        tabindex="0"
         @click="select(option)"
+        @keydown.enter.prevent="select(option)"
+        @keydown.space.prevent="select(option)"
         v-html="option.title"
       />
       <a

@@ -12,6 +12,7 @@
       <div class="ct-pame-modal__top">
         <button
           class="ct-pame-modal__close"
+          aria-label="Close dialog"
           @click="onClose"
         >
           <IconClose class="ct-pame-modal__close-icon" />

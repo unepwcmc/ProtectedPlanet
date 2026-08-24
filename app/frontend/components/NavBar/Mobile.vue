@@ -11,6 +11,7 @@
       <button
         id="close-nav-pane"
         class="ct-nav-bar-mobile__close"
+        aria-label="Close navigation menu"
         @click="closePanel"
       >
         <IconClose class="ct-nav-bar-mobile__close-icon" />
@@ -40,6 +41,9 @@
     <button
       :id="triggerId"
       class="ct-nav-bar-mobile__burger"
+      aria-label="Open navigation menu"
+      :aria-expanded="isNavPaneActive"
+      :aria-controls="paneId"
       @click="openPanel"
     >
       <IconBurger class="ct-nav-bar-mobile__burger-icon" />

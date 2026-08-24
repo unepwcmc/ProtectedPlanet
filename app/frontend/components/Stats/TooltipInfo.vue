@@ -1,5 +1,5 @@
 <template>
-  <TooltipSecond :onHover="false">
+  <TooltipPanel :onHover="false">
     <template #trigger>
       <IconExclamationCircle class="ct-stats-tooltip-info__trigger-icon" />
     </template>
@@ -13,11 +13,11 @@
         </span>
       </div>
     </template>
-  </TooltipSecond>
+  </TooltipPanel>
 </template>
 
 <script setup lang="ts">
-import TooltipSecond from '@/components/Tooltip/Second.vue'
+import TooltipPanel from '@/components/Tooltip/Panel.vue'
 import IconExclamationCircle from '@/components/Icon/ExclamationCircle.vue'
 import type { StatsTooltipInfoProps } from '@/types/backend'
 

@@ -37,14 +37,20 @@ registerTurboMountComponents({
 
   // Page-specific: stays lazy, fetched only when a page renders it (see the
   // DOM scan in turboMount.ts).
+  //
+  // Register a component here ONLY if an ERB view mounts it by name. A component
+  // used solely as a child of another SFC needs a plain import in that parent, not
+  // an entry here — `Tooltip` and `TooltipSecond` were both registered without any
+  // `turbo_mount` calling for them (their real consumers are Pame/Table/Head/Cell
+  // and Stats/TooltipInfo, which import them directly), so each was carrying its
+  // own redundant chunk. Cross-check with:
+  //   grep -rhoE 'turbo_mount "[A-Za-z]+"' app/views | sort -u
   Tabs: () => import('@/components/Tabs.vue'),
   Download: () => import('@/components/Download/Index.vue'),
   GaLink: () => import('@/components/GaLink.vue'),
   Counter: () => import('@/components/Counter.vue'),
   ListingPageCardNews: () => import('@/components/ListingPageCard/News/Index.vue'),
   ListingPageCardResources: () => import('@/components/ListingPageCard/Resources/Index.vue'),
-  Tooltip: () => import('@/components/Tooltip/Index.vue'),
-  TooltipSecond: () => import('@/components/Tooltip/Second.vue'),
   Listing: () => import('@/components/Listing/Index.vue'),
   Map: () => import('@/components/Map/Index.vue'),
   SearchAreasPage: () => import('@/components/SearchAreas/Page.vue'),

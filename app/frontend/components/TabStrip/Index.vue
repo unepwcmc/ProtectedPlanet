@@ -1,5 +1,8 @@
 <template>
-  <ul class="ct-tab-strip">
+  <ul
+    class="ct-tab-strip"
+    role="tablist"
+  >
     <TabStripTab
       v-for="child in children"
       :id="child.id"

@@ -7,6 +7,7 @@
       <button
         v-if="hasMultipleBanners"
         class="ct-banner__nav banner__nav--prev"
+        aria-label="Previous banner"
         @click="previousBanner"
       >
         &#10094;
@@ -30,12 +31,14 @@
       <button
         v-if="hasMultipleBanners"
         class="ct-banner__nav banner__nav--next"
+        aria-label="Next banner"
         @click="nextBanner"
       >
         &#10095;
       </button>
       <button
         class="ct-banner__close"
+        aria-label="Dismiss banner"
         @click="closeBanner"
       >
         <IconClose class="ct-banner__icon" />

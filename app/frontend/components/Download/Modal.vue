@@ -10,6 +10,8 @@
       />
       <button
         class="ct-download-modal__minimise"
+        :aria-label="downloads.isModalMinimised ? 'Expand downloads panel' : 'Minimise downloads panel'"
+        :aria-expanded="!downloads.isModalMinimised"
         @click="toggleMinimise"
       >
         <IconMinus class="ct-download-modal__minimise-icon" />

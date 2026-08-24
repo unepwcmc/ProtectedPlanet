@@ -27,6 +27,23 @@ describe('Dropdown', () => {
     expect(wrapper.find('.ct-dropdown-options__options').exists()).toBe(false)
   })
 
+  it('chooses an option with Enter and with Space, and marks the chosen one selected', async () => {
+    const wrapper = mount(Dropdown, { props: { options: ['a', 'b'], modelValue: 'a' } })
+
+    await wrapper.find('.ct-dropdown-base__button').trigger('click')
+    const options = wrapper.findAll('.ct-dropdown-options__option')
+    expect(options[0].attributes('aria-selected')).toBe('true')
+    expect(options[1].attributes('aria-selected')).toBe('false')
+    expect(options[1].attributes('tabindex')).toBe('0')
+
+    await options[1].trigger('keydown', { key: 'Enter' })
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['b'])
+
+    await wrapper.find('.ct-dropdown-base__button').trigger('click')
+    await wrapper.findAll('.ct-dropdown-options__option')[0].trigger('keydown', { key: ' ' })
+    expect(wrapper.emitted('update:modelValue')?.[1]).toEqual(['a'])
+  })
+
   it('closes when clicking outside', async () => {
     const wrapper = mount(Dropdown, {
       props: { options: ['a', 'b'] },

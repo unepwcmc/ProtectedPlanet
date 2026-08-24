@@ -7,6 +7,7 @@
       <button
         class="ct-map-pa-search__magnifying-glass"
         type="button"
+        aria-label="Search"
         @click="onMagnifyingGlassClick"
       >
         <IconSearch class="ct-map-pa-search__magnifying-glass-icon" />
@@ -17,6 +18,7 @@
         name="pa_search"
         class="ct-map-pa-search__input"
         type="text"
+        aria-label="Search protected areas"
         :placeholder="autocompletePlaceholder"
         @input="onInput"
         @keyup.enter.prevent.stop="onInputEnter"
@@ -26,6 +28,7 @@
         v-if="hasSearchString"
         class="ct-map-pa-search__delete"
         type="button"
+        aria-label="Clear search"
         @click="reset"
       >
         <IconClose class="ct-map-pa-search__delete-icon" />

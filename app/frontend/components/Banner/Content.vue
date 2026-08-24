@@ -2,7 +2,6 @@
   <div
     class="ct-banner-content"
     :class="{ 'ct-banner-content--is-active': isActive }"
-    :dataBannerId="data.id"
   >
     <h3
       v-if="data.title"

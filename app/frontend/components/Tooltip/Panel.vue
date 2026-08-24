@@ -1,8 +1,8 @@
 <template>
   <div
     ref="rootEl"
-    class="ct-tooltip-second"
-    :class="{ 'ct-tooltip-second--active': isActive }"
+    class="ct-tooltip-panel"
+    :class="{ 'ct-tooltip-panel--active': isActive }"
   >
     <button
       v-if="onHover"
@@ -10,7 +10,7 @@
       tabindex="0"
       :aria-describedby="id"
       :aria-expanded="isActive"
-      class="ct-tooltip-second__trigger"
+      class="ct-tooltip-panel__trigger"
       @mouseenter="toggleTooltip(true)"
       @mouseleave="toggleTooltip(false)"
       @focus="toggleTooltip(true)"
@@ -25,7 +25,7 @@
       tabindex="0"
       :aria-describedby="id"
       :aria-expanded="isActive"
-      class="ct-tooltip-second__trigger"
+      class="ct-tooltip-panel__trigger"
       @click="toggleTooltip()"
     >
       <slot name="trigger" />
@@ -35,19 +35,19 @@
       :id
       ref="targetEl"
       role="tooltip"
-      class="ct-tooltip-second__target"
-      :style="{ '--ct-tooltip-second-shift': `${shiftX}px` }"
+      class="ct-tooltip-panel__target"
+      :style="{ '--ct-tooltip-panel-shift': `${shiftX}px` }"
     >
-      <div class="ct-tooltip-second__header">
+      <div class="ct-tooltip-panel__header">
         <slot name="header" />
         <button
           v-if="!onHover"
-          class="ct-tooltip-second__close"
+          class="ct-tooltip-panel__close"
           aria-label="Close tooltip"
           @click="toggleTooltip(false)"
         >
           <IconClose
-            class="ct-tooltip-second__close-icon"
+            class="ct-tooltip-panel__close-icon"
             aria-hidden="true"
           />
         </button>
@@ -63,11 +63,11 @@ import { useEventListener } from '@vueuse/core'
 import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 import IconClose from '@/components/Icon/Close.vue'
 
-interface TooltipSecondProps {
+interface TooltipPanelProps {
   onHover?: boolean
 }
 
-withDefaults(defineProps<TooltipSecondProps>(), { onHover: true })
+withDefaults(defineProps<TooltipPanelProps>(), { onHover: true })
 
 const VIEWPORT_MARGIN_PX = 8
 
@@ -119,11 +119,11 @@ usePopupCloseListeners(rootEl, {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-tooltip-second {
+.ct-tooltip-panel {
   @apply relative;
 }
 
-.ct-tooltip-second__trigger {
+.ct-tooltip-panel__trigger {
   @apply
   cursor-pointer
   border-none
@@ -132,7 +132,7 @@ usePopupCloseListeners(rootEl, {
   p-0;
 }
 
-.ct-tooltip-second__target {
+.ct-tooltip-panel__target {
   @apply
   absolute
   top-full
@@ -154,22 +154,22 @@ usePopupCloseListeners(rootEl, {
   before:border-b-white
   before:content-[''];
 
-  transform: translateX(calc(-50% + var(--ct-tooltip-second-shift, 0px)));
+  transform: translateX(calc(-50% + var(--ct-tooltip-panel-shift, 0px)));
 }
 
-.ct-tooltip-second__target::before {
-  left: calc(50% - var(--ct-tooltip-second-shift, 0px));
+.ct-tooltip-panel__target::before {
+  left: calc(50% - var(--ct-tooltip-panel-shift, 0px));
   transform: translateX(-50%);
 }
 
-.ct-tooltip-second__header {
+.ct-tooltip-panel__header {
   @apply
   flex
   items-center
   justify-end;
 }
 
-.ct-tooltip-second__close-icon {
+.ct-tooltip-panel__close-icon {
   @apply size-3;
 }
 </style>

@@ -42,6 +42,42 @@ describe('Tabs (v-if panels)', () => {
     expect(wrapper.find('.c2').exists()).toBe(false)
   })
 
+  // The triggers are <li>s, not buttons, so keyboard operability is explicit
+  // rather than free: without tabindex + a keydown handler the whole tab strip
+  // was mouse-only.
+  it('activates a tab with Enter and with Space, not just a click', async () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+    const triggers = wrapper.findAll('.ct-tabs__trigger')
+
+    await triggers[1].trigger('keydown', { key: 'Enter' })
+    expect(wrapper.find('[data-tab-panel="2"]').exists()).toBe(true)
+
+    await triggers[2].trigger('keydown', { key: ' ' })
+    expect(wrapper.find('[data-tab-panel="3"]').exists()).toBe(true)
+  })
+
+  it('puts every trigger in the tab sequence', () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+
+    wrapper.findAll('.ct-tabs__trigger').forEach((trigger) => {
+      expect(trigger.attributes('tabindex')).toBe('0')
+    })
+  })
+
+  // Was `:ariaSelected`, which relies on ARIA reflection (el.ariaSelected) instead
+  // of emitting the attribute — unsupported in Firefox before 119.
+  it('exposes the selection as a real aria-selected attribute', async () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+    const triggers = wrapper.findAll('.ct-tabs__trigger')
+
+    expect(wrapper.find('.ct-tabs__triggers').attributes('role')).toBe('tablist')
+    expect(triggers[0].attributes('aria-selected')).toBe('true')
+    expect(triggers[1].attributes('aria-selected')).toBe('false')
+
+    await triggers[1].trigger('click')
+    expect(wrapper.findAll('.ct-tabs__trigger')[1].attributes('aria-selected')).toBe('true')
+  })
+
   it('renders a previously-hidden panel when its trigger is clicked', async () => {
     const wrapper = mount(Tabs, { props: { tabs } })
 

@@ -8,8 +8,13 @@
         'ct-tab-strip-tab--disabled': disabled
       }
     ]"
+    role="tab"
+    :aria-selected="isActive"
     :aria-disabled="disabled"
+    :tabindex="disabled ? -1 : 0"
     @click="click"
+    @keydown.enter.prevent="click"
+    @keydown.space.prevent="click"
     v-text="title"
   />
 </template>

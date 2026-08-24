@@ -46,6 +46,7 @@
     </a>
     <button
       class="ct-download-item__delete"
+      aria-label="Remove download"
       @click="deleteItem"
     >
       <IconCircleClose class="ct-download-item__delete-icon" />

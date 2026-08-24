@@ -3,6 +3,13 @@
   tw-shared-bg-image-overlay--black
   tw-shared-bg-center-no-repeat-cover;
   background-image: url('../../../../assets/ctas/mpa-guide.jpg');
+
+  @supports (background-image: image-set(url('probe.webp') type('image/webp'))) {
+      background-image: image-set(
+          url('../../../../assets/ctas/mpa-guide.webp') type('image/webp'),
+          url('../../../../assets/ctas/mpa-guide.jpg') type('image/jpeg')
+      );
+  }
 }
 
 .vw-partials-ctas-mpa-guide__container {

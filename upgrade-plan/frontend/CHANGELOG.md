@@ -2114,3 +2114,132 @@ verified instead: setting `sourcemap: true` in a mode whose *plugin* default is 
 maps, which proves the merge direction — user config wins — and restoring `false` returned it to 0.
 Combined with the pre-change `public/vite` build having carried 50 maps, that pins down both the
 cause and the fix. Final confirmation is the next staging deploy's asset output.
+
+---
+
+## Post-plan cleanup, part 2 — accessibility sweep + asset formats (done, 2026-08-24)
+
+An audit of the parts of the frontend the SCSS→Tailwind waves never touched: keyboard operability,
+accessible names, image formats, and the island registry.
+
+**26 accessible names added.** Every icon-only `<button>` in the app announced itself as just
+"button": pagination prev/next in `Search/Pagination` and `Pame/Table/Pagination`, the mobile nav
+burger and its close, search submit/clear in `Search/SiteInput`, `Map/PaSearch` and
+`SearchAreas/InputAutocomplete`, the banner's prev/next/dismiss, the PAME and commercial-download
+dialog closes, and the download-queue minimise. Four text inputs — every search box in the app — had
+no `id`, `aria-label` or `aria-labelledby` between them. Labels are hardcoded English in the SFCs,
+matching existing precedent (`aria-label="Previous slide"` in `Carousel/Themes/Index`,
+`"View assessment"` in the PAME rows, `"Close tooltip"` in both tooltips) rather than threading 26
+props through ERB `t()` calls. Only `en` exists today; if a second locale lands, these are the
+strings to lift out.
+
+Three toggles gained state as well as a name — the downloads panel minimise, the mobile nav burger
+(plus `aria-controls` for the pane it opens) and the search popout trigger now expose `aria-expanded`,
+and the minimise label flips between "Minimise"/"Expand" so it describes what the *next* press does.
+
+**Seven components were mouse-only; all seven now work from a keyboard.** `Tabs`, `TabStrip/Tab` and
+`Dropdown/Options` build their controls from bare `<li>`s with `v-text`/`v-html` and an `@click` — no
+`tabindex`, no key handler, no interactive child to fall back on, so both tab strips and every
+dropdown were unusable without a mouse. Same shape in `Download/Popup` (a `<span>` branch between two
+real `<a>` siblings — the download option was the one branch a keyboard could not reach),
+`Filters/Panel/Mobile`'s close footer, `Map/Overlay`'s layer toggle, and `Map/Header`'s close. All now
+carry `tabindex`, Enter and Space handlers, and the right role — `tablist`/`tab` for the tab strips,
+`listbox`/`option` for the dropdown (with `aria-selected`, which meant `Dropdown/Base` passing down
+the value it already owned), `button` for the rest. `TabStrip/Tab` uses `tabindex="-1"` when disabled
+so a dead tab leaves the tab sequence rather than being focusable-but-inert, and `Map/Overlay` only
+advertises a role when it is genuinely toggleable. Element types were left alone deliberately:
+`role="button"` on the existing element rather than a real `<button>`, since these classes are shared
+with `<a>` siblings and a swap pulls in UA button styling. Six new specs cover Enter/Space activation,
+the disabled-tab case, and the ARIA attributes.
+
+Note on counting: a mechanical scan first flagged ten click-without-keyboard sites and I dismissed
+four as defensible on a quick read. Re-reading each one showed the opposite — four were real and two
+of the "real" ones (a modal backdrop `@click.self`, PAME table rows that already contain a labelled
+`<a>`) were the defensible ones. Worth re-reading rather than triaging from a grep summary.
+
+**A malformed attribute, and one that was not what it looked like.** `Banner/Content`'s
+`:dataBannerId` never rendered as `data-banner-id`: `data-*` has no IDL reflection, so Vue falls back
+to `setAttribute('dataBannerId')` and HTML lowercases it to `databannerid`. Nothing read it under any
+spelling, so the line is gone. `Tabs`' `:ariaSelected` had the same shape but a different outcome —
+`ariaSelected` *is* a reflected IDL property, so it worked in Chrome and Safari but not Firefox before
+119. Now a plain `:aria-selected`. These were the only two camelCase `aria`/`data` bindings in the
+codebase, and note `vue/attribute-hyphenation` would **not** have caught either: that rule only
+inspects custom components, not native elements. The guard for this class of bug is an accessibility
+linter, not that rule.
+
+**A stray `console.log('hihih')` was shipping in production**, in `Tabs.vue`'s `select()`, firing on
+every tab change (added 2026-08-21 in `b9324e290`). Found only because a truncated test run printed
+it to stdout — a `console.*` count had folded it in with legitimate `console.error` calls. The only
+remaining `console.log` is `import.meta.env.DEV`-guarded in `lib/pdfReady.ts`.
+
+**WebP for the three photographic backgrounds, 812KB → 361KB (-55%).** `hero/home` (the homepage
+LCP), `ctas/mpa-guide` and `ctas/protected-planet-report` had no modern-format variant anywhere in the
+repo. Encoded at cwebp `-q 75`, chosen by measuring: at `-q 82` the already well-optimised progressive
+`home.jpg` shrank only 10%, at `-q 75` it drops 37% while the two CTAs drop 69% and 56%. Both formats
+stay committed; the JPEGs are the fallback, not leftovers.
+
+**The obvious delivery pattern for this is a trap, and the build output is the only way to see it.**
+Two consecutive `background-image` declarations in one rule — plain `url()` then `image-set()` — is
+the textbook progressive-enhancement idiom, and it does not survive minification here: Lightning CSS
+drops the first as redundant and, for the configured browser targets, replaces the second with a
+`-webkit-image-set` variant alongside the modern one. The shipped rule then had **no plain-JPEG
+declaration at all**, and since `-webkit-image-set` predates `type()`, any engine that parses the
+prefixed form but rejects `type()` (Safari before 17) invalidates both declarations and renders the
+element with no background image whatsoever. A byte count, or an "assets were emitted" check, says
+nothing about this — only reading the rule in the built CSS does.
+
+Delivered instead as a plain `url()` on the rule with `image-set()` inside a nested
+`@supports (background-image: image-set(url('probe.webp') type('image/webp')))`. Being a separate
+at-rule rather than a competing declaration, the JPEG cannot be optimised away, and both `image-set`
+forms — the risky prefixed one included — now sit behind a guard that fails closed. The condition uses
+a literal `probe.webp` deliberately: it is a syntax test, the URL in it is never resolved, and Vite
+rewrites URLs in declarations but *not* in at-rule conditions, so a real asset path there would ship
+as a stale relative path. Verified in the built CSS: three plain-JPEG declarations, three `@supports`
+guards, three WebP files emitted and referenced, no `../../` source paths left in the output. Still
+worth a glance in a real browser — encoder quality at `-q 75` is the one thing no byte count or CSS
+inspection can confirm.
+
+**Two dead island registrations removed.** `Tooltip` and `TooltipSecond` sat in
+`entrypoints/application.ts` although no ERB mounted either — their real consumers
+(`Pame/Table/Head/Cell`, `Stats/TooltipInfo`) import them directly as child components, so each entry
+only bought a redundant lazy chunk. The registry-vs-views cross-check is now a one-liner recorded in
+that file's comment. CMS content was checked too: no `turbo_mount` or `Tooltip` in
+`comfy_cms_layouts`/`snippets`/`fragments`, which matters because Comfy layouts can hold ERB and a
+grep over `app/views` would never see it.
+
+**`Tooltip/Second.vue` → `Tooltip/Panel.vue`.** The name said nothing, and it is not a near-duplicate
+of `Tooltip/Index` (134 of 270 lines differ) but the richer variant — named `trigger`/`header`/
+`content` slots, viewport-collision repositioning, an optional dismissible header. Renamed with its
+`ct-tooltip-second-*` classes, its props interface and its spec, which also moved from the flat
+`components/__tests__/` bucket to a colocated `components/Tooltip/__tests__/`.
+
+**A vitest speed-up was attempted and rejected.** The suite spends ~204s of cumulative worker time
+constructing jsdom against ~16s executing tests, so `isolate: false` looks like free money. It fails
+38 of 88 files with `URL is not a constructor` / `Invalid URL`: jsdom's teardown between files nulls
+globals that the next file's already-cached modules still reference. Recorded in `vitest.config.mts`
+so nobody spends the same afternoon on it — a real fix means changing the environment (happy-dom) or
+per-file globals, not that flag.
+
+**Verification note.** Running the suite and a build concurrently in separate containers starved this
+3-CPU dev VM: the test output truncated mid-stream and a build exited 0 having written nothing. A
+later full run showed 3 failures, all 5s timeouts in `Carousel/Themes/__tests__/Index.spec.ts` (a file
+untouched by any of this, exercising `swiper`) with `transform 270s` / `import 418s` against `16s` /
+`44s` in a clean run; that spec passes in 418ms on its own. Run one container job at a time here, and
+treat timeout-only failures under those durations as load, not regressions.
+
+Also verified and left alone: **no dead components or modules** (import graph traced transitively from
+the registry — all SFCs and every non-test module are reachable); the **32 `v-html` uses** are fed by
+CMS/admin-authored fields or by search text that `Search::BaseSerializer` puts through
+`ActionView::Base.full_sanitizer`; `fonts.css` is already per-subset with `font-display: swap` and
+Playfair as one variable file; and no `<img>` lacks `alt` (there is exactly one in the app — imagery is
+CSS backgrounds).
+
+**Known issue, deliberately not fixed: the desktop nav dropdown.**
+`NavBar/Dropdown/Desktop` renders `<button><NavBarLink/></button>`, and `NavBarLink` is an
+`<a role="menuitem" :href>` with `url` required on `NavLink` — an anchor nested inside a button, which
+HTML's content model forbids. The toggle also has no `@click` or key handler at all: the dropdown opens
+purely on the wrapper's `mouseenter`/`mouseleave`, so a keyboard user can focus the toggle, press
+Enter, and get navigation to the parent page instead of the menu. Fixing it means deciding whether a
+parent nav item should navigate or only disclose its children — the current markup attempts both,
+which is what makes it invalid — plus focus management. That is a UX decision on the site's primary
+navigation, not a mechanical fix.

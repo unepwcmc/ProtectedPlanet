@@ -11,6 +11,7 @@
       class="ct-pame-table-pagination__button
       ct-pame-table-pagination__button--previous"
       :class="{ 'ct-pame-table-pagination__button--disabled': isPreviousDisabled }"
+      aria-label="Previous page"
       :disabled="isPreviousDisabled"
       @click="onChangePage('previous')"
     >
@@ -24,6 +25,7 @@
       class="ct-pame-table-pagination__button
       ct-pame-table-pagination__button--next"
       :class="{ 'ct-pame-table-pagination__button--disabled': isNextDisabled }"
+      aria-label="Next page"
       :disabled="isNextDisabled"
       @click="onChangePage('next')"
     >

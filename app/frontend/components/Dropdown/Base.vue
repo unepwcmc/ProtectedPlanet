@@ -10,6 +10,8 @@
     >
       <button
         class="ct-dropdown-base__button"
+        aria-haspopup="listbox"
+        :aria-expanded="isOptionsOpen"
         @click="toggle"
       >
         <span
@@ -21,6 +23,7 @@
       <DropdownOptions
         v-if="isOptionsOpen"
         :options
+        :selected="modelValue"
         @click="chooseOption"
       />
     </div>

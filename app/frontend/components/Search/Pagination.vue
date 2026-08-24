@@ -11,6 +11,7 @@
       class="ct-search-pagination__button
       ct-search-pagination__button--previous"
       :class="{ 'ct-search-pagination__button--disabled': isPreviousDisabled }"
+      aria-label="Previous page"
       :disabled="isPreviousDisabled"
       @click="changePage(isPreviousActive, 'previous')"
     >
@@ -24,6 +25,7 @@
       class="ct-search-pagination__button
       ct-search-pagination__button--next"
       :class="{ 'ct-search-pagination__button--disabled': isNextDisabled }"
+      aria-label="Next page"
       :disabled="isNextDisabled"
       @click="changePage(isNextActive, 'next')"
     >

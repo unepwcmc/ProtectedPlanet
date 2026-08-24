@@ -3,6 +3,7 @@
     <div class="ct-download-commercial__dialog">
       <button
         class="ct-download-commercial__close"
+        aria-label="Close dialog"
         @click="close"
       >
         <IconClose class="ct-download-commercial__close-icon" />

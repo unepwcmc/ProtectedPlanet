@@ -9,6 +9,7 @@
         v-model="searchTerm"
         class="ct-search-areas-autocomplete__input"
         type="text"
+        aria-label="Search areas"
         :placeholder="config.placeholder"
         @keyup="onKeyup"
         @keyup.enter="submit"
@@ -16,6 +17,7 @@
       <button
         v-show="isResetIconVisible"
         class="ct-search-areas-autocomplete__delete"
+        aria-label="Clear search"
         @click="resetSearchTerm"
       >
         <IconClose class="ct-search-areas-autocomplete__delete-icon" />

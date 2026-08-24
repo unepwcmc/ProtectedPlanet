@@ -30,7 +30,11 @@
     </div>
     <span
       class="ct-filters-panel-mobile__footer"
+      role="button"
+      tabindex="0"
       @click="onToggleFilterPane"
+      @keydown.enter.prevent="onToggleFilterPane"
+      @keydown.space.prevent="onToggleFilterPane"
       v-html="filterCloseText"
     />
   </div>

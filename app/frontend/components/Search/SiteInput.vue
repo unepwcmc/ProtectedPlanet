@@ -7,6 +7,8 @@
     <button
       v-if="popout"
       class="ct-search__trigger"
+      aria-label="Open search"
+      :aria-expanded="isActive"
       @click="toggleInput"
     >
       <IconSearch class="ct-search__trigger-icon" />
@@ -44,6 +46,7 @@
           type="text"
           name="ct-search__input"
           class="ct-search__input"
+          aria-label="Search site"
           :disabled
           :placeholder
           @keyup.enter="submit"
@@ -51,6 +54,7 @@
         <button
           v-show="isSubmitVisible"
           class="ct-search__submit"
+          aria-label="Submit search"
           :disabled
           @click="submit"
         >

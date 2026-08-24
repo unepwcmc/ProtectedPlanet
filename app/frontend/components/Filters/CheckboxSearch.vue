@@ -10,6 +10,7 @@
       v-model="searchTerm"
       class="ct-filters-checkbox-search__input"
       type="text"
+      aria-label="Search filter options"
     >
     <FiltersCheckboxes
       :id

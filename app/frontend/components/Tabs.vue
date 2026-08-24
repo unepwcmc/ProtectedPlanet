@@ -4,15 +4,21 @@
       to="#vw-hero-tabs-target"
       :disabled="!hasHeroTabsTarget"
     >
-      <ul class="ct-tabs__triggers">
+      <ul
+        class="ct-tabs__triggers"
+        role="tablist"
+      >
         <li
           v-for="tab in tabs"
           :key="tab.id"
           class="ct-tabs__trigger"
           :class="{ 'ct-tabs__trigger--active': tab.id === selectedId }"
           role="tab"
-          :ariaSelected="tab.id === selectedId"
+          :aria-selected="tab.id === selectedId"
+          tabindex="0"
           @click="select(tab.id)"
+          @keydown.enter.prevent="select(tab.id)"
+          @keydown.space.prevent="select(tab.id)"
           v-html="tab.title"
         />
       </ul>
@@ -85,8 +91,6 @@ function updateTabParam(id: number) {
 }
 
 function select(id: number) {
-  console.log('hihih')
-
   const tab = props.tabs.find(t => t.id === id)
   if (props.gaId && tab) {
     trackEvent('click', { event_label: `${props.gaId} - Tab: ${tab.title}` })

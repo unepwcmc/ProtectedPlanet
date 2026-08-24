@@ -2,7 +2,11 @@
   <li
     class="ct-map-overlay"
     :class="{ 'ct-map-overlay--toggleable': isToggleable }"
+    :role="isToggleable ? 'button' : undefined"
+    :tabindex="isToggleable ? 0 : undefined"
     @click.stop="onClick"
+    @keydown.enter.prevent="onClick"
+    @keydown.space.prevent="onClick"
   >
     <div
       class="ct-map-overlay__color"

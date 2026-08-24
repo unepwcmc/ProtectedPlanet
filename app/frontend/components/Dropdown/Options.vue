@@ -1,17 +1,25 @@
 <template>
-  <ul class="ct-dropdown-options__options">
+  <ul
+    class="ct-dropdown-options__options"
+    role="listbox"
+  >
     <li
       v-for="(option, index) in options"
       :key="`${index}ct-dropdown-options`"
       class="ct-dropdown-options__option"
+      role="option"
+      :aria-selected="option === selected"
+      tabindex="0"
       @click="chooseOption(option)"
+      @keydown.enter.prevent="chooseOption(option)"
+      @keydown.space.prevent="chooseOption(option)"
       v-text="option"
     />
   </ul>
 </template>
 
 <script setup lang="ts">
-defineProps<{ options: string[] }>()
+defineProps<{ options: string[], selected?: string }>()
 const emit = defineEmits<{ click: [option: string] }>()
 
 function chooseOption(option: string) {

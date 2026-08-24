@@ -23,6 +23,28 @@ describe('TabStrip', () => {
     expect(wrapper.findAll('li')[0].classes()).toContain('ct-tab-strip-tab--active')
   })
 
+  it('activates a tab with Enter and with Space', async () => {
+    const wrapper = mountTabStrip()
+    const tabs = wrapper.findAll('li')
+
+    await tabs[1].trigger('keydown', { key: 'Enter' })
+    expect(tabs[1].classes()).toContain('ct-tab-strip-tab--active')
+
+    await tabs[2].trigger('keydown', { key: ' ' })
+    expect(tabs[2].classes()).toContain('ct-tab-strip-tab--active')
+  })
+
+  // A disabled tab must be skipped by the tab sequence, not focusable-but-inert.
+  it('drops a disabled tab out of the tab sequence and ignores its keypresses', async () => {
+    const wrapper = mountTabStrip({ disabled: true })
+    const tabs = wrapper.findAll('li')
+
+    expect(tabs[1].attributes('tabindex')).toBe('-1')
+
+    await tabs[1].trigger('keydown', { key: 'Enter' })
+    expect(tabs[1].classes()).not.toContain('ct-tab-strip-tab--active')
+  })
+
   it('honours defaultSelectedId over the first child', () => {
     const wrapper = mountTabStrip({ defaultSelectedId: 'site' })
 

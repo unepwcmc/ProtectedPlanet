@@ -16,7 +16,7 @@ describe('StatsTooltipInfo', () => {
     // The tooltip target is v-if'd (not merely hidden via style) until active.
     expect(wrapper.find('[role="tooltip"]').exists()).toBe(false)
 
-    await wrapper.find('.ct-tooltip-second__trigger').trigger('click')
+    await wrapper.find('.ct-tooltip-panel__trigger').trigger('click')
 
     const target = wrapper.find('[role="tooltip"]')
     expect(target.exists()).toBe(true)

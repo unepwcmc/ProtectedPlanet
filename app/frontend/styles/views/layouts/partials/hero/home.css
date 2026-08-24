@@ -9,6 +9,13 @@
     lg:min-h-180;
     
     background-image: url('../../../../../assets/hero/home.jpg');
+
+    @supports (background-image: image-set(url('probe.webp') type('image/webp'))) {
+        background-image: image-set(
+            url('../../../../../assets/hero/home.webp') type('image/webp'),
+            url('../../../../../assets/hero/home.jpg') type('image/jpeg')
+        );
+    }
 }
 
 .vw-layouts-partials-hero-home__container {
