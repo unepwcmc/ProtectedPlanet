@@ -21,7 +21,7 @@ class Geospatial::Calculator
   private
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 
   def render_template template_path, binding

@@ -23,7 +23,7 @@ module GeometryConcern
   end
 
   def geojson geo_properties=nil
-    geojson = ActiveRecord::Base.connection.select_value("""
+    geojson = ActiveRecord::Base.lease_connection.select_value("""
       SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_MakeValid(#{main_geom_column}), 0.003), 3)
       FROM #{self.class.table_name}
       WHERE id = #{id}

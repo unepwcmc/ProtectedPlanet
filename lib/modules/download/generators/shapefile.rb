@@ -55,7 +55,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
     component_paths = shapefile_components(name)
     view_name = create_view query(props[:select], props[:where])
 
-    total_count = ActiveRecord::Base.connection.select_value("
+    total_count = ActiveRecord::Base.lease_connection.select_value("
       SELECT COUNT(*) FROM #{view_name}
     ").to_i
 

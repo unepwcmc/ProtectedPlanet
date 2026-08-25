@@ -44,6 +44,6 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
   end
 
   def self.db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 end

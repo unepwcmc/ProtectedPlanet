@@ -98,7 +98,7 @@ class PameEvaluation < ApplicationRecord
                                    "countries.id IN (#{country_ids.join(',')})"
                                  end
       when 'method'
-        quoted = options.map { |e| ActiveRecord::Base.connection.quote(e) }
+        quoted = options.map { |e| ActiveRecord::Base.lease_connection.quote(e) }
         where_params[:method] = quoted.empty? ? nil : "pame_methods.name IN (#{quoted.join(',')})"
       when 'year'
         where_params[:year] = options.empty? ? nil : "pame_evaluations.asmt_year IN (#{options.join(',')})"
@@ -281,7 +281,7 @@ class PameEvaluation < ApplicationRecord
         COALESCE(pa_realms.name, parcel_realms.name),
         COALESCE(parcel_gl.gl_status, pa_gl.gl_status, 'Not applicable')
     SQL
-    evaluations = ActiveRecord::Base.connection.exec_query(query)
+    evaluations = ActiveRecord::Base.lease_connection.exec_query(query)
     columns = evaluations.columns
 
     csv_string = CSV.generate(headers: true) do |csv_line|

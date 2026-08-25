@@ -47,7 +47,7 @@ module Wdpa
             Rails.logger.info '🚀 Starting table swap: staging → live...'
             @backup_timestamp = ::Release.current_backup_timestamp_string
             @swapped_tables = []
-            @connection = ActiveRecord::Base.connection
+            @connection = ActiveRecord::Base.lease_connection
             @index_cache = {}
           end
 

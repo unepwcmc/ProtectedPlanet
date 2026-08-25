@@ -13,7 +13,7 @@ module Wdpa
 
           def self.overlay_attrs(soft_errors: [])
             run_id = select_run_id(table: 'global_stats', run_column: 'metadata_gs_uuid')
-            quoted_run_id = ActiveRecord::Base.connection.quote(run_id)
+            quoted_run_id = ActiveRecord::Base.lease_connection.quote(run_id)
 
             sql = <<~SQL
               SELECT stat_type, stat_value

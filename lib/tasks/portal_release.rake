@@ -76,7 +76,7 @@ namespace :pp do
       begin
         # Use the existing TableCleanupService
         service = Wdpa::Portal::Services::Core::TableCleanupService.new
-        service.instance_variable_set(:@connection, ActiveRecord::Base.connection)
+        service.instance_variable_set(:@connection, ActiveRecord::Base.lease_connection)
         service.instance_variable_set(:@index_cache, {})
         service.cleanup_old_backups(keep_count)
         Rails.logger.info '✅ Backup cleanup completed successfully'

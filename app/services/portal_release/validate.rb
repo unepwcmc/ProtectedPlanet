@@ -27,7 +27,7 @@ module PortalRelease
     private
 
     def c(sql)
-      ActiveRecord::Base.connection.select_value(sql).to_i
+      ActiveRecord::Base.lease_connection.select_value(sql).to_i
     end
 
     def source_counts

@@ -13,7 +13,7 @@ module Wdpa::GeometryRatioCalculator
   end
 
   def self.calculate_geometry_counts country_id
-    ActiveRecord::Base.connection.select_all("""
+    ActiveRecord::Base.lease_connection.select_all("""
       SELECT
         SUM((CASE WHEN GeometryType(the_geom) = 'MULTIPOINT' THEN 1 ELSE 0 END)) AS points_count,
         SUM((CASE WHEN GeometryType(the_geom) = 'MULTIPOLYGON' THEN 1 ELSE 0 END)) AS polygons_count,

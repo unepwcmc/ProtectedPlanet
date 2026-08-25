@@ -17,7 +17,7 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
   private
 
   def self.db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 
   def self.render_template template_path, binding

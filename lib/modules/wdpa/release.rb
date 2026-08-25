@@ -128,6 +128,6 @@ class Wdpa::Release
   end
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 end

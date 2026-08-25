@@ -44,7 +44,7 @@ module Wdpa
           def initialize_rollback_variables(backup_timestamp)
             @backup_timestamp = backup_timestamp
             @swapped_tables = []
-            @connection = ActiveRecord::Base.connection
+            @connection = ActiveRecord::Base.lease_connection
             @index_cache = {}
           end
 

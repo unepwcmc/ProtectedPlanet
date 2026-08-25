@@ -125,7 +125,7 @@ module Wdpa
               GROUP BY site_id
             SQL
 
-            ActiveRecord::Base.connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
+            ActiveRecord::Base.lease_connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
               sites_with_multiple_parcels[row['site_id']] = row['first_site_pid']
             end
           end

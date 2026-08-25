@@ -104,7 +104,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         FROM #{table}
         GROUP BY site_id
         HAVING COUNT(*) > 1;"
-      ActiveRecord::Base.connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
+      ActiveRecord::Base.lease_connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
         protected_area_ids_with_multiple_parcels[row['site_id']] = row['first_site_pid']
       end
     end
@@ -138,6 +138,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
   end
 
   def self.db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 end

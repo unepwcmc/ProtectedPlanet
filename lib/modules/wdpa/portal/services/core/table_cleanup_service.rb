@@ -42,7 +42,7 @@ module Wdpa
 
           def initialize_cleanup_variables
             Rails.logger.info '🧹 Starting table cleanup operations...'
-            @connection = ActiveRecord::Base.connection
+            @connection = ActiveRecord::Base.lease_connection
             @tables_to_cleanup = Wdpa::Portal::Config::PortalImportConfig.swap_sequence_live_table_names
             @original_lock_timeout = nil
             @original_statement_timeout = nil

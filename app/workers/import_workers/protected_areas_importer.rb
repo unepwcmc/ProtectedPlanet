@@ -56,6 +56,6 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
   end
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 end
