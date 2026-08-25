@@ -56,7 +56,7 @@ class CountryController < ApplicationController
     # Components above tabs
     @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', @country.iso_3)
 
-    @flag_path = flag_path(@country.name)
+    @flag_path = helpers.flag_url(@country.iso_3)
 
     # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
     @total_pame = @country
@@ -128,23 +128,5 @@ class CountryController < ApplicationController
 
     @country_presenter = CountryPresenter.new(@country)
     @tab_presenter = TabPresenter.new(@country)
-  end
-
-  def flag_path(country_name)
-    character_replacements = {
-      ' ' => '-',
-      ',' => ''
-    }
-
-    path_string = country_name.downcase
-    character_replacements.each { |key, val| path_string.gsub!(key, val) }
-
-    ActionController::Base.helpers.image_url("flags/#{path_string}.svg")
-  rescue Sprockets::Rails::Helper::AssetNotFound
-    # Not every country has a flag asset -- a newly added or renamed one will not
-    # until someone adds the SVG. Returning nil degrades to the no-flag layout the
-    # views already handle (`if local_assigns[:flag]`) rather than 500ing the whole
-    # country page. Before load_defaults 6.0 this silently produced a broken path.
-    nil
   end
 end

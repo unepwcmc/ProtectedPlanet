@@ -77,6 +77,20 @@ module ApplicationHelper
     end
   end
 
+  # Flag assets are named by ISO3 (app/assets/images/flags/AFG.svg). Not every
+  # country has one -- Western Sahara has never shipped a flag, and a newly
+  # added or renamed country will not until someone adds the SVG. Return nil in
+  # that case so callers can omit the element entirely rather than emitting a
+  # URL that 404s into a broken-image icon.
+  def flag_url(iso_3)
+    return nil if iso_3.blank?
+
+    image_url("flags/#{iso_3}.svg")
+  rescue Sprockets::Rails::Helper::AssetNotFound,
+         Sprockets::Rails::Helper::AssetNotPrecompiled
+    nil
+  end
+
   def country_cover(country, with_tag: true)
     version = AppSecrets.mapbox[:version]
     image_params = { id: country.iso, type: 'country', version: version }

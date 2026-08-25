@@ -1,18 +1,12 @@
 <div class="vw-partials-stats-stats-overview">
-  <% if local_assigns[:flag] %>
-    <div class="vw-partials-stats-stats-overview__heading">
-      <% unless @country.iso_3 == 'ESH' # temporary fix until we can figure out where the flag asset is cached %>
-        <i class="vw-partials-stats-stats-overview__flag" style="background-image:url('<%= flag %>');"></i>
-      <% end %>
-      <h1 class="vw-partials-stats-stats-overview__title">
-        <%= title %>
-      </h1>
-    </div>
-  <% else %>
+  <div class="vw-partials-stats-stats-overview__heading">
+    <% if local_assigns[:flag].present? %>
+      <i class="vw-partials-stats-stats-overview__flag" style="background-image:url('<%= flag %>');"></i>
+    <% end %>
     <h1 class="vw-partials-stats-stats-overview__title">
       <%= title %>
     </h1>
-  <% end %>
+  </div>
   <% if local_assigns[:total_wdpa] %>
     <div class="vw-partials-stats-stats-overview__section">
       <span class="vw-partials-stats-stats-overview__number">

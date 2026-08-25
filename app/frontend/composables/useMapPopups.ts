@@ -32,18 +32,22 @@ async function queryServicesForPoint(
 }
 
 function attributeHtml(elementType: 'span' | 'a', element: { title: string, value?: string, url?: string }): string {
+  const title = `
+                <span class="maplibregl-popup-content__title">
+                  ${element.title}: 
+                </span>`
   if (elementType === 'a') {
-    return `<span class="maplibregl-popup-content__wrapper">
-              <span class="maplibregl-popup-content__title">${element.title}: </span>
-              <a class="maplibregl-popup-content__link" href="${element.url}">
-                <span class="maplibregl-popup-content__value">${element.value}</span>
-              </a>
-            </span>`
+    return title + `
+            <a class="maplibregl-popup-content__link" href="${element.url}">
+              <span class="maplibregl-popup-content__value">
+                ${element.value}
+              </span>
+            </a>`
   }
 
-  return `<span class="maplibregl-popup-content__wrapper">
-            <span class="maplibregl-popup-content__title">${element.title}: </span>
-            <span class="maplibregl-popup-content__value">${element.value}</span>
+  return title + `
+          <span class="maplibregl-popup-content__value">
+            ${element.value}
           </span>`
 }
 

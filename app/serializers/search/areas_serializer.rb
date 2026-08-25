@@ -59,9 +59,8 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def country_hash(country)
-    _slug = slug(country.name)
     {
-      countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
+      countryFlag: ApplicationController.helpers.flag_url(country.iso_3),
       totalAreas: "#{areas_count(country)} #{I18n.t('search.protected-areas')}",
       title: country.name,
       url: country_path(iso: country.iso_3),
@@ -75,10 +74,6 @@ class Search::AreasSerializer < Search::BaseSerializer
       title: site.name,
       url: protected_area_path(site.site_id)
     }
-  end
-
-  def slug(name)
-    name.underscore.gsub(' ', '-')
   end
 
   DEFAULT_PAGE_SIZE = 9.0.freeze
