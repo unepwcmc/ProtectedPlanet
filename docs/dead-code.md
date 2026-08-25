@@ -377,7 +377,6 @@ Recorded because every one of them is flagged by a naive unused-code scan.
 | Thing | Why it looks dead | Why it is not |
 |---|---|---|
 | All 274 flag SVGs in `app/assets/images/flags/` | No literal filename anywhere | Built at runtime: `image_url("flags/#{slug}.svg")` in `areas_serializer.rb`, `country_controller.rb`, `country_presenter.rb` |
-| 12 `green_list/*.jpg` photos | No literal reference | Mapped by site ID in `config/initializers/green_list_images.rb` (`GREEN_LIST_IMAGES`) |
 | `region_hash`, `country_hash`, `site_hash` | Never called by name | Reached via `send("#{geo_type}_hash", a)` in the same file |
 | `lib/cms_tags/text_custom.rb` (`TextCustom`) | Class name appears nowhere else | Loaded by explicit `require Rails.root.join('lib/cms_tags/text_custom')` in `config/initializers/comfortable_media_surfer.rb`, so the class name never appears as a reference |
 | `Tooltip/Index.vue`, `Tooltip/Second.vue` | Registrations are dead (section 10) | Live as child components of `Pame/Table/Head/Cell.vue` and `Stats/TooltipInfo.vue` |

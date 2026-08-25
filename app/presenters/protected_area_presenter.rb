@@ -175,7 +175,7 @@ class ProtectedAreaPresenter
 
   def green_list_logo(gl_status)
     logo = gl_status.to_s.downcase == 'candidate' ? 'green-list-black' : 'green-list'
-    ActionController::Base.helpers.image_url("logos/#{logo}.png")
+    ActionController::Base.helpers.image_url("logos/#{logo}.webp")
   end
 
   def parcc_info
@@ -184,7 +184,7 @@ class ProtectedAreaPresenter
     [{
       site_pid: protected_area.site_pid,
       affiliation: 'parcc_info',
-      image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+      image_url: ActionController::Base.helpers.image_url('logos/parcc.webp'),
       link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
       link_url: url_for_related_source('parcc_info', protected_area)
     }]

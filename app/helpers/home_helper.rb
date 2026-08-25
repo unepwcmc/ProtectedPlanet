@@ -9,7 +9,7 @@ module HomeHelper
       title_key: :terrestrial,
       filter: 'terrestrial',
       cms_slug: nil,
-      use_this_image: 'terrestrial.jpg'
+      use_this_image: 'terrestrial.webp'
     },
     {
       title_key: :green_list,
