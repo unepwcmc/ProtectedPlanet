@@ -136,7 +136,12 @@ end
 
 gem 'will_paginate', '~> 3.0'
 
-gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
+# aws-sdk (the meta-gem) pulls a gem for EVERY AWS service -- 222 of the 423 gems in
+# Gemfile.lock, 52% of the bundle, to use one of them. The app touches S3 and nothing
+# else: four call sites (lib/modules/s3.rb, lib/modules/wdpa/s3.rb,
+# lib/modules/countries_geometry_importer.rb) all use Aws::S3::Resource/Client, and
+# config/storage.yml's `service: S3` needs the same gem.
+gem 'aws-sdk-s3', '~> 1.0'
 
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
