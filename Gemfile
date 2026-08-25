@@ -55,7 +55,6 @@ gem "slack-notifier", "~> 1.5.1"
 gem 'jquery-rails', '~> 4.3.3'
 gem 'premailer-rails'
 # gem 'listen'
-gem 'levenshtein', '~> 0.2.2'
 
 gem 'rails-controller-testing'
 
@@ -109,7 +108,6 @@ group :test do
   # gem 'codeclimate-test-reporter', require: nil
   gem 'simplecov', require: false, group: :test
   # gem 'simplecov-console'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
 end
 
@@ -137,7 +135,6 @@ gem 'will_paginate', '~> 3.0'
 gem 'aws-sdk-s3', '~> 1.0'
 
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
-gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 7.0'
 # Sidekiq 7 dropped its redis-rb dependency (it uses redis-client internally), but the
