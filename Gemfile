@@ -7,13 +7,6 @@ gem 'rails', '~> 8.0.0'
 # along, waiting for one. Containerised deploys need the server in the image.
 gem 'puma', '~> 6.4'
 
-# Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
-# its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
-# appsignal 3 call plain YAML.load on their aliased configs at boot and break.
-# Pin Psych 3 until those are gone -- webpacker at the Vite cutover (B5),
-# appsignal on a version bump. (libyaml-dev is present in the image.)
-gem 'psych', '~> 3.3'
-
 gem 'pg', '~> 1.1'
 gem 'activerecord-postgis-adapter', '~> 11.0'
 gem 'dbf', '~> 2.0.7'
@@ -62,7 +55,6 @@ gem "slack-notifier", "~> 1.5.1"
 gem 'jquery-rails', '~> 4.3.3'
 gem 'premailer-rails'
 # gem 'listen'
-gem 'levenshtein', '~> 0.2.2'
 
 gem 'rails-controller-testing'
 
@@ -116,7 +108,6 @@ group :test do
   # gem 'codeclimate-test-reporter', require: nil
   gem 'simplecov', require: false, group: :test
   # gem 'simplecov-console'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
 end
 
@@ -136,10 +127,14 @@ end
 
 gem 'will_paginate', '~> 3.0'
 
-gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
+# aws-sdk (the meta-gem) pulls a gem for EVERY AWS service -- 222 of the 423 gems in
+# Gemfile.lock, 52% of the bundle, to use one of them. The app touches S3 and nothing
+# else: four call sites (lib/modules/s3.rb, lib/modules/wdpa/s3.rb,
+# lib/modules/countries_geometry_importer.rb) all use Aws::S3::Resource/Client, and
+# config/storage.yml's `service: S3` needs the same gem.
+gem 'aws-sdk-s3', '~> 1.0'
 
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
-gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 7.0'
 # Sidekiq 7 dropped its redis-rb dependency (it uses redis-client internally), but the
