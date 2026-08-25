@@ -2088,6 +2088,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"codemirror@npm:^5.65.18":
+  version: 5.65.21
+  resolution: "codemirror@npm:5.65.21"
+  checksum: 10c0/0884fc54ad32cbfa7605b23c8e9c0085d71856178f88448e6912335dddce321edab1326202b3778647658e7debdff07329f30e30b32f8fb4ba501582f798495a
+  languageName: node
+  linkType: hard
+
 "color-convert@npm:^2.0.1":
   version: 2.0.1
   resolution: "color-convert@npm:2.0.1"
@@ -4809,8 +4816,10 @@ __metadata:
     "@vue/devtools-api": "npm:^8.2.1"
     "@vue/test-utils": "npm:^2.4.11"
     "@vueuse/core": "npm:^14.4.0"
+    codemirror: "npm:^5.65.18"
     eslint: "npm:^10.8.0"
     eslint-plugin-vue: "npm:^10.10.0"
+    flatpickr: "npm:^4.6.13"
     globals: "npm:^17.8.0"
     jsdom: "npm:^30.0.1"
     maplibre-gl: "npm:^6.1.0"
