@@ -24,6 +24,8 @@ class SearchController < ApplicationController
       per_page: search_params[:items_per_page]
     }
     @results = Search::FullSerializer.new(@search, _options).serialize
+
+    set_page_meta(title: t('meta.search.title'), description: t('meta.search.description'))
   end
 
   def search_results

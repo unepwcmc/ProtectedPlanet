@@ -16,3 +16,22 @@ en:
       card: "summary_large_image"
       site: "@protectedplanet"
       creator: "@protectedplanet"
+    # Page-level titles and descriptions. Before these existed, every page on the
+    # site shipped meta.site.title and meta.site.description verbatim.
+    protected_area:
+      description: >-
+        Explore protected area and OECM coverage in %{name}
+    country:
+      description: >-
+        Explore protected area and OECM coverage in %{name}
+    region:
+      description: >-
+        Explore protected area and OECM coverage across %{name}
+    search:
+      title: Search
+      description: >-
+        Search Protected Planet for protected areas, OECMs, countries and regions in the World Database on Protected and Conserved Areas.
+    search_areas:
+      title: Search protected areas and OECMs
+      description: >-
+        Search and filter the world's protected areas and OECMs by country, region, designation, IUCN category and governance type, then download the results.

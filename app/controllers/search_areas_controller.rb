@@ -34,6 +34,8 @@ class SearchAreasController < ApplicationController
       overlays: MapOverlaysSerializer.new(search_overlays, map_yml).serialize,
       type: 'all'
     }
+
+    set_page_meta(title: t('meta.search_areas.title'), description: t('meta.search_areas.description'))
   end
 
   def search_results

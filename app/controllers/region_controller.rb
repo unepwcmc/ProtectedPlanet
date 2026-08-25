@@ -26,6 +26,17 @@ class RegionController < ApplicationController
     }
 
     helpers.opengraph_title_and_description_with_suffix(@region.name)
+    set_page_meta(title: @region.name, description: t('meta.region.description', name: @region.name))
+
+    # See ProtectedAreasController#place_structured_data for why this is
+    # canonical_url and not a route helper.
+    @structured_data = {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      name: @region.name,
+      url: canonical_url,
+      description: t('meta.region.description', name: @region.name)
+    }
   end
 
   def build_stats

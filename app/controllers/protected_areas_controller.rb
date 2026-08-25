@@ -12,7 +12,7 @@ class ProtectedAreasController < ApplicationController
     # If found by slug, redirect to search page
     # This is to overcome possible issues with PAs with same name/slug and different SITE ID
     pa = ProtectedArea.find_by(slug: id)
-    redirect_to search_areas_path(search_term: pa.name) and return if pa
+    redirect_to search_areas_path(search_term: pa.name), status: :moved_permanently and return if pa
 
     @protected_area = ProtectedArea.find_by(site_id: id.to_i)
     @protected_area || raise_404
@@ -39,12 +39,82 @@ class ProtectedAreasController < ApplicationController
     }
 
     helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
+    set_page_meta(title: @protected_area.name, description: meta_description)
+    @structured_data = place_structured_data
+
     respond_to do |format|
       format.html
     end
   end
 
   private
+
+  def meta_description
+    t('meta.protected_area.description', name: @protected_area.name)
+  end
+
+  # A protected area is a Place, not a WebSite -- which is what all of these pages
+  # claimed to be. Only fields backed by data already loaded (or a single indexed
+  # lookup) are included; a page nobody can describe is worse than a short one.
+  def place_structured_data
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      name: @protected_area.name,
+      # Omitted when it matches name, which it does for most sites -- repeating the
+      # same string as an alternate name tells a consumer nothing.
+      alternateName: alternate_name,
+      description: meta_description,
+      # canonical_url rather than protected_area_url: default_url_options appends
+      # ?locale=en to any route without a :locale segment, and /:id has none, so the
+      # helper would disagree with the <link rel="canonical"> on the same page.
+      url: canonical_url,
+      address: address_structured_data,
+      geo: geo_structured_data,
+      additionalProperty: place_properties
+    }.compact
+  end
+
+  def alternate_name
+    original_name = @protected_area.original_name.presence
+    return if original_name.nil? || original_name == @protected_area.name
+
+    original_name
+  end
+
+  def address_structured_data
+    return if @countries.empty?
+
+    {
+      '@type': 'PostalAddress',
+      addressCountry: @countries.map(&:iso_3)
+    }
+  end
+
+  # the_geom_latitude/longitude are string columns on the record, so this costs no
+  # query and no PostGIS call.
+  def geo_structured_data
+    latitude = @protected_area.the_geom_latitude
+    longitude = @protected_area.the_geom_longitude
+    return if latitude.blank? || longitude.blank?
+
+    { '@type': 'GeoCoordinates', latitude: latitude, longitude: longitude }
+  end
+
+  def place_properties
+    properties = {
+      'WDPA ID' => @protected_area.site_id,
+      'Designation' => @protected_area.designation&.name,
+      'IUCN Management Category' => @protected_area.iucn_category&.name,
+      'Reported area (km²)' => @protected_area.reported_area&.to_f&.round(2)
+    }
+
+    properties.filter_map do |name, value|
+      next if value.blank?
+
+      { '@type': 'PropertyValue', name: name, value: value }
+    end.presence
+  end
 
   def map_overlays
     overlays(['individual_site'], {

@@ -36,8 +36,8 @@ class ApplicationController < ActionController::Base
       'type': 'website',
       'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
       'image:alt': t('meta.image_alt'),
-      'image:height': t('meta.image_height'),
-      'image:width': t('meta.image_width'),
+      'image:height': 630,
+      'image:width': 1200,
       'locale': 'en_GB'
     }
   end
@@ -68,9 +68,15 @@ class ApplicationController < ActionController::Base
       publisher: {
         '@type': 'Organization',
         name: t('meta.site.name'),
+        url: root_url,
         logo: URI.join(root_url, helpers.image_path(t('meta.image'))).to_s
       }
     }
+  end
+
+  def set_page_meta(title: nil, description: nil)
+    @page_title = title if title.present?
+    @page_description = description if description.present?
   end
 
   def default_url_options
@@ -153,8 +159,18 @@ class ApplicationController < ActionController::Base
 
     return unless @cms_page
 
-    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
-                        page: @cms_page).parse(opengraph: opengraph, type: 'og')
+    comfy_opengraph = ComfyOpengraph.new(
+      { 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
+      page: @cms_page
+    )
+    comfy_opengraph.parse(opengraph: opengraph, type: 'og')
+
+    # The home page's CMS record is the site root, whose label ("Home") makes a
+    # worse title than the site default -- so take only its description there.
+    set_page_meta(
+      title: (comfy_opengraph.page_title unless @cms_page.full_path == '/'),
+      description: comfy_opengraph.page_description
+    )
   end
 
   def record_invalid_error(exception = nil)
