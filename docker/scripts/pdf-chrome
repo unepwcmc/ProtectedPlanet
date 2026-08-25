@@ -41,11 +41,27 @@ fi
 # fallback private one are always configured identically.
 mapfile -t CHROME_ARGS < <(node -e "require('$APP_ROOT/app/frontend/backend-scripts/chrome-args').forEach(a => console.log(a))")
 
+# Profile dir is per-PORT, and thrown away on every start.
+#
+# Per-port because Chrome takes a singleton lock on the profile: a second
+# instance sharing the dir dies a few seconds in with an unhelpful exit status,
+# which is what happened when two of these ran side by side.
+#
+# Wiped because of how that lock is released. It is a symlink holding
+# <hostname>-<pid>, and a SIGKILLed Chrome leaves it behind; the next start
+# normally recovers by noticing the pid is dead, but if the container has since
+# reused that pid, Chrome reads the profile as still in use and refuses to boot.
+# Nothing here needs to survive a restart - every render gets a throwaway
+# incognito context anyway - so starting from an empty dir removes the whole
+# question.
+PROFILE_DIR="/tmp/pdf-chrome-profile-$PORT"
+rm -rf "$PROFILE_DIR"
+
 echo "pdf-chrome: starting $CHROME on port $PORT"
 
 exec "$CHROME" \
   --headless=new \
   --log-level=3 \
   "${CHROME_ARGS[@]}" \
-  --user-data-dir=/tmp/pdf-chrome-profile \
+  --user-data-dir="$PROFILE_DIR" \
   --remote-debugging-port="$PORT"

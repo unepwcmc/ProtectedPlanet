@@ -12,7 +12,7 @@
 
 .vw-home__download {
   @apply 
-  tw-shared-base-flex-gap-3
+  tw-shared-base-flex-col-md-row-gap-3
   tw-shared-font-hind-siliguri__light-lg-grey-black;
 }
 

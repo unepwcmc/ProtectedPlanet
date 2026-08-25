@@ -100,8 +100,14 @@ RUN gem install bundler --no-document \
 # fail at launch with "Could not find Chrome".
 ENV PUPPETEER_CACHE_DIR=/app/.cache/puppeteer
 
-COPY package.json yarn.lock .yarnrc.yml* ./
-RUN yarn install --immutable || yarn install
+COPY package.json yarn.lock .yarnrc.yml* .puppeteerrc.cjs ./
+
+# PUPPETEER_SKIP_DOWNLOAD: puppeteer's own postinstall download has no retry and
+# is not routed through the build cache mount used further down. It is also the
+# step that leaves the half-finished browser directory described below. Chrome
+# is installed explicitly, in its own controlled step, instead.
+RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install --immutable \
+ || PUPPETEER_SKIP_DOWNLOAD=true yarn install
 
 COPY . .
 
@@ -193,15 +199,11 @@ ENV AWS_S3_REGION=eu-west-1 \
 # directory-level check said the browser was there. `rm -rf` first makes the
 # install unconditional, so a half-finished download cannot persist.
 #
-# All steps are hard gates -- no tolerated exit codes. `test -x` on
-# executablePath() is the check that actually matters: an earlier version asserted
-# on the DIRECTORY, which is exactly the thing that exists when the download has
-# failed.
-#
-# executablePath() is wrapped in Promise.resolve() because puppeteer 25 returns a
-# Promise from it; writing that straight to stdout throws
-# "ERR_INVALID_ARG_TYPE ... Received an instance of Promise". Promise.resolve()
-# handles both the sync and async forms, so this does not break if it changes back.
+# The install is then asserted by app/frontend/backend-scripts/verify-puppeteer.js,
+# a hard gate -- see that file for what it checks and why. It lives in a file
+# rather than inline `node -e` because the checks need real error handling, and
+# because it doubles as a runtime diagnostic inside a deployed container. It sits
+# beside rasterize.js and chrome-args.js, the runtime code it is asserting about.
 RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
     export MAPBOX_ACCESS_TOKEN="$(cat /run/secrets/MAPBOX_ACCESS_TOKEN 2>/dev/null || true)" \
  && rm -rf public/assets public/vite tmp/cache/vite \
@@ -214,12 +216,35 @@ RUN --mount=type=secret,id=MAPBOX_ACCESS_TOKEN \
  && (grep -rq "VITE_MAPBOX_TOKEN:\`\?pk\." public/vite/assets/ \
      || (echo "ERROR: no Mapbox token in the built bundle -- the map will not render. Is MAPBOX_ACCESS_TOKEN passed as a builder secret?" && exit 1)) \
  && echo "assets OK: $(ls public/assets | wc -l) sprockets, vite manifest + mapbox token present" \
- && yarn workspaces focus --production \
- && rm -rf "$PUPPETEER_CACHE_DIR" \
- && ./node_modules/.bin/puppeteer browsers install chrome \
- && test -x "$(node -e "Promise.resolve(require('puppeteer').executablePath()).then(p => process.stdout.write(String(p)))")" \
- && node -e "const p=require('puppeteer'); p.launch({args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']}).then(async b => { console.log('puppeteer launches:', await b.version()); await b.close(); }).catch(e => { console.error('ERROR: puppeteer cannot launch -- every PDF export would fail. ' + e.message); process.exit(1); })" \
+ && PUPPETEER_SKIP_DOWNLOAD=true yarn workspaces focus --production \
  && rm -rf tmp/cache
+
+# The cache mount is wiped only AFTER a failed attempt, never before the first
+# one. Wiping up front (as this first did) empties the mount on every build, so
+# Chrome was re-downloaded every time and the cache bought nothing. Left intact,
+# a good browser makes `browsers install` a fast no-op.
+#
+# That still self-heals the half-finished download this step exists to defeat:
+# a version directory with no executable in it makes the CLI fail with
+# IncompleteInstallationError rather than silently succeed, and the retry path
+# clears the cache before trying again. So the wipe happens exactly when it is
+# needed and not on every build.
+#
+# $PUPPETEER_CACHE_DIR (the destination that gets copied into the image) is
+# still cleared on every attempt -- it is populated by the `cp -a` below.
+RUN --mount=type=cache,target=/puppeteer-dl-cache \
+    n=0; \
+    until rm -rf "$PUPPETEER_CACHE_DIR" \
+        && PUPPETEER_CACHE_DIR=/puppeteer-dl-cache ./node_modules/.bin/puppeteer browsers install chrome; do \
+        n=$((n+1)); \
+        if [ "$n" -ge 3 ]; then echo "Chrome download failed after 3 attempts" >&2; exit 1; fi; \
+        echo "Chrome download attempt $n failed, clearing the cache and retrying in 5s..."; \
+        find /puppeteer-dl-cache -mindepth 1 -delete; \
+        sleep 5; \
+    done \
+ && mkdir -p "$PUPPETEER_CACHE_DIR" \
+ && cp -a /puppeteer-dl-cache/. "$PUPPETEER_CACHE_DIR/" \
+ && node app/frontend/backend-scripts/verify-puppeteer.js
 
 # ---------------------------------------------------------------------------
 # runtime
@@ -255,7 +280,7 @@ RUN groupadd -g 1000 -r app 2>/dev/null || true \
  && mkdir -p tmp/pids log storage \
  # entrypoint.sh is mode 644 in git (the compose setup invoked it as
  # `bash entrypoint.sh`), so set the bit here rather than relying on the repo.
- && chmod +x entrypoint.sh bin/docker-sidekiq-healthcheck bin/docker-sidekiq-with-pdf-chrome docker/scripts/pdf-chrome \
+ && chmod +x entrypoint.sh bin/docker-sidekiq-healthcheck docker/scripts/pdf-chrome \
  && chown -R 1000:1000 /app
 USER 1000:1000
 

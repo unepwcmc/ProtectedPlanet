@@ -18,7 +18,11 @@ async function acquireBrowser () {
     console.error(`No shared browser at ${BROWSER_URL} (${err.message}); launching a private one.`);
   }
   console.warn("Couldn't use the shared Chrome launching its own Chrome now.")
-  return { browser: await puppeteer.launch({ args: CHROME_ARGS, ...options }), shared: false };
+  // Copy: puppeteer SPLICES the caller's --disable-features entry out of the array
+  // it is handed, merging that flag into its own list. CHROME_ARGS is the cached
+  // require() singleton, so passing it directly would shorten it for good and any
+  // second launch in this process would silently lose the flag.
+  return { browser: await puppeteer.launch({ args: [...CHROME_ARGS], ...options }), shared: false };
 }
 function freezeMapCanvases (page) {
   return page.evaluate(async () => {

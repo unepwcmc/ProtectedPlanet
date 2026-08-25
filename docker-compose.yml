@@ -146,6 +146,12 @@ services:
       # Dev-only: keep Chrome's output out of the sidekiq log. Unset in
       # deployment, where it goes to stdout so `kamal app logs` picks it up.
       - PDF_CHROME_LOG=/tmp/pdf-chrome.log
+      # Dev-only: --enable-low-end-device-mode, which shrinks Chrome's tile and
+      # resource pools the way it does on a low-memory phone. This whole stack
+      # shares a 1.5GB / 3 CPU VM and needs it; it also throttles the map raster
+      # work the PDFs are made of, so deployment leaves it unset. See
+      # app/frontend/backend-scripts/chrome-args.js.
+      - PDF_LOW_END_DEVICE_MODE=1
     depends_on:
       install:
         condition: service_completed_successfully
@@ -153,11 +159,16 @@ services:
         condition: service_started
       redis:
         condition: service_started
-    # Same wrapper the Kamal job_default role uses (config/deploy.staging.yml):
-    # it backgrounds Chrome and leaves sidekiq as the foreground process that
-    # defines the container's lifetime. PDF_CHROME_LOG (set above) keeps Chrome's
-    # output in its own file here so it doesn't interleave with sidekiq's.
-    command: /bin/bash -l -c "/ProtectedPlanet/bin/docker-sidekiq-with-pdf-chrome"
+    # Chrome's children (crashpad handler, renderers) are re-parented to PID 1
+    # when a Chrome dies, and PID 1 here is Sidekiq, which never calls wait() on
+    # anything it did not spawn - so each Chrome restart leaves ~11 permanent
+    # <defunct> entries. Measured: a container running the pre-supervisor script
+    # for 19h had 27 zombies out of 32 processes. The supervisor restarts Chrome
+    # far more often (crash restarts plus a scheduled recycle every 6h), so the
+    # leak compounds. `init: true` puts tini at PID 1 to reap them; it forwards
+    # SIGTERM, so Sidekiq still shuts down gracefully.
+    init: true
+    command: /bin/bash -l -c "bundle exec sidekiq"
     stdin_open: true
     tty: true
     extra_hosts:

@@ -32,17 +32,21 @@ servers:
       - pp-web-staging-01.internal.unep-wcmc.org
     options:
       add-host: host.docker.internal:host-gateway
+      # Chrome's children (crashpad handler, renderers) are re-parented to PID 1
+      # when a Chrome dies, and PID 1 in this role is Sidekiq, which never calls
+      # wait() on anything it did not spawn - so every Chrome restart strands
+      # ~11 permanent <defunct> entries. The supervisor in the wrapper restarts
+      # Chrome on each crash AND recycles it every 6h, so on a long-lived
+      # container that leak only grows. `--init` puts tini at PID 1 to reap
+      # them; it forwards SIGTERM, so Sidekiq still shuts down gracefully.
+      # Only this role needs it - job_import never starts a browser.
+      init: true
       health-cmd: /app/bin/docker-sidekiq-healthcheck
       health-interval: 5s
       health-retries: 3
       health-start-period: 10s
       health-timeout: 3s
-    # Not bare sidekiq: this role runs the `pdf` capsule, and the wrapper starts
-    # the shared headless Chrome those jobs render in (see
-    # bin/docker-sidekiq-with-pdf-chrome) before handing the process over to
-    # Sidekiq. Without it every PDF job launches a browser of its own - ~440MB
-    # each, against ~90MB for a page in the shared one.
-    cmd: bin/docker-sidekiq-with-pdf-chrome bundle exec sidekiq -C config/sidekiq.yml
+    cmd: bundle exec sidekiq -C config/sidekiq.yml
 
   job_import:
     hosts:

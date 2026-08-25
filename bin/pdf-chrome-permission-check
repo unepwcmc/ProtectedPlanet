@@ -1,0 +1,136 @@
+#!/bin/bash
+# Permission-only smoke test for the shared-Chrome path.
+#
+# Run AS THE APP USER, from the app root, inside the job_default container. It
+# only exercises the operations that could fail for a non-root user; it does not
+# need lib/modules/shared_chrome.rb, so it works on a deployment that predates it.
+#
+# Safe against a running Sidekiq: it uses a SPARE port (default 9010, never
+# 9222) and kills the browser it starts.
+#
+#   ./bin/pdf-chrome-permission-check [port]
+
+PORT="${1:-9010}"
+APP_ROOT="${APP_ROOT:-$PWD}"
+fails=0
+ok()   { echo "  PASS  $1"; }
+bad()  { echo "  FAIL  $1"; fails=$((fails + 1)); }
+
+echo "uid=$(id -u) gid=$(id -g)  app_root=$APP_ROOT  port=$PORT"
+
+echo "1. launcher script readable + executable"
+[ -x "$APP_ROOT/docker/scripts/pdf-chrome" ] && ok "docker/scripts/pdf-chrome" \
+  || bad "docker/scripts/pdf-chrome is not executable by this user"
+
+echo "2. puppeteer resolvable + Chrome binary executable"
+CHROME=$(cd "$APP_ROOT" && node -e "Promise.resolve(require('puppeteer').executablePath()).then(p=>console.log(p))" 2>/dev/null)
+if [ -n "$CHROME" ]; then ok "resolved: $CHROME"; else bad "cannot resolve puppeteer/executablePath (node_modules readable?)"; fi
+if [ -n "$CHROME" ] && [ -x "$CHROME" ]; then ok "chrome binary is executable"; else bad "chrome binary missing or not executable by this user"; fi
+
+echo "3. profile dir under /tmp is creatable"
+if mkdir -p "/tmp/pdf-chrome-permcheck-$PORT" 2>/dev/null; then
+  ok "/tmp writable"; rm -rf "/tmp/pdf-chrome-permcheck-$PORT"
+else bad "cannot create a profile dir under /tmp"; fi
+
+echo "4. PDF_CHROME_LOG target writable (only if set)"
+if [ -z "${PDF_CHROME_LOG}" ]; then ok "unset - Chrome logs to stdout (the deployment default)"
+elif (: >> "${PDF_CHROME_LOG}") 2>/dev/null; then ok "${PDF_CHROME_LOG} is appendable"
+else bad "PDF_CHROME_LOG=${PDF_CHROME_LOG} is not writable by this user"; fi
+
+echo "5. launch in its own process group, bind IPv4, then group-kill"
+rm -rf "/tmp/pdf-chrome-profile-$PORT"
+( cd "$APP_ROOT" \
+  && PDF_BROWSER_PORT="$PORT" \
+     LAUNCHER="$APP_ROOT/docker/scripts/pdf-chrome" ruby -e '
+  require "net/http"
+  pid = Process.spawn(ENV["LAUNCHER"], pgroup: true)
+  pgid = (Process.getpgid(pid) rescue nil)
+  puts(pgid == pid ? "  PASS  own process group (pgid=#{pgid})" : "  FAIL  setpgid did not take (pgid=#{pgid.inspect})")
+  ok = false
+  40.times do
+    begin
+      ok = Net::HTTP.start("127.0.0.1", ENV["PDF_BROWSER_PORT"].to_i, open_timeout: 2, read_timeout: 3) { |h|
+        h.get("/json/version").is_a?(Net::HTTPSuccess) }
+    rescue StandardError then ok = false
+    end
+    break if ok
+    sleep 1
+  end
+  # The trap this catches: with the port taken Chrome binds [::1] instead and
+  # looks healthy, while rasterize.js (IPv4) can never reach it.
+  puts(ok ? "  PASS  answers on 127.0.0.1:#{ENV["PDF_BROWSER_PORT"]} (IPv4)" \
+          : "  FAIL  never answered on IPv4 - port taken, or blocked")
+  begin
+    Process.kill("TERM", -pid)
+    sleep 4
+    reaped = Process.waitpid(pid, Process::WNOHANG)
+    Process.kill("KILL", -pid) rescue nil
+    puts(reaped ? "  PASS  group-kill + reap" : "  FAIL  could not TERM/reap the process group")
+  rescue Errno::EPERM => e
+    puts "  FAIL  not permitted to signal the group: #{e.message}"
+  end
+' ) 2>/dev/null
+
+rm -rf "/tmp/pdf-chrome-profile-$PORT"
+
+# Section 5 only proves TERM works. terminate() escalates to KILL when Chrome
+# does not go away within the grace period, and SIGKILL on a process group is a
+# separate permission question -- so force that path rather than assume it.
+# SIGSTOP makes the leader unable to act on TERM, which is exactly the state the
+# escalation exists for.
+echo "6. KILL escalation when TERM is ignored (SIGSTOPped leader)"
+( cd "$APP_ROOT" \
+  && PDF_BROWSER_PORT="$PORT" \
+     LAUNCHER="$APP_ROOT/docker/scripts/pdf-chrome" ruby -e '
+  require "net/http"
+  pid = Process.spawn(ENV["LAUNCHER"], pgroup: true)
+  up = false
+  40.times do
+    begin
+      up = Net::HTTP.start("127.0.0.1", ENV["PDF_BROWSER_PORT"].to_i, open_timeout: 2, read_timeout: 3) { |h|
+        h.get("/json/version").is_a?(Net::HTTPSuccess) }
+    rescue StandardError then up = false
+    end
+    break if up
+    sleep 1
+  end
+  unless up
+    puts "  SKIP  could not start a browser to test escalation against"
+    Process.kill("KILL", -pid) rescue nil
+    exit
+  end
+
+  begin
+    Process.kill("STOP", pid)
+    puts "  PASS  SIGSTOP accepted (leader can no longer honour TERM)"
+  rescue Errno::EPERM => e
+    puts "  FAIL  not permitted to SIGSTOP: #{e.message}"
+  end
+
+  Process.kill("TERM", -pid) rescue nil
+  sleep 3
+  still_here = Process.waitpid(pid, Process::WNOHANG).nil?
+  puts(still_here ? "  ....  TERM ignored as expected; escalating" \
+                  : "  ....  exited on TERM (escalation not exercised)")
+
+  if still_here
+    begin
+      Process.kill("KILL", -pid)
+      puts "  PASS  SIGKILL to the process group permitted"
+    rescue Errno::EPERM => e
+      puts "  FAIL  not permitted to SIGKILL the group: #{e.message}"
+    end
+    reaped = nil
+    20.times { reaped = Process.waitpid(pid, Process::WNOHANG); break if reaped; sleep 0.5 }
+    puts(reaped ? "  PASS  reaped after SIGKILL" : "  FAIL  survived SIGKILL or could not be reaped")
+  end
+' ) 2>/dev/null
+rm -rf "/tmp/pdf-chrome-profile-$PORT"
+
+echo
+if [ "$fails" -eq 0 ]; then
+  echo "checks 1-4 PASSED; read section 5 above for the launch result"
+else
+  echo "$fails permission check(s) FAILED"
+fi
+exit "$fails"

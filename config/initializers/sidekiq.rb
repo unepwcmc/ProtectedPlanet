@@ -11,3 +11,23 @@
     config.redis = { url: PPRedis.url }
   end
 end
+
+# The `pdf` capsule renders in a long-lived shared Chrome. Ruby owns its
+# lifetime (lib/modules/shared_chrome.rb) rather than a bash wrapper around the
+# container command, so the browser is a child of this process and gets reaped,
+# and the container command stays a plain `bundle exec sidekiq`.
+#
+# configure_server only yields in a Sidekiq process, so Puma never starts a
+# browser. The capsule check gates it further: job_import
+# (config/sidekiq-import.yml) declares no `pdf` capsule and must not start one,
+# because nothing it runs rasterizes.
+#
+# The check sits INSIDE the :startup hook rather than out here so it reads the
+# configuration the CLI actually loaded, whatever the parse/boot order is.
+Sidekiq.configure_server do |config|
+  config.on(:startup) do
+    SharedChrome.start! if config.capsules.key?('pdf')
+  end
+
+  config.on(:shutdown) { SharedChrome.stop! }
+end
