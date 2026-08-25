@@ -7,13 +7,6 @@ gem 'rails', '~> 8.0.0'
 # along, waiting for one. Containerised deploys need the server in the image.
 gem 'puma', '~> 6.4'
 
-# Ruby 3.1+ ships Psych 4/5, whose load is safe-load (aliases off). Rails 7 loads
-# its own configs (database.yml, secrets) alias-aware, but webpacker 4 and
-# appsignal 3 call plain YAML.load on their aliased configs at boot and break.
-# Pin Psych 3 until those are gone -- webpacker at the Vite cutover (B5),
-# appsignal on a version bump. (libyaml-dev is present in the image.)
-gem 'psych', '~> 3.3'
-
 gem 'pg', '~> 1.1'
 gem 'activerecord-postgis-adapter', '~> 11.0'
 gem 'dbf', '~> 2.0.7'
