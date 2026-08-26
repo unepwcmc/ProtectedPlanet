@@ -39,6 +39,7 @@ git submodule update --init --recursive
 12. [Green List Functionality](docs/green_list.md)
 13. [DB Connection between PP and Data Management Portal (FDW) Setup](docs/fdw_setup/index.md)
 14. [Banner system](docs/banner_system.md)
+15. [Shared Chrome for PDF rendering — verifying a deploy](docs/pdf-shared-chrome.md)
 
 ## Licence
 
