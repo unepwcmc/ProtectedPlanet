@@ -16,10 +16,30 @@
   --color-theme-grey-black: #242424;
   --color-theme-bright-green: #38A800;
   --color-theme-green-dark: #527B19;
-  --color-theme-chart-purple: #A54897;
-  --color-theme-chart-green: #71A22B;
-  --color-theme-chart-blue: #5F81CB;
-  --color-theme-chart-aqua: #65C9B2;
+
+  /* The 12-colour chart palette, indexed 1-12 exactly as the charts consume it:
+     ChartRowStacked's bars, the Stats legend swatches and AmChartPie's slices.
+     Reached through the `tw-shared-chart-*` classes in shared/themes.css.
+     amCharts can't use a class, so constants/charts.ts repeats these as literals. */
+  --color-theme-chart-1: #64BAD9;
+  --color-theme-chart-2: #A54897;
+  --color-theme-chart-3: #65C9B2;
+  --color-theme-chart-4: #5F81CB;
+  --color-theme-chart-5: #FAA51B;
+  --color-theme-chart-6: #EF5F6C;
+  --color-theme-chart-7: #151617;
+  --color-theme-chart-8: #71A22B;
+  --color-theme-chart-9: #F5F58A;
+  --color-theme-chart-10: #EF266C;
+  --color-theme-chart-11: #1A4D9F;
+  --color-theme-chart-12: #E57133;
+
+  /* Aliases for the palette entries Rails helpers pick by name. */
+  --color-theme-chart-purple: var(--color-theme-chart-2);
+  --color-theme-chart-aqua: var(--color-theme-chart-3);
+  --color-theme-chart-blue: var(--color-theme-chart-4);
+  --color-theme-chart-green: var(--color-theme-chart-8);
+
   --color-theme-purple: #7B1977;
   --color-theme-blue: #004DA8;
   --color-theme-orange: #D9B143;

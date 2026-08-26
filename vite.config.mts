@@ -36,14 +36,6 @@ export default defineConfig({
     // maplibre-gl ships its own worker as a separate chunk that the optimizer
     // doesn't handle correctly — pre-bundling 404s every request until excluded.
     exclude: ['maplibre-gl'],
-    // pinia's own dist file statically imports devtools-api, which lazily
-    // imports devtools-kit at runtime (on first app mount) — invisible to the
-    // optimizer's static crawl, so it got discovered mid-request and stalled
-    // every in-flight request ~20-25s while esbuild re-bundled. Including it
-    // upfront pre-bundles it on cold start instead. (pinia itself used to be
-    // excluded for a related resolve failure; removed 2026-08-19 after
-    // confirming clean across a cold restart + cache clear.)
-    include: ['@vue/devtools-kit'],
   },
   resolve: {
     alias: [

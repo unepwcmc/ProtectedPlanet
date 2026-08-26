@@ -19,10 +19,15 @@ only to serve `app/assets/images`.
   loaded as a real blocking stylesheet from the `vitecss.css` entrypoint. Every
   font-size/weight combination must route through a shared
   `tw-shared-font-*` utility rather than raw `text-*`/`font-*` in markup.
-- **State** — Pinia (`app/frontend/stores`) only for state that genuinely
-  outlives a single component tree (e.g. download keys). Prefer tree-scoped
-  `provide`/`inject` composables otherwise — see `composables/useMapOverlays.ts`
-  for why.
+- **Colours** — define values as `--color-*` in `styles/tailwind.css`'s `@theme`
+  block and reach them through a token; don't write a hex in a component or an
+  arbitrary `bg-[#...]`. Chart colours all live there (`--color-theme-chart-*`);
+  amCharts is the one consumer that can't use a class, so `constants/charts.ts`
+  mirrors the palette as literals for it.
+- **State** — composables only; there is no store library (Pinia was removed
+  once nothing needed it). Prefer tree-scoped `provide`/`inject` — see
+  `composables/useMapOverlays.ts` for why — and reach for module-level shared
+  state only when a browser storage already owns it, as in `useDownloads.ts`.
 - **HTTP** — use the `fetch`-based helpers in `app/frontend/lib/http.ts`
   (`getJson`/`postJson`, which handle the CSRF header). There is no `axios`
   dependency any more; don't reintroduce one.

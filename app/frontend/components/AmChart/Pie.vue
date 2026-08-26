@@ -11,7 +11,7 @@
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import * as am5 from '@amcharts/amcharts5'
 import * as am5percent from '@amcharts/amcharts5/percent'
-import { PIE_COLOURS } from '@/constants/charts'
+import { CHART_PALETTE, CHART_SURFACE_COLOUR, CHART_TOOLTIP_COLOUR, CHART_TOOLTIP_TEXT_COLOUR } from '@/constants/charts'
 import { registerPendingRender } from '@/lib/pdfReady'
 import type { AmChartPieProps } from '@/types/backend'
 
@@ -83,13 +83,13 @@ function removeLabels() {
 
 function setPieColours() {
   pieSeries!.set('colors', am5.ColorSet.new(root!, {
-    colors: PIE_COLOURS.map(colour => am5.color(colour))
+    colors: CHART_PALETTE.map(colour => am5.color(colour))
   }))
 }
 
 function createSpacers() {
   pieSeries!.slices.template.setAll({
-    stroke: am5.color('#ffffff'),
+    stroke: am5.color(CHART_SURFACE_COLOUR),
     strokeWidth: 2,
     strokeOpacity: 1
   })
@@ -103,11 +103,11 @@ function setTooltip() {
 
   const tooltip = am5.Tooltip.new(root!, { getFillFromSprite: false, autoTextColor: false })
   tooltip.get('background')!.setAll({
-    fill: am5.color('#000000'),
-    stroke: am5.color('#000000')
+    fill: am5.color(CHART_TOOLTIP_COLOUR),
+    stroke: am5.color(CHART_TOOLTIP_COLOUR)
   })
   tooltip.label.setAll({
-    fill: am5.color('#ffffff'),
+    fill: am5.color(CHART_TOOLTIP_TEXT_COLOUR),
     fontSize: 18,
     textAlign: 'center',
     paddingTop: 0,

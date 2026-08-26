@@ -11,12 +11,12 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as am5 from '@amcharts/amcharts5'
 import * as am5xy from '@amcharts/amcharts5/xy'
-import { CHART_FONT_FAMILY, LINE_COLOURS } from '@/constants/charts'
+import { CHART_AXIS_COLOUR, CHART_FONT_FAMILY, CHART_LINE_COLOURS, CHART_SURFACE_COLOUR } from '@/constants/charts'
 import type { AmChartMultilineProps } from '@/types/backend'
 
 type AmChartMultiline = AmChartMultilineProps
 const props = withDefaults(defineProps<AmChartMultiline>(), {
-  chartBackgroundColour: '#ffffff',
+  chartBackgroundColour: CHART_SURFACE_COLOUR,
   dots: false
 })
 
@@ -63,11 +63,11 @@ function createAxes(chart: am5xy.XYChart) {
   }))
   const xRenderer = xAxis.get('renderer')
   xRenderer.grid.template.set('visible', false)
-  xRenderer.setAll({ strokeOpacity: 1, strokeWidth: 1, stroke: am5.color('#c8c8c8') })
+  xRenderer.setAll({ strokeOpacity: 1, strokeWidth: 1, stroke: am5.color(CHART_AXIS_COLOUR) })
   xRenderer.ticks.template.setAll({
     visible: true,
     strokeOpacity: 1,
-    stroke: am5.color('#c8c8c8'),
+    stroke: am5.color(CHART_AXIS_COLOUR),
     length: 6
   })
   xRenderer.labels.template.setAll({ fontFamily: CHART_FONT_FAMILY, paddingTop: 10 })
@@ -80,7 +80,7 @@ function createAxes(chart: am5xy.XYChart) {
   yRenderer.setAll({
     strokeOpacity: 1,
     strokeWidth: 1,
-    stroke: am5.color('#c8c8c8')
+    stroke: am5.color(CHART_AXIS_COLOUR)
   })
   yRenderer.labels.template.setAll({ fontFamily: CHART_FONT_FAMILY, paddingRight: 4 })
 
@@ -109,21 +109,21 @@ function createSeries(chart: am5xy.XYChart, yAxis: am5xy.ValueAxis<am5xy.AxisRen
       yAxis,
       valueXField: 'x',
       valueYField: fieldName,
-      stroke: am5.color(LINE_COLOURS[i]),
-      fill: am5.color(LINE_COLOURS[i])
+      stroke: am5.color(CHART_LINE_COLOURS[i]),
+      fill: am5.color(CHART_LINE_COLOURS[i])
     }))
     series.strokes.template.set('strokeWidth', 4)
     series.data.setAll(data)
 
-    if (props.dots) createDots(series, i)
+    if (props.dots) createDots(series, CHART_LINE_COLOURS[i])
   }
 }
 
-function createDots(series: am5xy.LineSeries, index: number) {
+function createDots(series: am5xy.LineSeries, colour: string) {
   series.bullets.push(() => am5.Bullet.new(root!, {
     sprite: am5.Circle.new(root!, {
       radius: 6,
-      fill: am5.color(LINE_COLOURS[index])
+      fill: am5.color(colour)
     })
   }))
 }

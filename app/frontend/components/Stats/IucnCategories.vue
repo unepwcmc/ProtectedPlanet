@@ -21,7 +21,7 @@
       >
         <i
           class="ct-stats-iucn-categories__item-icon"
-          :class="`tw-shared-chart-theme-${(i % 12) + 1}`"
+          :class="chartThemeClass(i)"
         />
         <span
           class="ct-stats-iucn-categories__item-title"
@@ -47,6 +47,7 @@
 <script setup lang="ts">
 import AmChartPie from '@/components/AmChart/Pie.vue'
 import IconCircleChevron from '@/components/Icon/CircleChevron.vue'
+import { chartThemeClass } from '@/constants/charts'
 import type { StatsIucnCategoriesProps } from '@/types/backend'
 
 type StatsIucnCategories = StatsIucnCategoriesProps

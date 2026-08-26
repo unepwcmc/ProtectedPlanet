@@ -1,23 +1,16 @@
 // The app's only island mounter, backing the `turbo_mount` ERB helper.
 import { TurboMount, buildRegisterFunction, type Plugin } from 'turbo-mount'
 import { createApp, type Component } from 'vue'
-import { pinia } from '@/stores/pinia'
 import { markIslandScanComplete } from '@/lib/pdfReady'
 
 export type TurboMountLoader = () => Promise<{ default: Component }>
 
-// Replaces turbo-mount's stock `turbo-mount/vue` plugin, which doesn't install
-// anything into the per-island createApp(). Without the shared pinia, any
-// component using a store throws "no active Pinia".
-//
-// No component uses a store today (see stores/pinia.ts) — this stays so that the
-// first one to need it works without having to rediscover why the stock plugin
-// isn't enough.
-const piniaAwareVuePlugin: Plugin<Component> = {
+// Replaces turbo-mount's stock `turbo-mount/vue` plugin, which configures nothing
+// on the per-island createApp() — including no errorHandler.
+const vuePlugin: Plugin<Component> = {
   mountComponent({ el, Component: mounted, props }) {
     // turbo-mount types `props` as bare `object`; cast to createApp's signature.
     const app = createApp(mounted, props as Parameters<typeof createApp>[1])
-    app.use(pinia)
     // Each island is its own app, so an error thrown in one only ever blanks that
     // island — silently, without this. `__name` is the SFC's compiled name.
     const name = (mounted as { __name?: string }).__name ?? 'unknown'
@@ -27,7 +20,7 @@ const piniaAwareVuePlugin: Plugin<Component> = {
   }
 }
 
-const registerComponent = buildRegisterFunction(piniaAwareVuePlugin)
+const registerComponent = buildRegisterFunction(vuePlugin)
 
 const TURBO_MOUNT_SELECTOR = '[data-controller^="turbo-mount-"]'
 

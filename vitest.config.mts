@@ -23,7 +23,7 @@ export default defineConfig({
     include: ['app/frontend/**/*.{test,spec}.{ts,js}'],
     server: {
       deps: {
-        inline: [/@vue\/test-utils/, /@vueuse\//, /pinia/, /swiper/],
+        inline: [/@vue\/test-utils/, /@vueuse\//, /swiper/],
       },
     },
   },

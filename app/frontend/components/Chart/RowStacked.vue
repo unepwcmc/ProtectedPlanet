@@ -13,7 +13,7 @@
         v-for="(row, index) in rows"
         :key="`row-${index}`"
         class="ct-chart-row-stacked__bar"
-        :class="theme ? themeClass : `tw-shared-chart-theme-${(index % 12) + 1}`"
+        :class="theme ? themeClass : chartThemeClass(index)"
         :style="{ width: `${row.percent}%` }"
       >
         <span
@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { chartThemeClass } from '@/constants/charts'
 import type { ChartRowStackedProps } from '@/types/backend'
 
 type ChartRowStacked = ChartRowStackedProps

@@ -22,7 +22,7 @@
         <div class="ct-stats-designations__legend-header">
           <span
             class="ct-stats-designations__legend-icon"
-            :class="`tw-shared-chart-theme-${(i % 12) + 1}`"
+            :class="chartThemeClass(i)"
           />
           <h3
             class="ct-stats-designations__legend-title"
@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import ChartRowStacked from '@/components/Chart/RowStacked.vue'
 import IconCircleChevron from '@/components/Icon/CircleChevron.vue'
+import { chartThemeClass } from '@/constants/charts'
 import type { StatsDesignationsProps } from '@/types/backend'
 
 type StatsDesignations = StatsDesignationsProps

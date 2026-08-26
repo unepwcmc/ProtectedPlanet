@@ -1,9 +1,9 @@
 // Shared overlay/layer state for ONE map composition.
 //
-// Provide/inject rather than a Pinia store: a store is an app-wide singleton
-// outliving the Map island, which caused sites to inherit the previous site's
-// geometry (addOverlay is idempotent by id, and every PA page ships the same
-// overlay id with a different url). Every reader and writer lives inside the
+// Provide/inject rather than a module-level singleton: a singleton outlives the
+// Map island, which caused sites to inherit the previous site's geometry
+// (addOverlay is idempotent by id, and every PA page ships the same overlay id
+// with a different url). Every reader and writer lives inside the
 // `Map/Index.vue` tree, so scoping the state there leaves nothing stale to
 // reset and lets two maps coexist on a page.
 import { inject, provide, ref, type InjectionKey, type Ref } from 'vue'
