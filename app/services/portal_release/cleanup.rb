@@ -8,7 +8,7 @@ module PortalRelease
           # Analyze staging tables in dry-run for visibility
           [::Staging::ProtectedArea.table_name, ::Staging::ProtectedAreaParcel.table_name,
             ::Staging::Source.table_name].each do |t|
-            ActiveRecord::Base.connection.execute("ANALYZE #{t}")
+            ActiveRecord::Base.lease_connection.execute("ANALYZE #{t}")
           end
           log.event('post_swap_done_dry_run')
         else

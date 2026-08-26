@@ -12,7 +12,7 @@ class Wdpa::Portal::Importers::GeometryTest < ActiveSupport::TestCase
 
   def setup
     @conn = mock('connection')
-    ActiveRecord::Base.stubs(:connection).returns(@conn)
+    ActiveRecord::Base.stubs(:lease_connection).returns(@conn)
     Rails.logger.stubs(:info); Rails.logger.stubs(:warn)
     Rails.logger.stubs(:error); Rails.logger.stubs(:debug)
   end

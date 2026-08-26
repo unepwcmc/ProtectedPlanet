@@ -16,7 +16,7 @@ module Wdpa
           use_checkpoints = Wdpa::Portal::ImportRuntimeConfig.checkpoints?
 
           if portal_views_exist?
-            total_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{pame_view}").to_i
+            total_count = ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{pame_view}").to_i
             offset = 0
             if use_checkpoints
               begin
@@ -31,7 +31,7 @@ module Wdpa
             while offset < end_offset
               limit = [batch_size, end_offset - offset].min
               query = "SELECT * FROM #{pame_view} LIMIT #{limit} OFFSET #{offset}"
-              batch = ActiveRecord::Base.connection.select_all(query)
+              batch = ActiveRecord::Base.lease_connection.select_all(query)
               yield batch
               offset += limit
               Wdpa::Portal::Checkpoint.set_offset(pame_view, offset) if use_checkpoints
@@ -47,7 +47,7 @@ module Wdpa
 
         def count
           if portal_views_exist?
-            ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{pame_view}").to_i
+            ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{pame_view}").to_i
           else
             raise StandardError,
               "#{pame_view} view is required but does not exist"

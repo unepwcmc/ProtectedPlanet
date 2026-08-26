@@ -27,7 +27,7 @@ class Download::Generators::Base
   # Drops all temporary download views created by generators
   # (views with names starting with "tmp_downloads_")
   def self.clean_tmp_download_views
-    conn = ActiveRecord::Base.connection
+    conn = ActiveRecord::Base.lease_connection
     sql = <<-SQL
       SELECT table_name
       FROM information_schema.views
@@ -286,6 +286,6 @@ class Download::Generators::Base
   end
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 end

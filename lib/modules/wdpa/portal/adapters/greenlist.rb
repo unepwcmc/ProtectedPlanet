@@ -22,7 +22,7 @@ module Wdpa
               "#{greenlist_view} view is required but does not exist"
           end
 
-          total_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{greenlist_view}").to_i
+          total_count = ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{greenlist_view}").to_i
           offset = 0
           if use_checkpoints
             begin
@@ -37,7 +37,7 @@ module Wdpa
           while offset < end_offset
             limit = [batch_size, end_offset - offset].min
             query = "SELECT * FROM #{greenlist_view} LIMIT #{limit} OFFSET #{offset}"
-            result = ActiveRecord::Base.connection.select_all(query)
+            result = ActiveRecord::Base.lease_connection.select_all(query)
             # Yield array of hashes so each row is a plain Hash (string keys)
             batch = result.respond_to?(:to_a) ? result.to_a : result
             yield batch
@@ -57,7 +57,7 @@ module Wdpa
             raise StandardError,
               "#{greenlist_view} view is required but does not exist"
           end
-          ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{greenlist_view}").to_i
+          ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{greenlist_view}").to_i
         end
 
         def greenlist_view_exists?

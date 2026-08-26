@@ -22,7 +22,7 @@ module Wdpa
 
           def self.rows
             run_id = select_run_id(table: 'pame_stats', run_column: 'metadata_pame_uuid')
-            quoted_run_id = ActiveRecord::Base.connection.quote(run_id)
+            quoted_run_id = ActiveRecord::Base.lease_connection.quote(run_id)
 
             sql = <<~SQL
               SELECT iso3,

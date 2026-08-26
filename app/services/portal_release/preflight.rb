@@ -41,7 +41,7 @@ module PortalRelease
       end
 
       def counts_snapshot
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         {
@@ -55,7 +55,7 @@ module PortalRelease
       end
 
       def check_geometry!
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         bad_points = conn.select_value("SELECT COUNT(*) FROM #{views[:points]}   WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
@@ -66,7 +66,7 @@ module PortalRelease
       end
 
       def check_duplicates!
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         dup_points = conn.select_value(<<~SQL).to_i
@@ -94,7 +94,7 @@ module PortalRelease
       # Creates or replaces the staging portal downloads view used by generators/exporters
       # Combines polygons and points from staging materialized views.
       def create_portal_downloads_view!(log = nil)
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
         staging_view = Wdpa::Portal::Config::PortalImportConfig.generate_staging_name(downloads_view)
         backup_timestamp = ::Release.current_backup_timestamp_string
@@ -151,7 +151,7 @@ module PortalRelease
       # Rolls back the portal downloads view to a backup version
       # Similar to rollback_portal_materialized_views: backup → live, live → staging
       def rollback_portal_download_view(backup_timestamp, log = nil)
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
         backup_view = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(downloads_view, backup_timestamp)
         staging_view = Wdpa::Portal::Config::PortalImportConfig.generate_staging_name(downloads_view)

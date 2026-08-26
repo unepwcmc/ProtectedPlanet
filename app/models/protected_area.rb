@@ -128,7 +128,7 @@ class ProtectedArea < ApplicationRecord
   #     WHERE EXTRACT(YEAR FROM t.year) >= ?
   #   SQL
 
-  #   result = ActiveRecord::Base.connection.execute(
+  #   result = ActiveRecord::Base.lease_connection.execute(
   #     ActiveRecord::Base.send(:sanitize_sql_array, [
   #       growth, start_year
   #     ])
@@ -141,7 +141,7 @@ class ProtectedArea < ApplicationRecord
     result = {}
 
     # Get sources from the protected area itself
-    pa_sources = ActiveRecord::Base.connection.execute(<<~SQL)
+    pa_sources = ActiveRecord::Base.lease_connection.execute(<<~SQL)
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
       INNER JOIN protected_areas_sources
@@ -151,7 +151,7 @@ class ProtectedArea < ApplicationRecord
     result[self.site_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
 
     # Get sources from all parcels
-    parcel_sources = ActiveRecord::Base.connection.execute(<<~SQL)
+    parcel_sources = ActiveRecord::Base.lease_connection.execute(<<~SQL)
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.site_pid
       FROM sources
       INNER JOIN protected_area_parcels_sources ON protected_area_parcels_sources.source_id = sources.id
@@ -344,7 +344,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 
   def self.with_valid_iucn_categories

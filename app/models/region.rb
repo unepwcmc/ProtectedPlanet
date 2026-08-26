@@ -25,7 +25,7 @@ class Region < ApplicationRecord
   end
 
   def protected_areas_per_governance(exclude_oecms: false)
-    ActiveRecord::Base.connection.execute("
+    ActiveRecord::Base.lease_connection.execute("
       SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count AS count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage
       FROM governances
       INNER JOIN (
@@ -65,7 +65,7 @@ class Region < ApplicationRecord
   end
 
   def sources_per_jurisdiction
-    ActiveRecord::Base.connection.execute("
+    ActiveRecord::Base.lease_connection.execute("
       SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
       FROM jurisdictions
       INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
@@ -99,7 +99,7 @@ class Region < ApplicationRecord
   end
 
   def protected_areas_per_designation(jurisdictions = [], exclude_oecms: false)
-    ActiveRecord::Base.connection.execute("
+    ActiveRecord::Base.lease_connection.execute("
       SELECT designations.name AS designation_name, SUM(pas_per_designations.count) as count
       FROM designations
       INNER JOIN (
@@ -112,7 +112,7 @@ class Region < ApplicationRecord
   end
 
   def protected_areas_per_jurisdiction(exclude_oecms: false)
-    ActiveRecord::Base.connection.execute("
+    ActiveRecord::Base.lease_connection.execute("
       SELECT jurisdictions.name, COUNT(*)
       FROM jurisdictions
       INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
@@ -138,7 +138,7 @@ class Region < ApplicationRecord
   end
 
   def sources_per_region(exclude_oecms: false)
-    sources = ActiveRecord::Base.connection.execute("
+    sources = ActiveRecord::Base.lease_connection.execute("
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
       INNER JOIN countries_protected_areas

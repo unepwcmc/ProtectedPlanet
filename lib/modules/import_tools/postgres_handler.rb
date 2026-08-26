@@ -11,7 +11,7 @@ class ImportTools::PostgresHandler
   def connect_to db_name
     pg_conn_values = current_conn_values.merge(database: db_name)
     ActiveRecord::Base.establish_connection pg_conn_values
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 
   def create_database database_name

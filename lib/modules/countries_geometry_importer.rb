@@ -29,7 +29,7 @@ class CountriesGeometryImporter
   private
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 
   def download

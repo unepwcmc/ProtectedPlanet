@@ -20,7 +20,7 @@ module Wdpa
           # Pick the run covering the most rows for the vintage; tie-break latest timestamp.
           # Partial runs (single-country test runs) are naturally ignored.
           def select_run_id(table:, run_column:)
-            quoted_vintage = ActiveRecord::Base.connection.quote(vintage)
+            quoted_vintage = ActiveRecord::Base.lease_connection.quote(vintage)
             sql = <<~SQL
               SELECT #{run_column} AS run_id
               FROM stats.#{table}
@@ -29,7 +29,7 @@ module Wdpa
               ORDER BY COUNT(*) DESC, MAX(metadata_run_timestamp) DESC
               LIMIT 1
             SQL
-            run_id = ActiveRecord::Base.connection.select_value(sql)
+            run_id = ActiveRecord::Base.lease_connection.select_value(sql)
             if run_id.nil?
               raise MissingStatsError,
                 "No rows in stats.#{table} for vintage #{vintage} — fix stats mirror or set PP_STATS_SOURCE=csv"
@@ -39,7 +39,7 @@ module Wdpa
           end
 
           def fetch_rows(sql)
-            ActiveRecord::Base.connection.select_all(sql).to_a
+            ActiveRecord::Base.lease_connection.select_all(sql).to_a
           end
 
           # Fraction (0-1) -> percentage (0-100); NaN/nil -> nil

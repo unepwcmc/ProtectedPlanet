@@ -10,7 +10,7 @@ module Wdpa
           use_checkpoints = Wdpa::Portal::ImportRuntimeConfig.checkpoints?
 
           Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_staging_materialised_views.each do |view_name|
-            total_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
+            total_count = ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
 
             offset = 0
             if use_checkpoints
@@ -27,7 +27,7 @@ module Wdpa
             while offset < end_offset
               limit = [batch_size, end_offset - offset].min
               query = "SELECT * FROM #{view_name} LIMIT #{limit} OFFSET #{offset}"
-              batch = ActiveRecord::Base.connection.select_all(query)
+              batch = ActiveRecord::Base.lease_connection.select_all(query)
               yield batch
               offset += limit
               Wdpa::Portal::Checkpoint.set_offset(view_name, offset) if use_checkpoints
@@ -39,7 +39,7 @@ module Wdpa
           total_count = 0
 
           Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_staging_materialised_views.each do |view_name|
-            count_result = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}")
+            count_result = ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{view_name}")
             total_count += count_result.to_i
           end
 

@@ -59,7 +59,7 @@ module Wdpa
         end
 
         def self.drop_table_safely(table_name)
-          return unless ActiveRecord::Base.connection.table_exists?(table_name)
+          return unless ActiveRecord::Base.lease_connection.table_exists?(table_name)
 
           ActiveRecord::Base.connection_pool.with_connection do |conn|
             conn.drop_table(table_name, if_exists: true, force: :cascade)
@@ -69,7 +69,7 @@ module Wdpa
 
         def self.staging_tables_exist?
           Wdpa::Portal::Config::PortalImportConfig.staging_tables.all? do |table_name|
-            ActiveRecord::Base.connection.table_exists?(table_name)
+            ActiveRecord::Base.lease_connection.table_exists?(table_name)
           end
         end
 
@@ -82,7 +82,7 @@ module Wdpa
             Rails.logger.info '✅ Staging tables created successfully'
           else
             missing_tables = Wdpa::Portal::Config::PortalImportConfig.staging_tables.reject do |table_name|
-              ActiveRecord::Base.connection.table_exists?(table_name)
+              ActiveRecord::Base.lease_connection.table_exists?(table_name)
             end
             error_msg = "Required staging tables are missing: #{missing_tables.join(', ')}. Please create staging tables before running import."
             Rails.logger.error error_msg
@@ -92,7 +92,7 @@ module Wdpa
 
         def self.create_staging_table(staging_table_name)
           live_table_name = Wdpa::Portal::Config::PortalImportConfig.get_live_table_name_from_staging_name(staging_table_name)
-          unless ActiveRecord::Base.connection.table_exists?(live_table_name)
+          unless ActiveRecord::Base.lease_connection.table_exists?(live_table_name)
             Rails.logger.warn "Skipping staging for #{staging_table_name} because live table #{live_table_name} does not exist"
             return
           end
@@ -114,7 +114,7 @@ module Wdpa
         end
 
         def self.create_exact_table_copy(source_table_name, target_table_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           # Build LIKE options dynamically to control indexes and constraints
           like_opts = [
@@ -141,7 +141,7 @@ module Wdpa
         end
 
         def self.create_staging_sequence(source_table_name, target_table_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           primary_key = connection.primary_key(source_table_name)
 
           # Skip sequence creation for junction tables (no primary key)
@@ -199,7 +199,7 @@ module Wdpa
         end
 
         def self.sequence_exists?(sequence_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           result = connection.execute(<<~SQL)
             SELECT EXISTS (
               SELECT 1 FROM pg_sequences
@@ -212,7 +212,7 @@ module Wdpa
         end
 
         def self.add_foreign_keys(staging_table_name, live_table_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           live_foreign_keys = connection.foreign_keys(live_table_name)
 
           live_foreign_keys.each do |fk|
@@ -221,7 +221,7 @@ module Wdpa
         end
 
         def self.drop_all_foreign_keys(staging_table_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           existing_fks = connection.foreign_keys(staging_table_name)
           existing_fks.each do |fk|
             connection.remove_foreign_key(staging_table_name, name: fk.name)
@@ -253,7 +253,7 @@ module Wdpa
 
         # --- Primary key helpers (for swap compatibility) ---
         def self.get_primary_key_name(table_name)
-          result = ActiveRecord::Base.connection.execute(<<~SQL)
+          result = ActiveRecord::Base.lease_connection.execute(<<~SQL)
             SELECT conname
             FROM pg_constraint
             WHERE conrelid = '#{table_name}'::regclass
@@ -273,7 +273,7 @@ module Wdpa
           return if staging_pk == expected
 
           begin
-            ActiveRecord::Base.connection.execute(
+            ActiveRecord::Base.lease_connection.execute(
               "ALTER TABLE #{staging_table_name} RENAME CONSTRAINT #{staging_pk} TO #{expected}"
             )
             Rails.logger.debug "Renamed staging PK on #{staging_table_name}: #{staging_pk} -> #{expected}"
@@ -283,7 +283,7 @@ module Wdpa
         end
 
         def self.cleanup_auto_generated_index_suffixes(table_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           # Get all indexes for the table
           indexes = connection.execute(<<~SQL)
@@ -335,7 +335,7 @@ module Wdpa
         end
 
         def self.add_indexes_to_staging_table(staging_table_name, live_table_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           live_indexes = connection.indexes(live_table_name)
           staging_indexes = connection.indexes(staging_table_name)
