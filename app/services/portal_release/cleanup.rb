@@ -25,7 +25,9 @@ module PortalRelease
             Download.clear_downloads
 
             # Clear Rails cache to ensure fresh data is served
-            Rails.cache.clear
+            clear_cache_preserving_sitemap_fallback
+
+            warm_sitemap(log)
 
             log.event('post_swap_cleanup_done')
           rescue StandardError => e
@@ -39,6 +41,34 @@ module PortalRelease
       def retention!(log, keep_prev: 1)
         # Backups are cleaned in cleanup_after_swap; keep method for compatibility/logging
         log.event('retention_done', payload: { keep_prev: keep_prev })
+      end
+
+      private
+
+      # Losing the sitemap's last-good bounds to the clear turns a slow post-swap
+      # bounds query into a 500 on every sitemap URL. See Sitemap.
+      def clear_cache_preserving_sitemap_fallback
+        Sitemap.preserving_last_good_bounds { Rails.cache.clear }
+      rescue StandardError => e
+        # The clear itself must still happen; the rest of the release depends on it.
+        Rails.logger.warn("Sitemap fallback preservation failed: #{e.class}: #{e.message}")
+        Rails.cache.clear
+      end
+
+      # Spend the bounds query here, in the job container, rather than on the first
+      # crawler's Puma thread. Never fatal: the cleanup above has already succeeded.
+      def warm_sitemap(log)
+        chunks = Sitemap.warm!(sitemap_base_url)
+        log.event('sitemap_warmed', payload: { protected_area_chunks: chunks })
+      rescue StandardError => e
+        Rails.logger.warn("Sitemap warm after swap failed: #{e.class}: #{e.message}")
+        log.event('sitemap_warm_failed', payload: { error: e.message })
+      end
+
+      # No request to take a host from. nil still warms the expensive half.
+      def sitemap_base_url
+        host = AppSecrets.host.presence
+        host && "https://#{host}"
       end
     end
   end

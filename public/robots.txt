@@ -1,24 +1,77 @@
-# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
-#
-# To ban all spiders from the entire site uncomment the next two lines:
-# User-agent: *
-# Disallow: /
+Sitemap: https://www.protectedplanet.net/sitemap.xml
 
 User-agent: *
-Disallow: /search
+Disallow: /en/search-areas?
+Disallow: /en/search-areas-results
+Disallow: /en/search-results
+Disallow: /en/search-cms
+Disallow: /en/search$
+Disallow: /en/search?
+Disallow: /*?for_pdf=
+Disallow: /en/downloads/
+Disallow: /*.pdf$
 
-User-agent: AhrefsBot 
-Disallow: /
-
-User-agent: Yandex
-Disallow: /
-
-User-agent: Googlebot
+User-agent: bingbot
 Crawl-delay: 10
+Disallow: /en/search-areas?
+Disallow: /en/search-areas-results
+Disallow: /en/search-results
+Disallow: /en/search-cms
+Disallow: /en/search$
+Disallow: /en/search?
+Disallow: /*?for_pdf=
+Disallow: /en/downloads/
+Disallow: /*.pdf$
 
 User-agent: Slurp
 Crawl-delay: 30
-
-User-agent: *
+Disallow: /en/search-areas?
+Disallow: /en/search-areas-results
+Disallow: /en/search-results
+Disallow: /en/search-cms
+Disallow: /en/search$
+Disallow: /en/search?
+Disallow: /*?for_pdf=
+Disallow: /en/downloads/
 Disallow: /*.pdf$
 
+User-agent: Baiduspider
+User-agent: Baiduspider-image
+User-agent: Baiduspider-video
+User-agent: Baiduspider-news
+User-agent: Baiduspider-favo
+Crawl-delay: 30
+Disallow: /en/search-areas?
+Disallow: /en/search-areas-results
+Disallow: /en/search-results
+Disallow: /en/search-cms
+Disallow: /en/search$
+Disallow: /en/search?
+Disallow: /*?for_pdf=
+Disallow: /en/downloads/
+Disallow: /*.pdf$
+
+User-agent: Bytespider
+User-agent: YisouSpider
+User-agent: Sogou web spider
+User-agent: Sogou inst spider
+User-agent: Sogou spider2
+User-agent: Sogou Orion spider
+User-agent: Sogou News Spider
+User-agent: 360Spider
+User-agent: 360Spider-Image
+User-agent: 360Spider-Video
+User-agent: HaosouSpider
+User-agent: PetalBot
+User-agent: Sosospider
+User-agent: EasouSpider
+User-agent: YoudaoBot
+User-agent: YodaoBot
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+User-agent: DataForSeoBot
+User-agent: Yandex
+Disallow: /

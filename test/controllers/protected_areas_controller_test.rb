@@ -17,6 +17,24 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test '#show counts a visit for a browser' do
+    request.user_agent = 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Safari/537.36'
+    $redis.expects(:zincrby).with(DateTime.now.strftime('%m-%Y'), 1, @protected_area.site_id)
+
+    get :show, params: {id: @protected_area.site_id}
+    assert_response :success
+  end
+
+  test '#show does not count a visit for a crawler' do
+    # The sitemap advertises every /:id page, so a full crawl would otherwise tick
+    # every protected area in the popularity counter.
+    request.user_agent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+    $redis.expects(:zincrby).never
+
+    get :show, params: {id: @protected_area.site_id}
+    assert_response :success
+  end
+
   test '#show, given a slug, redirects to the search page' do
     # PAs can share a name/slug across different SITE IDs, so slug lookups are
     # redirected to search rather than rendering one arbitrary PA.
@@ -34,6 +52,10 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     )
 
     get :show, params: {id: protected_area.site_id}
+
+    # Without this the test could only fail by raising -- minitest reported it as
+    # "missing assertions".
+    assert_response :success
   end
 
   test '#show, given a PA that does not exist, renders the 404 page' do
@@ -42,5 +64,17 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     # than expecting the exception to propagate.
     get :show, params: {id: 'flarglearg'}
     assert_response :not_found
+  end
+
+  test '#show, given a non-HTML format, renders the HTML 404 page rather than blowing up' do
+    # /sitemaps.xml matches neither sitemap route (both declare format: false) and
+    # falls through to the catch-all `get '/:id'`, which parses it as id "sitemaps"
+    # + format "xml". render_error_page pins formats to :html because error_page
+    # only exists as .html.erb -- without that pin the rescue_from handler raised
+    # ActionView::MissingTemplate and the 404 came back as a 500.
+    get :show, params: { id: 'sitemaps', format: 'xml' }
+
+    assert_response :not_found
+    assert_equal 'text/html', response.media_type
   end
 end

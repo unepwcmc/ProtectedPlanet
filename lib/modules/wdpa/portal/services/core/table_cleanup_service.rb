@@ -62,6 +62,8 @@ module Wdpa
           def perform_vacuum_operations
             Rails.logger.info '🧹 Performing VACUUM operations...'
 
+            failed_tables = []
+
             @tables_to_cleanup.each do |table_name|
               next unless @connection.table_exists?(table_name)
 
@@ -73,10 +75,20 @@ module Wdpa
                 duration = Time.current - start_time
                 Rails.logger.info "✅ VACUUM ANALYZE completed for #{table_name} (#{duration.round(2)}s)"
               rescue StandardError => e
+                failed_tables << table_name
                 Rails.logger.error "❌ VACUUM ANALYZE failed for #{table_name}: #{e.message}"
                 # Continue with other tables even if one fails
               end
             end
+
+            return if failed_tables.empty?
+
+            Rails.logger.error(
+              "❌ VACUUM ANALYZE did not complete for: #{failed_tables.join(', ')}. " \
+              'These tables have no visibility map, so index-only scans over them will ' \
+              'read the heap until autovacuum catches up. Run VACUUM ANALYZE on them ' \
+              'manually if anything reading them is slow.'
+            )
           end
 
           # --- BACKUP CLEANUP METHODS ---

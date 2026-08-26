@@ -192,14 +192,11 @@ module Smoke
         # is already generated; downloads#poll covers the same code path safely.
         []
       when 'sitemaps#show'
-        # Both halves of the endpoint: a static chunk, and a generated protected-area
-        # chunk -- the only one that queries protected_areas, and the one whose bounds
-        # lookup is the expensive path. Asked for through Sitemap itself so this walks
-        # a chunk that exists: an out-of-range name is a deliberate 404, which the
-        # walker would report as a failure.
+        # Both halves: a static chunk and a generated one. Asked through Sitemap so
+        # the name exists -- an out-of-range one is a deliberate 404 the walker would
+        # report as a failure.
         label = route_label(route)
-        # 'pages' rather than countries/regions: it is the static chunk that walks
-        # every published CMS page, so it is the one that can actually break.
+        # 'pages' walks every published CMS page, so it is the one that can break.
         names = ['pages']
         names << 'protected-areas-1' if Sitemap.valid_chunk_name?('protected-areas-1')
         names.map { |name| Target.new(label: label, path: "/sitemaps/#{name}.xml") }

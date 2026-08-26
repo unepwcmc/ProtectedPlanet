@@ -81,8 +81,22 @@ class ProtectedAreasController < ApplicationController
     locations.join(', ')
   end
 
+  # Popularity counter, keyed by month. The sitemap now advertises every /:id page
+  # (see lib/modules/sitemap.rb), so a full crawl would tick all ~500k sites once.
+  # That is uniform enough not to reorder the ranking, but this counter is meant to
+  # measure people, and a crawler revisiting a slice of the catalogue is not.
+  #
+  # Headless Chrome is in the list because the PDF rasterizer renders this page to
+  # produce a protected area PDF: that visit was already counted when the person
+  # loaded the page they exported from.
+  NON_HUMAN_USER_AGENT = /bot|crawl|spider|slurp|headlesschrome|facebookexternalhit/i
+
   def record_visit
     return if @protected_area.nil?
+    # User agent is the only signal available on the request path -- verifying a
+    # crawler properly means a reverse DNS lookup per request. A spoofed agent
+    # loses one increment, which is the cheaper way to be wrong here.
+    return if request.user_agent.to_s.match?(NON_HUMAN_USER_AGENT)
 
     year_month = DateTime.now.strftime('%m-%Y')
     $redis.zincrby(year_month, 1, @protected_area.site_id)

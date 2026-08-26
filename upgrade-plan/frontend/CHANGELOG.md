@@ -2243,3 +2243,50 @@ Enter, and get navigation to the parent page instead of the menu. Fixing it mean
 parent nav item should navigate or only disclose its children — the current markup attempts both,
 which is what makes it invalid — plus focus management. That is a UX decision on the site's primary
 navigation, not a mechanical fix.
+
+---
+
+## Post-plan cleanup, part 3 — `app/assets/images` sweep (done, 2026-08-24)
+
+**52 unreferenced files removed from `app/assets/images`, 28MB → 25MB**, and `app/frontend/assets`
+audited clean (27 files, every one referenced — the earlier icon cleanup had already closed it).
+
+Removed: the whole `icons/` directory (40 SVGs, duplicated by the live Vite tree in
+`app/frontend/assets/icons`), `hero/home.jpg` (same story — the Vite copy is the live one),
+`background.jpg` (1MB), `social-marine.png` (978KB), `social-sharing-target-dashboard-banff-canada.jpg`,
+four stray `green_list/` files, a duplicate `logos/protected-planet.svg`, a duplicate
+`flags/united-kingdom.svg`, `flags/data.csv` (an EPS→SVG rename log from an old asset conversion), and
+a committed `.DS_Store`.
+
+**Three flags were missing from live country pages, and nearly got deleted as "unused".** A literal
+grep says every file under `flags/` is unreferenced, because the path is built by interpolation —
+`image_url("flags/#{...}.svg")`. Modelling that interpolation showed `hong-kong.svg`, `macau.svg` and
+`naoero.svg` matched no country, which reads like dead weight; in fact the country names had drifted to
+"Hong Kong, SAR China", "Macau, SAR China" and "Nauru" (`naoero` is Nauru's local name), so the code
+was asking for filenames that did not exist and three country pages silently rendered flagless. The
+fix is a rename, not a delete: `hong-kong-sar-china.svg`, `macau-sar-china.svg`, `nauru.svg`. Flags now
+reconcile exactly — 247 files, every one reachable from a country name, and the only country without a
+flag is Western Sahara, which has no asset in the repo at all and degrades through the controller's
+existing `Sprockets::Rails::Helper::AssetNotFound` rescue.
+
+**There are two different flag-name derivations and they disagree.**
+`CountryPresenter#flag_name` uses `country.name.underscore` and strips apostrophes;
+`CountryController#flag_path` downcases and strips only spaces and commas. They diverge for every
+country with an apostrophe or a hyphen — for Côte d'Ivoire the presenter asks for `côte-divoire.svg`
+(which exists) while the controller asks for `côte-d'ivoire.svg` (which does not), and `Timor-Leste`
+only resolves through the presenter because `underscore` turns `-` into `_`. Four assets are currently
+reachable through one derivation and not the other. Not fixed here — it needs a decision about which
+naming wins and a rename of the affected assets — but any future "unused flag" audit must model *both*
+derivations or it will delete live files.
+
+**Method notes, because three separate greps were each wrong on their own.** Basename matching is
+useless across these trees: `app/assets/images/icons/` and `app/frontend/assets/icons/` share
+filenames, so a reference in `app/frontend/styles` to the Vite copy makes the Sprockets copy look used.
+Matching by reference *style* instead (`image_tag`/`image_url`/`image_path`/`asset_path`, `image-url`,
+literal `/assets/…`) found only four call sites in the whole app. `config/initializers/green_list_images.rb`
+maps 12 site IDs to `green_list/*.jpg` filenames and is the sole consumer of that directory — invisible
+to any view- or stylesheet-oriented search. And `SELECT … LIKE '%green_list/%'` produced two false
+positives against CMS content, because `_` is a single-character wildcard in SQL `LIKE` and matched
+`green-list` inside an IUCN URL; `strpos()` showed the literal string was absent. There is also a third
+asset location, `public/images` (4 files, all referenced, reached by absolute paths like
+`image_tag '/images/icons/key.svg'`), which no `app/assets` audit would see.

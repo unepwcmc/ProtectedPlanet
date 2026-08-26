@@ -12,6 +12,11 @@ Rails.application.routes.draw do
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
 
+  # Must precede the /:id catch-all below, which would otherwise swallow
+  # /sitemap.xml as a protected area lookup for site_id "sitemap".
+  get '/sitemap.xml', to: 'sitemaps#index', as: 'sitemap', format: false
+  get '/sitemaps/:name.xml', to: 'sitemaps#show', as: 'sitemap_chunk', format: false
+
   # French and Spanish were never actually translated: config/locales contains only
   # en files, so /fr and /es served identical English content at duplicate URLs.
   # Locale routing is en-only now (see config/initializers/locale.rb), and these
