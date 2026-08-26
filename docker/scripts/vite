@@ -1,4 +1,14 @@
 #!/bin/bash
-set -e
+# Supervise the Vite dev server: a compile/config error kills `vite dev`, and if
+# that is PID 1 the whole container exits and you have to `docker compose up`
+# again. Loop instead so the server restarts and picks up the fixed file.
+# SIGINT/SIGTERM (docker stop) still exits for real.
 
-exec /ProtectedPlanet/bin/vite dev
+trap 'echo "[vite] stopping"; exit 0' INT TERM
+
+while true; do
+  /ProtectedPlanet/bin/vite dev
+  status=$?
+  echo "[vite] dev server exited (status ${status}) - restarting in 5s..." >&2
+  sleep 5
+done

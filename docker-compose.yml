@@ -204,6 +204,9 @@ services:
     container_name: protectedplanet-vite
     image: protectedplanet-app
     command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/vite"
+    # The script already supervises `vite dev`; this only covers the container
+    # itself dying (OOM kill, failed install), not a compile error.
+    restart: unless-stopped
     depends_on:
       install:
         condition: service_completed_successfully
