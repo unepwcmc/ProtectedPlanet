@@ -154,6 +154,10 @@ module Smoke
     end
 
     def dynamic_targets(route)
+      # Declared with redirect() instead of a controller, so there is no
+      # controller#action to switch on.
+      return retired_locale_targets(route) if route.defaults[:controller].blank?
+
       case "#{route.defaults[:controller]}##{route.defaults[:action]}"
       when 'protected_areas#show'
         wrap(route, "/#{protected_area_id}")
@@ -187,11 +191,39 @@ module Smoke
         # Redirects to a signed S3 URL and only makes sense for a download that
         # is already generated; downloads#poll covers the same code path safely.
         []
+      when 'sitemaps#show'
+        # Both halves of the endpoint: a static chunk, and a generated protected-area
+        # chunk -- the only one that queries protected_areas, and the one whose bounds
+        # lookup is the expensive path. Asked for through Sitemap itself so this walks
+        # a chunk that exists: an out-of-range name is a deliberate 404, which the
+        # walker would report as a failure.
+        label = route_label(route)
+        # 'pages' rather than countries/regions: it is the static chunk that walks
+        # every published CMS page, so it is the one that can actually break.
+        names = ['pages']
+        names << 'protected-areas-1' if Sitemap.valid_chunk_name?('protected-areas-1')
+        names.map { |name| Target.new(label: label, path: "/sitemaps/#{name}.xml") }
       when 'comfy/cms/content#show'
         cms_page_targets
       when 'comfy/cms/assets#render_css', 'comfy/cms/assets#render_js'
         cms_asset_targets(route)
       end
+    end
+
+    # The retired-locale redirects at the top of routes.rb: /es -> /en, and
+    # /es/<path> -> /en/<path> through a block that rewrites the path. Their
+    # constraint is locale =~ /es|fr/, so :locale cannot take the LOCALE the rest of
+    # this walker substitutes -- 'en' fails the constraint and the request falls
+    # through to a different route entirely. Both answer 301, which counts as
+    # healthy; the point is that they answer at all.
+    #
+    # nil rather than [] when the substitution leaves anything dynamic behind, so a
+    # future controllerless route is reported as UNCLASSIFIED rather than skipped.
+    def retired_locale_targets(route)
+      path = static_path(route).gsub(':locale', 'es').gsub('*path', 'about')
+      return nil if dynamic?(path)
+
+      [Target.new(label: route_label(route), path: path, note: 'expects a 301 to /en')]
     end
 
     def wrap(route, path, note: nil)

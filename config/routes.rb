@@ -12,11 +12,27 @@ Rails.application.routes.draw do
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
 
+  # French and Spanish were never actually translated: config/locales contains only
+  # en files, so /fr and /es served identical English content at duplicate URLs.
+  # Locale routing is en-only now (see config/initializers/locale.rb), and these
+  # 301 the URLs search engines have already indexed onto their English
+  # equivalents -- consolidating the duplicates instead of 404ing them and throwing
+  # away whatever ranking those URLs had.
+  #
+  # Also ahead of /:id, which matches single-segment paths like /fr.
+  retired_locales = /es|fr/
+  get '/:locale', constraints: { locale: retired_locales }, to: redirect('/en')
+  get '/:locale/*path', constraints: { locale: retired_locales }, to: redirect { |params, request|
+    query = request.query_string.presence
+    ["/en/#{params[:path]}", query].compact.join('?')
+  }
+
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
 
-  scope '(:locale)', locale: /en|es|fr/ do
+  # en only: see the retired-locale redirects above.
+  scope '(:locale)', locale: /en/ do
     root to: 'home#index'
     get '/', to: 'home#index'
 

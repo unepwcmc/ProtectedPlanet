@@ -7,8 +7,11 @@ I18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 # contained a single fr or es file -- both fell through to the English strings, so
 # every page was served twice more at /fr/... and /es/..., with no hreflang and a
 # self-referencing canonical on each. That is duplicate content, not translation.
-# config/routes.rb 301s the retired prefixes to their English equivalents; add the
-# locale back here and in that route constraint when real translations exist.
+# config/routes.rb 301s the retired prefixes to their English equivalents. Restoring a
+# locale means three changes, not one: add it here, widen the route constraint in
+# config/routes.rb, and reinstate a `set_locale` before_action in ApplicationController.
+# That before_action was removed as dead code once en was the only locale -- without it,
+# I18n.locale is never assigned per request and simply stays at default_locale.
 I18n.available_locales = [:en]
  
 # Set default locale to something other than :en

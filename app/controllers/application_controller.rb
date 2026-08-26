@@ -14,11 +14,10 @@ class ApplicationController < ActionController::Base
   before_action :load_cms_site
   before_action :load_cms_content
 
-  before_action :set_locale
   before_action :check_for_pdf
 
   def admin_path?
-    request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
+    request.original_fullpath =~ %r{/(?:#{I18n.default_locale}/)?admin/?}
   end
 
   def opengraph
@@ -85,7 +84,7 @@ class ApplicationController < ActionController::Base
 
   # '/', '/en' and '/en/' all route to home#index.
   def home_page?
-    request.path.match?(%r{\A/(?:#{I18n.locale}/?)?\z})
+    request.path.match?(%r{\A/(?:#{I18n.default_locale}/?)?\z})
   end
 
   def set_page_meta(title: nil, description: nil)
@@ -94,15 +93,7 @@ class ApplicationController < ActionController::Base
   end
 
   def default_url_options
-    { locale: I18n.locale }
-  end
-
-  def set_locale
-    if params[:locale].present?
-      I18n.locale = params[:locale]
-    else
-      I18n.locale = I18n.default_locale
-    end
+    { locale: I18n.default_locale }
   end
 
   def raise_404
@@ -167,7 +158,7 @@ class ApplicationController < ActionController::Base
 
     # Strips out the locale and any query params (including the query character) 
     # when attempting to find the page in the DB by its full_path
-    sanitised_request = request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/')[/[^?]+/]
+    sanitised_request = request.original_fullpath.gsub(%r{\A/#{I18n.default_locale}/?}, '/')[/[^?]+/]
 
     @cms_page ||= Comfy::Cms::Page.find_by_full_path(sanitised_request)
 
@@ -239,12 +230,12 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error_page(status)
-    case status
-    when 404
-      render template: "layouts/error_page", layout: "application", status: :not_found, locals: { error_status: status }
-    else
-      render template: "layouts/error_page", layout: "application", status: :internal_server_error, locals: { error_status: status }
-    end
+    render template: "layouts/error_page",
+           layout: "application",
+           formats: [:html],
+           content_type: "text/html",
+           status: status == 404 ? :not_found : :internal_server_error,
+           locals: { error_status: status }
   end
 
   def check_for_pdf

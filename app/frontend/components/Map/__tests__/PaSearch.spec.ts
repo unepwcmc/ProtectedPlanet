@@ -78,8 +78,8 @@ describe('MapPaSearch', () => {
     const wrapper = mountSearch()
 
     await wrapper.find('.ct-map-pa-search__input').setValue('yos')
-    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__result').exists()).toBe(true))
-    await wrapper.find('.ct-map-pa-search__result').trigger('click')
+    await vi.waitFor(() => expect(wrapper.find('.ct-map-pa-search__button').exists()).toBe(true))
+    await wrapper.find('.ct-map-pa-search__button').trigger('click')
 
     expect(wrapper.emitted('zoomTo')?.[0]?.[0]).toEqual({
       id: 1,
