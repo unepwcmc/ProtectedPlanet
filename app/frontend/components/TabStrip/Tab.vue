@@ -1,22 +1,26 @@
 <template>
   <li
-    class="ct-tab-strip-tab"
-    :class="[
-      `ct-tab-strip-tab--${size}`,
-      {
-        'ct-tab-strip-tab--active': isActive,
-        'ct-tab-strip-tab--disabled': disabled
-      }
-    ]"
-    role="tab"
-    :aria-selected="isActive"
-    :aria-disabled="disabled"
-    :tabindex="disabled ? -1 : 0"
-    @click="click"
-    @keydown.enter.prevent="click"
-    @keydown.space.prevent="click"
-    v-text="title"
-  />
+    class="ct-tab-strip-tab__item"
+    role="presentation"
+  >
+    <button
+      class="ct-tab-strip-tab"
+      :class="[
+        `ct-tab-strip-tab--${size}`,
+        {
+          'ct-tab-strip-tab--active': isActive,
+          'ct-tab-strip-tab--disabled': disabled
+        }
+      ]"
+      type="button"
+      role="tab"
+      :aria-selected="isActive"
+      :aria-disabled="disabled"
+      :tabindex="disabled ? -1 : 0"
+      @click="click"
+      v-text="title"
+    />
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -44,6 +48,10 @@ function click() {
 
 <style scoped lang="css">
 @reference "#importtailwindcss";
+
+.ct-tab-strip-tab__item {
+  @apply contents;
+}
 
 .ct-tab-strip-tab {
   @apply

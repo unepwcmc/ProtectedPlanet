@@ -22,8 +22,7 @@
   tw-shared-font-hind-siliguri__light-base-md-lg-grey-black
   cursor-pointer
   no-underline
-  hover:no-underline
-  focus:outline-none;
+  hover:no-underline;
 }
 
 .vw-partials-cards-resources__all-icon {

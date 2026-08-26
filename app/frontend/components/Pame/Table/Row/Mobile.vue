@@ -108,14 +108,12 @@
           />
         </span>
       </p>
-      <p
-        class="ct-pame-table-row-mobile__item--no-flex
-        ct-pame-table-row-mobile__item--modal-trigger"
-        @click="onOpenModal"
-      >
-        <span
+      <p class="ct-pame-table-row-mobile__item--no-flex">
+        <button
           class="ct-pame-table-row-mobile__item-label
           ct-pame-table-row-mobile__item--modal-trigger"
+          type="button"
+          @click="onOpenModal"
           v-text="`${attributes[8].title}: ${item.eff_metaid}`"
         />
       </p>

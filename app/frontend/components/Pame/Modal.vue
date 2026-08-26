@@ -2,16 +2,27 @@
   <div
     class="ct-pame-modal"
     :class="{ 'ct-pame-modal--active': isModalOpen }"
-    @click.self="onClose"
   >
-    <div class="ct-pame-modal__overlay" />
+    <!-- role="presentation": a click-to-dismiss backdrop is a mouse shortcut for
+         the close button, not a control of its own — Escape is the keyboard path
+         (see useDialog). -->
+    <div
+      class="ct-pame-modal__overlay"
+      role="presentation"
+      @click="onClose"
+    />
     <div
       id="modal"
+      ref="dialogEl"
       class="ct-pame-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pame-modal-title"
     >
       <div class="ct-pame-modal__top">
         <button
           class="ct-pame-modal__close"
+          type="button"
           aria-label="Close dialog"
           @click="onClose"
         >
@@ -20,6 +31,7 @@
       </div>
       <div class="ct-pame-modal__content">
         <h2
+          id="pame-modal-title"
           class="ct-pame-modal__title"
           v-text="text.modal_title"
         />
@@ -70,16 +82,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref, toRef } from 'vue'
 import IconClose from '@/components/Icon/Close.vue'
+import useDialog from '@/composables/useDialog'
+import useFreezeBackground from '@/composables/useFreezeBackground'
 import type { PameEvaluationItem, PameModalTranslations } from '@/types/backend'
 
-defineProps<{
+const props = defineProps<{
   text: PameModalTranslations
   modalContent: PameEvaluationItem | null
   isModalOpen: boolean
 }>()
 
 const emit = defineEmits<{ close: [] }>()
+
+const dialogEl = ref<HTMLElement | null>(null)
+const isModalOpen = toRef(props, 'isModalOpen')
+
+useDialog(dialogEl, { isOpen: isModalOpen, onClose })
+useFreezeBackground(isModalOpen)
 
 function onClose() {
   emit('close')

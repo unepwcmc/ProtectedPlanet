@@ -14,6 +14,7 @@
   <a
     v-if="fileUrl"
     class="ct-listing-page-card-resources-card-info__download"
+    :aria-label="`Download ${title}`"
     :href="fileUrl"
     target="_blank"
     :title

@@ -88,7 +88,7 @@ describe('SearchAreasPage', () => {
     }))
     const wrapper = mountSearchAreas()
 
-    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
+    await wrapper.findAll('.ct-tab-strip [role="tab"]')[1].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
@@ -104,7 +104,7 @@ describe('SearchAreasPage', () => {
     }))
     const wrapper = mountSearchAreas()
 
-    await wrapper.findAll('.ct-tab-strip li')[0].trigger('click')
+    await wrapper.findAll('.ct-tab-strip [role="tab"]')[0].trigger('click')
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
 
     expect(wrapper.find('.ct-filters-trigger').classes()).toContain('ct-filters-trigger--disabled')
@@ -167,7 +167,7 @@ describe('SearchAreasPage', () => {
     await wrapper.find('input[value="wdpa"]').setValue(true)
     await vi.waitFor(() => expect(window.location.search).toContain('filters%5Bdb_type%5D%5B%5D=wdpa'))
 
-    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
+    await wrapper.findAll('.ct-tab-strip [role="tab"]')[1].trigger('click')
     await vi.waitFor(() => expect(window.location.search).toContain('geo_type=country'))
 
     const [url] = vi.mocked(fetch).mock.calls.at(-1)!
@@ -188,7 +188,7 @@ describe('SearchAreasPage', () => {
 
     expect(wrapper.text()).toContain('Yosemite')
 
-    await wrapper.findAll('.ct-tab-strip li')[1].trigger('click')
+    await wrapper.findAll('.ct-tab-strip [role="tab"]')[1].trigger('click')
     await vi.waitFor(() => expect(wrapper.find('.ct-search-areas-page__spinner').exists()).toBe(true))
 
     expect(wrapper.find('.ct-search-areas-results').attributes('style')).toContain('display: none')

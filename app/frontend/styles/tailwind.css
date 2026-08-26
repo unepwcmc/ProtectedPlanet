@@ -53,6 +53,7 @@
 @import './shared/themes.css';
 @import './shared/typography.css';
 
+@import './global/a11y.css';
 @import './global/pdf-export.css';
 
 /* All styles used in views */

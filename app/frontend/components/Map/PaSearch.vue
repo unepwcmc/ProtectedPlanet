@@ -53,14 +53,18 @@
       <li
         v-for="(result, index) in results"
         :key="index"
-        ref="resultEls"
         class="ct-map-pa-search__result"
-        tabindex="0"
-        @click="submit(result)"
-        @keyup.enter.stop.prevent="submit(result)"
-        @mouseover="focusResult(index)"
-        v-text="result.title"
-      />
+      >
+        <button
+          ref="resultEls"
+          class="ct-map-pa-search__button"
+          type="button"
+          @click="submit(result)"
+          @focus="focusResult(index)"
+          @mouseover="focusResult(index)"
+          v-text="result.title"
+        />
+      </li>
     </ul>
   </div>
 </template>
@@ -252,9 +256,19 @@ function submit(result: AutocompleteResult) {
 
 .ct-map-pa-search__result {
   @apply
-  p-3
+  block
+  w-full
+  text-left
+  p-3;
+}
+
+.ct-map-pa-search__button {
+  @apply
+  w-full
+  text-left
   tw-shared-font-hind-siliguri__light-base-grey-light
-  cursor-default;
+  cursor-default
+  focus:border-none;
 }
 
 .ct-map-pa-search__result--no-pointer {

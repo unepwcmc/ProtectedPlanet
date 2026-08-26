@@ -159,6 +159,36 @@ describe('FiltersPanel', () => {
     expect(document.body.style.overflow).toBe('')
   })
 
+  // The mobile sheet covers the viewport, so it owes the keyboard the same exit
+  // the visible close control gives the mouse.
+  it('announces the mobile sheet as a modal dialog and closes it on Escape', async () => {
+    setBreakpoint({ isSmall: true, isMedium: false })
+
+    const wrapper = mount(FiltersPanel, {
+      props: {
+        filterCloseText: 'View results',
+        filters,
+        filtersTitle: 'Filter by',
+        isActive: false,
+        textClear: 'Clear',
+        title: 'Filters'
+      },
+      attachTo: document.body
+    })
+
+    await wrapper.setProps({ isActive: true })
+
+    const dialog = wrapper.find('.ct-filters-panel-mobile')
+    expect(dialog.attributes('role')).toBe('dialog')
+    expect(dialog.attributes('aria-modal')).toBe('true')
+    expect(dialog.attributes('aria-label')).toBe('Filters')
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }))
+    expect(wrapper.emitted('toggle:filterPane')).toHaveLength(1)
+
+    wrapper.unmount()
+  })
+
   it('restores background scroll on unmount', async () => {
     const wrapper = mount(FiltersPanel, {
       props: {

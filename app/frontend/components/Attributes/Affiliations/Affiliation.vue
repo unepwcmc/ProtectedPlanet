@@ -7,6 +7,10 @@
       class="ct-attributes-affiliations-affiliation__image"
       :src="link.image_url"
       :alt="link.image_alt || imageAltFallback"
+      width="100"
+      height="100"
+      loading="lazy"
+      decoding="async"
     >
     <template v-if="link.affiliation === 'greenlist'">
       <p
@@ -74,7 +78,9 @@ const imageAltFallback = computed(() => props.link.affiliation === 'greenlist' ?
 }
 
 .ct-attributes-affiliations-affiliation__image {
-  @apply w-25;
+  @apply
+  w-25
+  h-auto;
 }
 
 .ct-attributes-affiliations-affiliation__green-list-intro {

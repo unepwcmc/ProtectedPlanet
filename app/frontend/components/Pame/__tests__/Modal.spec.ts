@@ -47,6 +47,46 @@ describe('PameModal', () => {
     expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
+  it('emits close on the backdrop click', async () => {
+    const wrapper = mount(PameModal, {
+      props: { text, modalContent: item as PameEvaluationItem, isModalOpen: true }
+    })
+
+    await wrapper.find('.ct-pame-modal__overlay').trigger('click')
+
+    expect(wrapper.emitted('close')).toHaveLength(1)
+  })
+
+  it('carries the dialog semantics assistive tech needs to announce it as one', () => {
+    const wrapper = mount(PameModal, {
+      props: { text, modalContent: item as PameEvaluationItem, isModalOpen: true }
+    })
+
+    const dialog = wrapper.find('.ct-pame-modal__dialog')
+    expect(dialog.attributes('role')).toBe('dialog')
+    expect(dialog.attributes('aria-modal')).toBe('true')
+    expect(dialog.attributes('aria-labelledby')).toBe('pame-modal-title')
+    expect(wrapper.find('#pame-modal-title').text()).toBe('Source details')
+  })
+
+  it('closes on Escape and locks the page behind it while open', async () => {
+    const wrapper = mount(PameModal, {
+      props: { text, modalContent: item as PameEvaluationItem, isModalOpen: false },
+      attachTo: document.body
+    })
+
+    await wrapper.setProps({ isModalOpen: true })
+    expect(document.body.style.overflow).toBe('hidden')
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }))
+    expect(wrapper.emitted('close')).toHaveLength(1)
+
+    await wrapper.setProps({ isModalOpen: false })
+    expect(document.body.style.overflow).toBe('')
+
+    wrapper.unmount()
+  })
+
   it('shows the year of submission based on source_year, matching the legacy field mapping bug fix', () => {
     const wrapper = mount(PameModal, {
       props: { text, modalContent: { ...item, source_year: 2021 } as PameEvaluationItem, isModalOpen: true }

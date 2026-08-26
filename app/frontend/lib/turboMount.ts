@@ -18,6 +18,10 @@ const piniaAwareVuePlugin: Plugin<Component> = {
     // turbo-mount types `props` as bare `object`; cast to createApp's signature.
     const app = createApp(mounted, props as Parameters<typeof createApp>[1])
     app.use(pinia)
+    // Each island is its own app, so an error thrown in one only ever blanks that
+    // island — silently, without this. `__name` is the SFC's compiled name.
+    const name = (mounted as { __name?: string }).__name ?? 'unknown'
+    app.config.errorHandler = (error, _instance, info) => console.error(`[island:${name} (${info})]`, error)
     app.mount(el)
     return () => app.unmount()
   }
@@ -60,10 +64,12 @@ export function registerTurboMountComponents(map: Record<string, TurboMountLoade
     if (inFlight.has(name)) return
     inFlight.add(name)
 
-    // Without the .catch a chunk that 404s leaves the mount point silently empty.
+    // The .catch is required, not just for the log: this promise feeds the
+    // Promise.all below, and one rejection there would skip
+    // markIslandScanComplete() and hang PDF generation forever.
     const promise = loader()
       .then(mod => registerComponent(turboMount, name, mod.default))
-      .catch(e => console.error(`[turboMount] failed to load component "${name}"`, e))
+      .catch(e => console.error(`[turboMount:${name}]`, e))
       .finally(() => inFlight.delete(name))
 
     if (trackingInitialScan) initialScanPromises.push(promise)

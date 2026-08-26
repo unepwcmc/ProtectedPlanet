@@ -53,6 +53,7 @@
             />
             <a
               class="ct-stats-designations__jurisdiction-link"
+              :aria-label="jurisdiction.title"
               :href="jurisdiction.link"
               :title="jurisdiction.title"
             >

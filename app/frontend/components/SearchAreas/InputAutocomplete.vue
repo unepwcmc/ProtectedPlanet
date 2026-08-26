@@ -27,15 +27,11 @@
       v-show="autocomplete.length > 0"
       class="ct-search-areas-autocomplete__dropdown"
     >
-      <ul
-        class="ct-search-areas-autocomplete__list"
-        role="listbox"
-      >
+      <ul class="ct-search-areas-autocomplete__list">
         <li
           v-for="option in autocomplete"
           :key="option.id"
           class="ct-search-areas-autocomplete__item"
-          role="option"
         >
           <a
             class="ct-search-areas-autocomplete__link"

@@ -6,7 +6,6 @@
   font-sans
   no-underline
   hover:no-underline
-  focus:outline-none
   disabled:cursor-not-allowed
   disabled:opacity-20;
 }

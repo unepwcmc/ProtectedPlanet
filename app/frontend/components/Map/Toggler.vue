@@ -1,31 +1,46 @@
 <template>
-  <div
+  <span
+    v-if="presentational"
     class="ct-map-toggler"
-    tabindex="0"
     :class="{ 'ct-map-toggler--active': active }"
-    @keyup.enter.stop.prevent="toggle()"
+    aria-hidden="true"
+  >
+    <span
+      class="ct-map-toggler__switch"
+      v-text="actionText"
+    />
+  </span>
+  <button
+    v-else
+    class="ct-map-toggler"
+    :class="{ 'ct-map-toggler--active': active }"
+    type="button"
+    role="switch"
+    :aria-checked="active"
+    :aria-label="label"
     @click.stop="toggle()"
   >
     <span
       class="ct-map-toggler__switch"
       v-text="actionText"
     />
-  </div>
+  </button>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import useAnalytics from '@/composables/useAnalytics'
-
-const { trackEvent } = useAnalytics()
 
 const props = withDefaults(defineProps<{
   active: boolean
-  gaId?: string
+  // "ON"/"OFF" is the whole visible text, so on its own the control announces no
+  // subject. Callers pass the layer name they are toggling.
+  label?: string
+  presentational?: boolean
   onText?: string
   offText?: string
 }>(), {
-  gaId: undefined,
+  label: undefined,
+  presentational: false,
   onText: 'ON',
   offText: 'OFF'
 })
@@ -34,14 +49,11 @@ const emit = defineEmits<{ change: [active: boolean] }>()
 
 const actionText = computed(() => (props.active ? props.onText : props.offText))
 
+// GA4 tracking used to live here, keyed off a gaId prop. It moved to the caller
+// (Map/Overlay.vue) along with the click, so there is exactly one owner of the
+// event whichever way the layer is toggled.
 function toggle(newState?: boolean) {
-  const newBoolean = typeof newState === 'boolean' ? newState : !props.active
-
-  emit('change', newBoolean)
-
-  if (props.gaId) {
-    trackEvent('click', { event_label: `${props.gaId} - Toggle map layer: ${newBoolean}` })
-  }
+  emit('change', typeof newState === 'boolean' ? newState : !props.active)
 }
 </script>
 

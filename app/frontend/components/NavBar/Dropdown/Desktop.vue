@@ -3,25 +3,36 @@
     ref="rootEl"
     class="ct-nav-bar-dropdown-desktop"
     :class="{ 'ct-nav-bar-dropdown-desktop--active': isActive }"
+    role="presentation"
     @mouseenter="openDropdown"
     @mouseleave="closeDropdown"
+    @focusin="openDropdown"
+    @focusout="onFocusOut"
   >
-    <button
-      :id="triggerId"
-      aria-haspopup="true"
-      :aria-expanded="isActive"
-      :aria-controls="modalId"
-      class="ct-nav-bar-dropdown-desktop__toggle"
-    >
+    <!-- The section link and the submenu toggle are two separate controls. They
+         used to be one: an <a> nested inside the <button>, which is invalid HTML
+         and left no way to open the submenu without navigating away from it. -->
+    <div class="ct-nav-bar-dropdown-desktop__toggle">
       <NavBarLink
         :link
         class="ct-nav-bar-dropdown-desktop__label"
       />
-      <IconArrow
-        class="ct-nav-bar-dropdown-desktop__icon"
-        :class="{ 'ct-nav-bar-dropdown-desktop__icon--active': isActive }"
-      />
-    </button>
+      <button
+        :id="triggerId"
+        type="button"
+        class="ct-nav-bar-dropdown-desktop__toggle-button"
+        aria-haspopup="true"
+        :aria-expanded="isActive"
+        :aria-controls="modalId"
+        :aria-label="`${link.label} submenu`"
+        @click="toggleDropdown"
+      >
+        <IconArrow
+          class="ct-nav-bar-dropdown-desktop__icon"
+          :class="{ 'ct-nav-bar-dropdown-desktop__icon--active': isActive }"
+        />
+      </button>
+    </div>
     <nav
       :id="modalId"
       class="ct-nav-bar-dropdown-desktop__wrapper"
@@ -60,6 +71,17 @@ function closeDropdown() {
   isActive.value = false
 }
 
+function toggleDropdown() {
+  isActive.value = !isActive.value
+}
+
+// Tabbing between the toggle and the links inside fires focusout on the root, so
+// only a target outside the dropdown closes it.
+function onFocusOut(event: FocusEvent) {
+  const nextFocused = event.relatedTarget as Node | null
+  if (!nextFocused || !rootEl.value?.contains(nextFocused)) closeDropdown()
+}
+
 usePopupCloseListeners(rootEl, {
   isActive,
   onClose: closeDropdown
@@ -83,11 +105,22 @@ usePopupCloseListeners(rootEl, {
 
 .ct-nav-bar-dropdown-desktop__toggle {
   @apply
-  tw-shared-button-basic
   flex
   items-center
   justify-center
   gap-1;
+}
+
+/* Negative margin widens the pointer target around a 14x8px chevron without
+   moving anything else in the bar. */
+.ct-nav-bar-dropdown-desktop__toggle-button {
+  @apply
+  tw-shared-button-basic
+  flex
+  items-center
+  justify-center
+  p-2
+  -m-2;
 }
 
 .ct-nav-bar-dropdown-desktop__icon {

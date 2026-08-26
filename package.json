@@ -2,6 +2,7 @@
   "license": "MIT",
   "packageManager": "yarn@4.17.1",
   "scripts": {
+    "budget": "vite build --mode test && node app/frontend/backend-scripts/bundle-budget.mjs",
     "lint": "eslint app/frontend",
     "lint:fix": "eslint app/frontend --fix",
     "lint:css": "stylelint \"app/frontend/**/*.{css,vue}\"",
@@ -35,6 +36,7 @@
     "@vue/test-utils": "^2.4.11",
     "eslint": "^10.8.0",
     "eslint-plugin-vue": "^10.10.0",
+    "eslint-plugin-vuejs-accessibility": "^2.6.0",
     "globals": "^17.8.0",
     "jsdom": "^30.0.1",
     "postcss-html": "^1.8.1",

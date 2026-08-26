@@ -20,41 +20,41 @@ describe('TabStrip', () => {
   it('selects the first child by default', () => {
     const wrapper = mountTabStrip()
 
-    expect(wrapper.findAll('li')[0].classes()).toContain('ct-tab-strip-tab--active')
+    expect(wrapper.findAll('[role="tab"]')[0].classes()).toContain('ct-tab-strip-tab--active')
   })
 
-  it('activates a tab with Enter and with Space', async () => {
+  // Each tab is a real <button>, so Enter and Space activate it through the
+  // platform's own click synthesis -- there are no key handlers left to test, and
+  // jsdom does not synthesise that click, so the element type IS the contract.
+  it('renders each tab as a natively activatable button', () => {
     const wrapper = mountTabStrip()
-    const tabs = wrapper.findAll('li')
+    const tabs = wrapper.findAll('[role="tab"]')
 
-    await tabs[1].trigger('keydown', { key: 'Enter' })
-    expect(tabs[1].classes()).toContain('ct-tab-strip-tab--active')
-
-    await tabs[2].trigger('keydown', { key: ' ' })
-    expect(tabs[2].classes()).toContain('ct-tab-strip-tab--active')
+    expect(tabs).toHaveLength(3)
+    tabs.forEach(tab => expect(tab.element.tagName).toBe('BUTTON'))
   })
 
   // A disabled tab must be skipped by the tab sequence, not focusable-but-inert.
-  it('drops a disabled tab out of the tab sequence and ignores its keypresses', async () => {
+  it('drops a disabled tab out of the tab sequence and ignores its clicks', async () => {
     const wrapper = mountTabStrip({ disabled: true })
-    const tabs = wrapper.findAll('li')
+    const tabs = wrapper.findAll('[role="tab"]')
 
     expect(tabs[1].attributes('tabindex')).toBe('-1')
 
-    await tabs[1].trigger('keydown', { key: 'Enter' })
+    await tabs[1].trigger('click')
     expect(tabs[1].classes()).not.toContain('ct-tab-strip-tab--active')
   })
 
   it('honours defaultSelectedId over the first child', () => {
     const wrapper = mountTabStrip({ defaultSelectedId: 'site' })
 
-    expect(wrapper.findAll('li')[2].classes()).toContain('ct-tab-strip-tab--active')
+    expect(wrapper.findAll('[role="tab"]')[2].classes()).toContain('ct-tab-strip-tab--active')
   })
 
   it('ignores a click on the already-active tab', async () => {
     const wrapper = mountTabStrip({ defaultSelectedId: 'country' })
 
-    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')).toBeUndefined()
     expect(window.gtag).not.toHaveBeenCalled()
@@ -63,7 +63,7 @@ describe('TabStrip', () => {
   it('does not re-emit when the parent mirrors the emitted id back into preSelectedId', async () => {
     const wrapper = mountTabStrip()
 
-    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
     await wrapper.setProps({ preSelectedId: 'country' })
 
     expect(wrapper.emitted('click:tab')).toHaveLength(1)
@@ -72,10 +72,10 @@ describe('TabStrip', () => {
   it('emits click:tab and updates the active tab on click', async () => {
     const wrapper = mountTabStrip()
 
-    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')?.[0]).toEqual(['country'])
-    expect(wrapper.findAll('li')[1].classes()).toContain('ct-tab-strip-tab--active')
+    expect(wrapper.findAll('[role="tab"]')[1].classes()).toContain('ct-tab-strip-tab--active')
   })
 
   it('follows preSelectedId when it changes externally', async () => {
@@ -83,14 +83,14 @@ describe('TabStrip', () => {
 
     await wrapper.setProps({ preSelectedId: 'site' })
 
-    expect(wrapper.findAll('li')[2].classes()).toContain('ct-tab-strip-tab--active')
+    expect(wrapper.findAll('[role="tab"]')[2].classes()).toContain('ct-tab-strip-tab--active')
     expect(wrapper.emitted('click:tab')?.at(-1)).toEqual(['site'])
   })
 
   it('fires a GA4 event with the tab title when gaId is set', async () => {
     const wrapper = mountTabStrip({ gaId: 'Component: search areas' })
 
-    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
 
     expect(window.gtag).toHaveBeenCalledWith('event', 'click', {
       event_label: 'Component: search areas - Tab: Country'
@@ -100,11 +100,11 @@ describe('TabStrip', () => {
   it('marks tabs aria-disabled and ignores clicks when disabled', async () => {
     const wrapper = mountTabStrip({ disabled: true })
 
-    expect(wrapper.findAll('li')[1].attributes('aria-disabled')).toBe('true')
+    expect(wrapper.findAll('[role="tab"]')[1].attributes('aria-disabled')).toBe('true')
 
-    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
 
     expect(wrapper.emitted('click:tab')).toBeUndefined()
-    expect(wrapper.findAll('li')[0].classes()).toContain('ct-tab-strip-tab--active')
+    expect(wrapper.findAll('[role="tab"]')[0].classes()).toContain('ct-tab-strip-tab--active')
   })
 })

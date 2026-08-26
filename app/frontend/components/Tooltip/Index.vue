@@ -4,11 +4,12 @@
     class="ct-tooltip"
     :class="{ 'ct-tooltip--active': isActive }"
   >
-    <div
+    <button
       v-if="onHover"
-      tabindex="0"
+      type="button"
       :aria-describedby="id"
       :aria-expanded="isActive"
+      :aria-label="triggerLabel"
       class="ct-tooltip__trigger"
       @mouseenter="toggleTooltip(true)"
       @mouseleave="toggleTooltip(false)"
@@ -17,17 +18,18 @@
       @touchend.prevent="toggleTooltip()"
     >
       <slot />
-    </div>
-    <div
+    </button>
+    <button
       v-else
-      tabindex="0"
+      type="button"
       :aria-describedby="id"
       :aria-expanded="isActive"
+      :aria-label="triggerLabel"
       class="ct-tooltip__trigger"
       @click="toggleTooltip()"
     >
       <slot />
-    </div>
+    </button>
 
     <div
       v-show="isActive"
@@ -50,15 +52,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useId } from 'vue'
+import { computed, ref, useId, useSlots } from 'vue'
 import usePopupCloseListeners from '@/composables/usePopupCloseListeners'
 
 interface TooltipProps {
   text: string
   onHover?: boolean
+  // Only needed when the default slot is empty (the icon-only case); a filled
+  // slot names the trigger by its own content.
+  triggerLabel?: string
 }
 
-withDefaults(defineProps<TooltipProps>(), { onHover: true })
+const props = withDefaults(defineProps<TooltipProps>(), { onHover: true, triggerLabel: undefined })
+
+const slots = useSlots()
+
+// An aria-label would shadow slot content, so it is only applied when there is
+// none to shadow.
+const triggerLabel = computed(() => props.triggerLabel ?? (slots.default ? undefined : 'More information'))
 
 const id = `tooltip_${useId()}`
 const isActive = ref(false)

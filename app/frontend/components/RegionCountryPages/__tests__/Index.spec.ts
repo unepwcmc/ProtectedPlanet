@@ -47,7 +47,7 @@ describe('RegionCountryPages', () => {
 
     expect(wrapper.text()).toContain('WDPA message')
 
-    await wrapper.findAll('li')[1].trigger('click')
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
 
     expect(wrapper.text()).toContain('WDPA+OECM message')
   })

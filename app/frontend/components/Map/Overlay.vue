@@ -1,37 +1,52 @@
 <template>
-  <li
-    class="ct-map-overlay"
-    :class="{ 'ct-map-overlay--toggleable': isToggleable }"
-    :role="isToggleable ? 'button' : undefined"
-    :tabindex="isToggleable ? 0 : undefined"
-    @click.stop="onClick"
-    @keydown.enter.prevent="onClick"
-    @keydown.space.prevent="onClick"
-  >
-    <div
-      class="ct-map-overlay__color"
-      :style="{ backgroundColor: color }"
-    />
-    <span
-      class="ct-map-overlay__description"
-      v-text="title"
-    />
-    <div
+  <li class="ct-map-overlay">
+    <!-- One control per row, not two: the row used to be a clickable `<li>` with
+         its own role/tabindex wrapping a separately focusable toggler, so the same
+         state was announced twice and keyboard users hit it twice. The whole row is
+         now the switch; the toggler inside it draws the ON/OFF pill only. -->
+    <button
       v-if="isToggleable"
-      class="ct-map-overlay__active-toggler"
+      class="ct-map-overlay__control ct-map-overlay__control--toggleable"
+      type="button"
+      role="switch"
+      :aria-checked="isShown"
+      @click.stop="onClick"
     >
-      <MapToggler
-        :gaId="id"
-        :active="isShown"
-        @change="setShown"
+      <span
+        class="ct-map-overlay__color"
+        :style="{ backgroundColor: color }"
       />
-    </div>
+      <span
+        class="ct-map-overlay__description"
+        v-text="title"
+      />
+      <span class="ct-map-overlay__active-toggler">
+        <MapToggler
+          :active="isShown"
+          presentational
+        />
+      </span>
+    </button>
+    <span
+      v-else
+      class="ct-map-overlay__control"
+    >
+      <span
+        class="ct-map-overlay__color"
+        :style="{ backgroundColor: color }"
+      />
+      <span
+        class="ct-map-overlay__description"
+        v-text="title"
+      />
+    </span>
   </li>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import MapToggler from '@/components/Map/Toggler.vue'
+import useAnalytics from '@/composables/useAnalytics'
 import { useMapOverlays, type MapOverlay } from '@/composables/useMapOverlays'
 import type { MapFilterProps } from '@/types/backend'
 
@@ -42,6 +57,7 @@ const props = withDefaults(defineProps<MapFilter>(), {
   isToggleable: true
 })
 
+const { trackEvent } = useAnalytics()
 const { visibleOverlays, addOverlay, removeOverlay } = useMapOverlays()
 
 const overlay = computed<MapOverlay>(() => ({ layers: props.layers, id: props.id }))
@@ -58,9 +74,14 @@ function setShown(shown: boolean) {
 }
 
 function onClick() {
-  if (props.isToggleable) {
-    setShown(!isShown.value)
-  }
+  if (!props.isToggleable) return
+
+  const shown = !isShown.value
+  setShown(shown)
+
+  // Moved up from Map/Toggler.vue, which used to own the click. Same event name
+  // and label so the GA4 history stays continuous.
+  trackEvent('click', { event_label: `${props.id} - Toggle map layer: ${shown}` })
 }
 
 onMounted(() => {
@@ -71,13 +92,15 @@ onMounted(() => {
 <style scoped lang="css">
 @reference "#importtailwindcss";
 
-.ct-map-overlay {
+.ct-map-overlay__control {
   @apply
   tw-shared-base-flex-gap-3
-  items-center;
+  items-center
+  w-full
+  text-left;
 }
 
-.ct-map-overlay--toggleable {
+.ct-map-overlay__control--toggleable {
   @apply cursor-pointer;
 }
 

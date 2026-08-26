@@ -19,17 +19,17 @@
     >
       <slot name="trigger" />
     </button>
-    <div
+    <button
       v-else
       ref="triggerEl"
-      tabindex="0"
+      type="button"
       :aria-describedby="id"
       :aria-expanded="isActive"
       class="ct-tooltip-panel__trigger"
       @click="toggleTooltip()"
     >
       <slot name="trigger" />
-    </div>
+    </button>
     <div
       v-if="isActive"
       :id

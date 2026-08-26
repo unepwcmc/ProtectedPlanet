@@ -38,8 +38,10 @@ describe('Map Panel', () => {
   it('pulls focusable descendants out of tab order when isHidden is true', () => {
     const wrapper = mountPanel({ overlays, title: 'Filters', isHidden: true })
 
-    const toggler = wrapper.find('.ct-map-toggler')
-    expect(toggler.attributes('tabindex')).toBe('-5')
+    // The overlay row itself is the switch; the ON/OFF pill inside it is drawn by
+    // a presentational span with no tab stop of its own.
+    const overlayControl = wrapper.find('.ct-map-overlay__control')
+    expect(overlayControl.attributes('tabindex')).toBe('-5')
   })
 
   it('renders the disclaimer inside the panel when provided', () => {

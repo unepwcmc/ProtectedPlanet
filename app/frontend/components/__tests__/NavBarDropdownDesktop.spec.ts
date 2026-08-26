@@ -35,11 +35,44 @@ describe('NavBarDropdownDesktop', () => {
     expect(wrapper.classes()).not.toContain('ct-nav-bar-dropdown-desktop--active')
   })
 
-  it('ignores click on the toggle, so the link navigates normally', async () => {
+  it('leaves the section link alone, so it navigates normally', async () => {
     const wrapper = mount(NavBarDropdownDesktop, { props: { link } })
 
-    await wrapper.find('.ct-nav-bar-dropdown-desktop__toggle').trigger('click')
+    await wrapper.find('.ct-nav-bar-dropdown-desktop__label').trigger('click')
     expect(wrapper.classes()).not.toContain('ct-nav-bar-dropdown-desktop--active')
+  })
+
+  // The only way in without a mouse: hover cannot be performed from a keyboard,
+  // and the section link navigates away rather than opening the submenu.
+  it('opens and closes the submenu from the toggle button', async () => {
+    const wrapper = mount(NavBarDropdownDesktop, { props: { link } })
+    const toggle = wrapper.find('.ct-nav-bar-dropdown-desktop__toggle-button')
+
+    expect(toggle.attributes('aria-expanded')).toBe('false')
+
+    await toggle.trigger('click')
+    expect(wrapper.classes()).toContain('ct-nav-bar-dropdown-desktop--active')
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+
+    await toggle.trigger('click')
+    expect(wrapper.classes()).not.toContain('ct-nav-bar-dropdown-desktop--active')
+  })
+
+  it('opens when focus enters and closes when it leaves for somewhere outside', async () => {
+    const wrapper = mount(NavBarDropdownDesktop, { props: { link }, attachTo: document.body })
+
+    await wrapper.trigger('focusin')
+    expect(wrapper.classes()).toContain('ct-nav-bar-dropdown-desktop--active')
+
+    // Focus moving to a child link must not close it.
+    const childLink = wrapper.find('.ct-nav-bar-dropdown-desktop__link').element
+    await wrapper.trigger('focusout', { relatedTarget: childLink })
+    expect(wrapper.classes()).toContain('ct-nav-bar-dropdown-desktop--active')
+
+    await wrapper.trigger('focusout', { relatedTarget: document.body })
+    expect(wrapper.classes()).not.toContain('ct-nav-bar-dropdown-desktop--active')
+
+    wrapper.unmount()
   })
 
   it('closes when clicking outside the dropdown', async () => {

@@ -1,5 +1,11 @@
 <template>
-  <div class="ct-filters-panel-mobile">
+  <div
+    ref="dialogEl"
+    class="ct-filters-panel-mobile"
+    role="dialog"
+    aria-modal="true"
+    :aria-label="title"
+  >
     <div class="ct-filters-panel-mobile__topbar">
       <span
         class="ct-filters-panel-mobile__title"
@@ -28,21 +34,19 @@
         />
       </ul>
     </div>
-    <span
+    <button
       class="ct-filters-panel-mobile__footer"
-      role="button"
-      tabindex="0"
+      type="button"
       @click="onToggleFilterPane"
-      @keydown.enter.prevent="onToggleFilterPane"
-      @keydown.space.prevent="onToggleFilterPane"
       v-html="filterCloseText"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { toRef } from 'vue'
+import { ref, toRef } from 'vue'
 import FiltersGroup from '@/components/Filters/Group.vue'
+import useDialog from '@/composables/useDialog'
 import useFreezeBackground from '@/composables/useFreezeBackground'
 import type { FilterGroupFilter, FilterGroupSelection } from '@/types/backend'
 
@@ -58,12 +62,18 @@ const props = defineProps<{
   title: string
 }>()
 
-useFreezeBackground(toRef(props, 'isActive'))
-
 const emit = defineEmits<{
   'toggle:filterPane': []
   'update:filter': [payload: { id: string, options: FilterGroupSelection }]
 }>()
+
+const dialogEl = ref<HTMLElement | null>(null)
+const isActive = toRef(props, 'isActive')
+
+useFreezeBackground(isActive)
+// The sheet covers the whole viewport, so the page behind it must be out of reach
+// of Tab as well as of the eye, and Escape has to close it.
+useDialog(dialogEl, { isOpen: isActive, onClose: () => emit('toggle:filterPane') })
 
 // The CMS listing keeps its selection in one map on the page and passes it in;
 // the search-areas serializer bakes it into each filter instead.
