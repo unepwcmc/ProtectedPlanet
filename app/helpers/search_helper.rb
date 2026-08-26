@@ -9,14 +9,6 @@ module SearchHelper
     content_tag(:li, class: selected_class) { yield }
   end
 
-  def autocomplete_link(result)
-    if result[:type] == 'protected_area'
-      pa_autocomplete_link result
-    else
-      country_autocomplete_link result
-    end
-  end
-
   def facet_link(facet)
     search_params = params.permit(ALLOWED_PARAMS)
     link_params = search_params.merge({ facet[:query] => facet[:identifier] })
@@ -113,45 +105,6 @@ module SearchHelper
   rescue StandardError => e
     Rails.logger.warn e
     nil
-  end
-
-  def pa_autocomplete_link(result)
-    version = AppSecrets.mapbox[:version]
-    image_params = { id: result[:identifier], type: result[:type], version: version }
-
-    link_to protected_area_url(result[:identifier]), class: 'autocompletion__result' do
-      image = image_tag(
-        '/images/search-placeholder-country.png',
-        alt: result[:name],
-        data: { async: tiles_path(image_params) },
-        class: 'autocompletion__image'
-      )
-      concat image
-      concat(content_tag(:div, class: 'autocompletion__body') do
-        concat content_tag(:span, result[:name])
-        concat content_tag(:span, result[:type].titleize, class: 'autocompletion__type')
-      end)
-    end
-  end
-
-  def country_autocomplete_link(result)
-    version = AppSecrets.mapbox[:version]
-    image_params = { id: result[:identifier], type: result[:type], version: version }
-    type = (result[:type] == 'country' ? 'country/territory' : result[:type])
-
-    link_to country_url(result[:identifier]), class: 'autocompletion__result' do
-      image = image_tag(
-        '/images/search-placeholder-country.png',
-        alt: result[:name],
-        data: { async: tiles_path(image_params) },
-        class: 'autocompletion__image'
-      )
-      concat image
-      concat(content_tag(:div, class: 'autocompletion__body') do
-        concat content_tag(:span, result[:name])
-        concat content_tag(:span, type.titleize, class: 'autocompletion__type')
-      end)
-    end
   end
 
   # As of 23March2026, this seems to be unused double check if it's needed

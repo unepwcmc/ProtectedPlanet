@@ -80,28 +80,11 @@ class CountryController < ApplicationController
       map: { boundsUrl: @country.extent_url }
     }
 
-    helpers.opengraph_title_and_description_with_suffix(@country.name)
-    set_page_meta(title: @country.name, description: t('meta.country.description', name: @country.name))
-    @structured_data = country_structured_data
-  end
+    meta_description = t('meta.country.description', name: @country.name)
 
-  # An administrative area, not the website. containsPlace is deliberately absent:
-  # a country holds thousands of protected areas and enumerating them here would
-  # be a huge payload that the sitemap already covers properly.
-  def country_structured_data
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Country',
-      name: @country.name,
-      # See ProtectedAreasController#place_structured_data: default_url_options
-      # would append ?locale=en, disagreeing with the canonical link.
-      url: canonical_url,
-      description: t('meta.country.description', name: @country.name),
-      identifier: [
-        { '@type': 'PropertyValue', name: 'ISO 3166-1 alpha-3', value: @country.iso_3 },
-        { '@type': 'PropertyValue', name: 'ISO 3166-1 alpha-2', value: @country.iso }
-      ].reject { |identifier| identifier[:value].blank? }
-    }
+    helpers.opengraph_title_and_description_with_suffix(@country.name)
+    set_page_meta(title: @country.name, description: meta_description)
+    @structured_data = structured_data_presenter.country(@country, description: meta_description)
   end
 
   def calculate_national_designations_counts

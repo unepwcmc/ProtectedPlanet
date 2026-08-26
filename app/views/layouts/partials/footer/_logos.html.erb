@@ -1,10 +1,10 @@
 <div class="vw-partials-footer__col">
     <div class="vw-partials-footer__logos">
         <%= link_to 'http://www.iucn.org', title: 'here', target: '_blank', class: 'vw-partials-footer__logos--partner' do %>
-            <%= image_tag '/images/logos/iucn.svg', alt: t('global.logos.iucn'), class: 'vw-partials-footer__logos--partner' %>
+            <%= image_tag '/images/logos/iucn.svg', alt: t('global.logos.iucn'), class: 'vw-partials-footer__logos--partner', loading: 'lazy' %>
         <% end %>
         <%= link_to 'http://unep-wcmc.org', title: 'here', target: '_blank', class: 'vw-partials-footer__logos--partner' do %>
-            <%= image_tag 'https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg', alt: t('global.logos.wcmc'), class: 'vw-partials-footer__logos--partner' %>
+            <%= image_tag 'https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg', alt: t('global.logos.wcmc'), class: 'vw-partials-footer__logos--partner', loading: 'lazy' %>
         <% end %>
     </div>
     <span class="vw-partials-footer__logos--t-c">&copy;<%= t('global.footer.copyright', date: Date.today.year) %></span>

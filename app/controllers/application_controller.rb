@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
       'description': t('meta.site.description'),
       'url': request.url,
       'type': 'website',
-      'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+      'image': social_image_url,
       'image:alt': t('meta.image_alt'),
       'image:height': 630,
       'image:width': 1200,
@@ -56,22 +56,36 @@ class ApplicationController < ActionController::Base
     request.original_url.split('?').first
   end
 
+  def site_url
+    root_url(locale: nil)
+  end
+
+  def social_image_url
+    URI.join(site_url, helpers.image_path(t('meta.image')))
+  end
+
   def structured_data
     return if admin_path?
 
-    @structured_data ||= {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: t('meta.site.name'),
-      url: root_url,
-      description: t('meta.site.description'),
-      publisher: {
-        '@type': 'Organization',
-        name: t('meta.site.name'),
-        url: root_url,
-        logo: URI.join(root_url, helpers.image_path(t('meta.image'))).to_s
-      }
-    }
+    @structured_data ||=
+      if home_page?
+        structured_data_presenter.website
+      else
+        structured_data_presenter.webpage(name: @page_title, description: @page_description)
+      end
+  end
+
+  def structured_data_presenter
+    @structured_data_presenter ||= StructuredDataPresenter.new(
+      canonical_url: canonical_url,
+      site_url: site_url,
+      logo_url: social_image_url.to_s
+    )
+  end
+
+  # '/', '/en' and '/en/' all route to home#index.
+  def home_page?
+    request.path.match?(%r{\A/(?:#{I18n.locale}/?)?\z})
   end
 
   def set_page_meta(title: nil, description: nil)

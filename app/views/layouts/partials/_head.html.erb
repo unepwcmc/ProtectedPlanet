@@ -3,13 +3,15 @@
   <title>
     <%= page_title %>
   </title>
-  <meta name="description" content="<%= t('meta.site.description') %>">
+  <meta name="description" content="<%= page_description %>">
   <%== opengraph %>
   <% if canonical_url %>
     <link rel="canonical" href="<%= canonical_url %>">
   <% end %>
   <% if structured_data %>
-    <script type="application/ld+json"><%== structured_data.to_json %></script>
+    <script type="application/ld+json">
+      <%== ERB::Util.json_escape(structured_data.to_json) %>
+    </script>
   <% end %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <% unless Rails.env.development? %>

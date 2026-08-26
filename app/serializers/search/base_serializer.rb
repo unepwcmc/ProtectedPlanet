@@ -48,7 +48,7 @@ class Search::BaseSerializer
 
   def image(obj)
     if obj.is_a?(ProtectedArea)
-      ApplicationController.helpers.protected_area_cover(obj, with_tag: false)
+      ApplicationController.helpers.protected_area_cover(obj)
     elsif obj.is_a?(Comfy::Cms::SearchablePage)
       obj.image
     else

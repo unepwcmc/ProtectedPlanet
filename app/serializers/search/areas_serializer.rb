@@ -54,7 +54,7 @@ class Search::AreasSerializer < Search::BaseSerializer
       title: region.name,
       totalAreas: "#{areas_count(region)} #{I18n.t('search.protected-areas')}",
       url: region_path(iso: region.iso),
-      image: ApplicationController.helpers.region_cover(region, with_tag: false)
+      image: ApplicationController.helpers.region_cover(region)
     }
   end
 
@@ -64,13 +64,13 @@ class Search::AreasSerializer < Search::BaseSerializer
       totalAreas: "#{areas_count(country)} #{I18n.t('search.protected-areas')}",
       title: country.name,
       url: country_path(iso: country.iso_3),
-      image: ApplicationController.helpers.country_cover(country, with_tag: false)
+      image: ApplicationController.helpers.country_cover(country)
     }
   end
 
   def site_hash(site)
     {
-      image: ApplicationController.helpers.protected_area_cover(site, with_tag: false),
+      image: ApplicationController.helpers.protected_area_cover(site),
       title: site.name,
       url: protected_area_path(site.site_id)
     }

@@ -32,6 +32,6 @@ en:
       description: >-
         Search Protected Planet for protected areas, OECMs, countries and regions in the World Database on Protected and Conserved Areas.
     search_areas:
-      title: Search protected areas and OECMs
+      title: Explore protected areas and OECMs
       description: >-
-        Search and filter the world's protected areas and OECMs by country, region, designation, IUCN category and governance type, then download the results.
+        Search and filter the world's protected areas and OECMs.

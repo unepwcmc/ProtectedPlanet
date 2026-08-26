@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <%= render "layouts/partials/head" %>
   <body class="<%= 'tw-global-pdf-export' if @for_pdf %>">
     <% unless @for_pdf || @cms_page&.slug == PageSlugs::LEGAL %>
@@ -9,10 +9,10 @@
       <%= render "layouts/partials/banner" %>
     <% end %>
     <%= render "layouts/partials/topbar" %>
-    <div class="vw-layouts-application">
+    <main class="vw-layouts-application">
       <%= yield %>
       <%= render "layouts/partials/footer/index" %>
-    </div>
+    </main>
     <%= turbo_mount "DownloadModal", props: {
       endpointCreate: '/downloads',
       endpointPoll: '/downloads/poll',

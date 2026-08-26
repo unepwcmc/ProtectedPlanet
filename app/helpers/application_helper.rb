@@ -2,18 +2,6 @@ module ApplicationHelper
   include ActionView::Helpers::NumberHelper
   include BemHelper
 
-  COVER_HELPERS = {
-    ProtectedArea => :protected_area_cover,
-    Country => :country_cover,
-    Region => :region_cover
-  }.freeze
-
-  PLACEHOLDERS = {
-    ProtectedArea => '/images/search-placeholder-country.png',
-    Country => '/images/search-placeholder-country.png',
-    Region => '/images/search-placeholder-region.png'
-  }.freeze
-
   def get_square_side(area)
     Math.sqrt(area / 100) * 100
   end
@@ -30,41 +18,14 @@ module ApplicationHelper
     request.fullpath == current_path
   end
 
-  def cover(item)
-    send COVER_HELPERS[item.class], item
-  end
-
-  def cover_placeholder(klass)
-    PLACEHOLDERS[klass]
-  end
-
   def tiles_path(params)
     Rails.application.routes.url_helpers.tiles_path(params)
   end
 
-  def cover_data(image_params, item_class)
-    placeholder = cover_placeholder(item_class)
-    {
-      'data-src': tiles_path(image_params),
-      'data-error': image_path(placeholder),
-      'data-loading': image_path(placeholder)
-    }
-  end
-
-  def protected_area_cover(protected_area, with_tag: true)
+  def protected_area_cover(protected_area)
     version = AppSecrets.mapbox[:version]
-    image_params = { id: protected_area.site_id, type: 'protected_area', version: version }
-    data = cover_data(image_params, protected_area.class)
 
-    return tiles_path(image_params) unless with_tag
-
-    image_tag(
-      cover_placeholder(protected_area.class),
-      {
-        alt: protected_area.name,
-        class: 'image'
-      }.merge(data)
-    )
+    tiles_path(id: protected_area.site_id, type: 'protected_area', version: version)
   end
 
   def site_card_details(protected_areas)
@@ -72,7 +33,7 @@ module ApplicationHelper
       {
         name: protected_area[:name],
         site_id: protected_area[:site_id],
-        thumbnail_link: protected_area_cover(protected_area, with_tag: false)
+        thumbnail_link: protected_area_cover(protected_area)
       }
     end
   end
@@ -91,28 +52,16 @@ module ApplicationHelper
     nil
   end
 
-  def country_cover(country, with_tag: true)
+  def country_cover(country)
     version = AppSecrets.mapbox[:version]
-    image_params = { id: country.iso, type: 'country', version: version }
-    data = cover_data(image_params, country.class)
 
-    return tiles_path(image_params) unless with_tag
-
-    image_tag(
-      cover_placeholder(country.class),
-      { alt: country.name }.merge(data)
-    )
+    tiles_path(id: country.iso, type: 'country', version: version)
   end
 
-  def region_cover(region, with_tag: true)
+  def region_cover(region)
     version = AppSecrets.mapbox[:version]
-    image_params = { id: region.iso, type: 'region', version: version }
-    return tiles_path(image_params) unless with_tag
 
-    image_tag(
-      cover_placeholder(region.class),
-      alt: region.name
-    )
+    tiles_path(id: region.iso, type: 'region', version: version)
   end
 
   def url_encode(text)
