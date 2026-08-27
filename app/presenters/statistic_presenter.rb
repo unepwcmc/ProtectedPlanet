@@ -5,13 +5,6 @@ class StatisticPresenter
     @pame_statistic = model.pame_statistic
   end
 
-  def percentage_of_global_pas
-    percentage = (pa_area / global_statistic.pa_area) * 100
-    '%.1f' % percentage
-  rescue NoMethodError
-    "0"
-  end
-
   def geometry_ratio
     return { polygons: 0, points: 0 } if @statistic.nil?
 
@@ -60,11 +53,5 @@ class StatisticPresenter
     define_method(percent_oecm_stat) do
       (@statistic.send(percent_oecm_stat) && @statistic.send(percent_oecm_stat) > 100.0) ? 100.0 : @statistic.send(percent_oecm_stat) rescue nil
     end
-  end
-
-  private
-
-  def global_statistic
-    @global_statistic ||= Region.where(iso: 'GL').first.try(:regional_statistic)
   end
 end

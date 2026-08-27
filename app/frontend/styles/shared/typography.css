@@ -317,12 +317,6 @@ text-theme-grey-black;
   text-base;
 }
 
-@utility tw-shared-font-hind-siliguri__normal-base-grey-black {
-  @apply
-  tw-shared-font-hind-siliguri__normal-base
-  text-theme-grey-black;
-}
-
 @utility tw-shared-font-hind-siliguri__normal-base-white {
   @apply
   tw-shared-font-hind-siliguri__normal-base

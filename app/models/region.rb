@@ -10,14 +10,8 @@ class Region < ApplicationRecord
   has_many :designations, -> { distinct }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 
-  has_one :regional_statistic
-
   def site_ids
     protected_areas.map(&:site_id)
-  end
-
-  def statistic
-    regional_statistic
   end
 
   def countries_providing_data

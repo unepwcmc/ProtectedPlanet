@@ -11,7 +11,6 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     Download.stubs(:clear_downloads)
     ImportTools::WebHandler.stubs(:clear_cache)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
-    #Geospatial::Calculator.stubs(:calculate_statistics)
 
     ImportWorkers::FinaliserWorker.new.perform
   end
@@ -31,7 +30,6 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     Download.expects(:clear_downloads)
 
     ImportTools::WebHandler.expects(:clear_cache)
-    #Geospatial::Calculator.expects(:calculate_statistics)
 
     ImportWorkers::FinaliserWorker.new.perform
   end

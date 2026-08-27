@@ -56,22 +56,6 @@ module ProtectedAreasHelper
     end
   end
 
-  def has_pame_statistics_for(presenter, area = :land)
-    # Ensures pame stats are returned only for Country pages / Statistic presenters
-    presenter.class == StatisticPresenter && presenter.pame_statistic &&
-      presenter.pame_statistic.send("pame_percentage_pa_#{area}_cover").present? &&
-      presenter.pame_statistic.send("pame_pa_#{area}_area").present?
-  end
-
-  MP_DOCUMENTS = {
-    9786 => 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/Pulau_Redang_9786.pdf',
-    555_635_837 => 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/Pulau_Tinggi_and_Sibu_555635837.pdf',
-    3150 => 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/Pulau_Tioman_3150.pdf'
-  }.freeze
-  def management_plan_document
-    MP_DOCUMENTS[@protected_area.site_id]
-  end
-
   def area_type_is
     if @protected_area.is_oecm
       'oecm'

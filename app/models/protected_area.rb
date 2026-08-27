@@ -221,11 +221,6 @@ class ProtectedArea < ApplicationRecord
     overlap
   end
 
-  def self.sum_of_most_protected_marine_areas
-    reported_areas = without_proposed.most_protected_marine_areas(20).map(&:gis_marine_area)
-    reported_areas.inject(0){ |sum, area| sum + area.to_i }
-  end
-
   def self.transboundary_sites
     ProtectedArea.joins(:countries)
     .group('protected_areas.id')

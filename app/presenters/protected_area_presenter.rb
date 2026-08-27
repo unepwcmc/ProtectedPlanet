@@ -31,26 +31,6 @@ class ProtectedAreaPresenter
     ].compact.flatten
   end
 
-  def name_size
-    {
-      name: protected_area.name,
-      site_id: protected_area.site_id,
-      km: protected_area.gis_marine_area.to_i
-    }
-  end
-
-  def marine_designation
-    size = protected_area.reported_area.to_f.round(2)
-    {
-      name: protected_area.name,
-      site_id: protected_area.site_id,
-      country: marine_designation_country,
-      iso: protected_area.countries.first.try(:iso_3),
-      size: "#{number_with_delimiter(size, delimiter: ',')}km²",
-      date: protected_area.legal_status_updated_at.year
-    }
-  end
-
   def current_pa_and_parcels_attributes
     protected_area
       .parcels_including_protected_area_self
@@ -194,20 +174,6 @@ class ProtectedAreaPresenter
 
   def marine_designation_country
     protected_area.countries.first.try(:name) || 'Area Beyond National Jurisdiction'
-  end
-
-  # As of 07Apr2025 it doesn't seem to be used
-  def completeness_for(attributes)
-    attributes.map do |attribute|
-      standard_attr = standard_attributes[attribute[:field]]
-
-      {
-        label: standard_attr[:label],
-        complete: attribute[:assert].call(
-          protected_area, standard_attr[:name]
-        )
-      }
-    end
   end
 
   def dopa_link

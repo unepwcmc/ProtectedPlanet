@@ -50,11 +50,6 @@ class Release < ApplicationRecord
     end
   end
 
-  # Convert backup_timestamp datetime to string format needed by rollback
-  def backup_timestamp_string
-    backup_timestamp&.strftime(BACKUP_TIMESTAMP_FORMAT) if backup_timestamp
-  end
-
   # Generate current backup timestamp string
   def self.current_backup_timestamp_string
     Time.current.strftime(BACKUP_TIMESTAMP_FORMAT)

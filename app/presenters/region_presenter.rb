@@ -143,14 +143,6 @@ class RegionPresenter
     @statistics.map(&:marine_area).compact.reduce(:+)
   end
 
-  def marine_coverage
-    {
-      title: region.name,
-      percentage: percentage_pa_marine_cover,
-      km: number_with_delimiter(pa_marine_area.round(0))
-    }
-  end
-
   # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb
   # def top_gl_coverage_countries
   #   # List of all countries with at least one green list PA, grouped by region

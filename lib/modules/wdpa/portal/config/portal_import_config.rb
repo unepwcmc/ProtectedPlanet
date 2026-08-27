@@ -226,12 +226,6 @@ module Wdpa
           portal_materialised_views_hash.select { |_key, config| config[:required_for_downloads] }.keys
         end
 
-        def self.get_live_materialised_view_name_from_staging(staging_name)
-          mapping = portal_materialised_views_hash
-          entry = mapping.values.find { |v| v[:staging] == staging_name }
-          entry ? entry[:live] : nil
-        end
-
         def self.get_staging_materialised_view_name_from_live(live_name)
           mapping = portal_materialised_views_hash
           entry = mapping.values.find { |v| v[:live] == live_name }

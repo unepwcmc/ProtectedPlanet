@@ -129,14 +129,6 @@ module MapHelper
     end
   end
 
-  def oecm_services_for_point_query
-    ALL_SERVICES_FOR_POINT_QUERY.select {|s| s[:type] == 'oecm' }
-  end
-
-  def wdpa_services_for_point_query
-    ALL_SERVICES_FOR_POINT_QUERY.select {|s| s[:type] == 'wdpa' }
-  end
-
   def country_extent_url (iso3)
     return {
       url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=iso_ter+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
@@ -164,16 +156,6 @@ module MapHelper
 
   def greenlist_site_pids_query_string site_pids
     '/query?' + site_pids_where_query(site_pids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
-  end
-
-  def map_search_types
-    arr = []
-
-    t('map.search_types').each do |id, translations|
-      arr.push(translations.merge({id: id}))
-    end
-
-    arr
   end
 
   def map_legend

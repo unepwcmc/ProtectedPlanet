@@ -3,7 +3,7 @@
 Audit of unused / no-longer-reached code in the ProtectedPlanet Rails app.
 
 - **Produced** 2026-08-21 on branch `staging_kamal`.
-- **Wave 1 actioned 2026-08-27** — see the Suggested order section at the end for what was deleted and what remains.
+- **Waves 1 and 2 actioned 2026-08-27** — see the Suggested order section at the end for what was deleted and what remains.
 - **Re-scanned and updated 2026-08-27**, same branch. Every finding below was re-verified against the working tree; entries that have since been actioned are marked **✅ DONE**, and three findings were **corrected** — see *What changed* below.
 
 Findings are grouped by confidence:
@@ -129,29 +129,34 @@ Deleting the 334 MB is the single largest win in this audit. It lives in the `db
 
 ## 3. Rake tasks
 
-*Status 2026-08-27: unchanged — every file below still present, every broken dependency still missing.*
+*Status: ✅ **actioned in wave 2 (2026-08-27)**, with one correction — see below.*
+
+> **[CORRECTED] `lib/tasks/update_cms_tags.rake` is NOT dead. It was on the delete list and has been kept.**
+> [db/migrate/20200103163139_rename_comfy_cms_blocks_to_comfy_cms_fragments.rb:34](../db/migrate/20200103163139_rename_comfy_cms_blocks_to_comfy_cms_fragments.rb) ends with `Rake::Task['cms_update_2:update_cms_tags'].invoke`, and [.github/workflows/test.yml](../.github/workflows/test.yml) builds the test schema with `rake db:create db:migrate` over all 204 migrations. Deleting the task file breaks CI outright. `lib/tasks/cms_categories.rake` is live for the same reason (`db/migrate/20200729124938`, line 31).
+>
+> The general lesson, which also governs sections 4 and 5: **"migrations are never replayed because `schema_format = :sql`" is no longer true.** CI replays every one of them, so anything a migration reads at run time is live code.
 
 ### [CONFIRMED] Broken — depend on paths that no longer exist
 
 | Task | Missing dependency |
 |---|---|
-| `db:lazy_seed` — [lib/tasks/db.rake](../lib/tasks/db.rake) | Reads `lib/data/seeds/pre_seeded_database.sql`, **which does not exist** (re-verified: the directory holds only CSVs). The task cannot succeed. |
-| `cms_update_2:reattach_files` — [lib/tasks/reattach_files.rake](../lib/tasks/reattach_files.rake) | Reads `public/system/comfy/cms/files/files/000/000`, **which does not exist**. Paperclip is also no longer in the `Gemfile` — this was the one-time Paperclip → ActiveStorage migration. |
+| ✅ `db:lazy_seed` — `lib/tasks/db.rake` **(deleted)** | Read `lib/data/seeds/pre_seeded_database.sql`, which does not exist. It was broken twice over: it also called `pg_handler.seed(db_config['database'], dump_path)`, but `ImportTools::PostgresHandler#seed` takes **no arguments**, so the call raised `ArgumentError` regardless. |
+| ✅ `cms_update_2:reattach_files` — `lib/tasks/reattach_files.rake` **(deleted)** | Reads `public/system/comfy/cms/files/files/000/000`, **which does not exist**. Paperclip is also no longer in the `Gemfile` — this was the one-time Paperclip → ActiveStorage migration. |
 
-> `lib/tasks/db.rake` is not *only* dead weight — its `db:test:prepare` enhancement is what currently reddens CI. See the note in section 8.
+> Deleting `lib/tasks/db.rake` also removed its `db:test:prepare` enhancement, which was seeding every test database with 248 countries and colliding with the fixtures — the named cause of much of the red suite in section 8. `ImportTools::PostgresHandler#seed` itself was **kept**: `lib/modules/import_tools/import.rb:66` is a live caller.
 
 ### [CONFIRMED] Spent one-off data migrations
 
-Each is a single-purpose data fix, run once, never touched since. Dates are last commit to the file, re-confirmed on 2026-08-27.
+Each is a single-purpose data fix, run once, never touched since. Dates are last commit to the file. **All deleted in wave 2 except `update_cms_tags.rake`** (see the correction above).
 
-| File | Last touched |
-|---|---|
-| [lib/tasks/reattach_files.rake](../lib/tasks/reattach_files.rake) | 2020-01-07 |
-| [lib/tasks/update_cms_tags.rake](../lib/tasks/update_cms_tags.rake) | 2020-01-09 — Comfy v1→v2 tag rewrite, namespace `cms_update_2` |
-| [lib/tasks/fix_french_guiana_typo.rake](../lib/tasks/fix_french_guiana_typo.rake) | 2022-06-08 |
-| [lib/tasks/rename_and_assign_chinese_territories.rake](../lib/tasks/rename_and_assign_chinese_territories.rake) | 2022-06-08 |
-| [lib/tasks/rename_turkey_turkiye.rake](../lib/tasks/rename_turkey_turkiye.rake) | 2022-12-15 |
-| [lib/tasks/country_changes_326_327.rake](../lib/tasks/country_changes_326_327.rake) | 2023-07-24 — `remove_gbr_iot_link`, `rename_countries`; named after a ticket/release pair |
+| File | Last touched | Outcome |
+|---|---|---|
+| `lib/tasks/reattach_files.rake` | 2020-01-07 | ✅ deleted |
+| [lib/tasks/update_cms_tags.rake](../lib/tasks/update_cms_tags.rake) | 2020-01-09 — Comfy v1→v2 tag rewrite, namespace `cms_update_2` | **KEPT** — invoked by a migration CI replays |
+| `lib/tasks/fix_french_guiana_typo.rake` | 2022-06-08 | ✅ deleted |
+| `lib/tasks/rename_and_assign_chinese_territories.rake` | 2022-06-08 | ✅ deleted |
+| `lib/tasks/rename_turkey_turkiye.rake` | 2022-12-15 | ✅ deleted |
+| `lib/tasks/country_changes_326_327.rake` | 2023-07-24 — `remove_gbr_iot_link`, `rename_countries` | ✅ deleted |
 
 ### [CONFIRMED] Empty stub
 
@@ -173,9 +178,14 @@ Its tasks show 0 static references only because rake tasks are invoked from a sh
 
 ---
 
-## 4. `db/views/*` — [CONFIRMED] inert
+## 4. `db/views/*` — [CORRECTED 2026-08-27] not inert, and not deletable
 
-*Status 2026-08-27: unchanged — all 8 files still tracked in the submodule.*
+*Status: **[CORRECTED in wave 2]** — all 8 files still tracked, and they must stay.*
+
+> **These files are NOT inert, and section 5's instruction to delete five of them has been dropped.**
+> Both reasons given below are now wrong. CI (`.github/workflows/test.yml`) builds the test schema with `rake db:create db:migrate` over all 204 migrations, so the 2019–2020 migrations **are** replayed on every run, and each one calls `view_sql(...)`, which does `File.read(Rails.root.join("db/views/#{view}/#{timestamp}.sql"))` inside `up`. A missing file is a `Errno::ENOENT` mid-migration and a red CI run.
+>
+> They are dead in the sense that the views they build are dropped again later and never queried at runtime. They are not deletable while the schema is built from migrations. Revisit only if CI switches to loading `structure.sql`.
 
 Eight `.sql` files under [db/views/](../db/views/). These are *not* managed by `scenic` — re-confirmed that the gem is not in the `Gemfile`. They are read by a local helper, `view_sql(timestamp, view)` in [config/initializers/migration_helpers.rb:2](../config/initializers/migration_helpers.rb#L2), and referenced only from 2019–2020 migrations.
 
@@ -195,9 +205,19 @@ Caveat: deleting these files makes those old migrations un-rollable. Given `sche
 
 ---
 
-## 5. [CONFIRMED] `Geospatial::Calculator` + `RegionalStatistic` — dead cluster
+## 5. ✅ DONE (wave 2) — `Geospatial::Calculator` + `RegionalStatistic` — dead cluster
 
-*Status 2026-08-27: unchanged — still exactly one commented-out reference.*
+*Status: ✅ **deleted in wave 2 (2026-08-27)** — but the cluster was larger than recorded here.*
+
+> **[CORRECTED] The audit said `RegionalStatistic`'s "only non-test caller is `Geospatial::Calculator.clear_cache`". There were three more**, all found on deletion, all part of the same dead cluster and all removed with it:
+>
+> - `Region#has_one :regional_statistic` and `Region#statistic`, which returns it. `Region#statistic` was never called: `StatisticPresenter` — the only thing that calls `model.statistic` — is constructed exclusively from a `Country` (`country_presenter.rb:6`).
+> - `StatisticPresenter#global_statistic` (`Region.where(iso: 'GL').first.try(:regional_statistic)`) and its only caller `StatisticPresenter#percentage_of_global_pas`. Neither had an app-side caller; both were reachable only from two tests, one of which was already `skip`ped.
+> - `test/factories/regional_statistic.rb`.
+>
+> This is why the model never raised in production despite pointing at a nonexistent view: the one live-looking path guarded itself with `.try` on a `Region.where(iso: 'GL').first` that returns `nil`.
+>
+> **The 5 `db/views/regional_statistics_view/*.sql` files listed below were NOT deleted** — see the correction in section 4. CI replays the migrations that read them.
 
 **`Geospatial::Calculator`** ([lib/modules/geospatial/calculator.rb](../lib/modules/geospatial/calculator.rb)) has exactly one non-test reference, and it is **commented out** — [app/workers/import_workers/finaliser_worker.rb:41](../app/workers/import_workers/finaliser_worker.rb#L41):
 
@@ -217,7 +237,7 @@ Dies with them:
 - `lib/modules/geospatial/templates/base_calculation.erb` — referenced only from `calculator.rb:3`
 - `test/unit/geospatial/calculator_test.rb`
 - `test/models/regional_statistic_test.rb` *(missed by the first pass)*
-- the 5 `db/views/regional_statistics_view/*.sql` files from section 4
+- ~~the 5 `db/views/regional_statistics_view/*.sql` files from section 4~~ — **kept**, see section 4
 
 **Keep the other four templates** in that directory — `repair_geometries.erb`, `marine_geometry.erb` and `dissolve_geometries.erb` belong to `geometry.rb` and `country_geometry_populator/`, which are separate (see section 7 for `CountryGeometryPopulator`'s own status).
 
@@ -422,9 +442,11 @@ Re-scanned properly. 25 of the 102 `export type`/`export interface` declarations
 
 **[app/presenters/cms_presenter.rb](../app/presenters/cms_presenter.rb)** — 49 lines, zero callers anywhere in `app`, `lib`, `config` or `test`, and already carries `TODO(backend): unused` explaining that the CMS versioning UI that fed it was removed.
 
-### Still dead — methods (30 remaining, was 33)
+### ✅ DONE (wave 2) — methods (32 removed)
 
-All re-verified 2026-08-27 as having zero non-definition references anywhere in `app/`, `lib/` or `config/` — views included.
+All 30 listed below were re-verified as having zero non-definition references anywhere in `app/`, `lib/`, `config/` or `app/frontend/` — ERB views included — and additionally checked against every interpolated `send`/`public_send` call site in the codebase and against the serializer field lists that drive `BaseSerializer#public_send`. All 30 are gone.
+
+**Two more went with them**, found while deleting section 5 and belonging to the same cluster: `StatisticPresenter#percentage_of_global_pas` and its private helper `#global_statistic`. `MP_DOCUMENTS`, a frozen constant read only by `management_plan_document`, was removed alongside it.
 
 | Area | Count | Items | File |
 |---|---|---|---|
@@ -432,23 +454,23 @@ All re-verified 2026-08-27 as having zero non-definition references anywhere in 
 | | | `current_banner`, `get_square_side`, `is_regional_page` | `application_helper.rb` |
 | | | `map_search_types`, `oecm_services_for_point_query`, `wdpa_services_for_point_query` | `map_helper.rb` |
 | | | `has_pame_statistics_for`, `management_plan_document` | `protected_areas_helper.rb` |
-| | | `has_restricted_sites` | `countries_helper.rb` |
+| | | `has_restricted_sites?` | `countries_helper.rb` |
 | | | `has_documents` — dead **twice** | `regions_helper.rb` *and* `countries_helper.rb` |
 | Presenters / services | 7 | `marine_page_statistics` (`country_presenter`), `get_designations` (`designations_presenter`), `marine_coverage` (`region_presenter`), `name_size` / `marine_designation` / `completeness_for` (`protected_area_presenter`), `import_completion` (`portal_release/notifier`) | |
 | Models | 4 | `sum_of_most_protected_marine_areas` (`protected_area`), `sources_to_json` (`pame_evaluation`), `backup_timestamp_string` (`release`), `total_protected_marine_area` (`country_statistic`) | |
 | `lib/` | 6 | `statistics_monthly_import` (`import_tools`), `country_tile` / `region_tile` (`asset_generator`), `configuration_for` (`search/aggregation`), `get_live_materialised_view_name_from_staging` (`portal/config/portal_import_config`), `attributes_for_green_list_status_create` (`portal/utils/green_list_column_mapper`) | |
 
-### Still dead — controller
+### ✅ DONE (wave 2) — controller
 
-`search#map` ([app/controllers/search_controller.rb:42](../app/controllers/search_controller.rb#L42) — the line moved from 40) is `render :index` with no route, no view, and no reference anywhere.
+`search#map` was `render :index` with no route, no view, and no reference anywhere. Deleted.
 
-### Still dead — CSS
+### ✅ DONE (wave 2) — CSS
 
-One unused `@utility`: `tw-shared-font-hind-siliguri__normal-base-grey-black` in `app/frontend/styles/shared/typography.css`. Down from 39.
+The last unused `@utility`, `tw-shared-font-hind-siliguri__normal-base-grey-black`, is gone from `app/frontend/styles/shared/typography.css`. That closes out all 39. `yarn lint:css` and `yarn typecheck` both pass.
 
-### Still dead — view
+### ✅ DONE (wave 2) — view
 
-[app/views/partials/messages/_message-country-restricted.html.erb](../app/views/partials/messages/_message-country-restricted.html.erb) — unreferenced partial, re-confirmed.
+`app/views/partials/messages/_message-country-restricted.html.erb` — unreferenced partial, deleted.
 
 ---
 
@@ -502,27 +524,40 @@ Verified after the deletions: `rake -T` loads, `rake zeitwerk:check` reports *Al
 - **SimpleCov did not need porting.** It lives in `test/test_helper.rb` and the `Gemfile`, both untouched; only the `COVERAGE=1` invocation went with Jenkins. Set `COVERAGE=1` on the Ruby job in `test.yml` whenever the suite is green enough for a floor to mean anything.
 - **Snyk has no successor and now scans nothing.** It was a Jenkins-plugin step (`snykSecurity`, credential `wcmc-snyk`, org `informatics.wcmc`), so it stopped running when Jenkins was retired, not when the file was deleted. Porting it means a `snyk/actions` step plus a `SNYK_TOKEN` repo secret. **Open decision.**
 
-### Wave 2 — straightforward, worth a review
+### ✅ Wave 2 — DONE (2026-08-27). Straightforward, but it produced three corrections.
 
-1. **Broken and spent rake tasks** (section 3) — two of them cannot even run. While in `db.rake`, deal with the `db:test:prepare` seeding hook that is currently reddening CI (section 8).
-2. **`Geospatial::Calculator` + `RegionalStatistic`** (section 5) — includes a model pointing at a nonexistent view.
-3. **Dead helper/presenter/model/lib methods (30), `search#map`, the last unused `@utility`, the orphan partial** (section 10).
+| Item | Section | Result |
+|---|---|---|
+| Broken and spent rake tasks | 3 | 6 of 7 deleted (`db.rake`, `reattach_files`, `fix_french_guiana_typo`, `rename_and_assign_chinese_territories`, `rename_turkey_turkiye`, `country_changes_326_327`). **`update_cms_tags.rake` kept** — see correction 1. |
+| `Geospatial::Calculator` + `RegionalStatistic` | 5 | Deleted, along with 4 ERB templates, 2 test files, a factory, and 4 more references the audit missed — see correction 3. |
+| Dead helper/presenter/model/lib methods | 10 | All 30 deleted, plus 2 more from the section-5 cluster and the `MP_DOCUMENTS` constant. |
+| `search#map`, last unused `@utility`, orphan partial | 10 | All deleted. |
+
+**Three corrections came out of this wave, all from the same root cause:**
+
+1. **`lib/tasks/update_cms_tags.rake` is live** — a migration invokes it, and CI replays every migration. `lib/tasks/cms_categories.rake` too. (Section 3.)
+2. **`db/views/*.sql` cannot be deleted** — the migrations that read them are replayed by CI, so a missing file is a red build. Section 5's instruction to delete five of them was dropped. (Section 4.)
+3. **The section-5 cluster was bigger than recorded** — `Region#has_one :regional_statistic`, `Region#statistic`, `StatisticPresenter#percentage_of_global_pas`, `StatisticPresenter#global_statistic` and a factory were all part of it. (Section 5.)
+
+The root cause of 1 and 2 is the same stale assumption: the audit reasoned that `schema_format = :sql` means migrations are never replayed. **`.github/workflows/test.yml` replays all 204 of them on every run.** Anything a migration reads or invokes at run time is live code. Check that before deleting anything a migration touches.
+
+**Open follow-up:** no migration ever permanently drops `regional_statistics_view` — the last one to touch it (`20200828171030`) drops and immediately recreates it — so the migration history says the view should exist, while a real `structure.sql` shows it does not. `20260701120000_drop_aichi11_targets.rb` is the precedent for closing exactly this gap on the sibling feature. Worth a `DropRegionalStatisticsView` migration now that nothing reads it. The `regional_statistics` **table** is a separate question: it exists and holds rows, so check production before considering it.
 
 ### Wave 3 — the big one, its own PR
 
-4. **`db/cms_seeds/` + its 3 consumers** (section 2) — 334 MB, closed loop, nothing in the app reads it. Largest single win left. It is a commit to the `db` **submodule**, so it needs coordinating with anything else consuming that repo.
+1. **`db/cms_seeds/` + its 3 consumers** (section 2) — 334 MB, closed loop, nothing in the app reads it. Largest single win left. It is a commit to the `db` **submodule**, so it needs coordinating with anything else consuming that repo.
 
 ### Wave 4 — stale infrastructure
 
-5. **`config/deploy/ansible/`** (section 9) — seven years stale, provisions hosts that no longer exist. Safe ahead of the rest of `config/deploy`.
+2. **`config/deploy/ansible/`** (section 9) — seven years stale, provisions hosts that no longer exist. Safe ahead of the rest of `config/deploy`.
 
 ### Wave 5 — blocked on one decision
 
-6. **WDPA S3 release** (section 1), **the whole `import` queue + `sidekiq-import.yml` + the `job_import` role** (section 7), and **the rest of `config/deploy`** (section 9) — all three unblock together, the moment production is confirmed off Capistrano. Fix `docs/deployment.md` in the same change; it still documents `cap ... deploy` as the procedure.
+3. **WDPA S3 release** (section 1), **the whole `import` queue + `sidekiq-import.yml` + the `job_import` role** (section 7), and **the rest of `config/deploy`** (section 9) — all three unblock together, the moment production is confirmed off Capistrano. Fix `docs/deployment.md` in the same change; it still documents `cap ... deploy` as the procedure.
 
 ### Not repo cleanup, but worth doing
 
-7. **Database housekeeping** (section 6) — run `pp:portal:cleanup_backups` on the real environments, and **file the leaking `tmp_downloads_*` views as a bug**. Nothing to commit; `structure.sql` and `schema.rb` are gitignored.
+4. **Database housekeeping** (section 6) — run `pp:portal:cleanup_backups` on the real environments, and **file the leaking `tmp_downloads_*` views as a bug**. Nothing to commit; `structure.sql` and `schema.rb` are gitignored.
 
 Sections 1, 2, 5 and 7 touch import, CMS, stats and the worker fleet respectively, so each deserves its own PR rather than one sweeping cleanup commit.
 

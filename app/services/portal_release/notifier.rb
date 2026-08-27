@@ -64,11 +64,6 @@ module PortalRelease
       post(":hourglass_flowing_sand: #{message}")
     end
 
-    def import_completion(processed_count, _phase = 'import')
-      message = "Import completed: #{format_number(processed_count)} protected areas processed"
-      post(":white_check_mark: #{message}")
-    end
-
     # Rollback notifications
     def rollback_ok(timestamp)
       post(":rewind: Rollback to backup #{timestamp} succeeded. Now cleaning up...")

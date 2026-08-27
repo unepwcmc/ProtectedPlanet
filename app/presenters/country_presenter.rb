@@ -97,20 +97,6 @@ class CountryPresenter
     )
   end
 
-  def marine_page_statistics
-    {
-      title: country.name,
-      totalMarineArea: statistic.total_marine_area.round,
-      totalOverseasTerritories: country.children.count,
-      overseasTerritoriesURL: overseas_territories_url,
-      flag: ApplicationController.helpers.flag_url(country.iso_3),
-      nationalKm: statistic.pa_marine_area.round,
-      nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
-      overseasKm: statistic.overseas_total_protected_marine_area.round, # #check how this is being calculated
-      overseasPercentage: statistic.overseas_percentage.round(2) # #check how this is being calculated - discuss
-    }
-  end
-
   def malaysia_documents
     return unless @country && @country.iso_3 == 'MYS'
 

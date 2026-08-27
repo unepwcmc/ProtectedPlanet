@@ -2,10 +2,6 @@ module ApplicationHelper
   include ActionView::Helpers::NumberHelper
   include BemHelper
 
-  def get_square_side(area)
-    Math.sqrt(area / 100) * 100
-  end
-
   def commaify(number)
     number_with_delimiter(number, delimeter: ',')
   end
@@ -66,10 +62,6 @@ module ApplicationHelper
 
   def url_encode(text)
     ERB::Util.url_encode(text)
-  end
-
-  def is_regional_page(controller_name)
-    controller_name == 'region'
   end
 
   def get_cms_url(path)
@@ -245,11 +237,6 @@ module ApplicationHelper
   def banner_signature
     # Signature of current active banners set to support dismissing a group
     @banner_signature ||= Digest::SHA1.hexdigest(active_banners.map(&:id).join('-'))
-  end
-
-  def current_banner
-    # For backward compatibility where only first is used
-    active_banners.first
   end
 
   def banner_visible?

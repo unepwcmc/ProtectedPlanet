@@ -171,19 +171,6 @@ class PameEvaluation < ApplicationRecord
     end
   end
 
-  def self.sources_to_json
-    sources = PameSource.all.order(id: :asc)
-    sources.to_a.map! do |source|
-      {
-        id: source.id,
-        data_title: source.data_title,
-        resp_party: source.resp_party,
-        year: source.year,
-        language: source.language
-      }
-    end.to_json
-  end
-
   def self.filters
     methods = PameMethod.pluck(:name).compact.sort
     unique_countries = Country.pluck(:name).compact.uniq.sort

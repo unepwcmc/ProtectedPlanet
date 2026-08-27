@@ -8,24 +8,6 @@ class StatisticPresenterTest < ActiveSupport::TestCase
     @presenter = StatisticPresenter.new @country
   end
 
-  test '.percentage_of_global_pas returns the percentage of global PAs' do
-    skip("Regional statistics calculations need to be revisited and are now calculated via SQL view")
-    global_statistic = FactoryBot.create(:regional_statistic, pa_area: 25)
-    FactoryBot.create(:region, iso: 'GL', regional_statistic: global_statistic)
-    Region.where(iso: 'GL').first.regional_statistic = global_statistic
-
-    @statistic.stubs(:pa_area).returns(10)
-
-    percentage = @presenter.percentage_of_global_pas
-    assert_equal "40.0", percentage
-  end
-
-  test '.percentage_of_global_pas returns 0 if the percentage cannot
-   be calculated' do
-    percentage = @presenter.percentage_of_global_pas
-    assert_equal "0", percentage
-  end
-
   test '.percentage_pa_cover returns the percentage pa cover' do
     CountryStatistic.any_instance.stubs(:percentage_pa_cover).returns(50)
     percentage = @presenter.percentage_pa_cover

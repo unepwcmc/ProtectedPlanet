@@ -26,8 +26,4 @@ class Search::Aggregation
   def self.aggregator_for name
     AGGREGATORS[configuration[name]['type']]
   end
-
-  def self.configuration_for name
-    configuration[name]
-  end
 end

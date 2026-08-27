@@ -39,10 +39,6 @@ class SearchController < ApplicationController
     render json: @results
   end
 
-  def map
-    render :index
-  end
-
   def autocomplete
     search_term = search_params[:search_term]
     db_type = search_params[:type]
