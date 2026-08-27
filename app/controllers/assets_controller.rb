@@ -34,7 +34,7 @@ class AssetsController < ApplicationController
     # regenerated every request anyway, so a year-long browser TTL only gets in
     # the way. Always true in staging/production.
     if perform_caching
-      response.headers['cache-control'] = Middleware::CacheHeaders.long_lived
+      response.headers['Cache-Control'] = Middleware::CacheHeaders.long_lived
     end
 
     send_data image, type: 'image/png', disposition: 'inline'

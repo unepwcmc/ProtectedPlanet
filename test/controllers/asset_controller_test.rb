@@ -18,6 +18,7 @@ class AssetsControllerTest < ActionController::TestCase
     pa = FactoryBot.create(:protected_area, site_id: 555_222)
 
     AssetGenerator.stubs(:protected_area_tile).returns("the tile")
+    @controller.stubs(:perform_caching).returns(true)
 
     get :tiles, params: {"id" => pa.site_id, "type" => "protected_area"}
 
