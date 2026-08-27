@@ -32,6 +32,11 @@ concurrency:
   group: tests-${{ github.ref }}
   cancel-in-progress: true
 
+# corepack asks before downloading a Yarn it has not seen. It skips the prompt on
+# a non-TTY, but set it explicitly so a runner change cannot hang the build.
+env:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
+
 jobs:
   ruby:
     name: Ruby test suite
@@ -132,9 +137,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.4.1'   # matches NODE_VERSION in Dockerfile / Dockerfile.deploy
-      # package.json pins "packageManager": "yarn@4.17.1" (Yarn Berry), which ships
+          node-version: '26.8.1'   # matches NODE_VERSION in Dockerfile / Dockerfile.deploy
+      # package.json pins "packageManager" to a Yarn Berry version, which ships
       # via corepack rather than the classic yarn bundled with the runner.
+      # corepack from npm, not the runner's Node: v26 unbundled it (setup-node
+      # installs the official tarball, which ships only node/npm/npx), so a bare
+      # `corepack enable` exits 127. Same workaround as both Dockerfiles.
+      - run: npm install -g corepack@latest
       - run: corepack enable
       - run: yarn install --immutable
 
@@ -192,7 +201,11 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.4.1'
+          node-version: '26.8.1'
+      # corepack from npm, not the runner's Node: v26 unbundled it (setup-node
+      # installs the official tarball, which ships only node/npm/npx), so a bare
+      # `corepack enable` exits 127. Same workaround as both Dockerfiles.
+      - run: npm install -g corepack@latest
       - run: corepack enable
       - run: yarn install --immutable
       # package.json defines `yarn test` (vitest) and no workflow has ever called it.

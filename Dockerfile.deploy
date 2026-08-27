@@ -1,9 +1,5 @@
 # ProtectedPlanet — production/staging image for Kamal 2.
 #
-# This replaces the buster + GDAL-2.2.3-from-source + ESRI FileGDB SDK chain the
-# development Dockerfile still carries. That chain cannot be built on a current
-# base: ESRI ship FileGDB as a RHEL7 binary linked against an old glibc.
-#
 # Instead: Ubuntu 24.04 (matching the host), distro GDAL 3.8.4, and GDAL's
 # built-in OpenFileGDB driver, which has written .gdb since 3.6 and reports as
 # `rw+v` here. Verified end to end against the staging database — a 500-feature
@@ -15,7 +11,7 @@
 # uses ruby-build for 3.3.7, so the approach is proven in this repo.
 
 ARG RUBY_VERSION=3.3.7
-ARG NODE_VERSION=24.4.1
+ARG NODE_VERSION=26.8.1
 
 # ---------------------------------------------------------------------------
 # base — runtime libraries only, shared by build and final stages
@@ -77,10 +73,16 @@ RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build 
 ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
 
 # Node 24 from the official tarball (Vite 5 needs 18+).
+#
+# corepack comes from npm, not the tarball: Node 26 unbundled it (v26 ships only
+# node/npm/npx), so a bare `corepack enable` fails with exit 127 there. Harmless
+# on 24, which still bundles it -- this just makes NODE_VERSION safe to bump.
+# Yarn is not pinned here; corepack takes it from package.json's "packageManager".
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \
- && corepack enable && corepack prepare yarn@4.17.1 --activate
+ && npm install -g corepack@latest \
+ && corepack enable
 
 WORKDIR /app
 
@@ -101,6 +103,7 @@ RUN gem install bundler --no-document \
 ENV PUPPETEER_CACHE_DIR=/app/.cache/puppeteer
 
 COPY package.json yarn.lock .yarnrc.yml* .puppeteerrc.cjs ./
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
 # PUPPETEER_SKIP_DOWNLOAD: puppeteer's own postinstall download has no retry and
 # is not routed through the build cache mount used further down. It is also the
