@@ -7,9 +7,9 @@ name: Tests
 # Ruby suite was silently skipped for years because the retired Jenkins pipeline
 # called `echo "rakeTest()"` instead of `rakeTest()`, which is why a 2021 breakage
 # went unnoticed. The suite was revived to 624 runs / 0 failures in Jul 2026 and has
-# since drifted again -- it currently fails ~81 tests. Retiring the Jenkinsfile (see
-# docs/dead-code.md section 8) without this workflow would remove the only guardrail
-# that work restored.
+# since drifted again -- it currently fails ~81 tests. The Jenkinsfile has since been
+# retired (see docs/dead-code.md section 8); without this workflow that would have
+# removed the only guardrail that work restored.
 #
 # NOT A REQUIRED CHECK YET, DELIBERATELY. These jobs will report red until the suite
 # is fixed; leave them out of the branch protection required-checks list so they

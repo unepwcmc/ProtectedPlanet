@@ -91,7 +91,7 @@ For debugging with byebug, attach to the server console:
   The download itself retries 3x and goes through a Docker build cache mount, so a rebuild
   doesn't need Google's Chrome-for-Testing bucket to still have that exact build once it's been
   fetched successfully once on a given host — see the comment above that `RUN` step in the
-  `Dockerfile` for why that matters on this project's Jenkins setup.
+  `Dockerfile`.
 - In `.env`, set `PDF_RASTERIZER_HOST=protectedplanet-web:3000` so the PDF generator (running inside
   the `sidekiq` container) reaches the app directly over the internal Docker network instead of
   round-tripping through the public site domain. This is deliberately separate from `MAILER_HOST`
