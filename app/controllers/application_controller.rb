@@ -117,19 +117,15 @@ class ApplicationController < ActionController::Base
     render_error_page(404)
   end
 
-  # max-age=0 + must-revalidate makes the BROWSER re-check the HTML on every
-  # navigation. Without it a visitor holds the page for cache_max_age (30 days),
-  # and since the HTML embeds digest-stamped asset paths
-  # (/vite/assets/application-<hash>.js) that the next build deletes, they keep
-  # requesting assets that no longer exist -- the 404 comes back as the styled
-  # error page, so the browser reports it as a text/html MIME mismatch.
+  # max-age=0 + must-revalidate forces the BROWSER to recheck the HTML every visit,
+  # so it never keeps serving digest-stamped asset paths that the next build deleted.
+  # s-maxage lets the SHARED cache (Rack::Cache/memcached) serve the full window
+  # regardless, answering revalidation with a 304; post-deploy flushes that store.
   #
-  # s-maxage keeps SHARED caches (Rack::Cache in memcached) serving the page for
-  # the full window, so the origin cost is unchanged -- these pages are slow to
-  # render. Revalidation is answered from that cache with a 304 via the ETag
-  # Rack::ETag digests from the body. .kamal/hooks/post-deploy flushes the shared
-  # store on every deploy, so the first request after a deploy re-renders and the
-  # browser picks up the new asset hashes immediately.
+  # Unguarded by perform_caching, unlike AssetsController#tiles: this only sets
+  # headers on a response already being rendered, so there's no expensive work to
+  # skip in dev. If that ever changes (e.g. this starts gating real caching work),
+  # add the same perform_caching guard tiles uses.
   def enable_caching
     options = { public: true, must_revalidate: true }
     # Only set in production_defaults (so staging/production); nil elsewhere, and

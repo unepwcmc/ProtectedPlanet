@@ -26,13 +26,12 @@ Rails.application.configure do
   client = Dalli::Client.new(Rails.application.config_for(:app_secrets).memcache_servers, {value_max_bytes: 10485760})
   config.action_dispatch.rack_cache = {:metastore => client, :entitystore => client }
 
-  # Enable Rack::Cache to put a simple HTTP cache in front of your application
-  # Add `rack-cache` to your Gemfile before enabling this.
-  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
-  # config.action_dispatch.rack_cache = true
-
-  # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_files = false
+  # One flat hash covers all of public/, so this is the safe half: stable URLs
+  # revalidate, which is cheap because Rack::Files answers If-Modified-Since with a
+  # 304 itself. Middleware::CacheHeaders then grants a long TTL to the
+  # fingerprinted build output.
+  config.public_file_server.headers = { 'cache-control' => 'public, max-age=0, must-revalidate' }
+  config.middleware.insert_before ActionDispatch::Static, Middleware::CacheHeaders
 
   # Compress JavaScripts and CSS.
   # Terser rather than Uglifier: uglify-js is ES5-era and its Ruby wrapper is

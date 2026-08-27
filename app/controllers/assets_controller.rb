@@ -25,7 +25,17 @@ class AssetsController < ApplicationController
       return
     end
 
-    expires_in 3.days, public: true
+    # Set here rather than in Middleware::CacheHeaders, which sits ABOVE
+    # Rack::Cache: a header stamped there is applied after Rack::Cache has already
+    # judged the response uncacheable, so tiles would never be stored and every
+    # request would pay the record lookup above. The value stays shared.
+    #
+    # Guarded: false in dev without tmp/caching-dev.txt, where the tile is
+    # regenerated every request anyway, so a year-long browser TTL only gets in
+    # the way. Always true in staging/production.
+    if perform_caching
+      response.headers['cache-control'] = Middleware::CacheHeaders.long_lived
+    end
 
     send_data image, type: 'image/png', disposition: 'inline'
   rescue AssetGenerator::AssetGenerationFailedError

@@ -10,6 +10,12 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Not autoloadable: lib/ is not an autoload path, and the environment files insert
+# this as middleware at config time, before any autoloader exists. Required here
+# rather than per-environment because AssetsController references long_lived, so it
+# has to resolve in test too.
+require_relative '../lib/middleware/cache_headers'
+
 module ProtectedPlanet
   class Application < Rails::Application
     # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
