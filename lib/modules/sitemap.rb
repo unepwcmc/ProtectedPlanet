@@ -5,8 +5,14 @@ require 'builder'
 # XML sitemaps for the whole public site. robots.txt blocks the search endpoints,
 # so this is a crawler's only route to the ~500k protected area pages.
 #
-# Served from a controller, not written into public/: containers share no volume, so
-# files a job container writes are invisible to the web containers.
+# Rendered on demand from a controller rather than pre-generated into files. A chunk
+# is a ~40ms index-only scan plus Builder, behind the controller's 12h Cache-Control,
+# so a full crawl of every chunk costs seconds of CPU in total. The only cost that
+# scales with the table is #chunk_bounds, cached and warmed after a release.
+#
+# Files would also need somewhere both roles can see. Today they do share
+# /app/tmp/imports (deploy.yml mounts it for every role, all on one host), but that
+# stops holding once web scales out, and it fails silently: stale or missing XML.
 module Sitemap
   URLS_PER_CHUNK = 5_000
 
