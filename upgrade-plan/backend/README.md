@@ -80,7 +80,7 @@ Total around 6–9.5 months for backend. **Phase 1 is complete — the test suit
 |------|--------|-------|
 | ~~**Test suite is dead**~~ — **RESOLVED Jul 2026.** Revived to 624 runs / 0 failures on Rails 5.2; CI enforces it | was Critical — the safety net now exists | [10](./10-test-suite.md) |
 | **GDAL / ESRI FileGDB** — `.gdb` downloads depend on a proprietary SDK compiled into GDAL 2.2.3, which will not build on a modern base image | **High** — blocks dockerization; wrong output silently breaks downstream users | [13](./13-gdal-and-spatial-tooling.md) |
-| **Postgres major upgrade** — large spatial DB, PostGIS extension must move in step | **High** — data correctness + downtime | [12](./12-infrastructure-migration.md) |
+| **Postgres major upgrade** — large spatial DB, PostGIS extension must move in step. *Local dev + CI are on 17 as of Aug 2026, and the PostGIS 2.5 → 3.x path is now a tested runbook ([06](./06-postgis-and-database.md)); production remains on 10* | **High** — data correctness + downtime | [12](./12-infrastructure-migration.md) |
 | **CMS port** — Media Surfer is the unreleased Comfy master line; our monkey-patching touches private engine API | Medium — CMS blocks B3 | [09](./09-cms-comfy.md) |
 | **PostGIS adapter** — each AR bump needs spatial regression | Medium — data correctness | [06](./06-postgis-and-database.md) |
 | **WDPA import pipeline** — complex async chain must survive every bump | Medium — data ingestion | [08](./08-sidekiq-and-workers.md) |

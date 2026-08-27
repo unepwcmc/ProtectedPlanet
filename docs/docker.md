@@ -37,6 +37,13 @@ To attach to individual container's console:
 `docker attach protectedplanet-web`
 
 ## Step 2: Database restore
+
+> **Already have a local database from before Aug 2026?** It is a PostgreSQL 11 cluster, and
+> `db` now runs Postgres 17 — it will refuse to start with *"incompatible data directory"*
+> until you upgrade it. That is a one-off, ~10 minute job that keeps your data:
+> **[docker/pg-upgrade/README.md](../docker/pg-upgrade/README.md)**. Setting up fresh? Nothing
+> to do — you get a 17 cluster.
+
 **2.1. Recommended: restore a production dump into Docker Postgres**
 
 The recommended way to populate your local database is:

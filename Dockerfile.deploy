@@ -51,6 +51,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libdrm2 libxkbcommon0 \
  && rm -rf /var/lib/apt/lists/*
 
+# PostgreSQL 17 client tools, from PGDG rather than the archive — noble ships
+# postgresql-client-16, and pg_dump refuses to talk to a server newer than itself
+# ("aborting because of server version mismatch"), while staging/production run 17.5.
+#
+# These are not optional extras: ImportWorkers::FinaliserWorker shells out to pg_dump and
+# psql (via CmsTransfer / ApiTransfer / ActiveStorageTransfer) at the end of every import,
+# and this image previously shipped no pg_dump at all — only libpq5 for the pg gem. So
+# that step could not have been working in production.
+#
+# libpq5 gets pulled up to 17 as a dependency, which is fine: the pg gem links libpq.so.5
+# and 17 is ABI-compatible with the 16 headers it was built against in the build stage.
+RUN . /etc/os-release \
+ && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+      | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] https://apt.postgresql.org/pub/repos/apt/ ${VERSION_CODENAME}-pgdg main" \
+      > /etc/apt/sources.list.d/pgdg.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-client-17 \
+ && rm -rf /var/lib/apt/lists/* \
+ && pg_dump --version
+
 # ---------------------------------------------------------------------------
 # build — toolchain, Ruby, Node, gems, assets
 # ---------------------------------------------------------------------------
