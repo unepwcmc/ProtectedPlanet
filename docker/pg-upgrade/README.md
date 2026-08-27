@@ -9,6 +9,25 @@ Do it when you pull a branch where `docker-compose.yml` names `postgis/postgis:1
 `db` fails with **"database files are incompatible with server"** — that means your volume
 still holds a PG11 cluster.
 
+## Before you start
+
+**Free disk.** The backup is a full copy of your cluster and `pg_upgrade --copy` keeps the
+old one until you delete it, so you need roughly **12GB free**, more if your cluster is
+large. Check with `df -h /` first -- running out part-way is recoverable but tedious.
+
+**Shrink the WAL first.** A cluster created by the old `kartoza` image has
+`wal_segment_size = 1GB` (not the usual 16MB) combined with `wal_keep_segments = 64`, which
+means it will retain up to **64GB** of write-ahead log. One local volume was 26.7GB for a
+6.9GB database, 19GB of it dead WAL from 2024. Nothing holds it -- no replication slots,
+`archive_mode = off` -- so it can simply be dropped, and doing that before the backup makes
+the backup several times smaller and faster:
+
+```bash
+docker compose exec -u postgres db psql -d postgres \
+  -c 'ALTER SYSTEM SET wal_keep_segments = 0' -c 'SELECT pg_reload_conf()'
+docker compose exec -u postgres db psql -d postgres -c 'CHECKPOINT'
+```
+
 ## Run this
 
 ```bash
