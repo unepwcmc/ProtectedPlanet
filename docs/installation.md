@@ -144,13 +144,12 @@ to date data, particularly with respect to the CMS which most frequently changes
 ### Final steps
 
 1. Run `rake cms_categories:import` to create the custom Comfy page and layout categories.
-2. Run `rake comfy:staging_import` to import the seeds from staging. Don't worry if you see a lot of modified content
-in your resulting `db/cms_seeds` folder - this is likely to happen as the CLS team regularly tests out updates. 
-3. Import db seeds in `rake 'comfy:cms_seeds:import[protected-planet, protected-planet]'`
-4. Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`
+2. Go to `http://localhost:3000/en/admin/sites` and update the host to be `localhost:3000`
 if not already set.
-3. Reindex the search: `rake search:reindex` 
-4. Update your local CMS seeds (CMS pages, files, layouts etc.) using `rake comfy:staging_import` 
+3. Reindex the search: `rake search:reindex`
+
+Your CMS content comes from the database dump you restored above — there is no
+separate seed-import step
 
 #### GEOS and Linux
 

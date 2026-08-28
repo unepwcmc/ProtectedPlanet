@@ -65,48 +65,6 @@ class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::Integration
 
   private
 
-  def create_test_portal_staging_views
-    polygons_view = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:polygons]
-    points_view   = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:points]
-    sources_view  = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:sources]
-
-    ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{polygons_view} AS
-      SELECT
-        1 as site_id,
-        '1' as site_pid,
-        'Test Polygon PA' as name,
-        'Designated' as status,
-        'Ia' as iucn_cat,
-        ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
-      UNION ALL
-      SELECT
-        2 as site_id,
-        '2' as site_pid,
-        'Test Polygon PA 2' as name,
-        'Designated' as status,
-        'II' as iucn_cat,
-        ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry;
-
-      CREATE MATERIALIZED VIEW #{points_view} AS
-      SELECT
-        3 as site_id,
-        '3' as site_pid,
-        'Test Point PA' as name,
-        'Designated' as status,
-        'III' as iucn_cat,
-        ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry;
-
-      CREATE MATERIALIZED VIEW #{sources_view} AS
-      SELECT
-        1 as id,
-        'Test Source' as title,
-        'Test Description' as description,
-        2024 as year,
-        'en' as language;
-    SQL
-  end
-
   def drop_all_portal_materialized_views
     conn = ActiveRecord::Base.connection
 

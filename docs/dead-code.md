@@ -3,7 +3,7 @@
 Audit of unused / no-longer-reached code in the ProtectedPlanet Rails app.
 
 - **Produced** 2026-08-21 on branch `staging_kamal`.
-- **Waves 1 and 2 actioned 2026-08-27** — see the Suggested order section at the end for what was deleted and what remains.
+- **Waves 1 and 2 actioned 2026-08-27; wave 3 actioned 2026-08-28** — see the Suggested order section at the end for what was deleted and what remains.
 - **Re-scanned and updated 2026-08-27**, same branch. Every finding below was re-verified against the working tree; entries that have since been actioned are marked **✅ DONE**, and three findings were **corrected** — see *What changed* below.
 
 Findings are grouped by confidence:
@@ -105,25 +105,31 @@ There is a second, independent reason it may already be inert: the known-broken 
 
 ---
 
-## 2. `db/cms_seeds/*` — [CONFIRMED] dead cluster, 592 files / **334 MB**
+## 2. ✅ DONE (wave 3) — `db/cms_seeds/*`, 592 files / **334 MB**
 
-*Status 2026-08-27: unchanged — still 592 tracked files, still 334 MB.*
+*Status: ✅ **deleted 2026-08-28**, along with all three consumers — but the "closed loop" reasoning below did not survive checking.*
 
-The CMS seed dump and everything that reads it form one closed, dead loop. Nothing in the running app touches it.
+> **[CORRECTED] It was not a closed loop.** `rake comfy:cms_seeds:import[from,to,classes]` is a **live task provided by the ComfortableMediaSurfer gem**. It reads `db/cms_seeds` directly and does not pass through any of the three consumers listed below, so removing them would not have made the directory unreachable. `db/README.md` documented that task as the supported way to mirror production CMS content onto staging or a dev machine, and `docs/installation.md` listed it as a local setup step. Someone also fixed that exact import path for Ruby 3 on **2026-07-29** (`7f409feea`) — a month before this audit — which is active maintenance, not abandonment.
+>
+> **Deleted anyway, as a deliberate call**, on the grounds that the stored snapshot is 334 MB of a CMS that can be re-exported on demand from any live environment. The gem's `comfy:cms_seeds:export` / `:import` pair still works; only the *stored* snapshot is gone. The supporting machinery was therefore **kept**: the `CmsSeedYaml` Ruby-3 patch in `config/initializers/comfy_patching.rb` and the `Importer`/`Exporter` extensions in `config/initializers/comfortable_media_surfer.rb` are all still needed by those tasks.
+>
+> `db/README.md` and `docs/installation.md` were rewritten in the same change to describe the export-on-demand workflow instead of the stored directory. **Anyone who needed the old snapshot must recover it from the `db` submodule's history** — it is not reproducible from this repo.
+
+The three consumers, all genuinely legacy, were deleted with it:
 
 Consumers, all three legacy:
 
-1. **[lib/tasks/staging_seeds.rake](../lib/tasks/staging_seeds.rake)** — rsyncs seeds off staging over SSH. Hardcodes a host that is no longer the staging server (line 6):
+1. **`lib/tasks/staging_seeds.rake`** — rsynced seeds off staging over SSH. Hardcodes a host that is no longer the staging server (line 6):
    ```ruby
    PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
    ```
    Staging is now `pp-web-staging-01.internal.unep-wcmc.org` (see `config/deploy.staging.yml`). This task points at the retired Linode box.
-2. **[lib/modules/sync_seeds.rb](../lib/modules/sync_seeds.rb)** — the SSH/rsync implementation. `staging_seeds.rake:49` is its **only** caller. (`config/initializers/comfy_patching.rb:14` mentions `sync_seeds` in a comment only.)
-3. **[lib/tasks/export_to_s3.rake](../lib/tasks/export_to_s3.rake)** — reads `cms_seeds/protected-planet/files` to reconcile filenames during a one-time local-ActiveStorage → S3 migration.
+2. **`lib/modules/sync_seeds.rb`** — the SSH/rsync implementation. `staging_seeds.rake:49` is its **only** caller. (`config/initializers/comfy_patching.rb:14` mentions `sync_seeds` in a comment only.)
+3. **`lib/tasks/export_to_s3.rake`** — read `cms_seeds/protected-planet/files` to reconcile filenames during a one-time local-ActiveStorage → S3 migration.
 
 `db/README.md` also states seed changes never affect the apps unless someone manually runs `comfy:cms_seeds:import`, and that this "should not be done on production".
 
-Deleting the 334 MB is the single largest win in this audit. It lives in the `db` submodule — and unlike `structure.sql`, it genuinely *is* tracked there.
+This was the single largest win in the audit. It lived in the `db` submodule — and unlike `structure.sql`, it genuinely *was* tracked there, so the deletion is a commit to `unepwcmc/protectedplanet-db`, separate from the parent repo.
 
 ---
 
@@ -158,15 +164,15 @@ Each is a single-purpose data fix, run once, never touched since. Dates are last
 | `lib/tasks/rename_turkey_turkiye.rake` | 2022-12-15 | ✅ deleted |
 | `lib/tasks/country_changes_326_327.rake` | 2023-07-24 — `remove_gbr_iot_link`, `rename_countries` | ✅ deleted |
 
-### [CONFIRMED] Empty stub
+### ✅ DONE (wave 3) — Empty stub
 
 `comfy:sync_staging_production` in [lib/tasks/export_to_s3.rake:73](../lib/tasks/export_to_s3.rake#L73) has no body — just a `TODO` comment. It does nothing when run.
 
-### [SUSPECTED] `comfy:export_to_s3`
+### ✅ DONE (wave 3) — `comfy:export_to_s3`
 
 Same file, line 24. A one-time migration of local ActiveStorage blobs into the staging S3 bucket. Dead by intent, but unlike the tasks above it is not *broken* — it would still run. Delete alongside `db/cms_seeds` (section 2), since it is one of that directory's three consumers.
 
-### [SUSPECTED] `comfy:staging_import`
+### ✅ DONE (wave 3) — `comfy:staging_import`
 
 [lib/tasks/staging_seeds.rake](../lib/tasks/staging_seeds.rake). Dead because its hardcoded Linode host is retired (section 2). Worth one check that nobody on the team still uses it to refresh a local CMS from a *current* host before removing.
 
@@ -316,13 +322,13 @@ The original audit ended this section with a warning that `.github/workflows/` c
 
 | Job | Steps | Gate status |
 |---|---|---|
-| **Ruby test suite** | Postgres 17 + PostGIS 3.5, Elasticsearch 8.6, Redis 7; builds the schema from all 204 migrations; `bundle exec rails test` | **Not a required check yet, deliberately** — the suite is red (18 failures / 10 errors at the time it landed) |
+| **Ruby test suite** | Postgres 17 + PostGIS 3.5, Elasticsearch 8.6, Redis 7; builds the schema from all 204 migrations; `bundle exec rails test` | **Now green — see below.** Was red (18 failures / 10 errors) when the workflow landed |
 | **JavaScript test suite** | `yarn test` (vitest), `yarn lint --max-warnings 0`, `yarn lint:css`, `yarn typecheck` | All green; safe to make required |
 
 Two things worth carrying forward:
 
 - The workflow deliberately avoids `continue-on-error`, so the red suite reports honestly instead of showing a green tick over failures.
-- The Ruby suite's redness has a **named cause**: `lib/tasks/db.rake` enhances `db:test:prepare` to run `db:seed`, so every test database is built with 248 seeded countries and fixtures then collide with them (`duplicate key value violates unique constraint countries_pkey`). That hook dates from 2019. Building from migrations instead removes ~59 errors. Fix the suite, then add the Ruby job to branch protection.
+- **The Ruby suite is now green.** Verified locally after wave 2: **816 runs, 2168 assertions, 0 failures, 0 errors, 4 skips.** Two things got it there — deleting the 2019 `db:test:prepare` → `db:seed` hook in `lib/tasks/db.rake` (section 3), which was building every test database with 248 seeded countries for the fixtures to collide with (`duplicate key value violates unique constraint countries_pkey`), and a round of direct test fixes committed alongside wave 2. **The Ruby job can now be added to branch protection** — confirm it goes green on a real CI run first, since CI builds the schema from migrations rather than loading `structure.sql`.
 
 **What this does *not* cover:** the Jenkinsfile's **Snyk vulnerability scan** and the **SimpleCov coverage floor** (`COVERAGE=1`) have no replacement. If either mattered, port them before deleting the Jenkinsfile.
 
@@ -531,6 +537,7 @@ Verified after the deletions: `rake -T` loads, `rake zeitwerk:check` reports *Al
 | Broken and spent rake tasks | 3 | 6 of 7 deleted (`db.rake`, `reattach_files`, `fix_french_guiana_typo`, `rename_and_assign_chinese_territories`, `rename_turkey_turkiye`, `country_changes_326_327`). **`update_cms_tags.rake` kept** — see correction 1. |
 | `Geospatial::Calculator` + `RegionalStatistic` | 5 | Deleted, along with 4 ERB templates, 2 test files, a factory, and 4 more references the audit missed — see correction 3. |
 | Dead helper/presenter/model/lib methods | 10 | All 30 deleted, plus 2 more from the section-5 cluster and the `MP_DOCUMENTS` constant. |
+| **Verification** | — | `rails test`: **816 runs, 0 failures, 0 errors, 4 skips**. `yarn test`: **89 files / 413 tests passed**. `yarn lint`, `lint:css`, `typecheck`: all exit 0. `rake -T` and `rake zeitwerk:check` clean. |
 | `search#map`, last unused `@utility`, orphan partial | 10 | All deleted. |
 
 **Three corrections came out of this wave, all from the same root cause:**
@@ -541,23 +548,32 @@ Verified after the deletions: `rake -T` loads, `rake zeitwerk:check` reports *Al
 
 The root cause of 1 and 2 is the same stale assumption: the audit reasoned that `schema_format = :sql` means migrations are never replayed. **`.github/workflows/test.yml` replays all 204 of them on every run.** Anything a migration reads or invokes at run time is live code. Check that before deleting anything a migration touches.
 
+**Two local-environment problems surfaced while verifying this wave.** Neither is dead code and neither is caused by these deletions, but both were being masked by the deleted `db.rake` hook, which skipped the schema load entirely and only ran `db:seed`:
+
+- `config/database.yml` reads `TEST_POSTGRES_HOST`, which is **unset in the app containers**, so the test database falls back to `POSTGRES_HOST` — the `db` service, which is `kartoza/postgis:11.5-2.5` (PostgreSQL **11.7**). Loading a PG17-dumped `structure.sql` there dies on `unrecognized configuration parameter "transaction_timeout"`. The 17-3.5 `db_test` container is the one that should be used; the runs below passed `TEST_POSTGRES_HOST=protectedplanet-db-test` explicitly.
+- `protectedplanet-db-test`'s `template1` had a glibc collation version mismatch (created under 2.36, running on 2.31), which aborted `db:test:prepare` outright. Cleared with `ALTER DATABASE template1 REFRESH COLLATION VERSION`.
+
 **Open follow-up:** no migration ever permanently drops `regional_statistics_view` — the last one to touch it (`20200828171030`) drops and immediately recreates it — so the migration history says the view should exist, while a real `structure.sql` shows it does not. `20260701120000_drop_aichi11_targets.rb` is the precedent for closing exactly this gap on the sibling feature. Worth a `DropRegionalStatisticsView` migration now that nothing reads it. The `regional_statistics` **table** is a separate question: it exists and holds rows, so check production before considering it.
 
-### Wave 3 — the big one, its own PR
+### ✅ Wave 3 — DONE (2026-08-28)
 
-1. **`db/cms_seeds/` + its 3 consumers** (section 2) — 334 MB, closed loop, nothing in the app reads it. Largest single win left. It is a commit to the `db` **submodule**, so it needs coordinating with anything else consuming that repo.
+`db/cms_seeds/` (592 files, 334 MB) and all three consumers deleted; `db/README.md` and `docs/installation.md` rewritten for the export-on-demand workflow. The audit's "closed loop" premise was wrong — the gem's own `comfy:cms_seeds:import` reads the directory directly — and the deletion went ahead as a deliberate decision rather than on that reasoning. See the correction in section 2.
+
+Also landed in this wave: **`db/migrate/20260828120000_drop_regional_statistics_view.rb`**, closing the follow-up from wave 2. `down` recreates the view, with the definition **inlined** rather than read from `db/views/regional_statistics_view/20200828165929.sql`, so the migration carries no dependency on a file that may outlive it. Verified up → rollback → up against the test database; the view is absent and the migration recorded. The `regional_statistics` **table** is deliberately untouched; it still holds rows.
+
+Note for anyone writing a similar migration: the `view_sql` helper is patched onto `ActiveRecord::Migration[5.0]` in `config/initializers/migration_helpers.rb`, so it is **not** visible from an `[8.0]` migration.
 
 ### Wave 4 — stale infrastructure
 
-2. **`config/deploy/ansible/`** (section 9) — seven years stale, provisions hosts that no longer exist. Safe ahead of the rest of `config/deploy`.
+1. **`config/deploy/ansible/`** (section 9) — seven years stale, provisions hosts that no longer exist. Safe ahead of the rest of `config/deploy`.
 
 ### Wave 5 — blocked on one decision
 
-3. **WDPA S3 release** (section 1), **the whole `import` queue + `sidekiq-import.yml` + the `job_import` role** (section 7), and **the rest of `config/deploy`** (section 9) — all three unblock together, the moment production is confirmed off Capistrano. Fix `docs/deployment.md` in the same change; it still documents `cap ... deploy` as the procedure.
+2. **WDPA S3 release** (section 1), **the whole `import` queue + `sidekiq-import.yml` + the `job_import` role** (section 7), and **the rest of `config/deploy`** (section 9) — all three unblock together, the moment production is confirmed off Capistrano. Fix `docs/deployment.md` in the same change; it still documents `cap ... deploy` as the procedure.
 
 ### Not repo cleanup, but worth doing
 
-4. **Database housekeeping** (section 6) — run `pp:portal:cleanup_backups` on the real environments, and **file the leaking `tmp_downloads_*` views as a bug**. Nothing to commit; `structure.sql` and `schema.rb` are gitignored.
+3. **Database housekeeping** (section 6) — run `pp:portal:cleanup_backups` on the real environments, and **file the leaking `tmp_downloads_*` views as a bug**. Nothing to commit; `structure.sql` and `schema.rb` are gitignored.
 
 Sections 1, 2, 5 and 7 touch import, CMS, stats and the worker fleet respectively, so each deserves its own PR rather than one sweeping cleanup commit.
 
