@@ -88,13 +88,53 @@ COPY Gemfile Gemfile.lock ./
 RUN gem install bundler --no-document \
  && bundle install --jobs 4 --retry 3
 
-# Pre-warm corepack's Yarn cache (/root/.cache/node/corepack, not a mounted
-# path) with whatever version package.json asks for, so the first `yarn` in the
-# container doesn't stop to download one. package.json itself is shadowed by the
-# bind mount at runtime; only the cache matters.
-COPY package.json ./
-RUN COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack install \
- && yarn -v
+# JS deps. .yarnrc.yml sets nodeLinker: node-modules and must be present before
+# `yarn install`, or Yarn Berry silently defaults to PnP -- no node_modules/.bin,
+# so the puppeteer CLI below cannot be resolved. .puppeteerrc.cjs pins the Chrome
+# version and has to be here for the same reason.
+#
+# The corepack pre-warm (/root/.cache/node/corepack, not a mounted path) picks up
+# whatever package.json's "packageManager" asks for, so the first `yarn` in the
+# container doesn't stop to download one.
+COPY package.json yarn.lock .yarnrc.yml* .puppeteerrc.cjs ./
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack install && yarn -v
+
+# Chrome for Testing lives inside node_modules rather than puppeteer's default
+# $HOME/.cache/puppeteer, because node_modules is the one path docker-compose.yml
+# bind-mounts from the host across install/web/sidekiq. The default is
+# container-local: the download lands in whichever container ran it, is invisible
+# to the others, and is wiped on every recreate. When this line went missing,
+# docker/scripts/pdf-chrome exited instantly with "no Chrome at ..." and every PDF
+# job silently fell back to launching its own browser.
+ENV PUPPETEER_CACHE_DIR=/ProtectedPlanet/node_modules/.puppeteer-cache
+
+# PUPPETEER_SKIP_DOWNLOAD: puppeteer's postinstall download has no retry and is
+# not routed through the build cache mount below. Chrome is installed explicitly,
+# right after, in a controlled step instead.
+RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install --immutable \
+ || PUPPETEER_SKIP_DOWNLOAD=true yarn install
+
+# Same controlled install as Dockerfile.deploy -- see the long note there for why
+# each part is shaped this way. In short: the cache mount is wiped only AFTER a
+# failed attempt (never before the first, or Chrome is re-downloaded every build),
+# $PUPPETEER_CACHE_DIR is cleared on every attempt so a half-finished download
+# cannot read as "already installed", and verify-puppeteer.js is a hard gate that
+# actually launches the browser rather than trusting a directory to exist.
+COPY app/frontend/backend-scripts ./app/frontend/backend-scripts
+RUN --mount=type=cache,target=/puppeteer-dl-cache \
+    n=0; \
+    until rm -rf "$PUPPETEER_CACHE_DIR" \
+        && PUPPETEER_CACHE_DIR=/puppeteer-dl-cache ./node_modules/.bin/puppeteer browsers install chrome; do \
+        n=$((n+1)); \
+        if [ "$n" -ge 3 ]; then echo "Chrome download failed after 3 attempts" >&2; exit 1; fi; \
+        echo "Chrome download attempt $n failed, clearing the cache and retrying in 5s..."; \
+        find /puppeteer-dl-cache -mindepth 1 -delete; \
+        sleep 5; \
+    done \
+ && mkdir -p "$PUPPETEER_CACHE_DIR" \
+ && cp -a /puppeteer-dl-cache/. "$PUPPETEER_CACHE_DIR/" \
+ && node app/frontend/backend-scripts/verify-puppeteer.js
 
 EXPOSE 3000
 CMD ["rails", "server", "-b", "0.0.0.0"]

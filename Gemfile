@@ -36,6 +36,12 @@ gem 'sprockets-rails', '~> 3.2'
 # autoload. Asset-pipeline only: the app's own styles are Tailwind via Vite.
 gem 'sassc-rails', '~> 2.1'
 
+# Pulled in by sassc and ruby-vips, never resolved directly. The old lock pinned
+# 1.12.1, whose bundled libffi has no arm64-apple-darwin configure target, so
+# `bundle install` on an Apple-silicon host fails to build it. 1.17.x builds on
+# both arm64-darwin and the linux container.
+gem 'ffi', '~> 1.17', '>= 1.17.4'
+
 # Uglifier 4.x wraps uglify-js via ExecJS and is unmaintained since 2019. Under
 # Node 24 its error handling breaks -- it reads result['error']['message'], which
 # is nil for the error shape modern Node returns, so any compression failure
@@ -89,7 +95,8 @@ group :development do
   gem 'capistrano-git-with-submodules', '2.0.3'
   gem 'capistrano-service'
   gem 'awesome_print'
-  # gem 'rubocop', '~> 0.80.0'
+  gem 'rubocop', '~> 1.90.0'
+  gem 'ruby-lsp', '~> 0.26.11'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #
@@ -112,15 +119,11 @@ group :test do
 end
 
 group :test, :development do
-  #gem 'konacha' - TODO - NOT COMPATIBLE WITH RAILS 5
-  # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
-  gem 'minitest', '~> 5.10', '!= 5.10.2', '< 5.26.2' # 5.26.2+ requires ruby >= 3.1
-  
-
+  gem 'minitest', '~> 6.0.6'
 end
 
 group :test, :development, :staging do 
-  gem 'byebug', '~> 9.0', '>= 9.0.5'
+  gem 'byebug', '~> 13.0.0'
 end
 
 
