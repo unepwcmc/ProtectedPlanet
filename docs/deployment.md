@@ -11,55 +11,17 @@ cap production deploy
 
 ## Initial Machine Setup
 
-There is a collection of [Ansible](http://ansible.com) scripts in
-`config/deploy/ansible` that can be used to provision new servers with
-the required stack (Ruby, Postgres, etc).
+Servers are provisioned by Kamal from `config/deploy.yml` / `config/deploy.staging.yml`
+and the images built by `Dockerfile.deploy`.
 
-If you need to install a new dependency on a machine, add some
-configuration, etc. you should add an Ansible task/role so that it is
-repeatable by anyone.
+The Ansible tree that used to live in `config/deploy/ansible` was removed in Aug 2026.
+It had not been touched since 2019, and its inventories named bare-metal hosts
+(`www-prod.protectedplanet.net`, `db-prod.protectedplanet.net`, an EC2 box) that were
+decommissioned two migrations ago — first to Docker, then to Kamal.
 
-**If all goes to plan, you should never have to install or configure
-anything manually on the server. If you're doing something by hand on
-the server, stop it.**
-
-### Provisioning a machine
-
-The only requirement to use Ansible is that you [install the Ansible
-binary](http://docs.ansible.com/intro_installation.html). Once
-installed, you can add your machine(s) to the host inventory files
-(`config/deploy/ansible/inventories/production` and
-`config/deploy/ansible/inventories/staging`) and run:
-
-```
-cd config/deploy/ansible
-
-# staging
-ansible-playbook -i inventories/staging site.yml --ask-vault-pass
-
-# production
-ansible-playbook -i inventories/production site.yml --ask-vault-pass
-```
-
-This will ask you for a Vault password, which can be found in the
-Informatics Password Manager (speak to Stuart Watson for access).
-
-#### Ansible Vault
-
-[Ansible Vault](http://docs.ansible.com/playbooks_vault.html) is used to
-protected secret values for servers, such as passwords.
-
-Currently only one file is protected,
-[group_vars/db](../config/deploy/ansible/group_vars/db).
-
-You can view or edit this file using the `ansible-vault` command:
-
-```
-ansible-vault edit config/deploy/ansible/group_vars/db
-```
-
-This will ask you for a Vault password, which can be found in the
-Informatics Password Manager (speak to Stuart Watson for access).
+> **Its two `ansible-vault` files (`group_vars/all`, `group_vars/db`) held production
+> secrets.** Deleting them does not invalidate anything, and the ciphertext remains in
+> git history. If any of those values was ever reused elsewhere, have it rotated.
 
 ## Maintenance Mode
 

@@ -13,9 +13,9 @@ Rack::Cache sits inbetween nginx and Rails as a Rack middleware, and
 stores the requested pages in memcached and serves them directly on
 request, completely avoiding the Rails stack.
 
-[Ansible](servers.md) handles installing Memcached on production.
-Should you wish to set it up locally, take a look at the [Ansible
-memcached scripts](../config/deploy/ansible/roles/memcached/tasks/main.yml).
+In production Memcached runs as a service on the deploy host, not in a container —
+the app reaches it at `host.docker.internal:11211` (`MEMCACHE_SERVERS` in
+`config/deploy.yml`). Locally it is the `memcached` container in `docker-compose.yml`.
 
 ## Clearing the cache
 

@@ -401,11 +401,15 @@ Two follow-ups this created, neither of which is dead code — ✅ **both action
 |---|---|---|
 | [config/deploy/staging.rb](../config/deploy/staging.rb) | 2021-01-29 | Targets `new-web.pp-staging.linode.protectedplanet.net` — the retired Linode box |
 | [config/deploy/production.rb](../config/deploy/production.rb) | 2021-01-29 | Targets `new-web.pp-production.linode.protectedplanet.net` |
-| [config/deploy/ansible/](../config/deploy/ansible/) | **2019-05-17** | A whole provisioning tree — `site.yml`, `user.yml`, `ansible.cfg`, `group_vars`, `host_vars`, inventories, and vendored roles. Untouched for seven years and superseded twice over, by Docker and then Kamal. |
+| `config/deploy/ansible/` | **2019-05-17** | ✅ **DELETED in wave 4** — 76 files, 368 KB: `site.yml`, `user.yml`, `ansible.cfg`, `group_vars`, `host_vars`, inventories, and 15 vendored roles. Its inventories named `www-prod.protectedplanet.net`, `db-prod.protectedplanet.net` and an EC2 box — hosts decommissioned two migrations ago. |
 | [config/deploy.rb](../config/deploy.rb) | 2025-11-21 | The only recently-touched piece |
 | [Capfile](../Capfile) | 2025-03-06 | |
 
-`config/deploy/ansible/` is the strongest candidate in this group — it provisions bare-metal Linode hosts that no longer exist, and predates the Docker migration entirely. It can reasonably go ahead of the rest.
+`config/deploy/ansible/` was the strongest candidate in this group and went ahead of the rest in wave 4: it provisioned bare-metal hosts that no longer exist and predated the Docker migration entirely, so nothing about it depends on the open Capistrano question.
+
+> **Security follow-up, same shape as `.travis.yml`.** The tree contained two `ansible-vault` encrypted files — `group_vars/all` (12.9 KB) and `group_vars/db` — holding production secrets for those hosts. **Deleting them does not invalidate anything**, and the ciphertext stays in git history. If any of those values was reused anywhere still live, have it rotated. (`docs/deployment.md` claimed "only one file is protected"; there were two.)
+
+Three docs referenced the tree as current and were rewritten in the same change: `docs/deployment.md` (the whole "Provisioning a machine" / "Ansible Vault" section), `docs/caching.md` and `docs/search.md`. The latter two also linked to `docs/servers.md`, **which does not exist** — those links had been broken for years.
 
 Note the staging host here is the same retired Linode box hardcoded in `staging_seeds.rake` (section 2) — the same decommission covers both.
 
@@ -563,9 +567,13 @@ Also landed in this wave: **`db/migrate/20260828120000_drop_regional_statistics_
 
 Note for anyone writing a similar migration: the `view_sql` helper is patched onto `ActiveRecord::Migration[5.0]` in `config/initializers/migration_helpers.rb`, so it is **not** visible from an `[8.0]` migration.
 
-### Wave 4 — stale infrastructure
+### ✅ Wave 4 — DONE (2026-08-28)
 
-1. **`config/deploy/ansible/`** (section 9) — seven years stale, provisions hosts that no longer exist. Safe ahead of the rest of `config/deploy`.
+`config/deploy/ansible/` deleted — 76 files, 368 KB, untouched since 2019, provisioning hosts that no longer exist. `docs/deployment.md`, `docs/caching.md` and `docs/search.md` rewritten to describe the Kamal setup instead (and two long-broken links to a non-existent `docs/servers.md` removed).
+
+**Outstanding:** the tree's two `ansible-vault` files held production secrets. Deletion does not invalidate them and the ciphertext remains in git history — see section 9. This is the second such item, alongside the `.travis.yml` tokens from wave 1.
+
+`docs/deployment.md` still documents `cap staging deploy` as the deploy procedure. That is deliberate: it belongs to wave 5, which is blocked on the Capistrano question.
 
 ### Wave 5 — blocked on one decision
 

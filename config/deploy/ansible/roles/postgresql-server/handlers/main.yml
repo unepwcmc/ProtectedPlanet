@@ -1,6 +1,0 @@
-- name: postgresql
-  service: name=postgresql state=restarted
-     
-- name: nagios-nrpe-server
-  service: name=nagios-nrpe-server state=restarted
-

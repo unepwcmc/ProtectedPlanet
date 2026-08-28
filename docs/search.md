@@ -37,13 +37,13 @@ easy.
 
 ### Production
 
-Production installation is, as with everything, handled by the [Ansible
-scripts](servers.md) and **should not be done manually**.
+Production Elasticsearch is deployed as its own accessory in `config/deploy.yml` and
+**should not be installed or configured manually**.
 
 Elasticsearch is optimised for quick development, and as such it has
 pretty poor defaults for production, such as small allocations of
-memory. The [Ansible scripts](servers.md) handle setting these up for
-you, but for more info check out the [pre-flight
+memory. The deploy config sets these up for you, but for more info check out the
+[pre-flight
 checklist](http://www.elasticsearch.org/webinars/elasticsearch-pre-flight-checklist/).
 
 ## Indexing
