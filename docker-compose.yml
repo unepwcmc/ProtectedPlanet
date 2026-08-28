@@ -7,7 +7,16 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-install
     image: protectedplanet-app
-    command: /bin/bash -l -c "bundle install && yarn install && bundle exec rails comfy:compile_assets"
+    # `puppeteer browsers install chrome` is explicit rather than left to
+    # puppeteer's postinstall. Yarn records that the postinstall has already run
+    # and never looks at whether the browser is still on disk, so a
+    # node_modules/.puppeteer-cache that has been deleted -- or left stale by a
+    # .puppeteerrc.cjs version bump -- is NOT restored by `yarn install`
+    # (measured: 4s, no download). The Dockerfile installs Chrome into the image,
+    # but the bind mount below shadows that copy, so the host cache is what
+    # sidekiq actually executes and it needs its own way back. Idempotent, ~2s
+    # once the cache is warm.
+    command: /bin/bash -l -c "bundle install && yarn install && ./node_modules/.bin/puppeteer browsers install chrome && bundle exec rails comfy:compile_assets"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
