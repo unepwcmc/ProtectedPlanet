@@ -114,9 +114,10 @@ class Wdpa::Portal::Managers::StagingTableManagerTest < ActiveSupport::TestCase
   end
 
   test 'ensure_staging_tables_exist! raises error when missing and create_if_missing is false' do
-    assert_raises(StandardError, /Required staging tables are missing/) do
+    error = assert_raises(StandardError) do
       Wdpa::Portal::Managers::StagingTableManager.ensure_staging_tables_exist!(create_if_missing: false)
     end
+    assert_match(/Required staging tables are missing/, error.message)
   end
 
   test 'add_foreign_keys_to_staging_table adds foreign keys' do

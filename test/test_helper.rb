@@ -28,6 +28,11 @@ require 'database_cleaner'
 
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
+# No test may announce itself in Slack. The release notifier posts to this webhook
+# the moment it takes the release lock, and the dev container has a real one set, so
+# any test that turns WebMock off (the ES ones must) would post to the team channel.
+ENV.delete('PP_SLACK_WEBHOOK_URL')
+
 Mocha.configure do |c|
   c.stubbing_non_existent_method = :prevent
   # Ruby 3 distinguishes positional hashes from keyword arguments; enforce the same in
@@ -99,6 +104,32 @@ class ActiveSupport::TestCase
       Thread.current.report_on_exception = false
       yield
     end.value
+  end
+
+  # ES indices outlive a test run: one a crashed run left behind makes create
+  # fail with resource_already_exists. Always start from a clean index.
+  def fresh_search_index index_name, collection
+    index = Search::Index.new index_name, collection
+    index.delete
+    index.create
+    index
+  end
+
+  # The portal importer resolves each row's country by ISO3 and drops the ones it
+  # cannot match, so a run against an empty countries table imports nothing at all.
+  # Loads the same CSVs db/seeds.rb does, without the CMS content that follows them
+  # there. Tests are transactional, so the rows go away with the test.
+  def seed_reference_data
+    [Jurisdiction, Governance, IucnCategory, Region, Country].each do |model|
+      next if model.exists?
+
+      source = Rails.root.join('lib', 'data', 'seeds', "#{model.to_s.pluralize.underscore}.csv")
+      CSV.foreach(source, headers: true) do |row|
+        attributes = row.to_hash
+        attributes['region_id'] = Region.find_by(name: attributes.delete('region'))&.id if model == Country
+        model.create!(attributes)
+      end
+    end
   end
 
   # helper method to seed cms pages required for header/footer

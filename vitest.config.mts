@@ -20,6 +20,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
     include: ['app/frontend/**/*.{test,spec}.{ts,js}'],
     server: {
       deps: {

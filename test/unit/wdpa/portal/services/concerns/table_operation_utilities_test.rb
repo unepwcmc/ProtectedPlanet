@@ -178,18 +178,20 @@ class Wdpa::Portal::Services::Concerns::TableOperationUtilitiesTest < ActiveSupp
     @service.expects(:get_primary_key_name).with('sources').returns(nil)
     @service.expects(:get_primary_key_name).with('sources_staging').returns('staging_sources_pkey')
 
-    assert_raises(RuntimeError, /Primary key mismatch/) do
+    error = assert_raises(RuntimeError) do
       @service.validate_staging_live_table_primary_key('sources_staging', 'sources')
     end
+    assert_match(/Primary key mismatch/, error.message)
   end
 
   test 'validate_staging_live_table_primary_key raises error for name mismatch' do
     @service.expects(:get_primary_key_name).with('sources').returns('sources_pkey')
     @service.expects(:get_primary_key_name).with('sources_staging').returns('wrong_name')
 
-    assert_raises(RuntimeError, /Primary key name mismatch/) do
+    error = assert_raises(RuntimeError) do
       @service.validate_staging_live_table_primary_key('sources_staging', 'sources')
     end
+    assert_match(/Primary key name mismatch/, error.message)
   end
 
   test 'junction_table? returns true for junction tables' do

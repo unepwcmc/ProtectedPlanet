@@ -68,9 +68,10 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     @service.initialize_swap_variables
 
     # Don't create staging tables
-    assert_raises(RuntimeError, /Missing staging tables/) do
+    error = assert_raises(RuntimeError) do
       @service.validate_staging_tables_existence
     end
+    assert_match(/Missing staging tables/, error.message)
   end
 
   test 'process_database_objects_after_swap calls all required methods' do

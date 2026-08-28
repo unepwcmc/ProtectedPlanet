@@ -11,11 +11,30 @@ class Wdpa::Portal::ReleaseOrchestrationIntegrationTest < ActionDispatch::Integr
 
     skip 'Portal FDW schema/tables not available in test DB; full release orchestration cannot be exercised here' if fdw_check['exists'].nil?
 
+    # The importer matches portal rows to countries by ISO3; with none loaded every
+    # row is dropped and the release has nothing to promote.
+    seed_reference_data
+
+    # post_swap re-indexes through Elasticsearch, which WebMock would block; the ES
+    # container is on the compose network, not localhost, so the allowance misses it.
+    WebMock.disable!
+
+    # VACUUM cannot run inside a transaction, and this test runs in one. The release
+    # itself never does -- it is a rake task -- so the vacuum is the one step of
+    # cleanup that can only be exercised outside the suite.
+    Wdpa::Portal::Services::Core::TableCleanupService.any_instance.stubs(:perform_vacuum_operations)
+
+    # The suite does not load rake tasks, and this test drives the release through them.
+    require 'rake'
+    Rails.application.load_tasks if Rake::Task.tasks.empty?
+
     # Ensure no in-flight release and a clean staging state
     PortalRelease::Service.abort_current!
   end
 
   def teardown
+    WebMock.enable!
+
     # Best-effort abort/cleanup to leave DB clean for other tests
     PortalRelease::Service.abort_current!
   end
@@ -35,7 +54,8 @@ class Wdpa::Portal::ReleaseOrchestrationIntegrationTest < ActionDispatch::Integr
     release = Release.order(created_at: :desc).first
     assert_not_nil release, 'Dry run should create a Release record'
     assert_equal LABEL, release.label
-    assert_includes %w[importing succeeded swapped], release.state
+    # A dry run stops after validate_and_manifest, which is what leaves 'validating'.
+    assert_equal 'validating', release.state
 
     # --- Phase 2: Status check (pp:portal:status) ---
     Rake::Task['pp:portal:status'].reenable
@@ -54,9 +74,14 @@ class Wdpa::Portal::ReleaseOrchestrationIntegrationTest < ActionDispatch::Integr
       Rake::Task['pp:portal:release'].invoke(LABEL)
     end
 
-    release.reload
-    assert_equal 'succeeded', release.state
-    assert release.manifest_url.present?, 'Finalised release should have a manifest URL set'
+    # Every run creates its own Release row, so the resume is a new record rather
+    # than an update of the dry run's.
+    resumed = Release.order(created_at: :desc).first
+    assert_not_equal release.id, resumed.id
+    assert_equal 'succeeded', resumed.state
+    # The manifest is written by validate_and_manifest, which the resume starts after,
+    # so it belongs to the dry run's release.
+    assert release.reload.manifest_url.present?, 'The dry run should have written a manifest URL'
 
     # --- Phase 4: Backups exist after swap ---
     backups = Wdpa::Portal::Services::Core::TableRollbackService.list_available_backups

@@ -7,20 +7,27 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
 
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_staging_materialised_views).returns({ sources: 'portal_standard_sources' })
+    @config.stubs(:portal_staging_materialised_views).returns({ sources: 'staging_portal_standard_sources' })
 
     Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_views).returns(@config.portal_staging_materialised_views)
+
+    # A crashed run -- or a real import against this database -- leaves this
+    # behind, and every CREATE below would then fail on the leftover.
+    drop_test_views
   end
 
   def teardown
-    # Clean up any test views
-    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS portal_standard_sources CASCADE')
+    drop_test_views
+  end
+
+  def drop_test_views
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS staging_portal_standard_sources CASCADE')
   end
 
   test 'each processes all records when view exists' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'Source 1' as title, 'Description 1' as description, 2024 as year, 'en' as language
       UNION ALL
       SELECT 2 as id, 'Source 2' as title, 'Description 2' as description, 2023 as year, 'en' as language
@@ -43,15 +50,16 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'each raises error when view does not exist' do
     # Don't create the view
 
-    assert_raises(StandardError, /portal_standard_sources table is required but does not exist/) do
+    error = assert_raises(StandardError) do
       @adapter.each { |_record| _ = record }
     end
+    assert_match(/staging_portal_standard_sources table is required but does not exist/, error.message)
   end
 
   test 'each handles empty view' do
     # Create empty materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'test' as title, 'test' as description, 2024 as year, 'en' as language
       WHERE 1 = 0
     SQL
@@ -68,7 +76,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'count returns correct count when view exists' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'Source 1' as title, 'Description 1' as description, 2024 as year, 'en' as language
       UNION ALL
       SELECT 2 as id, 'Source 2' as title, 'Description 2' as description, 2023 as year, 'en' as language
@@ -84,15 +92,16 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'count raises error when view does not exist' do
     # Don't create the view
 
-    assert_raises(StandardError, /portal_standard_sources table is required but does not exist/) do
+    error = assert_raises(StandardError) do
       @adapter.count
     end
+    assert_match(/staging_portal_standard_sources table is required but does not exist/, error.message)
   end
 
   test 'count returns zero for empty view' do
     # Create empty materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'test' as title, 'test' as description, 2024 as year, 'en' as language
       WHERE 1 = 0
     SQL
@@ -105,7 +114,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'portal_sources_exist? returns true when view exists' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'test' as title, 'test' as description, 2024 as year, 'en' as language
     SQL
 
@@ -121,7 +130,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   end
 
   test 'portal_sources_exist? delegates to ViewManager' do
-    Wdpa::Portal::Managers::ViewManager.expects(:materialized_view_exists?).with('portal_standard_sources').returns(true)
+    Wdpa::Portal::Managers::ViewManager.expects(:materialized_view_exists?).with('staging_portal_standard_sources').returns(true)
 
     result = @adapter.portal_sources_exist?
     assert result
@@ -130,7 +139,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'each handles database errors gracefully' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'test' as title, 'test' as description, 2024 as year, 'en' as language
     SQL
 
@@ -145,7 +154,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'count handles database errors gracefully' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'test' as title, 'test' as description, 2024 as year, 'en' as language
     SQL
 
@@ -160,7 +169,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'each with block that modifies records' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'Source 1' as title, 'Description 1' as description, 2024 as year, 'en' as language
       UNION ALL
       SELECT 2 as id, 'Source 2' as title, 'Description 2' as description, 2023 as year, 'en' as language
@@ -181,7 +190,7 @@ class Wdpa::Portal::Adapters::ProtectedAreaSourcesTest < ActiveSupport::TestCase
   test 'each without block returns enumerator' do
     # Create test materialized view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'Source 1' as title, 'Description 1' as description, 2024 as year, 'en' as language
     SQL
 

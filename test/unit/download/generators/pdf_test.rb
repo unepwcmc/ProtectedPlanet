@@ -54,12 +54,19 @@ class DownloadGeneratorsPdfTest < ActiveSupport::TestCase
 
   def process_alive?(pid)
     Process.kill(0, pid)
-    true
+    !zombie?(pid)
   rescue Errno::ESRCH
     false
   rescue Errno::EPERM
     # Still there, just no longer ours to signal (reparented after its parent died).
     true
+  end
+
+  # A killed child whose parent has already gone is reparented to PID 1, and in a
+  # container with no init reaping for it that corpse lingers as a zombie: still
+  # signalable, so kill(0) succeeds, but no longer running anything.
+  def zombie?(pid)
+    `ps -o state= -p #{pid}`.strip.start_with?('Z')
   end
 
   def wait_until(timeout: 5)

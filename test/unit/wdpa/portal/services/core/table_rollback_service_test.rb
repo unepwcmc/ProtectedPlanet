@@ -63,9 +63,10 @@ class Wdpa::Portal::Services::Core::TableRollbackServiceTest < ActiveSupport::Te
     @service.initialize_rollback_variables(@backup_timestamp)
     
     # Don't create backup tables
-    assert_raises(RuntimeError, /Missing backup tables/) do
+    error = assert_raises(RuntimeError) do
       @service.validate_backup_tables_exist
     end
+    assert_match(/Missing backup tables/, error.message)
   end
 
 

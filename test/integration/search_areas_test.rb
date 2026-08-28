@@ -11,25 +11,21 @@ class SearchAreasTest < ActionDispatch::IntegrationTest
     country = FactoryBot.create(:country, id: 999, iso_3: 'jsd', name: 'jsdjkjkasdhf', region: region)
     pa = FactoryBot.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, has_irreplaceability_info: false)
 
-    @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
-    @psi.create
-    @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
-    @csi.create
+    @psi = fresh_search_index Search::PA_INDEX, ProtectedArea.all
+    @csi = fresh_search_index Search::COUNTRY_INDEX, Country.without_geometry.all
     # Default search also queries the region + CMS indices — they must exist or queries 404.
-    @rsi = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
-    @rsi.create
-    @cmsi = Search::Index.new Search::CMS_INDEX, Comfy::Cms::SearchablePage.all
-    @cmsi.create
+    @rsi = fresh_search_index Search::REGION_INDEX, Region.without_geometry.all
+    @cmsi = fresh_search_index Search::CMS_INDEX, Comfy::Cms::SearchablePage.all
 
     seed_cms
     
   end
 
   def teardown
-    @psi.delete
-    @csi.delete
-    @rsi.delete
-    @cmsi.delete
+    @psi&.delete
+    @csi&.delete
+    @rsi&.delete
+    @cmsi&.delete
     WebMock.enable!
   end
   

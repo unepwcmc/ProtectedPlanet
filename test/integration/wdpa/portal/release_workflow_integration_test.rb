@@ -2,13 +2,16 @@ require 'test_helper'
 
 class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::IntegrationTest
   def setup
-    # Ensure staging tables exist; importer will ensure required views itself
+    # VACUUM cannot run inside a transaction, and this test runs in one. The release
+    # itself never does -- it is a rake task -- so the vacuum is the one step of
+    # cleanup that can only be exercised outside the suite.
+    Wdpa::Portal::Services::Core::TableCleanupService.any_instance.stubs(:perform_vacuum_operations)
+
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
   end
 
   def teardown
-    # Drop staging tables and any backup/live tables created during swap
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
 
     # Drop all portal-related materialized views (live, staging, backups)
@@ -24,11 +27,20 @@ class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::Integration
 
     skip 'Portal FDW schema/tables not available in test DB; full release workflow cannot be exercised here' if fdw_check['exists'].nil?
 
-    # 1. Run the high-level portal importer into staging + live helper tables
-    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, sample: nil)
+    # The importer matches portal rows to countries by ISO3; with none loaded every
+    # row is dropped and staging_protected_areas comes out empty.
+    seed_reference_data
+
+    # 1. Run the high-level portal importer into staging + live helper tables.
+    # Give it a release to hang its checkpoints off, as a real release does: without
+    # one they fall back to a shared tmp file, where offsets left by a previous run
+    # make the import skip every row.
+    release = Release.create!(label: 'Jan2026')
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, sample: nil, release_id: release.id)
 
     assert result[:success], "Portal import failed: #{Array(result[:hard_errors]).join(', ')}"
-    assert result[:protected_areas][:success], 'Protected areas staging import should succeed'
+    # The protected areas importer reports hard_errors rather than a :success flag.
+    assert_empty Array(result[:protected_areas][:hard_errors]), 'Protected areas staging import should succeed'
     assert result[:sources][:success], 'Sources staging import should succeed'
 
     # Basic sanity check that staging tables now contain data

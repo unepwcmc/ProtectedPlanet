@@ -4,24 +4,20 @@ class SearchTest < ActionDispatch::IntegrationTest
   def setup
     # ES and WebMock don't get along
     WebMock.disable!
-    @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
-    @psi.create
-    @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
-    @csi.create
+    @psi = fresh_search_index Search::PA_INDEX, ProtectedArea.all
+    @csi = fresh_search_index Search::COUNTRY_INDEX, Country.without_geometry.all
     # The default search index set now includes the region index (Search::AREAS_INDEX);
     # it must exist or multi-index queries 404 with "no such index [regions_test]".
-    @rsi = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
-    @rsi.create
+    @rsi = fresh_search_index Search::REGION_INDEX, Region.without_geometry.all
     # DEFAULT_INDEX_NAME also queries the CMS index; it must exist too (empty is fine).
-    @cmsi = Search::Index.new Search::CMS_INDEX, Comfy::Cms::SearchablePage.all
-    @cmsi.create
+    @cmsi = fresh_search_index Search::CMS_INDEX, Comfy::Cms::SearchablePage.all
   end
 
   def teardown
-    @psi.delete
-    @csi.delete
-    @rsi.delete
-    @cmsi.delete
+    @psi&.delete
+    @csi&.delete
+    @rsi&.delete
+    @cmsi&.delete
     WebMock.enable!
   end
 
