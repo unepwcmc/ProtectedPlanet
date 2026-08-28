@@ -136,6 +136,18 @@ for db in $databases; do
     echo "    $db: postgis $before -> $after"
   fi
 
+  # postgis_topology is a SEPARATE extension with its own library, postgis_topology-2.5.
+  # `ALTER EXTENSION postgis UPDATE` does not touch it, so it stays on 2.5 and pg_upgrade
+  # fails with "could not load library $libdir/postgis_topology-2.5". Not every database
+  # has it -- staging does not -- so this is guarded on its presence rather than assumed.
+  has_topology="$(psql_old "-d $db -tAc \"select 1 from pg_extension where extname='postgis_topology'\"" | tr -d '\r')"
+  if [ "$has_topology" = "1" ]; then
+    before="$(psql_old "-d $db -tAc \"select extversion from pg_extension where extname='postgis_topology'\"" | tr -d '\r')"
+    psql_old "-d $db -c 'ALTER EXTENSION postgis_topology UPDATE'"
+    after="$(psql_old "-d $db -tAc \"select extversion from pg_extension where extname='postgis_topology'\"" | tr -d '\r')"
+    echo "    $db: postgis_topology $before -> $after"
+  fi
+
   # Raster. In PostGIS 2.5 raster lived inside the `postgis` extension; 3.0 split it into
   # its own `postgis_raster`, and the 2.5 -> 3.x update above does that split by
   # *unpackaging* the raster objects -- detaching them from the extension and leaving them
@@ -170,6 +182,30 @@ for db in $databases; do
   # and its presence in db/structure.sql is itself a known problem (see
   # upgrade-plan/backend/CARRYOVER.md). If you ever want it back, PG17's pg_cron.so is
   # already in the kartoza image; add it to shared_preload_libraries and CREATE EXTENSION.
+  # Non-raster orphans. The raster handling above adopts objects bound to rtpostgis-2.5,
+  # but a database that predates the extension packaging can also carry plain functions
+  # bound to $libdir/postgis-2.5 and owned by NO extension -- the deprecated PostGIS 1.x
+  # aliases (asbinary, astext, estimated_extent, ndims, setsrid, srid). No ALTER EXTENSION
+  # reaches them, and pg_upgrade fails on them exactly as it does on the raster ones.
+  # They are the same functions that make a dumped db/structure.sql unloadable on PostGIS 3.
+  #
+  # Dropped rather than adopted: they are superseded by their ST_-prefixed equivalents,
+  # which PostGIS 3 provides, and nothing in this application calls the bare forms.
+  orphan_fns="$(psql_old "-d $db -tAc \"
+    select count(*) from pg_proc p
+    left join pg_depend d on d.objid = p.oid and d.deptype = 'e'
+    where p.probin like '%postgis-2.5%' and d.objid is null\"" | tr -d '\r')"
+  if [ "${orphan_fns:-0}" != "0" ]; then
+    psql_old "-d $db -tAc \"
+      select 'DROP FUNCTION IF EXISTS ' || p.oid::regprocedure || ';'
+      from pg_proc p
+      left join pg_depend d on d.objid = p.oid and d.deptype = 'e'
+      where p.probin like '%postgis-2.5%' and d.objid is null\"" \
+      | tr -d '\r' | grep '^DROP' > /tmp/drop_orphans_$db.sql
+    psql_old "-d $db -f /tmp/drop_orphans_$db.sql" >/dev/null
+    echo "    $db: dropped $orphan_fns orphaned postgis-2.5 function(s) (owned by no extension)"
+  fi
+
   has_cron="$(psql_old "-d $db -tAc \"select 1 from pg_extension where extname='pg_cron'\"" | tr -d '\r')"
   if [ "$has_cron" = "1" ]; then
     psql_old "-d $db -c 'DROP EXTENSION pg_cron CASCADE'"
@@ -367,11 +403,33 @@ fi
 say "Rebuilding planner statistics"
 su postgres -c "$NEW_BIN/vacuumdb -h /tmp --all --analyze-in-stages" || true
 
+# The topology extension carries its own stored procedures, versioned separately from the
+# extension itself. Moving 3.3.4 -> 3.5.2 leaves them on the old version, which
+# postgis_full_version() reports as `TOPOLOGY (topology procs from "3.3.4 3.3.4" need
+# upgrade)`. That is only a warning -- pg_upgrade succeeds and the database works -- so it
+# scrolls past unnoticed and the procs stay behind indefinitely. Upgrade them here, on the
+# NEW cluster, because that is where the target PostGIS version lives.
+say "Upgrading topology procedures (PG17 side)"
+for db in $databases; do
+  has_topology="$(psql_new "-d $db -tAc \"select 1 from pg_extension where extname='postgis_topology'\"" | tr -d '\r')"
+  if [ "$has_topology" = "1" ]; then
+    before="$(psql_new "-d $db -tAc \"select extversion from pg_extension where extname='postgis_topology'\"" | tr -d '\r')"
+    psql_new "-d $db -c 'ALTER EXTENSION postgis_topology UPDATE'" >/dev/null
+    after="$(psql_new "-d $db -tAc \"select extversion from pg_extension where extname='postgis_topology'\"" | tr -d '\r')"
+    echo "    $db: postgis_topology $before -> $after"
+  fi
+done
+
 say "Verifying"
 psql_new "-tAc \"select version()\""
 for db in $databases; do
   v="$(psql_new "-d $db -tAc \"select postgis_full_version()\" 2>/dev/null" | tr -d '\r' || true)"
   [ -n "$v" ] && echo "    $db: $v"
+  # Fail loudly rather than leaving a warning in the scrollback.
+  case "$v" in
+    *"need upgrade"*)
+      echo "    WARNING: $db still reports procs needing upgrade -- see the line above" ;;
+  esac
 done
 
 su postgres -c "$NEW_BIN/pg_ctl -D $NEW_DATA -m fast -w stop"
