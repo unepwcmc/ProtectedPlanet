@@ -113,16 +113,9 @@ For debugging with byebug, attach to the server console:
   something else, add that hostname there too.
 
 # Deployment
-To deploy PP.net with docker:
-
-```
-sudo docker exec -it protectedplanet-web cap staging deploy
-```
-
-To deploy the PP API with docker:
-```
-sudo docker exec -it protectedplanet-api cap staging deploy
-```
+Deployment is handled by Kamal from the host, not from inside a container — see
+[deployment.md](deployment.md). The Capistrano commands that used to be here were
+removed in Aug 2026 along with Capistrano itself.
 
 ### Troubleshooting:
 - `SSH_AUTH_SOCK` not found: make sure `echo ${SSH_AUTH_SOCK}` returns a path to your ssh agent

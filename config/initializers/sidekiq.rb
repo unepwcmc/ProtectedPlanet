@@ -18,9 +18,8 @@ end
 # and the container command stays a plain `bundle exec sidekiq`.
 #
 # configure_server only yields in a Sidekiq process, so Puma never starts a
-# browser. The capsule check gates it further: job_import
-# (config/sidekiq-import.yml) declares no `pdf` capsule and must not start one,
-# because nothing it runs rasterizes.
+# browser. The capsule check gates it further: only a config declaring a `pdf`
+# capsule starts a browser, so any other Sidekiq role never does.
 #
 # The check sits INSIDE the :startup hook rather than out here so it reads the
 # configuration the CLI actually loaded, whatever the parse/boot order is.

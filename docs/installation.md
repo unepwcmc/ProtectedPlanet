@@ -101,31 +101,24 @@ S3 and restore it into your local database.
 
 #### Local import of release
 
-Before you can really do much with the website, you'll need to import
-a WDPA release. We have a small subset in the development S3 bucket,
-so make sure you have the right secrets in your `.env`, and run this:
+The old walkthrough here polled an S3 bucket for a monthly WDPA geodatabase and
+ran it through `ImportWorkers::S3PollingWorker` on a dedicated `import` Sidekiq
+queue. **That entire path was removed in Aug 2026** — it had been superseded by
+the portal release, and its own code said so.
+
+Imports now run synchronously through rake, not through Sidekiq:
 
 ```
-  bundle exec sidekiq -C config/sidekiq-import.yml
-
-  # in another window
-  bundle exec rails c
-  > ImportWorkers::S3PollingWorker.perform_async
+bundle exec rake 'pp:portal:release[<label>]'
 ```
 
-This will look for the latest file in the S3 bucket, and use it to import
-its protected areas, countries, and whatnot. After 5 to 10 minutes, the main
-worker will be done (you can check this in the sidekiq output).
+`lib/tasks/portal_dev_tools.rake` has the escape hatches you will actually want
+locally — `dev:import_only`, `dev:import_skip`, `dev:import_resume` and
+`dev:release_resume` — so a partial or failed import can be resumed rather than
+restarted. See `docs/release/portal_release_runbook.md` for the full procedure.
 
-At this point,go back to the rails console and enter
-
-```
-  > ImportWorkers::FinaliserWorker.perform_async
-```
-This will take another couple of minutes. After this, you are ready to `localhost:3000`!
-
-**Do be aware that this method takes at least several hours to complete, depending
-on the speed of your internet connection.** 
+In practice, restoring a database dump (above) is far quicker than running an
+import locally.
 
 #### Alternative setup
 

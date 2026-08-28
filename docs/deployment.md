@@ -1,20 +1,24 @@
+<!-- TODO: update the readme now it uses Github action + Kamal -->
 # Deployment
 
-## Capistrano
+## Kamal
 
-Deployments are handled by standard capistrano tasks:
+Deployments are handled by Kamal, from `config/deploy.yml` and
+`config/deploy.staging.yml`:
 
 ```
-cap staging deploy
-cap production deploy
+kamal deploy -d staging
 ```
+
+Capistrano was removed in Aug 2026. At the time of removal only staging had a
+Kamal destination; a production one still needs adding before production can be
+deployed.
 
 ## Initial Machine Setup
 
 Servers are provisioned by Kamal from `config/deploy.yml` / `config/deploy.staging.yml`
 and the images built by `Dockerfile.deploy`.
 
-The Ansible tree that used to live in `config/deploy/ansible` was removed in Aug 2026.
 It had not been touched since 2019, and its inventories named bare-metal hosts
 (`www-prod.protectedplanet.net`, `db-prod.protectedplanet.net`, an EC2 box) that were
 decommissioned two migrations ago — first to Docker, then to Kamal.
@@ -42,14 +46,3 @@ curl -X PUT -d maintenance_mode_on=true --header "X-Auth-Key: <key>" <domain>/ad
 curl -X PUT -d maintenance_mode_on=false --header "X-Auth-Key: <key>" <domain>/admin/maintenance
 ```
 
-### Capistrano
-
-If you need to turn maintenance mode on manually, you can use
-capistrano:
-
-```
-# On
-cap <stage> maintenance:on
-# Off
-cap <stage> maintenance:off
-```

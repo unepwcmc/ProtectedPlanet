@@ -39,10 +39,9 @@ tables.
 
 As the polygon and points geometries are stored separately, we create a
 postgres `VIEW` during import that is based on a `UNION` of the two
-tables. This view is managed by `Download::Config.downloads_view`, which
-selects the appropriate view based on whether a portal release exists
-(uses portal materialized views) or falls back to the standard WDPA release
-views managed by `Wdpa::Release`.
+tables. This view is `Download::Config.downloads_view`, which resolves to the portal
+materialized view `portal_downloads_protected_areas`. The pre-portal fallback was
+removed in Aug 2026 along with the WDPA S3 importer that built it.
 
 ### Caching
 

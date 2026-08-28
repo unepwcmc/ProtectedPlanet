@@ -1,11 +1,21 @@
 # Disabled unless Slack webhook URL is present because Bystander has no error handling in place
 #
-# The scene block below references autoloaded constants (Download, Search::Index,
-# Wdpa::*, ImportTools::WebHandler). Under Rails 7.1 + Zeitwerk those are not
-# resolvable while initializers run, so this raised
-# `NameError: uninitialized constant Download` at boot. It only bit environments
-# that actually set SLACK_WEBHOOK_URL, which is why it went unnoticed.
+# The scene block below references autoloaded constants (Download, Search::Index).
+# Under Rails 7.1 + Zeitwerk those are not resolvable while initializers run, so
+# this raised `NameError: uninitialized constant Download` at boot. It only bit
+# environments that actually set SLACK_WEBHOOK_URL, which is why it went unnoticed.
 # after_initialize runs once, after autoloading is set up.
+#
+# `Bystander.scene` calls load_hooks, which REDEFINES the listed methods to wrap
+# them in a Slack notification. So the actors here are not documentation -- every
+# caller of these methods notifies #pp-bystander, wherever it is called from.
+#
+# The legacy WDPA S3 import was removed in Aug 2026 and its actors went with it
+# (Wdpa::Release, Wdpa::SourceImporter, Wdpa::ProtectedAreaImporter,
+# Wdpa::CountryGeometryPopulator, and ImportTools::WebHandler#under_maintenance,
+# which only the deleted FinaliserWorker called). What remains is still live: the
+# portal release calls both Search::Index.create and Download.clear_downloads from
+# app/services/portal_release/cleanup.rb, and `rake search:reindex` calls the former.
 if ENV['SLACK_WEBHOOK_URL'].present?
   Bystander::Transports::Slack.configure do |slack|
     slack.username    'Bystander'
@@ -20,12 +30,6 @@ if ENV['SLACK_WEBHOOK_URL'].present?
       actors do
         add Download
         add Search::Index, :indexer
-        add Wdpa::Release, :release
-        add Wdpa::SourceImporter, :source_importer
-        add Wdpa::ProtectedAreaImporter, :pa_importer
-        # As of 19Aug2025 CountryGeometryPopulator is not used as stats are now from NC team
-        add Wdpa::CountryGeometryPopulator, :geometry_populator
-        add ImportTools::WebHandler, :web_handler
       end
 
       acts do
@@ -40,11 +44,6 @@ if ENV['SLACK_WEBHOOK_URL'].present?
             Search::Index.count == (ProtectedArea.count + Country.count)
           }
         }
-        add :release, :download, notify: :wrap
-        add :source_importer, :import, notify: :wrap
-        add :pa_importer, :import, notify: :wrap
-
-        add :web_handler, :under_maintenance, notify: :wrap
       end
     end
   end

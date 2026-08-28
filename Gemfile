@@ -85,15 +85,6 @@ end
 #
 group :development do
   gem 'spring'
-  gem 'capistrano', '3.11.0', require: false
-  gem 'capistrano-rails',   '1.4.0', require: false
-  gem 'capistrano-bundler', '1.6.0', require: false
-  gem 'capistrano-rvm', '0.1.2', require: false
-  gem 'capistrano-maintenance','1.2.1', require: false
-  gem 'capistrano-passenger', '0.2.0', require: false
-  gem 'capistrano-sidekiq', '1.0.2'
-  gem 'capistrano-git-with-submodules', '2.0.3'
-  gem 'capistrano-service'
   gem 'awesome_print'
   gem 'rubocop', '~> 1.90.0'
   gem 'ruby-lsp', '~> 0.26.11'
@@ -157,7 +148,8 @@ gem 'redis', '~> 5.0'
 # silently. Pin to 2.x until we move to Sidekiq 8, which supports connection_pool 3.
 gem 'connection_pool', '~> 2.5'
 gem 'sinatra', '>= 1.3.0', :require => nil
-gem 'whenever', require: false
+
+gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'appsignal', '~> 3.3.11'
 
@@ -167,7 +159,6 @@ gem 'dotenv-deployment'
 
 gem 'turnout', '~> 2.5.0'
 
-gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'comfortable_media_surfer', '~> 3.1'
 # Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
@@ -177,5 +168,3 @@ gem 'rails-i18n', '~> 8.0'
 # also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
 gem 'nokogiri', '~> 1.16'
 gem 'loofah', '~> 2.22'
-gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
-gem 'ed25519', '>= 1.2', '< 2.0'

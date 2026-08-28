@@ -44,18 +44,6 @@ servers:
       health-timeout: 3s
     cmd: bundle exec sidekiq -C config/sidekiq.yml
 
-  job_import:
-    hosts:
-      - pp-web-staging-01.internal.unep-wcmc.org
-    options:
-      add-host: host.docker.internal:host-gateway
-      health-cmd: /app/bin/docker-sidekiq-healthcheck
-      health-interval: 5s
-      health-retries: 3
-      health-start-period: 10s
-      health-timeout: 3s
-    cmd: bundle exec sidekiq -C config/sidekiq-import.yml
-
 env:
   clear:
     RAILS_ENV: staging
