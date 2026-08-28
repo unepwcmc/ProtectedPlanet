@@ -107,7 +107,7 @@ module PortalRelease
         conn.transaction do
           # Step 1: Drop staging view if exists, then create fresh (inside transaction for atomicity)
           # Note: ActiveRecord doesn't have drop_view, so we use SQL directly
-          as_query = Download::Queries.build_query_for_downloads_view('portal')
+          as_query = Download::Queries.build_query_for_downloads_view
           conn.execute("DROP VIEW IF EXISTS #{staging_view} CASCADE")
           conn.execute("CREATE VIEW #{staging_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
 

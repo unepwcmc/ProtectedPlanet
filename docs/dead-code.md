@@ -3,7 +3,7 @@
 Audit of unused / no-longer-reached code in the ProtectedPlanet Rails app.
 
 - **Produced** 2026-08-21 on branch `staging_kamal`.
-- **Waves 1 and 2 actioned 2026-08-27; wave 3 actioned 2026-08-28** — see the Suggested order section at the end for what was deleted and what remains.
+- **All five waves actioned** — 1 and 2 on 2026-08-27, 3 to 5 on 2026-08-28 — see the Suggested order section at the end for what was deleted and what remains.
 - **Re-scanned and updated 2026-08-27**, same branch. Every finding below was re-verified against the working tree; entries that have since been actioned are marked **✅ DONE**, and three findings were **corrected** — see *What changed* below.
 
 Findings are grouped by confidence:
@@ -45,13 +45,13 @@ Also removed in the same window, beyond this audit's scope: Pinia and its store,
 
 ---
 
-## 1. WDPA S3 release (legacy import path)
+## 1. ✅ DONE (wave 5) — WDPA S3 release (legacy import path)
 
 The pre-portal WDPA import: poll an S3 bucket for a new monthly WDPA GDB, download it, load it with OGR, build views, import.
 
 **Chain:** `config/schedule.rb` (hourly cron) → `ImportWorkers::S3PollingWorker` → `ImportWorkers::MainWorker` → `Wdpa::Importer.import` → `Wdpa::Release.download` → `Wdpa::S3.download_latest_wdpa_to`
 
-*Status 2026-08-27: unchanged, all files still present.*
+*Status: ✅ **removed in wave 5 (2026-08-28)**, after the team confirmed production is moving to Kamal.*
 
 ### [CONFIRMED] It has been superseded
 
@@ -282,7 +282,7 @@ Nothing in this section blocks or is blocked by anything else. It has been moved
 
 ---
 
-## 7. The `import` Sidekiq queue — [CONFIRMED] no live producer
+## 7. ✅ DONE (wave 5) — The `import` Sidekiq queue
 
 *Status 2026-08-27: unchanged in every particular.*
 
@@ -393,7 +393,7 @@ Two follow-ups this created, neither of which is dead code — ✅ **both action
 
 ---
 
-## 9. `config/deploy` — [SUSPECTED] Capistrano is superseded
+## 9. ✅ DONE (wave 5) — `config/deploy` — Capistrano removed
 
 *Status 2026-08-27: unchanged.* Same open question as section 1: this is dead the moment production stops deploying via Capistrano, and not before.
 
@@ -575,9 +575,46 @@ Note for anyone writing a similar migration: the `view_sql` helper is patched on
 
 `docs/deployment.md` still documents `cap staging deploy` as the deploy procedure. That is deliberate: it belongs to wave 5, which is blocked on the Capistrano question.
 
-### Wave 5 — blocked on one decision
+### ✅ Wave 5 — DONE (2026-08-28)
 
-2. **WDPA S3 release** (section 1), **the whole `import` queue + `sidekiq-import.yml` + the `job_import` role** (section 7), and **the rest of `config/deploy`** (section 9) — all three unblock together, the moment production is confirmed off Capistrano. Fix `docs/deployment.md` in the same change; it still documents `cap ... deploy` as the procedure.
+Unblocked by the team confirming production is moving to Kamal. Sections 1, 7 and 9 all went together, plus everything that could not be left behind once they did.
+
+**Capistrano** — `Capfile`, `config/deploy.rb`, `config/deploy/{staging,production}.rb`, `config/schedule.rb`, `lib/capistrano/tasks/*`, and `Gemfile.development` (which still pinned `ruby '2.6.3'`).
+
+**The `import` queue** — `config/sidekiq-import.yml`, the `job_import` role in `config/deploy.staging.yml`, and the whole `app/workers/import_workers/` tree.
+
+**The legacy WDPA import** — `Wdpa::S3`, `Wdpa::Release`, `Wdpa::Importer`, `Wdpa::SourceImporter`, `Wdpa::ProtectedAreaImporter` (+ its subdirectory), `Wdpa::GeometryRatioCalculator`, `Wdpa::CountryGeometryPopulator`, `Wdpa::ParcelDataStandard`, `Wdpa::ParcelRelation`, `Wdpa::DopaImporter`, and `lib/modules/wdpa/README.md` (which asked to be deleted once this happened).
+
+**14 gems** — the 9 `capistrano-*`, `whenever`, `sshkit`, `airbrussh`, `ed25519`, `bcrypt_pbkdf`. The last two were not on the audit's list: they exist only so `net-ssh` can use ed25519 keys, and `net-ssh`/`sshkit` came in solely through Capistrano.
+
+#### What was deliberately KEPT, and why it looked deletable
+
+The portal release path is the live import system, and it shares a namespace with the dead one. Its dependencies were derived by extracting every `Wdpa::` constant referenced from `lib/tasks/portal_release.rake`, `lib/modules/wdpa/portal/` and `lib/modules/wdpa/shared/`; it uses exactly three families — `Wdpa::Portal::*`, `Wdpa::Shared::*` and `Wdpa::DataStandard` — and none of the legacy chain.
+
+| Kept | Why it looked dead | Why it is not |
+|---|---|---|
+| `lib/modules/wdpa/relation.rb` | Sits beside the deleted `parcel_relation.rb` | `data_standard.rb:117` builds relations with it, and `DataStandard` is live (`protected_area_presenter.rb:216`, plus the portal's `DataStandard::Source`) |
+| `config/initializers/bystander.rb` + the `bystander` gem | Its only `Bystander.*` callers were in the deleted legacy import | **`Bystander.scene` calls `load_hooks`, which REDEFINES the listed methods** to wrap them in a Slack notification. `Search::Index.create` and `Download.clear_downloads` are called by `app/services/portal_release/cleanup.rb` — the *portal* release. Deleting this would have silently stopped `#pp-bystander` reporting on every release. **Trimmed** to those two actors instead; the four dead actors and the `ImportTools::WebHandler#under_maintenance` act (only the deleted FinaliserWorker called it) were removed |
+
+`Wdpa::ParcelDataStandard` **was** deleted despite the name: it is a top-level file, not part of `data_standard/`, and its only consumer was the legacy `protected_area_importer/attribute_importer.rb`. The portal handles parcels through `Wdpa::Portal::Relation::ProtectedAreaParcel`.
+
+#### Coupling that had to be broken
+
+`Download::Config` held the only two live references into the deleted classes, both on the pre-portal fallback arm:
+
+- `Wdpa::Release::DOWNLOADS_VIEW_NAME` → now `Download::Config::LEGACY_DOWNLOADS_VIEW_NAME`.
+- `Wdpa::S3.current_wdpa_identifier` → now `Time.current.strftime('%b%Y')`, the same `MMMYYYY` shape the S3 key produced. No test asserted the old value; the global stub in `test_helper.rb` existed only to keep tests off the network, and went with it.
+
+#### Follow-ups this created
+
+- **No Kamal production destination exists yet.** Both `config/deploy.yml` and `config/deploy.staging.yml` target staging (`RAILS_ENV: staging`). Until a production destination is added, there is no working production deploy path. `docs/deployment.md` says so explicitly.
+- **`ProtectedArea#is_dopa` is now set by nothing.** `Wdpa::DopaImporter` was its only writer and was already both unreferenced *and* broken (`DOPA_LIST` pointed at a non-existent CSV). `protected_area_presenter.rb:180` still reads the flag for the DOPA Explorer link, so that data is stale — this predates the deletion.
+- **`lib/modules/geospatial/` was removed entirely** — 7 lib files + 2 test files. Once `ImportWorkers::GeometryPopulatorWorker` went, the orphan was not just `CountryGeometryPopulator`: `Geospatial::Geometry` had no non-test callers either, and all three ERB templates (`repair_geometries`, `marine_geometry`, `dissolve_geometries`) belong to those two classes. Zero references remain anywhere. This supersedes section 5's advice to "keep the other four templates" — that held only while `geometry.rb` and `country_geometry_populator/` still existed.
+- **`CmsTransfer`, `ApiTransfer` and `ActiveStorageTransfer` were removed** — the deleted `FinaliserWorker` was their only caller and they had no tests. They were also the codebase's only `pg_dump`/`psql` callers.
+- **`postgresql-client-17` stays in `Dockerfile.deploy`**, but its comment was rewritten: the justification it gave (FinaliserWorker → pg_dump/psql via those three transfer modules) is gone. It is still required because **`CountriesGeometryImporter` shells out to `pg_restore`** and is live via `rake import:countries_geometries`. `db:migrate` does *not* need `pg_dump` there — `dump_schema_after_migration` is false in staging and production.
+- Stale `job_import` references were corrected in `.kamal/hooks/pre-deploy` (the migration-lock comment counted three roles) and `config/deploy.staging.yml:38`.
+
+Docs rewritten in the same change: `docs/deployment.md` (Kamal, not Capistrano; maintenance-mode `cap` commands removed), `docs/installation.md` (the S3-import walkthrough replaced with the portal rake path), `docs/downloads.md`, `docs/docker.md`, and a comment in `config/database.yml`.
 
 ### Not repo cleanup, but worth doing
 
@@ -585,8 +622,10 @@ Note for anyone writing a similar migration: the `view_sql` helper is patched on
 
 Sections 1, 2, 5 and 7 touch import, CMS, stats and the worker fleet respectively, so each deserves its own PR rather than one sweeping cleanup commit.
 
-## The one question that unblocks the most
+## The one question that unblocks the most — ✅ ANSWERED
 
-**Does production still deploy via Capistrano?** A single answer settles sections 1, 7 and 9 — the WDPA S3 import chain, the entire `import` Sidekiq queue and its dedicated container, `config/deploy/*`, and 10 gems. Everything else in this document can be actioned without it.
+**Does production still deploy via Capistrano?** Answered 2026-08-28: production is moving to Kamal, so Capistrano goes. That released sections 1, 7 and 9 — the WDPA S3 import chain, the entire `import` Sidekiq queue and its dedicated container, `config/deploy/*`, and 14 gems (not 10) — all done in wave 5.
+
+**The one thing still outstanding is its consequence:** there is no Kamal *production* destination yet. Both Kamal configs target staging. That has to exist before production can be deployed again.
 
 *(The audit's second open question — "what replaces Jenkins as test CI?" — has been answered: `.github/workflows/test.yml`.)*

@@ -6,7 +6,6 @@ class DownloadGeneratorsBaseTest < ActiveSupport::TestCase
   # column lists. These tests assert the portal form, so pin it here instead of
   # depending on DB state.
   setup do
-    Download::Config.stubs(:has_successful_portal_release?).returns(true)
   end
 
   test '#generate, given a path and an empty selection, returns immediately' do

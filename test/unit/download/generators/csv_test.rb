@@ -14,7 +14,6 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
   # via File.stubs(:exists?), which never took effect because the code calls
   # File.exist? (no trailing "s").
   setup do
-    Download::Config.stubs(:has_successful_portal_release?).returns(true)
     Download::Config.stubs(:current_label).returns(SOURCES_LABEL)
     Download::Generators::Csv.any_instance.stubs(:export_sources).returns(true)
   end

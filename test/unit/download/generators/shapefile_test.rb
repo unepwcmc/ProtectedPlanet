@@ -10,7 +10,6 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   # The generator now builds its column lists per call in .query_conditions, so
   # the stubs below do reach the SELECT list.
   setup do
-    Download::Config.stubs(:has_successful_portal_release?).returns(true)
     Download::Config.stubs(:current_label).returns('Jan2024')
     Download::Generators::Shapefile.any_instance.stubs(:export_sources).returns(true)
   end

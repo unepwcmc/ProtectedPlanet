@@ -47,9 +47,7 @@ class Download::Requesters::Base
     # generation_info re-reads Redis on every call, so the json_response built
     # immediately afterwards saw 'generating' and returned url: ''. The caller
     # then had to wait for a completely redundant regeneration before /downloads/poll
-    # handed back the URL the key already held. A ready key is always current --
-    # ImportWorkers::FinaliserWorker clears the whole downloads keyspace on
-    # release finalisation.
+    # handed back the URL the key already held.
     return false if status == 'ready'
 
     if status == 'generating'

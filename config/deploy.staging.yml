@@ -35,7 +35,7 @@ servers:
       # Chrome's children (crashpad handler, renderers) are re-parented to PID 1
       # container that leak only grows. `--init` puts tini at PID 1 to reap
       # them; it forwards SIGTERM, so Sidekiq still shuts down gracefully.
-      # Only this role needs it - job_import never starts a browser.
+      # Only this role needs it - no other Sidekiq role starts a browser.
       init: true
       health-cmd: /app/bin/docker-sidekiq-healthcheck
       health-interval: 5s

@@ -1,31 +1,5 @@
 module Download
   module Config
-    # Standard columns for when there's no portal release
-    STANDARD_POINTS_COLUMNS = %i[
-      wkb_geometry wdpaid wdpa_pid
-      pa_def name orig_name
-      desig desig_eng desig_type
-      iucn_cat int_crit marine
-      rep_m_area rep_area no_take
-      no_tk_area status status_yr
-      gov_type own_type mang_auth
-      mang_plan verif metadataid
-      sub_loc parent_iso3 iso3
-      supp_info cons_obj
-    ]
-
-    STANDARD_POLYGONS_COLUMNS = STANDARD_POINTS_COLUMNS.clone
-      .insert(13, :gis_m_area).insert(15, :gis_area)
-
-    STANDARD_SOURCE_COLUMNS = %i[
-      metadataid data_title resp_party
-      year update_yr char_set
-      ref_system scale lineage
-      citation disclaimer language
-      verifier
-    ]
-
-    # Portal columns for when there's a portal release
     PORTAL_POINTS_COLUMNS = %i[
       wkb_geometry
       site_id site_pid
@@ -57,40 +31,27 @@ module Download
       verifier
     ]
 
-    # Check if there's a current release (portal release)
-    def self.has_successful_portal_release?
-      Release.current_release.present?
-    end
-
     # View names
     def self.points_view
-      has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:points][:live] :
-        'standard_points'
+      Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:points][:live]
     end
 
     def self.polygons_view
-      has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:polygons][:live] :
-        'standard_polygons'
+      Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:polygons][:live]
     end
 
     def self.sources_view
-      has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:sources][:live] :
-        'standard_sources'
+      Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:sources][:live]
     end
 
     def self.downloads_view
-      has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS : 
-        Wdpa::Release::DOWNLOADS_VIEW_NAME
+      Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
     end
 
     # Column names – centralised in a single hash for easy maintenance
     def self.download_view_column_names
       {
-        site_id:  has_successful_portal_release? ? 'SITE_ID' : 'WDPAID',
+        site_id:  'SITE_ID',
         site_pid: 'SITE_PID',
         iso3:     'ISO3',
         site_type: 'SITE_TYPE',
@@ -119,20 +80,20 @@ module Download
 
     # Labels for filenames
     def self.current_label
-      has_successful_portal_release? ? Release.current_label : Wdpa::S3.current_wdpa_identifier
+      Release.current_label
     end
 
     # Column definitions
     def self.points_columns
-      has_successful_portal_release? ? PORTAL_POINTS_COLUMNS : STANDARD_POINTS_COLUMNS
+      PORTAL_POINTS_COLUMNS
     end
 
     def self.polygons_columns
-      has_successful_portal_release? ? PORTAL_POLYGONS_COLUMNS : STANDARD_POLYGONS_COLUMNS
+      PORTAL_POLYGONS_COLUMNS
     end
 
     def self.source_columns
-      has_successful_portal_release? ? PORTAL_SOURCE_COLUMNS : STANDARD_SOURCE_COLUMNS
+      PORTAL_SOURCE_COLUMNS
     end
   end
 end
