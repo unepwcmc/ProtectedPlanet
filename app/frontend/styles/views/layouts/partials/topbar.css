@@ -27,7 +27,7 @@
 
 .vw-layouts-partials-topbar__right {
   @apply
-  tw-shared-base-flex-gap-6
+  tw-shared-base-flex-gap-3-2xl-gap-6
   items-center
   justify-center;
 }

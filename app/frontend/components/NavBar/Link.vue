@@ -23,7 +23,6 @@ defineProps<{ link: NavLink }>()
   flex
   items-center
   h-full
-  p-1
   tw-shared-font-hind-siliguri__light-base-lg-lg
   no-underline;
 }

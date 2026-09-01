@@ -61,6 +61,13 @@
   md:gap-6;
 } 
 
+@utility tw-shared-base-flex-gap-3-2xl-gap-6 {
+  @apply
+  flex
+  gap-3
+  2xl:gap-6;
+} 
+
 @utility tw-shared-base-flex-gap-3-lg-gap-9 {
   @apply
   flex
