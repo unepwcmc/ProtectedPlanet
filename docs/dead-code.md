@@ -719,19 +719,21 @@ Small by design. This wave closes the only finding still carrying a **[SUSPECTED
 
 **On the two deletions:** neither is loaded by anything. `rails test` collects `*_test.rb`, so a bare `_helper.rb` with no requirers was never run; a `config/environments/*.rb` file is loaded only when `RAILS_ENV` names it.
 
-**Verification:** `rake -T` (77 tasks) and `rake zeitwerk:check` (*All is good!*) clean. `rails test`: **767 runs, 2016 assertions, 0 failures, 0 errors, 2 skips.** The two skips are the FDW-dependent portal integration tests, now behind an explicit `PP_PORTAL_E2E=1` opt-in — see below. The 4 skips wave 6 reported are gone because the deliberate `asset_generator_test` / `search_test` skips were removed since, in `42ff729f5`.
+**Verification:** `rake -T` (77 tasks) and `rake zeitwerk:check` (*All is good!*) clean. `rails test`: **767 runs, 2078 assertions, 0 failures, 0 errors, 0 skips** — see the test bug below, which this wave diagnosed and fixed. The 4 skips wave 6 reported are gone because the deliberate `asset_generator_test` / `search_test` skips were removed since, in `42ff729f5`.
 
-#### A real test-environment bug this wave surfaced
+#### A real test bug this wave surfaced -- and its root cause
 
-`test/integration/wdpa/portal/release_workflow_integration_test.rb` and `release_orchestration_integration_test.rb` guard themselves with `skip … if to_regclass('portal_fdw.wdpa_iso3') IS NULL`. **That precondition is satisfied while the things the tests actually need are absent.** In `pp_test` the FDW is live and populated (42,379 rows in `portal_fdw.wdpa_iso3`), so both tests proceed — and then fail inside the importer.
+The two portal integration tests (`release_workflow_integration_test.rb`, `release_orchestration_integration_test.rb`) failed in the full suite while **passing in isolation**. Two earlier diagnoses in this document were wrong and are corrected here: it is **not** the `fdw_check` skip guard, and it is **not** missing `staging_*` tables. The guard is fine, and the tests are fine.
 
-What they really depend on is a chain the guard says nothing about: the release's own `create_views` phase must build the `staging_portal_*` materialized views from the FDW, the importer must populate `staging_protected_areas` from those, and only then can the geometry step run. `pp_test` has the **live** `portal_*` matviews but the run never got working `staging_portal_*` ones, so the attributes import raised hard errors and the geometry step reported `Target staging table staging_protected_areas does not exist or has no records` — a cascade, not the root cause.
+**The cause is `tmp/portal_checkpoints.json`.** `Wdpa::Portal::Checkpoint` memoises its store in a class ivar and, when there is no `Release` to hang it off, persists to that shared file -- which is untracked, outside the test transaction, and survives across runs. The copy found on this branch was dated **2026-08-27**, five days stale, and said `attributes.staging_portal_standard_polygons.offset = 1061` with geometry `"done": true` for every view. The importer therefore resumed past the end of freshly-created staging matviews, imported **zero** rows, and the geometry step reported `Target staging table staging_protected_areas does not exist or has no records` -- a cascade, not the root.
 
-This is also why wave 6 saw 4 skips and 0 failures while wave 7 sees 0 skips and 2 failures: **the FDW appeared in the shared database between the two runs, so the guard flipped from skip to run.** Nothing in waves 6 or 7 touched `app/`, `lib/` or these tests, and no file deletion can make a database relation absent.
+The code already warns about exactly this: *"a run that ends without reset_all! (a dry run, a crash) leaves offsets behind that make the NEXT release import 0 records."* The orchestration test performs a dry run, so it is a first-class producer of that state.
 
-**Fixed in wave 7 by replacing the sniff with an opt-in.** Both tests now `skip … unless ENV['PP_PORTAL_E2E'] == '1'`, and the workflow test's guard was lifted to the top of `setup` so its staging-table DDL no longer runs on every ordinary suite pass. The suite is green again and stays green regardless of what the shared database does; the end-to-end release is run deliberately with `PP_PORTAL_E2E=1 bin/rails test test/integration/wdpa/portal/`.
+**Fix:** `Wdpa::Portal::Checkpoint.reset_all!` in `setup` **and** `teardown` of both tests, so neither inherits nor leaks checkpoint state. `reset_all!` clears the memoised ivar and the backing store together. The `fdw_check` guards were left exactly as they were.
 
-This is the minimal fix, not the full one. These two tests still drive the real release through rake tasks against live FDW data, so what they can catch is limited to whenever someone opts in. The orchestration logic worth testing hermetically — phase sequencing, `PP_RELEASE_START_AT`/`STOP_AFTER`/`ONLY_PHASES`, dry-run and resume, `Release` state transitions — needs no portal data at all, because `StagingTableManager.create_staging_tables` builds staging tables with `LIKE <live_table>` from the test schema alone. That remains unbuilt.
+With the stale file removed and the resets in place: **767 runs, 2078 assertions, 0 failures, 0 errors, 0 skips**, with both portal tests running rather than skipping.
+
+**This is a production risk too, not only a test one.** Nothing outside these tests resets the file store, and `checkpoints?` defaults to on. Any dry run or crashed release leaves offsets that make the next real release silently import nothing.
 
 #### What is deliberately left open
 
@@ -743,7 +745,7 @@ Everything remaining needs a decision or an environment, not an edit:
 - **No Kamal production destination** (wave 5) — both configs target staging.
 - **`ProtectedArea#is_dopa` is written by nothing** (wave 5), so the DOPA Explorer link at `protected_area_presenter.rb:180` reads stale data.
 - **Database housekeeping** (section 6) — `pp:portal:cleanup_backups` on the real environments, and the leaking `tmp_downloads_*` views still need filing as a bug.
-- **The portal integration tests are quarantined, not fixed** (above). They now skip unless `PP_PORTAL_E2E=1`, which makes the suite honest but leaves the release orchestration effectively untested in CI. A hermetic orchestration test needs no portal data and would cover most of the regression risk.
+- **The portal checkpoint file store has no owner** (above). Only the tests now reset it; a dry run or crashed release still leaves `tmp/portal_checkpoints.json` behind, and the next real release will silently import zero records. The file-store fallback should refuse a store that does not belong to the current release, or be disabled outside a `Release`.
 
 ### Not repo cleanup, but worth doing
 

@@ -147,7 +147,7 @@ docker exec -it "$WEB" bash
 # Step 1: Dry run (stops after validation, does not swap tables), can do this as
 # soon as NC completes all drafts approval on all needed data.
 # Do NOT set RAILS_ENV — the container already has it right.
-PP_RELEASE_DRY_RUN=true bundle exec rake 'pp:portal:release[Aug2026]'
+PP_RELEASE_DRY_RUN=true bundle exec rake 'pp:portal:release[Sep2026]'
 
 # Detach without stopping the process (this detaches the HOST tmux session,
 # leaving both the container shell and the release running)
