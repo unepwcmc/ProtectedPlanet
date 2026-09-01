@@ -11,6 +11,24 @@ module AssetGenerator
     ''#fallback_tile
   end
 
+  def self.country_tile country
+    raise AssetGenerationFailedError if country.nil?
+
+    tile_url = mapbox_url country.geojson({"fill-opacity" => 0, "stroke-width" => 0})
+    request_tile tile_url
+  rescue AssetGenerationFailedError
+    ''#fallback_tile
+  end
+
+  def self.region_tile region
+    raise AssetGenerationFailedError if region.nil?
+
+    tile_url = mapbox_url region.geojson({"fill-opacity" => 0, "stroke-width" => 0})
+    request_tile tile_url
+  rescue AssetGenerationFailedError
+    ''#fallback_tile
+  end
+
   private
 
   def self.mapbox_url geojson

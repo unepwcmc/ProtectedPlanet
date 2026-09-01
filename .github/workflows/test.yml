@@ -157,12 +157,27 @@ jobs:
       # "LoadError: cannot load such file -- sass" during the suite, but that was the
       # wrong fix: the LoadError came from Sprockets initialising its processor set,
       # which sassc-rails now satisfies (see the Gemfile). Precompiling additionally
-      # drags in comfortable_media_surfer's admin stylesheet, whose first line imports
-      # `codemirror/lib/codemirror` from a node_modules directory the gem does not
-      # ship -- verified absent from both a clean CI bundle and the deploy image. It
-      # cannot compile in any clean environment, which is why Dockerfile.deploy runs
-      # precompile as `|| echo ...`. Verified: with sassc-rails and NO precompiled
-      # assets at all, the controller tests pass.
+      # drags in comfortable_media_surfer's whole admin bundle, and the app's
+      # node_modules carries none of its JS deps (bootstrap, jquery, plupload,
+      # sortablejs, popper.js, @rails/ujs) -- which is why Dockerfile.deploy tolerates
+      # precompile as `|| echo ...`.
+      #
+      # The admin *stylesheet* does compile here, and must: the comfy admin layout
+      # emits stylesheet_link_tag "comfy/admin/cms/application", and test.rb sets
+      # assets.compile = true with unknown_asset_fallback = false, so the three
+      # Comfy::Admin::Cms::BaseController subclasses under app/controllers/admin fail
+      # to render if it cannot. With no precompiled manifest and no populated gem
+      # builds/ dir, Sprockets falls back to the gem's application.sass, whose only
+      # two node_modules imports -- codemirror and flatpickr, lines 3 and 6 -- come
+      # from the app's package.json. Everything else it imports ships in the gem.
+      # Verified by deleting those two packages under CI conditions: the admin
+      # controller tests error with "File to import not found or unreadable:
+      # codemirror/lib/codemirror".
+      #
+      # The deploy image takes a different path and does not rely on them:
+      # Dockerfile.deploy runs comfy:compile_assets first, which npm-installs inside
+      # the gem and dart-sass-builds its app/assets/builds/, and Sprockets resolves
+      # the prebuilt CSS in preference to the .sass source.
       - name: Build test assets
         run: bundle exec vite build --mode test
 

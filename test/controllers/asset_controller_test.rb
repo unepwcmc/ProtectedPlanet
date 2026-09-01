@@ -29,6 +29,35 @@ class AssetsControllerTest < ActionController::TestCase
                  directives(@response.headers["Cache-Control"])
   end
 
+  # Every type in TYPES must reach a generator that actually exists. This is the
+  # one thing grep cannot check: country_tile/region_tile were deleted as dead
+  # code while AssetsController still reached them through a built method name
+  # ("#{area_type}_tile"), so they had no literal call site anywhere and both
+  # endpoints 500d. Deleting either one now fails here.
+  test ".tiles returns a tile for every type in TYPES" do
+    AppSecrets.stubs(:mapbox).returns({"base_url" => "http://mapbox.com/", "access_token" => "123"})
+    # Stubbed at the network boundary, NOT on the *_tile methods themselves:
+    # mocha happily stubs a method that does not exist, so stubbing those would
+    # define the very thing this test exists to prove is still there.
+    AssetGenerator.stubs(:request_tile).returns("the tile")
+    ProtectedArea.any_instance.stubs(:geojson).returns("{}")
+    Country.any_instance.stubs(:geojson).returns("{}")
+    Region.any_instance.stubs(:geojson).returns("{}")
+
+    ids = {
+      "protected_area" => FactoryBot.create(:protected_area, site_id: 555_333).site_id,
+      "country" => FactoryBot.create(:country, iso: "TL", iso_3: "TLX").iso,
+      "region" => FactoryBot.create(:region, iso: "TLR").iso
+    }
+    assert_equal AssetsController::TYPES.sort, ids.keys.sort,
+                 "a tile type was added to TYPES without coverage here"
+
+    ids.each do |type, id|
+      get :tiles, params: {"id" => id, "type" => type}
+      assert_equal "the tile", @response.body, "no tile generated for type=#{type}"
+    end
+  end
+
   private
 
   def directives(cache_control)

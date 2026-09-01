@@ -24,8 +24,6 @@ ActiveRecord::Migration.maintain_test_schema!
 require 'mocha/minitest'
 require 'webmock/minitest'
 
-require 'database_cleaner'
-
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
 # No test may announce itself in Slack. The release notifier posts to this webhook
@@ -54,10 +52,6 @@ module Minitest::Assertions
 end
 
 class ActionDispatch::IntegrationTest
-
-  # Make the Capybara DSL available in all integration tests
-  include Capybara::DSL
-  Capybara.app = Rails.application
 
   def teardown
 

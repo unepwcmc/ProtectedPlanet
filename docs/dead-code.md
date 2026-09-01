@@ -3,7 +3,7 @@
 Audit of unused / no-longer-reached code in the ProtectedPlanet Rails app.
 
 - **Produced** 2026-08-21 on branch `staging_kamal`.
-- **All five waves actioned** — 1 and 2 on 2026-08-27, 3 to 5 on 2026-08-28 — see the Suggested order section at the end for what was deleted and what remains.
+- **All six waves actioned** — 1 and 2 on 2026-08-27, 3 to 6 on 2026-08-28 — see the Suggested order section at the end for what was deleted and what remains. Wave 6 is the `Gemfile` prune section 11 deferred.
 - **Re-scanned and updated 2026-08-27**, same branch. Every finding below was re-verified against the working tree; entries that have since been actioned are marked **✅ DONE**, and three findings were **corrected** — see *What changed* below.
 
 Findings are grouped by confidence:
@@ -13,6 +13,8 @@ Findings are grouped by confidence:
 - **[NOT DEAD]** — things that look dead to a naive scan but are not. Recorded so nobody deletes them.
 
 Method: import-graph reachability for the frontend, a fixed-point call-graph pass for Ruby helper methods (so dead *clusters* are caught, not just leaves), and per-item manual verification. This codebase uses `send("...#{}...")` dispatch heavily, so every Ruby finding was checked against those patterns individually.
+
+> **⚠️ That last check was not applied consistently, and wave 2 shipped a live bug.** `AssetGenerator.country_tile` / `.region_tile` were deleted as dead while `AssetsController` was still reaching them through a built method name, 500ing every country and region tile in production until 2026-09-01. **Before deleting any Ruby method, read the dispatch-site inventory in section 11 and check the name against it.** A grep returning nothing is not evidence of death for anything in those families.
 
 > **Note on `db/`** — `db/` is a **git submodule** (`unepwcmc/protectedplanet-db`, branch `backend/rails-upgrade`). Deletions under `db/` are commits to a separate repository and need to be coordinated with anything else consuming it. Note also that `db/schema.rb` and `db/structure.sql` are **listed in the submodule's `.gitignore`** — they are local artefacts, not committed files (see section 6).
 
@@ -468,7 +470,15 @@ All 30 listed below were re-verified as having zero non-definition references an
 | | | `has_documents` — dead **twice** | `regions_helper.rb` *and* `countries_helper.rb` |
 | Presenters / services | 7 | `marine_page_statistics` (`country_presenter`), `get_designations` (`designations_presenter`), `marine_coverage` (`region_presenter`), `name_size` / `marine_designation` / `completeness_for` (`protected_area_presenter`), `import_completion` (`portal_release/notifier`) | |
 | Models | 4 | `sum_of_most_protected_marine_areas` (`protected_area`), `sources_to_json` (`pame_evaluation`), `backup_timestamp_string` (`release`), `total_protected_marine_area` (`country_statistic`) | |
-| `lib/` | 6 | `statistics_monthly_import` (`import_tools`), `country_tile` / `region_tile` (`asset_generator`), `configuration_for` (`search/aggregation`), `get_live_materialised_view_name_from_staging` (`portal/config/portal_import_config`), `attributes_for_green_list_status_create` (`portal/utils/green_list_column_mapper`) | |
+| `lib/` | 4 | `statistics_monthly_import` (`import_tools`), `configuration_for` (`search/aggregation`), `get_live_materialised_view_name_from_staging` (`portal/config/portal_import_config`), `attributes_for_green_list_status_create` (`portal/utils/green_list_column_mapper`) | |
+
+> **Correction (2026-09-01).** `country_tile` / `region_tile` (`asset_generator`) were listed
+> here and deleted in wave 2, but they are **not** dead: `AssetsController#tiles` dispatches to
+> them by name for `type=country` / `type=region`, and `Search::AreasSerializer` emits those URLs
+> for every country and region in a search-areas result. The deletion 500d both endpoints; caught
+> by `rake smoke:routes` and both methods have been restored. The controller now dispatches with an
+> explicit `case` instead of a built name, a regression test covers all three tile types, and the
+> general rule is recorded in *The dispatch-site inventory* in section 11.
 
 ### ✅ DONE (wave 2) — controller
 
@@ -492,6 +502,7 @@ Recorded because every one of them is flagged by a naive unused-code scan. Re-ve
 |---|---|---|
 | All **247** flag SVGs in `app/assets/images/flags/` *(count and mechanism corrected — the audit said 274 and named three call sites)* | No literal filename anywhere | Built at runtime from a single helper: `image_url("flags/#{iso_3}.svg")` in [app/helpers/application_helper.rb:49](../app/helpers/application_helper.rb#L49). Commit `9eb95ce1e` consolidated the lookup onto ISO3 filenames, which is why the earlier call sites no longer exist |
 | `region_hash`, `country_hash`, `site_hash` | Never called by name | Reached via `send("#{geo_type}_hash", a)` at [app/serializers/search/areas_serializer.rb:49](../app/serializers/search/areas_serializer.rb#L49) |
+| `AssetGenerator.country_tile`, `.region_tile` | Never called by name — **wave 2 deleted them on exactly this reasoning** | Were reached via `send("#{area_type}_tile", record)` in `AssetsController#tiles`, whose URLs are emitted for every country and region by [app/serializers/search/areas_serializer.rb:57-67](../app/serializers/search/areas_serializer.rb#L57-L67). Restored 2026-09-01; the controller now dispatches with an explicit `case`, and [test/controllers/asset_controller_test.rb](../test/controllers/asset_controller_test.rb) walks every entry in `AssetsController::TYPES` so a re-deletion fails CI |
 | `lib/cms_tags/text_custom.rb` (`TextCustom`) | Class name appears nowhere else | Loaded by explicit `require Rails.root.join('lib/cms_tags/text_custom')` in `config/initializers/comfortable_media_surfer.rb:8`, so the class name never appears as a reference |
 | `Tooltip/Index.vue`, `Tooltip/Panel.vue` | Their turbo-mount registrations were deleted | Live as child components of `Pame/Table/Head/Cell.vue` and `Stats/TooltipInfo.vue` — the registrations were the dead part, and they are already gone |
 | `app/views/layouts/cms/_*.html.erb` (9 files) | `_data-areas` and `_thematic-and-data-area-default` have zero references in the repo | Comfy renders these by the `app_layout` value stored on each CMS layout **record in the database**. All nine also have a matching stylesheet imported from `tailwind.css`. Do not judge these statically — check `comfy_cms_layouts.app_layout` in a real database first |
@@ -504,10 +515,44 @@ Recorded because every one of them is flagged by a naive unused-code scan. Re-ve
 | `config/sidekiq.yml` | — | Live: drives the `job_web`/`job` roles and the `pdf` capsule |
 | `config/sidekiq-import.yml` | — | The file **is** wired into a running Kamal role. It is dead only because its queue has no producers — see section 7. Do not delete it in isolation; remove the role with it |
 | The 25 module-internal types in `backend.ts` | No cross-file reference | Building blocks of live exported types — see the correction in section 10 |
+| `dotenv` **and** `dotenv-deployment` | No `Dotenv` reference anywhere, and `dotenv-rails` is not in the bundle | Bundler auto-requires `dotenv/deployment`, whose file body runs `Dotenv.load '.env'` and `Dotenv.overload ".env.#{Rails.env}"` **at boot**. This is the mechanism [bin/preflight-deploy:115](../bin/preflight-deploy#L115) masks with an empty `.env`. Added in wave 6 |
+| `slack-notifier` | No `Slack::Notifier` reference | Reached through `config.add_notifier :slack` in `config/initializers/exception_notification.rb` — an optional dependency `exception_notification` does not declare. Added in wave 6 |
+| `will_paginate` | Its only call site is invisible to a `.erb`-shaped grep | `app/views/admin/home_carousel_slides/index.html.haml` calls it twice. Added in wave 6 |
 
 > **A note on scanning Vue components:** a basename-matching scan reports ~118 of the ~120 SFCs as unreferenced. That is an artefact — components are imported by path (`@/components/Icon/Download.vue`) and registered under joined names, so the basename never appears as a standalone word. Do not run that scan.
 
-**Not assessed:** the `Gemfile`. A gem-usage scan produced 35 hits that were nearly all false positives (constant-vs-gem-name mismatches like `comfortable_media_surfer` → `ComfortableMediaSurfer`, plus Capfile- and `database.yml`-level wiring). Treat gem pruning as a separate exercise with a proper tool. Note that three rounds of it have already happened since this audit (`16e8af033`, `0eaf9f884`, `54c707888`), so the low-hanging fruit is gone.
+### The dispatch-site inventory — check every Ruby deletion against this
+
+Code reached by a **built or configured name** has no literal call site, so `grep` reports it as unreferenced no matter how live it is. This is the single failure mode that has actually shipped a bug from this audit (the tiles row above). Verified live 2026-09-01.
+
+| Dispatch site | Builds | Protected family |
+|---|---|---|
+| `AssetsController#tiles` *(now an explicit `case`)* | *(was)* `"#{area_type}_tile"` | `AssetGenerator.*_tile` |
+| [app/serializers/search/areas_serializer.rb:49](../app/serializers/search/areas_serializer.rb#L49) | `"#{geo_type}_hash"` | `region_hash`, `country_hash`, `site_hash` |
+| [app/presenters/country_presenter.rb:75-94](../app/presenters/country_presenter.rb#L75-L94) | `"pa_#{type}_area"`, `"percentage_pa_#{type}_cover"`, `"oecms_pa_#{type}_area"`, … | `CountryStatistic` columns |
+| [app/presenters/tab_presenter.rb:21-22](../app/presenters/tab_presenter.rb#L21-L22) | `"build_#{combined}stats"` | `*_stats` presenter methods |
+| [app/presenters/statistic_presenter.rb:38-54](../app/presenters/statistic_presenter.rb#L38-L54) | `define_method` over stat name lists | the listed stat names |
+| [app/controllers/country_controller.rb:118](../app/controllers/country_controller.rb#L118), [region_controller.rb:70](../app/controllers/region_controller.rb#L70) | `@tab_presenter.send(key)` | `TabPresenter` tab methods |
+| [app/serializers/base_serializer.rb:30-37](../app/serializers/base_serializer.rb#L30-L37) | `public_send(field)` from config | serializer field names |
+| [app/helpers/search_helper.rb:69](../app/helpers/search_helper.rb#L69) | `config['model'].constantize` | the six models in `config/search.yml` |
+| [app/models/global_statistic.rb:43-44](../app/models/global_statistic.rb#L43-L44) | `define_singleton_method(column_name)` | `global_statistics` columns |
+| `config/initializers/comfortable_media_surfer.rb:8` | explicit `require` of a path | `lib/cms_tags/*` |
+| Comfy `app_layout` values in the **database** | layout template paths | `app/views/layouts/cms/_*` |
+
+**The rule:** if a candidate's name could be produced by any row above, a clean grep proves nothing. Get runtime evidence instead — exercise the feature, or delete it locally and watch a test or route fail.
+
+**What is actually authoritative**, cheapest first. None of these existed as a gate when waves 1–5 ran:
+
+```
+bin/rails zeitwerk:check                              # dangling constants
+bin/rails runner 'Rails.application.eager_load!'      # missing constants at boot
+bundle exec rails test                                # CI runs this — the real gate
+bundle exec rake smoke:routes                         # walks every GET route; also runs post-deploy
+```
+
+> A full re-audit of all six waves on 2026-09-01 — every deleted `def` and `class` cross-checked against these dispatch sites — found the tiles bug and **nothing else**: 1 bad deletion out of 159. The waves were sound; the method just needs this one check applied consistently.
+
+**The `Gemfile` — ✅ ASSESSED (wave 6).** The original note here said gem pruning needed to be a separate exercise, because a naive gem-usage scan produced 35 hits that were nearly all false positives (constant-vs-gem-name mismatches like `comfortable_media_surfer` → `ComfortableMediaSurfer`, plus Capfile- and `database.yml`-level wiring). That exercise is done: **17 direct dependencies removed, 24 gems out of the lockfile, 58 → 41**, with the three false positives above recorded rather than deleted. See wave 6 in the suggested order. Four rounds of pruning had already happened before it (`16e8af033`, `0eaf9f884`, `54c707888`, plus wave 5's 14 Capistrano-chain gems), which is why the survivors needed boot-time evidence rather than a grep.
 
 ---
 
@@ -615,6 +660,51 @@ The portal release path is the live import system, and it shares a namespace wit
 - Stale `job_import` references were corrected in `.kamal/hooks/pre-deploy` (the migration-lock comment counted three roles) and `config/deploy.staging.yml:38`.
 
 Docs rewritten in the same change: `docs/deployment.md` (Kamal, not Capistrano; maintenance-mode `cap` commands removed), `docs/installation.md` (the S3-import walkthrough replaced with the portal rake path), `docs/downloads.md`, `docs/docker.md`, and a comment in `config/database.yml`.
+
+### ✅ Wave 6 — DONE (2026-08-28). The `Gemfile` prune the audit deferred.
+
+Section 11 closed with *"**Not assessed:** the `Gemfile`. … Treat gem pruning as a separate exercise with a proper tool."* This is that exercise. The audit's own warning held: a naive gem-usage scan is nearly all false positives, so every candidate was checked three ways — a constant/require grep across `app/ lib/ config/ test/ bin/ Dockerfile* .kamal/ .github/`, a reverse-dependency read of `Gemfile.lock` (is the explicit entry redundant?), and for anything that hooks in via a railtie rather than a reference, **what the gem actually does at boot inside the running container**.
+
+**17 direct dependencies removed; 24 gems left the lockfile** (7 were their transitives). `Gemfile` dependency count: **58 → 41**.
+
+| Gem | Why it is dead |
+|---|---|
+| `uglifier` | Replaced with the `terser` that staging already used — see the fix below |
+| `autoprefixer-rails` | Zero references. It hooked Sprockets, whose only remaining input is the Comfy admin stylesheet |
+| `premailer-rails` | Inlines CSS into HTML mail. **The app sends no mail at all**: `ApplicationMailer` has no subclasses and nothing anywhere calls `deliver_now`/`deliver_later`; `exception_notification` is configured with the Slack notifier only |
+| `jquery-rails` | Zero references, and `app/assets/` has no `javascripts/` directory — only `images/` and the Comfy admin `stylesheets/` |
+| `net-sftp`, `net-scp` | Zero references. They sat under the comment about the removed `gdal` gem and went with `net-ssh`, whose only consumers (Capistrano, `sshkit`) left in wave 5 |
+| `sinatra` (`require: nil`) | Sidekiq's web UI needed it up to Sidekiq 5. `sidekiq-7`'s `lib/sidekiq/web.rb` requires `rack/builder`, `rack/static` and `rack/content_length` — no Sinatra. Verified after removal: `Sidekiq::Web` still loads and `/admin/sidekiq` is still mounted |
+| `system` (0.1.3) | A 2011 host-introspection gem, zero references — and it defines a **top-level `class System`**, so it was squatting the global namespace for nothing |
+| `capybara` (pinned `~> 2.3.0`, from 2015) | `test_helper.rb` did `include Capybara::DSL` for integration tests, but **not one test uses it** — no `visit`, `click_*`, `fill_in` or `page.has_*` anywhere in `test/`. The include and `Capybara.app =` line went with the gem |
+| `database_cleaner` | Required by `test_helper.rb:27` and used by nothing. The only other match in the tree is `contract_test_helper.rb`'s comment saying *"no fixtures or DatabaseCleaner are involved"* |
+| `timecop` | Zero references |
+| `webrick` | Its Gemfile comment named its one consumer — the S3 upload test, deleted in wave 5. It also stays in the lockfile regardless, as a dependency of `rackup` |
+| `loofah` (`~> 2.22`) | Redundant pin. `rails-html-sanitizer` already floors it at `>= 2.25.2`, well past this constraint |
+| `spring`, `awesome_print` | Development-group tooling with nothing invoking it. `bin/spring` and `config/spring.rb` were deleted with the gem |
+
+`rails-controller-testing` was **kept but moved into `group :test`**, where it belongs — `assert_template` and `assigns` are used by two controller tests and nowhere else.
+
+#### The one behavioural fix in this wave
+
+`config/environments/production.rb` set `config.assets.js_compressor = Uglifier.new(harmony: true)`. Comfy **does** ship JS through Sprockets (`app/assets/javascripts/comfy/vendor/{redactor,fontawesome,flatpickr,…}.js`), so that compressor is live — and the Gemfile's own comment said Uglifier's wrapper fails opaquely under modern Node. `Dockerfile.deploy` runs `assets:precompile || echo …`, so a failure there is swallowed and the production admin bundle would simply be missing. Production now uses `:terser`, matching staging.
+
+Verified by precompiling under `RAILS_ENV=production`: `public/assets/comfy/admin/cms/application-<digest>.js` builds, 1.5 MB, terser-minified.
+
+#### Three that looked dead and are not — added to section 11
+
+- **`dotenv` + `dotenv-deployment`.** Zero `Dotenv` references anywhere, and `dotenv-rails` is not in the bundle — so by every static measure this pair is dead. It is not. Bundler auto-requires `dotenv/deployment`, whose **file body** runs `Dotenv.load '.env'` and then `Dotenv.overload ".env.#{Rails.env}"` at boot. That is precisely the behaviour [bin/preflight-deploy:115](../bin/preflight-deploy#L115) documents and masks with an empty `.env` bind mount. Removing these would have broken preflight, and silently changed what `bin/rails` sees outside docker-compose. `dotenv` 2.8.1 ships no `dotenv/rails.rb`, so the mechanism is entirely the `-deployment` gem.
+- **`slack-notifier`.** No `Slack::Notifier` reference in the tree; it reaches the app through `config/initializers/exception_notification.rb`'s `config.add_notifier :slack`, which `exception_notification` leaves as an optional dependency. It is also a dependency of `bystander`, so the explicit entry is redundant *in resolution* — but it is kept, because the app depends on it directly and should not inherit it from an unrelated gem.
+- **`will_paginate`.** Only one call site, and it is in a `.haml` view: `app/views/admin/home_carousel_slides/index.html.haml` uses `will_paginate @home_carousel_slides, theme: 'comfy'` twice. (`haml` itself is transitive, via Comfy's `haml-rails`.)
+
+**Verification:** `bundle install` clean (41 dependencies, 171 gems). `rails test`: **770 runs, 2074 assertions, 0 failures, 0 errors, 4 skips.** `RAILS_ENV=production assets:precompile` exit 0, Sprockets and Vite outputs both present. `rake -T` (77 tasks) and `rake zeitwerk:check` (*All is good!*) clean. App boots; 162 routes; `Sidekiq::Web` resolves. `yarn lint` exit 0.
+
+#### Follow-ups this created
+
+- **Dead mail scaffolding.** `app/mailers/application_mailer.rb` and `app/views/layouts/mailer.html.erb` have no subclasses and no senders, yet `config/environments/{development,staging,production}.rb` all configure real `smtp_settings` and `docker-compose.yml` runs a `mailpit` service. Either the app is meant to send mail and doesn't yet, or all of that is fossil. **Needs a team answer, not a scan.** Left in place deliberately.
+- **`test/contracts/` contains only `contract_test_helper.rb`** — a helper with no tests to help. It boots against `pp_development` for FDW/materialized-view contract tests that either never landed or were removed.
+- **`config/environments/development_backup.rb`** — 71 lines, zero references anywhere in the tree, loadable only via `RAILS_ENV=development_backup`. A copy someone left behind.
+- The bundle still carries **`rubocop` with no `.rubocop.yml`** in the repo root and no CI step invoking it. Not touched here; worth deciding whether the project actually lints Ruby.
 
 ### Not repo cleanup, but worth doing
 

@@ -63,36 +63,6 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 0, search.results.count
   end
 
-  test 'search single country on iso3' do
-    skip('currently not searching on iso3')
-    region = FactoryBot.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryBot.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-
-    assert_index 1, 0
-    search = Search.search 'MBN', {}
-    assert_equal 1, search.results.count
-  end
-
-  test 'rank iso3 above country, above region' do
-    skip('currently not searching on iso3 or region')
-    region = FactoryBot.create(:region, id: 987, name: 'North Manmerica')
-    region2 = FactoryBot.create(:region, id: 988, name: 'Bel')
-    # make sure they aren't in index/id order so we are truly sorting
-    region_match = FactoryBot.create(:country, id: 125, iso_3: 'CHE', name: 'Cheese', region: region2)
-    iso3_match = FactoryBot.create(:country, id: 127, iso_3: 'BEL', name: 'Benland', region: region)
-    country_match = FactoryBot.create(:country, id: 124, iso_3: 'BLA', name: 'Bel', region: region)
-
-    assert_index 3, 0
-
-    search = Search.search 'bel', {}
-    assert_equal 3, search.results.count
-    assert_equal iso3_match.id, search.results.matches[0]['_source']['id']
-    assert_greater search.results.matches[0]['_score'], search.results.matches[1]['_score']
-    assert_equal country_match.id, search.results.matches[1]['_source']['id']
-    assert_greater search.results.matches[1]['_score'], search.results.matches[2]['_score']
-    assert_equal region_match.id, search.results.matches[2]['_source']['id']
-  end
-
   test 'Index single ProtectedArea' do
     pa = FactoryBot.create(:protected_area)
     assert_index 0, 1

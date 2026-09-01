@@ -174,7 +174,7 @@ bundle exec rake pp:portal:status
 # When ready to go live** (normally on the first day of the month), continue with the swap:
 # If the first day is a Friday, run this on Thursday instead (see Monthly Release Date Rule above)
 # IMPORTANT! Make sure you change the correct label
-PP_RELEASE_START_AT=finalise_swap bundle exec rake 'pp:portal:release[Aug2026]'
+PP_RELEASE_START_AT=finalise_swap bundle exec rake 'pp:portal:release[Sep2026]'
 
 
 # When everything is done: leave the container, then kill the HOST tmux session

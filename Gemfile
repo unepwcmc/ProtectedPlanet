@@ -42,34 +42,14 @@ gem 'sassc-rails', '~> 2.1'
 # both arm64-darwin and the linux container.
 gem 'ffi', '~> 1.17', '>= 1.17.4'
 
-# Uglifier 4.x wraps uglify-js via ExecJS and is unmaintained since 2019. Under
-# Node 24 its error handling breaks -- it reads result['error']['message'], which
-# is nil for the error shape modern Node returns, so any compression failure
-# surfaces as `undefined method 'start_with?' for nil` rather than the real
-# problem. Terser is the maintained ES6+ successor. Uglifier is kept in the
-# bundle only because config/environments/production.rb still references it;
-# that should move to terser too when production migrates.
-gem 'uglifier', '~> 4.1.17'
-# staging compresses with terser (see config/environments/staging.rb) -- uglify-js is
-# ES5-era and its wrapper fails on Node 24. production still uses Uglifier for now.
+# Sprockets JS compressor, for the comfortable_media_surfer admin bundle -- the only
+# JS still going through the asset pipeline. Uglifier was dropped in its favour:
+# uglify-js is ES5-era and its unmaintained wrapper fails opaquely on Node 24 (it
+# reads result['error']['message'], nil for the error shape modern Node returns).
+# staging already compressed with terser; production now does too.
 gem 'terser', '~> 1.2'
-# Vite cutover -- nothing compiles CoffeeScript any more.
-gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
 gem "slack-notifier", "~> 1.5.1"
-#
-gem 'jquery-rails', '~> 4.3.3'
-gem 'premailer-rails'
-# gem 'listen'
-
-gem 'rails-controller-testing'
-
-# The `gdal` gem is removed: it is pinned to GDAL 2.x and calls C API functions
-# (OSRStripCTParms, OSRFixup, OPTGetParameterInfo, ...) deleted in GDAL 3, so it
-# cannot compile against the 3.8.4 the image now ships. Its only use was
-# Ogr::Info, which shells out to the ogrinfo CLI instead.
-gem 'net-sftp'
-gem 'net-scp'
 
 # Frontend related gems
 gem 'vite_rails', '~> 3.11.1'
@@ -84,8 +64,6 @@ group :production, :staging do
 end
 #
 group :development do
-  gem 'spring'
-  gem 'awesome_print'
   gem 'rubocop', '~> 1.90.0'
   gem 'ruby-lsp', '~> 0.26.11'
   # gem 'listen', '~> 3.1.5'
@@ -98,15 +76,13 @@ end
 
 group :test do
   gem 'factory_bot_rails', '~> 6.2' # was factory_girl_rails 4.4 (File.exists?, removed in Ruby 3.2)
-  gem 'webrick' # removed from Ruby 3's default gems; used by the S3 upload test
   gem 'mocha', '~> 2.7'
+  # `assert_template` and `assigns` -- extracted out of Rails core in 5.0.
+  gem 'rails-controller-testing'
   gem 'webmock', '~> 3.23', require: false
-  gem 'timecop', '~> 0.7.1'
-  gem 'capybara', '~> 2.3.0'
   # gem 'codeclimate-test-reporter', require: nil
-  gem 'simplecov', require: false, group: :test
+  gem 'simplecov', require: false
   # gem 'simplecov-console'
-  gem 'database_cleaner'
 end
 
 group :test, :development do
@@ -116,8 +92,6 @@ end
 group :test, :development, :staging do 
   gem 'byebug', '~> 13.0.0'
 end
-
-
 
 gem 'will_paginate', '~> 3.0'
 
@@ -147,24 +121,21 @@ gem 'redis', '~> 5.0'
 # polled: perform_in/perform_at did nothing and no failed job was ever retried,
 # silently. Pin to 2.x until we move to Sidekiq 8, which supports connection_pool 3.
 gem 'connection_pool', '~> 2.5'
-gem 'sinatra', '>= 1.3.0', :require => nil
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'appsignal', '~> 3.3.11'
 
-gem 'system'
 gem 'dotenv', '~> 2.8' # 0.11 used File.exists?, removed in Ruby 3.2
 gem 'dotenv-deployment'
 
 gem 'turnout', '~> 2.5.0'
-
 
 gem 'comfortable_media_surfer', '~> 3.1'
 # Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
 # rails-i18n 5.1.3, which caps railties < 6. Force the Rails 6 line.
 gem 'rails-i18n', '~> 8.0'
 # nokogiri 1.10 does not build on Ruby 3.x; 1.16+ supports Ruby 3.3. Bumping it
-# also unblocks loofah (needs Nokogiri::HTML4, present since nokogiri 1.12).
+# also unblocked loofah, which needs Nokogiri::HTML4 (present since nokogiri 1.12);
+# loofah itself needs no explicit entry -- rails-html-sanitizer already floors it.
 gem 'nokogiri', '~> 1.16'
-gem 'loofah', '~> 2.22'

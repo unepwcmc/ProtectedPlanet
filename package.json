@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit"
   },
+  "//comfy-admin-css": "codemirror and flatpickr are not app code. comfortable_media_surfer's admin stylesheet imports them from node_modules, and in test Sprockets compiles that .sass on demand -- without them the app/controllers/admin tests fail to render. See .github/workflows/test.yml.",
   "dependencies": {
     "@amcharts/amcharts5": "^5.20.0",
     "@hotwired/stimulus": "^3.2.2",

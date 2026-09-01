@@ -4,8 +4,7 @@ class AssetsController < ApplicationController
   def tiles
     area_type = params[:type]
     raise_404 unless TYPES.include?(area_type)
-    method_name = "#{area_type}_tile"
-    record = send(area_type)
+    record = find_record(area_type)
     raise_404 if record.nil?
 
     cache_key = [
@@ -17,7 +16,7 @@ class AssetsController < ApplicationController
     ].join(':')
 
     image = Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
-      AssetGenerator.send(method_name, record)
+      generate_tile(area_type, record)
     end
 
     if image.blank?
@@ -44,15 +43,19 @@ class AssetsController < ApplicationController
 
   private
 
-  def protected_area
-    @protected_area ||= ProtectedArea.where(site_id: params[:id]).first
+  def find_record(area_type)
+    case area_type
+    when 'protected_area' then ProtectedArea.find_by(site_id: params[:id])
+    when 'country' then Country.find_by(iso: params[:id])
+    when 'region' then Region.find_by(iso: params[:id])
+    end
   end
 
-  def country
-    @country ||= Country.where(iso: params[:id]).first
-  end
-
-  def region
-    @region ||= Region.where(iso: params[:id]).first
+  def generate_tile(area_type, record)
+    case area_type
+    when 'protected_area' then AssetGenerator.protected_area_tile(record)
+    when 'country' then AssetGenerator.country_tile(record)
+    when 'region' then AssetGenerator.region_tile(record)
+    end
   end
 end
