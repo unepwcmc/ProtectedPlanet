@@ -2,8 +2,8 @@ name: Deploy to Proxmox staging (Kamal 2)
 
 # Deploys to the Proxmox staging host (pp-web-staging-01.internal.unep-wcmc.org).
 #
-# The existing deploy.yml targets the old Linode staging via Kamal 1 and is left
-# alone, so both run side by side until Linode is decommissioned.
+# This is the only deploy workflow. The Kamal 1 workflow that deployed the old
+# Linode staging alongside it was removed when Linode was decommissioned.
 on:
   push:
     branches:
@@ -23,8 +23,8 @@ jobs:
           # `environment` is the KAMAL destination (config/deploy.staging.yml) and
           # the label shown in Slack — it must stay "staging".
           # `gh-environment` is the GitHub environment the secrets live in. It is
-          # separate so the Linode Kamal 1 workflow can keep its own `staging`
-          # secrets while this one uses `staging_proxmox`.
+          # separate because the retired Linode Kamal 1 workflow held the `staging`
+          # secrets; this one uses `staging_proxmox` and that split has been kept.
           echo "environment=staging" >> $GITHUB_OUTPUT
           echo "gh-environment=staging_proxmox" >> $GITHUB_OUTPUT
           echo "kamal-secrets-file=.kamal/secrets-common" >> $GITHUB_OUTPUT

@@ -3,7 +3,7 @@
 Audit of unused / no-longer-reached code in the ProtectedPlanet Rails app.
 
 - **Produced** 2026-08-21 on branch `staging_kamal`.
-- **All six waves actioned** — 1 and 2 on 2026-08-27, 3 to 6 on 2026-08-28 — see the Suggested order section at the end for what was deleted and what remains. Wave 6 is the `Gemfile` prune section 11 deferred.
+- **All seven waves actioned** — 1 and 2 on 2026-08-27, 3 to 6 on 2026-08-28, 7 on 2026-09-01 — see the Suggested order section at the end for what was deleted and what remains. Wave 6 is the `Gemfile` prune section 11 deferred; wave 7 closed the last **[SUSPECTED]** finding, so **no finding in this document is still open** — only decisions and per-environment housekeeping, listed at the end of wave 7.
 - **Re-scanned and updated 2026-08-27**, same branch. Every finding below was re-verified against the working tree; entries that have since been actioned are marked **✅ DONE**, and three findings were **corrected** — see *What changed* below.
 
 Findings are grouped by confidence:
@@ -389,7 +389,7 @@ Two follow-ups this created, neither of which is dead code — ✅ **both action
 - [docs/docker.md:94](docker.md) referred to *"this project's Jenkins setup"* — clause removed.
 - `upgrade-plan/backend/10-test-suite.md` and `00-scope-and-shared-milestones.md` describe Jenkins as the CI system and record fixing its Test stage as a milestone. They are historical planning records, so leaving them is defensible, but they no longer describe reality.
 
-### [SUSPECTED] Stale comment in the deploy workflow
+### ✅ DONE (wave 7) — Stale comment in the deploy workflow
 
 [.github/workflows/deploy-staging-kamal.yml:5-6](../.github/workflows/deploy-staging-kamal.yml#L5) still says *"The existing deploy.yml targets the old Linode staging via Kamal 1 and is left alone, so both run side by side until Linode is decommissioned"*, with a matching note at line 26. `.github/workflows/` contains only this workflow and `test.yml`; the Kamal 1 / Linode workflow it defers to is gone. Worth correcting while the Linode decommission is fresh.
 
@@ -702,9 +702,42 @@ Verified by precompiling under `RAILS_ENV=production`: `public/assets/comfy/admi
 #### Follow-ups this created
 
 - **Dead mail scaffolding.** `app/mailers/application_mailer.rb` and `app/views/layouts/mailer.html.erb` have no subclasses and no senders, yet `config/environments/{development,staging,production}.rb` all configure real `smtp_settings` and `docker-compose.yml` runs a `mailpit` service. Either the app is meant to send mail and doesn't yet, or all of that is fossil. **Needs a team answer, not a scan.** Left in place deliberately.
-- **`test/contracts/` contains only `contract_test_helper.rb`** — a helper with no tests to help. It boots against `pp_development` for FDW/materialized-view contract tests that either never landed or were removed.
-- **`config/environments/development_backup.rb`** — 71 lines, zero references anywhere in the tree, loadable only via `RAILS_ENV=development_backup`. A copy someone left behind.
-- The bundle still carries **`rubocop` with no `.rubocop.yml`** in the repo root and no CI step invoking it. Not touched here; worth deciding whether the project actually lints Ruby.
+- ✅ **`test/contracts/contract_test_helper.rb`** — deleted in wave 7.
+- ✅ **`config/environments/development_backup.rb`** — deleted in wave 7.
+- **[CORRECTED in wave 7]** An earlier revision of this list claimed the bundle carried `rubocop` with no `.rubocop.yml`. **That was wrong** — `.rubocop.yml` is in the repo root (added in `3a215d50c`) with `NewCops: enable` and a dozen layout rules. `rubocop` and `ruby-lsp` are both live developer tooling and were never candidates. What does hold is narrower: **no CI step invokes it**, so the config is advisory only. Worth deciding, not deleting.
+
+### ✅ Wave 7 — DONE (2026-09-01). The residue: the last stale text and two orphan files.
+
+Small by design. This wave closes the only finding still carrying a **[SUSPECTED]** tag and the two orphans wave 6 turned up, so nothing in this document is left open except the items under *Not repo cleanup* and the three follow-ups named below.
+
+| Item | Section | Result |
+|---|---|---|
+| Stale Kamal 1 / Linode comment in `.github/workflows/deploy-staging-kamal.yml` | 8 | **Corrected**, both occurrences. The header said *"both run side by side until Linode is decommissioned"* and the `gh-environment` step said the Linode workflow *"can keep its own `staging` secrets"* — `.github/workflows/` holds only this file and `test.yml`, so the workflow both sentences deferred to is gone. Rewritten to past tense; the `staging` / `staging_proxmox` secrets split is documented as deliberately kept, because it is still what the workflow does |
+| Jenkins-as-current-CI text in `upgrade-plan/backend/10-test-suite.md` and `00-scope-and-shared-milestones.md` | 8 | **Banner added to both, body left alone.** Section 8 judged leaving these "defensible" because they are planning records, and rewriting them would falsify the history that explains why the suite was broken for years. A banner above the fold names `.github/workflows/test.yml` as the real CI, flags that Snyk now scans nothing, and marks everything below as written-at-the-time |
+| `test/contracts/contract_test_helper.rb` | 6 (wave-6 follow-up) | **Deleted.** The whole `test/contracts/` directory held this one file and no tests. It is also **superseded, not merely untested**: the live FDW/materialized-view contract check is `script/check_portal_views_contract.rb`, documented at `docs/fdw_setup/local.md:414`, and it boots `config/environment` directly rather than through this helper |
+| `config/environments/development_backup.rb` | 6 (wave-6 follow-up) | **Deleted.** 71 lines, zero references in the tree, reachable only by someone setting `RAILS_ENV=development_backup` |
+
+**On the two deletions:** neither is loaded by anything. `rails test` collects `*_test.rb`, so a bare `_helper.rb` with no requirers was never run; a `config/environments/*.rb` file is loaded only when `RAILS_ENV` names it.
+
+**Verification:** `rake -T` (77 tasks) and `rake zeitwerk:check` (*All is good!*) clean. `rails test`: **767 runs, 2017 assertions, 1 failure, 1 error, 0 skips.** The two are the FDW-dependent portal integration tests and are **environmental, not caused by this wave** — see below. The 4 skips wave 6 reported are gone because the deliberate `asset_generator_test` / `search_test` skips were removed since, in `42ff729f5`.
+
+#### A real test-environment bug this wave surfaced
+
+`test/integration/wdpa/portal/release_workflow_integration_test.rb` and `release_orchestration_integration_test.rb` guard themselves with `skip … if fdw_check['exists'].nil?`. **That guard checks the wrong object.** It tests for the FDW schema, which is now present in the dev database, so both tests proceed — and then fail inside the importer because `staging_protected_areas` **does not exist** (`SELECT to_regclass('staging_protected_areas')` returns NULL). The error surfaces as `Importer reported hard errors: … Target staging table staging_protected_areas does not exist or has no records`.
+
+This is why wave 6 saw 4 skips and 0 failures while wave 7 sees 0 skips and 2 failures: the FDW schema appeared in the shared dev database between the two runs. **The guard needs to check the staging tables it actually depends on, not the schema.** Nothing in waves 6 or 7 touched `app/`, `lib/` or these tests; the two files wave 7 deleted are loaded by nothing, and no deletion can make a database table absent.
+
+#### What is deliberately left open
+
+Everything remaining needs a decision or an environment, not an edit:
+
+- **The dead mail scaffolding** (wave 6's follow-up) — `ApplicationMailer` with no subclasses and no senders, an empty `test/mailers/`, a `mailer.html.erb` layout, yet real `smtp_settings` in three environments and a `mailpit` service in `docker-compose.yml`. Delete-or-build is a product question.
+- **Snyk has no successor** (section 8, wave 1) and **no CI step runs `rubocop`** (wave 6) — both are "should CI do this?", not dead code.
+- **Two sets of live secrets in git history** — the `.travis.yml` tokens (wave 1) and the two `ansible-vault` files (wave 4). Deleting the files did not invalidate them. **Still the highest-value outstanding item in this document.**
+- **No Kamal production destination** (wave 5) — both configs target staging.
+- **`ProtectedArea#is_dopa` is written by nothing** (wave 5), so the DOPA Explorer link at `protected_area_presenter.rb:180` reads stale data.
+- **Database housekeeping** (section 6) — `pp:portal:cleanup_backups` on the real environments, and the leaking `tmp_downloads_*` views still need filing as a bug.
+- **The portal integration tests' skip guard is wrong** (above) — it checks the FDW schema but the tests need `staging_protected_areas`. A one-line fix in each test, but it belongs to whoever owns the portal test environment.
 
 ### Not repo cleanup, but worth doing
 
