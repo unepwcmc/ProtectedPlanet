@@ -90,6 +90,9 @@ docker compose ps  # Check status
 
 > **⚠️ Deploys are blocked while a release runs.** `.kamal/hooks/pre-deploy` runs
 > `rake pp:portal:deploy_gate` and aborts the deploy if a release holds the release lock.
+> `.kamal/hooks/pre-build` runs the same check before the image is built, so a blocked
+> deploy fails in seconds instead of after a build + push. Both stages fail closed: if the
+> gate cannot run at all, the deploy is blocked rather than waved through.
 > Without it, `kamal deploy` replaces the app containers and kills the release mid-phase —
 > the process is SIGKILLed, so the release is left stranded with no Slack error.
 > There is no override — wait for the release to finish, or abort it with

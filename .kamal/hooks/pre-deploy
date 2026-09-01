@@ -28,39 +28,13 @@ set -euo pipefail
 
 # Stop the deploy if a monthly portal release is running.
 #
-# A release is a single long-lived rake process (lib/tasks/portal_release.rake).
-# Whether it was started with `kamal app exec --reuse` or `docker exec` into the
-# live web container, `kamal deploy` stops every container carrying the app's
-# service/destination/role labels, so boot kills it mid-phase. The process is
-# SIGKILLed, so the rescue/ensure in PortalRelease::Service#run! never runs: the
-# release row is stranded in a non-terminal state and no Slack error is sent.
-#
-# Checked here rather than in pre-build so the check runs against the image about
-# to go live, and BEFORE db:migrate below touches the database.
-#
-# There is deliberately NO override. A deploy during a release is never the right
-# call: wait for it, or abort the release first. Anyone who reintroduces an
-# opt-out should expect it to be used reflexively, which is the same as not
-# having this hook.
-echo "==> Checking whether a portal release is running"
-if kamal app exec \
-     ${KAMAL_DESTINATION:+--destination "$KAMAL_DESTINATION"} \
-     --primary \
-     --roles web \
-     --version "$KAMAL_VERSION" \
-     "bundle exec rake pp:portal:deploy_gate"; then
-  echo "==> No release running"
-else
-  echo "!!! DEPLOY BLOCKED — a portal release is currently running."
-  echo "!!!"
-  echo "!!! Deploying would replace the app containers and kill the release mid-phase,"
-  echo "!!! leaving it stranded with no failure notification."
-  echo "!!!"
-  echo "!!! Wait for the release to finish, or abort it first:"
-  echo "!!!   check:    kamal app exec -d ${KAMAL_DESTINATION:-staging} --primary --roles web \"bundle exec rake pp:portal:status\""
-  echo "!!!   abort it: kamal app exec -d ${KAMAL_DESTINATION:-staging} --primary --roles web \"bundle exec rake pp:portal:abort\""
-  exit 1
-fi
+# The gate itself lives in lib/release_gate.sh, shared with pre-build. pre-build has
+# already asked the live container; this call re-asks the image about to go live,
+# which is the only way to catch a release started during the build — and it runs
+# BEFORE db:migrate below touches the database.
+source "$(dirname "${BASH_SOURCE[0]}")/lib/release_gate.sh"
+
+check_portal_release --version "$KAMAL_VERSION"
 
 echo "==> Running migrations for version ${KAMAL_VERSION} (destination: ${KAMAL_DESTINATION:-none})"
 
