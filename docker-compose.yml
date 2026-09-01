@@ -94,15 +94,6 @@ services:
     # `docker compose stop db` left the cluster dirty every time), ignores the data
     # directory's postgresql.conf in favour of one it generates into /settings, and defaults
     # to 1GB WAL segments -- which is how the old data directory reached 57GB.
-    #
-    # A PG17 server cannot read a PG11 data directory, so if this errors with "incompatible
-    # data directory" or "database files are incompatible", the upgrade has not been run on
-    # this machine yet:
-    #
-    #   docker compose stop db sidekiq web
-    #   docker compose --profile upgrade run --rm pg_upgrade
-    #
-    # See docker/pg-upgrade/README.md -- it is a 10 minute job that keeps your data.
     image: postgis/postgis:17-3.5
     ports:
       - "5441:5432"
@@ -148,24 +139,6 @@ services:
     volumes:
       - protectedplanet_pg_test_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
-  # One-off PG11 -> PG17 in-place upgrade of the dev cluster. Behind a profile so it never
-  # runs as part of `docker compose up`. Mounts the same volume as `db`, which has to be
-  # stopped first -- pg_upgrade refuses to touch a cluster that was not shut down cleanly.
-  #
-  #   docker compose stop db sidekiq web
-  #   docker compose --profile upgrade run --rm pg_upgrade
-  #
-  # Env knobs: PG_UPGRADE_MODE (--copy by default, --link to hard-link instead),
-  # PG_UPGRADE_JOBS, PG_UPGRADE_SKIP_REINDEX.
-  pg_upgrade:
-    profiles: ["upgrade"]
-    platform: linux/x86_64
-    build:
-      context: ./docker/pg-upgrade
-    volumes:
-      - protectedplanet_pg_data:/var/lib/postgresql
-    networks:
-      - protectedplanet
 
   redis:
     container_name: protectedplanet-redis

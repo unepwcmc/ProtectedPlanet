@@ -115,7 +115,7 @@ What this phase owns at that point:
 
 Local dev used to run `kartoza/postgis:11.5-2.5` (PG 11.7 / PostGIS 2.5.4) while staging runs 17.5 / PostGIS 3.5.2 — **six majors apart**. That is not a cosmetic gap: it is why the `date_part` → `extract` break reached staging with every local check green (see CARRYOVER §"three PostgreSQL majors"). `db` and `db_test` are both on 17 now, and CI already was.
 
-Each developer has their own `protectedplanet_pg_data` volume, so **each has to do this once on their own machine**. The tooling is committed at **[`docker/pg-upgrade/`](../../docker/pg-upgrade/)** — read its README before running; this section is the summary.
+Each developer has their own `protectedplanet_pg_data` volume, so **each has to do this once on their own machine**. The tooling that did this lived at `docker/pg-upgrade/`, removed 2026-09-01 once every developer had upgraded — retrieve it from git history (`git log --diff-filter=D -- docker/pg-upgrade`) if it is ever needed again. This section is the summary.
 
 ```bash
 # 1. stop everything that touches the database
@@ -160,7 +160,7 @@ You do **not** need to shut Postgres down cleanly by hand first: `docker compose
 
 - `db` and `db_test` on PostgreSQL 17.5 / PostGIS 3.5.2 — staging's exact versions — same data, no reimport
 - `rake db:migrate` exits 0 including the schema dump, and regenerates a **clean `structure.sql`** — mine went 341KB → 270KB with the `pg_cron` line and any `postgis-2.5` function bindings gone. Since `structure.sql` is untracked in the `db` submodule, each developer's copy differs; regenerating yours after the upgrade is the fix for stale `$libdir/postgis-2.5` references in it.
-- Rollback: the backup from step 2 restores and starts — **but only under the `docker/pg-upgrade` image**, not `kartoza/postgis:11.5-2.5`, because the upgrade moved that cluster's PostGIS to 3.3. Recipe in the tooling README.
+- Rollback: the backup from step 2 restores and starts — **but only under the `docker/pg-upgrade` image**, not `kartoza/postgis:11.5-2.5`, because the upgrade moved that cluster's PostGIS to 3.3. Recipe was in the removed tooling README; see git history.
 
 ### Image choice: why `postgis/postgis`, not kartoza
 
