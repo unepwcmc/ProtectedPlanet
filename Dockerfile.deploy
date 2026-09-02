@@ -21,10 +21,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
     RAILS_SERVE_STATIC_FILES=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      ca-certificates curl gnupg tzdata \
+      ca-certificates curl tzdata \
       # GDAL 3.8.4 + its geo stack. OpenFileGDB is built in — no ESRI SDK.
       gdal-bin libgdal34 libproj25 proj-data libgeos-c1v5 \
-      # PostGIS client (pg gem) and spatialite
+      # PostGIS client (pg gem) and spatialite. Noble's libpq 16 -- the PGDG 17 client
+      # went with CountriesGeometryImporter (Sep 2026); nothing shells out to
+      # psql/pg_dump here, and dump_schema_after_migration is false in staging/production.
       libpq5 libsqlite3-0 libspatialite8t64 \
       # psych/YAML; without the runtime .so Puma dies on libyaml-0.so.2.
       libyaml-0-2 \
@@ -36,23 +38,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libxdamage1 libxfixes3 libxrandr2 libgbm1 libnss3 libasound2t64 \
       libdrm2 libxkbcommon0 \
  && rm -rf /var/lib/apt/lists/*
-
-# PostgreSQL 17 client from PGDG: noble ships 16, and pg_dump refuses a server
-# newer than itself while staging/production run 17.5. Needed by
-# CountriesGeometryImporter, which shells out to pg_restore. (db:migrate does not
-# need it — dump_schema_after_migration is false in staging and production.)
-#
-# libpq5 gets pulled up to 17, which is ABI-compatible with the 16 headers the
-# pg gem was built against.
-RUN . /etc/os-release \
- && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-      | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg \
- && echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] https://apt.postgresql.org/pub/repos/apt/ ${VERSION_CODENAME}-pgdg main" \
-      > /etc/apt/sources.list.d/pgdg.list \
- && apt-get update \
- && apt-get install -y --no-install-recommends postgresql-client-17 \
- && rm -rf /var/lib/apt/lists/* \
- && pg_dump --version
 
 # ---------------------------------------------------------------------------
 # build — toolchain, Ruby, Node, gems, assets

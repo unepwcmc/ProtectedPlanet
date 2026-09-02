@@ -6,8 +6,7 @@ class ApplicationController < ActionController::Base
   class PageNotFound < StandardError; end;
 
   protect_from_forgery with: :exception
-  # Required for development
-  before_action :set_host_for_local_storage
+  before_action :set_request_host_for_url_helpers
 
   helper_method :opengraph, :canonical_url, :structured_data
 
@@ -236,9 +235,12 @@ class ApplicationController < ActionController::Base
     @for_pdf = params[:for_pdf].present?
   end
 
-  def set_host_for_local_storage
+  # The host for the *_url helpers called outside a view/controller during a
+  # request -- ComfyOpengraph#root_url and AssetGenerator.request_tile's Referer.
+  # Both include url_helpers without a default_url_options of their own, so they
+  # read this global. Jobs have no request: Download::Generators::Pdf supplies its
+  # own host instead.
+  def set_request_host_for_url_helpers
     Rails.application.routes.default_url_options[:host] = request.base_url
-    # TODO Check why this is not set automatically
-    # ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
   end
 end

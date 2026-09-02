@@ -57,13 +57,6 @@ env:
     - AWS_SECRET_ACCESS_KEY
     - AWS_S3_REGION
     - AWS_REGION
-    - MAILER_ADDRESS
-    - MAILER_PORT
-    - MAILER_DOMAIN
-    - MAILER_USERNAME
-    - MAILER_PASSWORD
-    - MAILER_HOST
-    - MAILER_ASSET_HOST
     - MAPBOX_ACCESS_TOKEN
     # Server-side base URL for the Mapbox Static Images API, read by
     # AssetGenerator.mapbox_url via app_secrets (mapbox.base_url). It was never
@@ -77,7 +70,6 @@ env:
     - APPSIGNAL_PUSH_API_KEY
     - SLACK_WEBHOOK_URL
     - PP_SLACK_WEBHOOK_URL
-    - MAINTENANCE_MODE_KEY
 
 # WDPA imports and .gdb download generation write multi-GB files. This must be a
 # real volume, not container-ephemeral, and must be shared by the web and job

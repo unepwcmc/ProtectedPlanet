@@ -37,11 +37,6 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
-
-  config.action_mailer.perform_caching = false
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -64,20 +59,6 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-
-  config.action_mailer.delivery_method = :smtp
-
-  secrets = Rails.application.config_for(:app_secrets).mailer
-  config.action_mailer.default_url_options = { :host => secrets[:host] }
-  config.action_mailer.smtp_settings = {
-    :enable_starttls_auto => true,
-    :address => secrets[:address],
-    :port => 587,
-    :domain => secrets[:domain],
-    :authentication => :login,
-    :user_name => secrets[:username],
-    :password => secrets[:password]
-  }
 
   config.active_storage.service = :local
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker

@@ -1,5 +1,6 @@
 class Search::BaseSerializer
-  include Routeable
+  # *_path helpers only -- no :host needed, so no default_url_options here.
+  include Rails.application.routes.url_helpers
 
   def initialize(search, opts={})
     unless search.is_a?(Search)

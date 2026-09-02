@@ -104,8 +104,6 @@ jobs:
       # with 401 -- a CI configuration gap that looks exactly like broken auth code.
       COMFY_ADMIN_USERNAME: ci
       COMFY_ADMIN_PASSWORD: ci
-      # AdminController#authenticated? compares against AppSecrets.maintenance_mode_key.
-      MAINTENANCE_MODE_KEY: ci-maintenance-key
 
     steps:
       # submodules: db/ is the unepwcmc/protectedplanet-db submodule and holds all

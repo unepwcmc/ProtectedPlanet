@@ -78,11 +78,22 @@ SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose --profile api up
 Chromium is downloaded at image build time (`npx puppeteer browsers install
 chrome`, cached in `node_modules/.puppeteer-cache`) — no manual setup.
 
-Set `PDF_RASTERIZER_HOST=protectedplanet-web:3000` in `.env` so the generator
-(in the `sidekiq` container) reaches the app over the internal Docker network
-instead of the public domain. **Don't reuse `MAILER_HOST` for this** — that is
-what `default_url_options` resolves to for every other absolute URL, including
-real outgoing mail links. Unset, `PDF_RASTERIZER_HOST` falls back to it.
+The generator runs in the `sidekiq` container and renders the page by fetching
+it over HTTP, so it needs a hostname that resolves from there.
+`PDF_RASTERIZER_HOST` sets that hostname; unset, it falls back to `PP_HOST`
+(`config.x.app_host`).
+
+**Locally, set `PDF_RASTERIZER_HOST=protectedplanet-web:3000` in `.env`.** That is
+a docker-compose service name, so the sidekiq container reaches the web container
+directly over the compose network. The `PP_HOST` fallback is no use here: in dev it
+is `localhost:3000` (or `host.docker.internal:3000`), neither of which a sibling
+container can hairpin back through.
+
+**On production, leave `PDF_RASTERIZER_HOST` unset and let `PP_HOST` do its thing.**
+The production host is publicly resolvable, so the job container hairpins out through
+kamal-proxy and back in ~0.11s — not worth optimising away. Never copy the dev
+value into a Kamal env or secret: `protectedplanet-web` resolves to nothing there,
+and every PDF render fails at navigation.
 
 Rails 8's Host Authorization rejects Host headers not on its allowlist, and a
 Docker service name isn't covered by the built-in private-IP allowance (literal

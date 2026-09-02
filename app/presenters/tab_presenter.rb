@@ -1,6 +1,6 @@
 class TabPresenter
-  include CountriesHelper
   include Rails.application.routes.url_helpers
+  include CountriesHelper
   include ActionView::Helpers::AssetTagHelper
 
   def initialize(geo_entity)

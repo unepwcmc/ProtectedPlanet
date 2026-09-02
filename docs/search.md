@@ -1,5 +1,8 @@
 # Search
 
+> 🔴 **Search currently 500s in every environment** — `AppSecrets.elasticsearch.url`
+> is dot access on a plain Hash. See [known-issues.md](known-issues.md).
+
 Powered by [Elasticsearch](https://www.elastic.co). Protected areas, countries
 and regions are serialised to JSON and stored in a **single index**, so one
 query returns interleaved results across all three. Documents carry the model

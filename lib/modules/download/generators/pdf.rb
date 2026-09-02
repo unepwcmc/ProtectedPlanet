@@ -1,7 +1,7 @@
 require 'timeout'
 
 class Download::Generators::Pdf < Download::Generators::Base
-  include Routeable
+  include Rails.application.routes.url_helpers
 
   TYPE = 'pdf'
 
@@ -71,20 +71,20 @@ class Download::Generators::Pdf < Download::Generators::Base
     raise "PDF rasterizer exited with status #{$?.exitstatus} for #{url}" unless $?.success?
   end
 
-  # Puppeteer renders the page by requesting it over HTTP, so it needs a host
-  # that resolves from wherever the job runs. MAILER_HOST (Routeable's default)
-  # is written for links a user clicks on their own machine - in dev that is
-  # `host.docker.internal`, which cannot hairpin back into the compose network
-  # the request came from. PDF_RASTERIZER_HOST overrides it for that hop.
+  # The only place in the app that needs an absolute URL outside a request: no
+  # controller has set a host, so url_for gets one from here. PP_HOST
+  # (config.x.app_host) is written for links a user clicks on their own machine,
+  # which in dev cannot hairpin back into the compose network the request came
+  # from. PDF_RASTERIZER_HOST overrides it for that hop.
   #
   # It is an override, not a requirement, and the dev value is NOT portable:
   # .env.example sets `protectedplanet-web:3000`, a docker-compose service name
   # that exists only on the compose network. Setting that under Kamal breaks
   # every PDF download, because Chrome cannot resolve the name at all. Under
-  # Kamal, leaving it unset is the expected configuration - MAILER_HOST
+  # Kamal, leaving it unset is the expected configuration - PP_HOST
   # hairpins out through kamal-proxy and back in ~0.11s from the job container.
   def default_url_options
-    { host: ENV['PDF_RASTERIZER_HOST'].presence || super[:host] }
+    { host: ENV['PDF_RASTERIZER_HOST'].presence || Rails.application.config.x.app_host }
   end
 
   # Remove extension and add the pdf one

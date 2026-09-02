@@ -129,8 +129,6 @@ gem 'appsignal', '~> 3.3.11'
 gem 'dotenv', '~> 2.8' # 0.11 used File.exists?, removed in Ruby 3.2
 gem 'dotenv-deployment'
 
-gem 'turnout', '~> 2.5.0'
-
 gem 'comfortable_media_surfer', '~> 3.1'
 # Pulled in by Comfy, which only asks for >= 5.0.0. Left to itself Bundler picks
 # rails-i18n 5.1.3, which caps railties < 6. Force the Rails 6 line.

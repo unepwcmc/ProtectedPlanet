@@ -1,6 +1,4 @@
 class DesignationsPresenter
-  include Rails.application.routes.url_helpers
-
   JURISDICTIONSCOUNTRY = ['National', 'Regional', 'International', 'Not Applicable'].freeze
   JURISDICTIONSREGION = %w[National Regional International].freeze
 

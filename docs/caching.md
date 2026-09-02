@@ -11,5 +11,9 @@ On the deployed hosts Memcached runs as a host service, not a container — the 
 reaches it at `host.docker.internal:11211` (`MEMCACHE_SERVERS` in
 `config/deploy.yml`). Locally it is the `memcached` container.
 
-Clear it from the Rails console with `Rails.cache.clear`, or over HTTP via
-`PUT /admin/clear_cache`.
+Clear it from the Rails console with `Rails.cache.clear`, or on a deployed host
+with `kamal app exec -d staging --reuse "bin/rails runner 'Rails.cache.clear'"`.
+The `PUT /admin/clear_cache` endpoint was removed in Sep 2026 with
+`AdminController`; it called a bare `Rails.cache.clear`, without the sitemap
+bounds preservation that `PortalRelease::Cleanup` does before it clears
+(`app/services/portal_release/cleanup.rb`).

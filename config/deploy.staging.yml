@@ -50,16 +50,6 @@ env:
     # PP_HOST keeps its prefix: config/app_secrets.yml reads it, and a bare HOST is
     # far too generic to be safe in a Rails env alongside PORT and DATABASE_HOST.
     PP_HOST: pp-web-staging-01.internal.unep-wcmc.org
-    # The host rasterizer Chrome loads the site/country/region page from. Only
-    # ever a name that resolves INSIDE the job container - here that is the same
-    # public staging hostname, hairpinning out through kamal-proxy and back
-    # (~0.11s), so this line is explicitness rather than necessity: unset, the
-    # generator falls back to MAILER_HOST, which is this host too.
-    #
-    # Never copy .env.example's value here. That is `protectedplanet-web:3000`,
-    # a docker-compose service name with no meaning under Kamal, and it fails
-    # every PDF render at navigation.
-    PDF_RASTERIZER_HOST: pp-web-staging-01.internal.unep-wcmc.org
 
 builder:
   args:

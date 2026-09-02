@@ -54,19 +54,3 @@ kamal app logs -d staging --roles=web -f
 kamal app exec -d staging --reuse -i "bash"
 kamal app exec -d staging --reuse "bin/rails console"
 ```
-
-## Maintenance mode
-
-Handled by `AdminController`, secured by `maintenance_mode_key`:
-
-```bash
-curl -X PUT -d maintenance_mode_on=true  --header "X-Auth-Key: <key>" <domain>/admin/maintenance
-curl -X PUT -d maintenance_mode_on=false --header "X-Auth-Key: <key>" <domain>/admin/maintenance
-```
-
-## History
-
-Capistrano and the 2019 Ansible provisioning were removed in Aug 2026. The
-Ansible tree's two `ansible-vault` files held production secrets — deleting them
-did not invalidate anything and the ciphertext is still in git history. See
-[known-issues.md](known-issues.md).

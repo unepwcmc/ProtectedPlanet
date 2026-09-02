@@ -41,9 +41,6 @@ Rails.application.routes.draw do
     root to: 'home#index'
     get '/', to: 'home#index'
 
-    put '/admin/maintenance', as: 'maintenance'
-    put '/admin/clear_cache', as: 'clear_cache'
-
     ## Non-CMS routes
     get '/region/:iso', to: 'region#show', as: 'region'
 

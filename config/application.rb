@@ -73,5 +73,11 @@ module ProtectedPlanet
     if (key = config_for(:app_secrets)[:secret_key_base]).present?
       config.secret_key_base = key
     end
+
+    # Host for absolute URL generation outside a request -- only
+    # Download::Generators::Pdf needs it (every other route-helper call site is
+    # either in a request or uses a *_path helper). Resolved once here rather than
+    # per call: config_for re-parses the YAML and its ERB every time.
+    config.x.app_host = config_for(:app_secrets)[:host]
   end
 end

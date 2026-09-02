@@ -38,12 +38,6 @@ Mocha.configure do |c|
   c.strict_keyword_argument_matching = true
 end
 
-class ActionMailer::TestCase
-  def html_body mail
-    mail.body.parts.find{ |p| p.content_type.match(/html/) }.body.raw_source
-  end
-end
-
 module Minitest::Assertions
   def assert_same_elements(array_one, array_two)
     assert ((array_one - array_two) + (array_two - array_one)).empty?,

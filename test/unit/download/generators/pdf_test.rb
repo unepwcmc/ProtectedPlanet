@@ -232,19 +232,19 @@ class DownloadGeneratorsPdfTest < ActiveSupport::TestCase
     assert_equal 'protectedplanet-web:3000', generator.send(:default_url_options)[:host]
   end
 
-  # Kamal deployments are expected to leave it unset; MAILER_HOST has to carry
-  # the render there, so the fallback is load-bearing, not a nicety.
-  test '#default_url_options falls back to the mailer host when PDF_RASTERIZER_HOST is unset' do
+  # Kamal deployments are expected to leave it unset; PP_HOST has to carry the
+  # render there, so the fallback is load-bearing, not a nicety.
+  test '#default_url_options falls back to PP_HOST when PDF_RASTERIZER_HOST is unset' do
     ENV.stubs(:[]).with('PDF_RASTERIZER_HOST').returns(nil)
 
-    expected = Rails.application.config.action_mailer.default_url_options[:host]
+    expected = Rails.application.config.x.app_host
     assert_equal expected, generator.send(:default_url_options)[:host]
   end
 
-  test '#default_url_options falls back to the mailer host when PDF_RASTERIZER_HOST is blank' do
+  test '#default_url_options falls back to PP_HOST when PDF_RASTERIZER_HOST is blank' do
     ENV.stubs(:[]).with('PDF_RASTERIZER_HOST').returns('')
 
-    expected = Rails.application.config.action_mailer.default_url_options[:host]
+    expected = Rails.application.config.x.app_host
     assert_equal expected, generator.send(:default_url_options)[:host]
   end
 end
