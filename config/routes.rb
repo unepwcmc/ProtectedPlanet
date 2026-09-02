@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :home_carousel_slides
     resources :call_to_actions
     resources :banners, except: [:show]
   end

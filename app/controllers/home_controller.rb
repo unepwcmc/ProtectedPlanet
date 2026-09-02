@@ -16,8 +16,6 @@ class HomeController < ApplicationController
     @site_facts = home_presenter.fact_card_stats
     @update_date = home_presenter.update_date
 
-    @carousel_slides = HomeCarouselSlide.all.select { |slide| slide.published }
-
     @main_map = {
       overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
