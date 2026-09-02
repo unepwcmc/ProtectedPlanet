@@ -7,7 +7,7 @@
 | **Blocks** | **Everything.** No Rails bump can be verified until the suite loads and passes on 5.2 |
 | **Priority** | **FIRST phase.** Re-sequenced from last → first after the Jul 2026 baseline |
 
-> **Historical record — CI has changed.** This document describes Jenkins as the project's CI system. Jenkins was retired and its `Jenkinsfile` deleted (dead-code audit wave 1); CI is now [.github/workflows/test.yml](../../.github/workflows/test.yml), which replays all migrations and runs `rails test` plus the frontend checks. Statements below about the Jenkins Test stage, `pollSCM`, Snyk or `#jenkins-cicd-pp` record what was true when written. Note that **Snyk has no successor and now scans nothing** — see `docs/dead-code.md` section 8.
+> **Historical record — CI has changed.** This document describes Jenkins as the project's CI system. Jenkins was retired and its `Jenkinsfile` deleted (dead-code audit wave 1); CI is now [.github/workflows/test.yml](../../.github/workflows/test.yml), which replays all migrations and runs `rails test` plus the frontend checks. Statements below about the Jenkins Test stage, `pollSCM`, Snyk or `#jenkins-cicd-pp` record what was true when written. Note that **Snyk has no successor and now scans nothing** — see [docs/known-issues.md](../../docs/known-issues.md).
 
 [← Back to overview](./README.md)
 

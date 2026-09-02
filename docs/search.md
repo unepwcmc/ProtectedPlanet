@@ -1,132 +1,77 @@
 # Search
 
-The Protected Planet search feature is powered by
-[Elasticsearch](http://www.elasticsearch.org/overview/elasticsearch/).
+Powered by [Elasticsearch](https://www.elastic.co). Protected areas, countries
+and regions are serialised to JSON and stored in a **single index**, so one
+query returns interleaved results across all three. Documents carry the model
+name so they can be turned back into ActiveRecord objects on retrieval.
 
-## How it works
+Nothing hooks in automatically: queries go over HTTP and the app parses the
+results. The `elasticsearch` gem is just the Ruby wrapper for the same DSL.
 
-[Official docs](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-elastic-stack.html)
+## Running it
 
-Elasticsearch operates effectively as a JSON document store, that is
-accessed by a JSON [query
-DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html).
-Documents (protected areas, countries and regions) are converted to JSON
-and saved in Elasticsearch as an index for querying.
+Locally Elasticsearch is the `elasticsearch` container (`:9200`) — nothing to
+install. On staging/production it is a Kamal accessory in `config/deploy.yml`
+and **should not be configured by hand**; ES ships development-tuned defaults
+(small memory allocations) and the accessory config sets the production ones.
 
-The application does not hook in to Elasticsearch in any magic ways, and
-nor does Elasticsearch hook in to the application. Queries are passed
-over http to Elasticsearch, and results parsed in to ActiveRecord models
-by the application. We *do* utilise the elasticsearch gem, and that is effectively 
-the Ruby wrapper for the Elasticsearch service, allowing us to use the same DSL.
-More information can be found in the [Github repo for the gem](https://github.com/elastic/elasticsearch-ruby)
-
-## Installation
-
-Thankfully, Elasticsearch installation is super easy.
-
-On OS X:
-
-```
-brew update
-brew install elasticsearch
-```
-
-On Ubuntu/Debian systems, the
-[process](https://gist.github.com/wingdspur/2026107) is longer but still
-easy.
-
-### Production
-
-Production Elasticsearch is deployed as its own accessory in `config/deploy.yml` and
-**should not be installed or configured manually**.
-
-Elasticsearch is optimised for quick development, and as such it has
-pretty poor defaults for production, such as small allocations of
-memory. The deploy config sets these up for you, but for more info check out the
-[pre-flight
-checklist](http://www.elasticsearch.org/webinars/elasticsearch-pre-flight-checklist/).
+We are on the **7.17 client against a 7.17 server**. Don't bump to the 8.x gem —
+it is a client rewrite (elastic-transport, namespace changes) and the code uses
+`Elasticsearch::Transport::Transport::Errors::*`, which 8.x drops.
 
 ## Indexing
 
-As the indexed materials (PAs, countries, regions) are only
-modified during an import, there are no triggers or automatic methods of
-re-indexing the search. It is, however, a simple and (kind of) quick
-process.
+Indexed data only changes during a release, so there are no triggers or
+automatic reindexing. `Search::Index` runs at the end of an import; manually:
 
-Elasticsearch is a JSON document store, and so to create an index, we
-convert the desired models in to JSON objects and PUT them in to the
-chosen index. In our case, we are using a single index to store multiple
-models: Protected Areas, Countries, and Regions. This way only a single,
-simple query needs to be made and multiple models can be interleaved in
-results.
-
-Documents are stored with their `_type` set to the name of the converted
-Model, so that they can be converted back to ActiveRecord objects on
-retrieval.
-
-Indexing is handled by `Search::Index` automatically at the end of an
-import, but can be run manually:
-
+```bash
+bundle exec rake search:reindex          # or RAILS_ENV=<env> bundle exec rake search:reindex
 ```
-bundle exec rake search:reindex
-```
+
+You may need to rebuild the indices on staging/production occasionally.
 
 ## Querying
 
-The `Search` class acts as a neat wrapper for hiding the terrifying
-complexity that is building Elasticsearch JSON queries:
+`Search` wraps the query building:
 
-```
-# Basic search
+```ruby
 Search.search 'manbone'
-
-# Search with filters
-Search.search 'manbone', filters: {type: 'country', country: 123}
-
-# Search with pagination
+Search.search 'manbone', filters: { type: 'country', country: 123 }
 Search.search 'manbone', page: 3
 ```
 
-Various other utility classes can be found within `lib/modules/search`, namely
-the sorters and the matchers, which allows them to be easily extensible.
+Sorters and matchers live in `lib/modules/search/` and are extensible.
 
-### Troubleshooting
+## Adding or changing a filter
 
-* You may have to rebuild the search indices on staging/production on occasion: 
+Every one of these needs touching:
 
-Run this in the console:
+| File | Role |
+|---|---|
+| `ProtectedArea#as_indexed_json` | Builds the stored document. **Not in here, not queryable.** |
+| `search.yml` | Per-field config: `boolean`, `nested` or `geo`. Type picks the processing class in `search/`. Nested filters must declare their required param, or a NOT filter is applied by default. |
+| `modules/search.rb` | `ALLOWED_FILTERS` |
+| `search/filter_params.rb` | Pre-submission param processing. Nested types need none; booleans usually do. |
+| `mappings.json` | Index mappings |
+| `search/filters_serializer.rb` | The filter options the frontend renders, and the params they submit |
+| `aggregations.json` | Used by `aggregation.rb` (possibly unused) |
 
-```
-  RAILS_ENV=<environment> bundle exec rake search:reindex
-```
+## Boolean vs nested filters
 
-### Elasticsearch implementation in Protected Planet
-
-methods/files that need changing to add/modify filtering:
-- `#as_indexed_json`: this is the method that creates the json that is stored and queried in elasticsearch. if it's not in here, it can't be queried.
-- `search.yml`: Adds configuration details for each search field. Currently, fields can be boolean (see note below), nested, or geo. The type is used to select the right processing class in the search/ namespace. With nested filters you need to also specify the required param, or by default a NOT filter will be applied.
-- `modules/search.rb`: modify ALLOWED_FILTERS
-- `search/filter_params.rb`: processes the params before submission to elasticsearch. Nested search types don't need processing, but boolean usually do (see note below)
-- `aggregations.json`: used in the aggregation.rb to support elasticsearch aggregations (is this being used?)
-- `mappings.json`: used to create search indexes in elasticsearch, so new/modified search attributes should be added here
-- `search/filters_serializer.rb`: creates the filter options displayed in the front end, and the params they submit
-
-##### Boolean vs nested filters
-
-The boolean and nested filters are combined to form the final elasticsearch query. The filters are grouped under their 'name' like this:
+The final query groups filters by name:
 
 ```
-{
-  boolean_field_1: [boolean_filter_1a AND boolean_filter_1b AND boolean_filter_1c]
-} AND {
-  boolean_field_2: [boolean_filter_2a AND boolean_filter_2b AND boolean_filter_2c]
-} AND {
-  nested_field_1: [nested_filter_1a OR nested_filter_1b OR nested_filter_1c]
-} AND {
-  nested_field_2: [nested_filter_2a OR nested_filter_2b OR nested_filter_2c]  
-}
+{ boolean_field_1: [1a AND 1b AND 1c] }
+  AND { boolean_field_2: [2a AND 2b] }
+  AND { nested_field_1:  [1a OR 1b OR 1c] }
 ```
 
-***However*** Because of the way the filters are set up in the UI, boolean filters appear to be processed as OR statements. They are not, we delete some of the filters on the back end to make it appear this way. If a user selects WDPA and OECM, if we submitted both of those parameters we would get zero results, because a Protected Area can't be both of them. so in the back end we delete the filters if both are submitted. same for Type. This works ok, because both categories are binary, and the WDPA/OECM and Marine/Terrestrial categories aren't mutually exclusive. If you have a filter that isn't binary, e.g. Green Listed, Green List Candidate, and Neither, we can't use this method.
+**Boolean filters look like OR in the UI but aren't.** A protected area can't be
+both WDPA and OECM, so submitting both would return zero results — instead the
+backend *deletes* both filters when both are selected. Same for Marine /
+Terrestrial. This works only because those categories are binary and the two
+groups aren't mutually exclusive.
 
-However, with Elasticsearch we can convert these binary values into nested values to make groups of non-exclusive binary options (see ProtectedArea#as_indexed_json and #special_status).
+It breaks for anything non-binary (Green Listed / Candidate / Neither). Those
+have to become nested values instead — see `ProtectedArea#as_indexed_json` and
+`#special_status`.

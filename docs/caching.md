@@ -1,26 +1,15 @@
 # Caching
 
-> ## ⚠️ **WARNING**
->
-> This file is left here for reference. Explicit caching has been removed,
-> As of 25Nov2025 - Consider removing Memcached and implementing a simpler solution with fewer dependencies.
+> ⚠️ Explicit page caching was removed in Nov 2025. This describes what is still
+> wired up. Worth revisiting whether Memcached earns its dependency.
 
-## How does it work?
+`config.cache_store = :mem_cache_store` (dalli-backed) in staging and production,
+pointed at `memcache_servers` from `config/app_secrets.yml`, with a 10MB value
+ceiling. `rack-cache` is still in the `production, staging` bundle group.
 
-The pages are cached via
-[Rack::Cache](http://rtomayko.github.io/rack-cache/) and Memcached.
-Rack::Cache sits inbetween nginx and Rails as a Rack middleware, and
-stores the requested pages in memcached and serves them directly on
-request, completely avoiding the Rails stack.
+On the deployed hosts Memcached runs as a host service, not a container — the app
+reaches it at `host.docker.internal:11211` (`MEMCACHE_SERVERS` in
+`config/deploy.yml`). Locally it is the `memcached` container.
 
-In production Memcached runs as a service on the deploy host, not in a container —
-the app reaches it at `host.docker.internal:11211` (`MEMCACHE_SERVERS` in
-`config/deploy.yml`). Locally it is the `memcached` container in `docker-compose.yml`.
-
-## Clearing the cache
-
-In the Rails console:
-
-```
-Rails.cache.clear
-```
+Clear it from the Rails console with `Rails.cache.clear`, or over HTTP via
+`PUT /admin/clear_cache`.

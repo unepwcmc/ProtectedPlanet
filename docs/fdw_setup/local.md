@@ -234,7 +234,7 @@ PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_U
    UNION ALL SELECT 'iso3', count(*) FROM portal_fdw.iso3;"
 ```
 
-That is all done. If you want to test creating all staging materialised views please view the SQL [here](../FDW_VIEWS.sql)
+That is all done. If you want to test creating all staging materialised views please view the SQL [here](../../FDW_VIEWS.sql)
 
 ## 5. Final materialized views schema (contract)
 

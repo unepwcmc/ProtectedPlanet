@@ -1,94 +1,75 @@
-# Development Workflow, Conventions and Tips
+# Development workflow, conventions and tips
 
-### Frontend development
+## Frontend
 
-Vue 3 + Vite + Tailwind v4. The Webpacker/Vue 2/Vuex stack and the SCSS asset
-pipeline it came with are gone — `app/javascript` no longer exists, and the only
-remaining `.scss` file is the Comfy CMS admin override. `sprockets-rails` stays
-only to serve `app/assets/images`.
+Vue 3 + Vite + Tailwind v4. Webpacker, Vue 2, Vuex and the SCSS asset pipeline
+are gone — `app/javascript` no longer exists and there are no `.scss` files left
+in `app/`. `sprockets-rails` stays only for `app/assets/images` and the Comfy
+admin stylesheet.
 
 - **Components** — Vue 3 SFCs in `app/frontend/components`, Composition API +
   TypeScript throughout.
-- **Mounting** — each component is a standalone "island": its own `createApp()`
-  mounted into its own DOM node, not one app owning the page. Views render
+- **Mounting** — every component is a standalone **island**: its own
+  `createApp()` in its own DOM node, not one app owning the page. Views render
   `<%= turbo_mount "<Name>", props: {...} %>` (the `turbo-mount` gem); the
-  name → lazy-loader registry lives in `app/frontend/entrypoints/application.ts`
-  and the wiring in `app/frontend/lib/turboMount.ts`. Props are passed from the
-  ERB as a Ruby hash and arrive as the component's props.
+  name → lazy-loader registry is in `app/frontend/entrypoints/application.ts`
+  and the wiring in `app/frontend/lib/turboMount.ts`. Props are passed as a Ruby
+  hash and arrive as the component's props.
 - **Styling** — Tailwind v4 via `@tailwindcss/vite`, entry `app/frontend/styles`,
-  loaded as a real blocking stylesheet from the `vitecss.css` entrypoint. Every
-  font-size/weight combination must route through a shared
-  `tw-shared-font-*` utility rather than raw `text-*`/`font-*` in markup.
-- **Colours** — define values as `--color-*` in `styles/tailwind.css`'s `@theme`
-  block and reach them through a token; don't write a hex in a component or an
-  arbitrary `bg-[#...]`. Chart colours all live there (`--color-theme-chart-*`);
-  amCharts is the one consumer that can't use a class, so `constants/charts.ts`
-  mirrors the palette as literals for it.
-- **State** — composables only; there is no store library (Pinia was removed
-  once nothing needed it). Prefer tree-scoped `provide`/`inject` — see
-  `composables/useMapOverlays.ts` for why — and reach for module-level shared
-  state only when a browser storage already owns it, as in `useDownloads.ts`.
-- **HTTP** — use the `fetch`-based helpers in `app/frontend/lib/http.ts`
-  (`getJson`/`postJson`, which handle the CSRF header). There is no `axios`
-  dependency any more; don't reintroduce one.
+  loaded as a blocking stylesheet from the `vitecss.css` entrypoint. Every
+  font-size/weight combination must route through a shared `tw-shared-font-*`
+  utility, never raw `text-*`/`font-*` in markup.
+- **Colours** — define as `--color-*` in `styles/tailwind.css`'s `@theme` block
+  and reach them through a token. No hex values in components, no
+  `bg-[#...]`. Chart colours live there too (`--color-theme-chart-*`); amCharts
+  is the one consumer that can't use a class, so `constants/charts.ts` mirrors
+  the palette as literals.
+- **State** — composables only, no store library. Prefer tree-scoped
+  `provide`/`inject` (see `composables/useMapOverlays.ts` for why); reach for
+  module-level shared state only when browser storage already owns it, as in
+  `useDownloads.ts`.
+- **HTTP** — the `fetch` helpers in `app/frontend/lib/http.ts` (`getJson` /
+  `postJson`, which handle the CSRF header). There is no `axios`; don't add one.
 - **No Turbo Drive.** turbo-mount is Stimulus-based and unrelated to it; every
   navigation is an ordinary full document load. See
   `upgrade-plan/backend/CARRYOVER.md` §8ac.
 
-### Testing
+## Testing
 
-The application is built test-first, using TDD, but only on the backend. New features are 
-expected to have test coverage.
+Backend is built test-first with Minitest; new features are expected to have
+coverage. Run it against the PG17 test container:
 
-The frontend has a Vitest suite (`yarn test`, or `yarn test:watch`) covering
-components, composables and `lib/` — specs live in `__tests__` directories
-alongside the code they cover. Also available: `yarn typecheck` (vue-tsc),
-`yarn lint` / `lint:css`.
+```bash
+TEST_POSTGRES_HOST=protectedplanet-db-test bundle exec rails test
+```
 
-> **Note**: As of 16/6/21, tests need to be fixed - they have not been working for some 
-> time now. Consider replacing Minitest with RSpec and rewriting the specs.
+Frontend: `yarn test` (Vitest, specs in `__tests__` next to the code),
+`yarn test:watch`, `yarn typecheck` (vue-tsc), `yarn lint`, `yarn lint:css`.
 
-### Line-length
+CI is [`.github/workflows/test.yml`](../.github/workflows/test.yml). It replays
+all migrations and runs both suites, but is **deliberately not a required check**
+while the Ruby suite is red — see the comment at the top of that file, and
+[known-issues.md](known-issues.md).
 
-Try to keep your lines 80 characters maximum!
+## Conventions
 
-### Commit workflow
+- Keep lines to 80 characters where you can.
+- Feature branches; small, single-purpose commits; PR reviewed by someone else.
+- **Changes under `db/`** are commits to the `protectedplanet-db` submodule —
+  merge that PR first, then the one in this repo.
+- Prefer small, well-named functions over comments; comment the non-obvious.
+- New developers should be able to get running from the docs alone. If you did
+  something non-obvious, write it down.
 
-Work on feature branches, commit often with small commits with only one change
-to the code. When you're ready to merge your code into the develop branch,
-submit a pull request and have someone else review it.
+## Tips
 
-If any files are changed within the `db` submodule, you will first need to create a 
-PR for your updates in the `protectedplanet-db` repository and merge that in before
-any PRs affecting the larger application.
+**See the real error instead of the error page** — uncomment the error handling
+and `render_500` section in
+[application_controller.rb](/app/controllers/application_controller.rb).
 
-### Commenting your code
+**Silence SQL in the log** so you can see your own output — add
+`config/initializers/activerecord_logger.rb` locally (**do not commit it**):
 
-Writing small (less than 10 lines), well named functions is preferable to
-comments, but obviously comment when your code isn't intuitive.
-
-### Documentation
-
-New developers will be expected to be able to get the application up and
-running on their development machines purely by reading the README. Doing
-anything in the app workflow which isn't intuitive? Make sure it's in the docs.
-
-# Tips
-
-### Fed up seeing error page rather than actual error?
-
-1. Go to [application_controller.rb](/app/controllers/application_controller.rb)
-2. Uncomment the section that has error handling and render_500
-
-
-### Want to hide DB quries in logs so you can see your -> puts "hello world"
-<mark>••• Do not push following to repo! This is only for local development purpose</mark>
-
-1. create a new rb file under /config/initializers    i,e /config/initializers/activerecord_logger.rb
-2. add the following lines
-
-    ```ruby
-        # The following lines are for not showing db queries in logs
-        old_logger = ActiveRecord::Base.logger
-        ActiveRecord::Base.logger = nil
-    ```
+```ruby
+ActiveRecord::Base.logger = nil
+```

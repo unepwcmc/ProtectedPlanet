@@ -19,7 +19,7 @@ to the ESRI server which hosts them.
 There are currently four types of downloads: the entire WDPA, Protected Areas by
 country or region, Protected Areas filtered by a search, and single Protected Areas.
 
-All downloads are created in the backend via async requests initiated from the Vue
+All downloads are created in the backend via async requests initiated from the Vue 3
 frontend (the Download button). The frontend polls the backend at regular intervals 
 until the download is ready, at which point a URL will be produced from the S3 
 hosted file and the download can be initiated.
@@ -78,20 +78,6 @@ given a download name (which already includes the format):
   Download.link_to 'WDPA_WDOECM_Jun2021_Public_AFG_csv'
     #=> 'https://pp-downloads-production.s3.amazonaws.com/current/WDPA_WDOECM_Jun2021_Public_AFG_csv.zip'
 ```
-
-## Known issues (staging)
-
-### 18 Dec 2025 - \"Ready\" link returns `NoSuchKey`
-
-On staging, a download can sometimes be reported as `ready` (based on Redis status) while the S3 URL returns `NoSuchKey`.
-
-When investigating:
-- Confirm the Redis key for the download and its `status`/`filename`.
-- Confirm Sidekiq actually processed a job (do not rely on queue length alone).
-- Confirm the object exists in the configured downloads bucket/prefix:
-  - bucket: `Rails.application.secrets.aws_downloads_bucket`
-  - URL base: `Rails.application.secrets.aws_s3_url`
-  - object key prefix: `current/`
 
 ## Shapefile notes
 

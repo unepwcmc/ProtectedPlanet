@@ -128,8 +128,6 @@ class ApplicationController < ActionController::Base
   # add the same perform_caching guard tiles uses.
   def enable_caching
     options = { public: true, must_revalidate: true }
-    # Only set in production_defaults (so staging/production); nil elsewhere, and
-    # an empty `s-maxage=` is a malformed directive.
     shared_max_age = AppSecrets.cache_max_age
     options['s-maxage'] = shared_max_age if shared_max_age.present?
 

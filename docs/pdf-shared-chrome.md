@@ -148,7 +148,7 @@ Log: `stopping shared Chrome (pid N)`. After the container is gone, no orphaned
 Chrome should be left on the host:
 
 ```bash
-ssh pp-web-staging-01.internal.unep-wcmc.org 'pgrep -af remote-debugging-port'
+ssh <staging-host> 'pgrep -af remote-debugging-port'
 ```
 
 `Chrome (pid N) ignored TERM; killing` is fine — it means the escalation path

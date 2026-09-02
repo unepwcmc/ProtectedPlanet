@@ -107,7 +107,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.asset_host = secrets[:asset_host]
   config.action_mailer.default_url_options = { :host => secrets[:host] }
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,
