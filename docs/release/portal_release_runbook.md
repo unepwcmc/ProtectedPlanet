@@ -438,6 +438,7 @@ export PP_IMPORT_PROGRESS_NOTIFICATIONS=false  # Optional: silence progress
 | **"Required portal views missing"** | Ensure FDW is connected and portal views exist |
 | **"Invalid geometry" or SRID ≠ 4326** | Fix upstream view geometry; must be valid and EPSG:4326 |
 | **"Duplicate rows by (site_id, site_pid)"** | Check points/polygons logic; enforce DISTINCT ON upstream |
+| **"checkpoint … does not match key"** | A deploy changed a view's batch key columns mid-release, so the saved cursors no longer apply. Clean up with `pp:portal:abort` and start the release again — clearing checkpoints alone restarts each view from the top, re-importing into staging tables that already hold those rows. |
 | **Importer errors** | Check logs for specific error details |
 | **zsh bracket expansion errors** | Always quote rake arguments: `rake task['arg']` |
 | **"timestamp not found"** | Use `pp:portal:list_backups` to see available timestamps |

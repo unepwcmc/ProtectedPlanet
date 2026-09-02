@@ -62,6 +62,16 @@ module Wdpa
           'oecm_asmt' => { name: 'oecm_assessment', type: :string, for_create: true }
         }.freeze
 
+        # Batch cursor for Adapters::ProtectedAreas: the portal's wdpas PK, not
+        # the natural key — site_pid is nullable upstream, and a NULL in the
+        # cursor makes the row comparison NULL, silently dropping the rest of
+        # that site.
+        KEY_COLUMNS = %w[wdpa_pk].freeze
+
+        # View columns that exist for the import machinery, not for PP: the
+        # batch cursor above, and ogc_fid for GDAL's FID.
+        PORTAL_PROTECTED_AREA_IGNORED_COLUMNS = (KEY_COLUMNS + %w[ogc_fid]).freeze
+
         # Column names to strip before insert (for_create: false). Used by Relation#remove_fields.
         def self.columns_not_for_create
           PORTAL_TO_PP_MAPPING.values
@@ -121,6 +131,8 @@ module Wdpa
                 attributes['is_oecm'] = Wdpa::Shared::TypeConverter.convert(value, as: :oecm_string)
               end
             else
+              next if PORTAL_PROTECTED_AREA_IGNORED_COLUMNS.include?(portal_key)
+
               # Log unmapped columns for debugging
               Rails.logger.debug "Unmapped portal column: #{portal_key} (value: #{value})"
             end

@@ -21,9 +21,18 @@ module Wdpa
           use_checkpoints = Wdpa::Portal::ImportRuntimeConfig.checkpoints?
           remaining = Wdpa::Portal::ImportRuntimeConfig.sample_limit
           order = key_columns.map { |c| conn.quote_column_name(c) }.join(', ')
-          select_list = select_list(conn, view, exclude_columns)
+          select_list = select_list(conn, view, exclude_columns, key_columns)
 
           cursor = use_checkpoints ? Wdpa::Portal::Checkpoint.get_cursor(view).presence : nil
+          # A checkpoint written before the key columns changed has the wrong
+          # arity, and would build a row comparison Postgres rejects outright.
+          # Restarting the view instead would re-insert its imported prefix,
+          # so make the operator clear the checkpoint deliberately.
+          if cursor && !(cursor.is_a?(Array) && cursor.size == key_columns.size)
+            raise "#{view} checkpoint #{cursor.inspect} does not match key #{key_columns.inspect} — " \
+                  'it predates a key column change. Clear it with ' \
+                  'Wdpa::Portal::Checkpoint.reset_all! before re-running.'
+          end
 
           loop do
             limit = remaining ? [batch_size, remaining].min : batch_size
@@ -48,7 +57,7 @@ module Wdpa
         # Naming the columns instead of `SELECT *` is what keeps a batch small:
         # the geometry columns are megabytes per row on the polygon view and the
         # attribute import discards them anyway.
-        def select_list(conn, view, exclude_columns)
+        def select_list(conn, view, exclude_columns, key_columns)
           return '*' if exclude_columns.empty?
 
           excluded = exclude_columns.map { |c| c.to_s.downcase }
@@ -57,6 +66,12 @@ module Wdpa
             Rails.logger.warn("⚠️ Could not list columns of #{view}, falling back to SELECT * (geometry will be fetched)")
             return '*'
           end
+
+          # The cursor is read back off the yielded row, so a key column missing
+          # from the SELECT yields a nil cursor and truncates the view after one
+          # batch. Fail instead.
+          missing = key_columns.map(&:downcase) - wanted.map(&:downcase)
+          raise "#{view} is missing key column(s) #{missing.join(', ')} — cannot page it" if missing.any?
 
           wanted.map { |c| conn.quote_column_name(c) }.join(', ')
         end

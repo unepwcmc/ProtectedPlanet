@@ -42,21 +42,21 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
 
     # wkb_geometry must not appear in the SELECT: the attribute import drops it,
     # and fetching it would pull every polygon through Ruby.
-    @adapter.stubs(:view_columns).returns(%w[wdpaid site_id site_pid wkb_geometry])
+    @adapter.stubs(:view_columns).returns(%w[wdpa_pk wdpaid site_id site_pid wkb_geometry])
 
     # Expect two keyset batches: the first unbounded, the second resuming after
     # the last row of the first, and the sample limit shrinking the last LIMIT.
     @connection.expects(:select_all)
-               .with('SELECT "wdpaid", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
-                     'ORDER BY "site_id", "site_pid" LIMIT 2')
+               .with('SELECT "wdpa_pk", "wdpaid", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
+                     'ORDER BY "wdpa_pk" LIMIT 2')
                .returns(fake_result([
-                 { 'wdpaid' => 1, 'site_id' => 1, 'site_pid' => '1' },
-                 { 'wdpaid' => 2, 'site_id' => 2, 'site_pid' => '2' }
+                 { 'wdpa_pk' => 1, 'wdpaid' => 1, 'site_id' => 1, 'site_pid' => '1' },
+                 { 'wdpa_pk' => 2, 'wdpaid' => 2, 'site_id' => 2, 'site_pid' => '2' }
                ]))
     @connection.expects(:select_all)
-               .with('SELECT "wdpaid", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
-                     'WHERE ("site_id", "site_pid") > (2, \'2\') ORDER BY "site_id", "site_pid" LIMIT 1')
-               .returns(fake_result([{ 'wdpaid' => 3, 'site_id' => 3, 'site_pid' => '3' }]))
+               .with('SELECT "wdpa_pk", "wdpaid", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
+                     'WHERE ("wdpa_pk") > (2) ORDER BY "wdpa_pk" LIMIT 1')
+               .returns(fake_result([{ 'wdpa_pk' => 3, 'wdpaid' => 3, 'site_id' => 3, 'site_pid' => '3' }]))
 
     batches = []
     @adapter.find_in_batches do |batch|
@@ -74,16 +74,66 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     Wdpa::Portal::ImportRuntimeConfig.stubs(:sample_limit).returns(nil)
     Wdpa::Portal::ImportRuntimeConfig.stubs(:checkpoints?).returns(false)
 
-    @adapter.stubs(:view_columns).returns(%w[wdpaid site_id site_pid wkb_geometry])
+    @adapter.stubs(:view_columns).returns(%w[wdpa_pk wdpaid site_id site_pid wkb_geometry])
     @connection.expects(:select_all).once
-               .with('SELECT "wdpaid", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
-                     'ORDER BY "site_id", "site_pid" LIMIT 2')
-               .returns(fake_result([{ 'wdpaid' => 1, 'site_id' => 1, 'site_pid' => '1' }]))
+               .with('SELECT "wdpa_pk", "wdpaid", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
+                     'ORDER BY "wdpa_pk" LIMIT 2')
+               .returns(fake_result([{ 'wdpa_pk' => 1, 'wdpaid' => 1, 'site_id' => 1, 'site_pid' => '1' }]))
 
     batches = []
     @adapter.find_in_batches { |batch| batches << batch }
 
     assert_equal 1, batches.length
+  end
+
+  test 'find_in_batches refuses a checkpoint left over from the old key columns' do
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['staging_portal_standard_polygons'])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_protected_area_staging_materialised_views).returns(@config.portal_protected_area_staging_materialised_views)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:sample_limit).returns(nil)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:checkpoints?).returns(true)
+    # (site_id, site_pid) cursor from a run that predates KEY_COLUMNS. Restarting
+    # the view would re-insert everything it had already imported.
+    Wdpa::Portal::Checkpoint.stubs(:get_cursor).returns([2, '2'])
+
+    @adapter.stubs(:view_columns).returns(%w[wdpa_pk site_id site_pid wkb_geometry])
+    @connection.expects(:select_all).never
+
+    error = assert_raises(RuntimeError) { @adapter.find_in_batches { |_batch| } }
+    assert_match(/does not match key \["wdpa_pk"\]/, error.message)
+    assert_match(/reset_all!/, error.message)
+  end
+
+  test 'find_in_batches accepts a checkpoint matching the current key columns' do
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['staging_portal_standard_polygons'])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_protected_area_staging_materialised_views).returns(@config.portal_protected_area_staging_materialised_views)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:sample_limit).returns(nil)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:checkpoints?).returns(true)
+    Wdpa::Portal::Checkpoint.stubs(:get_cursor).returns([7])
+    Wdpa::Portal::Checkpoint.stubs(:set_cursor)
+
+    @adapter.stubs(:view_columns).returns(%w[wdpa_pk site_id site_pid wkb_geometry])
+    @connection.expects(:select_all).once
+               .with('SELECT "wdpa_pk", "site_id", "site_pid" FROM staging_portal_standard_polygons ' \
+                     'WHERE ("wdpa_pk") > (7) ORDER BY "wdpa_pk" LIMIT 2')
+               .returns(fake_result([{ 'wdpa_pk' => 8, 'site_id' => 8, 'site_pid' => '8' }]))
+
+    batches = []
+    @adapter.find_in_batches { |batch| batches << batch }
+
+    assert_equal 1, batches.length
+  end
+
+  test 'find_in_batches refuses a view that does not expose the key column' do
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['staging_portal_standard_polygons'])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_protected_area_staging_materialised_views).returns(@config.portal_protected_area_staging_materialised_views)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:sample_limit).returns(nil)
+    Wdpa::Portal::ImportRuntimeConfig.stubs(:checkpoints?).returns(false)
+
+    @adapter.stubs(:view_columns).returns(%w[site_id site_pid wkb_geometry])
+    @connection.expects(:select_all).never
+
+    error = assert_raises(RuntimeError) { @adapter.find_in_batches { |_batch| } }
+    assert_match(/missing key column\(s\) wdpa_pk/, error.message)
   end
 
   test 'find_in_batches handles empty views' do
@@ -92,13 +142,13 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     # Create empty materialized views
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW staging_portal_standard_polygons AS
-      SELECT 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
+      SELECT 1 as wdpa_pk, 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
       WHERE 1 = 0
     SQL
 
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW staging_portal_standard_points AS
-      SELECT 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
+      SELECT 1 as wdpa_pk, 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
       WHERE 1 = 0
     SQL
 
@@ -140,13 +190,13 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     # Create empty materialized views
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW staging_portal_standard_polygons AS
-      SELECT 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
+      SELECT 1 as wdpa_pk, 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
       WHERE 1 = 0
     SQL
 
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW staging_portal_standard_points AS
-      SELECT 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
+      SELECT 1 as wdpa_pk, 1 as wdpaid, 1 as site_id, '1' as site_pid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
       WHERE 1 = 0
     SQL
 
@@ -158,7 +208,7 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
   test 'find_in_batches handles database errors gracefully' do
     # Mock the connection to raise an error
     Wdpa::Portal::ImportRuntimeConfig.stubs(:checkpoints?).returns(false)
-    @adapter.stubs(:view_columns).returns(%w[site_id site_pid])
+    @adapter.stubs(:view_columns).returns(%w[wdpa_pk site_id site_pid])
     @connection.expects(:select_all).raises(StandardError, 'Database error')
 
     assert_raises(StandardError, 'Database error') do

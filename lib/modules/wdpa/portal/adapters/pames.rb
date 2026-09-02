@@ -6,8 +6,6 @@ module Wdpa
       class Pames
         include KeysetBatches
 
-        KEY_COLUMNS = %w[id].freeze
-
         private
 
         def pame_view
@@ -22,7 +20,8 @@ module Wdpa
           end
 
           batch_size = Wdpa::Portal::Config::PortalImportConfig.batch_import_pame_from_view_size
-          each_keyset_batch(view: pame_view, key_columns: KEY_COLUMNS, batch_size: batch_size, &block)
+          key_columns = Wdpa::Portal::Utils::PameColumnMapper::KEY_COLUMNS
+          each_keyset_batch(view: pame_view, key_columns: key_columns, batch_size: batch_size, &block)
         end
 
         def count

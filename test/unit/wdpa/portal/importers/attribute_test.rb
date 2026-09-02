@@ -55,11 +55,12 @@ class Wdpa::Portal::Importers::ProtectedAreaAttributeImporterTest < ActiveSuppor
     Wdpa::Portal::Config::PortalImportConfig.stubs(:progress_notification_interval).returns(2)
 
     notifier = mock('notifier')
-    notifier.expects(:progress).with(0, 2, 'protected area attributes')
-    notifier.expects(:progress).with(2, 2, 'protected area attributes')
-    notifier.expects(:phase).with(regexp_matches(/Protected area attributes imported/))
+    notifier.expects(:progress).with(0, 2, 'portal WDPCA rows')
+    notifier.expects(:progress).with(2, 2, 'portal WDPCA rows')
+    notifier.expects(:phase).with(regexp_matches(/Protected areas: \d+ rows/))
 
     Rails.logger.stubs(:info)
+    Rails.logger.stubs(:warn)
     Rails.logger.stubs(:error)
 
     result = @importer.import_to_staging(notifier: notifier)
