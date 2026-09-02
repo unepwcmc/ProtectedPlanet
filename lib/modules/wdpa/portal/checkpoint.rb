@@ -59,15 +59,17 @@ module Wdpa
           Rails.logger.warn "⚠️ Failed to reset checkpoints: #{e.message}"
         end
 
-        # Offsets for attributes batches per view
-        def get_offset(view_name)
-          store.dig('attributes', view_name.to_s, 'offset').to_i
+        # Keyset cursors for view batches, one per view: the key columns of the
+        # last row handed to the importer. An offset cannot resume an unordered
+        # LIMIT/OFFSET scan — see Adapters::KeysetBatches.
+        def get_cursor(view_name)
+          store.dig('attributes', view_name.to_s, 'cursor')
         end
 
-        def set_offset(view_name, offset)
+        def set_cursor(view_name, cursor)
           store['attributes'] ||= {}
           store['attributes'][view_name.to_s] ||= {}
-          store['attributes'][view_name.to_s]['offset'] = offset.to_i
+          store['attributes'][view_name.to_s]['cursor'] = cursor
           persist!
         end
 

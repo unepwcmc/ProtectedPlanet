@@ -57,10 +57,10 @@ module PortalRelease
       post(":rotating_light: Release #{@label} failed in #{phase}: #{e.message}")
     end
 
-    def progress(processed_count, total_estimated = nil, _phase = 'import')
+    def progress(processed_count, total_estimated = nil, phase = '')
       return unless Wdpa::Portal::Config::PortalImportConfig.progress_notifications_enabled?
 
-      message = "It is now importing #{format_number(processed_count)} out of #{format_number(total_estimated)} protected areas"
+      message = "It is now importing #{format_number(processed_count)} out of #{format_number(total_estimated)} #{phase}"
       post(":hourglass_flowing_sand: #{message}")
     end
 
@@ -195,6 +195,11 @@ module PortalRelease
       pa_geom_areas   = value(results, :protected_areas, :protected_areas_geometries, :protected_areas, :imported_count)
       pa_geom_parcels = value(results, :protected_areas, :protected_areas_geometries, :protected_area_parcels,
         :imported_count)
+      pa_area_attrs = value(results, :protected_areas, :protected_areas_attributes,
+        :protected_areas_imported_count)
+      pa_parcel_attrs = value(results, :protected_areas, :protected_areas_attributes,
+        :protected_area_parcels_imported_count)
+      pa_soft_errors = Array(value(results, :protected_areas, :protected_areas_attributes, :soft_errors)).size
       fields_updated = value(results, :global_stats, :fields_updated)
 
       gl_imported    = value(results, :green_list, :imported_count)
@@ -213,8 +218,12 @@ module PortalRelease
           type: 'section',
           fields: [
             { type: 'mrkdwn', text: "*Protected area sources imported*\n#{src_count || 0}" },
-            { type: 'mrkdwn', text: "*Protected areas imported*\n#{pa_attrs || 0}" },
-            { type: 'mrkdwn', text: "*Geometries (areas/parcels)*\n#{pa_geom_areas || 0} / #{pa_geom_parcels || 0}" },
+            { type: 'mrkdwn',
+              text: "*Portal WDPCA rows imported*\n#{pa_attrs || 0} (#{pa_soft_errors} soft errors)" },
+            { type: 'mrkdwn',
+              text: "*Staging rows written (areas / parcels)*\n#{pa_area_attrs || 0} / #{pa_parcel_attrs || 0}" },
+            { type: 'mrkdwn',
+              text: "*Geometries written (areas / parcels)*\n#{pa_geom_areas || 0} / #{pa_geom_parcels || 0}" },
             { type: 'mrkdwn', text: "*Global statistics fields updated*\n#{fields_updated || 0}" },
             { type: 'mrkdwn',
               text: "*Green List*\n#{gl_imported || 0} (#{gl_skipped.to_i} skipped) (#{gl_soft_errors} soft errors)" },

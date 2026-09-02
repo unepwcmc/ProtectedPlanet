@@ -63,6 +63,7 @@ services:
       # Tests hit the db_test service; development uses `db`. Both are
       # postgis/postgis:17-3.5, so they cannot drift from each other.
       - TEST_POSTGRES_HOST=db_test
+      - PP_IMPORT_PROGRESS_INTERVAL=500
     depends_on:
       install:
         condition: service_completed_successfully

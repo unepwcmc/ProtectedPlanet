@@ -18,8 +18,10 @@ module Wdpa
         # CONFIGURATION VALUES
         # ============================================================================
 
+        # Attribute rows only — the adapter leaves geometry out of the SELECT, so
+        # a batch is a few MB, not a few GB.
         def self.batch_import_protected_areas_from_view_size
-          10
+          1000
         end
 
         def self.batch_import_pame_from_view_size
@@ -46,8 +48,10 @@ module Wdpa
 
         # Progress notification settings for large imports
         def self.progress_notification_interval
-          # Send progress update every N records
-          50000
+          # Send progress update every N records. Lower it with
+          # PP_IMPORT_PROGRESS_INTERVAL to exercise progress on a small dataset.
+          interval = ENV['PP_IMPORT_PROGRESS_INTERVAL'].to_i
+          interval.positive? ? interval : 50_000
         end
 
         def self.progress_notifications_enabled?

@@ -4,6 +4,10 @@ module Wdpa
   module Portal
     module Adapters
       class Greenlist
+        include KeysetBatches
+
+        KEY_COLUMNS = %w[id].freeze
+
         private
 
         def greenlist_view
@@ -12,38 +16,14 @@ module Wdpa
 
         public
 
-        def find_in_batches
-          batch_size = Wdpa::Portal::Config::PortalImportConfig.batch_import_greenlist_from_view_size
-          sample_limit = Wdpa::Portal::ImportRuntimeConfig.sample_limit
-          use_checkpoints = Wdpa::Portal::ImportRuntimeConfig.checkpoints?
-
+        def find_in_batches(&block)
           unless greenlist_view_exists?
             raise StandardError,
               "#{greenlist_view} view is required but does not exist"
           end
 
-          total_count = ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{greenlist_view}").to_i
-          offset = 0
-          if use_checkpoints
-            begin
-              offset = Wdpa::Portal::Checkpoint.get_offset(greenlist_view)
-            rescue StandardError
-              offset = 0
-            end
-          end
-
-          end_offset = sample_limit ? [offset + sample_limit, total_count].min : total_count
-
-          while offset < end_offset
-            limit = [batch_size, end_offset - offset].min
-            query = "SELECT * FROM #{greenlist_view} LIMIT #{limit} OFFSET #{offset}"
-            result = ActiveRecord::Base.lease_connection.select_all(query)
-            # Yield array of hashes so each row is a plain Hash (string keys)
-            batch = result.respond_to?(:to_a) ? result.to_a : result
-            yield batch
-            offset += limit
-            Wdpa::Portal::Checkpoint.set_offset(greenlist_view, offset) if use_checkpoints
-          end
+          batch_size = Wdpa::Portal::Config::PortalImportConfig.batch_import_greenlist_from_view_size
+          each_keyset_batch(view: greenlist_view, key_columns: KEY_COLUMNS, batch_size: batch_size, &block)
         end
 
         def each(&block)

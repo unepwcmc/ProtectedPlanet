@@ -359,21 +359,50 @@ docker compose exec -T web bash -lc 'bundle exec rake pp:portal:status'
 
 ### View Logs
 
+A release writes to **four** places, and they do not contain the same thing:
+
+| Where | What's in it |
+|---|---|
+| your tmux pane (stdout) | the rake task's output **and** every `Rails.logger` line from the importers — per-view and per-batch counts, dropped-row and checkpoint warnings, soft errors. On the server `RAILS_LOG_TO_STDOUT=1` (`config/deploy.yml`), so this is the *only* place the importer detail goes: there is no `log/staging.log` to tail. |
+| `log/portal_release.log` | **only** structured phase/event JSON — no importer detail |
+| the database | `release_events` (audit trail) and `releases.stats_json` (the full importer result hash, including per-importer `soft_errors`) |
+
+**Because stdout is the only sink for importer detail, tee it to a file** — otherwise
+it exists only in your tmux scrollback:
+
 ```bash
-# On the server, inside the web container
-tail -n 100 -f log/portal_release.log
-
-# On the server, one-off from the host
-docker exec -it "$WEB" bash -lc 'tail -n 100 -f log/portal_release.log'
-
-# Local Development
-docker compose exec -T web bash -lc 'tail -n 100 -f log/portal_release.log'
+PP_RELEASE_DRY_RUN=true bundle exec rake 'pp:portal:release[Sep2026]' 2>&1 | tee log/release_Sep2026.out
 ```
 
-> **⚠️ `log/portal_release.log` lives inside the container and is ephemeral.** It
-> is lost when the container is replaced by the next deploy — so copy anything you
-> need for a post-mortem out to the host (`docker cp "$WEB":/app/log/portal_release.log .`)
-> before deploying. Slack (`#pp-release`) and `docker logs` are the durable record.
+```bash
+# Phase/event markers (inside the web container)
+tail -n 100 -f log/portal_release.log
+
+# The teed run log
+tail -n 200 -f log/release_Sep2026.out
+
+# Local Development: RAILS_LOG_TO_STDOUT is not set, so Rails.logger goes to a file
+docker compose exec -T web bash -lc 'tail -n 200 -f log/development.log'
+```
+
+`docker logs "$WEB"` shows the container's PID‑1 (puma), **not** your `docker exec`
+rake process — it only carries the release when you use the detached-container
+method below.
+
+The importer results are also queryable after the fact — this is where to look
+when a Slack count doesn't add up:
+
+```ruby
+r = Release.find_by(label: 'Sep2026')
+r.stats_json.dig('importer', 'protected_areas', 'protected_areas_attributes', 'soft_errors')
+r.stats_json['checkpoints']   # per-view keyset cursors; should be empty after a clean run
+```
+
+> **⚠️ The log files live inside the container and are ephemeral.** They are
+> lost when the container is replaced by the next deploy — so copy anything you
+> need for a post-mortem out to the host (`docker cp "$WEB":/app/log/portal_release.log .`,
+> and the same for your teed run log) before deploying. Slack (`#pp-release`) and
+> the `release_events` / `releases` tables are the durable record.
 
 ### Enable Slack Notifications
 

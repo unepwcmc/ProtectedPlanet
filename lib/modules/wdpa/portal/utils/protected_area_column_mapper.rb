@@ -80,6 +80,14 @@ module Wdpa
           map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Relation::ProtectedAreaParcel)
         end
 
+        # Portal view columns holding geometry. The attribute import discards
+        # them (GeometryImporter does that work set-based, in SQL), so readers
+        # leave them out of the SELECT rather than hauling every polygon into
+        # Ruby to drop it.
+        def self.geometry_portal_columns
+          PORTAL_TO_PP_MAPPING.select { |_portal_key, mapping| mapping[:type] == :geometry }.keys
+        end
+
         # Common logic for mapping portal attributes with different relation classes
         def self.map_portal_to_pp_with_relation(portal_attributes, relation_class)
           attributes = {}
