@@ -68,7 +68,7 @@ class Search::Index
   end
 
   def initialize(index_name, collection = nil)
-    @client = Elasticsearch::Client.new(url: AppSecrets.elasticsearch.url)
+    @client = Elasticsearch::Client.new(url: AppSecrets.elasticsearch[:url])
     @index_name = index_name
     @collection = collection
   end
