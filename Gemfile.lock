@@ -144,6 +144,8 @@ GEM
       multi_json
     erb (6.0.7)
     erubi (1.13.1)
+    et-orbi (1.4.2)
+      tzinfo
     execjs (2.7.0)
     factory_bot (6.6.0)
       activesupport (>= 6.1.0)
@@ -175,6 +177,9 @@ GEM
     faraday-retry (1.0.4)
     fastercsv (1.5.5)
     ffi (1.17.4)
+    fugit (1.13.0)
+      et-orbi (~> 1.4)
+      raabro (~> 1.4)
     globalid (1.4.0)
       activesupport (>= 6.1)
     haml (7.2.0)
@@ -270,6 +275,7 @@ GEM
     public_suffix (7.0.5)
     puma (6.6.1)
       nio4r (~> 2.0)
+    raabro (1.5.0)
     racc (1.8.1)
     rack (2.2.24)
     rack-cache (1.11.0)
@@ -381,6 +387,10 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    sidekiq-cron (1.12.0)
+      fugit (~> 1.8)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6)
     simplecov (1.0.3)
     sprockets (3.7.5)
       base64
@@ -464,6 +474,7 @@ DEPENDENCIES
   ruby-lsp (~> 0.26.11)
   sassc-rails (~> 2.1)
   sidekiq (~> 7.0)
+  sidekiq-cron (~> 1.12)
   simplecov
   sprockets-rails (~> 3.2)
   terser (~> 1.2)

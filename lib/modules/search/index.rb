@@ -12,7 +12,7 @@ class Search::Index
   def self.create
     started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     notifier = SlackNotifier.new('search:index')
-    notifier.phase('Start rebuilding elasticsearch indexes.')
+    notifier.phase('Rebuilding elasticsearch indexes.')
     cms_index = init_cms_index
     cms_index.create
 
@@ -72,7 +72,7 @@ class Search::Index
   def self.delete(indexes = INDEXES)
     started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     notifier = SlackNotifier.new('search:index')
-    notifier.phase('Start deleting Elasticsearch indexes')
+    notifier.phase('Deleting Elasticsearch indexes')
 
     indexes.each do |index_name|
       index = new index_name

@@ -26,6 +26,30 @@ end
 Sidekiq.configure_server do |config|
   config.on(:startup) do
     SharedChrome.start! if config.capsules.key?('pdf')
+
+    # sidekiq-cron stores the schedule in Redis, so re-syncing it on every boot
+    # is idempotent even across the job role's multiple replicas / deploys.
+    #
+    # Not scheduled in dev/test at all. To test the cron wiring itself, temporarily
+    # hardcode a short cron string below (e.g. '*/3 * * * *') and revert it after.
+    search_reindex_cron =
+      if Rails.env.production?
+        '0 22 * * *' # Every night at 22:00
+      elsif Rails.env.staging?
+        '0 22 * * 1' # Every Monday at 22:00
+      # For dev mode comment it out if no need for testing the feature
+      # elsif Rails.env.development?
+      #   '*/3 * * * *' # Every 3 mins
+      end
+
+    if search_reindex_cron
+      Sidekiq::Cron::Job.load_from_hash(
+        'search_reindex' => {
+          'cron' => search_reindex_cron,
+          'class' => 'SearchReindexWorker'
+        }
+      )
+    end
   end
 
   config.on(:shutdown) { SharedChrome.stop! }

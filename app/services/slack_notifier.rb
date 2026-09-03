@@ -19,6 +19,15 @@ class SlackNotifier
     post(":rocket: ProtectedPlanet release #{label} started")
   end
 
+  def reindex_started
+    post_divider
+    post(':mag: Daily Elasticsearch reindex started')
+  end
+
+  def reindex_complete
+    post(':white_check_mark: Daily Elasticsearch reindex complete')
+  end
+
   # Rollback start notification
   def rollback_started(timestamp)
     post_divider

@@ -120,6 +120,12 @@ gem 'redis', '~> 5.0'
 # silently. Pin to 2.x until we move to Sidekiq 8, which supports connection_pool 3.
 gem 'connection_pool', '~> 2.5'
 
+# Replaces the host crontab entry that ran `rake search:reindex` nightly on the
+# old server. Schedule lives in Redis so it survives across the job container's
+# rolling Kamal deploys, and syncing it on every boot (config/initializers/sidekiq.rb)
+# is idempotent even with multiple job replicas.
+gem 'sidekiq-cron', '~> 1.12'
+
 gem 'appsignal', '~> 3.3.11'
 
 gem 'dotenv', '~> 2.8' # 0.11 used File.exists?, removed in Ruby 3.2
