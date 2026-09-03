@@ -49,6 +49,11 @@ Sidekiq.configure_server do |config|
           'class' => 'SearchReindexWorker'
         }
       )
+    else
+      # load_from_hash only adds/updates -- it never removes a job that's no
+      # longer in the hash. Without this, toggling the dev schedule on and off
+      # leaves the old cron entry alive in Redis, still firing on its own.
+      Sidekiq::Cron::Job.find('search_reindex')&.destroy
     end
   end
 
