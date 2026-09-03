@@ -73,6 +73,9 @@ namespace :pp do
 
       Rails.logger.info "🧹 Starting manual backup cleanup (keeping #{keep_count} most recent backup(s))..."
 
+      notifier = SlackNotifier.new('pp:portal:cleanup_backups')
+      notifier.phase("Manually triggered: cleaning up old backups (keeping #{keep_count} most recent)")
+
       begin
         # Use the existing TableCleanupService
         service = Wdpa::Portal::Services::Core::TableCleanupService.new
@@ -80,9 +83,11 @@ namespace :pp do
         service.instance_variable_set(:@index_cache, {})
         service.cleanup_old_backups(keep_count)
         Rails.logger.info '✅ Backup cleanup completed successfully'
+        notifier.phase_complete('Backup cleanup complete')
       rescue StandardError => e
         Rails.logger.error "❌ Backup cleanup failed: #{e.class}: #{e.message}"
         Rails.logger.error e.backtrace.join("\n")
+        notifier.error(e, phase: 'cleanup_backups')
         exit 1
       end
     end

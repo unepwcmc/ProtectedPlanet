@@ -19,6 +19,9 @@ module PortalRelease
     ].freeze
 
     def self.abort_current!
+      notify = SlackNotifier.new('PP_ABORT')
+      notify.phase('Release abort triggered: releasing lock and dropping staging tables')
+
       # Release the lock first to allow new releases to start
       begin
         Lock.new.release!(Rails.logger)
@@ -26,11 +29,15 @@ module PortalRelease
       rescue StandardError => e
         Rails.logger.warn("Failed to release lock during abort: #{e.message}")
       end
-      
+
       # Minimal abort: drop staging tables to leave clean state
       Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
       Rails.logger.warn('Aborted current release; staging tables dropped and lock released')
+      notify.phase_complete('Release aborted, staging tables dropped')
       true
+    rescue StandardError => e
+      notify.error(e, phase: 'abort_current')
+      raise
     end
 
     def self.rollback_to!(timestamp)
