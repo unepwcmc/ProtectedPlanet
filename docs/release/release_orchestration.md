@@ -156,7 +156,6 @@ This ordering ensures referenced tables exist before tables that reference them.
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `PP_SLACK_WEBHOOK_URL` | Slack webhook for notifications | - |
-| `PP_RELEASE_SLACK_PHASE_COMPLETE` | Send per-phase complete notifications | `true` |
 
 ### Code Configuration
 

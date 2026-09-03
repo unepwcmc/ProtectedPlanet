@@ -10,6 +10,9 @@ class Search::Index
   ].freeze
 
   def self.create
+    started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    notifier = SlackNotifier.new('search:index')
+    notifier.phase('Start rebuilding elasticsearch indexes.')
     cms_index = init_cms_index
     cms_index.create
 
@@ -34,9 +37,15 @@ class Search::Index
     country_index.index
     pa_index.index
 
-    
-    # To clean up the cache
-    Rails.cache.clear
+    notifier.phase_complete(
+      "Elasticsearch indexes rebuilt successfully — CMS pages: #{cms_index.count}, " \
+      "regions: #{region_index.count}, countries: #{country_index.count}, " \
+      "protected areas: #{pa_index.count}",
+      duration_s: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at
+    )
+  rescue StandardError => e
+    notifier.error(e, phase: 'search_index_create')
+    raise
   end
 
   def self.create_cms_fragments
@@ -61,10 +70,22 @@ class Search::Index
   end
 
   def self.delete(indexes = INDEXES)
+    started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    notifier = SlackNotifier.new('search:index')
+    notifier.phase('Start deleting Elasticsearch indexes')
+
     indexes.each do |index_name|
       index = new index_name
       index.delete
     end
+
+    notifier.phase_complete(
+      "Deleted all Elasticsearch indexes: #{indexes.join(', ')}",
+      duration_s: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at
+    )
+  rescue StandardError => e
+    notifier.error(e, phase: 'search_index_delete')
+    raise
   end
 
   def initialize(index_name, collection = nil)

@@ -48,8 +48,6 @@ gem 'ffi', '~> 1.17', '>= 1.17.4'
 # reads result['error']['message'], nil for the error shape modern Node returns).
 # staging already compressed with terser; production now does too.
 gem 'terser', '~> 1.2'
-gem "exception_notification", '~> 4.5' # 4.3 caps actionmailer < 6
-gem "slack-notifier", "~> 1.5.1"
 
 # Frontend related gems
 gem 'vite_rails', '~> 3.11.1'
@@ -121,8 +119,6 @@ gem 'redis', '~> 5.0'
 # polled: perform_in/perform_at did nothing and no failed job was ever retried,
 # silently. Pin to 2.x until we move to Sidekiq 8, which supports connection_pool 3.
 gem 'connection_pool', '~> 2.5'
-
-gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'appsignal', '~> 3.3.11'
 

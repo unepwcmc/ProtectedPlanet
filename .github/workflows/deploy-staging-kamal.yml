@@ -67,7 +67,6 @@ jobs:
       PRIVATE_KEY_PEM: ${{ secrets.PRIVATE_KEY_PEM }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Set workflow start time
         run: |

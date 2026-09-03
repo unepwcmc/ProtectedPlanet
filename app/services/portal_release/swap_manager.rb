@@ -62,7 +62,7 @@ module PortalRelease
     end
 
     def rollback_to!(timestamp)
-      notifier = ::PortalRelease::Notifier.new('PP_ROLLBACK')
+      notifier = SlackNotifier.new('PP_ROLLBACK')
       # Announce rollback start
       notifier.rollback_started(timestamp)
 

@@ -59,10 +59,10 @@ module PortalRelease
         validate_label_format!(@label)
         @release = Release.create!(label: label)
         @log     = ::PortalRelease::Logger.new(@release)
-        @notify  = ::PortalRelease::Notifier.new(@release)
+        @notify  = SlackNotifier.new(@release)
       rescue ActiveRecord::RecordInvalid => e
         # Send error notification even without a release record
-        @notify = ::PortalRelease::Notifier.new(label)
+        @notify = SlackNotifier.new(label)
         @notify.error(e, phase: 'initialisation')
         raise
       end

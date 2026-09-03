@@ -68,7 +68,6 @@ env:
     - MAPBOX_STATIC_IMAGE_URL
     - CARTODB_API_KEY
     - APPSIGNAL_PUSH_API_KEY
-    - SLACK_WEBHOOK_URL
     - PP_SLACK_WEBHOOK_URL
 
 # WDPA imports and .gdb download generation write multi-GB files. This must be a
