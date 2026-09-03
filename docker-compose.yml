@@ -264,7 +264,7 @@ services:
     build:
       context: ${API_PATH}
     # Remove this once api is using the ruby 4 version
-    command: /bin/bash -l -c " bundle i; bundle exec rackup --host 0.0.0.0"
+    # command: /bin/bash -l -c " bundle i; bundle exec rackup --host 0.0.0.0"
     volumes:
       # This should be removed once the api is using the latest gem versions branch is merged 
       - ${API_PATH}:/ProtectedPlanetApi

@@ -25,7 +25,6 @@ class ProtectedAreaPresenter
 
   def external_links
     [
-      dopa_link,
       world_heritage_outlook_link,
       story_map_links
     ].compact.flatten
@@ -174,16 +173,6 @@ class ProtectedAreaPresenter
 
   def marine_designation_country
     protected_area.countries.first.try(:name) || 'Area Beyond National Jurisdiction'
-  end
-
-  def dopa_link
-    return unless protected_area.is_dopa
-
-    {
-      link: url_for_related_source('dopa_info', protected_area),
-      text: I18n.t('stats.dopa.title'),
-      button_title: I18n.t('stats.dopa.button-title', name: protected_area.name)
-    }
   end
 
   def world_heritage_outlook_link
