@@ -1,19 +1,33 @@
 name: Tests
 
-# The repository had NO test CI. `.github/workflows/` contained only the deploy
-# workflow, so nothing ran `rails test` or `vitest` on a push or a pull request.
+# Runs the Ruby and JavaScript suites on every push to the branches below and on
+# every pull request. Before this workflow existed, `.github/workflows/` held only
+# the deploy workflow, so nothing ran `rails test` or `vitest` on a push at all.
 #
-# NOT A REQUIRED CHECK YET, DELIBERATELY. These jobs will report red until the suite
-# is fixed; leave them out of the branch protection required-checks list so they
-# report without blocking merges. Do NOT use `continue-on-error` for this -- it makes
-# the run report success and the failures become invisible, which is how a suite rots
-# unnoticed in the first place. The suite is red today for a known reason:
-# lib/tasks/db.rake enhances db:test:prepare to run db:seed, so every test database
-# is built with 248 seeded countries, and fixtures/factories then collide with them
-# ("duplicate key value violates unique constraint countries_pkey"). That hook dates
-# from 2019; what is new is ~150 tests added since the last green run. Fix the suite,
-# then add these jobs to the branch protection required-checks list --
-# a gate everyone has learned to ignore is worse than no gate.
+# STATUS: green. Full run 2026-09-04 on Rails 8.1.3.1 with `load_defaults 8.1`:
+# 738 runs, 1972 assertions, 0 failures, 0 errors, 2 skips. The 2 skips are the
+# portal FDW integration tests, which call `skip` when the portal FDW schema is
+# absent from the test database -- it always is here, so the release path has no
+# executing integration coverage. See docs/known-issues.md.
+#
+# STILL NOT A REQUIRED CHECK. This was deliberate while the suite was red; it is
+# now an open decision rather than a wait. The complication is which branch: every
+# PR targets `master`, but the branch that deploys is `staging_kamal`, and it is
+# pushed to directly -- and GitHub rejects a direct push to a protected branch
+# whose commit has no passing required check yet. So protecting `staging_kamal`
+# means moving it to a PR flow, while protecting `master` gates every PR and
+# changes nobody's habits. Checks to require: `Ruby test suite`,
+# `JavaScript test suite`.
+#
+# The test database is built with `db:create db:migrate` (below), never from a
+# structure/schema dump. That is deliberate: a stale `db/structure.sql` can list a
+# migration as applied while still defining the pre-migration columns, and a
+# database loaded from it skips that migration forever. Building from migrations
+# is why CI has never hit that, and it is why a green run here means more than a
+# green run locally.
+#
+# On reporting failures honestly, see the note on the `Ruby test suite` step: do
+# NOT reach for `continue-on-error`.
 
 on:
   pull_request:
