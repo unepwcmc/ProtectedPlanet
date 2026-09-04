@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 8.0.0'
+gem 'rails', '~> 8.1.0'
 
 # App server. The legacy deploy ran under system-installed Passenger via nginx,
 # so no server gem was ever in the bundle — but config/puma.rb has been here all
