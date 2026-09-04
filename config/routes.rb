@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     resources :banners, except: [:show]
   end
 
+  # HTTP Basic auth is attached in config/initializers/sidekiq.rb, which runs
+  # before this mount. Mounting it bare leaves the job console world-readable.
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 

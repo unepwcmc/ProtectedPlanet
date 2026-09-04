@@ -59,3 +59,32 @@ Sidekiq.configure_server do |config|
 
   config.on(:shutdown) { SharedChrome.stop! }
 end
+
+# Sidekiq::Web is mounted inside this app (config/routes.rb), so nothing outside
+# the Rails stack gates it: verified 2026-09-04 that GET /admin/sidekiq returned
+# 200 with no credentials on staging while /admin/sites correctly returned 401.
+# That console can retry and delete jobs -- WDPA imports, PDF renders, downloads
+# -- so it gets the same HTTP Basic wall as the CMS admin, using the credentials
+# already delivered to the web role (config/deploy.yml env.secret).
+#
+# Fails CLOSED. If either variable is missing or blank the block returns false
+# and every request is rejected, rather than a nil == nil comparison letting
+# everyone through -- an unset secret must not silently reopen the door.
+#
+# `require` here rather than relying on the one in routes.rb: initializers run
+# first, and Sidekiq::Web.use has to be called before the constant is mounted.
+require 'sidekiq/web'
+
+Sidekiq::Web.use(Rack::Auth::Basic, 'Protected Planet') do |username, password|
+  expected_username = ENV['COMFY_ADMIN_USERNAME'].to_s
+  expected_password = ENV['COMFY_ADMIN_PASSWORD'].to_s
+
+  if expected_username.empty? || expected_password.empty?
+    false
+  else
+    # Both comparisons always run: `&` rather than `&&` so a wrong username does
+    # not skip the password check and leak which half was wrong through timing.
+    ActiveSupport::SecurityUtils.secure_compare(username.to_s, expected_username) &
+      ActiveSupport::SecurityUtils.secure_compare(password.to_s, expected_password)
+  end
+end
