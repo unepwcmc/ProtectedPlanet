@@ -33,7 +33,22 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 8.0
+    config.load_defaults 8.1
+
+    # Two 8.1 defaults are worth knowing about here.
+    #
+    # `config.yjit = !Rails.env.local?` is inert on this image: the Ruby 3.3.7
+    # build in the Dockerfile is compiled without YJIT (`RubyVM::YJIT` is not
+    # defined), and railties guards the initializer on
+    # `defined?(RubyVM::YJIT.enable)` -- so staging and production get no YJIT
+    # and no error. Rebuilding Ruby with --enable-yjit is what would turn it on.
+    #
+    # `action_on_path_relative_redirect = :raise` turns any `redirect_to` with a
+    # path-relative string into a PathRelativeRedirectError. Every literal
+    # redirect in this app is absolute, but the two rescue handlers in
+    # ApplicationController redirect to `request.referrer`, which is a
+    # client-supplied header -- a crafted relative Referer raises there instead
+    # of redirecting. See the note on those handlers.
 
     # Opted out of one default. Every belongs_to foreign key in this schema is
     # nullable, so nothing at the database level backs a presence validation, and
