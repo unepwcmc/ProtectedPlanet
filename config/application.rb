@@ -45,10 +45,10 @@ module ProtectedPlanet
     #
     # `action_on_path_relative_redirect = :raise` turns any `redirect_to` with a
     # path-relative string into a PathRelativeRedirectError. Every literal
-    # redirect in this app is absolute, but the two rescue handlers in
-    # ApplicationController redirect to `request.referrer`, which is a
-    # client-supplied header -- a crafted relative Referer raises there instead
-    # of redirecting. See the note on those handlers.
+    # redirect in this app is absolute; the two rescue handlers that redirect to
+    # the client-supplied Referer header now go through
+    # ApplicationController#safe_referrer_path, which handles both this and the
+    # off-host case. See the note there.
 
     # Opted out of one default. Every belongs_to foreign key in this schema is
     # nullable, so nothing at the database level backs a presence validation, and

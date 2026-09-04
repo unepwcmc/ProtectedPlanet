@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
         end
       end
       message = "The following fields cannot be empty: #{null_fragments.join(', ')}"
-      return redirect_to(request.referrer || root_path, alert: message)
+      return redirect_to(safe_referrer_path, alert: message)
     end
 
     # Anything that is NOT the Comfy fragment case is a genuine database error and
@@ -215,7 +215,35 @@ class ApplicationController < ActionController::Base
     raise exception if exception && !Rails.env.production?
     return render_error_page(500) if exception
 
-    redirect_to(request.referrer || root_path, alert: message)
+    redirect_to(safe_referrer_path, alert: message)
+  end
+
+  # `request.referrer` is a client-supplied header, so it cannot go to
+  # redirect_to unfiltered. Rails rejects two shapes of it, and both would turn
+  # this rescue handler into a 500 rather than the intended redirect:
+  #
+  #   * an off-host referrer raises UnsafeRedirectError
+  #     (action_on_open_redirect = :raise, on since load_defaults 7.0)
+  #   * a referrer that is not rooted at "/" raises PathRelativeRedirectError
+  #     (action_on_path_relative_redirect = :raise, on since load_defaults 8.1)
+  #
+  # Keep only the path of a same-origin referrer and fall back to the homepage
+  # for everything else -- including a missing, malformed or protocol-relative
+  # ("//evil.example") header.
+  def safe_referrer_path
+    referrer = request.referrer
+    return root_path if referrer.blank?
+
+    uri = URI.parse(referrer)
+    return root_path if uri.host.present? && uri.host != request.host
+
+    path = uri.path.presence || '/'
+    return root_path unless path.start_with?('/')
+    return root_path if path.start_with?('//')
+
+    uri.query.present? ? "#{path}?#{uri.query}" : path
+  rescue URI::InvalidURIError
+    root_path
   end
 
   def is_comfy_page_edit?
