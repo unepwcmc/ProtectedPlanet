@@ -3,61 +3,64 @@
 Open items needing a decision, an environment, or a fix. Remove an entry when it
 is closed.
 
-Last verified against the code: **2026-09-02**.
+Last verified against the code: **2026-09-03**.
 
-## 🔴 Search is broken in every environment
+## 🔴 Sidekiq::Web admin panel has no authentication
 
-`AppSecrets.elasticsearch` is a plain `Hash`, but two call sites reach into it
-with dot access:
+`config/routes.rb:8` — `mount Sidekiq::Web => '/admin/sidekiq'` has no auth
+constraint, no Basic-auth wrapper, nothing. Checked for any surrounding
+middleware or route constraint that might cover it (`application_controller.rb`,
+`config/`) — there is none in this repo.
 
-- `lib/modules/search.rb:130`
-- `lib/modules/search/index.rb:71`
+**Verified 2026-09-03:** anyone who finds the URL can view, retry, or delete
+every background job (WDPA import, PDF rendering, downloads) with no login.
+Cloudflare Access or a firewall rule could still be shielding it at the edge,
+but that is outside the codebase — confirm directly rather than assuming it.
 
-```ruby
-Elasticsearch::Client.new(url: AppSecrets.elasticsearch.url)
-#                                                      ^^^^ NoMethodError
-```
+**Fix** — wrap the mount in the same `COMFY_ADMIN_USERNAME`/`PASSWORD` Basic
+auth already used for CMS admin (`config/initializers/comfortable_media_surfer.rb:111-112`),
+or a route constraint.
 
-`config_for` returns an `OrderedOptions` at the top level only — nested hashes
-stay plain, as `config/initializers/00_app_secrets.rb` says in its own comment
-("nested hashes intact… `AppSecrets.redis[:url]`"). So this is not
-test-environment drift: it fails identically in development, staging and
-production.
+## 🟡 No rate limiting or overload protection at the app tier
 
-**Verified 2026-09-02:** `GET /search?search_term=peru` returns **HTTP 500** in
-the dev container, logging `undefined method 'url' for an instance of Hash`, and
-`AppSecrets.elasticsearch.respond_to?(:url)` is `false` under `RAILS_ENV=development`.
+No `rack-attack` (or equivalent) in the Gemfile, no throttle config anywhere.
+Nothing here caps requests per IP under a flood — the sibling `protectedplanet-api`
+repo has this now (`config/rack_attack.rb`), this app does not.
 
-**Fix** — use `[:url]` at both call sites. Confirmed working: with
-`AppSecrets.elasticsearch[:url]` the client builds and `client.ping` returns
-`true` against the local ES container.
+Related gaps found alongside it:
 
-This is also the sole cause of the failing test suite (below), so the two close
-together.
+- **`POST /downloads`** (`app/controllers/downloads_controller.rb:11`) only
+  dedupes *identical* generation requests via a Redis lock
+  (`lib/modules/download/requesters/base.rb`); a client varying search
+  filters can still enqueue unlimited unique Sidekiq CSV/Shapefile/GDB jobs
+  with no per-IP cap.
+- **Puma is thin and single-mode** (`config/puma.rb:7`) — 5 threads,
+  clustered `workers`/`WEB_CONCURRENCY` is commented out, no
+  `worker_timeout`/`first_data_timeout` set. PDF/country-page requests can
+  run up to 120s (Cloudflare's ceiling, `config/deploy.staging.yml:16`) — a
+  handful of concurrent PDF renders can exhaust the whole thread pool.
+- **No login brute-force protection** — the only login surface (CMS admin)
+  is static HTTP Basic auth with no lockout/backoff on failed attempts.
+
+**Fix** — add `rack-attack` with a per-IP throttle, at minimum on
+`/downloads` and any admin login surface; consider a Puma request/worker
+timeout given the 120s PDF path above.
 
 ## CI
 
-- **The Ruby suite is red: 730 runs, 0 failures, 41 errors, 0 skips**
-  (full run, 2026-09-02).
-  - **40 of the 41 are the search bug above**, across six files:
-    `test/integration/search_test.rb` (18), `test/unit/search_test.rb` (6),
-    `test/integration/search_areas_test.rb` (6),
-    `test/integration/search_page_test.rb` (5),
-    `test/unit/search/index_test.rb` (4), `test/unit/autocompletion_test.rb` (1).
-    Most enter through `test_helper.rb:98` (`fresh_search_index`). Fixing the two
-    call sites should clear all 40.
-  - **1 is `release_orchestration_integration_test.rb`** — *"Target staging table
-    `staging_protected_areas` does not exist or has no records"*. Treat as
-    unconfirmed: it surfaced in a run made after a concurrent suite was killed
-    mid-flight, and this test shares staging tables with anything else touching
-    the test database. **Re-run it alone** before believing it:
-    `bin/rails test test/integration/wdpa/portal/release_orchestration_integration_test.rb`
+- **`release_orchestration_integration_test.rb` may still be flaky** — *"Target
+  staging table `staging_protected_areas` does not exist or has no records"*.
+  Treat as unconfirmed: it surfaced in a run made after a concurrent suite was
+  killed mid-flight, and this test shares staging tables with anything else
+  touching the test database. **Re-run it alone** before believing it:
+  `bin/rails test test/integration/wdpa/portal/release_orchestration_integration_test.rb`
 - **The explanation at the top of `.github/workflows/test.yml` is out of date.**
   It blames `lib/tasks/db.rake` seeding 248 countries and colliding on
   `countries_pkey`. That file was deleted in the cleanup, and the current run
-  shows **zero** such failures. Replace that paragraph when the suite is fixed.
-- **Not a required check.** Deliberate while the suite is red — add the jobs to
-  branch protection once it is green.
+  shows **zero** such failures. It's also now stale on the search bug (see
+  Closed below) — needs a fresh full-suite run to write an accurate summary.
+- **Not a required check.** Deliberate while the suite's full-run status is
+  unconfirmed — add the jobs to branch protection once it is green.
 - **Snyk has no successor.** It was a Jenkins plugin step and stopped scanning
   when Jenkins was retired. Porting it means a `snyk/actions` step plus a
   `SNYK_TOKEN` secret. Open decision.
@@ -89,24 +92,3 @@ together.
 - **`pp:portal:cleanup_backups` has not been run on the real environments.** Old
   `bkYYMMDDHHMM_*` backup tables accumulate after every release swap. The task
   takes a keep-count: `rake pp:portal:cleanup_backups[2]`.
-
-## Data
-
-- **`ProtectedArea#is_dopa` is written by nothing.** Its only writer,
-  `Wdpa::DopaImporter`, was already broken (its `DOPA_LIST` CSV did not exist)
-  and has been removed. The column survives on both `protected_areas` and
-  `protected_area_parcels`, and `protected_area_presenter.rb:180` still reads it
-  to decide whether to show the DOPA Explorer link — so that link is driven by
-  stale data.
-
-## Closed since the audit
-
-- ~~Leaking `tmp_downloads_*` views~~ — now swept by
-  `Download::Generators::Base.clean_tmp_download_views`, called from
-  `Download::Utils` and the portal release cleanup. Zero leaked views in the dev
-  database.
-- ~~Dead mail scaffolding~~ — removed 2026-09-02: `ApplicationMailer`, the
-  `layouts/mailer` template and every `smtp_settings` / `action_mailer` block are
-  gone, with no references left. **`mailpit` is still a service in
-  `docker-compose.yml`** and now has nothing to catch — drop it too, or keep it
-  deliberately for when mail is built.
