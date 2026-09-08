@@ -37,8 +37,6 @@
     "strings": "on"
   },
   "stylelint.validate": [
-    "postcss",
-    "pcss",
     "vue",
     "css"
   ],
