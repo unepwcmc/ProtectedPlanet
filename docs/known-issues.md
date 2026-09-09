@@ -116,20 +116,32 @@ Three traps that cost time on 2026-09-04 and will catch the next person.
 
 ## Release
 
-- **The portal checkpoint file store has no owner, and nothing resets it.** With
-  no `Release` to hang off, `Wdpa::Portal::Checkpoint` persists offsets to
-  `tmp/portal_checkpoints.json`, which survives across runs. A dry run or a
-  crashed release leaves stale offsets behind and **the next real release
-  silently imports zero records** — the visible symptom is *"Target staging table
-  `staging_protected_areas` does not exist or has no records"*.
-  It logs a loud warning when it takes that branch (`checkpoint.rb:23-27`), but
-  that is the only guard. ⚠️ **Correction to the audit record:** it claimed
-  `Checkpoint.reset_all!` was added to the setup and teardown of both portal
-  integration tests. It is not there — `grep -rn "reset_all!" test/` matches only
-  an assertion string in `adapters/protected_areas_test.rb`. So *nothing* resets
-  the store, tests included. Either restore those resets, make the fallback refuse
-  a store that does not belong to the current release, or disable it outside a
-  `Release`.
+- **The portal checkpoint file store is global, and only a *successful* release
+  clears it.** ⚠️ **Correction to the earlier entry here, which said nothing reset
+  the store at all:** `Checkpoint.reset_all!` *is* called, from
+  `app/services/portal_release/service.rb:234` — but it is the last entry in
+  `PortalRelease::Service::PHASES`, so it runs only on the full success path. The
+  `ensure` block releases the lock and nothing else, `abort_current!` drops
+  staging tables and releases the lock, and a dry run or a partial
+  `PP_RELEASE_ONLY_PHASES` subset breaks out before reaching it. So a crash, an
+  abort or a partial run leaves offsets behind.
+  **Scope is narrower than it first looked:** a real release passes
+  `release_id: @release.id` (`service.rb:187`), so its offsets live in that
+  Release's `stats_json`, scoped to it — resume within a release is safe and
+  unaffected. The hazard is the fallback taken when `release_id` is nil: one
+  global `tmp/portal_checkpoints.json` shared by every run.
+  **Mitigated 2026-09-07:** that fallback now discards whatever it finds and
+  starts empty (`Checkpoint#discard_unowned_file_store!`), because a global store
+  cannot be shown to belong to the current run. The trade is that a file-store run
+  can no longer resume across processes; the alternative was skipping records that
+  were never imported, which surfaces as *"Target staging table
+  `staging_protected_areas` does not exist or has no records"* and is silent.
+  Covered by `test/unit/wdpa/portal/checkpoint_test.rb`.
+  **Still open:** `reset_all!` is not on the failure or abort paths, so a failed
+  release leaves its own Release-scoped offsets in `stats_json`. That is harmless
+  for the *next* release (new row, empty checkpoints) but means a re-run of the
+  *same* release resumes from wherever it died — intended, but undocumented and
+  untested.
 - **`pp:portal:cleanup_backups` has not been run on the real environments.** Old
   `bkYYMMDDHHMM_*` backup tables accumulate after every release swap. The task
   takes a keep-count: `rake pp:portal:cleanup_backups[2]`.
