@@ -36,7 +36,7 @@
           <a
             class="ct-search-areas-autocomplete__link"
             :href="option.url"
-            v-html="option.title"
+            v-text="option.title"
           />
         </li>
       </ul>

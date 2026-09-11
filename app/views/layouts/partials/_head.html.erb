@@ -15,7 +15,20 @@
   <% end %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <% unless Rails.env.development? %>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="<%=
+      [
+        "default-src 'self'",
+        "script-src 'self' https://www.googletagmanager.com https://*.hotjar.com https://*.hotjar.io",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data: blob: https:",
+        "font-src 'self' data:",
+        "connect-src 'self' https:",
+        "frame-src https://*.hotjar.com",
+        "object-src 'none'",
+        "base-uri 'self'",
+        'upgrade-insecure-requests'
+      ].join('; ')
+    %>">
   <% end %>
   <link rel="manifest" href="/manifest.json">
   <%= csrf_meta_tags %>

@@ -14,6 +14,7 @@
         :href="item.pa_site_url"
         title="View protected area on Protected Planet"
         target="_blank"
+        rel="noopener noreferrer"
       >
         <PameTableRowSiteId
           :siteId="item.site_id"
@@ -48,6 +49,7 @@
         :href="item.asmt_url"
         title="View assessment"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Link
       </a>

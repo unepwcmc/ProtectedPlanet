@@ -17,6 +17,7 @@
     :aria-label="`Download ${title}`"
     :href="fileUrl"
     target="_blank"
+    rel="noopener noreferrer"
     :title
   >
     <IconDownload class="ct-listing-page-card-resources-card-info__download-icon" />
@@ -26,6 +27,7 @@
     class="ct-listing-page-card-resources-card-info__external-link"
     :href="linkUrl"
     target="_blank"
+    rel="noopener noreferrer"
     :title
   >
     <span v-html="linkTitle" />

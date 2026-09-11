@@ -34,6 +34,7 @@
           :class="document.type === 'pdf' ? 'ct-stats-message__link--pdf' : 'ct-stats-message__link--link'"
           :href="document.url"
           target="_blank"
+          rel="noopener noreferrer"
           :title="document.name"
         >
           <span

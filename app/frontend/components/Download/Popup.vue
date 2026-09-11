@@ -27,6 +27,7 @@
         class="ct-download-popup__link"
         :href="option.url"
         target="_blank"
+        rel="noopener noreferrer"
         :title="option.title"
         v-html="option.title"
       />
