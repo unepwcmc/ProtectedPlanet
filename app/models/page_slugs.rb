@@ -10,6 +10,7 @@ module PageSlugs
   MONTHLY_RELEASE_NEWS = 'monthly-release-news'
   LEGAL = 'legal'
   TERMS_AND_CONDITIONS = 'terms-and-conditions'
+  PRIVACY_POLICY = 'privacy-policy'
 
   # Call-to-action records (CallToAction#css_class)
   # Although it is called Class here but it is used as a slug/id for some reason
@@ -46,7 +47,7 @@ module PageSlugs
   end
 
   FOOTER_LINKS_PRIMARY = [RESOURCES, Data::WDPCA].freeze
-  FOOTER_LINKS_SECONDARY = [ABOUT, LEGAL].freeze
+  FOOTER_LINKS_SECONDARY = [ABOUT, LEGAL, PRIVACY_POLICY].freeze
 
   NAV_PRIMARY = [
     ABOUT,
