@@ -17,17 +17,23 @@ module Wdpa
               stats['checkpoints'] ||= {}
               stats['checkpoints']
             else
-              # The file store is global — it is shared by every release, so a
-              # run that ends without reset_all! (a dry run, a crash) leaves
-              # offsets behind that make the NEXT release import 0 records. Say
-              # so loudly; reaching this branch during a release is a bug.
+              # The file store is global — one file shared by every run — so
+              # offsets found in it cannot be shown to belong to THIS run.
+              # reset_all! only runs as the last phase of a successful release
+              # (PortalRelease::Service::PHASES), so a crash, an abort, a dry
+              # run, or a partial PP_RELEASE_ONLY_PHASES subset all leave
+              # offsets behind.
+              #
+              # Reaching this branch during a release is itself a bug: a real
+              # release passes release_id (service.rb:187) and takes the
+              # Release-scoped branch above.
               Rails.logger.warn(
                 "⚠️ Portal checkpoints falling back to the shared file store #{FILE_PATH} " \
                 "(release_id=#{Wdpa::Portal::ImportRuntimeConfig.release_id.inspect}). " \
-                'Stale offsets here can silently skip the whole import.'
+                'Reaching this branch during a release is a bug.'
               )
               ensure_file_store
-              JSON.parse(File.read(FILE_PATH))
+              discard_unowned_file_store!
             end
           rescue StandardError => e
             # Was a bare `rescue; {}`, which hid a NameError for years: importers
@@ -99,6 +105,31 @@ module Wdpa
         end
 
         private
+
+        # Start the shared file store empty rather than resuming from a cursor of
+        # unknown provenance.
+        #
+        # The trade: a run using the file store can no longer resume across
+        # processes. That capability was not safe to have — the two outcomes are
+        # re-importing rows that are already there (idempotent; staging tables are
+        # rebuilt per release) versus skipping rows that were never imported, which
+        # surfaces as "Target staging table staging_protected_areas does not exist
+        # or has no records" and is not recoverable without noticing it happened.
+        #
+        # Release-scoped checkpoints are untouched: those offsets provably belong
+        # to their release, so resume within a release still works.
+        def discard_unowned_file_store!
+          contents = JSON.parse(File.read(FILE_PATH))
+          return contents if contents.empty?
+
+          Rails.logger.warn(
+            "⚠️ Discarding stale portal checkpoints #{contents.keys.inspect} from #{FILE_PATH}: " \
+            'the shared file store cannot be shown to belong to this run, and trusting it ' \
+            'would silently skip records. Starting from an empty store.'
+          )
+          File.write(FILE_PATH, '{}')
+          {}
+        end
 
         def current_release
           release_id = Wdpa::Portal::ImportRuntimeConfig.release_id
