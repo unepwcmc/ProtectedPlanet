@@ -3,7 +3,7 @@
 Running log of things intentionally **not** done yet, with **when** to pick each up.
 Keep this current as phases land. Last updated: 2026-09-14 (Rails 8.1, Sidekiq auth, checkpoints).
 
-Status at this point: **Rails 8.1.3.1**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.1`,
+Status at this point: **Rails 8.1.3.1**, **Ruby 4.0.6**, Zeitwerk, `load_defaults 8.1`,
 postgis-adapter 11.1.1. Suite **744 runs, 0 failures, 2 skips**; SimpleCov floor 62.
 **Live on staging** (`pp-web-staging-01`, Kamal v2) with the Vite/Vue-3 frontend — see §5b.
 **Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1.**
@@ -89,34 +89,86 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
 - [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation** — still
       noisy on adapter 8.x / Rails 7.0; recheck at the 9.x/11.x bumps.
 
-## 2b. Beyond Ruby 3.3 — NOT PLANNED (researched Sep 2026)
+## 2b. Ruby 3.3 → 4.0.6 — DONE (Sep 2026)
 
-The plan's Ruby target was **3.3** and it is met (3.3.7).
+⚠️ **This section previously said Ruby 4 was blocked and should not be started. That was
+wrong on both counts.** The two "blockers" were never tested; when they were, neither
+existed. Recorded here in full because the wrong version of this entry nearly cost the
+team a supported Ruby.
 
-**Two blockers, neither of them Ruby's fault:**
+**Why it was urgent, which the old entry missed entirely.** Ruby 3.3 left normal
+maintenance on **2026-04-01** and is security-only until **EOL 2027-03-31**
+([branch status](https://www.ruby-lang.org/en/downloads/branches/)) — roughly six months
+out when this was picked up. Ruby 4.0 shipped 2025-12-25 and was on 4.0.6 (2026-07-14).
 
-- **`mimemagic 0.4.3` is transitive, not ours.** `comfortable_media_surfer` requires
-  `mimemagic (~> 0.4, >= 0.4.3)` (Gemfile.lock), so it cannot be dropped or bumped
-  independently — and the CMS is itself pinned to Media Surfer's unreleased master
-  line (§4c), so unpinning is its own project.
-- **`sprockets 3.7.5` → Sprockets 4** needs a `manifest.js` this app has never had.
-  Already deferred in §4 alongside sass-rails 5 → 6 / LibSass across 129 SCSS files
-  with no visual tests. That is an asset-pipeline phase, not a Ruby phase.
+**Both claimed blockers were false, tested against a real `ruby:4.0.6` container:**
 
-**The usual reason to want a newer Ruby does not apply here yet.** `load_defaults 8.1`
-already sets `config.yjit = true` for non-local environments, but the Ruby 3.3.7 build
-in the Dockerfile is compiled **without YJIT** — verified on the live staging container:
+- **`sprockets 3.7.5`** installs and `require`s cleanly on Ruby 4. No change needed.
+- **`mimemagic 0.4.3`** installs and works on Ruby 4. The first attempt failed and looked
+  like confirmation, but the error was a missing `shared-mime-info` system package in the
+  slim test image — which `Dockerfile:33` and `Dockerfile.deploy:35` already install.
+- **The whole pinned bundle resolves unchanged.** Conservative `bundle lock` under Ruby 4
+  altered only the `BUNDLED WITH` line; `bundle install` with native extensions exited 0.
 
-    loaded_config_version=8.1   yjit_config=true   yjit_actually_on=not-compiled
+### The one real code change: `gem 'csv'`
 
-railties guards the initializer on `defined?(RubyVM::YJIT.enable)`, so this is inert
-rather than broken. **Recompiling 3.3.7 with `--enable-yjit` would deliver the
-performance win with none of the gem churn above, and the config to use it is already
-in place.** Do that first if performance is the motivation.
+`csv` left the default gems and is bundled-only, so on Ruby 4 it loads under `bundle exec`
+only when the Gemfile declares it. It never was, because every Ruby through 3.3 supplied it
+free. Five app files require it directly (`PameEvaluation`, `GlobalStatistic`, the portal
+table utilities, two `Wdpa::Shared` importers) and `dbf` requires it at load — so without
+the declaration **the app does not boot at all**: `db:migrate` died with
+`LoadError: cannot load such file -- csv`.
 
-**Revisit when:** the CMS moves off the unreleased Media Surfer line (which frees
-mimemagic), or the asset phase lands Sprockets 4 — whichever comes first. Until then
-this is not upgrade work that is being deferred; it is work that has no reason to start.
+Nothing else needed declaring: `base64`, `bigdecimal`, `mutex_m`, `drb` and `logger` are
+already in the lock transitively, and nothing requires `ostruct` or `benchmark`. A scan for
+every documented Ruby 4 removal (`open('|...')`, `Process::Status` `&`/`>>`, `SortedSet`,
+CGI) found no other hits — `CGI.escape` in `map_helper.rb:141` is safe because `cgi/escape`
+stayed in core.
+
+### The trap that made a green deploy meaningless
+
+`config/deploy.yml`'s `builder.args` **override** the `ARG` defaults in `Dockerfile.deploy`.
+The first Ruby 4 deploy went green — build, boot, 46/46 smoke walk — on an image still
+running **3.3.7**, because `deploy.yml` still pinned `RUBY_VERSION: 3.3.7`. The image tag
+was the Ruby 4 commit, so nothing looked wrong. Only `kamal app exec ... RUBY_VERSION` on
+the live container caught it. **Verify the runtime, not the tag.**
+
+### Verified on Ruby 4.0.6
+
+- CI: **744 runs, 1982 assertions, 0 failures, 2 skips** — identical to the 3.3.7 baseline
+- Staging: `ruby=4.0.6`, `rails=8.1.3.1`, `loaded_defaults=8.1`, route smoke **46/46**
+- Downloads, cold-generated end to end: **CSV**, **SHP** (nested split zips with
+  `.shp`/`.shx`/`.dbf`/`.prj`/`.cpg`), **GDB** (real `.gdb` with `gdbtable`/`spx`) — so
+  native GDAL/OpenFileGDB is fine
+- **PDF**: `%PDF-1.4`, 732KB, `Producer: Skia/PDF m152`, HeadlessChrome 152 — Chrome path fine
+
+### Still open after this
+
+- [ ] **YJIT is still not compiled in.** `load_defaults 8.1` sets `config.yjit = true`, and
+      the live container still reports `yjit=not-compiled`; railties guards on
+      `defined?(RubyVM::YJIT.enable)` so it is inert, not broken. Rebuilding with
+      `--enable-yjit` (RUBY_CONFIGURE_OPTS) turns on the config that is already there. This
+      is the actual performance win and it is independent of the version bump.
+      **Do NOT enable ZJIT** — the Ruby team still advise against it in production.
+- [ ] **Bundler is 2.4.22** (`BUNDLED WITH`, and CI's `setup-ruby` installs the same). It
+      works, but predates Ruby 4 and emits a wall of `already initialized constant
+      Gem::Platform::*` warnings on every command.
+- [ ] **Staging builds on Node 24.4.1** (`deploy.yml`) while both Dockerfiles default to
+      26.8.1. Reconcile separately — Node 26's bundled npm is broken for every install, so
+      moving staging to 26 is what first exercises the corepack workaround below.
+- [ ] **Not yet exercised on Ruby 4:** CMS `/admin` (needs credentials) and the portal
+      import path (the 2 FDW skips, §3).
+
+### Corepack, a pre-existing break this uncovered
+
+Not a Ruby issue, found because the Ruby bump busted the Docker layer cache. `npm install -g
+corepack@latest` fails with `cannot set sizeCalculation without setting maxSize or
+maxEntrySize`. Reproduced 2026-09-14 in clean `node:26.8.1-slim` and `ubuntu:24.04` + tarball,
+on both arm64 and amd64, on npm 11.18.0 / 11.19.0 / 11.19.1 (every Node 26 patch from 26.6.0
+to 26.8.2), installing nothing more exotic than `is-odd`, and for **local** installs too.
+Upstream npm bug. Both Dockerfiles now install corepack from its registry tarball with
+`curl` (`ARG COREPACK_VERSION=0.36.0`); nothing else in the build needs npm. Revisit when a
+Node 26 patch ships a working npm.
 
 ## 3. Test coverage — deferred deliberately to the phase that touches the code
 Writing these now, then not touching the code for months, risks staleness. Do each
@@ -194,7 +246,7 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.
 
 ## 4. Deferred gem / asset bumps (own phases — reasoned deferrals)
-- [ ] **sass-rails 5.0.8 → 6 + Sprockets 4** — needs a `manifest.js` this app lacks; Ruby-Sass → LibSass migration across 129 SCSS files with **no visual tests**. Pair with the Vite/asset work, not the Rails bump. sass-rails 5.0.8 works fine on Rails 6.1.
+- [ ] **Sprockets 4** — needs a `manifest.js` this app lacks. ⚠️ **Rescoped Sep 2026:** the old "LibSass migration across 129 SCSS files" is gone. The Vite cutover removed them all; `app/` has **zero** `.scss` files, no asset tags in any view, and `sassc-rails 2.1.2` is now only there to stop Sprockets autoloading the dead `sass` gem. What Sprockets still serves is `app/assets/images` (flags, social, webp) and the Comfy admin assets. Still **no visual tests**, so verification is a manual click through `/admin` and a few pages.
 - [ ] **capybara 2.3 → 3 + selenium 4** — currently rack-test only, no drivers in use; Capybara 3 text-matching changes need per-assertion review. Do in the test phase, no rush.
 - [ ] **`rails app:update` never run** — its main artifact (`new_framework_defaults_6_x.rb`) is redundant since we adopted `load_defaults` directly. If run later, don't let it clobber hand-tuned `config/`.
 

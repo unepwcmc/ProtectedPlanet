@@ -1,6 +1,6 @@
 **The backend upgrade is complete and live on staging (Sep 2026).** Every phase in the
 table below has landed: the Rails ladder ran 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → **8.1**,
-Ruby is on 3.3.7, and the app runs on Docker + Kamal 2 against Postgres 17 / PostGIS 3.5.
+Ruby is on **4.0.6**, and the app runs on Docker + Kamal 2 against Postgres 17 / PostGIS 3.5.
 Suite: **744 runs, 0 failures, 2 skips**, enforced by GitHub Actions on every push.
 What remains is not upgrade work — it is infrastructure decisions (production deploy
 target, Memcached → Redis) and test coverage. See [CARRYOVER](./CARRYOVER.md).
@@ -13,8 +13,8 @@ target, Memcached → Redis) and test coverage. See [CARRYOVER](./CARRYOVER.md).
 |                     |                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------ |
 | **Target**          | Rails 8 · Ruby 3.3 · Sidekiq 7 · PostGIS adapter 11.x · Postgres 17/18 · Docker + Kamal 2       |
-| **Now (Sep 2026)**  | **Rails 8.1.3.1** (`load_defaults 8.1`) · Ruby 3.3.7 · Sidekiq 7.3.9 · Node 26.8.1 · ES client 7.17.11 · postgis-adapter 11.1.1 · Media Surfer 3.1.7 · vite_rails 3.11.1 · Docker + Kamal 2 on staging · **744 runs / 0 failures, CI enforcing** |
-| **Past target**     | Shipped 8.1 rather than stopping at 8.0; Capistrano and Webpacker are both gone from the bundle |
+| **Now (Sep 2026)**  | **Rails 8.1.3.1** (`load_defaults 8.1`) · **Ruby 4.0.6** · Sidekiq 7.3.9 · Node 26.8.1 · ES client 7.17.11 · postgis-adapter 11.1.1 · Media Surfer 3.1.7 · vite_rails 3.11.1 · Docker + Kamal 2 on staging · **744 runs / 0 failures, CI enforcing** |
+| **Past target**     | Shipped Rails 8.1 rather than stopping at 8.0, and **Ruby 4.0.6** rather than 3.3 — 3.3 went security-only on 2026-04-01 (EOL 2027-03-31), so staying put had a deadline. Capistrano and Webpacker are both gone from the bundle |
 | **Owner**           | Backend (+ shared deploy/DevOps tasks with frontend)                                             |
 | **Not in estimate** | Frontend Vue 3 / Vite migration · CMS content redesign · Elasticsearch server upgrade (stays 7.17) |
 | **Critical gate**   | ~~**B0 = Rails 7.1+ boots**~~ — **cleared Jul 2026**; kept here for the sequencing history below |
@@ -36,6 +36,7 @@ target, Memcached → Redis) and test coverage. See [CARRYOVER](./CARRYOVER.md).
 | 4   | Ruby 2.6.3 → 2.7             | Inherited from `feat/upgrade-frontend` (2.7.8)                             | ✅ (banked)             | [02](./02-ruby-upgrade.md)          |
 | 5   | Rails 5.2 → 6.0 → 6.1        | Zeitwerk; AR 6 APIs; PostGIS adapter → 7.x; Sidekiq 5→6                    | ✅                      | [03](./03-rails-6.md)               |
 | 6   | Ruby 2.7 → **3.3.7**         | Keyword-arg break fixed; `::Data`→`DataPages`; factory_girl→factory_bot    | ✅ Jul 2026             | [02](./02-ruby-upgrade.md)          |
+| 6b  | Ruby 3.3.7 → **4.0.6**       | Off a security-only branch. One code change (`gem 'csv'`, now bundled-only); no other gem moved | ✅ Sep 2026 | [CARRYOVER §2b](./CARRYOVER.md) |
 | 7   | Rails 6.1 → 7.0 → **7.1 (B0)** | B0 delivered; CMS swapped to Media Surfer; Nokogiri unpinned             | ✅ Jul 2026             | [04](./04-rails-7.md)               |
 | 7b  | Rails 7.1 → 7.2              | `Rails.application.secrets` → `config_for(:app_secrets)` (the 7.2 blocker) | ✅                      | [04](./04-rails-7.md)               |
 | 8   | Rails 7.2 → 8.0 **(B4)**     | PostGIS adapter → 11.0; rails-i18n 7 → 8; clean, zero code changes         | ✅ Aug 2026             | [05](./05-rails-8.md)               |
