@@ -127,6 +127,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.7)
+    csv (3.3.6)
     dalli (3.2.8)
     date (3.5.1)
     dbf (2.0.13)
@@ -453,6 +454,7 @@ DEPENDENCIES
   byebug (~> 13.0.0)
   comfortable_media_surfer (~> 3.1)
   connection_pool (~> 2.5)
+  csv
   dalli (~> 3.2)
   dbf (~> 2.0.7)
   dotenv (~> 2.8)

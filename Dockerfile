@@ -1,9 +1,11 @@
-ARG RUBY_VERSION=3.3.7
+ARG RUBY_VERSION=4.0.6
 ARG NODE_VERSION=26.8.1
+ARG COREPACK_VERSION=0.36.0
 
 FROM ubuntu:24.04
 ARG RUBY_VERSION
 ARG NODE_VERSION
+ARG COREPACK_VERSION
 
 # GEM_HOME/BUNDLE_PATH came free with the ruby:* base image before; they have to
 # be set explicitly here, and must stay at /usr/local/bundle -- that is the path
@@ -75,10 +77,25 @@ RUN printf 'export PATH=/usr/local/ruby-%s/bin:/usr/local/bundle/bin:$PATH\n' "$
 # 24 dies with "corepack: not found" (exit 127).
 #
 # node itself needs libatomic.so.1, which comes in via build-essential above.
+# corepack is installed straight from its registry tarball, NOT via
+# `npm install -g corepack@latest`. Node 26 unbundled corepack (a bare
+# `corepack enable` exits 127), but the npm that ships with Node 26.6.0 through
+# 26.8.2 (npm 11.18.0 - 11.19.1) is broken for EVERY install, global or local:
+#   npm error cannot set sizeCalculation without setting maxSize or maxEntrySize
+# Reproduced 2026-09-14 in clean `node:26.8.1-slim` and `ubuntu:24.04` + tarball,
+# on both arm64 and amd64, installing nothing more exotic than `is-odd`. It is an
+# upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
+# corepack, per package.json's "packageManager"), so the tarball path sidesteps it
+# entirely. Revisit when a Node 26 patch ships a working npm.
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \
- && npm install -g corepack@latest \
+ && curl -fsSL "https://registry.npmjs.org/corepack/-/corepack-${COREPACK_VERSION}.tgz" -o /tmp/corepack.tgz \
+ && mkdir -p /usr/local/lib/node_modules/corepack \
+ && tar -xzf /tmp/corepack.tgz -C /usr/local/lib/node_modules/corepack --strip-components=1 \
+ && rm /tmp/corepack.tgz \
+ && chmod +x /usr/local/lib/node_modules/corepack/dist/corepack.js \
+ && ln -sf /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack \
  && corepack enable
 
 WORKDIR /ProtectedPlanet

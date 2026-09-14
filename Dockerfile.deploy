@@ -5,8 +5,9 @@
 # Ruby comes from ruby-build, not a ruby:* image: those are Debian-based and
 # would not give us the 24.04 GDAL.
 
-ARG RUBY_VERSION=3.3.7
+ARG RUBY_VERSION=4.0.6
 ARG NODE_VERSION=26.8.1
+ARG COREPACK_VERSION=0.36.0
 
 # ---------------------------------------------------------------------------
 # base — runtime libraries only, shared by build and final stages
@@ -45,6 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 FROM base AS build
 ARG RUBY_VERSION
 ARG NODE_VERSION
+ARG COREPACK_VERSION
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential git pkg-config \
@@ -63,10 +65,25 @@ ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
 # Node from the official tarball. corepack comes from npm because Node 26
 # unbundled it (a bare `corepack enable` exits 127 there); harmless on 24, and it
 # keeps NODE_VERSION safe to bump. Yarn's version comes from package.json.
+# corepack is installed straight from its registry tarball, NOT via
+# `npm install -g corepack@latest`. Node 26 unbundled corepack (a bare
+# `corepack enable` exits 127), but the npm that ships with Node 26.6.0 through
+# 26.8.2 (npm 11.18.0 - 11.19.1) is broken for EVERY install, global or local:
+#   npm error cannot set sizeCalculation without setting maxSize or maxEntrySize
+# Reproduced 2026-09-14 in clean `node:26.8.1-slim` and `ubuntu:24.04` + tarball,
+# on both arm64 and amd64, installing nothing more exotic than `is-odd`. It is an
+# upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
+# corepack, per package.json's "packageManager"), so the tarball path sidesteps it
+# entirely. Revisit when a Node 26 patch ships a working npm.
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \
- && npm install -g corepack@latest \
+ && curl -fsSL "https://registry.npmjs.org/corepack/-/corepack-${COREPACK_VERSION}.tgz" -o /tmp/corepack.tgz \
+ && mkdir -p /usr/local/lib/node_modules/corepack \
+ && tar -xzf /tmp/corepack.tgz -C /usr/local/lib/node_modules/corepack --strip-components=1 \
+ && rm /tmp/corepack.tgz \
+ && chmod +x /usr/local/lib/node_modules/corepack/dist/corepack.js \
+ && ln -sf /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack \
  && corepack enable
 
 WORKDIR /app
