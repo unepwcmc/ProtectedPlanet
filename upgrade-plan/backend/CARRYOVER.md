@@ -1,12 +1,25 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-18 (staging deploys, phases 1 + 2).
+Keep this current as phases land. Last updated: 2026-09-14 (Rails 8.1, Sidekiq auth, checkpoints).
 
-Status at this point: **Rails 8.0.5**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.0`,
-postgis-adapter 11.0. Suite **714 runs, 0 failures, 7 skips**; coverage ~65.4%, SimpleCov floor 62.
+Status at this point: **Rails 8.1.3.1**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.1`,
+postgis-adapter 11.1.1. Suite **744 runs, 0 failures, 2 skips**; SimpleCov floor 62.
 **Live on staging** (`pp-web-staging-01`, Kamal v2) with the Vite/Vue-3 frontend — see §5b.
-**Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0.**
+**Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1.**
+
+### Rails 8.1 phase — DONE (Sep 2026)
+- rails ~> 8.1.0 (8.1.3.1), `load_defaults 8.1`, postgis-adapter 11.0.0 → 11.1.1,
+  rgeo-activerecord 8.0 → 8.1, `action_text-trix` added, `benchmark` dropped.
+- Six new defaults adopted. Two needed thought: `config.yjit = !Rails.env.local?` is
+  **inert** here (the Ruby 3.3.7 build has no YJIT compiled in; railties guards on
+  `defined?(RubyVM::YJIT.enable)`), and `action_on_path_relative_redirect = :raise`
+  required a guard — `ApplicationController#safe_referrer_path`, since two rescue
+  handlers redirect to the client-supplied `Referer`. An off-host Referer was
+  **already** raising before this phase (`action_on_open_redirect = :raise` since
+  `load_defaults 7.0`), so that fix closed a live latent 500 as well.
+- Skips dropped 7 → 2: the dead-code waves deleted the other five. The remaining two
+  are the FDW integration tests (§3).
 
 ### Rails 8.0 phase — DONE
 - rails ~> 8.0.0 (8.0.5.1), `load_defaults 8.0`, activerecord-postgis-adapter 10 → 11.0.0,
@@ -61,7 +74,9 @@ buster 2.28). Done: `::Data`→`DataPages` rename; ~11 gem bumps; factory_girl�
 factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeController.
 
 **Stopgaps from the Ruby-3 / Rails-6.1 window:**
-- [ ] **`psych ~> 3.3` pin** (Gemfile) — Psych 4/5 (Ruby 3.1+) is safe-load
+- [x] ~~**`psych ~> 3.3` pin**~~ — **REMOVED (Aug 2026)** in the gem-pruning pass; no
+      `psych` entry remains in the Gemfile. Original reasoning kept below for history.
+      ~~(Gemfile) — Psych 4/5 (Ruby 3.1+) is safe-load
       (aliases off). Rails 7 loads its OWN configs alias-aware, but **webpacker 4
       and appsignal 3 call plain `YAML.load` on their aliased configs at boot** and
       break — so the pin **cannot be removed at Rails 7.0** (tried; boots red).
@@ -73,6 +88,35 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
       `comfy_route` is Ruby-3-native).
 - [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation** — still
       noisy on adapter 8.x / Rails 7.0; recheck at the 9.x/11.x bumps.
+
+## 2b. Beyond Ruby 3.3 — NOT PLANNED (researched Sep 2026)
+
+The plan's Ruby target was **3.3** and it is met (3.3.7).
+
+**Two blockers, neither of them Ruby's fault:**
+
+- **`mimemagic 0.4.3` is transitive, not ours.** `comfortable_media_surfer` requires
+  `mimemagic (~> 0.4, >= 0.4.3)` (Gemfile.lock), so it cannot be dropped or bumped
+  independently — and the CMS is itself pinned to Media Surfer's unreleased master
+  line (§4c), so unpinning is its own project.
+- **`sprockets 3.7.5` → Sprockets 4** needs a `manifest.js` this app has never had.
+  Already deferred in §4 alongside sass-rails 5 → 6 / LibSass across 129 SCSS files
+  with no visual tests. That is an asset-pipeline phase, not a Ruby phase.
+
+**The usual reason to want a newer Ruby does not apply here yet.** `load_defaults 8.1`
+already sets `config.yjit = true` for non-local environments, but the Ruby 3.3.7 build
+in the Dockerfile is compiled **without YJIT** — verified on the live staging container:
+
+    loaded_config_version=8.1   yjit_config=true   yjit_actually_on=not-compiled
+
+railties guards the initializer on `defined?(RubyVM::YJIT.enable)`, so this is inert
+rather than broken. **Recompiling 3.3.7 with `--enable-yjit` would deliver the
+performance win with none of the gem churn above, and the config to use it is already
+in place.** Do that first if performance is the motivation.
+
+**Revisit when:** the CMS moves off the unreleased Media Surfer line (which frees
+mimemagic), or the asset phase lands Sprockets 4 — whichever comes first. Until then
+this is not upgrade work that is being deferred; it is work that has no reason to start.
 
 ## 3. Test coverage — deferred deliberately to the phase that touches the code
 Writing these now, then not touching the code for months, risks staleness. Do each
@@ -129,18 +173,22 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       end-to-end; (2) **data-team ArcGIS sign-off** on a real `.gdb` (largely pre-answered — portal output
       already consumed); (3) diffs above used samples (20 poly / 5 point) not a full release volume.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
-- [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
+- [ ] **Un-skip the 2 FDW integration tests — NO LONGER SANDBOX-GATED (re-scoped Sep 2026).** They skip on
       `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
       `release_workflow_integration_test.rb`). Requirements: a **`portal_fdw` schema (~48 source
       tables** — categories/lookups + `wdpas`, `spatial_data` w/ PostGIS geometry, `source`, `pame`,
       `greenlists`, `wdpa_iso3` + junctions) + sample rows, on top of which `FDW_VIEWS.sql` (659
       lines, in repo) builds ~9 staging materialized views; the tests then run import→swap→cleanup.
-      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs) — in prod it's a live
-      postgres_fdw foreign schema on the portal DB, so the exact 48-table schema exists only there.
-      **Do NOT hand-fabricate** (48 tables, high drift risk). **Path: `pg_dump --schema-only -n
-      portal_fdw` from the temp staging sandbox** (the devops ask — it has the portal FDW), convert
-      `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed a handful of rows. Gate on the
-      sandbox existing. The fragile *logic* is already covered by the geometry-importer +
+      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs), but ⚠️ **correction to the
+      Aug 2026 note, which said the schema exists only on the portal DB and gated this on a devops
+      sandbox: the local dev database already has it.** `pp_development` carries all **50**
+      `portal_fdw` relations (`relkind = 'f'`), so `pg_dump --schema-only -n portal_fdw` can be run
+      today against `protectedplanet-db` — no sandbox, no devops ask, no hand-fabrication.
+      Convert `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed rows.
+      **The remaining cost is the seed data, not the schema.** Neither test inserts into
+      `portal_fdw`; both assume a populated portal DB as a runbook prerequisite, so empty tables
+      give a release that imports 0 rows and fails on the very error the test exists to catch.
+      Fixtures must survive ISO3 matching, PAME joins and greenlist resolution. The fragile *logic* is already covered by the geometry-importer +
       table-service unit tests, so this is end-to-end confidence, not a correctness gap.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.
@@ -429,9 +477,8 @@ cycle (the stale `application-*.css` assertion, and the comfy step). Run it befo
       `String#strip`) *instead of* the real error, twice. The self-hosted runner's locale is
       US-ASCII, so any non-ASCII build output masks the genuine failure. Set `LANG=C.UTF-8` /
       `LC_ALL=C.UTF-8` on the runner. Turned a 30-second diagnosis into a 4,600-line log dig.
-- [ ] **`public/packs` is committed** — 15 stale webpack outputs, dead since the Vite cutover and
-      still shipped in the image. `git rm -r --cached public/packs` + gitignore it. Nothing
-      references them (0 `*_pack_tag` calls anywhere).
+- [x] ~~**`public/packs` is committed**~~ — **DONE.** `git ls-files public/packs` returns 0;
+      the stale webpack outputs are untracked and the `webpacker` gem is gone from the bundle.
 - [ ] **Narrow the `assets:precompile ||` tolerance in `Dockerfile.deploy`.** It exists for
       vite_ruby's nested `vite:build_all`, which always exits non-zero with a bare
       "Compilation failed:" while sprockets succeeds — but it also swallowed the genuine
