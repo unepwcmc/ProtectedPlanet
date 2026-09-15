@@ -35,6 +35,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       shared-mime-info zip unzip \
       # toolchain: native gems, and ruby-build's own compile
       build-essential pkg-config autoconf bison \
+      # rustc/cargo build YJIT into ruby (build-time only; see the ruby-build step)
+      rustc cargo \
       libssl-dev libyaml-dev zlib1g-dev libreadline-dev libffi-dev libgmp-dev \
       libxml2-dev libxslt1-dev xz-utils \
       # Chromium runtime deps -- the PDF pipeline drives Puppeteer
@@ -57,11 +59,24 @@ RUN install -d /usr/share/postgresql-common/pgdg \
  && rm -rf /var/lib/apt/lists/*
 
 # Ruby via ruby-build, same version and mechanism as the deploy image.
+# YJIT is compiled in via RUBY_CONFIGURE_OPTS. `config.yjit = true` has been set
+# for non-local environments since load_defaults 8.1, but the Ruby built here had
+# no YJIT, so railties' `if config.yjit && defined?(RubyVM::YJIT.enable)` guard
+# silently skipped it -- the live staging container reported yjit=not-compiled
+# while the config said true. Building with it makes the existing config real.
+#
+# rustc/cargo are BUILD-ONLY: YJIT is compiled into the ruby binary, so nothing
+# Rust-related is needed at runtime. Ubuntu 24.04 ships rustc 1.75, comfortably
+# over the 1.60 YJIT needs for a release-mode build.
+#
+# NOT ZJIT: Ruby 4.0 ships it, but upstream still advise against production use.
 RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
  && PREFIX=/usr/local /tmp/ruby-build/install.sh \
- && ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
+ && RUBY_CONFIGURE_OPTS="--enable-yjit" \
+    ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
  && rm -rf /tmp/ruby-build \
- && ruby -v | grep -q "${RUBY_VERSION}"
+ && ruby -v | grep -q "${RUBY_VERSION}" \
+ && ruby -e 'abort("YJIT missing from this build") unless defined?(RubyVM::YJIT)'
 
 # The compose commands use login shells (`bash -l -c`), which source /etc/profile
 # and rebuild PATH from scratch -- dropping the ENV above. Re-prepend it here.
@@ -87,6 +102,17 @@ RUN printf 'export PATH=/usr/local/ruby-%s/bin:/usr/local/bundle/bin:$PATH\n' "$
 # upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
 # corepack, per package.json's "packageManager"), so the tarball path sidesteps it
 # entirely. Revisit when a Node 26 patch ships a working npm.
+# Reverted to linux-x64 deliberately. A native arm64 dev image would fix the
+# frontend toolchain (vue-tsc, tailwind and npm all misbehave under Rosetta --
+# the same `vite build --mode test` that fails emulated completed in 6.6s on
+# native arm64, measured 2026-09-14), but it cannot work: Chrome for Testing has
+# no linux-arm64 build, so `puppeteer browsers install chrome` fetches the x64
+# binary and the image build dies on
+#   rosetta error: failed to open elf at /lib64/ld-linux-x86-64.so.2
+# and Ubuntu 24.04 arm64 has no usable chromium package to substitute (`chromium`
+# has no candidate; `chromium-browser` is a snap shim). Chrome is needed for
+# local PDF generation, so x64 + emulation stays until that changes. The cost is
+# that `vite build` cannot run locally; CI builds assets fine.
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \

@@ -50,16 +50,30 @@ ARG COREPACK_VERSION
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential git pkg-config \
+      rustc cargo \
       autoconf bison libssl-dev libyaml-dev zlib1g-dev libreadline-dev \
       libffi-dev libgmp-dev libpq-dev libgdal-dev libsqlite3-dev \
       libxml2-dev libxslt1-dev xz-utils \
  && rm -rf /var/lib/apt/lists/*
 
 # Ruby via ruby-build
+# YJIT is compiled in via RUBY_CONFIGURE_OPTS. `config.yjit = true` has been set
+# for non-local environments since load_defaults 8.1, but the Ruby built here had
+# no YJIT, so railties' `if config.yjit && defined?(RubyVM::YJIT.enable)` guard
+# silently skipped it -- the live staging container reported yjit=not-compiled
+# while the config said true. Building with it makes the existing config real.
+#
+# rustc/cargo are BUILD-ONLY: YJIT is compiled into the ruby binary, so nothing
+# Rust-related is needed at runtime. Ubuntu 24.04 ships rustc 1.75, comfortably
+# over the 1.60 YJIT needs for a release-mode build.
+#
+# NOT ZJIT: Ruby 4.0 ships it, but upstream still advise against production use.
 RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
  && PREFIX=/usr/local /tmp/ruby-build/install.sh \
- && ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
- && rm -rf /tmp/ruby-build
+ && RUBY_CONFIGURE_OPTS="--enable-yjit" \
+    ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
+ && rm -rf /tmp/ruby-build \
+ && /usr/local/ruby-${RUBY_VERSION}/bin/ruby -e 'abort("YJIT missing from this build") unless defined?(RubyVM::YJIT)'
 ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
 
 # Node from the official tarball. corepack comes from npm because Node 26
