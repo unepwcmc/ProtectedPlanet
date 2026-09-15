@@ -20,30 +20,74 @@ before that). Two things about those credentials are still open:
   thin, and there is no lockout on repeated attempts (see rate limiting below).
 
 
-## 🟡 No rate limiting or overload protection at the app tier
+## 🟡 Puma has no overload protection (rate limiting now done)
 
-No `rack-attack` (or equivalent) in the Gemfile, no throttle config anywhere.
-Nothing here caps requests per IP under a flood — the sibling `protectedplanet-api`
-repo has this now (`config/rack_attack.rb`), this app does not.
+**Rate limiting: DONE (Sep 2026).** `rack-attack` in the Gemfile, configured in
+`config/initializers/rack_attack.rb`, Redis-backed, covered by
+`test/integration/rack_attack_test.rb` (8 tests).
 
-Related gaps found alongside it:
+⚠️ **Correction:** the previous version of this entry said the sibling
+`protectedplanet-api` repo "has this now (`config/rack_attack.rb`)". It does not —
+no such file on any branch, and `rack-attack` is not in its Gemfile. Written from
+scratch, not ported.
 
-- **`POST /downloads`** (`app/controllers/downloads_controller.rb:11`) only
-  dedupes *identical* generation requests via a Redis lock
-  (`lib/modules/download/requesters/base.rb`); a client varying search
-  filters can still enqueue unlimited unique Sidekiq CSV/Shapefile/GDB jobs
-  with no per-IP cap.
-- **Puma is thin and single-mode** (`config/puma.rb:7`) — 5 threads,
-  clustered `workers`/`WEB_CONCURRENCY` is commented out, no
-  `worker_timeout`/`first_data_timeout` set. PDF/country-page requests can
-  run up to 120s (Cloudflare's ceiling, `config/deploy.staging.yml:16`) — a
-  handful of concurrent PDF renders can exhaust the whole thread pool.
-- **No login brute-force protection** — the only login surface (CMS admin)
-  is static HTTP Basic auth with no lockout/backoff on failed attempts.
+**The shape matters more than the numbers, because WCMC staff share an office/VPN
+egress — a whole team arrives as ONE IP.** Anything counting ordinary work per-IP
+punishes exactly the people who should be using the site.
 
-**Fix** — add `rack-attack` with a per-IP throttle, at minimum on
-`/downloads` and any admin login surface; consider a Puma request/worker
-timeout given the 120s PDF path above.
+- **`POST /downloads` — 60/min per IP.** Each unique request enqueues a Sidekiq job
+  writing a multi-GB artefact, and the Redis lock in `Download::Requesters::Base`
+  dedupes only *identical* requests. One person taking CSV + SHP + GDB + PDF is
+  already 4, so this is a runaway-script cap, not a per-person quota.
+  `GET /downloads/poll` is exempt — the frontend polls it while a download builds.
+- **`/admin` — NOT throttled.** Only **failed authentications** are counted:
+  `AdminAuthFailureTracker` (middleware, inserted after Rack::Attack so it sees the
+  real response) reports 401s, and Fail2Ban bans an address after 20 failures in
+  10 minutes for 15 minutes. Successful admin work is unlimited however many
+  people are behind the address.
+  An earlier draft throttled all of `/admin` at 20/min per IP. That was wrong twice:
+  Sidekiq's dashboard polls `/admin/sidekiq/stats` on a timer (`web/views/
+  dashboard.erb` sets `updateUrl`), so an idle open dashboard would eat the budget;
+  and a team editing CMS pages from one VPN address would lock itself out. That poll
+  is also exempt from failure counting, or an expired session on an open dashboard
+  could ban the office.
+- **No global request cap, deliberately.** The post-deploy hook walks 46 URLs in
+  seconds from one IP; a blanket cap low enough to matter would 429 the smoke walk
+  and fail every deploy. Tests pin this omission.
+
+### ⚠️ Client IP resolution is only correct while no proxy APPENDS itself
+
+`Rack::Attack::Request` subclasses `::Rack::Request`, which has **no `#remote_ip`** —
+using it raises NoMethodError and turns every guarded request into a 500. The
+initializer defines it from `env['action_dispatch.remote_ip']`. Plain `#ip` is wrong
+too: behind a proxy that is the proxy.
+
+`config.action_dispatch.trusted_proxies` is **unset** (Rails defaults: loopback and
+private ranges). Measured on staging:
+
+| `X-Forwarded-For` | `REMOTE_ADDR` | `remote_ip` |
+| --- | --- | --- |
+| `203.0.113.9` | `172.17.0.5` (kamal-proxy, private) | `203.0.113.9` ✓ |
+| `203.0.113.9` | `104.16.1.1` (public, Cloudflare-shaped) | `203.0.113.9` ✓ |
+| `203.0.113.9, 104.16.1.1` | `104.16.1.1` | **`104.16.1.1`** ✗ |
+
+Staging is fine (kamal-proxy is on a private address). Cloudflare normally *sets*
+`X-Forwarded-For` to the client rather than appending, so production is probably
+fine too — but that is **assumed, not measured**, and row 3 is the failure mode:
+every visitor collapses onto one counter and the whole internet shares one budget.
+**Before production goes behind Cloudflare, either add the Cloudflare ranges to
+`trusted_proxies` or read `CF-Connecting-IP`, and verify with a real request.**
+
+### Still open
+
+- **Puma is thin and single-mode** (`config/puma.rb:7`) — 5 threads, clustered
+  `workers`/`WEB_CONCURRENCY` commented out, no `worker_timeout`/
+  `first_data_timeout`. PDF and country-page requests can run up to 120s
+  (Cloudflare's ceiling, `config/deploy.staging.yml:16`), so concurrent PDF renders
+  can still exhaust the thread pool. Rate limiting caps how fast work is *requested*,
+  not how much a single slow request *costs*. A worker/request timeout would.
+- **Redis is now on the request path** for `/downloads` and `/admin`. It already was
+  via Sidekiq, but a Redis outage now touches those two surfaces directly.
 
 ## CI
 
