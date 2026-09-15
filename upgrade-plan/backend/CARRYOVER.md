@@ -144,20 +144,39 @@ the live container caught it. **Verify the runtime, not the tag.**
 
 ### Still open after this
 
-- [ ] **YJIT is still not compiled in.** `load_defaults 8.1` sets `config.yjit = true`, and
-      the live container still reports `yjit=not-compiled`; railties guards on
-      `defined?(RubyVM::YJIT.enable)` so it is inert, not broken. Rebuilding with
-      `--enable-yjit` (RUBY_CONFIGURE_OPTS) turns on the config that is already there. This
-      is the actual performance win and it is independent of the version bump.
-      **Do NOT enable ZJIT** — the Ruby team still advise against it in production.
+- [x] ~~**YJIT is still not compiled in.**~~ **DONE (Sep 2026).** Both Dockerfiles now build
+      Ruby with `RUBY_CONFIGURE_OPTS="--enable-yjit"` and install `rustc`/`cargo` in the
+      **build stage only** (YJIT compiles into the binary; nothing Rust-related at runtime).
+      Ubuntu 24.04 ships rustc 1.75, over the 1.60 a release-mode YJIT build needs.
+      Live on staging: `config.yjit=true`, **`YJIT.enabled?=true`** — it was `false` before,
+      so the 8.1 default had been inert since the Rails bump.
+      Each Dockerfile now **asserts** `RubyVM::YJIT` is defined right after `ruby-build`, so a
+      YJIT-less Ruby fails the build instead of shipping silently. That mattered: this is the
+      same failure shape as the `deploy.yml` build-arg trap above — config claiming one thing
+      while the running process did another.
+      Re-verified on the YJIT build, since a JIT changes every code path and the suite covers
+      none of this: route smoke 46/46, and cold-generated **CSV / SHP / GDB / PDF** downloads
+      for a fresh PA (GDAL and headless Chrome both fine).
+      **ZJIT remains off** — the Ruby team still advise against it in production.
 - [ ] **Bundler is 2.4.22** (`BUNDLED WITH`, and CI's `setup-ruby` installs the same). It
       works, but predates Ruby 4 and emits a wall of `already initialized constant
       Gem::Platform::*` warnings on every command.
 - [ ] **Staging builds on Node 24.4.1** (`deploy.yml`) while both Dockerfiles default to
       26.8.1. Reconcile separately — Node 26's bundled npm is broken for every install, so
       moving staging to 26 is what first exercises the corepack workaround below.
-- [ ] **Not yet exercised on Ruby 4:** CMS `/admin` (needs credentials) and the portal
-      import path (the 2 FDW skips, §3).
+- [x] ~~**CMS `/admin` not yet exercised on Ruby 4.**~~ **Verified Sep 2026** on the
+      Ruby 4.0.6 + YJIT build: `/admin/sites` 200, `pages` 200 (149 pages), `files` 200,
+      `layouts` 200, `snippets` 302 to `/snippets/new` (correct — there are 0 snippets),
+      and `/admin/sites` **401 without credentials**. The Comfy layout renders in ~142ms,
+      which also confirms the `comfy:compile_assets` Sprockets output is intact.
+      **How, without handling the password:** run it inside the container via
+      `kamal app exec ... bin/rails runner`, building an
+      `ActionDispatch::Integration::Session` and letting the process construct the Basic
+      auth header from its own `ENV[COMFY_ADMIN_USERNAME]`/`[_PASSWORD]`. The values are
+      never printed and never leave the host. Reuse this for anything behind that wall.
+      Server-side only: it does **not** cover browser JS (CodeMirror/flatpickr) or saving
+      a page — that still needs a real login.
+- [ ] **Not yet exercised on Ruby 4:** the portal import path (the 2 FDW skips, §3).
 
 ### Corepack, a pre-existing break this uncovered
 
