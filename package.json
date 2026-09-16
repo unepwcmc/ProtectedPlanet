@@ -16,7 +16,7 @@
     "@amcharts/amcharts5": "^5.20.5",
     "@hotwired/stimulus": "^3.2.2",
     "@vueuse/core": "^14.4.0",
-    "codemirror": "^6.0.2",
+    "codemirror": "^5.65.18",
     "flatpickr": "^4.6.13",
     "maplibre-gl": "^6.9.0",
     "maplibregl-mapbox-request-transformer": "^0.0.3",
