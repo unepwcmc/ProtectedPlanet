@@ -67,6 +67,37 @@ class CheckpointTest < ActiveSupport::TestCase
     assert_equal %w[42], Wdpa::Portal::Checkpoint.get_cursor('v_pa')
   end
 
+  # The store used to be memoized for the life of the process, so a second release
+  # in the same worker resumed from the FIRST release's cursor and imported zero
+  # rows. Each release must read its own checkpoints.
+  test 'switching release loads that release own checkpoints, not the previous one' do
+    first = Release.create!(label: 'JAN2026', state: 'importing')
+    first.update_columns(stats_json: { 'checkpoints' => { 'attributes' => { 'v_pa' => { 'cursor' => %w[999] } } } })
+    second = Release.create!(label: 'FEB2026', state: 'importing')
+
+    Wdpa::Portal::ImportRuntimeConfig.release_id = first.id
+    assert_equal %w[999], Wdpa::Portal::Checkpoint.get_cursor('v_pa')
+
+    Wdpa::Portal::ImportRuntimeConfig.release_id = second.id
+    assert_nil Wdpa::Portal::Checkpoint.get_cursor('v_pa'),
+               'a new release must not inherit the previous release cursor'
+  end
+
+  test 'a release that set a cursor and a later release in the same process stay separate' do
+    first = Release.create!(label: 'JAN2026', state: 'importing')
+    second = Release.create!(label: 'FEB2026', state: 'importing')
+
+    Wdpa::Portal::ImportRuntimeConfig.release_id = first.id
+    Wdpa::Portal::Checkpoint.set_cursor('v_pa', %w[1])
+
+    Wdpa::Portal::ImportRuntimeConfig.release_id = second.id
+    assert_nil Wdpa::Portal::Checkpoint.get_cursor('v_pa')
+
+    Wdpa::Portal::ImportRuntimeConfig.release_id = first.id
+    assert_equal %w[1], Wdpa::Portal::Checkpoint.get_cursor('v_pa'),
+                 'returning to a release still resumes from its own cursor'
+  end
+
   # Release-scoped checkpoints are the safe case and must keep resuming: those
   # offsets provably belong to that release.
   test 'release scoped checkpoints are not discarded' do
