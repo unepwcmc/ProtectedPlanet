@@ -277,6 +277,11 @@ Three traps that cost time on 2026-09-04 and will catch the next person.
   for the *next* release (new row, empty checkpoints) but means a re-run of the
   *same* release resumes from wherever it died — intended, but undocumented and
   untested.
-- **`pp:portal:cleanup_backups` has not been run on the real environments.** Old
-  `bkYYMMDDHHMM_*` backup tables accumulate after every release swap. The task
-  takes a keep-count: `rake pp:portal:cleanup_backups[2]`.
+- ~~**`pp:portal:cleanup_backups` has not been run on the real environments.**~~ **Not a
+  problem — closed Sep 2026.** Backups are pruned automatically: every swap runs
+  `TableCleanupService.cleanup_after_swap`, which calls
+  `cleanup_old_backups(PortalImportConfig.keep_backup_count)`. The rake task only matters
+  for a manual cleanup. Measured on staging 2026-09-16: **one** backup set
+  (`bk2609021137`, the September release — 16 tables, 9 materialized views, 4.7 GB),
+  which is exactly the rollback point for the live data and must be kept. Nothing had
+  accumulated.
