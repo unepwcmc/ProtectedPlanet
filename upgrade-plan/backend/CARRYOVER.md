@@ -258,9 +258,11 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       committed file byte-for-byte, so the drift risk this entry used to warn about has a tool.
       **What the seed data taught us:** `site_type` looks optional (LEFT JOIN) but isn't — the column
       mapper calls `.match` on it and the importer swallows the `nil` crash as a *soft* error,
-      reporting success with 0 rows. And running the tests exposed a **real production bug**: the
+      reporting success with 0 rows. And running the tests exposed a **latent bug**: the
       checkpoint store was memoized across releases, so a second release in one process imported
-      zero records. That was also the cause of the "flaky" orchestration test (seed 3923). Fixed and
+      zero records. Not an active production failure — production runs one release per process —
+      but it hits consoles and the test suite, and would hit production if imports moved into a
+      long-lived worker. That was also the cause of the "flaky" orchestration test (seed 3923). Fixed and
       pinned by regression tests — see `docs/known-issues.md` → Release.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.

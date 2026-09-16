@@ -143,8 +143,8 @@ every visitor collapses onto one counter and the whole internet shares one budge
   never exercised, so nobody could tell. Once it ran, it failed on **1 run in 5**,
   reproducibly with `--seed 3923` (workflow test first, then orchestration), with the
   same *"Target staging table staging_protected_areas does not exist or has no
-  records"* message originally reported. Root cause was a real production bug, not a
-  test problem — see **Release → checkpoint store memoized across releases**. Fixed;
+  records"* message originally reported. Root cause was a latent bug in the checkpoint
+  store, not in the test — see **Release → checkpoint store memoized across releases**. Fixed;
   seed 3923 and 8 further random-order runs now pass.
 - **The explanation at the top of `.github/workflows/test.yml` is out of date**
   and now actively misleading. It says the repo has no test CI, that the jobs
@@ -214,14 +214,20 @@ Three traps that cost time on 2026-09-04 and will catch the next person.
   was a bare `@store ||=`, memoized for the life of the process. Only `reset_all!`
   cleared it, and that runs solely as the last phase of a *successful*
   `PortalRelease::Service` run. So a direct `Wdpa::Portal::Importer.import`, a failed or
-  partial release, or a second import in the same Sidekiq worker or console left the
-  previous release's cursors in memory, and the next release resumed from them.
+  partial release, or a second import in the same Ruby process (a console session, the
+  test suite) left the previous release's cursors in memory, and the next release
+  resumed from them.
   Measured with two imports in one process against one seeded row:
   `Jan2026: imported=1, cursor => [1]` then `Feb2026: imported=0, success=false`, still
   reading Jan2026's cursor, with Feb2026's own `stats_json` checkpoints never loaded.
-  **This is a real production failure mode, not just a test artefact** — any worker
-  process that runs more than one import can hit it. It surfaced only because the FDW
-  integration tests started running (see CI). The store is now reloaded whenever
+  **Latent, not an active production failure.** Production runs one release per
+  process: `rake pp:portal:release` calls `PortalRelease::Service` once, and no Sidekiq
+  worker runs imports (checked Sep 2026), so the release id never changes mid-process
+  and the old memoization never bit. It affects a Rails console running two imports, a
+  dry run and resume in one session, and the test suite — which is where it surfaced,
+  once the FDW integration tests started running (see CI). It would become a production
+  bug the moment imports moved into a long-lived worker, which is why it was worth
+  fixing now rather than documenting. The store is now reloaded whenever
   `ImportRuntimeConfig.release_id` changes, so each release reads its own checkpoints
   and resume *within* a release still works. Pinned by two regression tests in
   `test/unit/wdpa/portal/checkpoint_test.rb`, which fail against the old code.

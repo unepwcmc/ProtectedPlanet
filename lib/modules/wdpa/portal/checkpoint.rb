@@ -15,8 +15,14 @@ module Wdpa
         # reset_all! cleared it, and that runs solely as the last phase of a
         # *successful* PortalRelease::Service run. Anything else — a direct
         # Wdpa::Portal::Importer.import, a failed or partial release, a second
-        # import in the same Sidekiq worker or console — left the previous
-        # release's cursors in memory, so the next release resumed from them.
+        # import in the same Ruby process — left the previous release's cursors in
+        # memory, so the next release resumed from them.
+        #
+        # Latent in production, which runs one release per process
+        # (rake pp:portal:release), so the release id never changes mid-process.
+        # It bites a console running two imports, a dry run and resume in one
+        # session, and the test suite — and would bite production if imports ever
+        # moved into a long-lived worker.
         #
         # Measured 2026-09-16, two imports in one process against one seeded row:
         #   Jan2026 (release 49): imported=1, @store cursor => [1]
