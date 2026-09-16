@@ -80,12 +80,45 @@ every visitor collapses onto one counter and the whole internet shares one budge
 
 ### Still open
 
-- **Puma is thin and single-mode** (`config/puma.rb:7`) — 5 threads, clustered
-  `workers`/`WEB_CONCURRENCY` commented out, no `worker_timeout`/
-  `first_data_timeout`. PDF and country-page requests can run up to 120s
-  (Cloudflare's ceiling, `config/deploy.staging.yml:16`), so concurrent PDF renders
-  can still exhaust the thread pool. Rate limiting caps how fast work is *requested*,
-  not how much a single slow request *costs*. A worker/request timeout would.
+- **Puma is thin and single-mode, but the risk is smaller than this entry used to
+  claim.** `config/puma.rb:7` gives 5 threads; clustered `workers`/`WEB_CONCURRENCY`
+  is commented out, and there is no request timeout.
+
+  ⚠️ **Corrections, measured on staging 2026-09-15:**
+
+  - The old text said "concurrent PDF renders can exhaust the thread pool". They
+    cannot. The pages the rasterizer fetches (`?for_pdf=true`, see
+    `Download::Generators::Pdf#params`) are the **fastest** heavy pages at
+    **0.2–0.36s** — they render a stripped layout. The slow part of a PDF is Chrome
+    rasterizing inside Sidekiq, which never occupies a Puma thread.
+  - `worker_timeout` would be **inert** here anyway. In puma 6.6.1 it is read only
+    in `cluster.rb` and `cluster/worker_handle.rb`, never in `single.rb`, so it does
+    nothing without clustered mode. It is also a worker *liveness* check, not a
+    per-request cap: when it fires it kills the worker and every in-flight request
+    on it.
+
+  **Measured cold TTFB** (warm hits are ~0.2s; memcached caches these, so only first
+  hits count — `/en/country/USA` went 2.17s → 0.20s between two calls):
+
+  | Page | Cold TTFB |
+  | --- | --- |
+  | Country pages (USA, SWE, CAN, AUS) | 1.1–2.6s |
+  | Regions | 0.4–2.4s |
+  | Protected area pages | 0.2–0.5s |
+  | Search / search-areas | 0.08–0.83s |
+  | `?for_pdf=true` render pages | 0.2–0.36s |
+
+  Slowest legitimate request is **~2.6s** against a proxy ceiling of **120s**
+  (`config/deploy.staging.yml:16`) — a 46× gap. Anything holding a thread longer is
+  already pathological, so a timeout at 90s would almost never fire; a useful value
+  would be nearer **15–30s**.
+
+  **Deferred 2026-09-15**, deliberately. The real exposure is narrow — a pathological
+  query or a hung Elasticsearch call, not PDFs. If thread exhaustion is ever observed,
+  `rack-timeout` at ~20s is the cheap fix (it works in single mode, unlike
+  `worker_timeout`); going clustered is the larger one and needs `preload_app!` plus
+  `on_worker_boot` reconnects on a 1.5GB VM. Sample the long tail before picking a
+  number: only the ten heaviest pages by PA count were measured.
 - **Redis is now on the request path** for `/downloads` and `/admin`. It already was
   via Sidekiq, but a Redis outage now touches those two surfaces directly.
 
