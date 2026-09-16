@@ -20,8 +20,18 @@ builder:
   # Dockerfile.deploy, NOT the dev Dockerfile — the dev one still carries the
   # buster + GDAL-2.2.3 + ESRI FileGDB chain that cannot build on a current base.
   dockerfile: Dockerfile.deploy
+  # These OVERRIDE the ARG defaults in Dockerfile.deploy -- bumping the Dockerfile
+  # alone changes nothing here, which is how a Ruby 4.0.6 commit deployed an image
+  # still running 3.3.7 (verified on the live container, Sep 2026). Keep in step
+  # with Dockerfile.deploy's ARG RUBY_VERSION / ARG NODE_VERSION.
+  #
+  # NODE_VERSION is deliberately NOT 26.8.1 here yet: both Dockerfiles default to
+  # 26, so staging builds on a different Node from dev and CI. Reconcile that on
+  # its own, not folded into a Ruby bump -- Node 26's bundled npm is broken for
+  # every install (see the corepack note in Dockerfile.deploy), so moving staging
+  # to 26 is what first exercises that workaround on the deploy path.
   args:
-    RUBY_VERSION: 3.3.7
+    RUBY_VERSION: 4.0.6
     NODE_VERSION: 24.4.1
     RAILS_ENV: staging
   # Vite INLINES import.meta.env.VITE_* at build time, so the Mapbox token has to

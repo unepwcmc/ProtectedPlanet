@@ -10,6 +10,22 @@ gem 'puma', '~> 6.4'
 gem 'pg', '~> 1.1'
 gem 'activerecord-postgis-adapter', '~> 11.0'
 gem 'dbf', '~> 2.0.7'
+
+# `csv` left the default gems and became a bundled gem, so on Ruby 4 it is only
+# loadable when the Gemfile declares it -- otherwise `require 'csv'` raises
+# LoadError under `bundle exec`. It was never declared here because every Ruby up
+# to 3.3 supplied it for free. Five app files require it directly
+# (PameEvaluation, GlobalStatistic, the portal table utilities and two Shared
+# importers) and `dbf` requires it at load, so without this the app does not boot
+# at all on Ruby 4.
+gem 'csv'
+
+# Rack::Attack. `POST /downloads` enqueues a Sidekiq CSV/Shapefile/GDB/PDF job per
+# unique request; the Redis lock in Download::Requesters::Base only dedupes
+# IDENTICAL requests, so a client varying search filters could enqueue unbounded
+# work against a 5-thread Puma with no worker_timeout. See config/initializers/
+# rack_attack.rb for the throttles and why there is no global request cap.
+gem 'rack-attack', '~> 6.7'
 #
 # Match the 7.17.24 server. Stay on the ES 7.x client — 8.x is a client rewrite
 # (elastic-transport gem, namespace changes) and the code uses

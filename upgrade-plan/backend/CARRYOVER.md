@@ -1,12 +1,25 @@
 # Backend upgrade — carryover / deferred items
 
 Running log of things intentionally **not** done yet, with **when** to pick each up.
-Keep this current as phases land. Last updated: 2026-08-18 (staging deploys, phases 1 + 2).
+Keep this current as phases land. Last updated: 2026-09-14 (Rails 8.1, Sidekiq auth, checkpoints).
 
-Status at this point: **Rails 8.0.5**, Ruby 3.3.7, Zeitwerk, `load_defaults 8.0`,
-postgis-adapter 11.0. Suite **714 runs, 0 failures, 7 skips**; coverage ~65.4%, SimpleCov floor 62.
+Status at this point: **Rails 8.1.3.1**, **Ruby 4.0.6**, Zeitwerk, `load_defaults 8.1`,
+postgis-adapter 11.1.1. Suite **744 runs, 0 failures, 2 skips**; SimpleCov floor 62.
 **Live on staging** (`pp-web-staging-01`, Kamal v2) with the Vite/Vue-3 frontend — see §5b.
-**Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0.**
+**Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1.**
+
+### Rails 8.1 phase — DONE (Sep 2026)
+- rails ~> 8.1.0 (8.1.3.1), `load_defaults 8.1`, postgis-adapter 11.0.0 → 11.1.1,
+  rgeo-activerecord 8.0 → 8.1, `action_text-trix` added, `benchmark` dropped.
+- Six new defaults adopted. Two needed thought: `config.yjit = !Rails.env.local?` is
+  **inert** here (the Ruby 3.3.7 build has no YJIT compiled in; railties guards on
+  `defined?(RubyVM::YJIT.enable)`), and `action_on_path_relative_redirect = :raise`
+  required a guard — `ApplicationController#safe_referrer_path`, since two rescue
+  handlers redirect to the client-supplied `Referer`. An off-host Referer was
+  **already** raising before this phase (`action_on_open_redirect = :raise` since
+  `load_defaults 7.0`), so that fix closed a live latent 500 as well.
+- Skips dropped 7 → 2: the dead-code waves deleted the other five. The remaining two
+  are the FDW integration tests (§3).
 
 ### Rails 8.0 phase — DONE
 - rails ~> 8.0.0 (8.0.5.1), `load_defaults 8.0`, activerecord-postgis-adapter 10 → 11.0.0,
@@ -61,7 +74,9 @@ buster 2.28). Done: `::Data`→`DataPages` rename; ~11 gem bumps; factory_girl�
 factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeController.
 
 **Stopgaps from the Ruby-3 / Rails-6.1 window:**
-- [ ] **`psych ~> 3.3` pin** (Gemfile) — Psych 4/5 (Ruby 3.1+) is safe-load
+- [x] ~~**`psych ~> 3.3` pin**~~ — **REMOVED (Aug 2026)** in the gem-pruning pass; no
+      `psych` entry remains in the Gemfile. Original reasoning kept below for history.
+      ~~(Gemfile) — Psych 4/5 (Ruby 3.1+) is safe-load
       (aliases off). Rails 7 loads its OWN configs alias-aware, but **webpacker 4
       and appsignal 3 call plain `YAML.load` on their aliased configs at boot** and
       break — so the pin **cannot be removed at Rails 7.0** (tried; boots red).
@@ -73,6 +88,106 @@ factory_bot; `File.exists?`→`File.exist?`; frozen-I18n-hash fix in HomeControl
       `comfy_route` is Ruby-3-native).
 - [ ] **`activerecord-postgis-adapter` `PG::Coder.new(hash)` deprecation** — still
       noisy on adapter 8.x / Rails 7.0; recheck at the 9.x/11.x bumps.
+
+## 2b. Ruby 3.3 → 4.0.6 — DONE (Sep 2026)
+
+⚠️ **This section previously said Ruby 4 was blocked and should not be started. That was
+wrong on both counts.** The two "blockers" were never tested; when they were, neither
+existed. Recorded here in full because the wrong version of this entry nearly cost the
+team a supported Ruby.
+
+**Why it was urgent, which the old entry missed entirely.** Ruby 3.3 left normal
+maintenance on **2026-04-01** and is security-only until **EOL 2027-03-31**
+([branch status](https://www.ruby-lang.org/en/downloads/branches/)) — roughly six months
+out when this was picked up. Ruby 4.0 shipped 2025-12-25 and was on 4.0.6 (2026-07-14).
+
+**Both claimed blockers were false, tested against a real `ruby:4.0.6` container:**
+
+- **`sprockets 3.7.5`** installs and `require`s cleanly on Ruby 4. No change needed.
+- **`mimemagic 0.4.3`** installs and works on Ruby 4. The first attempt failed and looked
+  like confirmation, but the error was a missing `shared-mime-info` system package in the
+  slim test image — which `Dockerfile:33` and `Dockerfile.deploy:35` already install.
+- **The whole pinned bundle resolves unchanged.** Conservative `bundle lock` under Ruby 4
+  altered only the `BUNDLED WITH` line; `bundle install` with native extensions exited 0.
+
+### The one real code change: `gem 'csv'`
+
+`csv` left the default gems and is bundled-only, so on Ruby 4 it loads under `bundle exec`
+only when the Gemfile declares it. It never was, because every Ruby through 3.3 supplied it
+free. Five app files require it directly (`PameEvaluation`, `GlobalStatistic`, the portal
+table utilities, two `Wdpa::Shared` importers) and `dbf` requires it at load — so without
+the declaration **the app does not boot at all**: `db:migrate` died with
+`LoadError: cannot load such file -- csv`.
+
+Nothing else needed declaring: `base64`, `bigdecimal`, `mutex_m`, `drb` and `logger` are
+already in the lock transitively, and nothing requires `ostruct` or `benchmark`. A scan for
+every documented Ruby 4 removal (`open('|...')`, `Process::Status` `&`/`>>`, `SortedSet`,
+CGI) found no other hits — `CGI.escape` in `map_helper.rb:141` is safe because `cgi/escape`
+stayed in core.
+
+### The trap that made a green deploy meaningless
+
+`config/deploy.yml`'s `builder.args` **override** the `ARG` defaults in `Dockerfile.deploy`.
+The first Ruby 4 deploy went green — build, boot, 46/46 smoke walk — on an image still
+running **3.3.7**, because `deploy.yml` still pinned `RUBY_VERSION: 3.3.7`. The image tag
+was the Ruby 4 commit, so nothing looked wrong. Only `kamal app exec ... RUBY_VERSION` on
+the live container caught it. **Verify the runtime, not the tag.**
+
+### Verified on Ruby 4.0.6
+
+- CI: **744 runs, 1982 assertions, 0 failures, 2 skips** — identical to the 3.3.7 baseline
+- Staging: `ruby=4.0.6`, `rails=8.1.3.1`, `loaded_defaults=8.1`, route smoke **46/46**
+- Downloads, cold-generated end to end: **CSV**, **SHP** (nested split zips with
+  `.shp`/`.shx`/`.dbf`/`.prj`/`.cpg`), **GDB** (real `.gdb` with `gdbtable`/`spx`) — so
+  native GDAL/OpenFileGDB is fine
+- **PDF**: `%PDF-1.4`, 732KB, `Producer: Skia/PDF m152`, HeadlessChrome 152 — Chrome path fine
+
+### Still open after this
+
+- [x] ~~**YJIT is still not compiled in.**~~ **DONE (Sep 2026).** Both Dockerfiles now build
+      Ruby with `RUBY_CONFIGURE_OPTS="--enable-yjit"` and install `rustc`/`cargo` in the
+      **build stage only** (YJIT compiles into the binary; nothing Rust-related at runtime).
+      Ubuntu 24.04 ships rustc 1.75, over the 1.60 a release-mode YJIT build needs.
+      Live on staging: `config.yjit=true`, **`YJIT.enabled?=true`** — it was `false` before,
+      so the 8.1 default had been inert since the Rails bump.
+      Each Dockerfile now **asserts** `RubyVM::YJIT` is defined right after `ruby-build`, so a
+      YJIT-less Ruby fails the build instead of shipping silently. That mattered: this is the
+      same failure shape as the `deploy.yml` build-arg trap above — config claiming one thing
+      while the running process did another.
+      Re-verified on the YJIT build, since a JIT changes every code path and the suite covers
+      none of this: route smoke 46/46, and cold-generated **CSV / SHP / GDB / PDF** downloads
+      for a fresh PA (GDAL and headless Chrome both fine).
+      **ZJIT remains off** — the Ruby team still advise against it in production.
+- [ ] **Bundler is 2.4.22** (`BUNDLED WITH`, and CI's `setup-ruby` installs the same). It
+      works, but predates Ruby 4 and emits a wall of `already initialized constant
+      Gem::Platform::*` warnings on every command.
+- [ ] **Staging builds on Node 24.4.1** (`deploy.yml`) while both Dockerfiles default to
+      26.8.1. Reconcile separately — Node 26's bundled npm is broken for every install, so
+      moving staging to 26 is what first exercises the corepack workaround below.
+- [x] ~~**CMS `/admin` not yet exercised on Ruby 4.**~~ **Verified Sep 2026** on the
+      Ruby 4.0.6 + YJIT build: `/admin/sites` 200, `pages` 200 (149 pages), `files` 200,
+      `layouts` 200, `snippets` 302 to `/snippets/new` (correct — there are 0 snippets),
+      and `/admin/sites` **401 without credentials**. The Comfy layout renders in ~142ms,
+      which also confirms the `comfy:compile_assets` Sprockets output is intact.
+      **How, without handling the password:** run it inside the container via
+      `kamal app exec ... bin/rails runner`, building an
+      `ActionDispatch::Integration::Session` and letting the process construct the Basic
+      auth header from its own `ENV[COMFY_ADMIN_USERNAME]`/`[_PASSWORD]`. The values are
+      never printed and never leave the host. Reuse this for anything behind that wall.
+      Server-side only: it does **not** cover browser JS (CodeMirror/flatpickr) or saving
+      a page — that still needs a real login.
+- [ ] **Not yet exercised on Ruby 4:** the portal import path (the 2 FDW skips, §3).
+
+### Corepack, a pre-existing break this uncovered
+
+Not a Ruby issue, found because the Ruby bump busted the Docker layer cache. `npm install -g
+corepack@latest` fails with `cannot set sizeCalculation without setting maxSize or
+maxEntrySize`. Reproduced 2026-09-14 in clean `node:26.8.1-slim` and `ubuntu:24.04` + tarball,
+on both arm64 and amd64, on npm 11.18.0 / 11.19.0 / 11.19.1 (every Node 26 patch from 26.6.0
+to 26.8.2), installing nothing more exotic than `is-odd`, and for **local** installs too.
+Upstream npm bug. Both Dockerfiles now install corepack from its registry tarball with
+`curl` (`ARG COREPACK_VERSION=0.36.0`); nothing else in the build needs npm. Revisit when a
+Node 26 patch ships a working npm.
 
 ## 3. Test coverage — deferred deliberately to the phase that touches the code
 Writing these now, then not touching the code for months, risks staleness. Do each
@@ -129,24 +244,28 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       end-to-end; (2) **data-team ArcGIS sign-off** on a real `.gdb` (largely pre-answered — portal output
       already consumed); (3) diffs above used samples (20 poly / 5 point) not a full release volume.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
-- [ ] **Un-skip the 7 FDW integration tests — SANDBOX-GATED (scoped Aug 2026).** They skip on
+- [ ] **Un-skip the 2 FDW integration tests — NO LONGER SANDBOX-GATED (re-scoped Sep 2026).** They skip on
       `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
       `release_workflow_integration_test.rb`). Requirements: a **`portal_fdw` schema (~48 source
       tables** — categories/lookups + `wdpas`, `spatial_data` w/ PostGIS geometry, `source`, `pame`,
       `greenlists`, `wdpa_iso3` + junctions) + sample rows, on top of which `FDW_VIEWS.sql` (659
       lines, in repo) builds ~9 staging materialized views; the tests then run import→swap→cleanup.
-      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs) — in prod it's a live
-      postgres_fdw foreign schema on the portal DB, so the exact 48-table schema exists only there.
-      **Do NOT hand-fabricate** (48 tables, high drift risk). **Path: `pg_dump --schema-only -n
-      portal_fdw` from the temp staging sandbox** (the devops ask — it has the portal FDW), convert
-      `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed a handful of rows. Gate on the
-      sandbox existing. The fragile *logic* is already covered by the geometry-importer +
+      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs), but ⚠️ **correction to the
+      Aug 2026 note, which said the schema exists only on the portal DB and gated this on a devops
+      sandbox: the local dev database already has it.** `pp_development` carries all **50**
+      `portal_fdw` relations (`relkind = 'f'`), so `pg_dump --schema-only -n portal_fdw` can be run
+      today against `protectedplanet-db` — no sandbox, no devops ask, no hand-fabrication.
+      Convert `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed rows.
+      **The remaining cost is the seed data, not the schema.** Neither test inserts into
+      `portal_fdw`; both assume a populated portal DB as a runbook prerequisite, so empty tables
+      give a release that imports 0 rows and fails on the very error the test exists to catch.
+      Fixtures must survive ISO3 matching, PAME joins and greenlist resolution. The fragile *logic* is already covered by the geometry-importer +
       table-service unit tests, so this is end-to-end confidence, not a correctness gap.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.
 
 ## 4. Deferred gem / asset bumps (own phases — reasoned deferrals)
-- [ ] **sass-rails 5.0.8 → 6 + Sprockets 4** — needs a `manifest.js` this app lacks; Ruby-Sass → LibSass migration across 129 SCSS files with **no visual tests**. Pair with the Vite/asset work, not the Rails bump. sass-rails 5.0.8 works fine on Rails 6.1.
+- [ ] **Sprockets 4** — needs a `manifest.js` this app lacks. ⚠️ **Rescoped Sep 2026:** the old "LibSass migration across 129 SCSS files" is gone. The Vite cutover removed them all; `app/` has **zero** `.scss` files, no asset tags in any view, and `sassc-rails 2.1.2` is now only there to stop Sprockets autoloading the dead `sass` gem. What Sprockets still serves is `app/assets/images` (flags, social, webp) and the Comfy admin assets. Still **no visual tests**, so verification is a manual click through `/admin` and a few pages.
 - [ ] **capybara 2.3 → 3 + selenium 4** — currently rack-test only, no drivers in use; Capybara 3 text-matching changes need per-assertion review. Do in the test phase, no rush.
 - [ ] **`rails app:update` never run** — its main artifact (`new_framework_defaults_6_x.rb`) is redundant since we adopted `load_defaults` directly. If run later, don't let it clobber hand-tuned `config/`.
 
@@ -429,9 +548,8 @@ cycle (the stale `application-*.css` assertion, and the comfy step). Run it befo
       `String#strip`) *instead of* the real error, twice. The self-hosted runner's locale is
       US-ASCII, so any non-ASCII build output masks the genuine failure. Set `LANG=C.UTF-8` /
       `LC_ALL=C.UTF-8` on the runner. Turned a 30-second diagnosis into a 4,600-line log dig.
-- [ ] **`public/packs` is committed** — 15 stale webpack outputs, dead since the Vite cutover and
-      still shipped in the image. `git rm -r --cached public/packs` + gitignore it. Nothing
-      references them (0 `*_pack_tag` calls anywhere).
+- [x] ~~**`public/packs` is committed**~~ — **DONE.** `git ls-files public/packs` returns 0;
+      the stale webpack outputs are untracked and the `webpacker` gem is gone from the bundle.
 - [ ] **Narrow the `assets:precompile ||` tolerance in `Dockerfile.deploy`.** It exists for
       vite_ruby's nested `vite:build_all`, which always exits non-zero with a bare
       "Compilation failed:" while sprockets succeeds — but it also swallowed the genuine

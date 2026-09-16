@@ -1,9 +1,11 @@
-ARG RUBY_VERSION=3.3.7
+ARG RUBY_VERSION=4.0.6
 ARG NODE_VERSION=26.8.1
+ARG COREPACK_VERSION=0.36.0
 
 FROM ubuntu:24.04
 ARG RUBY_VERSION
 ARG NODE_VERSION
+ARG COREPACK_VERSION
 
 # GEM_HOME/BUNDLE_PATH came free with the ruby:* base image before; they have to
 # be set explicitly here, and must stay at /usr/local/bundle -- that is the path
@@ -33,6 +35,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       shared-mime-info zip unzip \
       # toolchain: native gems, and ruby-build's own compile
       build-essential pkg-config autoconf bison \
+      # rustc/cargo build YJIT into ruby (build-time only; see the ruby-build step)
+      rustc cargo \
       libssl-dev libyaml-dev zlib1g-dev libreadline-dev libffi-dev libgmp-dev \
       libxml2-dev libxslt1-dev xz-utils \
       # Chromium runtime deps -- the PDF pipeline drives Puppeteer
@@ -55,11 +59,24 @@ RUN install -d /usr/share/postgresql-common/pgdg \
  && rm -rf /var/lib/apt/lists/*
 
 # Ruby via ruby-build, same version and mechanism as the deploy image.
+# YJIT is compiled in via RUBY_CONFIGURE_OPTS. `config.yjit = true` has been set
+# for non-local environments since load_defaults 8.1, but the Ruby built here had
+# no YJIT, so railties' `if config.yjit && defined?(RubyVM::YJIT.enable)` guard
+# silently skipped it -- the live staging container reported yjit=not-compiled
+# while the config said true. Building with it makes the existing config real.
+#
+# rustc/cargo are BUILD-ONLY: YJIT is compiled into the ruby binary, so nothing
+# Rust-related is needed at runtime. Ubuntu 24.04 ships rustc 1.75, comfortably
+# over the 1.60 YJIT needs for a release-mode build.
+#
+# NOT ZJIT: Ruby 4.0 ships it, but upstream still advise against production use.
 RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
  && PREFIX=/usr/local /tmp/ruby-build/install.sh \
- && ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
+ && RUBY_CONFIGURE_OPTS="--enable-yjit" \
+    ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
  && rm -rf /tmp/ruby-build \
- && ruby -v | grep -q "${RUBY_VERSION}"
+ && ruby -v | grep -q "${RUBY_VERSION}" \
+ && ruby -e 'abort("YJIT missing from this build") unless defined?(RubyVM::YJIT)'
 
 # The compose commands use login shells (`bash -l -c`), which source /etc/profile
 # and rebuild PATH from scratch -- dropping the ENV above. Re-prepend it here.
@@ -75,10 +92,36 @@ RUN printf 'export PATH=/usr/local/ruby-%s/bin:/usr/local/bundle/bin:$PATH\n' "$
 # 24 dies with "corepack: not found" (exit 127).
 #
 # node itself needs libatomic.so.1, which comes in via build-essential above.
+# corepack is installed straight from its registry tarball, NOT via
+# `npm install -g corepack@latest`. Node 26 unbundled corepack (a bare
+# `corepack enable` exits 127), but the npm that ships with Node 26.6.0 through
+# 26.8.2 (npm 11.18.0 - 11.19.1) is broken for EVERY install, global or local:
+#   npm error cannot set sizeCalculation without setting maxSize or maxEntrySize
+# Reproduced 2026-09-14 in clean `node:26.8.1-slim` and `ubuntu:24.04` + tarball,
+# on both arm64 and amd64, installing nothing more exotic than `is-odd`. It is an
+# upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
+# corepack, per package.json's "packageManager"), so the tarball path sidesteps it
+# entirely. Revisit when a Node 26 patch ships a working npm.
+# Reverted to linux-x64 deliberately. A native arm64 dev image would fix the
+# frontend toolchain (vue-tsc, tailwind and npm all misbehave under Rosetta --
+# the same `vite build --mode test` that fails emulated completed in 6.6s on
+# native arm64, measured 2026-09-14), but it cannot work: Chrome for Testing has
+# no linux-arm64 build, so `puppeteer browsers install chrome` fetches the x64
+# binary and the image build dies on
+#   rosetta error: failed to open elf at /lib64/ld-linux-x86-64.so.2
+# and Ubuntu 24.04 arm64 has no usable chromium package to substitute (`chromium`
+# has no candidate; `chromium-browser` is a snap shim). Chrome is needed for
+# local PDF generation, so x64 + emulation stays until that changes. The cost is
+# that `vite build` cannot run locally; CI builds assets fine.
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \
- && npm install -g corepack@latest \
+ && curl -fsSL "https://registry.npmjs.org/corepack/-/corepack-${COREPACK_VERSION}.tgz" -o /tmp/corepack.tgz \
+ && mkdir -p /usr/local/lib/node_modules/corepack \
+ && tar -xzf /tmp/corepack.tgz -C /usr/local/lib/node_modules/corepack --strip-components=1 \
+ && rm /tmp/corepack.tgz \
+ && chmod +x /usr/local/lib/node_modules/corepack/dist/corepack.js \
+ && ln -sf /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack \
  && corepack enable
 
 WORKDIR /ProtectedPlanet
