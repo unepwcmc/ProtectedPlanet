@@ -70,10 +70,37 @@ module Wdpa
           Rails.logger.info message
           notifier&.phase(message)
 
-          build_result(imported_count, soft_errors, [], {
+          build_result(imported_count, soft_errors, total_failure_errors(total_count, imported_count, soft_errors), {
             protected_areas_imported_count: imported_pa_count,
             protected_area_parcels_imported_count: imported_parcel_count
           })
+        end
+
+        # Every row of a non-empty source failing is not a soft outcome, it is a
+        # failed import — but it used to be reported as `success: true,
+        # imported_count: 0`, with the per-row causes left in soft_errors.
+        #
+        # The release then failed one step later, in the geometry import, with
+        # "Target staging table staging_protected_areas does not exist or has no
+        # records" — which names the symptom and hides the cause. Diagnosing a
+        # missing site_type (TypeConverter calls .match on it and raises on nil)
+        # meant running the importer by hand to read soft_errors.
+        #
+        # Deliberately narrow: this fires ONLY when every row failed. A partial drop
+        # stays a soft error, exactly as before — real portal data can legitimately
+        # have a few bad rows, and turning those into hard errors would stop a
+        # release that works today. Total failure is safe to escalate because a
+        # release importing 0 protected areas already fails, at geometry, so this
+        # changes which message is reported and where, never whether a release
+        # succeeds.
+        TOTAL_FAILURE_SAMPLE_SIZE = 3
+
+        def self.total_failure_errors(total_count, imported_count, soft_errors)
+          return [] unless total_count.positive? && imported_count.zero?
+
+          causes = soft_errors.first(TOTAL_FAILURE_SAMPLE_SIZE)
+          cause_text = causes.any? ? " First errors: #{causes.join(' | ')}" : ''
+          ["All #{total_count} portal WDPCA rows failed to import; none reached staging.#{cause_text}"]
         end
 
         def self.process_batch(batch, site_ids_with_multiple_site_pids)

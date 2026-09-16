@@ -231,15 +231,25 @@ Three traps that cost time on 2026-09-04 and will catch the next person.
   `ImportRuntimeConfig.release_id` changes, so each release reads its own checkpoints
   and resume *within* a release still works. Pinned by two regression tests in
   `test/unit/wdpa/portal/checkpoint_test.rb`, which fail against the old code.
-- **The importer hides its real errors.** Row-level failures in the attribute import are
-  recorded as *soft* errors and the step still reports `success: true, imported_count: 0`.
-  The run then fails one stage later, in the geometry import, with the generic *"Target
-  staging table staging_protected_areas does not exist or has no records"*. The actual
-  cause — e.g. `undefined method 'match' for nil` when a site has no `site_type` — never
-  reaches the test failure message or the release notification. Diagnosing it meant
-  running the importer by hand and reading `result[:protected_areas][:protected_areas_attributes][:soft_errors]`.
-  Worth surfacing: a step that imports zero rows from a non-empty view should not be
-  reported as a success.
+- **FIXED (Sep 2026): a release where every row failed hid the cause.** Row failures in
+  the protected-area attribute import are soft errors, and when *every* row failed the
+  step still reported `success: true, imported_count: 0`. The release then failed one
+  step later, at geometry, with only *"Target staging table staging_protected_areas does
+  not exist or has no records"* — the cause (e.g. `undefined method 'match' for nil` for a
+  site with no `site_type`) appeared nowhere in the hard errors. It now raises a hard error
+  naming the first three row errors, ordered **before** the geometry symptom:
+  `protected_areas.protected_areas_attributes: All N portal WDPCA rows failed to import;
+  none reached staging. First errors: ...`.
+  **Deliberately narrow — cannot fail a release that succeeds today.** It fires only when
+  every row fails. A partial drop stays soft, exactly as before, because real data can
+  legitimately contain a few bad rows. And a release importing 0 protected areas already
+  failed at geometry, so this changes which message is reported, never whether a release
+  succeeds. Pinned by unit tests (including that a partial drop still succeeds) and by
+  `release_error_reporting_integration_test.rb` through the real pipeline.
+  **Not applied to the sibling importers** (green list, PAME, sources, country statistics),
+  which share the soft-only pattern. Green list and PAME have a `skipped_count` for rows
+  that legitimately match no PA, so "every row skipped" is not provably a failure there,
+  and adding the rule could stop a real release that works today.
 
 - **The portal checkpoint file store is global, and only a *successful* release
   clears it.** ⚠️ **Correction to the earlier entry here, which said nothing reset
