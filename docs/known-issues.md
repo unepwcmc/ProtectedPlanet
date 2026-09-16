@@ -173,10 +173,16 @@ Three traps that cost time on 2026-09-04 and will catch the next person.
   The file is gitignored and untracked, so this is per-machine. **Fix:**
   `rm db/structure.sql && rails db:drop db:create db:migrate` — a clean run
   reports 207 migrations, not 2.
-- **`.ruby-version` pins 3.3.7, which is not installed on the dev Macs.** Every
+- **`.ruby-version` pins 4.0.6, which is not installed on the dev Macs.** Every
   rbenv shim refuses to start, which is what breaks `kamal` (`rbenv: version
-  '3.3.7' is not installed`). Workaround is `RBENV_VERSION=3.4.7 kamal ...`;
-  the fix is `rbenv install 3.3.7` or correcting the file.
+  '4.0.6' is not installed`). Workaround is `RBENV_VERSION=3.4.7 kamal ...` —
+  kamal itself runs fine on any installed Ruby, since it only drives the remote
+  build. **Fix:** `rbenv install 4.0.6`.
+  **Do not "fix" this by editing the file down to an installed version.** It must
+  match `Dockerfile`, `Dockerfile.deploy`, `config/deploy.yml` (`builder.args`)
+  and `.github/workflows/test.yml`, which all build 4.0.6. (This entry previously
+  said 3.3.7; it went stale when the app moved to Ruby 4.0.6 in Sep 2026, and the
+  old advice — install 3.3.7 — would now put a developer on the wrong Ruby.)
 - **The `install` compose service can wedge indefinitely on
   `puppeteer browsers install chrome`.** Observed stalled 2h45m at 176MB of a
   ~180MB download with no progress and no timeout. Because `web`, `sidekiq` and
