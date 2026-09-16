@@ -124,18 +124,28 @@ every visitor collapses onto one counter and the whole internet shares one budge
 
 ## CI
 
-- **The suite is green.** Full run 2026-09-04 on Rails 8.1.3.1 with
-  `load_defaults 8.1`: **738 runs, 1972 assertions, 0 failures, 0 errors,
-  2 skips**, matched by three consecutive green `Tests` runs in Actions.
-- **The 2 skips are the portal FDW integration tests**, and they are skipped
-  structurally, not flakily — `release_workflow_integration_test.rb:28` and
-  `release_orchestration_integration_test.rb:12` both call `skip` when the portal
-  FDW schema is absent from the test database, which it always is locally and in
-  CI. ⚠️ **This supersedes the earlier "may still be flaky" entry for
-  `release_orchestration_integration_test`:** the test is not flaky, it never
-  runs. Its question is still unanswered, and the release path — the highest-stakes
-  code in the app — has no executing integration coverage. Getting the FDW schema
-  into the test database is what would change that.
+- **The Ruby suite is green with no skips.** Full run 2026-09-16 on Rails 8.1.3.1,
+  Ruby 4.0.6: **754 runs, 2036 assertions, 0 failures, 0 errors, 0 skips** (in CI;
+  locally 16 view tests still fail on the vite manifest, see Local development).
+- **The 2 portal FDW integration tests now RUN — and the release path has real
+  coverage for the first time.** `release_workflow_integration_test.rb` and
+  `release_orchestration_integration_test.rb` used to `skip` whenever
+  `portal_fdw` was absent, which was always, in CI and locally. They now load
+  `test/support/portal_fdw/schema.sql` (the 50 portal tables as local tables — the
+  release only SELECTs from them, so foreign vs local does not matter) and
+  `seed.sql` (one GBR polygon PA) via `load_portal_fdw_fixture`, inside the test
+  transaction. Together: 62 assertions across import → staging → swap → cleanup →
+  backups. Regenerate the schema with `bin/rails pp:test:regenerate_portal_fdw_schema`
+  when the portal schema changes; verified to reproduce the committed file
+  byte-for-byte.
+- ⚠️ **Correction: `release_orchestration_integration_test` WAS flaky.** A previous
+  version of this entry said it "is not flaky, it never runs". That was wrong — it was
+  never exercised, so nobody could tell. Once it ran, it failed on **1 run in 5**,
+  reproducibly with `--seed 3923` (workflow test first, then orchestration), with the
+  same *"Target staging table staging_protected_areas does not exist or has no
+  records"* message originally reported. Root cause was a real production bug, not a
+  test problem — see **Release → checkpoint store memoized across releases**. Fixed;
+  seed 3923 and 8 further random-order runs now pass.
 - **The explanation at the top of `.github/workflows/test.yml` is out of date**
   and now actively misleading. It says the repo has no test CI, that the jobs
   "will report red until the suite is fixed", and blames `lib/tasks/db.rake`
@@ -198,6 +208,32 @@ Three traps that cost time on 2026-09-04 and will catch the next person.
   production deploy path until one is added.
 
 ## Release
+
+- **FIXED (Sep 2026): the checkpoint store was memoized across releases, so a second
+  release in the same process imported ZERO records.** `Wdpa::Portal::Checkpoint.store`
+  was a bare `@store ||=`, memoized for the life of the process. Only `reset_all!`
+  cleared it, and that runs solely as the last phase of a *successful*
+  `PortalRelease::Service` run. So a direct `Wdpa::Portal::Importer.import`, a failed or
+  partial release, or a second import in the same Sidekiq worker or console left the
+  previous release's cursors in memory, and the next release resumed from them.
+  Measured with two imports in one process against one seeded row:
+  `Jan2026: imported=1, cursor => [1]` then `Feb2026: imported=0, success=false`, still
+  reading Jan2026's cursor, with Feb2026's own `stats_json` checkpoints never loaded.
+  **This is a real production failure mode, not just a test artefact** — any worker
+  process that runs more than one import can hit it. It surfaced only because the FDW
+  integration tests started running (see CI). The store is now reloaded whenever
+  `ImportRuntimeConfig.release_id` changes, so each release reads its own checkpoints
+  and resume *within* a release still works. Pinned by two regression tests in
+  `test/unit/wdpa/portal/checkpoint_test.rb`, which fail against the old code.
+- **The importer hides its real errors.** Row-level failures in the attribute import are
+  recorded as *soft* errors and the step still reports `success: true, imported_count: 0`.
+  The run then fails one stage later, in the geometry import, with the generic *"Target
+  staging table staging_protected_areas does not exist or has no records"*. The actual
+  cause — e.g. `undefined method 'match' for nil` when a site has no `site_type` — never
+  reaches the test failure message or the release notification. Diagnosing it meant
+  running the importer by hand and reading `result[:protected_areas][:protected_areas_attributes][:soft_errors]`.
+  Worth surfacing: a step that imports zero rows from a non-empty view should not be
+  reported as a success.
 
 - **The portal checkpoint file store is global, and only a *successful* release
   clears it.** ⚠️ **Correction to the earlier entry here, which said nothing reset

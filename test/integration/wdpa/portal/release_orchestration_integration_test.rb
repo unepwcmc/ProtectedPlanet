@@ -4,12 +4,9 @@ class Wdpa::Portal::ReleaseOrchestrationIntegrationTest < ActionDispatch::Integr
   LABEL = 'Jan2026'.freeze
 
   def setup
-    # Guard: only run when Portal FDW is available (matches runbook prerequisites)
-    fdw_check = ActiveRecord::Base.connection.execute(
-      "SELECT to_regclass('portal_fdw.wdpa_iso3') AS exists"
-    ).first
-
-    skip 'Portal FDW schema/tables not available in test DB; full release orchestration cannot be exercised here' if fdw_check['exists'].nil?
+    # portal_fdw is a foreign schema in real environments; the fixture recreates it
+    # as local tables with one seeded protected area. See test/support/portal_fdw/.
+    load_portal_fdw_fixture
 
     # The importer matches portal rows to countries by ISO3; with none loaded every
     # row is dropped and the release has nothing to promote.

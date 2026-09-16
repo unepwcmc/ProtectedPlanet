@@ -4,7 +4,7 @@ Running log of things intentionally **not** done yet, with **when** to pick each
 Keep this current as phases land. Last updated: 2026-09-14 (Rails 8.1, Sidekiq auth, checkpoints).
 
 Status at this point: **Rails 8.1.3.1**, **Ruby 4.0.6**, Zeitwerk, `load_defaults 8.1`,
-postgis-adapter 11.1.1. Suite **744 runs, 0 failures, 2 skips**; SimpleCov floor 62.
+postgis-adapter 11.1.1. Suite **754 runs, 2036 assertions, 0 failures, 0 skips**; SimpleCov floor 62.
 **Live on staging** (`pp-web-staging-01`, Kamal v2) with the Vite/Vue-3 frontend — see §5b.
 **Rails ladder COMPLETE: 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1.**
 
@@ -176,7 +176,8 @@ the live container caught it. **Verify the runtime, not the tag.**
       never printed and never leave the host. Reuse this for anything behind that wall.
       Server-side only: it does **not** cover browser JS (CodeMirror/flatpickr) or saving
       a page — that still needs a real login.
-- [ ] **Not yet exercised on Ruby 4:** the portal import path (the 2 FDW skips, §3).
+- [x] ~~**Not yet exercised on Ruby 4:** the portal import path.~~ **Covered Sep 2026** — the
+      two FDW integration tests now run (§3), exercising import → staging → swap → cleanup.
 
 ### Corepack, a pre-existing break this uncovered
 
@@ -244,23 +245,23 @@ Writing these now, then not touching the code for months, risks staleness. Do ea
       end-to-end; (2) **data-team ArcGIS sign-off** on a real `.gdb` (largely pre-answered — portal output
       already consumed); (3) diffs above used samples (20 poly / 5 point) not a full release volume.
 - [ ] **ES-backed serializers** — `Search::{Areas,Full,Cms}Serializer` need a real `Search` object (ES). Only `FiltersSerializer` (structural) + `CountrySerializer`/`MapOverlaysSerializer` are covered so far.
-- [ ] **Un-skip the 2 FDW integration tests — NO LONGER SANDBOX-GATED (re-scoped Sep 2026).** They skip on
-      `to_regclass('portal_fdw.wdpa_iso3')` being nil (`release_orchestration_integration_test.rb`,
-      `release_workflow_integration_test.rb`). Requirements: a **`portal_fdw` schema (~48 source
-      tables** — categories/lookups + `wdpas`, `spatial_data` w/ PostGIS geometry, `source`, `pame`,
-      `greenlists`, `wdpa_iso3` + junctions) + sample rows, on top of which `FDW_VIEWS.sql` (659
-      lines, in repo) builds ~9 staging materialized views; the tests then run import→swap→cleanup.
-      **`portal_fdw` is NOT in the repo** (`structure.sql` has 0 refs), but ⚠️ **correction to the
-      Aug 2026 note, which said the schema exists only on the portal DB and gated this on a devops
-      sandbox: the local dev database already has it.** `pp_development` carries all **50**
-      `portal_fdw` relations (`relkind = 'f'`), so `pg_dump --schema-only -n portal_fdw` can be run
-      today against `protectedplanet-db` — no sandbox, no devops ask, no hand-fabrication.
-      Convert `FOREIGN TABLE`→local `TABLE`, load into the test DB, seed rows.
-      **The remaining cost is the seed data, not the schema.** Neither test inserts into
-      `portal_fdw`; both assume a populated portal DB as a runbook prerequisite, so empty tables
-      give a release that imports 0 rows and fails on the very error the test exists to catch.
-      Fixtures must survive ISO3 matching, PAME joins and greenlist resolution. The fragile *logic* is already covered by the geometry-importer +
-      table-service unit tests, so this is end-to-end confidence, not a correctness gap.
+- [x] ~~**Un-skip the 2 FDW integration tests.**~~ **DONE (Sep 2026).** Both now run with **0 skips**,
+      62 assertions across import → staging → swap → cleanup → backups.
+      **How:** `pg_dump --schema-only -n portal_fdw` from the dev DB (which has the real foreign
+      schema), converted `CREATE FOREIGN TABLE` → `CREATE TABLE IF NOT EXISTS` with the
+      `SERVER/OPTIONS` and `ALTER FOREIGN TABLE` statements dropped → committed as
+      `test/support/portal_fdw/schema.sql`. The release only SELECTs from `portal_fdw.*`, so local
+      tables behave identically to foreign ones. `test/support/portal_fdw/seed.sql` holds one GBR
+      polygon PA; its header documents why every row is load-bearing. Both load through
+      `load_portal_fdw_fixture` inside the test transaction, so nothing persists.
+      **Regenerate** with `bin/rails pp:test:regenerate_portal_fdw_schema` — verified to reproduce the
+      committed file byte-for-byte, so the drift risk this entry used to warn about has a tool.
+      **What the seed data taught us:** `site_type` looks optional (LEFT JOIN) but isn't — the column
+      mapper calls `.match` on it and the importer swallows the `nil` crash as a *soft* error,
+      reporting success with 0 rows. And running the tests exposed a **real production bug**: the
+      checkpoint store was memoized across releases, so a second release in one process imported
+      zero records. That was also the cause of the "flaky" orchestration test (seed 3923). Fixed and
+      pinned by regression tests — see `docs/known-issues.md` → Release.
 - [ ] **No system/browser tests at all** (rack-test only). Full request→render→JS path is never exercised. Frontend plan phase 9 adds Playwright; coordinate.
 - [ ] **Raise the SimpleCov floor** (`test/test_helper.rb`, **now 62**; actual ~65.4%) as coverage improves. Never lower it.
 

@@ -1,7 +1,7 @@
 **The backend upgrade is complete and live on staging (Sep 2026).** Every phase in the
 table below has landed: the Rails ladder ran 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → **8.1**,
 Ruby is on **4.0.6**, and the app runs on Docker + Kamal 2 against Postgres 17 / PostGIS 3.5.
-Suite: **744 runs, 0 failures, 2 skips**, enforced by GitHub Actions on every push.
+Suite: **754 runs, 0 failures, 0 skips**, enforced by GitHub Actions on every push — including the portal release path, which had no executing coverage until Sep 2026.
 What remains is not upgrade work — it is infrastructure decisions (production deploy
 target, Memcached → Redis) and test coverage. See [CARRYOVER](./CARRYOVER.md).
 

@@ -19,13 +19,9 @@ class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::Integration
   end
 
   test 'runs full portal release workflow from import to swap and cleanup' do
-    # This end-to-end workflow requires the Portal FDW schema and tables (portal_fdw.*)
-    # to be present in the test database. If they are not available, skip gracefully.
-    fdw_check = ActiveRecord::Base.connection.execute(
-      "SELECT to_regclass('portal_fdw.wdpa_iso3') AS exists"
-    ).first
-
-    skip 'Portal FDW schema/tables not available in test DB; full release workflow cannot be exercised here' if fdw_check['exists'].nil?
+    # portal_fdw is a foreign schema in real environments; the fixture recreates it
+    # as local tables with one seeded protected area. See test/support/portal_fdw/.
+    load_portal_fdw_fixture
 
     # The importer matches portal rows to countries by ISO3; with none loaded every
     # row is dropped and staging_protected_areas comes out empty.

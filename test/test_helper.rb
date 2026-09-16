@@ -99,6 +99,20 @@ class ActiveSupport::TestCase
   # cannot match, so a run against an empty countries table imports nothing at all.
   # Loads the same CSVs db/seeds.rb does, without the CMS content that follows them
   # there. Tests are transactional, so the rows go away with the test.
+  # Loads the local stand-in for the portal FDW schema plus the minimal seed row
+  # (test/support/portal_fdw/). Both files are idempotent, and the load runs on the
+  # test's own connection inside its transaction, so it rolls back with the test.
+  #
+  # This replaces a `skip` that fired whenever portal_fdw was absent — which in CI
+  # was always, so the release pipeline had no executing integration coverage at
+  # all. A load failure now fails the test loudly instead of skipping it quietly.
+  def load_portal_fdw_fixture
+    conn = ActiveRecord::Base.lease_connection
+    dir = Rails.root.join('test', 'support', 'portal_fdw')
+    conn.execute(File.read(dir.join('schema.sql')))
+    conn.execute(File.read(dir.join('seed.sql')))
+  end
+
   def seed_reference_data
     [Jurisdiction, Governance, IucnCategory, Region, Country].each do |model|
       next if model.exists?
