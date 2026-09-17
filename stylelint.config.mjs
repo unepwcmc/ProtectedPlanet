@@ -11,6 +11,12 @@ export default {
 		"at-rule-no-unknown": [true, {
 			ignoreAtRules: ["reference","apply"]
 		}],
+		// stylelint-config-tailwindcss@1.0.1 (the latest release) only patches
+		// at-rule-no-unknown/function-no-unknown, not this rule, so every `@apply`
+		// utility list is flagged as an invalid prelude without this override.
+		"at-rule-prelude-no-invalid": [true, {
+			ignoreAtRules: ["apply"]
+		}],
 		"function-no-unknown": null,
 		"no-descending-specificity": null,
 		"plugin/stylelint-bem-namics": {

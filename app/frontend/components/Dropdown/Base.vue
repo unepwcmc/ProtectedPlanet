@@ -42,6 +42,9 @@ defineProps<{
   options: string[]
 }>()
 
+// No selection is a valid state (falls back to defaultDropdownText below), so
+// there is no meaningful default to give this model.
+// eslint-disable-next-line vue/require-default-prop
 const modelValue = defineModel<string>()
 
 const rootEl = ref<HTMLElement | null>(null)
