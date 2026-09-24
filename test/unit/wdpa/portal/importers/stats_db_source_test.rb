@@ -100,6 +100,22 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_match(/not_a_real_column/, soft_errors.first)
   end
 
+  test 'global stats overlay publishes green_list_perc_no_ata as green_list_perc' do
+    ActiveRecord::Base.connection.stubs(:select_value).returns('_GS_run_1')
+    result = stub(to_a: [
+      { 'stat_type' => 'green_list_perc_no_ata', 'stat_value' => '0.12' },
+      { 'stat_type' => 'green_list_perc', 'stat_value' => '0.39' }
+    ])
+    ActiveRecord::Base.connection.stubs(:select_all).returns(result)
+    Staging::GlobalStatistic.stubs(:column_names).returns(%w[id singleton_guard green_list_perc])
+
+    soft_errors = []
+    attrs = Wdpa::Portal::Importers::StatsDbSource::GlobalStats.overlay_attrs(soft_errors: soft_errors)
+
+    assert_equal({ 'green_list_perc' => 0.12 }, attrs)
+    assert_empty soft_errors
+  end
+
   test 'num and pct helpers handle NaN string and numeric NaN' do
     base = Wdpa::Portal::Importers::StatsDbSource::NationalStats
 

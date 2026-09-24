@@ -11,6 +11,10 @@ module Wdpa
         class GlobalStats
           extend Wdpa::Portal::Importers::StatsDbSource::Base
 
+          # The stats server's green_list_perc includes Antarctica (ATA); PP publishes the
+          # no-ATA figure under that name instead.
+          RENAMED_STAT_TYPES = { 'green_list_perc_no_ata' => 'green_list_perc' }.freeze
+
           def self.overlay_attrs(soft_errors: [])
             run_id = select_run_id(table: 'global_stats', run_column: 'metadata_gs_uuid')
             quoted_run_id = ActiveRecord::Base.connection.quote(run_id)
@@ -22,9 +26,11 @@ module Wdpa
             SQL
 
             known_columns = Staging::GlobalStatistic.column_names
+            values = fetch_rows(sql).to_h { |row| [row['stat_type'].to_s.strip, row['stat_value']] }
+            RENAMED_STAT_TYPES.each { |from, to| values[to] = values.delete(from) if values.key?(from) }
+
             attrs = {}
-            fetch_rows(sql).each do |row|
-              stat_type = row['stat_type'].to_s.strip
+            values.each do |stat_type, stat_value|
               next if stat_type.empty?
 
               unless known_columns.include?(stat_type)
@@ -32,7 +38,7 @@ module Wdpa
                 next
               end
 
-              attrs[stat_type] = Wdpa::Shared::Importer::GlobalStats.parse_value(row['stat_value'])
+              attrs[stat_type] = Wdpa::Shared::Importer::GlobalStats.parse_value(stat_value)
             end
             attrs
           end
