@@ -56,8 +56,8 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_equal 179.72, attrs['land_area']
     assert_in_delta 26.9, attrs['percentage_pa_land_cover'], 0.0001
     assert_in_delta 0.36257, attrs['percentage_pa_marine_cover'], 0.0001
-    assert_nil attrs['percentage_oecms_pa_marine_cover'] # NaN -> nil
-    assert_nil attrs['percentage_oecms_pa_land_cover']   # nil -> nil
+    assert_equal 0.0, attrs['percentage_oecms_pa_marine_cover'] # NaN -> 0
+    assert_equal 0.0, attrs['percentage_oecms_pa_land_cover']   # nil -> 0
   end
 
   test 'pame stats maps pame_ prefixed columns' do
@@ -77,7 +77,7 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_equal 606.27, attrs['pame_pa_land_area']
     assert_equal 0.0, attrs['pame_pa_marine_area']
     assert_in_delta 0.09446, attrs['pame_percentage_pa_land_cover'], 0.0001
-    assert_nil attrs['pame_percentage_pa_marine_cover']
+    assert_equal 0.0, attrs['pame_percentage_pa_marine_cover'] # NaN -> 0
   end
 
   test 'global stats overlay keeps known stat_types without scaling and soft-errors unknown ones' do
@@ -123,7 +123,9 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_nil base.num(Float::NAN)
     assert_nil base.num(nil)
     assert_equal 1.5, base.num(1.5)
-    assert_nil base.pct(Float::NAN)
+    assert_equal 0.0, base.pct(Float::NAN)
+    assert_equal 0.0, base.pct('NaN')
+    assert_equal 0.0, base.pct(nil)
     assert_in_delta 26.9, base.pct(0.269), 0.0001
   end
 

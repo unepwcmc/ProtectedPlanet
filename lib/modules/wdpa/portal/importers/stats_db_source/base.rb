@@ -42,10 +42,13 @@ module Wdpa
             ActiveRecord::Base.connection.select_all(sql).to_a
           end
 
-          # Fraction (0-1) -> percentage (0-100); NaN/nil -> nil
+          # Fraction (0-1) -> percentage (0-100); NaN/nil -> 0.
+          # The stats server emits NaN when the denominator is zero (e.g. marine % for
+          # landlocked countries). Legacy CSVs published 0 there, and the country page
+          # presenters call .round on these values, so nil would break those pages.
           def pct(value)
             v = num(value)
-            v.nil? ? nil : v * 100
+            v.nil? ? 0.0 : v * 100
           end
 
           def num(value)
