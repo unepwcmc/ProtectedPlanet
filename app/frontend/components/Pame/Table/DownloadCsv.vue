@@ -22,23 +22,20 @@ import { postBlob } from '@/lib/http'
 import IconDownload from '@/components/Icon/Download.vue'
 import type { PameFilterSelection } from '@/types/backend'
 
-const { trackEvent } = useAnalytics()
-
 const props = defineProps<{
   isFetching: boolean
   selectedFilterOptions: PameFilterSelection[]
   totalItems: number
 }>()
 
-const emit = defineEmits<{ 'update:isFetching': [value: boolean] }>()
-
-// Own flag for the spinner; `isFetching` is the shared one, so a table fetch or
-// filter apply disables this button too.
-const isDownloading = ref(false)
-
 const hasNoResults = computed(() => props.totalItems === 0)
 const isDisabled = computed(() => hasNoResults.value || props.isFetching)
 
+const emit = defineEmits<{ 'update:isFetching': [value: boolean] }>()
+const { trackEvent } = useAnalytics()
+// Own flag for the spinner; `isFetching` is the shared one, so a table fetch or
+// filter apply disables this button too.
+const isDownloading = ref(false)
 async function onDownload() {
   if (isDisabled.value) return
 

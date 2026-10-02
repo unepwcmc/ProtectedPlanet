@@ -17,8 +17,6 @@ import useAnalytics from '@/composables/useAnalytics'
 import FiltersCheckboxesItem from '@/components/Filters/Checkboxes/Item.vue'
 import type { FilterOption } from '@/types/backend'
 
-const { trackEvent } = useAnalytics()
-
 const props = defineProps<{
   id: string
   gaId?: string
@@ -28,9 +26,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{ 'update:options': [ids: Array<string | number>] }>()
-
+const { trackEvent } = useAnalytics()
 const selected = ref<Array<string | number>>(props.preSelected ?? [])
-
 watch(() => props.resetKey, () => {
   // Avoids a redundant request when Clear is clicked on an empty group.
   if (!selected.value.length) return
@@ -38,31 +35,26 @@ watch(() => props.resetKey, () => {
   selected.value = []
   emitChange()
 })
-
 watch(() => props.preSelected, (value) => {
   selected.value = value ?? []
 })
-
 // Option ids can be numbers (Comfy::Cms::PageCategory#id) but always come back
 // from the query string as strings, so compare by String(), not strict equality.
 function isSelected(id: string | number) {
   return selected.value.some(selectedId => String(selectedId) === String(id))
 }
-
 function onClick(option: FilterOption, checked: boolean) {
   selected.value = checked
     ? [...selected.value, option.id]
     : selected.value.filter(id => String(id) !== String(option.id))
   emitChange()
 }
-
 function selectedTitles() {
   return props.options
     .filter(option => isSelected(option.id))
     .map(option => option.title)
     .join(', ')
 }
-
 function emitChange() {
   emit('update:options', selected.value)
 
@@ -70,13 +62,11 @@ function emitChange() {
     trackEvent('click', { event_label: `${props.gaId} - Checkbox(es): ${selectedTitles()}` })
   }
 }
-
 // Lets Filters/CheckboxSearch.vue clear a hidden group on a tab switch
 // without bumping resetKey, which would clear the visible group too.
 function reset() {
   selected.value = []
 }
-
 defineExpose({ reset })
 </script>
 

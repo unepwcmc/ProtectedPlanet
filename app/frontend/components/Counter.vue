@@ -17,13 +17,18 @@ const props = withDefaults(defineProps<Counter>(), {
 })
 
 const number = ref(0)
-const step = ref(0)
-const isIncreasing = ref(true)
+const styledNumber = computed(() => {
+  const roundingNumber = Math.pow(10, props.decimal)
+  return (Math.round(number.value * roundingNumber) / roundingNumber).toLocaleString()
+})
 
+const step = ref(0)
 function calculateStep() {
   step.value = Math.abs(props.total - number.value) / props.config.divisor
 }
+calculateStep()
 
+const isIncreasing = ref(true)
 function checkDirection() {
   isIncreasing.value = number.value < props.total
 }
@@ -44,19 +49,10 @@ function count() {
     }
   }, props.config.speed)
 }
-
-const styledNumber = computed(() => {
-  const roundingNumber = Math.pow(10, props.decimal)
-  return (Math.round(number.value * roundingNumber) / roundingNumber).toLocaleString()
-})
-
 watch(() => props.total, () => {
   calculateStep()
   count()
 })
-
-calculateStep()
-
 onMounted(() => {
   if (props.animate) count()
 

@@ -55,16 +55,14 @@ const props = defineProps<{
   totalItems: number
 }>()
 
+const hasResults = computed(() => props.totalItems > 0)
 const text = computed(() => `${props.pageItemsStart} - ${props.pageItemsEnd} of ${props.totalItems}`)
 
 const emit = defineEmits<{ 'update:page': [requestedPage: number] }>()
-
-const hasResults = computed(() => props.totalItems > 0)
 const isNextActive = computed(() => props.pageItemsEnd < props.totalItems)
 const isPreviousActive = computed(() => props.currentPage > 1)
 const isNextDisabled = computed(() => !isNextActive.value || props.loading)
 const isPreviousDisabled = computed(() => !isPreviousActive.value || props.loading)
-
 function changePage(isActive: boolean, direction: 'previous' | 'next') {
   if (!isActive || props.loading) return
 

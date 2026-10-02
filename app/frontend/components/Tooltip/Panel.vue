@@ -69,20 +69,12 @@ interface TooltipPanelProps {
 
 withDefaults(defineProps<TooltipPanelProps>(), { onHover: true })
 
-const VIEWPORT_MARGIN_PX = 8
-
 const id = `tooltip_${useId()}`
-const isActive = ref(false)
-const rootEl = ref<HTMLElement | null>(null)
+
+const VIEWPORT_MARGIN_PX = 8
 const triggerEl = ref<HTMLElement | null>(null)
 const targetEl = ref<HTMLElement | null>(null)
 const shiftX = ref(0)
-
-function toggleTooltip(value?: boolean) {
-  isActive.value = typeof value === 'boolean' ? value : !isActive.value
-  if (isActive.value) nextTick(updateShift)
-}
-
 // Centered on the trigger by default (see CSS). If that overflows the viewport,
 // shift the box just enough to fit — the arrow stays pinned to the trigger.
 function updateShift() {
@@ -106,10 +98,16 @@ function updateShift() {
   }
 }
 
+const isActive = ref(false)
+function toggleTooltip(value?: boolean) {
+  isActive.value = typeof value === 'boolean' ? value : !isActive.value
+  if (isActive.value) nextTick(updateShift)
+}
 useEventListener(window, 'resize', () => {
   if (isActive.value) updateShift()
 })
 
+const rootEl = ref<HTMLElement | null>(null)
 usePopupCloseListeners(rootEl, {
   isActive,
   onClose: () => toggleTooltip(false)

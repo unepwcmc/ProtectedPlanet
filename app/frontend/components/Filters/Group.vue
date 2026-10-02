@@ -69,14 +69,14 @@ const props = defineProps<{
   type: FilterGroupFilter['type']
 }>()
 
-const emit = defineEmits<{ 'update:filter': [payload: { id: string, options: FilterGroupSelection }] }>()
-
 const localResetKey = ref(0)
-
 // Clear empties this group alone, but a page can also reset every group at once
 // (SearchAreas does on a new search), so the two counters are summed instead of
 // one overwriting the other.
 const combinedResetKey = computed(() => localResetKey.value + (props.resetKey ?? 0))
+function clear() {
+  localResetKey.value += 1
+}
 
 const gaIdWithFilter = computed(() => `${props.gaId} - Filter title: ${props.title}`)
 
@@ -86,40 +86,31 @@ const gaIdWithFilter = computed(() => `${props.gaId} - Filter title: ${props.tit
 // that sends checkbox groups exclusively.
 const searchOptions = computed(() => props.options as SearchFilterOption[])
 
-const hasPreSelected = computed(() => Array.isArray(props.preSelected) && props.preSelected.length > 0)
-
-// Both shapes arrive as an array: checkbox and radio groups hold option ids,
-// a checkbox-search group holds a single {type, options} entry.
-const preSelectedIds = computed(() => (
-  hasPreSelected.value ? props.preSelected as Array<string | number> : undefined
-))
-
-const preSelectedCheckboxSearch = computed(() => (
-  hasPreSelected.value ? props.preSelected![0] as { type: string, options: string[] } : undefined
-))
-
-function clear() {
-  localResetKey.value += 1
-}
-
+const emit = defineEmits<{ 'update:filter': [payload: { id: string, options: FilterGroupSelection }] }>()
 function emitFilter(options: FilterGroupSelection) {
   emit('update:filter', { id: props.id, options })
 }
-
 function onUpdateCheckboxes(options: Array<string | number>) {
   emitFilter(options)
 }
-
 // RadioButtons emits the bare id, or '' once cleared; the endpoint expects the
 // same array shape as every other filter type.
 function onUpdateRadio(option: string) {
   emitFilter(option ? [option] : [])
 }
-
 function onUpdateCheckboxSearch(value: { type: string, options: string[] }) {
   emitFilter(value)
 }
 
+const hasPreSelected = computed(() => Array.isArray(props.preSelected) && props.preSelected.length > 0)
+// Both shapes arrive as an array: checkbox and radio groups hold option ids,
+// a checkbox-search group holds a single {type, options} entry.
+const preSelectedIds = computed(() => (
+  hasPreSelected.value ? props.preSelected as Array<string | number> : undefined
+))
+const preSelectedCheckboxSearch = computed(() => (
+  hasPreSelected.value ? props.preSelected![0] as { type: string, options: string[] } : undefined
+))
 // Primes the parent's active-filter state from a URL-preselected value.
 onMounted(() => {
   if (!hasPreSelected.value) return

@@ -21,7 +21,6 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{ click: [option: string, checked: boolean] }>()
-
 function onOptionClick(option: string, checked: boolean) {
   emit('click', option, checked)
 }

@@ -10,11 +10,10 @@
 import useAnalytics from '@/composables/useAnalytics'
 import type { GaLinkProps } from '@/types/backend'
 
-const { trackEvent } = useAnalytics()
-
 type GaLink = GaLinkProps
 const props = defineProps<GaLink>()
 
+const { trackEvent } = useAnalytics()
 function click() {
   if (props.gaId) {
     trackEvent('click', { event_label: `Link - ${props.gaId}` })

@@ -69,7 +69,6 @@ const emit = defineEmits<{
 
 const dialogEl = ref<HTMLElement | null>(null)
 const isActive = toRef(props, 'isActive')
-
 useFreezeBackground(isActive)
 // The sheet covers the whole viewport, so the page behind it must be out of reach
 // of Tab as well as of the eye, and Escape has to close it.
@@ -84,7 +83,6 @@ function preSelectedFor(filter: FilterGroupFilter) {
 function onUpdateFilter(payload: { id: string, options: FilterGroupSelection }) {
   emit('update:filter', payload)
 }
-
 function onToggleFilterPane() {
   emit('toggle:filterPane')
 }

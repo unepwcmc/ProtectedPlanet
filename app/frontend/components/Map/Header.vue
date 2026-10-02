@@ -41,7 +41,6 @@ withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ toggle: [] }>()
-
 const toggle = () => emit('toggle')
 </script>
 

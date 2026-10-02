@@ -87,7 +87,6 @@ function onToggle() {
   if (props.isFetching) return
   emit('toggle')
 }
-
 </script>
 
 <style scoped lang="css">

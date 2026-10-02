@@ -49,25 +49,33 @@ import type { SearchSiteProps, SearchSiteResultsData } from '@/types/backend'
 type SearchSite = SearchSiteProps
 const props = defineProps<SearchSite>()
 
+const defaultCategoryId = props.categories[0].id
+const categoryId = ref(defaultCategoryId)
+function resetCategory() {
+  categoryId.value = defaultCategoryId
+}
+
 enum UrlParams {
   SearchTerm = 'search_term'
 }
+const searchTerm = ref(props.dataPageLoad.searchTerm)
+function updateQueryString(newSearchTerm: string) {
+  const searchParams = new URLSearchParams()
+  searchParams.set(UrlParams.SearchTerm, newSearchTerm)
+  window.history.replaceState({}, '', `${window.location.pathname}?${searchParams.toString()}`)
+}
+function handleQueryString() {
+  const paramsFromUrl = new URLSearchParams(window.location.search)
+  if (paramsFromUrl.has(UrlParams.SearchTerm)) searchTerm.value = paramsFromUrl.get(UrlParams.SearchTerm) ?? ''
+}
+handleQueryString()
 
-const defaultCategoryId = props.categories[0].id
-
-const categoryId = ref(defaultCategoryId)
 const currentPage = ref(props.dataPageLoad.currentPage)
 const isLoadingResults = ref(false)
 const pageItemsEnd = ref(props.dataPageLoad.pageItemsEnd)
 const pageItemsStart = ref(props.dataPageLoad.pageItemsStart)
 const results = ref(props.dataPageLoad.results)
-const searchTerm = ref(props.dataPageLoad.searchTerm)
 const totalItems = ref(props.dataPageLoad.totalItems)
-
-function resetCategory() {
-  categoryId.value = defaultCategoryId
-}
-
 async function ajaxSubmission(requestedPage: number) {
   isLoadingResults.value = true
 
@@ -86,12 +94,10 @@ function updateCategory(selectedCategoryId: string) {
   categoryId.value = selectedCategoryId
   ajaxSubmission(1)
 }
-
 function updatePage(requestedPage: number) {
   if (isLoadingResults.value) return
   ajaxSubmission(requestedPage)
 }
-
 function updateProperties(data: SearchSiteResultsData) {
   currentPage.value = data.currentPage
   pageItemsStart.value = data.pageItemsStart
@@ -100,13 +106,6 @@ function updateProperties(data: SearchSiteResultsData) {
   searchTerm.value = data.searchTerm
   totalItems.value = data.totalItems
 }
-
-function updateQueryString(newSearchTerm: string) {
-  const searchParams = new URLSearchParams()
-  searchParams.set(UrlParams.SearchTerm, newSearchTerm)
-  window.history.replaceState({}, '', `${window.location.pathname}?${searchParams.toString()}`)
-}
-
 function updateSearchTerm(newSearchTerm: string) {
   if (isLoadingResults.value) return
   searchTerm.value = newSearchTerm
@@ -114,12 +113,6 @@ function updateSearchTerm(newSearchTerm: string) {
   resetCategory()
   ajaxSubmission(1)
 }
-
-function handleQueryString() {
-  const paramsFromUrl = new URLSearchParams(window.location.search)
-  if (paramsFromUrl.has(UrlParams.SearchTerm)) searchTerm.value = paramsFromUrl.get(UrlParams.SearchTerm) ?? ''
-}
-handleQueryString()
 </script>
 
 <style scoped lang="css">

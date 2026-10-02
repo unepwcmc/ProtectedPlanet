@@ -95,16 +95,14 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{ close: [] }>()
-
-const dialogEl = ref<HTMLElement | null>(null)
-const isModalOpen = toRef(props, 'isModalOpen')
-
-useDialog(dialogEl, { isOpen: isModalOpen, onClose })
-useFreezeBackground(isModalOpen)
-
 function onClose() {
   emit('close')
 }
+
+const dialogEl = ref<HTMLElement | null>(null)
+const isModalOpen = toRef(props, 'isModalOpen')
+useDialog(dialogEl, { isOpen: isModalOpen, onClose })
+useFreezeBackground(isModalOpen)
 </script>
 
 <style scoped lang="css">

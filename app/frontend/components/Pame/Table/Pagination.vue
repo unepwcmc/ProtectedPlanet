@@ -54,22 +54,20 @@ const props = defineProps<{
   totalPages: number
 }>()
 
-const emit = defineEmits<{ requestItems: [page: number] }>()
-
-const isNextActive = computed(() => props.currentPage < props.totalPages)
-const isPreviousActive = computed(() => props.currentPage > 1)
 const hasResults = computed(() => props.totalItems > 0)
-const isNextDisabled = computed(() => !isNextActive.value || props.isFetching)
-const isPreviousDisabled = computed(() => !isPreviousActive.value || props.isFetching)
 
 const firstItem = computed(() => {
   if (props.totalItems === 0) return 0
   if (props.totalItems < props.itemsPerPage) return 1
   return props.itemsPerPage * (props.currentPage - 1) + 1
 })
-
 const lastItem = computed(() => Math.min(props.itemsPerPage * props.currentPage, props.totalItems))
 
+const emit = defineEmits<{ requestItems: [page: number] }>()
+const isNextActive = computed(() => props.currentPage < props.totalPages)
+const isPreviousActive = computed(() => props.currentPage > 1)
+const isNextDisabled = computed(() => !isNextActive.value || props.isFetching)
+const isPreviousDisabled = computed(() => !isPreviousActive.value || props.isFetching)
 function onChangePage(direction: 'previous' | 'next') {
   const isActive = direction === 'next' ? isNextActive.value : isPreviousActive.value
   if (!isActive || props.isFetching) return

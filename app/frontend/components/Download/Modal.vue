@@ -56,7 +56,6 @@ type DownloadModal = DownloadModalProps
 defineProps<DownloadModal>()
 
 const downloads = useDownloads()
-
 // The store persists itself, so there is nothing to restore here — only to
 // reflect. `immediate` covers the case this watcher exists for: a tab opened (or
 // reloaded) while downloads requested elsewhere are still in flight, which the
@@ -65,7 +64,6 @@ watch(() => downloads.downloadItems.length, (count) => {
   downloads.toggleDownloadModal(count > 0)
   if (count === 0) downloads.minimiseDownloadModal(false)
 }, { immediate: true })
-
 function toggleMinimise() {
   downloads.minimiseDownloadModal(!downloads.isModalMinimised)
 }

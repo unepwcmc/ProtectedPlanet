@@ -34,7 +34,6 @@ type AttributesProtectedArea = AttributesProtectedAreaProps
 const props = defineProps<AttributesProtectedArea>()
 
 const { selectedParcelId } = useParcelSelection()
-
 const currentAttributeSet = computed(() => {
   const chosen = props.attributesList.find(set => set.site_pid === selectedParcelId.value)
     ?? props.attributesList[0]

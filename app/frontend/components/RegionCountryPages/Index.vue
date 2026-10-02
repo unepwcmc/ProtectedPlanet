@@ -86,6 +86,9 @@ const props = defineProps<RegionCountryPages>()
 
 const selectedDatabaseId = ref(props.tabs[0].id)
 const activeDatabase = computed(() => props.data[selectedDatabaseId.value])
+function onSelectDatabase(id: string) {
+  selectedDatabaseId.value = id
+}
 
 const hasCoverageStats = computed(() =>
   (activeDatabase.value.coverage?.length ?? 0) > 1)
@@ -97,15 +100,6 @@ const hasSites = computed(() =>
   (activeDatabase.value.sites?.site_details.length ?? 0) > 1)
 
 const coverageProps = computed(() => (activeDatabase.value.coverage ?? []).map(mapCoverage))
-const sourcesProps = computed(() => mapSources(activeDatabase.value.sources!))
-const sitesProps = computed(() => mapSites(activeDatabase.value.sites!))
-const iucnProps = computed(() => mapIucnCategories(activeDatabase.value.iucn!))
-const governanceProps = computed(() => mapGovernance(activeDatabase.value.governance!))
-
-function onSelectDatabase(id: string) {
-  selectedDatabaseId.value = id
-}
-
 function mapCoverage(datum: StatsCoverageDatum): StatsCoverageProps {
   return {
     nationalReportVersion: datum.national_report_version,
@@ -126,6 +120,7 @@ function mapCoverage(datum: StatsCoverageDatum): StatsCoverageProps {
   }
 }
 
+const sourcesProps = computed(() => mapSources(activeDatabase.value.sources!))
 function mapSources(data: StatsSourcesData): StatsSourcesProps {
   return {
     count: data.count,
@@ -135,6 +130,7 @@ function mapSources(data: StatsSourcesData): StatsSourcesProps {
   }
 }
 
+const sitesProps = computed(() => mapSites(activeDatabase.value.sites!))
 function mapSites(data: StatsSitesData): StatsSitesProps {
   return {
     siteDetails: data.site_details,
@@ -144,6 +140,7 @@ function mapSites(data: StatsSitesData): StatsSitesProps {
   }
 }
 
+const iucnProps = computed(() => mapIucnCategories(activeDatabase.value.iucn!))
 function mapIucnCategories(data: StatsIucnCategoriesData): StatsIucnCategoriesProps {
   return {
     categories: data.categories,
@@ -152,6 +149,7 @@ function mapIucnCategories(data: StatsIucnCategoriesData): StatsIucnCategoriesPr
   }
 }
 
+const governanceProps = computed(() => mapGovernance(activeDatabase.value.governance!))
 function mapGovernance(data: StatsGovernanceData): StatsGovernanceProps {
   return {
     governance: data.governance,

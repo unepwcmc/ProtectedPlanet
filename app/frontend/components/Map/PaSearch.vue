@@ -82,38 +82,21 @@ import type { ZoomToOptions } from '@/composables/useMapBoundingBox'
 
 type MapPaSearch = MapPaSearchProps
 const props = defineProps<MapPaSearch>()
-const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
-
-const root = ref<HTMLElement | null>(null)
-const inputEl = ref<HTMLInputElement | null>(null)
-const resultEls = ref<HTMLElement[]>([])
 
 const search = ref('')
-const results = ref<AutocompleteResult[]>([])
-const isResultsPaneRequested = ref(false)
-const isBusy = ref(false)
-const hasNoResultsError = ref(false)
-
 const hasSearchString = computed(() => search.value.length > 0)
 const isValidSearchString = computed(() => search.value.length > 2)
-const hasResults = computed(() => results.value.length > 0)
 const hasTooShortError = computed(() => hasSearchString.value && !isValidSearchString.value)
-const isResultsPaneVisible = computed(() => hasSearchString.value && isResultsPaneRequested.value)
 
-onClickOutside(root, () => {
-  isResultsPaneRequested.value = false
-})
-
+const results = ref<AutocompleteResult[]>([])
+const isBusy = ref(false)
+const hasNoResultsError = ref(false)
+const hasResults = computed(() => results.value.length > 0)
 function reset() {
   search.value = ''
   results.value = []
   hasNoResultsError.value = false
 }
-
-function focusResult(index: number) {
-  resultEls.value[index]?.focus()
-}
-
 const runAutocomplete = useDebounceFn(async () => {
   if (!isValidSearchString.value) return
 
@@ -140,6 +123,12 @@ const runAutocomplete = useDebounceFn(async () => {
   }
 }, 500)
 
+const root = ref<HTMLElement | null>(null)
+const isResultsPaneRequested = ref(false)
+const isResultsPaneVisible = computed(() => hasSearchString.value && isResultsPaneRequested.value)
+onClickOutside(root, () => {
+  isResultsPaneRequested.value = false
+})
 function onInput() {
   isResultsPaneRequested.value = true
 
@@ -152,6 +141,10 @@ function onInput() {
   }
 }
 
+const resultEls = ref<HTMLElement[]>([])
+function focusResult(index: number) {
+  resultEls.value[index]?.focus()
+}
 function onInputEnter() {
   if (!hasSearchString.value) return
 
@@ -163,6 +156,7 @@ function onInputEnter() {
   }
 }
 
+const inputEl = ref<HTMLInputElement | null>(null)
 function onMagnifyingGlassClick() {
   if (hasSearchString.value) {
     if (hasResults.value) focusResult(0)
@@ -173,6 +167,7 @@ function onMagnifyingGlassClick() {
   }
 }
 
+const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
 function submit(result: AutocompleteResult) {
   search.value = result.title
   results.value = []

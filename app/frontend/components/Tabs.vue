@@ -53,35 +53,23 @@ import { ref, onMounted } from 'vue'
 import useAnalytics from '@/composables/useAnalytics'
 import type { TabsProps } from '@/types/backend'
 
-const { trackEvent } = useAnalytics()
-
 // Match by id or by title, mirroring the `?tab=` param.
 type Tabs = TabsProps
 const props = defineProps<Tabs>()
+
 const emit = defineEmits<{ change: [id: number] }>()
-
-// Hero partials render an empty #vw-hero-tabs-target for the trigger row to
-// teleport into, so it sits at the bottom of the hero while the panels stay at
-// this component's mount point. Renders in place when there is no hero target.
-const hasHeroTabsTarget = ref(false)
-onMounted(() => {
-  hasHeroTabsTarget.value = document.querySelector('#vw-hero-tabs-target') !== null
-})
-
+const { trackEvent } = useAnalytics()
 function initialTabId() {
   const preset = props.tabs.find(
     t => String(t.id) === String(props.preselectedTab) || t.title === props.preselectedTab
   )
   return preset ? preset.id : props.tabs[0]?.id
 }
-
 const selectedId = ref(initialTabId())
-
 // Strips non-ASCII chars and newlines from CMS titles used in the URL.
 function sanitizeTabParam(title: string) {
   return title.replace(/[^\x00-\x7F]|\n/g, '')
 }
-
 function updateTabParam(id: number) {
   const tab = props.tabs.find(t => t.id === id)
   if (!tab) return
@@ -89,7 +77,6 @@ function updateTabParam(id: number) {
   url.searchParams.set('tab', sanitizeTabParam(tab.title))
   window.history.replaceState({ page: 1 }, '', url)
 }
-
 function select(id: number) {
   const tab = props.tabs.find(t => t.id === id)
   if (props.gaId && tab) {
@@ -99,8 +86,15 @@ function select(id: number) {
   updateTabParam(id)
   emit('change', id)
 }
-
 if (selectedId.value !== undefined) updateTabParam(selectedId.value)
+
+// Hero partials render an empty #vw-hero-tabs-target for the trigger row to
+// teleport into, so it sits at the bottom of the hero while the panels stay at
+// this component's mount point. Renders in place when there is no hero target.
+const hasHeroTabsTarget = ref(false)
+onMounted(() => {
+  hasHeroTabsTarget.value = document.querySelector('#vw-hero-tabs-target') !== null
+})
 </script>
 
 <style scoped lang="css">

@@ -36,18 +36,14 @@ import type { CookieConsentProps } from '@/types/backend'
 
 const props = defineProps<CookieConsentProps>()
 
-const { acceptAnalytics, rejectAnalytics } = useAnalytics()
-
 const isVisible = ref(getConsent() === null)
-
 // Banner sits over an overlay, so the page behind it shouldn't scroll while it's up.
 useFreezeBackground(isVisible)
-
+const { acceptAnalytics, rejectAnalytics } = useAnalytics()
 function accept() {
   acceptAnalytics()
   isVisible.value = false
 }
-
 function reject() {
   rejectAnalytics()
   isVisible.value = false

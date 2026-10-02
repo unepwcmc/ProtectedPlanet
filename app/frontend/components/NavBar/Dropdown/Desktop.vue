@@ -61,27 +61,23 @@ const modalId = `nav-dropdown-${props.link.id}`
 const triggerId = `nav-dropdown-toggle-${props.link.id}`
 
 const isActive = ref(false)
-const rootEl = ref<HTMLElement | null>(null)
-
 function openDropdown() {
   isActive.value = true
 }
-
 function closeDropdown() {
   isActive.value = false
 }
-
 function toggleDropdown() {
   isActive.value = !isActive.value
 }
 
+const rootEl = ref<HTMLElement | null>(null)
 // Tabbing between the toggle and the links inside fires focusout on the root, so
 // only a target outside the dropdown closes it.
 function onFocusOut(event: FocusEvent) {
   const nextFocused = event.relatedTarget as Node | null
   if (!nextFocused || !rootEl.value?.contains(nextFocused)) closeDropdown()
 }
-
 usePopupCloseListeners(rootEl, {
   isActive,
   onClose: closeDropdown

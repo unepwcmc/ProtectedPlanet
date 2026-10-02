@@ -53,8 +53,9 @@ const props = defineProps<{
   textNoResults: string
 }>()
 
-const emit = defineEmits<{ requestMore: [page: number] }>()
 const hasResults = computed(() => props.results.total > 0)
+
+const emit = defineEmits<{ requestMore: [page: number] }>()
 const onRequestMore = (page: number) => emit('requestMore', page)
 </script>
 

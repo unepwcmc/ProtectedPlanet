@@ -56,23 +56,20 @@ import IconClose from '@/components/Icon/Close.vue'
 type Banner = BannerProps
 const props = defineProps<Banner>()
 
-const currentIndex = ref(0)
-const isVisible = ref(true)
-
 const hasMultipleBanners = computed(() => props.banners.length > 1)
 
+const currentIndex = ref(0)
 function nextBanner() {
   currentIndex.value = (currentIndex.value + 1) % props.banners.length
 }
-
 function previousBanner() {
   currentIndex.value = (currentIndex.value - 1 + props.banners.length) % props.banners.length
 }
 
+const isVisible = ref(true)
 function setCookie(name: string, value: string) {
   document.cookie = `${name}=${value}; path=/; max-age=1209600` // 2 weeks
 }
-
 function closeBanner() {
   if (props.banners.length === 1) {
     setCookie('banner_closed', props.banners[0].id.toString())

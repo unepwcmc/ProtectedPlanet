@@ -40,14 +40,13 @@ const props = defineProps<{
   textClear: string
 }>()
 
-const emit = defineEmits<{ 'update:filter': [payload: { id: string, options: FilterGroupSelection }] }>()
-
 // The CMS listing keeps its selection in one map on the page and passes it in;
 // the search-areas serializer bakes it into each filter instead.
 function preSelectedFor(filter: FilterGroupFilter) {
   return props.preSelected?.[filter.id] ?? filter.preSelected
 }
 
+const emit = defineEmits<{ 'update:filter': [payload: { id: string, options: FilterGroupSelection }] }>()
 function onUpdateFilter(payload: { id: string, options: FilterGroupSelection }) {
   emit('update:filter', payload)
 }

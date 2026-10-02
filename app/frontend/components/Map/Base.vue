@@ -40,21 +40,10 @@ const props = withDefaults(defineProps<MapBase>(), {
   popupAttributes: undefined
 })
 
-// A hardcoded id would collide with a second Map on the page: getElementById
-// returns the first match, mounting this canvas into another's container. The
-// counter must stay at module scope — `<script setup>` re-runs per instance.
-const containerId = `${MAP_OPTIONS_DEFAULT.container}-${mapInstanceCount++}`
-const { visibleLayers } = useMapOverlays()
-
 // Holds the PDF rasterizer's readiness flag open until tiles have loaded
 // (MapLibre 'idle', below). Registered outside onMounted so there is no gap
 // between mount and reporting busy — see pdfReady.ts.
 const markMapRenderDone = registerPendingRender()
-
-const baselayers = computed(() => props.options.baselayers ?? BASELAYERS_DEFAULT)
-// The map is built with the first baselayer's style, so selection starts there.
-const selectedBaselayer = ref<MapBaselayer>(baselayers.value[0])
-const controlsOptions = computed(() => ({ ...CONTROLS_OPTIONS_DEFAULT, ...props.options.controls }))
 
 const { map, initMap } = useMapInstance()
 const { executeAfterStyleLoad, setFirstForegroundLayerId, showLayers, hideLayers } = useMapLayers(map)
@@ -72,23 +61,9 @@ const { initBounds, initBoundingBoxAndMap, zoomTo } = useMapBoundingBox(map, (co
     { title: popupAttributes.site_pid, value: (options.site_pid as string | null) ?? undefined }
   ]))
 })
+const resize = () => map.value?.resize()
 
-const mapOptions = computed<MapOptions>(() => {
-  // boundsUrl isn't a MapLibre option; initBoundingBoxAndMap consumes it first.
-  const opts: MapOptions = {
-    ...MAP_OPTIONS_DEFAULT,
-    ...props.options.map,
-    container: containerId,
-    style: baselayers.value[0].style,
-    attributionControl: false,
-    maplibreLogo: false
-  }
-
-  if (initBounds.value) opts.bounds = initBounds.value
-
-  return opts
-})
-
+const { visibleLayers } = useMapOverlays()
 watch(
   visibleLayers,
   (newLayers, oldLayers) => {
@@ -98,6 +73,9 @@ watch(
   }
 )
 
+const baselayers = computed(() => props.options.baselayers ?? BASELAYERS_DEFAULT)
+// The map is built with the first baselayer's style, so selection starts there.
+const selectedBaselayer = ref<MapBaselayer>(baselayers.value[0])
 watch(
   selectedBaselayer,
   (layer) => {
@@ -118,14 +96,32 @@ watch(
   }
 )
 
-const resize = () => map.value?.resize()
+// A hardcoded id would collide with a second Map on the page: getElementById
+// returns the first match, mounting this canvas into another's container. The
+// counter must stay at module scope — `<script setup>` re-runs per instance.
+const containerId = `${MAP_OPTIONS_DEFAULT.container}-${mapInstanceCount++}`
+const mapOptions = computed<MapOptions>(() => {
+  // boundsUrl isn't a MapLibre option; initBoundingBoxAndMap consumes it first.
+  const opts: MapOptions = {
+    ...MAP_OPTIONS_DEFAULT,
+    ...props.options.map,
+    container: containerId,
+    style: baselayers.value[0].style,
+    attributionControl: false,
+    maplibreLogo: false
+  }
 
+  if (initBounds.value) opts.bounds = initBounds.value
+
+  return opts
+})
+
+const controlsOptions = computed(() => ({ ...CONTROLS_OPTIONS_DEFAULT, ...props.options.controls }))
 // A map mounted inside a hidden tab (e.g. wdpca/Green List tab extras)
 // initialises at 0×0, so MapLibre needs an explicit resize() once the container
 // has a layout box. Container-driven, so it isn't coupled to the Tabs component.
 let visibilityObserver: IntersectionObserver | undefined
 const mapContainer = useTemplateRef('mapContainer')
-
 onMounted(() => {
   initBoundingBoxAndMap(props.options.map?.boundsUrl, () => {
     try {
@@ -174,7 +170,6 @@ onMounted(() => {
     visibilityObserver.observe(mapContainer.value)
   })
 })
-
 onUnmounted(() => visibilityObserver?.disconnect())
 
 defineExpose({ zoomTo, resize })

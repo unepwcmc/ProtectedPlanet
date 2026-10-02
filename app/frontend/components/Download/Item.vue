@@ -70,8 +70,6 @@ import {
 } from '@/composables/useDownloads'
 import type { DownloadModalProps } from '@/types/backend'
 
-const { trackEvent } = useAnalytics()
-
 const props = defineProps<{
   endpointCreate: string
   endpointPoll: string
@@ -81,7 +79,6 @@ const props = defineProps<{
 }>()
 
 const downloads = useDownloads()
-
 // props.params identifies the item; the live copy comes back out of the store so
 // this stays correct when another tab edits the list. It stands in if the item
 // has already been deleted.
@@ -92,43 +89,15 @@ const item = computed(() => downloads.downloadItems.find(({ id }) => id === prop
 const hasFailed = ref(false)
 const serverTitle = ref('')
 const url = ref('')
-
 const isGenerating = computed(() => !hasFailed.value && url.value === '')
 const isReady = computed(() => url.value !== '')
 const title = computed(() => serverTitle.value || `${item.value.token}.${item.value.format}`)
-
-let interval: ReturnType<typeof window.setInterval> | null = null
-
 interface DownloadResponseData {
   hasFailed: boolean
   title: string
   url: string
   token?: string
 }
-
-// Only what each endpoint reads. Download::Router::request keys off
-// filters/search, and Download::Poller keys 'search' off backEndToken.
-function createPayload(download: DownloadItemParams) {
-  return {
-    domain: download.domain,
-    format: download.format,
-    token: download.token,
-    filters: download.filters,
-    search: download.search
-  }
-}
-
-function pollPayload(download: DownloadItemParams): Record<string, string> {
-  const payload: Record<string, string> = {
-    domain: download.domain,
-    format: download.format,
-    token: download.token
-  }
-  if (download.backEndToken !== undefined) payload.backEndToken = download.backEndToken
-
-  return payload
-}
-
 function applyResponse(data: DownloadResponseData) {
   hasFailed.value = data.hasFailed
   serverTitle.value = data.title
@@ -145,16 +114,36 @@ function applyResponse(data: DownloadResponseData) {
   if (isNewDigest) downloads.patchDownloadItem(item.value.id, { backEndToken: data.token })
 }
 
+let interval: ReturnType<typeof window.setInterval> | null = null
+// Only what each endpoint reads. Download::Router::request keys off
+// filters/search, and Download::Poller keys 'search' off backEndToken.
+function createPayload(download: DownloadItemParams) {
+  return {
+    domain: download.domain,
+    format: download.format,
+    token: download.token,
+    filters: download.filters,
+    search: download.search
+  }
+}
+function pollPayload(download: DownloadItemParams): Record<string, string> {
+  const payload: Record<string, string> = {
+    domain: download.domain,
+    format: download.format,
+    token: download.token
+  }
+  if (download.backEndToken !== undefined) payload.backEndToken = download.backEndToken
+
+  return payload
+}
 function markFailed() {
   hasFailed.value = true
   stopPolling()
 }
-
 function stopPolling() {
   if (interval !== null) window.clearInterval(interval)
   interval = null
 }
-
 // Asking the server to generate the file. Only ever reached for the click that
 // requested this download — see useDownloads#consumeCreateRequest.
 function requestDownload() {
@@ -165,7 +154,6 @@ function requestDownload() {
       markFailed()
     })
 }
-
 function pollDownloadStatus() {
   // A 'search' download is keyed off a digest only the create response carries,
   // so there is nothing to ask about until the tab that requested it stored one.
@@ -178,7 +166,6 @@ function pollDownloadStatus() {
       markFailed()
     })
 }
-
 function tick() {
   if (isReady.value || hasFailed.value) {
     stopPolling()
@@ -192,28 +179,26 @@ function tick() {
 
   pollDownloadStatus()
 }
-
 function start() {
   if (downloads.consumeCreateRequest(item.value.id)) requestDownload()
   else tick()
 
   interval = window.setInterval(tick, POLL_INTERVAL_MS)
 }
+onMounted(start)
+onUnmounted(stopPolling)
 
 function deleteItem() {
   downloads.deleteDownloadItem(item.value)
   stopPolling()
 }
 
+const { trackEvent } = useAnalytics()
 function trackDownloadClick() {
   if (props.gaId) {
     trackEvent('download', { label: `${props.gaId} file - ${title.value}` })
   }
 }
-
-onMounted(start)
-
-onUnmounted(stopPolling)
 </script>
 
 <style scoped lang="css">

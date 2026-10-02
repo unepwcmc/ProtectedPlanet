@@ -85,9 +85,6 @@ import type { FilterGroupSelection, SearchAreasPageProps, SearchAreasResults as 
 type SearchAreasPage = SearchAreasPageProps
 const props = defineProps<SearchAreasPage>()
 
-const QUERY_STRING_PARAMS = ['search_term', 'geo_type']
-const QUERY_STRING_PARAMS_FILTERS = ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category']
-
 const downloads = useDownloads()
 
 // The hero partial renders an empty #vw-hero-search-target for this bar to
@@ -98,35 +95,113 @@ onMounted(() => {
   hasHeroSearchTarget.value = document.querySelector('#vw-hero-search-target') !== null
 })
 
+const isFilterPaneActive = ref(false)
+const isFilterPaneDisabled = ref(false)
+function disableFilters() {
+  isFilterPaneActive.value = false
+  isFilterPaneDisabled.value = true
+}
+function enableFilters() {
+  isFilterPaneDisabled.value = false
+}
+function updateDisabledComponents(selectedTabId: string) {
+  if (selectedTabId === 'site') enableFilters()
+  else disableFilters()
+}
+function toggleFilterPane() {
+  isFilterPaneActive.value = !isFilterPaneActive.value
+}
+
+type QueryStringUpdate = { filters: Record<string, unknown> } | { search_term: string } | { geo_type: string }
+function updateQueryString(params: QueryStringUpdate) {
+  let searchParams = new URLSearchParams(window.location.search)
+
+  if ('filters' in params) {
+    Object.entries(params.filters).forEach(([key, value]) => {
+      let queryKey = `filters[${key}][]`
+      let queryValues = value as string[] | { type: string, options: string[] }
+
+      if (key === 'location') {
+        const location = queryValues as { type: string, options: string[] }
+        updateQueryStringParam(searchParams, 'filters[location][type]', location.type)
+
+        queryKey = 'filters[location][options][]'
+        queryValues = location.options
+      }
+
+      if (searchParams.has(queryKey)) searchParams.delete(queryKey)
+
+      ;(queryValues as string[]).forEach((value) => {
+        searchParams.append(queryKey, value)
+      })
+    })
+  }
+
+  if ('search_term' in params) {
+    searchParams = new URLSearchParams()
+
+    updateQueryStringParam(searchParams, 'search_term', params.search_term)
+    updateQueryStringParam(searchParams, 'geo_type', 'site')
+  }
+
+  if ('geo_type' in params) {
+    // Switching tab clears every filter, so rebuild the query string from
+    // scratch and keep only the search term alongside the new geo_type.
+    const currentSearchTerm = searchParams.get('search_term')
+    searchParams = new URLSearchParams()
+
+    if (currentSearchTerm) updateQueryStringParam(searchParams, 'search_term', currentSearchTerm)
+    updateQueryStringParam(searchParams, 'geo_type', params.geo_type)
+  }
+
+  const newUrl = `${window.location.pathname}?${searchParams.toString()}`
+
+  window.history.replaceState({ page: 1 }, '', newUrl)
+}
+function updateQueryStringParam(params: URLSearchParams, key: string, value: string) {
+  if (params.has(key)) params.set(key, value)
+  else params.append(key, value)
+}
+
+const searchTerm = ref('')
+
+const tabIdDefault = props.tabs[2].id
+const tabIdSelected = ref(tabIdDefault)
+
 const activeFilterOptions = ref<Record<string, unknown>>({})
 // Search::FiltersSerializer#serialize is a hardcoded single-element array, not
 // a real multi-group structure, so flatten it once here and let the rest of the
 // tree work with a plain filter list.
 const filtersTitle = props.filterGroups[0]?.title ?? ''
 const filters = ref<SearchFilter[]>(props.filterGroups[0]?.filters ?? [])
-const isFilterPaneActive = ref(false)
-const isFilterPaneDisabled = ref(false)
-const isLoadingResults = ref(false)
-// Pagination appends to the list, so the current cards stay put under the
-// spinner; every other request replaces them and should show the spinner alone.
-const isReplacingResults = ref(false)
-const newResults = ref<SearchAreasResultsData>(props.results)
-const searchTerm = ref('')
-const tabIdDefault = props.tabs[2].id
-const tabIdSelected = ref(tabIdDefault)
+function isUnchanged(id: string, options: FilterGroupSelection) {
+  return JSON.stringify(activeFilterOptions.value[id] ?? []) === JSON.stringify(options)
+}
+
 // Vue 3 has no global event bus: bumping these props down the Filters/Results
 // trees stands in for the old 'reset:filter-options'/'reset:pagination'
 // broadcasts.
 const filterResetKey = ref(0)
 const paginationResetKey = ref(0)
+function resetFilters() {
+  activeFilterOptions.value = {}
+  filterResetKey.value += 1
+  downloads.updateSearchFilters({} as unknown as unknown[])
+}
+function resetPagination() {
+  paginationResetKey.value += 1
+}
 
+const isLoadingResults = ref(false)
+// Pagination appends to the list, so the current cards stay put under the
+// spinner; every other request replaces them and should show the spinner alone.
+const isReplacingResults = ref(false)
+const newResults = ref<SearchAreasResultsData>(props.results)
 const isDownloadDisabled = computed(() => Number(newResults.value.total || 0) === 0)
-
 interface SearchAreasResultsResponse {
   areas: SearchAreasResultsData
   filters: SearchFilterGroup[]
 }
-
 async function ajaxSubmission(resetFilters = false, pagination = false, requestedPage = 1) {
   isLoadingResults.value = true
   isReplacingResults.value = !pagination
@@ -149,24 +224,60 @@ async function ajaxSubmission(resetFilters = false, pagination = false, requeste
   isLoadingResults.value = false
   isReplacingResults.value = false
 }
-
-function disableFilters() {
-  isFilterPaneActive.value = false
-  isFilterPaneDisabled.value = true
+function updateProperties(response: SearchAreasResultsResponse, resetFilters: boolean) {
+  newResults.value = response.areas
+  if (resetFilters) filters.value = response.filters[0]?.filters ?? []
 }
-
-function enableFilters() {
-  isFilterPaneDisabled.value = false
-}
-
 function getFilteredSearchResults() {
   ajaxSubmission()
 }
+function requestMore(requestedPage: number) {
+  ajaxSubmission(false, true, requestedPage)
+}
 
+// FiltersPanel reports one group at a time; the accumulated dict is what the
+// endpoint, the query string and the download store all take.
+function updateFilters(payload: { id: string, options: FilterGroupSelection }) {
+  // Groups re-announce their selection on mount and when resetKey bumps, so
+  // opening the panel or switching tab would otherwise fire a second, identical
+  // request. Only a genuine change gets through.
+  if (isUnchanged(payload.id, payload.options)) return
+
+  paginationResetKey.value += 1
+  const filters = { ...activeFilterOptions.value, [payload.id]: payload.options }
+  activeFilterOptions.value = filters
+  updateQueryString({ filters })
+  // Re-syncs the active filters and the download store from the query string.
+  handleQueryString()
+  getFilteredSearchResults()
+}
+
+function updateSelectedTab(selectedTabId: string) {
+  updateDisabledComponents(selectedTabId)
+  tabIdSelected.value = selectedTabId
+  resetFilters()
+  resetPagination()
+  updateQueryString({ geo_type: selectedTabId })
+  // Drops the preSelected values the filter list was initialised with, now
+  // that the filter params are gone from the query string.
+  handleQueryString()
+  getFilteredSearchResults()
+}
+
+function updateSearchTerm(newSearchTerm: string) {
+  resetFilters()
+  resetPagination()
+  searchTerm.value = newSearchTerm
+  ajaxSubmission(true)
+  updateQueryString({ search_term: newSearchTerm })
+  downloads.updateSearchTerm(newSearchTerm)
+}
+
+const QUERY_STRING_PARAMS = ['search_term', 'geo_type']
+const QUERY_STRING_PARAMS_FILTERS = ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category']
 function getQueryStringParams(paramsFromUrl: URLSearchParams) {
   return QUERY_STRING_PARAMS.filter(param => paramsFromUrl.has(param))
 }
-
 // Initialise from the URL's query params, if any — called at the end of setup.
 function handleQueryString() {
   const paramsFromUrl = new URLSearchParams(window.location.search)
@@ -225,130 +336,6 @@ function handleQueryString() {
   // `{ [filterId]: options }` dict.
   downloads.updateSearchFilters(activeFromUrl as unknown as unknown[])
 }
-
-function updateDisabledComponents(selectedTabId: string) {
-  if (selectedTabId === 'site') enableFilters()
-  else disableFilters()
-}
-
-// FiltersPanel reports one group at a time; the accumulated dict is what the
-// endpoint, the query string and the download store all take.
-function updateFilters(payload: { id: string, options: FilterGroupSelection }) {
-  // Groups re-announce their selection on mount and when resetKey bumps, so
-  // opening the panel or switching tab would otherwise fire a second, identical
-  // request. Only a genuine change gets through.
-  if (isUnchanged(payload.id, payload.options)) return
-
-  paginationResetKey.value += 1
-  const filters = { ...activeFilterOptions.value, [payload.id]: payload.options }
-  activeFilterOptions.value = filters
-  updateQueryString({ filters })
-  // Re-syncs the active filters and the download store from the query string.
-  handleQueryString()
-  getFilteredSearchResults()
-}
-
-function isUnchanged(id: string, options: FilterGroupSelection) {
-  return JSON.stringify(activeFilterOptions.value[id] ?? []) === JSON.stringify(options)
-}
-
-function updateProperties(response: SearchAreasResultsResponse, resetFilters: boolean) {
-  newResults.value = response.areas
-  if (resetFilters) filters.value = response.filters[0]?.filters ?? []
-}
-
-type QueryStringUpdate = { filters: Record<string, unknown> } | { search_term: string } | { geo_type: string }
-
-function updateQueryString(params: QueryStringUpdate) {
-  let searchParams = new URLSearchParams(window.location.search)
-
-  if ('filters' in params) {
-    Object.entries(params.filters).forEach(([key, value]) => {
-      let queryKey = `filters[${key}][]`
-      let queryValues = value as string[] | { type: string, options: string[] }
-
-      if (key === 'location') {
-        const location = queryValues as { type: string, options: string[] }
-        updateQueryStringParam(searchParams, 'filters[location][type]', location.type)
-
-        queryKey = 'filters[location][options][]'
-        queryValues = location.options
-      }
-
-      if (searchParams.has(queryKey)) searchParams.delete(queryKey)
-
-      ;(queryValues as string[]).forEach((value) => {
-        searchParams.append(queryKey, value)
-      })
-    })
-  }
-
-  if ('search_term' in params) {
-    searchParams = new URLSearchParams()
-
-    updateQueryStringParam(searchParams, 'search_term', params.search_term)
-    updateQueryStringParam(searchParams, 'geo_type', 'site')
-  }
-
-  if ('geo_type' in params) {
-    // Switching tab clears every filter, so rebuild the query string from
-    // scratch and keep only the search term alongside the new geo_type.
-    const currentSearchTerm = searchParams.get('search_term')
-    searchParams = new URLSearchParams()
-
-    if (currentSearchTerm) updateQueryStringParam(searchParams, 'search_term', currentSearchTerm)
-    updateQueryStringParam(searchParams, 'geo_type', params.geo_type)
-  }
-
-  const newUrl = `${window.location.pathname}?${searchParams.toString()}`
-
-  window.history.replaceState({ page: 1 }, '', newUrl)
-}
-
-function updateQueryStringParam(params: URLSearchParams, key: string, value: string) {
-  if (params.has(key)) params.set(key, value)
-  else params.append(key, value)
-}
-
-function updateSelectedTab(selectedTabId: string) {
-  updateDisabledComponents(selectedTabId)
-  tabIdSelected.value = selectedTabId
-  resetFilters()
-  resetPagination()
-  updateQueryString({ geo_type: selectedTabId })
-  // Drops the preSelected values the filter list was initialised with, now
-  // that the filter params are gone from the query string.
-  handleQueryString()
-  getFilteredSearchResults()
-}
-
-function updateSearchTerm(newSearchTerm: string) {
-  resetFilters()
-  resetPagination()
-  searchTerm.value = newSearchTerm
-  ajaxSubmission(true)
-  updateQueryString({ search_term: newSearchTerm })
-  downloads.updateSearchTerm(newSearchTerm)
-}
-
-function requestMore(requestedPage: number) {
-  ajaxSubmission(false, true, requestedPage)
-}
-
-function resetFilters() {
-  activeFilterOptions.value = {}
-  filterResetKey.value += 1
-  downloads.updateSearchFilters({} as unknown as unknown[])
-}
-
-function resetPagination() {
-  paginationResetKey.value += 1
-}
-
-function toggleFilterPane() {
-  isFilterPaneActive.value = !isFilterPaneActive.value
-}
-
 handleQueryString()
 </script>
 

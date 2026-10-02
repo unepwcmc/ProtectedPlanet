@@ -80,32 +80,28 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{ 'submit:search': [searchTerm: string] }>()
-
-const isActive = ref(!props.popout)
 const searchTerm = ref(props.prePopulatedSearchTerm ?? '')
-const inputEl = ref<HTMLInputElement | null>(null)
-const rootEl = ref<HTMLElement | null>(null)
-
 const isSubmitVisible = computed(() => props.popout || searchTerm.value.length !== 0)
-
-if (props.popout) {
-  usePopupCloseListeners(rootEl, { isActive, onClose: closeInput })
-}
-
-function closeInput() {
-  isActive.value = false
-}
-
 function submit() {
   if (props.disabled) return
   emit('submit:search', searchTerm.value)
 }
 
+const isActive = ref(!props.popout)
+const inputEl = ref<HTMLInputElement | null>(null)
+function closeInput() {
+  isActive.value = false
+}
 function toggleInput() {
   isActive.value = !isActive.value
   // A macrotask past Vue's render flush, so the popout's CSS transition has
   // started before focusing — nextTick alone only means "DOM updated".
   setTimeout(() => inputEl.value?.focus(), 0)
+}
+
+const rootEl = ref<HTMLElement | null>(null)
+if (props.popout) {
+  usePopupCloseListeners(rootEl, { isActive, onClose: closeInput })
 }
 </script>
 

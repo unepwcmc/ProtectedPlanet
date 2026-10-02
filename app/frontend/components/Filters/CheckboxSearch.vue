@@ -40,16 +40,12 @@ const props = defineProps<{
   resetKey?: number
 }>()
 
-const emit = defineEmits<{ 'update:options': [value: { type: string, options: string[] }] }>()
+const tabs = computed(() => props.options.map(option => ({ id: option.id, title: option.title })))
 
-const checkboxesEl = ref<InstanceType<typeof FiltersCheckboxes> | null>(null)
 const defaultTabId = props.options[0].id
 const preSelectedCheckboxes = ref<string[] | null>(props.preSelected?.options ?? null)
 const selectedTabId = ref(props.preSelected?.type ?? defaultTabId)
 const searchTerm = ref('')
-
-const tabs = computed(() => props.options.map(option => ({ id: option.id, title: option.title })))
-
 const autocompleteOptions = computed(() => {
   let options = props.options.find(option => option.id === selectedTabId.value)?.autocomplete ?? []
 
@@ -60,26 +56,26 @@ const autocompleteOptions = computed(() => {
 
   return options
 })
-
 function reset() {
   preSelectedCheckboxes.value = null
   selectedTabId.value = defaultTabId
   searchTerm.value = ''
 }
+watch(() => props.resetKey, () => {
+  reset()
+})
 
+const emit = defineEmits<{ 'update:options': [value: { type: string, options: string[] }] }>()
+function updateSelectedCheckboxes(options: Array<string | number>) {
+  emit('update:options', { type: selectedTabId.value, options: options as string[] })
+}
+
+const checkboxesEl = ref<InstanceType<typeof FiltersCheckboxes> | null>(null)
 function updateSelectedTab(id: string) {
   reset()
   selectedTabId.value = id
   checkboxesEl.value?.reset()
 }
-
-function updateSelectedCheckboxes(options: Array<string | number>) {
-  emit('update:options', { type: selectedTabId.value, options: options as string[] })
-}
-
-watch(() => props.resetKey, () => {
-  reset()
-})
 </script>
 
 <style scoped lang="css">

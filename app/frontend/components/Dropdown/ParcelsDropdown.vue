@@ -32,18 +32,15 @@ import type { AttributesParcelsDropdownProps } from '@/types/backend'
 type AttributesParcelsDropdown = AttributesParcelsDropdownProps
 const props = defineProps<AttributesParcelsDropdown>()
 
-const { selectedParcelId, selectParcel } = useParcelSelection()
-
-const chosenParcelId = ref<string | undefined>(undefined)
-
 const moreThanOneParcels = props.sitePids.length > 1
 const showDropdown = computed(() => moreThanOneParcels && !props.forPdf)
 const showDescription = moreThanOneParcels && !!props.description
 
+const { selectedParcelId, selectParcel } = useParcelSelection()
+const chosenParcelId = ref<string | undefined>(undefined)
 watch(chosenParcelId, (newParcelId) => {
   if (newParcelId) selectParcel(newParcelId)
 })
-
 onMounted(() => {
   if (props.sitePids.length === 0 || props.forPdf) return
 

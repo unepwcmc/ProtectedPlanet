@@ -49,8 +49,6 @@ import type { AttributesAffiliationLink, AttributesAffiliationsProps } from '@/t
 type AttributesAffiliations = AttributesAffiliationsProps
 const props = defineProps<AttributesAffiliations>()
 
-const { selectedParcelId } = useParcelSelection()
-
 const affiliationsByParcel = computed(() => {
   const byParcel: Record<string, AttributesAffiliationLink[]> = {}
   props.affiliations.forEach((link) => {
@@ -59,6 +57,8 @@ const affiliationsByParcel = computed(() => {
   return byParcel
 })
 const hasAnyAffiliations = computed(() => props.affiliations.length > 0)
+
+const { selectedParcelId } = useParcelSelection()
 const currentAffiliation = computed(() => {
   const activeParcelId = selectedParcelId.value ?? Object.keys(affiliationsByParcel.value)[0]
   const affiliations = affiliationsByParcel.value[activeParcelId] ?? []

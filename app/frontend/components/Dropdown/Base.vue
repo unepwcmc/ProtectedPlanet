@@ -42,27 +42,25 @@ defineProps<{
   options: string[]
 }>()
 
-// No selection is a valid state (falls back to defaultDropdownText below), so
-// there is no meaningful default to give this model.
-// eslint-disable-next-line vue/require-default-prop
-const modelValue = defineModel<string>()
-
-const rootEl = ref<HTMLElement | null>(null)
 const isOptionsOpen = ref(false)
-
-function chooseOption(option: string) {
-  modelValue.value = option
-  isOptionsOpen.value = false
-}
-
 function toggle() {
   isOptionsOpen.value = !isOptionsOpen.value
 }
 
+const rootEl = ref<HTMLElement | null>(null)
 usePopupCloseListeners(rootEl, {
   isActive: isOptionsOpen,
   onClose: () => { isOptionsOpen.value = false }
 })
+
+// No selection is a valid state (falls back to defaultDropdownText below), so
+// there is no meaningful default to give this model.
+// eslint-disable-next-line vue/require-default-prop
+const modelValue = defineModel<string>()
+function chooseOption(option: string) {
+  modelValue.value = option
+  isOptionsOpen.value = false
+}
 </script>
 
 <style scoped lang="css">

@@ -59,11 +59,8 @@ const props = withDefaults(defineProps<MapFilter>(), {
 
 const { trackEvent } = useAnalytics()
 const { visibleOverlays, addOverlay, removeOverlay } = useMapOverlays()
-
 const overlay = computed<MapOverlay>(() => ({ layers: props.layers, id: props.id }))
-
 const isShown = computed(() => visibleOverlays.value.some(o => o.id === props.id))
-
 function setShown(shown: boolean) {
   if (shown) {
     addOverlay(overlay.value)
@@ -72,7 +69,6 @@ function setShown(shown: boolean) {
     removeOverlay(overlay.value)
   }
 }
-
 function onClick() {
   if (!props.isToggleable) return
 
@@ -83,7 +79,6 @@ function onClick() {
   // and label so the GA4 history stays continuous.
   trackEvent('click', { event_label: `${props.id} - Toggle map layer: ${shown}` })
 }
-
 onMounted(() => {
   setShown(props.isShownByDefault)
 })

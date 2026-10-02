@@ -24,18 +24,11 @@ const props = withDefaults(defineProps<AmChartPie>(), {
 const chartEl = ref<HTMLElement | null>(null)
 let root: am5.Root | null = null
 let pieSeries: am5percent.PieSeries | null = null
-
 // amCharts draws slices on its own render tick, not inside createChart(), so
 // hold the PDF readiness flag open until the first draw lands. See pdfReady.ts.
 const markChartRenderDone = registerPendingRender()
-
 onMounted(createChart)
 onUnmounted(() => root?.dispose())
-
-watch(() => props.dataset, (dataset) => {
-  pieSeries?.data.setAll(dataset)
-})
-
 function createChart() {
   if (!chartEl.value) {
     markChartRenderDone()
@@ -67,6 +60,10 @@ function createChart() {
 
   if (props.spacers) createSpacers()
 }
+
+watch(() => props.dataset, (dataset) => {
+  pieSeries?.data.setAll(dataset)
+})
 
 function removeActiveState() {
   pieSeries!.slices.template.states.create('active', { shiftRadius: 0 })

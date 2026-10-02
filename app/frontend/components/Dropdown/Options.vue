@@ -20,8 +20,8 @@
 
 <script setup lang="ts">
 defineProps<{ options: string[], selected?: string }>()
-const emit = defineEmits<{ click: [option: string] }>()
 
+const emit = defineEmits<{ click: [option: string] }>()
 function chooseOption(option: string) {
   emit('click', option)
 }

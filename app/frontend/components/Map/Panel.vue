@@ -56,12 +56,11 @@ const props = withDefaults(defineProps<MapPanel>(), {
   autocompletePlaceholder: undefined,
   mapiIsForRegionCountryPA: false
 })
-const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
 
 const isVisible = ref(true)
-const root = ref<HTMLElement | null>(null)
-
 const toggleShow = () => (isVisible.value = !isVisible.value)
+
+const emit = defineEmits<{ zoomTo: [options: ZoomToOptions] }>()
 const onZoomTo = (options: ZoomToOptions) => emit('zoomTo', options)
 
 // The header-map layout (PA show, country, region) omits these props rather
@@ -70,6 +69,7 @@ const hasPaSearch = computed(() =>
   !props.isHidden && !!props.type && !!props.autocompleteErrorMessages && !!props.autocompletePlaceholder
 )
 
+const root = ref<HTMLElement | null>(null)
 onMounted(() => {
   if (props.isHidden && root.value) {
     root.value.querySelectorAll<HTMLElement>(PANEL_FOCUSABLE_SELECTOR).forEach((el) => {

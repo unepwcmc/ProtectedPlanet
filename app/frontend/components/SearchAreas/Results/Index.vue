@@ -47,11 +47,10 @@ const props = defineProps<{
   resetKey?: number
 }>()
 
-const emit = defineEmits<{ requestMore: [page: number] }>()
-
 const hasResults = computed(() => props.results.total > 0)
 const totalAsString = computed(() => Number.parseFloat(String(props.results.total)).toLocaleString())
 
+const emit = defineEmits<{ requestMore: [page: number] }>()
 function requestMore(page: number) {
   emit('requestMore', page)
 }

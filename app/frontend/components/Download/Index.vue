@@ -37,19 +37,25 @@ import useAnalytics from '@/composables/useAnalytics'
 import { useDownloads } from '@/composables/useDownloads'
 import type { DownloadOption, DownloadProps } from '@/types/backend'
 
-const { trackEvent } = useAnalytics()
-
 type Download = DownloadProps
 const props = withDefaults(defineProps<Download>(), {
   downloadDisabled: false
 })
 
-const downloads = useDownloads()
-
-const selectedDownloadOption = ref<DownloadOption | null>(null)
-const isCommercialModalVisible = ref(false)
 const isPopupVisible = ref(false)
+function toggleDownloadPane() {
+  if (props.downloadDisabled) return
+  isPopupVisible.value = !isPopupVisible.value
+}
 
+const isCommercialModalVisible = ref(false)
+function closeCommercialModal() {
+  isCommercialModalVisible.value = false
+}
+
+const { trackEvent } = useAnalytics()
+const downloads = useDownloads()
+const selectedDownloadOption = ref<DownloadOption | null>(null)
 function addNewDownloadItem() {
   const params = selectedDownloadOption.value?.params
   if (!params) return
@@ -59,7 +65,6 @@ function addNewDownloadItem() {
   downloads.addNewDownloadItem(params)
   selectedDownloadOption.value = null
 }
-
 function clickDownloadOption(option: DownloadOption) {
   isPopupVisible.value = false
   selectedDownloadOption.value = option
@@ -75,19 +80,9 @@ function clickDownloadOption(option: DownloadOption) {
     trackEvent('download_request', { label: `${props.gaId} request - ${option.title}` })
   }
 }
-
 function clickNonCommercial() {
   closeCommercialModal()
   addNewDownloadItem()
-}
-
-function closeCommercialModal() {
-  isCommercialModalVisible.value = false
-}
-
-function toggleDownloadPane() {
-  if (props.downloadDisabled) return
-  isPopupVisible.value = !isPopupVisible.value
 }
 </script>
 

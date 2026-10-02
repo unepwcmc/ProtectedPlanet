@@ -59,7 +59,6 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{ close: [], nonCommercial: [] }>()
-
 const close = () => emit('close')
 const selectNonCommercial = () => emit('nonCommercial')
 </script>

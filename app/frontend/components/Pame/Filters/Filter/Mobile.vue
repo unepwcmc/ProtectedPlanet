@@ -39,8 +39,6 @@ import PameFiltersFilterOptions from '@/components/Pame/Filters/Filter/Options.v
 import useAnalytics from '@/composables/useAnalytics'
 import useFreezeBackground from '@/composables/useFreezeBackground'
 
-const { trackEvent } = useAnalytics()
-
 const props = defineProps<{
   name: string
   title: string
@@ -50,37 +48,33 @@ const props = defineProps<{
   isOpen: boolean
 }>()
 
+useFreezeBackground(computed(() => props.isOpen))
+
+const filterClass = computed(() => `ct-pame-filter-mobile--${props.name.replace(/[\s()_]/g, '-').toLowerCase()}`)
+
 const emit = defineEmits<{
   toggle: []
   apply: [options: string[]]
 }>()
-
-useFreezeBackground(computed(() => props.isOpen))
-
+const { trackEvent } = useAnalytics()
 // Seeded from `appliedOptions` (sourced from the URL) rather than empty:
 // Filter/Index.vue's `v-if="isOpen"` recreates this on every open, so a fresh
 // mount is the only place it can pick up the filter's current value.
 const pendingOptions = ref<string[]>([...props.appliedOptions])
-
-const filterClass = computed(() => `ct-pame-filter-mobile--${props.name.replace(/[\s()_]/g, '-').toLowerCase()}`)
-
 function onOptionClick(option: string, checked: boolean) {
   pendingOptions.value = checked
     ? [...pendingOptions.value, option]
     : pendingOptions.value.filter(selected => selected !== option)
 }
-
 function onCancel() {
   pendingOptions.value = [...props.appliedOptions]
   emit('toggle')
   trackEvent('click', { event_label: `Page: PAME - Filter title: ${props.title} - Button: cancel` })
 }
-
 function onClear() {
   pendingOptions.value = []
   trackEvent('click', { event_label: `Page: PAME - Filter title: ${props.title} - Button: clear` })
 }
-
 function onApply() {
   if (props.isFetching) return
 

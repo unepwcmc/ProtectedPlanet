@@ -23,7 +23,6 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ 'toggle:filterPane': [] }>()
-
 function toggleFilterPane() {
   if (props.isDisabled) return
   emit('toggle:filterPane')

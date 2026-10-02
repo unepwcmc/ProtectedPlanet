@@ -39,8 +39,8 @@
 import type { DownloadOption } from '@/types/backend'
 
 defineProps<{ options: DownloadOption[] }>()
-const emit = defineEmits<{ select: [option: DownloadOption] }>()
 
+const emit = defineEmits<{ select: [option: DownloadOption] }>()
 const select = (option: DownloadOption) => emit('select', option)
 </script>
 

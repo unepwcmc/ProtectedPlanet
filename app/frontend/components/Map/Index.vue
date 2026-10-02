@@ -60,7 +60,6 @@ withDefaults(defineProps<Map>(), {
 provideMapOverlays()
 
 const mapBaseRef = useTemplateRef('mapBaseRef')
-
 const onZoomTo = (options: ZoomToOptions) => mapBaseRef.value?.zoomTo(options)
 </script>
 

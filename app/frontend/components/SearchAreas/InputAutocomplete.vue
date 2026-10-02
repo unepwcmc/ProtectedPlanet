@@ -59,15 +59,14 @@ const props = defineProps<{
   prePopulatedSearchTerm?: string
 }>()
 
-const emit = defineEmits<{ 'submit:search': [searchTerm: string] }>()
-
-const root = ref<HTMLElement | null>(null)
 const searchTerm = ref(props.prePopulatedSearchTerm ?? '')
-const autocomplete = ref<AutocompleteResult[]>([])
-
 const isResetIconVisible = computed(() => searchTerm.value.length !== 0)
-const isDropdownOpen = computed(() => autocomplete.value.length > 0)
+watch(() => props.prePopulatedSearchTerm, () => {
+  searchTerm.value = props.prePopulatedSearchTerm ?? ''
+})
 
+const autocomplete = ref<AutocompleteResult[]>([])
+const isDropdownOpen = computed(() => autocomplete.value.length > 0)
 async function updateAutocomplete() {
   const results = await postJson<AutocompleteResult[]>(props.endpoint, {
     search_term: searchTerm.value,
@@ -76,9 +75,7 @@ async function updateAutocomplete() {
 
   autocomplete.value = results
 }
-
 const updateAutocompleteDebounced = useDebounceFn(updateAutocomplete, 500)
-
 function onKeyup(e: KeyboardEvent) {
   if (e.key === 'Enter') {
     resetAutocomplete()
@@ -87,25 +84,21 @@ function onKeyup(e: KeyboardEvent) {
 
   updateAutocompleteDebounced()
 }
-
 function resetSearchTerm() {
   searchTerm.value = ''
   resetAutocomplete()
 }
-
 function resetAutocomplete() {
   autocomplete.value = []
 }
 
+const root = ref<HTMLElement | null>(null)
+usePopupCloseListeners(root, { isActive: isDropdownOpen, onClose: resetAutocomplete })
+
+const emit = defineEmits<{ 'submit:search': [searchTerm: string] }>()
 function submit() {
   emit('submit:search', searchTerm.value)
 }
-
-usePopupCloseListeners(root, { isActive: isDropdownOpen, onClose: resetAutocomplete })
-
-watch(() => props.prePopulatedSearchTerm, () => {
-  searchTerm.value = props.prePopulatedSearchTerm ?? ''
-})
 </script>
 
 <style scoped lang="css">

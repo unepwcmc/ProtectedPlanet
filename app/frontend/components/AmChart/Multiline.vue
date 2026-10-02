@@ -22,10 +22,8 @@ const props = withDefaults(defineProps<AmChartMultiline>(), {
 
 const chartEl = ref<HTMLElement | null>(null)
 let root: am5.Root | null = null
-
 onMounted(createChart)
 onUnmounted(() => root?.dispose())
-
 function createChart() {
   if (!chartEl.value) return
 
@@ -118,7 +116,6 @@ function createSeries(chart: am5xy.XYChart, yAxis: am5xy.ValueAxis<am5xy.AxisRen
     if (props.dots) createDots(series, CHART_LINE_COLOURS[i])
   }
 }
-
 function createDots(series: am5xy.LineSeries, colour: string) {
   series.bullets.push(() => am5.Bullet.new(root!, {
     sprite: am5.Circle.new(root!, {

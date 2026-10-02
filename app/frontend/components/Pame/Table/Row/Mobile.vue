@@ -137,10 +137,9 @@ const props = withDefaults(defineProps<{
   isLast: false
 })
 
-const emit = defineEmits<{ openModal: [item: PameEvaluationItem] }>()
-
 const countryDisplay = computed(() => joinOrMultiple(props.item.country))
 
+const emit = defineEmits<{ openModal: [item: PameEvaluationItem] }>()
 function onOpenModal() {
   emit('openModal', props.item)
 }

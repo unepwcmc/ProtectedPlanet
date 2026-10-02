@@ -46,28 +46,23 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ 'update:options': [option: string] }>()
-
 const input = ref(props.preSelected)
-
 function changeInput(id: string) {
   input.value = id
   emit('update:options', input.value)
 }
-
 function reset() {
   input.value = ''
 }
-
-function radioId(option: SearchFilterOption) {
-  return `${props.name}-${option.id}}`
-}
-
 watch(() => props.resetKey, () => {
   reset()
   changeInput('')
 })
-
 changeInput(props.preSelected)
+
+function radioId(option: SearchFilterOption) {
+  return `${props.name}-${option.id}}`
+}
 </script>
 
 <style scoped lang="css">

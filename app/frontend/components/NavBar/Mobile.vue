@@ -65,23 +65,21 @@ defineProps<{ links: NavLinkType[] }>()
 
 const paneId = 'nav-pane'
 const triggerId = 'open-nav-pane'
-const isNavPaneActive = ref(false)
-const rootEl = ref<HTMLElement | null>(null)
 
+const isNavPaneActive = ref(false)
 function openPanel() {
   isNavPaneActive.value = true
 }
-
 function closePanel() {
   isNavPaneActive.value = false
 }
+useFreezeBackground(isNavPaneActive)
 
+const rootEl = ref<HTMLElement | null>(null)
 usePopupCloseListeners(rootEl, {
   isActive: isNavPaneActive,
   onClose: closePanel
 })
-
-useFreezeBackground(isNavPaneActive)
 
 function hasChildren(link: NavLinkType): boolean {
   return Boolean(link.children)

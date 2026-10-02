@@ -40,7 +40,6 @@ type AttributesPameList = AttributesPameListProps
 const props = defineProps<AttributesPameList>()
 
 const { selectedParcelId } = useParcelSelection()
-
 const currentPameAttributes = computed(() => {
   const activeParcelId = selectedParcelId.value ?? Object.keys(props.pamesAttributesList)[0]
   return activeParcelId ? (props.pamesAttributesList[activeParcelId] ?? {}) : {}

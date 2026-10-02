@@ -35,10 +35,9 @@ const props = defineProps<{
   groupId: string
 }>()
 
-const emit = defineEmits<{ click: [checked: boolean] }>()
-
 const optionId = computed(() => `${props.groupId}-${props.option.replace(/[\s()_]/g, '-').toLowerCase()}`)
 
+const emit = defineEmits<{ click: [checked: boolean] }>()
 const onChange = (event: Event) => emit('click', (event.target as HTMLInputElement).checked)
 </script>
 

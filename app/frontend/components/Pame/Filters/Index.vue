@@ -42,6 +42,9 @@ const emit = defineEmits<{
 }>()
 
 const openFilterName = ref<string | null>(null)
+function onToggleFilter(name: string) {
+  openFilterName.value = openFilterName.value === name ? null : name
+}
 
 // The parent (Pame/Table/Index.vue) owns the applied filters — sourced from,
 // and written back to, the URL — this just looks each filter's current value
@@ -49,10 +52,6 @@ const openFilterName = ref<string | null>(null)
 const appliedOptionsByName = computed(() => (
   Object.fromEntries(props.selectedFilterOptions.map(filter => [filter.name, filter.options as string[]]))
 ))
-
-function onToggleFilter(name: string) {
-  openFilterName.value = openFilterName.value === name ? null : name
-}
 
 function onApplyFilter(name: string, options: string[]) {
   emit('apply', name, options)

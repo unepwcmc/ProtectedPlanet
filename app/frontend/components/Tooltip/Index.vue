@@ -66,19 +66,18 @@ interface TooltipProps {
 const props = withDefaults(defineProps<TooltipProps>(), { onHover: true, triggerLabel: undefined })
 
 const slots = useSlots()
-
 // An aria-label would shadow slot content, so it is only applied when there is
 // none to shadow.
 const triggerLabel = computed(() => props.triggerLabel ?? (slots.default ? undefined : 'More information'))
 
 const id = `tooltip_${useId()}`
-const isActive = ref(false)
-const rootEl = ref<HTMLElement | null>(null)
 
+const isActive = ref(false)
 function toggleTooltip(value?: boolean) {
   isActive.value = typeof value === 'boolean' ? value : !isActive.value
 }
 
+const rootEl = ref<HTMLElement | null>(null)
 usePopupCloseListeners(rootEl, {
   isActive,
   onClose: () => toggleTooltip(false)

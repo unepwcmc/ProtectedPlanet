@@ -55,21 +55,19 @@ const props = defineProps<{
   title: string
 }>()
 
-const emit = defineEmits<{
-  'toggle:filterPane': []
-  'update:filterGroup': [payload: { id: string, options: FilterGroupSelection }]
-}>()
-
 const { isSmall, isMedium } = useBreakpoint()
 
 // The CMS listing hides the panel rather than tearing it down, so groups that
 // were preselected from the query string still prime the page on first load.
 const isRendered = computed(() => props.keepMounted || props.isActive)
 
+const emit = defineEmits<{
+  'toggle:filterPane': []
+  'update:filterGroup': [payload: { id: string, options: FilterGroupSelection }]
+}>()
 function onToggleFilterPane() {
   emit('toggle:filterPane')
 }
-
 function onUpdateFilter(payload: { id: string, options: FilterGroupSelection }) {
   emit('update:filterGroup', payload)
 }

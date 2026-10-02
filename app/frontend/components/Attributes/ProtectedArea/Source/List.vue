@@ -41,7 +41,6 @@ type AttributesProtectedAreaSources = AttributesProtectedAreaSourcesProps
 const props = defineProps<AttributesProtectedAreaSources>()
 
 const { selectedParcelId } = useParcelSelection()
-
 const currentSources = computed(() => {
   const activeParcelId = selectedParcelId.value ?? Object.keys(props.sourcesAttributesList)[0]
   return activeParcelId ? (props.sourcesAttributesList[activeParcelId] ?? []) : []

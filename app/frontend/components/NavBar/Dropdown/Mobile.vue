@@ -48,17 +48,15 @@ const modalId = `nav-dropdown-${props.link.id}`
 const triggerId = `nav-dropdown-toggle-${props.link.id}`
 
 const isActive = ref(false)
-const rootEl = ref<HTMLElement | null>(null)
-
 function closeDropdown() {
   isActive.value = false
 }
-
 function toggleDropdown(e: Event) {
   e.preventDefault()
   isActive.value = !isActive.value
 }
 
+const rootEl = ref<HTMLElement | null>(null)
 usePopupCloseListeners(rootEl, {
   isActive,
   onClose: closeDropdown

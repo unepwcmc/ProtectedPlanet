@@ -61,18 +61,14 @@ const props = defineProps<Listing>()
 const filters = props.filterGroups[0]?.filters ?? []
 const filtersTitle = props.filterGroups[0]?.title ?? ''
 
-const currentResults = ref<ListingResults>(props.results)
+const isFilterPaneActive = ref(false)
+function toggleFilterPane() {
+  isFilterPaneActive.value = !isFilterPaneActive.value
+}
+
 // The query string is the single source of truth: activeFilterOptions is never
 // mutated in place, only reassigned by re-reading the URL, so it can't drift.
 const activeFilterOptions = ref<Record<string, Array<string | number>>>(readFiltersFromUrl())
-const isFilterPaneActive = ref(false)
-const isLoadingMoreResults = ref(false)
-const isUpdatingResults = ref(false)
-const paginationResetKey = ref(0)
-let ajaxRequests = 0
-
-const isLoadingResults = computed(() => isLoadingMoreResults.value || isUpdatingResults.value)
-
 function readFiltersFromUrl(): Record<string, string[]> {
   const params = new URLSearchParams(window.location.search)
   const filters: Record<string, string[]> = {}
@@ -84,7 +80,6 @@ function readFiltersFromUrl(): Record<string, string[]> {
 
   return filters
 }
-
 function writeFilterToUrl(id: string, options: Array<string | number>) {
   const searchParams = new URLSearchParams(window.location.search)
   const queryKey = `filters[${id}][]`
@@ -96,10 +91,11 @@ function writeFilterToUrl(id: string, options: Array<string | number>) {
   window.history.replaceState({ page: 1 }, '', newUrl)
 }
 
-function toggleFilterPane() {
-  isFilterPaneActive.value = !isFilterPaneActive.value
-}
-
+const currentResults = ref<ListingResults>(props.results)
+const isLoadingMoreResults = ref(false)
+const isUpdatingResults = ref(false)
+const isLoadingResults = computed(() => isLoadingMoreResults.value || isUpdatingResults.value)
+let ajaxRequests = 0
 function buildSearchParams(requestedPage: number): URLSearchParams {
   const query = new URLSearchParams()
 
@@ -113,7 +109,6 @@ function buildSearchParams(requestedPage: number): URLSearchParams {
 
   return query
 }
-
 function requestSearch(pagination = false, requestedPage = 1) {
   if (pagination) isLoadingMoreResults.value = true
   else isUpdatingResults.value = true
@@ -140,11 +135,11 @@ function requestSearch(pagination = false, requestedPage = 1) {
       }
     })
 }
-
 function requestMore(requestedPage: number) {
   requestSearch(true, requestedPage)
 }
 
+const paginationResetKey = ref(0)
 function updateFilters(payload: { id: string, options: FilterGroupSelection }) {
   paginationResetKey.value++
   // The CMS only sends checkbox groups, so the selection is always an id array.

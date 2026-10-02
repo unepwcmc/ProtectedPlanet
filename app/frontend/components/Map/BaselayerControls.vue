@@ -22,7 +22,6 @@ defineProps<{
 // MapBase owns the selection, since it swaps the MapLibre style; this is only
 // the picker, so a v-model is the whole contract between them.
 const selected = defineModel<MapBaselayer>({ required: true })
-
 const selectBaselayer = (layer: MapBaselayer) => (selected.value = layer)
 </script>
 

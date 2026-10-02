@@ -36,10 +36,9 @@ const props = withDefaults(defineProps<{
   size: 'default'
 })
 
-const emit = defineEmits<{ 'click:tab': [id: string] }>()
-
 const isActive = computed(() => props.id === props.selectedId)
 
+const emit = defineEmits<{ 'click:tab': [id: string] }>()
 function click() {
   if (props.disabled) return
   emit('click:tab', props.id)

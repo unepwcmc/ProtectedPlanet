@@ -27,16 +27,13 @@ const rootEl = ref<HTMLElement | null>(null)
 const isSticky = ref(false)
 let stickyTrigger = 0
 let visibilityObserver: IntersectionObserver | undefined
-
 function setStickyTrigger() {
   if (!rootEl.value) return
   stickyTrigger = rootEl.value.clientHeight + rootEl.value.getBoundingClientRect().top + window.scrollY
 }
-
 function onScroll() {
   isSticky.value = window.scrollY > stickyTrigger
 }
-
 onMounted(() => {
   setStickyTrigger()
   onScroll()
@@ -53,7 +50,6 @@ onMounted(() => {
     visibilityObserver.observe(rootEl.value)
   }
 })
-
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', setStickyTrigger)

@@ -45,10 +45,9 @@ const props = withDefaults(defineProps<{
   offText: 'OFF'
 })
 
-const emit = defineEmits<{ change: [active: boolean] }>()
-
 const actionText = computed(() => (props.active ? props.onText : props.offText))
 
+const emit = defineEmits<{ change: [active: boolean] }>()
 // GA4 tracking used to live here, keyed off a gaId prop. It moved to the caller
 // (Map/Overlay.vue) along with the click, so there is exactly one owner of the
 // event whichever way the layer is toggled.

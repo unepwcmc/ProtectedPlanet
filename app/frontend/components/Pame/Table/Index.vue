@@ -79,38 +79,36 @@ import type { PameEvaluationItem, PameFilterSelection, PameTablePage, PameTableP
 type PameTable = PameTableProps
 const props = defineProps<PameTable>()
 
-// The shared in-flight flag every PAME control disables itself against. Owned
-// here as their common ancestor and passed down; DownloadCsv writes back via
-// `update:isFetching`, bubbled up through PameFilters.
-const isFetching = ref(false)
+// PameModal is a direct sibling, like the rows that open it, so this stays
+// local rather than going in the store.
+const modalContent = ref<PameEvaluationItem | null>(null)
+const isModalOpen = ref(false)
+function onOpenModal(item: PameEvaluationItem) {
+  modalContent.value = item
+  isModalOpen.value = true
+}
+function onCloseModal() {
+  isModalOpen.value = false
+}
 
 const currentPage = ref(props.json.current_page)
 const itemsPerPage = ref(props.json.per_page)
 const totalItems = ref(props.json.total_entries)
 const totalPages = ref(props.json.total_pages)
 const items = ref(props.json.items)
-
-// PameModal is a direct sibling, like the rows that open it, so this stays
-// local rather than going in the store.
-const modalContent = ref<PameEvaluationItem | null>(null)
-const isModalOpen = ref(false)
-
-function onOpenModal(item: PameEvaluationItem) {
-  modalContent.value = item
-  isModalOpen.value = true
-}
-
-function onCloseModal() {
-  isModalOpen.value = false
+function updatePage(data: PameTablePage) {
+  currentPage.value = data.current_page
+  itemsPerPage.value = data.per_page
+  totalItems.value = data.total_entries
+  totalPages.value = data.total_pages
+  items.value = data.items
 }
 
 // The URL is the only store for applied filters. Read on load so a bookmarked
 // or back-navigated link reproduces the same table, written back on every
 // apply (see updateQueryString).
 const FILTER_PARAM_PREFIX = 'pame_filters'
-const requestedPage = ref(1)
 const selectedFilterOptions = ref<PameFilterSelection[]>(readFiltersFromUrl())
-
 function defaultFilterOptions(): PameFilterSelection[] {
   // PameEvaluation.generate_query only reads filters present in this array, so
   // every filter needs a (possibly empty) entry.
@@ -118,7 +116,6 @@ function defaultFilterOptions(): PameFilterSelection[] {
     .filter(filter => filter.options.length > 0)
     .map(filter => ({ name: filter.name, options: [], type: filter.type }))
 }
-
 function readFiltersFromUrl(): PameFilterSelection[] {
   const params = new URLSearchParams(window.location.search)
 
@@ -127,7 +124,6 @@ function readFiltersFromUrl(): PameFilterSelection[] {
     return params.has(key) ? { ...filter, options: params.getAll(key) } : filter
   })
 }
-
 function updateQueryString(filters: PameFilterSelection[]) {
   const params = new URLSearchParams()
 
@@ -141,14 +137,11 @@ function updateQueryString(filters: PameFilterSelection[]) {
   window.history.replaceState({}, '', `${window.location.pathname}${query ? `?${query}` : ''}`)
 }
 
-function updatePage(data: PameTablePage) {
-  currentPage.value = data.current_page
-  itemsPerPage.value = data.per_page
-  totalItems.value = data.total_entries
-  totalPages.value = data.total_pages
-  items.value = data.items
-}
-
+// The shared in-flight flag every PAME control disables itself against. Owned
+// here as their common ancestor and passed down; DownloadCsv writes back via
+// `update:isFetching`, bubbled up through PameFilters.
+const isFetching = ref(false)
+const requestedPage = ref(1)
 // Guarded against overlapping requests, not just repeat clicks: a filter apply
 // and a pagination click can race each other.
 function fetchItems(page = requestedPage.value) {
@@ -164,7 +157,6 @@ function fetchItems(page = requestedPage.value) {
     isFetching.value = false
   })
 }
-
 function onApplyFilter(name: string, options: string[]) {
   selectedFilterOptions.value = selectedFilterOptions.value.map(filter => (
     filter.name === name ? { ...filter, options } : filter
@@ -172,7 +164,6 @@ function onApplyFilter(name: string, options: string[]) {
   updateQueryString(selectedFilterOptions.value)
   fetchItems(1)
 }
-
 // Data::GdpameController#index ignores query params, so the initial `json` prop
 // is always unfiltered — re-fetch at once when the URL already has filters, or
 // a shared filtered link shows unfiltered results.

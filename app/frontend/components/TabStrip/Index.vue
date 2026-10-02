@@ -22,8 +22,6 @@ import { ref, watch } from 'vue'
 import useAnalytics from '@/composables/useAnalytics'
 import TabStripTab from '@/components/TabStrip/Tab.vue'
 
-const { trackEvent } = useAnalytics()
-
 interface TabStripChild {
   id: string
   title: string
@@ -42,9 +40,8 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ 'click:tab': [id: string] }>()
-
+const { trackEvent } = useAnalytics()
 const selectedId = ref(initialSelectedId())
-
 function initialSelectedId() {
   if (props.preSelectedId && props.children.some(child => child.id === props.preSelectedId)) {
     return props.preSelectedId
@@ -52,7 +49,6 @@ function initialSelectedId() {
 
   return props.defaultSelectedId || props.children[0].id
 }
-
 function click(selectedTabId: string) {
   // Re-selecting the current tab changes nothing, and parents mirror our emit
   // back into preSelectedId — either way there is no work for them to redo.
@@ -66,14 +62,13 @@ function click(selectedTabId: string) {
     trackEvent('click', { event_label: `${props.gaId} - Tab: ${selectedTab?.title}` })
   }
 }
+watch(() => props.preSelectedId, (value) => {
+  if (value) click(value)
+})
 
 function googleAnalyticsId(child: TabStripChild) {
   return `${props.gaId} - ${child.title}`
 }
-
-watch(() => props.preSelectedId, (value) => {
-  if (value) click(value)
-})
 </script>
 
 <style scoped lang="css">

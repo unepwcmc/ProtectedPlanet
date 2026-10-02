@@ -22,25 +22,19 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ requestMore: [page: number] }>()
-
-const triggerEl = ref<HTMLElement | null>(null)
 const currentPage = ref(1)
-
 const isTriggerVisible = computed(() => currentPage.value < props.totalPages)
-
 function requestMore() {
   currentPage.value += 1
   emit('requestMore', currentPage.value)
 }
-
 function reset() {
   currentPage.value = 1
 }
-
 watch(() => props.resetKey, reset)
 
+const triggerEl = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | undefined
-
 onMounted(() => {
   if (!triggerEl.value) return
 
@@ -51,7 +45,6 @@ onMounted(() => {
   })
   observer.observe(triggerEl.value)
 })
-
 onUnmounted(() => {
   observer?.disconnect()
 })
