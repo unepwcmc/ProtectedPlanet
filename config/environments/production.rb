@@ -39,7 +39,14 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.compress = true
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  # Terser rather than Uglifier, matching config/environments/staging.rb.
+  # uglify-js is ES5-era and its Ruby wrapper crashes on a modern toolchain:
+  # when the JS engine returns an error without a 'message', uglifier raises
+  # `NoMethodError: undefined method 'start_with?' for nil` and sprockets aborts
+  # part-way, leaving no application-*.css for the Dockerfile's assert to find.
+  # The Gemfile already notes uglifier "should move to terser too when
+  # production migrates" — this is that migration.
+  config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
