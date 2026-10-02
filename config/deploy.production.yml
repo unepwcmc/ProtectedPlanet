@@ -1,0 +1,112 @@
+# ⚠ THIS FILE ON THE `production_kamal` BRANCH IS THE PROXMOX PREFLIGHT CONFIG.
+# The `production` branch has its own config/deploy.production.yml which deploys
+# LIVE LINODE PRODUCTION. Do not merge this branch into `production`.
+#
+# The name is forced: unepwcmc/devops-actions' kamal-v2.x-deploy validates
+# `environment` as staging|production and passes it to Kamal as `-d`, so the
+# destination must be `production` and the file must be deploy.production.yml.
+# The GitHub environment stays `production_proxmox`, which is where the secrets live.
+# Kamal destination: production_proxmox
+#
+# The Proxmox PREFLIGHT PRODUCTION stack — VM 224 wcmc-pp-web-prod-01 on pve-04,
+# database VM 225 wcmc-pp-db-prod-01 (172.20.0.182). Production data, production RAILS_ENV,
+# nothing public pointed at it.
+#
+# Why a separate destination rather than `production`:
+#   Four of the six PP repos already have a `config/deploy.production.yml` that
+#   deploys the LIVE Linode production via Kamal 1 + Traefik. Reusing that name
+#   or the `production` GitHub environment would repoint live production deploys
+#   at this host. This mirrors what `staging_proxmox` did alongside Linode
+#   staging — see .github/workflows/deploy-production-kamal.yml.
+#
+# RAILS_ENV is `production` (unlike the staging destination, which runs the
+# `staging` Rails env). That is the point of preflight: production code paths,
+# production data, production config.
+image: unepwcmc/protectedplanet/rails-production
+
+# Base deploy.yml pins the staging host — override every reference to it.
+builder:
+  remote: ssh://wcmc@pp-web-prod-01.internal.unep-wcmc.org
+  args:
+    RAILS_ENV: production
+
+servers:
+  web:
+    hosts:
+      - pp-web-prod-01.internal.unep-wcmc.org # 172.20.0.183, VM 224 on pve-04
+    options:
+      # Reaches host-bound Redis (172.17.0.1:6379), Memcached (:11211) and the
+      # Elasticsearch accessory (:9200) via host.docker.internal.
+      add-host: host.docker.internal:host-gateway
+    proxy:
+      host: pp-web-prod-01.internal.unep-wcmc.org
+      app_port: 3000
+      # Country pages and the /country/*.pdf Puppeteer endpoint are slow.
+      # 30s (the default) would cut them; 120 is Cloudflare's ceiling.
+      response_timeout: 120
+      # Explicit wildcard. `ssl: true` alone makes kamal-proxy attempt Let's
+      # Encrypt ACME, which cannot validate an internal-only hostname.
+      # Source of the two secrets: /etc/ssl/kamal/ on the web host, installed
+      # from certbot on n8n.internal.unep-wcmc.org, expires 2026-11-19.
+      ssl:
+        certificate_pem: CERTIFICATE_PEM
+        private_key_pem: PRIVATE_KEY_PEM
+      forward_headers: true
+      healthcheck:
+        path: /
+        interval: 5
+
+  # TWO Sidekiq roles, matching the two systemd units on Linode production
+  # (pp_default and pp_import). Do not collapse them: the import queue runs
+  # long multi-GB WDPA jobs that would starve the default queue.
+  job_default:
+    hosts:
+      - pp-web-prod-01.internal.unep-wcmc.org
+    options:
+      add-host: host.docker.internal:host-gateway
+      health-cmd: /app/bin/docker-sidekiq-healthcheck
+      health-interval: 5s
+      health-retries: 3
+      health-start-period: 10s
+      health-timeout: 3s
+    cmd: bundle exec sidekiq -C config/sidekiq.yml
+
+  job_import:
+    hosts:
+      - pp-web-prod-01.internal.unep-wcmc.org
+    options:
+      add-host: host.docker.internal:host-gateway
+      health-cmd: /app/bin/docker-sidekiq-healthcheck
+      health-interval: 5s
+      health-retries: 3
+      health-start-period: 10s
+      health-timeout: 3s
+    cmd: bundle exec sidekiq -C config/sidekiq-import.yml
+
+env:
+  clear:
+    RAILS_ENV: production
+    # PP_HOST keeps its prefix: config/secrets.yml reads it, and a bare HOST is
+    # far too generic to be safe in a Rails env alongside PORT and DATABASE_HOST.
+    PP_HOST: pp-web-prod-01.internal.unep-wcmc.org
+
+# Base deploy.yml points the accessory at the staging host, so it has to be
+# restated here in full — Kamal merges the accessory by name, and a wrong `host`
+# would deploy Elasticsearch onto the staging box.
+accessories:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.24
+    host: pp-web-prod-01.internal.unep-wcmc.org
+    port: "172.17.0.1:9200:9200"
+    env:
+      clear:
+        discovery.type: single-node
+        cluster.name: ProtectedPlanet
+        node.name: ProtectedPlanetPreflight
+        bootstrap.memory_lock: "true"
+        xpack.security.enabled: "false"
+        # Linode production runs 7.17 deb-installed on the DB host with ~124 MB
+        # of indices; all of it is rebuilt here with `rake search:reindex`.
+        ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+    volumes:
+      - /data/elasticsearch:/usr/share/elasticsearch/data
