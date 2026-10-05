@@ -44,15 +44,6 @@ module Wdpa
 
           greenlist_attributes
         end
-
-        # Returns only attributes suitable for Staging::GreenListStatus.create! (excludes columns_not_for_create).
-        # Pass the result of map_portal_greenlist_to_attributes.
-        def self.attributes_for_green_list_status_create(mapped_attributes)
-          return {} if mapped_attributes.blank?
-
-          keys_to_exclude = columns_not_for_create
-          mapped_attributes.reject { |key, _| keys_to_exclude.include?(key.to_s) }
-        end
       end
     end
   end

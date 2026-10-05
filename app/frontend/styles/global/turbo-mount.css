@@ -1,0 +1,17 @@
+/*
+ * turbo-mount's Stimulus controller must keep `data-controller` on its host to
+ * track it, so every `turbo_mount(...)` leaves a permanent wrapper <div> around
+ * the component's real root — it cannot unwrap itself without breaking
+ * Stimulus's lifecycle tracking.
+ *
+ * `display: contents` makes Grid/Flexbox treat the promoted real root as the
+ * grid/flex item, so siblings land where they would with no wrapper.
+ *
+ * Residual risk: this changes box generation, not the DOM, so positional
+ * selectors (:first-child, :nth-child, `+`/`~`, Tailwind's first:/last:/
+ * odd:/even:) still resolve against the wrapper. An app-wide audit found no
+ * real cases of one — re-check if the pattern shows up.
+ */
+[data-controller^='turbo-mount-'] {
+  display: contents;
+}

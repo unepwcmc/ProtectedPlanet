@@ -3,8 +3,8 @@ import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import Tabs from '@/components/Tabs.vue'
 
-// Real tab panels hold components. This one records its own mount/unmount so we can
-// prove a hidden tab's components are never created until the tab is shown.
+// Records its own mount/unmount, to prove a hidden tab's components are never
+// created until the tab is shown.
 const lifecycle: string[] = []
 const PanelWidget = defineComponent({
   props: { label: { type: String, required: true } },
@@ -34,13 +34,48 @@ describe('Tabs (v-if panels)', () => {
   it('renders ONLY the active panel in the DOM; hidden panels are absent', () => {
     const wrapper = mount(Tabs, { props: { tabs } })
 
-    // Active (tab 1) present…
     expect(wrapper.find('[data-tab-panel="1"]').exists()).toBe(true)
     expect(wrapper.find('.c1').exists()).toBe(true)
-    // …the others are NOT in the DOM at all (true v-if, not hidden with v-show).
+    // The others are not in the DOM at all — a real v-if, not v-show.
     expect(wrapper.find('[data-tab-panel="2"]').exists()).toBe(false)
     expect(wrapper.find('[data-tab-panel="3"]').exists()).toBe(false)
     expect(wrapper.find('.c2').exists()).toBe(false)
+  })
+
+  // The triggers are <li>s, not buttons, so keyboard operability is explicit
+  // rather than free: without tabindex + a keydown handler the whole tab strip
+  // was mouse-only.
+  it('activates a tab with Enter and with Space, not just a click', async () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+    const triggers = wrapper.findAll('.ct-tabs__trigger')
+
+    await triggers[1].trigger('keydown', { key: 'Enter' })
+    expect(wrapper.find('[data-tab-panel="2"]').exists()).toBe(true)
+
+    await triggers[2].trigger('keydown', { key: ' ' })
+    expect(wrapper.find('[data-tab-panel="3"]').exists()).toBe(true)
+  })
+
+  it('puts every trigger in the tab sequence', () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+
+    wrapper.findAll('.ct-tabs__trigger').forEach((trigger) => {
+      expect(trigger.attributes('tabindex')).toBe('0')
+    })
+  })
+
+  // Was `:ariaSelected`, which relies on ARIA reflection (el.ariaSelected) instead
+  // of emitting the attribute — unsupported in Firefox before 119.
+  it('exposes the selection as a real aria-selected attribute', async () => {
+    const wrapper = mount(Tabs, { props: { tabs } })
+    const triggers = wrapper.findAll('.ct-tabs__trigger')
+
+    expect(wrapper.find('.ct-tabs__triggers').attributes('role')).toBe('tablist')
+    expect(triggers[0].attributes('aria-selected')).toBe('true')
+    expect(triggers[1].attributes('aria-selected')).toBe('false')
+
+    await triggers[1].trigger('click')
+    expect(wrapper.findAll('.ct-tabs__trigger')[1].attributes('aria-selected')).toBe('true')
   })
 
   it('renders a previously-hidden panel when its trigger is clicked', async () => {
@@ -49,7 +84,6 @@ describe('Tabs (v-if panels)', () => {
     const secondTrigger = wrapper.findAll('.ct-tabs__trigger')[1]
     await secondTrigger.trigger('click')
 
-    // Panel 2 now exists and its body rendered; panel 1 was torn down.
     expect(wrapper.find('[data-tab-panel="2"]').exists()).toBe(true)
     expect(wrapper.find('.c2').text()).toBe('two')
     expect(wrapper.find('[data-tab-panel="1"]').exists()).toBe(false)
@@ -104,13 +138,12 @@ describe('Tabs (v-if panels)', () => {
       }
     })
 
-    // Tab 1 active: only widget A was ever created. Widget B does not exist —
-    // its slot outlet is inside the v-if that is false, so it is never invoked.
+    // Only widget A was ever created: B's slot outlet sits inside the false
+    // v-if, so it is never invoked.
     expect(lifecycle).toEqual(['mount:A'])
     expect(wrapper.findAll('.widget')).toHaveLength(1)
     expect(wrapper.find('.widget').text()).toBe('widget:A')
 
-    // Reveal tab 2: A unmounts, B mounts for the first time.
     await wrapper.findAll('.ct-tabs__trigger')[1].trigger('click')
 
     expect(lifecycle).toEqual(['mount:A', 'unmount:A', 'mount:B'])

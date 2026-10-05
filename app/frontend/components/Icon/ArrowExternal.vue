@@ -1,0 +1,15 @@
+<template>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 15.646 11.254"
+    fill="none"
+  >
+    <path
+      d="M10.1,4.758a.515.515,0,0,1,0,.735.506.506,0,0,1-.728,0L5.645,1.773V14.064a.518.518,0,0,1-.515.522.524.524,0,0,1-.522-.522V1.773L.889,5.493a.515.515,0,0,1-.735,0,.515.515,0,0,1,0-.735L4.763.149a.528.528,0,0,1,.735,0Z"
+      transform="translate(15.086 0.5) rotate(90)"
+      fill="currentColor"
+      stroke="currentColor"
+      stroke-width="1"
+    />
+  </svg>
+</template>

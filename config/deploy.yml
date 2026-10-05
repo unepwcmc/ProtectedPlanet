@@ -20,10 +20,28 @@ builder:
   # Dockerfile.deploy, NOT the dev Dockerfile — the dev one still carries the
   # buster + GDAL-2.2.3 + ESRI FileGDB chain that cannot build on a current base.
   dockerfile: Dockerfile.deploy
+  # These OVERRIDE the ARG defaults in Dockerfile.deploy -- bumping the Dockerfile
+  # alone changes nothing here, which is how a Ruby 4.0.6 commit deployed an image
+  # still running 3.3.7 (verified on the live container, Sep 2026). Keep in step
+  # with Dockerfile.deploy's ARG RUBY_VERSION / ARG NODE_VERSION.
+  #
+  # NODE_VERSION is deliberately NOT 26.8.1 here yet: both Dockerfiles default to
+  # 26, so staging builds on a different Node from dev and CI. Reconcile that on
+  # its own, not folded into a Ruby bump -- Node 26's bundled npm is broken for
+  # every install (see the corepack note in Dockerfile.deploy), so moving staging
+  # to 26 is what first exercises that workaround on the deploy path.
   args:
-    RUBY_VERSION: 3.3.7
+    RUBY_VERSION: 4.0.6
     NODE_VERSION: 24.4.1
     RAILS_ENV: staging
+  # Vite INLINES import.meta.env.VITE_* at build time, so the Mapbox token has to
+  # be present while the image is built -- having it only at runtime leaves the
+  # bundle with no token and the map silently never renders. config/vite.rb reads
+  # it from app_secrets (ENV["MAPBOX_ACCESS_TOKEN"]) and hands it to Vite.
+  # It is a public token by nature (it ships inside the client JS either way), but
+  # passed as a build secret rather than an arg so it stays out of image history.
+  secrets:
+    - MAPBOX_ACCESS_TOKEN
 
 env:
   clear:
@@ -49,19 +67,18 @@ env:
     - AWS_SECRET_ACCESS_KEY
     - AWS_S3_REGION
     - AWS_REGION
-    - MAILER_ADDRESS
-    - MAILER_PORT
-    - MAILER_DOMAIN
-    - MAILER_USERNAME
-    - MAILER_PASSWORD
-    - MAILER_HOST
-    - MAILER_ASSET_HOST
     - MAPBOX_ACCESS_TOKEN
+    # Server-side base URL for the Mapbox Static Images API, read by
+    # AssetGenerator.mapbox_url via app_secrets (mapbox.base_url). It was never
+    # declared here, so it was UNSET on staging and `base_url + "geojson(...)"`
+    # raised NoMethodError on nil -- every /assets/tiles/:id request 500'd, which
+    # is the map overlay and the search-result card thumbnails. Distinct from
+    # MAPBOX_ACCESS_TOKEN: that one is also a BUILD secret (Vite inlines it into
+    # the client bundle); this one is runtime-only.
+    - MAPBOX_STATIC_IMAGE_URL
     - CARTODB_API_KEY
     - APPSIGNAL_PUSH_API_KEY
-    - SLACK_WEBHOOK_URL
     - PP_SLACK_WEBHOOK_URL
-    - MAINTENANCE_MODE_KEY
 
 # WDPA imports and .gdb download generation write multi-GB files. This must be a
 # real volume, not container-ephemeral, and must be shared by the web and job

@@ -32,6 +32,11 @@ servers:
       - pp-web-staging-01.internal.unep-wcmc.org
     options:
       add-host: host.docker.internal:host-gateway
+      # Chrome's children (crashpad handler, renderers) are re-parented to PID 1
+      # container that leak only grows. `--init` puts tini at PID 1 to reap
+      # them; it forwards SIGTERM, so Sidekiq still shuts down gracefully.
+      # Only this role needs it - no other Sidekiq role starts a browser.
+      init: true
       health-cmd: /app/bin/docker-sidekiq-healthcheck
       health-interval: 5s
       health-retries: 3
@@ -39,22 +44,10 @@ servers:
       health-timeout: 3s
     cmd: bundle exec sidekiq -C config/sidekiq.yml
 
-  job_import:
-    hosts:
-      - pp-web-staging-01.internal.unep-wcmc.org
-    options:
-      add-host: host.docker.internal:host-gateway
-      health-cmd: /app/bin/docker-sidekiq-healthcheck
-      health-interval: 5s
-      health-retries: 3
-      health-start-period: 10s
-      health-timeout: 3s
-    cmd: bundle exec sidekiq -C config/sidekiq-import.yml
-
 env:
   clear:
     RAILS_ENV: staging
-    # PP_HOST keeps its prefix: config/secrets.yml reads it, and a bare HOST is
+    # PP_HOST keeps its prefix: config/app_secrets.yml reads it, and a bare HOST is
     # far too generic to be safe in a Rails env alongside PORT and DATABASE_HOST.
     PP_HOST: pp-web-staging-01.internal.unep-wcmc.org
 

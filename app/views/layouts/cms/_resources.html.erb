@@ -1,21 +1,20 @@
-<%= render partial: "layouts/partials/hero-small", locals: { 
-  classes: @cms_page[:slug],
+<div class="vw-layouts-cms-resources">
+  <%= render partial: "layouts/partials/hero/small", locals: {
   image: cms_fragment_render(:image, @cms_page),
   title: @cms_page.label
 } %>
-<listing-page
-  endpoint-search="/en/search-cms"
-  :filter-groups="<%= get_category_filters %>"
-  ga-id="Slug: <%= @cms_page.slug %>"
-  :items-per-page="9"
-  :page-id="<%= @cms_page.id %>"
-  :results="<%= cms_pages_for_search %>"
-  sm-trigger-element="sm-listing"
-  template="resources"
-  text-clear="<%= t('search.clear') %>"
-  text-filters-close="View Results"
-  text-filter-trigger="<%= t('search.filters') %>"
-  text-no-results="No Results"
-></listing-page>
-
-<%= render "partials/ctas/live-report" %>
+  <%= turbo_mount "Listing", props: {
+  endpointSearch: search_cms_path,
+  filterGroups: get_category_filters,
+  gaId: "Slug: #{@cms_page.slug}",
+  itemsPerPage: 9,
+  pageId: @cms_page.id,
+  results: cms_pages_for_search,
+  template: "resources",
+  textClear: t('search.clear'),
+  textFiltersClose: "View Results",
+  textFilterTrigger: t('search.filters'),
+  textNoResults: "No Results"
+} %>
+  <%= render "partials/ctas/protected-planet-report" %>
+</div>

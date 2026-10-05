@@ -1,24 +1,35 @@
 <template>
   <div class="ct-tabs">
-    <ul class="ct-tabs__triggers">
-      <li
-        v-for="tab in tabs"
-        :key="tab.id"
-        class="ct-tabs__trigger"
-        :class="{ active: tab.id === selectedId }"
-        role="tab"
-        :ariaSelected="tab.id === selectedId"
-        @click="select(tab.id)"
-        v-html="tab.title"
-      />
-    </ul>
+    <Teleport
+      to="#vw-hero-tabs-target"
+      :disabled="!hasHeroTabsTarget"
+    >
+      <ul
+        class="ct-tabs__triggers"
+        role="tablist"
+      >
+        <li
+          v-for="tab in tabs"
+          :key="tab.id"
+          class="ct-tabs__trigger"
+          :class="{ 'ct-tabs__trigger--active': tab.id === selectedId }"
+          role="tab"
+          :aria-selected="tab.id === selectedId"
+          tabindex="0"
+          @click="select(tab.id)"
+          @keydown.enter.prevent="select(tab.id)"
+          @keydown.space.prevent="select(tab.id)"
+          v-html="tab.title"
+        />
+      </ul>
+    </Teleport>
     <template
       v-for="tab in tabs"
       :key="`panel-${tab.id}`"
     >
       <div
         v-if="tab.id === selectedId"
-        class="ct-tabs__target ct-tabs__target--active"
+        class="ct-tabs__target"
         :data-tab-panel="tab.id"
         role="tabpanel"
       >
@@ -29,8 +40,8 @@
         />
         <slot
           :name="`tab-${tab.id}`"
-          :tab="tab"
-          :selectedId="selectedId"
+          :tab
+          :selectedId
         />
       </div>
     </template>
@@ -38,30 +49,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { trackEvent } from '@/lib/analytics'
+import { ref, onMounted } from 'vue'
+import useAnalytics from '@/composables/useAnalytics'
 import type { TabsProps } from '@/types/backend'
 
+// Match by id or by title, mirroring the `?tab=` param.
 type Tabs = TabsProps
-// Match by id or by title (mirrors the legacy ?tab= param behaviour).
 const props = defineProps<Tabs>()
-const emit = defineEmits<{ change: [id: number] }>()
 
+const emit = defineEmits<{ change: [id: number] }>()
+const { trackEvent } = useAnalytics()
 function initialTabId() {
   const preset = props.tabs.find(
     t => String(t.id) === String(props.preselectedTab) || t.title === props.preselectedTab
   )
   return preset ? preset.id : props.tabs[0]?.id
 }
-
 const selectedId = ref(initialTabId())
-
-// Strips non-ASCII chars/newlines from CMS titles before putting them in the
-// URL, matching the legacy Vue2 Tabs component's `removeEncodedChars`.
+// Strips non-ASCII chars and newlines from CMS titles used in the URL.
 function sanitizeTabParam(title: string) {
   return title.replace(/[^\x00-\x7F]|\n/g, '')
 }
-
 function updateTabParam(id: number) {
   const tab = props.tabs.find(t => t.id === id)
   if (!tab) return
@@ -69,7 +77,6 @@ function updateTabParam(id: number) {
   url.searchParams.set('tab', sanitizeTabParam(tab.title))
   window.history.replaceState({ page: 1 }, '', url)
 }
-
 function select(id: number) {
   const tab = props.tabs.find(t => t.id === id)
   if (props.gaId && tab) {
@@ -79,43 +86,44 @@ function select(id: number) {
   updateTabParam(id)
   emit('change', id)
 }
-
 if (selectedId.value !== undefined) updateTabParam(selectedId.value)
+
+// Hero partials render an empty #vw-hero-tabs-target for the trigger row to
+// teleport into, so it sits at the bottom of the hero while the panels stay at
+// this component's mount point. Renders in place when there is no hero target.
+const hasHeroTabsTarget = ref(false)
+onMounted(() => {
+  hasHeroTabsTarget.value = document.querySelector('#vw-hero-tabs-target') !== null
+})
 </script>
 
 <style scoped lang="css">
-@reference "tailwindcss";
+@reference "#importtailwindcss";
 
 .ct-tabs__triggers {
-  @apply m-0 flex list-none gap-8 overflow-x-auto p-0 md:flex-wrap;
+  @apply
+  tw-shared-base-container
+  tw-shared-base-flex-gap-8
+  overflow-x-auto;
 }
 
 .ct-tabs__trigger {
-  @apply tw-shared-base-container shrink-0 cursor-pointer border-b-2 border-transparent pb-1 text-[1.125rem] leading-[1.3] text-theme-grey-dark transition-colors hover:border-theme-primary md:text-[1.25rem];
+  @apply
+  shrink-0
+  cursor-pointer
+  border-b-2
+  border-transparent
+  pb-1
+  tw-shared-font-hind-siliguri__light-lg-md-xl-grey-black
+  transition-colors
+  hover:border-theme-primary;
 }
 
 .ct-tabs__trigger--active {
-  @apply border-theme-primary font-bold text-theme-grey-black;
+  @apply
+  border-theme-primary
+  font-bold
+  text-theme-grey-black;
 }
 
-.ct-tabs__target {
-  @apply pt-4;
-}
-
-.ct-tabs__body {
-  @apply text-base leading-[1.3] text-theme-grey-black;
-}
-
-/* v-html content has no classes to hook Tailwind onto directly, so it's styled here. */
-.ct-tabs__body :deep(p) {
-  margin: 0;
-}
-
-.ct-tabs__body :deep(a) {
-  @apply text-theme-primary underline;
-}
-
-.ct-tabs__body :deep(a):hover {
-  @apply text-theme-primary-dark no-underline;
-}
 </style>

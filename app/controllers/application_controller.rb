@@ -6,19 +6,17 @@ class ApplicationController < ActionController::Base
   class PageNotFound < StandardError; end;
 
   protect_from_forgery with: :exception
-  # Required for development
-  before_action :set_host_for_local_storage
+  before_action :set_request_host_for_url_helpers
 
-  helper_method :opengraph
+  helper_method :opengraph, :canonical_url, :structured_data
 
   before_action :load_cms_site
   before_action :load_cms_content
 
-  before_action :set_locale
   before_action :check_for_pdf
 
   def admin_path?
-    request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
+    request.original_fullpath =~ %r{/(?:#{I18n.default_locale}/)?admin/?}
   end
 
   def opengraph
@@ -34,10 +32,10 @@ class ApplicationController < ActionController::Base
       'description': t('meta.site.description'),
       'url': request.url,
       'type': 'website',
-      'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+      'image': social_image_url,
       'image:alt': t('meta.image_alt'),
-      'image:height': t('meta.image_height'),
-      'image:width': t('meta.image_width'),
+      'image:height': 630,
+      'image:width': 1200,
       'locale': 'en_GB'
     }
   end
@@ -50,34 +48,89 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def default_url_options
-    { locale: I18n.locale }
+  def canonical_url
+    return if admin_path?
+
+    request.original_url.split('?').first
   end
 
-  def set_locale
-    if params[:locale].present?
-      I18n.locale = params[:locale]
-    else
-      I18n.locale = I18n.default_locale
-    end
+  def site_url
+    root_url(locale: nil)
+  end
+
+  def social_image_url
+    URI.join(site_url, helpers.image_path(t('meta.image')))
+  end
+
+  def structured_data
+    return if admin_path?
+
+    @structured_data ||=
+      if home_page?
+        structured_data_presenter.website
+      else
+        structured_data_presenter.webpage(name: @page_title, description: @page_description)
+      end
+  end
+
+  def structured_data_presenter
+    @structured_data_presenter ||= StructuredDataPresenter.new(
+      canonical_url: canonical_url,
+      site_url: site_url,
+      logo_url: social_image_url.to_s
+    )
+  end
+
+  # '/', '/en' and '/en/' all route to home#index.
+  def home_page?
+    request.path.match?(%r{\A/(?:#{I18n.default_locale}/?)?\z})
+  end
+
+  def set_page_meta(title: nil, description: nil)
+    @page_title = title if title.present?
+    @page_description = description if description.present?
+  end
+
+  def default_url_options
+    { locale: I18n.default_locale }
   end
 
   def raise_404
     raise PageNotFound
   end
 
+  # Production only: a blanket StandardError handler swallows every exception, so in
+  # development it hides the Rails error page/backtrace and in test it turns genuine
+  # failures into a rendered 500 instead of failing loudly.
   if Rails.env.production?
-    rescue_from PageNotFound do
-      render_404
-    end
-
     rescue_from StandardError do
-      render_500
+      render_error_page(500)
     end
   end
 
+  # Declared AFTER StandardError deliberately: rescue_from matches the most recently
+  # registered handler first, and PageNotFound < StandardError — reverse the order and
+  # every 404 would render as a 500 in production.
+  # Unguarded, so a missing record renders the styled 404 page in every environment.
+  rescue_from PageNotFound do
+    render_error_page(404)
+  end
+
+  # max-age=0 + must-revalidate forces the BROWSER to recheck the HTML every visit,
+  # so it never keeps serving digest-stamped asset paths that the next build deleted.
+  # s-maxage lets the SHARED cache (Rack::Cache/memcached) serve the full window
+  # regardless, answering revalidation with a 304; post-deploy flushes that store.
+  #
+  # Unguarded by perform_caching, unlike AssetsController#tiles: this only sets
+  # headers on a response already being rendered, so there's no expensive work to
+  # skip in dev. If that ever changes (e.g. this starts gating real caching work),
+  # add the same perform_caching guard tiles uses.
   def enable_caching
-    expires_in Rails.application.secrets.cache_max_age, public: true
+    options = { public: true, must_revalidate: true }
+    shared_max_age = AppSecrets.cache_max_age
+    options['s-maxage'] = shared_max_age if shared_max_age.present?
+
+    expires_in 0, options
   end
 
   # as of 04Apr it doesn't seem to be used
@@ -98,14 +151,24 @@ class ApplicationController < ActionController::Base
 
     # Strips out the locale and any query params (including the query character) 
     # when attempting to find the page in the DB by its full_path
-    sanitised_request = request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/')[/[^?]+/]
+    sanitised_request = request.original_fullpath.gsub(%r{\A/#{I18n.default_locale}/?}, '/')[/[^?]+/]
 
     @cms_page ||= Comfy::Cms::Page.find_by_full_path(sanitised_request)
 
     return unless @cms_page
 
-    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
-                        page: @cms_page).parse(opengraph: opengraph, type: 'og')
+    comfy_opengraph = ComfyOpengraph.new(
+      { 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
+      page: @cms_page
+    )
+    comfy_opengraph.parse(opengraph: opengraph, type: 'og')
+
+    # The home page's CMS record is the site root, whose label ("Home") makes a
+    # worse title than the site default -- so take only its description there.
+    set_page_meta(
+      title: (comfy_opengraph.page_title unless @cms_page.full_path == '/'),
+      description: comfy_opengraph.page_description
+    )
   end
 
   def record_invalid_error(exception = nil)
@@ -127,32 +190,85 @@ class ApplicationController < ActionController::Base
         end
       end
       message = "The following fields cannot be empty: #{null_fragments.join(', ')}"
-    elsif exception
-      Rails.logger.error("record_invalid_error: #{exception.class}: #{exception.message}")
+      return redirect_to(safe_referrer_path, alert: message)
     end
 
-    redirect_to(request.referrer || root_path, alert: message)
+    # Anything that is NOT the Comfy fragment case is a genuine database error and
+    # must surface. This used to log and redirect, which meant a broken query was
+    # indistinguishable from a normal 302.
+    #
+    # That is not hypothetical: after the move to the PostgreSQL 17 staging host,
+    # Country#coverage_growth raised
+    #   PG::UndefinedColumn: ERROR: column "date_part" does not exist
+    # on EVERY country page. All of them silently redirected to the homepage, no
+    # error reached AppSignal, and nothing looked wrong from the outside -- it was
+    # found only because a route smoke test compared against production.
+    #
+    # NB: raising from inside a rescue_from handler propagates straight to the error
+    # middleware -- it is NOT re-dispatched to the StandardError handler above -- so
+    # a bare re-raise in production would lose the styled error page. Hence: report
+    # explicitly, then raise in development/test where a loud backtrace is what you
+    # want, and render the normal 500 page in production.
+    Rails.logger.error("record_invalid_error: #{exception.class}: #{exception.message}") if exception
+    Appsignal.send_error(exception) if exception && defined?(Appsignal)
+
+    raise exception if exception && !Rails.env.production?
+    return render_error_page(500) if exception
+
+    redirect_to(safe_referrer_path, alert: message)
+  end
+
+  # `request.referrer` is a client-supplied header, so it cannot go to
+  # redirect_to unfiltered. Rails rejects two shapes of it, and both would turn
+  # this rescue handler into a 500 rather than the intended redirect:
+  #
+  #   * an off-host referrer raises UnsafeRedirectError
+  #     (action_on_open_redirect = :raise, on since load_defaults 7.0)
+  #   * a referrer that is not rooted at "/" raises PathRelativeRedirectError
+  #     (action_on_path_relative_redirect = :raise, on since load_defaults 8.1)
+  #
+  # Keep only the path of a same-origin referrer and fall back to the homepage
+  # for everything else -- including a missing, malformed or protocol-relative
+  # ("//evil.example") header.
+  def safe_referrer_path
+    referrer = request.referrer
+    return root_path if referrer.blank?
+
+    uri = URI.parse(referrer)
+    return root_path if uri.host.present? && uri.host != request.host
+
+    path = uri.path.presence || '/'
+    return root_path unless path.start_with?('/')
+    return root_path if path.start_with?('//')
+
+    uri.query.present? ? "#{path}?#{uri.query}" : path
+  rescue URI::InvalidURIError
+    root_path
   end
 
   def is_comfy_page_edit?
     params[:controller] == 'comfy/admin/cms/pages' && params[:action] == 'update'
   end
 
-  def render_404
-    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
-  end
-
-  def render_500
-    render file: Rails.root.join("/app/views/layouts/500.html.erb"), layout: true, status: :internal_server_error
+  def render_error_page(status)
+    render template: "layouts/error_page",
+           layout: "application",
+           formats: [:html],
+           content_type: "text/html",
+           status: status == 404 ? :not_found : :internal_server_error,
+           locals: { error_status: status }
   end
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
   end
 
-  def set_host_for_local_storage
+  # The host for the *_url helpers called outside a view/controller during a
+  # request -- ComfyOpengraph#root_url and AssetGenerator.request_tile's Referer.
+  # Both include url_helpers without a default_url_options of their own, so they
+  # read this global. Jobs have no request: Download::Generators::Pdf supplies its
+  # own host instead.
+  def set_request_host_for_url_helpers
     Rails.application.routes.default_url_options[:host] = request.base_url
-    # TODO Check why this is not set automatically
-    # ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
   end
 end

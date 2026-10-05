@@ -24,7 +24,8 @@ class Search::CmsSerializer < Search::BaseSerializer
   }.freeze
 
   def serialize
-    return DEFAULT_OBJ.to_json unless @search 
+    return DEFAULT_OBJ unless @search
+
     DEFAULT_OBJ.merge(
       {
         total: total,
@@ -34,7 +35,7 @@ class Search::CmsSerializer < Search::BaseSerializer
             date: date(record),
             fileUrl: file(record),
             linkUrl: link(record),
-            linktTile: link_title(record), 
+            linktTile: link_title(record),
             title: strip_html(record.respond_to?(:label) ? record.label : record.name),
             url: url(record),
             summary: strip_html(record.respond_to?(:summary) ? record.summary : record.name),
@@ -42,7 +43,7 @@ class Search::CmsSerializer < Search::BaseSerializer
           }
         end
       }
-    ).to_json
+    )
   end
 
   private
@@ -63,7 +64,8 @@ class Search::CmsSerializer < Search::BaseSerializer
 
   def file(page)
     attachments = page.fragments.where(identifier: 'file').first.try(:attachments)
-    attachments.attachments.first.blob.service_url if attachments.present?
+    # #service_url was removed in Rails 7.0; #url replaces it.
+    attachments.attachments.first.blob.url if attachments.present?
   end
 
   def link(page)
@@ -97,7 +99,18 @@ class Search::CmsSerializer < Search::BaseSerializer
   end
 
   def cms_root_page_slug
-    _root_page_id = @search.options.dig(:filters, :ancestor)
+    # Searchable#filters returns '' (not {}) when no filters are supplied, so
+    # options is {filters: '', ...}. Hash#dig then fetched that String and called
+    # ''.dig(:ancestor) on it:
+    #
+    #   TypeError (String does not have #dig method)
+    #
+    # which made an unfiltered GET /search-cms return 500 -- on production too, not
+    # just staging. It only ever worked because the frontend always sends filters.
+    # Guard here rather than changing what #filters returns: that value is also fed
+    # to the query builder, and '' vs {} is not a change worth making blind.
+    _filters = @search.options[:filters]
+    _root_page_id = _filters.is_a?(Hash) ? _filters[:ancestor] : nil
     _cms_root_page = Comfy::Cms::Page.find_by(id: _root_page_id)
     _cms_root_page ? _cms_root_page.slug.underscore.to_sym : :default
   end

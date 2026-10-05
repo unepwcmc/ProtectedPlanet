@@ -1,8 +1,4 @@
 module CountriesHelper
-  def has_documents local_assigns
-    (local_assigns.has_key? :documents) && (local_assigns[:documents].length > 0)
-  end
-
   def has_related_countries?
     @country.children.any? || @country.parent.present?
   end
@@ -33,12 +29,6 @@ module CountriesHelper
       link: search_areas_path(locale, filters),
       title: title_variable
     }
-  end
-
-  def has_restricted_sites?
-    restricted_iso3 = ["RUS", "EST", "CHN", "GBR"]
-
-    @country && (restricted_iso3.include? @country.iso_3)
   end
 
   def view_all_link(oecms_tab: false)

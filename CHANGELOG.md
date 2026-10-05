@@ -1,3 +1,40 @@
+### 7.0.0
+Major platform upgrade — Rails 5.2 → 8, Webpacker/Vue 2 → Vite/Vue 3, Capistrano → Kamal.
+
+**Backend**
+  - Ruby 2.6.3 → 3.3.7, Rails 5.2 → 8.0.5
+  - Puma replaces system Passenger; app now runs containerised
+  - PostGIS adapter 11, PostgreSQL 17 (`db_test` container for the suite)
+  - Elasticsearch client held at 7.17 (8.x is a client rewrite)
+  - Sidekiq 7 with a dedicated `pdf` capsule; `import` queue removed
+  - Comfortable Mexican Sofa → Comfortable Media Surfer 3.1
+  - Gemfile pruned 58 → 41 direct dependencies (−24 gems in the lock)
+
+**Frontend**
+  - Webpacker → Vite; Vue 2 + Vuex → Vue 3 Composition API + TypeScript
+  - Every component is now a turbo-mount island, no page-wide Vue app
+  - All SCSS migrated to Tailwind v4; asset pipeline retired for app styles
+  - Pinia and axios removed — composables and a `fetch` wrapper instead
+  - amCharts 5; maps rendered by MapLibre GL against Mapbox styles
+  - Vitest suite added, plus `vue-tsc`, eslint and stylelint
+
+**Deploy and infrastructure**
+  - Capistrano, Ansible and Jenkins removed; Kamal 2 + GitHub Actions
+  - Staging moved from Linode to a Proxmox VM
+  - GDAL 2.2.3 + proprietary ESRI FileGDB SDK → distro GDAL 3.8 + OpenFileGDB
+  - Shared long-lived Chrome for PDF rendering, owned by Sidekiq hooks
+  - `.github/workflows/test.yml` — the repo's first test CI
+
+**Data**
+  - Stats read from the `stats` schema on the PP DB, replacing CSV ingestion
+  - GDPR cookie consent gating GA4 / Hotjar; Silktide and UA removed
+
+**Cleanup**
+  - Seven-wave dead-code audit: legacy WDPA S3 importer, `import` workers,
+    `Geospatial::*`, `RegionalStatistic`, `db/cms_seeds` (334 MB), 40+ unused
+    assets and 30+ dead methods
+  - Docs consolidated; `docs/known-issues.md` added
+
 ### 6.0.0
   - Hook up to read Effectiveness and Greenlist from DMP
   - Update importer to Effectiveness and Greenlist

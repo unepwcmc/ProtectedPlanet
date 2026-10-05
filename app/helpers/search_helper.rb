@@ -9,29 +9,6 @@ module SearchHelper
     content_tag(:li, class: selected_class) { yield }
   end
 
-  def autocomplete_link(result)
-    if result[:type] == 'protected_area'
-      pa_autocomplete_link result
-    else
-      country_autocomplete_link result
-    end
-  end
-
-  def facet_link(facet)
-    search_params = params.permit(ALLOWED_PARAMS)
-    link_params = search_params.merge({ facet[:query] => facet[:identifier] })
-
-    link_to(url_for(link_params), class: 'filter-bar__value') do
-      facet_count = content_tag(
-        :strong,
-        "(#{facet[:count]})",
-        class: 'filter-bar__count'
-      )
-
-      raw "#{facet[:label]} #{facet_count}"
-    end
-  end
-
   def clear_filters_link(params)
     search_params = params.permit(ALLOWED_PARAMS)
     if search_params[:main] && search_params[:q].nil?
@@ -79,7 +56,7 @@ module SearchHelper
     keywords = query.split(',')
     if keywords.select { |k| k .length == 3 }.count == keywords.count
       # They all belong to the same parent country already when coming from the marine page
-      parent_country = Country.find_by_iso_3(keywords.first).try(:parent).try(:name)
+      parent_country = Country.find_by(iso_3: keywords.first).try(:parent).try(:name)
       return nil unless parent_country
 
       %(Search results for <strong class="u-link-color">#{parent_country} overseas territories</strong>).html_safe
@@ -90,7 +67,7 @@ module SearchHelper
     value: ->(config, param) { config['cases'][param.to_s] },
     model: lambda { |config, param|
       model = config['model'].constantize
-      instance = model.find_by_id(param)
+      instance = model.find_by(id: param)
       config['template'] % instance.name
     }
   }.freeze
@@ -113,49 +90,5 @@ module SearchHelper
   rescue StandardError => e
     Rails.logger.warn e
     nil
-  end
-
-  def pa_autocomplete_link(result)
-    version = Rails.application.secrets.mapbox[:version]
-    image_params = { id: result[:identifier], type: result[:type], version: version }
-
-    link_to protected_area_url(result[:identifier]), class: 'autocompletion__result' do
-      image = image_tag(
-        'search-placeholder-country.png',
-        alt: result[:name],
-        data: { async: tiles_path(image_params) },
-        class: 'autocompletion__image'
-      )
-      concat image
-      concat(content_tag(:div, class: 'autocompletion__body') do
-        concat content_tag(:span, result[:name])
-        concat content_tag(:span, result[:type].titleize, class: 'autocompletion__type')
-      end)
-    end
-  end
-
-  def country_autocomplete_link(result)
-    version = Rails.application.secrets.mapbox[:version]
-    image_params = { id: result[:identifier], type: result[:type], version: version }
-    type = (result[:type] == 'country' ? 'country/territory' : result[:type])
-
-    link_to country_url(result[:identifier]), class: 'autocompletion__result' do
-      image = image_tag(
-        'search-placeholder-country.png',
-        alt: result[:name],
-        data: { async: tiles_path(image_params) },
-        class: 'autocompletion__image'
-      )
-      concat image
-      concat(content_tag(:div, class: 'autocompletion__body') do
-        concat content_tag(:span, result[:name])
-        concat content_tag(:span, type.titleize, class: 'autocompletion__type')
-      end)
-    end
-  end
-
-  # As of 23March2026, this seems to be unused double check if it's needed
-  def designation_link(desig)
-    search_areas_path(filters: SearchAreaLinkFilters.designation_filters(desig))
   end
 end

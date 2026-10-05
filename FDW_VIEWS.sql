@@ -92,7 +92,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_intcrit_agg_pk     ON staging_port
 --    Points are spatial_data rows where is_polygon = 0
 --    ⚠️  If you modify JOINs, WHERE clauses, or add columns here, check:
 --        - Portal DB: wdpas.archived_at, spatial_data(wdpa_id, is_polygon), data_restriction_levels.code indexes
---        - This file: Ensure unique index on (site_id, site_pid) and spatial index on wkb_geometry exist
+--        - This file: Ensure unique indexes on (site_id, site_pid) and (wdpa_pk), plus a spatial index on wkb_geometry
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_points AS
 WITH site AS (
@@ -220,6 +220,7 @@ string_agg(DISTINCT COALESCE(oc.description->>'en', oc.code), ';' ORDER BY COALE
 )
 SELECT
   (row_number() OVER (ORDER BY site.wdpa_id, site.parcel_id))::integer AS ogc_fid,
+  (site.wdpa_pk)::bigint                                     AS wdpa_pk,
   (site.wdpa_id)::integer                                    AS site_id,
   (site.parcel_id)::varchar(52)                              AS site_pid,
 
@@ -270,6 +271,11 @@ WITH NO DATA;
 -- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
 -- ⚠️  If you change the natural key columns, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_points_pk ON staging_portal_standard_points (site_id, site_pid);
+
+-- Batch cursor for the attribute import (Adapters::ProtectedAreas). The portal
+-- PK is NOT NULL and collation-independent, unlike the natural key; ogc_fid is
+-- recomputed on every refresh and cannot be resumed against.
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_points_wdpa_pk ON staging_portal_standard_points (wdpa_pk);
 -- Spatial index for efficient geometry queries (ST_DWithin, ST_Intersects, etc.)
 -- ⚠️  If you add/modify geometry columns, ensure spatial indexes exist for all geometry columns
 CREATE INDEX IF NOT EXISTS staging_idx_portal_points_geom ON staging_portal_standard_points USING GIST (wkb_geometry);
@@ -278,7 +284,7 @@ CREATE INDEX IF NOT EXISTS staging_idx_portal_points_geom ON staging_portal_stan
 --    Polygons are spatial_data rows where is_polygon = 1
 --    ⚠️  If you modify JOINs, WHERE clauses, or add columns here, check:
 --        - Portal DB: wdpas.archived_at, spatial_data(wdpa_id, is_polygon), data_restriction_levels.code indexes
---        - This file: Ensure unique index on (site_id, site_pid) and spatial index on wkb_geometry exist
+--        - This file: Ensure unique indexes on (site_id, site_pid) and (wdpa_pk), plus a spatial index on wkb_geometry
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_polygons AS
 WITH site AS (
@@ -407,6 +413,7 @@ string_agg(DISTINCT COALESCE(oc.description->>'en', oc.code), ';' ORDER BY COALE
 )
 SELECT
   (row_number() OVER (ORDER BY site.wdpa_id, site.parcel_id))::integer AS ogc_fid,
+  (site.wdpa_pk)::bigint                                     AS wdpa_pk,
   (site.wdpa_id)::integer                                    AS site_id,
   (site.parcel_id)::varchar(52)                              AS site_pid,
 
@@ -462,6 +469,10 @@ WITH NO DATA;
 -- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
 -- ⚠️  If you change the natural key columns, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_polygons_pk ON staging_portal_standard_polygons (site_id, site_pid);
+
+-- Batch cursor for the attribute import (Adapters::ProtectedAreas). See the
+-- points view above.
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_polygons_wdpa_pk ON staging_portal_standard_polygons (wdpa_pk);
 -- Spatial index for efficient geometry queries (ST_DWithin, ST_Intersects, etc.)
 -- ⚠️  If you add/modify geometry columns, ensure spatial indexes exist for all geometry columns
 CREATE INDEX IF NOT EXISTS staging_idx_portal_polygons_geom ON staging_portal_standard_polygons USING GIST (wkb_geometry);

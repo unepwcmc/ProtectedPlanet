@@ -13,10 +13,10 @@ describe('ListingPageCardNews', () => {
       }
     })
 
-    const cards = wrapper.findAll('.card')
+    const cards = wrapper.findAll('.ct-listing-page-card-news-card')
     expect(cards).toHaveLength(2)
-    expect(cards[0].find('.card__h3').text()).toBe('First headline')
-    expect(cards[1].find('.card__h3').text()).toBe('Second headline')
+    expect(cards[0].find('.ct-listing-page-card-news-card__title').text()).toBe('First headline')
+    expect(cards[1].find('.ct-listing-page-card-news-card__title').text()).toBe('Second headline')
   })
 
   it('renders nothing when there are no cards', () => {
@@ -24,6 +24,6 @@ describe('ListingPageCardNews', () => {
       props: { cards: [] }
     })
 
-    expect(wrapper.findAll('.card')).toHaveLength(0)
+    expect(wrapper.findAll('.ct-listing-page-card-news-card')).toHaveLength(0)
   })
 })

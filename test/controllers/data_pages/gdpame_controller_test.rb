@@ -9,7 +9,7 @@ class DataPages::GdpameControllerTest < ActionController::TestCase
     # nil and the controller's tabs_list comes back empty.
     # @cms_page is resolved by Comfy full_path (/data/<slug>), which needs the page
     # nested under the data parent; seed_cms creates pages flat, so resolve it here.
-    page = FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::GDPAME)
+    page = FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::GDPAME)
     Comfy::Cms::Page.stubs(:find_by_full_path).returns(page)
     # tabs_list is built from tab-title-N / tab-content-N CMS fragments on the page.
     page.fragments.create!(identifier: 'tab-title-1', content: 'Overview')

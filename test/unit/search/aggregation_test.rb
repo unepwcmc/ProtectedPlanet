@@ -112,15 +112,15 @@ class SearchAggregationTest < ActiveSupport::TestCase
   end
 
   test '.parse, given the hash of raw aggregations, returns the computed aggregations' do
-    region = FactoryGirl.create(:region)
-    designation = FactoryGirl.create(:designation)
-    iucn_category = FactoryGirl.create(:iucn_category)
-    governance = FactoryGirl.create(:governance)
-    country_1 = FactoryGirl.create(:country)
-    country_2 = FactoryGirl.create(:country)
-    site = FactoryGirl.create(:cms_site)
-    cat_1 = FactoryGirl.create(:cms_category, id: 12, site: site, label: 'cat_1')
-    cat_2 = FactoryGirl.create(:cms_category, id: 13, site: site, label: 'cat_2')
+    region = FactoryBot.create(:region)
+    designation = FactoryBot.create(:designation)
+    iucn_category = FactoryBot.create(:iucn_category)
+    governance = FactoryBot.create(:governance)
+    country_1 = FactoryBot.create(:country)
+    country_2 = FactoryBot.create(:country)
+    site = FactoryBot.create(:cms_site)
+    cat_1 = FactoryBot.create(:cms_category, id: 12, site: site, label: 'cat_1')
+    cat_2 = FactoryBot.create(:cms_category, id: 13, site: site, label: 'cat_2')
 
     
     aggregations_hash = {

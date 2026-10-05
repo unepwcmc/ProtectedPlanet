@@ -1,0 +1,25 @@
+@utility tw-shared-hero-wrapper-common {
+    @apply
+    tw-shared-bg-image-overlay--white
+    bg-theme-grey-light
+    tw-shared-bg-center-no-repeat-cover;
+}
+
+@utility tw-shared-hero-wrapper {
+    @apply
+    tw-shared-hero-wrapper-common
+    min-h-50
+    md:min-h-87.5 
+    lg:min-h-126.25
+    pt-7.5
+    pb-10;
+}
+
+@utility tw-shared-hero-wrapper--no-padding {
+    @apply
+    tw-shared-hero-wrapper-common
+    min-h-50 
+    md:min-h-87.5 
+    lg:min-h-126.25;
+}
+

@@ -1,0 +1,19 @@
+.vw-partials-bars-topbar-secondary {
+  @apply 
+  sticky
+  top-0
+  z-2
+  tw-shared-shadow-bottom-grey
+  bg-white;
+}
+
+.vw-partials-bars-topbar-secondary__container {
+  @apply 
+  tw-shared-base-container 
+  tw-shared-base-flex-gap-3-lg-gap-9
+  items-center
+  justify-end
+  py-1.5
+  md:py-2.5
+  lg:py-3.5;
+}

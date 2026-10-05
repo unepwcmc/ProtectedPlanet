@@ -1,8 +1,8 @@
-<div class="social--media">
-  <% t('social.share').keys.map(&:to_s).each do |social_medium| %>
-    <%= link_to '', t("social.share.#{social_medium}.url", url: url_encode(request.original_url) ),
-      title: t("social.share.#{social_medium}.title"),
-      class: "social__icon--#{social_medium}",
+<div class="vw-partials-social-share">
+  <% t('social.share').keys.map(&:to_s).each do |slug| %>
+    <%= link_to '', t("social.share.#{slug}.url", url: url_encode(request.original_url) ),
+      title: t("social.share.#{slug}.title"),
+      class: "vw-partials-social-share__icon vw-partials-social-share__icon--#{slug}",
       target: '_blank'
     %>
   <% end %>

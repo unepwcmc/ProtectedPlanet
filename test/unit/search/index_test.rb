@@ -4,8 +4,8 @@ class IndexTest < ActiveSupport::TestCase
   test '.index, given a Model enumerable, PUTs a set of Model records to Elastic Search' do
     elasticsearch_index = "fake_index"
 
-    FactoryGirl.create(:protected_area, name: 'Charlie')
-    FactoryGirl.create(:protected_area, name: 'Mac')
+    FactoryBot.create(:protected_area, name: 'Charlie')
+    FactoryBot.create(:protected_area, name: 'Mac')
 
     ProtectedArea.any_instance.
       stubs(:as_indexed_json).

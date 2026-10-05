@@ -38,7 +38,7 @@ module Wdpa
               pp_key = PORTAL_TO_PP_SOURCES_MAPPING[portal_key]
 
               # Only include mapped column if it exists in the destination table
-              if ActiveRecord::Base.connection.column_exists?(dest_table, pp_key)
+              if ActiveRecord::Base.lease_connection.column_exists?(dest_table, pp_key)
                 # `year` and `update_year` are DATE columns in the DB, but the portal
                 # exposes them as 4‑digit strings. Normalise them to a proper Date
                 # using the shared `:year` converter (YYYY-01-01).

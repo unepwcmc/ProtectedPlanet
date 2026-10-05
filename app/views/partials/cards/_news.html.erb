@@ -1,16 +1,18 @@
 <% get_all = false if local_assigns[:get_all].nil? %>
 <% get_news_items get_all %>
-
-<div class="cards--articles">
-
+<div class="vw-partials-cards-news">
   <% unless get_all %>
-    <div class="flex flex-v-center flex-h-between">
-      <h2><%= @items[:title] %></h2>
-      <%= link_to t('global.button.all'), @items[:url], title: t('global.button.all'), class: 'button--all' %>
+    <div class="vw-partials-cards-news__header">
+      <h2 class="vw-partials-cards-news__title">
+        <%= @items[:title] %>
+      </h2>
+      <%= link_to @items[:url], title: t('global.button.all'), class: 'vw-partials-cards-news__all' do %>
+        <%= t('global.button.all') %>
+        <i class="vw-partials-cards-news__all-icon"></i>
+      <% end %>
     </div>
   <% end %>
-
-  <%= frontend_mount "ListingPageCardNews", props: {
+  <%= turbo_mount "ListingPageCardNews", props: {
         cards: @items[:cards].map do |card|
           {
             date: cms_fragment_content_datetime(:published_date, card).strftime('%d %B %y'),

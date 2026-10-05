@@ -1,18 +1,19 @@
 <template>
   <a
-    :href="href"
+    :href
     @click="click"
     v-html="text"
   />
 </template>
 
 <script setup lang="ts">
-import { trackEvent } from '@/lib/analytics'
+import useAnalytics from '@/composables/useAnalytics'
 import type { GaLinkProps } from '@/types/backend'
 
 type GaLink = GaLinkProps
 const props = defineProps<GaLink>()
 
+const { trackEvent } = useAnalytics()
 function click() {
   if (props.gaId) {
     trackEvent('click', { event_label: `Link - ${props.gaId}` })

@@ -1,0 +1,107 @@
+@utility tw-shared-cms-wysiwyg {
+  @apply tw-shared-base-flex-col-gap-3;
+
+  h1,
+  h2 {
+    @apply tw-shared-font-hind-siliguri__semibold-lg-md-xl-grey-black;
+  }
+  
+  h3 {
+    @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-md-lg-grey-black;
+  }
+  
+  h4 {
+    @apply tw-shared-font-hind-siliguri__light-base-grey-black;
+  }
+
+  a,
+  p,
+  ul,
+  li {
+    @apply tw-shared-font-hind-siliguri__leading-1-6-light-base-grey-black;
+  }
+
+  strong,
+  b {
+    @apply font-bold;
+
+    a {
+      @apply font-bold;
+    }
+  }
+
+  em,
+  i {
+    @apply italic;
+  }
+
+  u {
+    @apply underline;
+  }
+
+  table,
+  th,
+  td {
+    @apply 
+    border
+    border-solid 
+    p-1.25;
+  
+    border-collapse: collapse;
+  }
+
+  ul {
+    @apply 
+    list-disc 
+    list-inside 
+    mbs-4 
+    mbe-4
+    ps-4;
+  }
+
+  ol {
+    @apply 
+    list-decimal 
+    list-inside
+    mbs-4
+    mbe-4
+    ps-4;
+  }
+
+
+  a {
+    @apply underline;
+  }
+
+  a:hover {
+      @apply no-underline;
+  }
+}
+
+@utility tw-shared-cms-wysiwyg-thematic-page {
+  @apply tw-shared-base-flex-col-gap-3;
+
+  h2 {
+    @apply tw-shared-font-playfair__bold-xl-lg-2xl-grey-black;
+  }
+
+  div {
+    @apply
+    tw-shared-font-hind-siliguri__light-base-grey-black
+    leading-[1.6];
+  }
+
+  strong,
+  b {
+    @apply font-bold;
+  }
+
+  em,
+  i {
+    @apply italic;
+  }
+
+  u {
+    @apply underline;
+  }
+}

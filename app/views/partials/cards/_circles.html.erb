@@ -1,12 +1,15 @@
-<div class="cards--circles spacer-small--top">
-  <h2 class="cards__title"></h2>
-
-  <div class="cards__cards">
+<div class="vw-partials-cards-circles">
+  <h2 class="vw-partials-cards-circles__title">
+    <%= title %>
+  </h2>
+  <div class="vw-partials-cards-circles__circles">
     <% cards.each do |card| %>
-      <%= link_to card[:url], title: "Explore Protected Areas by #{card[:title]}", class: 'card' do  %>
-        <i class="card__icon icon--<%= card[:icon] %>"></i>
-        <h3 class="card__title"><%= card[:title] %></h3>
-        <i class="card__chevron icon--circle-chevron-black %>"></i>
+      <%= link_to card[:url], title: "Explore Protected Areas by #{card[:title]}", class: 'vw-partials-cards-circles__card' do %>
+        <i class="vw-partials-cards-circles__icon--<%= card[:icon] %>"></i>
+        <h3 class="vw-partials-cards-circles__card-title">
+          <%= card[:title] %>
+        </h3>
+        <i class="vw-partials-cards-circles__chevron"></i>
       <% end %>
     <% end %>
   </div>

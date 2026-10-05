@@ -10,6 +10,12 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Not autoloadable: lib/ is not an autoload path, and the environment files insert
+# this as middleware at config time, before any autoloader exists. Required here
+# rather than per-environment because AssetsController references long_lived, so it
+# has to resolve in test too.
+require_relative '../lib/middleware/cache_headers'
+
 module ProtectedPlanet
   class Application < Rails::Application
     # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
@@ -27,7 +33,22 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.load_defaults 7.1
+    config.load_defaults 8.1
+
+    # Two 8.1 defaults are worth knowing about here.
+    #
+    # `config.yjit = !Rails.env.local?` is inert on this image: the Ruby 3.3.7
+    # build in the Dockerfile is compiled without YJIT (`RubyVM::YJIT` is not
+    # defined), and railties guards the initializer on
+    # `defined?(RubyVM::YJIT.enable)` -- so staging and production get no YJIT
+    # and no error. Rebuilding Ruby with --enable-yjit is what would turn it on.
+    #
+    # `action_on_path_relative_redirect = :raise` turns any `redirect_to` with a
+    # path-relative string into a PathRelativeRedirectError. Every literal
+    # redirect in this app is absolute; the two rescue handlers that redirect to
+    # the client-supplied Referer header now go through
+    # ApplicationController#safe_referrer_path, which handles both this and the
+    # off-host case. See the note there.
 
     # Opted out of one default. Every belongs_to foreign key in this schema is
     # nullable, so nothing at the database level backs a presence validation, and
@@ -53,5 +74,25 @@ module ProtectedPlanet
     config.eager_load_paths += %W[#{config.root}/lib/modules]
 
     config.active_record.schema_format = :sql
+
+    # secret_key_base used to come from config/secrets.yml via Rails' auto-load. That
+    # is deprecated (7.1) / removed (7.2), and we renamed the file to app_secrets.yml,
+    # so set it explicitly from the same YAML (ENV-driven for prod/staging).
+    #
+    # Only assign when we actually have one. `assets:precompile` in the deploy image
+    # runs with SECRET_KEY_BASE unset and SECRET_KEY_BASE_DUMMY=1 -- Rails' escape
+    # hatch for generating a throwaway key at build time. Assigning nil here bypasses
+    # that hatch: Rails 8's secret_key_base= raises on a blank value outside dev/test,
+    # which broke the image build. Leaving it unset lets Rails resolve it itself
+    # (SECRET_KEY_BASE_DUMMY at build, ENV["SECRET_KEY_BASE"] at runtime).
+    if (key = config_for(:app_secrets)[:secret_key_base]).present?
+      config.secret_key_base = key
+    end
+
+    # Host for absolute URL generation outside a request -- only
+    # Download::Generators::Pdf needs it (every other route-helper call site is
+    # either in a request or uses a *_path helper). Resolved once here rather than
+    # per call: config_for re-parses the YAML and its ERB every time.
+    config.x.app_host = config_for(:app_secrets)[:host]
   end
 end

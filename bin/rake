@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
-require_relative '../config/boot'
-require 'rake'
+# Rails-generated binstub -- see bin/rails for why the Bundler-generated one was
+# replaced.
+require_relative "../config/boot"
+require "rake"
 Rake.application.run

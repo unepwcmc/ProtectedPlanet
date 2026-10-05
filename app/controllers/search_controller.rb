@@ -1,8 +1,9 @@
 class SearchController < ApplicationController
   include Searchable
-  after_action :enable_caching
 
   before_action :load_search, only: [:index, :search_results]
+
+  after_action :enable_caching
 
   def index
     categories = I18n.t('search.categories')
@@ -23,6 +24,8 @@ class SearchController < ApplicationController
       per_page: search_params[:items_per_page]
     }
     @results = Search::FullSerializer.new(@search, _options).serialize
+
+    set_page_meta(title: t('meta.search.title'), description: t('meta.search.description'))
   end
 
   def search_results
@@ -32,12 +35,8 @@ class SearchController < ApplicationController
     }
 
     @results = Search::FullSerializer.new(@search, _options).serialize
-    
-    render json: @results.to_json
-  end
 
-  def map
-    render :index
+    render json: @results
   end
 
   def autocomplete

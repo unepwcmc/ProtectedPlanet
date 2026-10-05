@@ -1,6 +1,6 @@
 <template>
   <SearchSiteInput
-    :placeholder="placeholder"
+    :placeholder
     :popout="true"
     @submit:search="updateSearchTerm"
   />

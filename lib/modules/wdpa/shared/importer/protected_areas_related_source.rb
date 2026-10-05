@@ -81,7 +81,7 @@ module Wdpa
         end
 
         def self.update_table(site_ids, field, target_table)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           soft_errors = []
 
           unless column_exists?(target_table, field)
@@ -102,7 +102,7 @@ module Wdpa
         end
 
         def self.column_exists?(table_name, column_name)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           columns = connection.columns(table_name)
           columns.any? { |col| col.name == column_name.to_s }
         end

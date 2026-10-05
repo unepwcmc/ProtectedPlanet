@@ -4,12 +4,15 @@ class AutocompletionTest < ActiveSupport::TestCase
   test '.lookup, given a search term, returns an array of results' do
     term = 'san guill'
 
-    pa = FactoryGirl.create(:protected_area, site_id: 46, name: 'San Guillermo')
+    pa = FactoryBot.create(:protected_area, site_id: 46, name: 'San Guillermo')
 
     # Autocompletion.lookup now returns the full result shape (see lib/modules/autocompletion.rb).
     expected_response = [{
       id: pa.site_id,
       is_pa: true,
+      # Only a ProtectedArea carries a site_pid; it is threaded through for the
+      # map's "jump to result" popup. nil here because the factory sets none.
+      site_pid: pa.site_pid,
       extent_url: pa.extent_url,
       title: 'San Guillermo',
       url: "/#{pa.site_id}"

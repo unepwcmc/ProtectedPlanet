@@ -1,0 +1,15 @@
+.vw-partials-messages-message-citation {
+  @apply tw-shared-messages__container;
+}
+
+.vw-partials-messages-message-citation__title {
+  @apply tw-shared-messages__title;
+}
+
+.vw-partials-messages-message-citation__text {
+  @apply tw-shared-messages__text;
+}
+
+.vw-partials-messages-message-citation__link {
+  @apply tw-shared-messages__link;
+}

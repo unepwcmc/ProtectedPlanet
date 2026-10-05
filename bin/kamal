@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Run the Kamal CLI without tripping over this repo's Ruby pin.
+#
+# .ruby-version pins 3.3.7 to match Dockerfile.deploy's `ARG RUBY_VERSION=3.3.7`.
+# That Ruby is usually NOT installed locally -- ruby-build no longer ships a 3.3.7
+# definition (the 3.3 line stops at 3.3.11), and the Dockerfile builds it from
+# source rather than taking a ruby:* image. So rbenv aborts every command run in
+# this directory with:
+#
+#   rbenv: version `3.3.7' is not installed (set by .../.ruby-version)
+#
+# That is harmless for the app (it runs in Docker) but it also blocks kamal, which
+# is a standalone CLI that does not need the app's Ruby at all. This wrapper picks
+# any installed Ruby that has Kamal 2 and runs it there.
+#
+# Kamal 2 specifically: this repo uses Kamal 2 config -- destinations
+# (config/deploy.staging.yml), .kamal/secrets-common, and a `proxy:` block. Kamal 1
+# cannot read any of it, and 1.x is what `gem install kamal` left behind here.
+# CI pins the same major via unepwcmc/devops-actions/.../kamal-v2.x-deploy@v1.
+#
+# Install into any Ruby you have, e.g.:
+#   RBENV_VERSION=3.4.7 rbenv exec gem install kamal -v '~> 2.0'
+#
+# NB: reaching *.internal.unep-wcmc.org needs the VPN. Without it kamal fails at
+# DNS ("getaddrinfo: nodename nor servname provided"), which looks like a kamal or
+# credentials problem but is not.
+
+if ! command -v rbenv >/dev/null 2>&1; then
+  exec kamal "$@"   # no rbenv, no pin to dodge
+fi
+
+for version in $(rbenv versions --bare 2>/dev/null); do
+  if RBENV_VERSION="$version" rbenv exec gem list -i kamal -v '~> 2.0' >/dev/null 2>&1; then
+    exec env RBENV_VERSION="$version" rbenv exec kamal "$@"
+  fi
+done
+
+echo "bin/kamal: no installed Ruby has Kamal 2." >&2
+echo "  rubies: $(rbenv versions --bare 2>/dev/null | tr '\n' ' ')" >&2
+echo "  fix:    RBENV_VERSION=<one of the above> rbenv exec gem install kamal -v '~> 2.0'" >&2
+exit 1

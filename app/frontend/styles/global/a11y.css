@@ -1,0 +1,43 @@
+/* Site-wide accessibility primitives. Nothing here is component-specific: it is
+   the baseline every page inherits.
+
+   Imported from styles/tailwind.css after the shared utilities, so the
+   `focus-visible` rule below can be overridden by any component that needs a
+   different indicator (it is written with `:where()`, specificity 0). */
+
+@layer base {
+  /* WCAG 2.4.7. Until now `tw-shared-button-basic` — the utility behind every
+     button on the site — carried `focus:outline-none` with nothing in its place,
+     so keyboard users had no visible position anywhere. `:focus-visible` (not
+     `:focus`) is what keeps the ring off mouse clicks, which is what the
+     outline-none was really reaching for. */
+  :where(a, button, input, select, textarea, summary, [tabindex], [role='button'], [role='switch'], [role='tab'], [role='option']):focus-visible {
+    outline: 2px solid var(--color-theme-primary);
+    outline-offset: 2px;
+  }
+
+  /* Dark surfaces: the primary green on near-black does not carry enough contrast
+     to read as an indicator. */
+  :where(.tw-shared-bg--grey-black, .tw-shared-bg--grey-xdark, .ct-map-panel, .ct-download-modal__topbar)
+    :where(a, button, input, [tabindex]):focus-visible {
+    outline-color: #fff;
+  }
+}
+
+/* WCAG 2.3.3. Respects the OS "reduce motion" setting for the carousel slides,
+   chart draw-ins, dropdown transitions and scroll-to behaviour. Not `none`:
+   zeroing a duration outright can stop transitionend/animationend from firing,
+   and code that waits on those events would hang. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+}

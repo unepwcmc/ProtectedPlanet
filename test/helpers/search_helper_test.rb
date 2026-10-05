@@ -44,7 +44,7 @@ class SearchHelperTest < ActionView::TestCase
   end
 
   test 'search_title, given params with a model field, returns the search title' do
-    country = FactoryGirl.create(:country)
+    country = FactoryBot.create(:country)
 
     params = ActionController::Parameters.new ({'country' => country.id, 'main' => 'country'})
     assert_equal "Protected Areas in #{country.name}", search_title(params)

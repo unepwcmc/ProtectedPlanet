@@ -1,15 +1,15 @@
 <%= render partial: "partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
-
-<%= render partial: "layouts/partials/hero-area-types", locals: {
-  button_search_text: cms_fragment_render("button-text"),
-  button_search_url: @wdpca_view_all_url,
+<div class="vw-data-wdpca">
+  <%= render partial: "layouts/partials/hero/basic", locals: {
+  button_text: cms_fragment_render("button-text"),
+  button_link: @wdpca_view_all_url,
   image: cms_fragment_render(:image, @cms_page),
-  classes: "#{@cms_page.slug} bg-image-overlay--white",
   summary: cms_fragment_render("summary"),
-  title: @cms_page.label
+  title: @cms_page.label,
+  items_centre: true,
+  limited_title_width: true
 } %>
-
-<%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
+  <%= render partial: 'partials/thematic_and_data_area/tabs', locals: {
   ga_id: "Slug: #{@cms_page.slug}",
   tabs_list: @tabs_list,
   tab_extras: [
@@ -23,5 +23,5 @@
     }
   ]
 } %>
-
-<%= render "partials/thematic_and_data_area/footer" %>
+  <%= render "partials/thematic_and_data_area/footer" %>
+</div>

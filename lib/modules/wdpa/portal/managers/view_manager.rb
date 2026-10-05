@@ -13,7 +13,7 @@ module Wdpa
           # Create the needed materialised views as well as refresh to get the data (in the sql script)
           Rails.logger.info "Creating/refreshing staging materialized views by executing FDW_VIEWS.sql"
           sql = File.read(fdw_file)
-          ActiveRecord::Base.connection.execute(sql)
+          ActiveRecord::Base.lease_connection.execute(sql)
 
           # Validate that all required staging views exist after execution (hard error if missing)
           unless validate_required_views_exist
@@ -29,7 +29,7 @@ module Wdpa
             FROM pg_matviews
             WHERE schemaname = 'public' AND matviewname = '#{view_name}'
           SQL
-          result = ActiveRecord::Base.connection.execute(sql)
+          result = ActiveRecord::Base.lease_connection.execute(sql)
           result.any?
         end
 
@@ -71,7 +71,7 @@ module Wdpa
 
         # Shared implementation used by both public helpers above
         def self.rename_materialised_view_indexes(view_name, action, backup_timestamp = nil)
-          conn = ActiveRecord::Base.connection
+          conn = ActiveRecord::Base.lease_connection
           sql = <<~SQL
             SELECT indexname
             FROM pg_indexes

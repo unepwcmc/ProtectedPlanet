@@ -1,14 +1,14 @@
-<div class="topbar">
-  <div class="topbar__container container">
+<div class="vw-layouts-partials-topbar">
+  <div class="vw-layouts-partials-topbar__container">
     <%= render '/partials/global/site-logo' %>
-
-    <% unless @for_pdf %>
-      <%= frontend_mount "NavBar", props: { links: get_nav_primary }, class: "topbar__nav nav--primary" %>
-    <% end %>
-
-    <%= frontend_mount "SearchSiteTopbar", props: {
+    <div class="vw-layouts-partials-topbar__right">
+      <% unless @for_pdf %>
+        <%= turbo_mount "NavBar", props: { links: get_nav_primary }, class: "vw-layouts-partials-topbar__nav" %>
+      <% end %>
+      <%= turbo_mount "SearchSiteTopbar", props: {
       endpoint: "/#{locale}/search?search_term=",
       placeholder: t('global.placeholder.search-site')
-    }, class: "topbar__search" %>
+    }, class: "vw-layouts-partials-topbar__search" %>
+    </div>
   </div>
 </div>

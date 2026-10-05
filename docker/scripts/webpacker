@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# Dependencies (bundle + yarn) are installed once by the `install` compose service,
-# which the webpacker service waits on (service_completed_successfully). This avoids
-# concurrent yarn/bundle installs racing on the shared volumes at cold start.
-/ProtectedPlanet/bin/webpack-dev-server

@@ -32,12 +32,12 @@ class CountryPresenter
     [
       {
         percentage: total_polygons_percentage,
-        theme: 'theme--primary',
+        theme: 'primary',
         title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%"
       },
       {
         percentage: total_points_percentage,
-        theme: 'theme--primary-dark',
+        theme: 'primary-dark',
         title: "#{I18n.t('stats.points')} #{total_points_percentage}%"
       }
     ]
@@ -97,20 +97,6 @@ class CountryPresenter
     )
   end
 
-  def marine_page_statistics
-    {
-      title: country.name,
-      totalMarineArea: statistic.total_marine_area.round,
-      totalOverseasTerritories: country.children.count,
-      overseasTerritoriesURL: overseas_territories_url,
-      flag: "flags/#{flag_name}",
-      nationalKm: statistic.pa_marine_area.round,
-      nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
-      overseasKm: statistic.overseas_total_protected_marine_area.round, # #check how this is being calculated
-      overseasPercentage: statistic.overseas_percentage.round(2) # #check how this is being calculated - discuss
-    }
-  end
-
   def malaysia_documents
     return unless @country && @country.iso_3 == 'MYS'
 
@@ -160,9 +146,5 @@ class CountryPresenter
   def overseas_territories_url
     overseas_territories = country.children.map(&:iso_3).join(',')
     "search?q=#{overseas_territories}&type=country"
-  end
-
-  def flag_name
-    country.name.underscore.gsub(' ', '-').gsub(/"/, '').gsub(',', '').gsub(/'/, '')
   end
 end

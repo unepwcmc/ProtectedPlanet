@@ -24,10 +24,15 @@ module Wdpa
           imported_parcel_count = 0
           soft_errors = []
           progress_interval = Wdpa::Portal::Config::PortalImportConfig.progress_notification_interval
+          # A threshold, not `imported_count % interval`: a batch adds a variable
+          # number of rows (parcels add extra, soft-errored rows add none), so
+          # the counter drifts off the exact multiples and every notification
+          # after the first one was missed.
+          next_progress_at = progress_interval
 
           # Send initial progress notification
           if notifier
-            notifier.progress(0, total_count, 'protected area attributes')
+            notifier.progress(0, total_count, 'portal WDPCA rows')
           end
 
           relation.find_in_batches do |batch|
@@ -37,22 +42,65 @@ module Wdpa
             imported_parcel_count += (batch_result[:parcel_count] || 0)
             soft_errors.concat(batch_result[:soft_errors])
 
-            # Send progress notification if we've hit the interval
-            if notifier && imported_count % progress_interval == 0
-              notifier.progress(imported_count, total_count, 'protected area attributes')
+            # Send progress notification if we've passed the interval
+            if notifier && imported_count >= next_progress_at
+              notifier.progress(imported_count, total_count, 'portal WDPCA rows')
+              next_progress_at = ((imported_count / progress_interval) + 1) * progress_interval
             end
           rescue StandardError => e
             Rails.logger.error("Batch processing failed: #{e.message}")
             raise e # Re-raise as hard error to stop import
           end
-          message = "#{imported_pa_count} Protected area attributes imported, #{imported_parcel_count} Protected area parcel attributes imported. Note: ProtectedArea contains first parcel as representative for sites having multiple parcels, and all parcels including first parcel are also stored in ProtectedAreaParcel table, so counts here are greater than portal total counts"
+          # Every source row lands in at least one of the two tables, so a
+          # shortfall against total_count means rows were dropped. These used to
+          # be collected and never mentioned anywhere.
+          if soft_errors.any?
+            Rails.logger.warn "⚠️ #{soft_errors.size} protected area rows failed to import (soft errors)"
+            soft_errors.first(50).each { |e| Rails.logger.warn "  #{e}" }
+          end
+          dropped = total_count - imported_count
+          if dropped != 0
+            Rails.logger.warn "⚠️ #{dropped} of #{total_count} portal WDPCA rows produced no staging record"
+            notifier&.phase("⚠️ #{dropped} of #{total_count} portal WDPCA rows produced no staging record (#{soft_errors.size} soft errors)")
+          end
+
+          message = "Protected areas: #{imported_pa_count} rows · parcels: #{imported_parcel_count} rows " \
+                    "(from #{total_count} portal WDPCA rows). Sites with multiple parcels store their first " \
+                    'parcel in both tables, so the two figures overlap and each exceeds the portal totals.'
           Rails.logger.info message
           notifier&.phase(message)
 
-          build_result(imported_count, soft_errors, [], {
+          build_result(imported_count, soft_errors, total_failure_errors(total_count, imported_count, soft_errors), {
             protected_areas_imported_count: imported_pa_count,
             protected_area_parcels_imported_count: imported_parcel_count
           })
+        end
+
+        # Every row of a non-empty source failing is not a soft outcome, it is a
+        # failed import — but it used to be reported as `success: true,
+        # imported_count: 0`, with the per-row causes left in soft_errors.
+        #
+        # The release then failed one step later, in the geometry import, with
+        # "Target staging table staging_protected_areas does not exist or has no
+        # records" — which names the symptom and hides the cause. Diagnosing a
+        # missing site_type (TypeConverter calls .match on it and raises on nil)
+        # meant running the importer by hand to read soft_errors.
+        #
+        # Deliberately narrow: this fires ONLY when every row failed. A partial drop
+        # stays a soft error, exactly as before — real portal data can legitimately
+        # have a few bad rows, and turning those into hard errors would stop a
+        # release that works today. Total failure is safe to escalate because a
+        # release importing 0 protected areas already fails, at geometry, so this
+        # changes which message is reported and where, never whether a release
+        # succeeds.
+        TOTAL_FAILURE_SAMPLE_SIZE = 3
+
+        def self.total_failure_errors(total_count, imported_count, soft_errors)
+          return [] unless total_count.positive? && imported_count.zero?
+
+          causes = soft_errors.first(TOTAL_FAILURE_SAMPLE_SIZE)
+          cause_text = causes.any? ? " First errors: #{causes.join(' | ')}" : ''
+          ["All #{total_count} portal WDPCA rows failed to import; none reached staging.#{cause_text}"]
         end
 
         def self.process_batch(batch, site_ids_with_multiple_site_pids)
@@ -125,7 +173,7 @@ module Wdpa
               GROUP BY site_id
             SQL
 
-            ActiveRecord::Base.connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
+            ActiveRecord::Base.lease_connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
               sites_with_multiple_parcels[row['site_id']] = row['first_site_pid']
             end
           end

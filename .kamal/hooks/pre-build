@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Fail fast when a monthly portal release is running, before the image is built,
+# so a blocked deploy costs seconds instead of a full build + push.
+#
+# Fails closed like pre-deploy: a check that cannot run blocks too. pre-deploy
+# repeats it anyway — only that stage catches a release started mid-build.
+source "$(dirname "${BASH_SOURCE[0]}")/lib/release_gate.sh"
+
+check_portal_release --reuse

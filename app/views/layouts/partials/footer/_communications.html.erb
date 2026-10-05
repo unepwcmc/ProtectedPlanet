@@ -1,0 +1,22 @@
+<div class="vw-partials-footer__col vw-partials-footer__col--more-gap">
+  <div class="vw-partials-footer-social-follow">
+    <h3 class="vw-partials-footer-social-follow__title">
+      <%= t('global.footer.follow-us') %>
+    </h3>
+    <div class="vw-partials-footer-social-follow__icons">
+      <%  t('social.follow').keys.map(&:to_s).each do |slug| %>
+        <%= link_to '', t("social.follow.#{slug}.url"),
+            title: t("social.follow.#{slug}.title"),
+            class: "vw-partials-footer-social-follow__icon vw-partials-footer-social-follow__icon--#{slug}",
+            target: '_blank'
+        %>
+      <% end %>
+    </div>
+  </div>
+  <div class="vw-partials-footer__get-in-touch">
+    <h3 class="vw-partials-footer__title">
+      <%= t('global.footer.get-in-touch') %>
+    </h3>
+    <%= link_to 'protectedareas@unep-wcmc.org', 'mailto:protectedareas@unep-wcmc.org', title: t('global.links.email', email: 'protectedareas@unep-wcmc.org'), class: 'vw-partials-footer__link vw-partials-footer__link--no-wrap' %>
+  </div>
+</div>

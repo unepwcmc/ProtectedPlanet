@@ -26,7 +26,11 @@ module PortalRelease
         check_geometry!
         check_duplicates!
 
-        release.update!(state: 'preflight_ok', stats_json: { source_counts: counts })
+        # Merge rather than replace. Preflight is the first writer on a brand-new
+        # Release row today, so there is nothing to preserve — but a bare replace
+        # is the kind of line that silently eats another phase's data the moment
+        # that stops being true.
+        release.update!(state: 'preflight_ok', stats_json: (release.stats_json || {}).merge({ source_counts: counts }))
         log.event('preflight_ok', payload: counts)
         notify.phase('Preflight OK — source views and geometry checks passed', counts: counts)
       end
@@ -37,7 +41,7 @@ module PortalRelease
       end
 
       def counts_snapshot
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         {
@@ -51,7 +55,7 @@ module PortalRelease
       end
 
       def check_geometry!
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         bad_points = conn.select_value("SELECT COUNT(*) FROM #{views[:points]}   WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
@@ -62,7 +66,7 @@ module PortalRelease
       end
 
       def check_duplicates!
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
 
         views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         dup_points = conn.select_value(<<~SQL).to_i
@@ -90,7 +94,7 @@ module PortalRelease
       # Creates or replaces the staging portal downloads view used by generators/exporters
       # Combines polygons and points from staging materialized views.
       def create_portal_downloads_view!(log = nil)
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
         staging_view = Wdpa::Portal::Config::PortalImportConfig.generate_staging_name(downloads_view)
         backup_timestamp = ::Release.current_backup_timestamp_string
@@ -103,7 +107,7 @@ module PortalRelease
         conn.transaction do
           # Step 1: Drop staging view if exists, then create fresh (inside transaction for atomicity)
           # Note: ActiveRecord doesn't have drop_view, so we use SQL directly
-          as_query = Download::Queries.build_query_for_downloads_view('portal')
+          as_query = Download::Queries.build_query_for_downloads_view
           conn.execute("DROP VIEW IF EXISTS #{staging_view} CASCADE")
           conn.execute("CREATE VIEW #{staging_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
 
@@ -147,7 +151,7 @@ module PortalRelease
       # Rolls back the portal downloads view to a backup version
       # Similar to rollback_portal_materialized_views: backup → live, live → staging
       def rollback_portal_download_view(backup_timestamp, log = nil)
-        conn = ActiveRecord::Base.connection
+        conn = ActiveRecord::Base.lease_connection
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
         backup_view = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(downloads_view, backup_timestamp)
         staging_view = Wdpa::Portal::Config::PortalImportConfig.generate_staging_name(downloads_view)

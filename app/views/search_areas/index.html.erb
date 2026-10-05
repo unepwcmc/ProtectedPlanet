@@ -1,32 +1,22 @@
-<%= render partial: "layouts/partials/hero-small", locals: { 
-  title: t('search.search-areas-title')
+<%= render partial: "layouts/partials/hero/small", locals: {
+  title: t('search.search-areas-title'),
+  has_bottom_shadow: true
 } %>
 
-<div>
-  <search-areas
-    :config-autocomplete="<%= @config_search_areas %>"
-    :download-options="<%= @download_options %>"
-    endpoint-autocomplete="/search/autocomplete"
-    endpoint-pagination="<%= search_areas_results_path(filters: @filters) %>"
-    endpoint-search="<%= search_areas_results_path(filters: @filters) %>"
-    :filter-groups="<%= @filter_groups.to_json %>"
-    ga-id="Component: search areas"
-    no-results-text="<%= t('search.no-results') %>"
-    sm-trigger-element="sm-trigger-infinite-scroll"
-    :tabs="<%= @tabs.to_json %>"
-    text-download="<%= t('search.download') %>"
-    text-filters="<%= t('search.filters') %>"
-    text-clear="<%= t('search.clear') %>"
-    text-close="View Results"
-    text-map="<%= t('search.map') %>"
-    :results="<%= @results.to_json %>"
-  >
-    <template v-slot:download="{ downloadDisabled }">
-      <%= render partial: "partials/download/download", locals: {
-        classes: 'download--search',
-        options: @download_options,
-        download_disabled: 'downloadDisabled'
-      } %>
-    </template>
-  </search-areas>
-</div>
+<%= turbo_mount "SearchAreasPage", props: {
+  configAutocomplete: @config_search_areas,
+  downloadButtonText: t('global.button.download'),
+  downloadOptions: @download_options,
+  downloadTextCommercial: @download_text[:commercial],
+  endpointAutocomplete: search_autocomplete_path,
+  endpointSearch: search_areas_results_path(filters: @filters),
+  filterGroups: @filter_groups,
+  gaId: 'Component: search areas',
+  noResultsText: t('search.no-results'),
+  results: @results,
+  smTriggerElement: 'sm-trigger-infinite-scroll',
+  tabs: @tabs,
+  textClear: t('search.clear'),
+  textClose: 'View Results',
+  textFilters: t('search.filters')
+} %>

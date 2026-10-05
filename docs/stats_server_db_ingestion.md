@@ -216,7 +216,7 @@ As described in Section 5: biggest run within the vintage matching the release l
 
 ### Scale conversion
 
-`stats.national_stats` and `stats.pame_stats` store percentage columns as **fractions (0–1)**; the importer multiplies by 100 to match PP columns (0–100). `stats.global_stats` values are already 0–100 — no conversion. `NaN` values map to `NULL`.
+`stats.national_stats` and `stats.pame_stats` store percentage columns as **fractions (0–1)**; the importer multiplies by 100 to match PP columns (0–100). `stats.global_stats` values are already 0–100 — no conversion. `NaN` percentages (zero denominator, e.g. marine % for landlocked countries) map to `0`, matching the legacy CSVs; `NaN` areas map to `NULL`.
 
 ### CSV merge in db mode
 

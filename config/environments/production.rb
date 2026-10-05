@@ -1,8 +1,5 @@
-secrets = Rails.application.secrets.mailer
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  # config.webpacker.check_yarn_integrity = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -23,29 +20,25 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # dalli 3.x removed :dalli_store; :mem_cache_store is the Rails built-in (dalli-backed).
-  config.cache_store = :mem_cache_store, Rails.application.secrets.memcache_servers, { value_max_bytes: 10_485_760 }
+  config.cache_store = :mem_cache_store, Rails.application.config_for(:app_secrets).memcache_servers,
+    { value_max_bytes: 10_485_760 }
 
   # http://wcmc.io/heroku_memcached for reference
-  client = Dalli::Client.new(Rails.application.secrets.memcache_servers, {value_max_bytes: 10485760})
-  config.action_dispatch.rack_cache = {:metastore => client, :entitystore => client }
+  client = Dalli::Client.new(Rails.application.config_for(:app_secrets).memcache_servers,
+    { value_max_bytes: 10_485_760 })
+  config.action_dispatch.rack_cache = { metastore: client, entitystore: client }
 
-  # Enable Rack::Cache to put a simple HTTP cache in front of your application
-  # Add `rack-cache` to your Gemfile before enabling this.
-  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
-  # config.action_dispatch.rack_cache = true
-
-  # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_files = false
+  # One flat hash covers all of public/, so this is the safe half: stable URLs
+  # revalidate, which is cheap because Rack::Files answers If-Modified-Since with a
+  # 304 itself. Middleware::CacheHeaders then grants a long TTL to the
+  # fingerprinted build output.
+  config.public_file_server.headers = { 'cache-control' => 'public, max-age=0, must-revalidate' }
+  config.middleware.insert_before ActionDispatch::Static, Middleware::CacheHeaders
 
   # Compress JavaScripts and CSS.
   config.assets.compress = true
-  # Terser rather than Uglifier, matching config/environments/staging.rb.
-  # uglify-js is ES5-era and its Ruby wrapper crashes on a modern toolchain:
-  # when the JS engine returns an error without a 'message', uglifier raises
-  # `NoMethodError: undefined method 'start_with?' for nil` and sprockets aborts
-  # part-way, leaving no application-*.css for the Dockerfile's assert to find.
-  # The Gemfile already notes uglifier "should move to terser too when
-  # production migrates" — this is that migration.
+  # Terser rather than Uglifier: uglify-js is ES5-era and its Ruby wrapper is
+  # unmaintained, failing opaquely on Node 24. Terser handles ES6+ natively.
   config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
@@ -84,10 +77,6 @@ Rails.application.configure do
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
   # config.assets.precompile += %w( search.js )
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
-
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
@@ -99,33 +88,20 @@ Rails.application.configure do
   # config.autoflush_log = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
-
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { :host => secrets[:host] }
-  config.action_mailer.smtp_settings = {
-    :enable_starttls_auto => true,
-    :address => secrets[:address],
-    :port => 587,
-    :domain => secrets[:domain],
-    :authentication => :login,
-    :user_name => secrets[:username],
-    :password => secrets[:password]
-  }
 
   config.active_storage.service = :production
 end

@@ -3,8 +3,8 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import Counter from '@/components/Counter.vue'
 
-// Stand-in for the browser's IntersectionObserver (not implemented by jsdom) so we
-// can trigger the "trigger element became visible" path ourselves.
+// Stand-in for IntersectionObserver, absent from jsdom, so a test can trigger
+// the "trigger became visible" path itself.
 class FakeIntersectionObserver {
   static instances: FakeIntersectionObserver[] = []
   callback: IntersectionObserverCallback
@@ -45,8 +45,8 @@ describe('Counter', () => {
     })
 
     vi.runAllTimers()
-    // The interval's ref updates batch into a microtask flush, which fake timers
-    // don't drive — let it run before reading the rendered text.
+    // The interval's ref updates batch into a microtask flush fake timers do
+    // not drive — let it run before reading the text.
     await nextTick()
 
     expect(wrapper.text()).toBe('100')

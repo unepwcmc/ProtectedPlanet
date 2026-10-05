@@ -37,12 +37,12 @@ class RegionPresenter
     [
       {
         percentage: total_polygons_percentage,
-        theme: 'theme--primary',
+        theme: 'primary',
         title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%"
       },
       {
         percentage: total_points_percentage,
-        theme: 'theme--primary-dark',
+        theme: 'primary-dark',
         title: "#{I18n.t('stats.points')} #{total_points_percentage}%"
       }
     ]
@@ -141,14 +141,6 @@ class RegionPresenter
 
   def marine_area
     @statistics.map(&:marine_area).compact.reduce(:+)
-  end
-
-  def marine_coverage
-    {
-      title: region.name,
-      percentage: percentage_pa_marine_cover,
-      km: number_with_delimiter(pa_marine_area.round(0))
-    }
   end
 
   # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb

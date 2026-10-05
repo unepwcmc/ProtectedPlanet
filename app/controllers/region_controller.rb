@@ -1,7 +1,8 @@
 class RegionController < ApplicationController
   before_action :load_vars
   before_action :build_stats, only: :show
-
+  after_action :enable_caching
+  
   TABS_KEYS = %i[coverage message iucn governance sources designations sites].freeze
 
   include MapHelper
@@ -14,14 +15,21 @@ class RegionController < ApplicationController
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: all_services_for_point_query
+      point_query_services: all_services_for_point_query,
+      title: map_yml[:title],
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
 
     @map_options = {
       map: { boundsUrl: @region.extent_url }
     }
 
+    meta_description = t('meta.region.description', name: @region.name)
+
     helpers.opengraph_title_and_description_with_suffix(@region.name)
+    set_page_meta(title: @region.name, description: meta_description)
+    @structured_data = structured_data_presenter.region(@region, description: meta_description)
   end
 
   def build_stats

@@ -56,8 +56,8 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_equal 179.72, attrs['land_area']
     assert_in_delta 26.9, attrs['percentage_pa_land_cover'], 0.0001
     assert_in_delta 0.36257, attrs['percentage_pa_marine_cover'], 0.0001
-    assert_nil attrs['percentage_oecms_pa_marine_cover'] # NaN -> nil
-    assert_nil attrs['percentage_oecms_pa_land_cover']   # nil -> nil
+    assert_equal 0.0, attrs['percentage_oecms_pa_marine_cover'] # NaN -> 0
+    assert_equal 0.0, attrs['percentage_oecms_pa_land_cover']   # nil -> 0
   end
 
   test 'pame stats maps pame_ prefixed columns' do
@@ -77,7 +77,7 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_equal 606.27, attrs['pame_pa_land_area']
     assert_equal 0.0, attrs['pame_pa_marine_area']
     assert_in_delta 0.09446, attrs['pame_percentage_pa_land_cover'], 0.0001
-    assert_nil attrs['pame_percentage_pa_marine_cover']
+    assert_equal 0.0, attrs['pame_percentage_pa_marine_cover'] # NaN -> 0
   end
 
   test 'global stats overlay keeps known stat_types without scaling and soft-errors unknown ones' do
@@ -100,6 +100,22 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_match(/not_a_real_column/, soft_errors.first)
   end
 
+  test 'global stats overlay publishes green_list_perc_no_ata as green_list_perc' do
+    ActiveRecord::Base.connection.stubs(:select_value).returns('_GS_run_1')
+    result = stub(to_a: [
+      { 'stat_type' => 'green_list_perc_no_ata', 'stat_value' => '0.12' },
+      { 'stat_type' => 'green_list_perc', 'stat_value' => '0.39' }
+    ])
+    ActiveRecord::Base.connection.stubs(:select_all).returns(result)
+    Staging::GlobalStatistic.stubs(:column_names).returns(%w[id singleton_guard green_list_perc])
+
+    soft_errors = []
+    attrs = Wdpa::Portal::Importers::StatsDbSource::GlobalStats.overlay_attrs(soft_errors: soft_errors)
+
+    assert_equal({ 'green_list_perc' => 0.12 }, attrs)
+    assert_empty soft_errors
+  end
+
   test 'num and pct helpers handle NaN string and numeric NaN' do
     base = Wdpa::Portal::Importers::StatsDbSource::NationalStats
 
@@ -107,7 +123,9 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_nil base.num(Float::NAN)
     assert_nil base.num(nil)
     assert_equal 1.5, base.num(1.5)
-    assert_nil base.pct(Float::NAN)
+    assert_equal 0.0, base.pct(Float::NAN)
+    assert_equal 0.0, base.pct('NaN')
+    assert_equal 0.0, base.pct(nil)
     assert_in_delta 26.9, base.pct(0.269), 0.0001
   end
 

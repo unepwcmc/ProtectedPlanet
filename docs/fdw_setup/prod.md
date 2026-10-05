@@ -208,6 +208,7 @@ Filters applied:
 - wdpas.archived_at IS NULL
 - data_restriction_level = 'not restricted'
 - ogc_fid: integer, row_number() over (site_id, site_pid)
+- wdpa_pk: bigint (portal wdpas.id — batch cursor for the attribute import)
 - site_id: integer (wdpa site_id)
 - site_pid: varchar(52) (parcel identifier)
 - site_type: 'pa' | 'oecm'

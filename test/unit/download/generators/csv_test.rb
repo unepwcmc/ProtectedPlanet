@@ -14,7 +14,6 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
   # via File.stubs(:exists?), which never took effect because the code calls
   # File.exist? (no trailing "s").
   setup do
-    Download::Config.stubs(:has_successful_portal_release?).returns(true)
     Download::Config.stubs(:current_label).returns(SOURCES_LABEL)
     Download::Generators::Csv.any_instance.stubs(:export_sources).returns(true)
   end
@@ -35,11 +34,11 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
 
     wdpa_zip_command = "zip -ru #{zip_file_path} #{SOURCES_FILE}"
-    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, { chdir: '.' }).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, chdir: '.').returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
-    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, **opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 
@@ -55,18 +54,19 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
       'Expected #generate to return false on failure'
   end
 
-  test '#generate returns false if the zip fails' do
+  test '#generate returns false if the zip fails, without adding to a broken archive' do
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
 
+    # Base#zip is `run_zip(...) && add_sources && add_attachments`, so a failed
+    # archive creation short-circuits the sources and attachments steps -- the
+    # single `expects(:system)` (exactly once, by mocha's default) is what
+    # asserts they are skipped.
+    #
+    # This used to expect all three calls: `zip` ran them unconditionally and
+    # returned only the LAST one's value, so a failed archive was still
+    # reported as a successful download.
     Download::Generators::Csv.any_instance.expects(:system).returns(false)
-
-    wdpa_zip_command = "zip -ru  #{SOURCES_FILE}"
-    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, { chdir: '.' }).returns(true)
-
-    update_zip_command = 'zip -ru  *'
-    opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
-    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(false)
 
     assert_equal false, Download::Generators::Csv.generate(''),
       'Expected #generate to return false on failure'
@@ -105,11 +105,11 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
 
     wdpa_zip_command = "zip -ru #{zip_file_path} #{SOURCES_FILE}"
-    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, { chdir: '.' }).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, chdir: '.').returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
-    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
+    Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, **opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 

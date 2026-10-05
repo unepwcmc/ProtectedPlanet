@@ -18,6 +18,23 @@ class GlobalStatisticTest < ActiveSupport::TestCase
     assert_nil methodology_row['value']
   end
 
+  test 'download_csv includes the high seas OECM stats' do
+    GlobalStatistic.instance.update!(
+      high_seas_oecms_coverage_percentage: 0.208,
+      high_seas_oecms_coverage_area: 462_847,
+      high_seas_oecms_pas_coverage_percentage: 1.656,
+      high_seas_oecms_pas_coverage_area: 3_684_542
+    )
+
+    csv = CSV.parse(GlobalStatistic.download_csv, headers: true)
+    values = csv.each_with_object({}) { |row, hash| hash[row['type']] = row['value'] }
+
+    assert_equal '0.208', values['high_seas_oecms_coverage_percentage']
+    assert_equal '462847', values['high_seas_oecms_coverage_area']
+    assert_equal '1.656', values['high_seas_oecms_pas_coverage_percentage']
+    assert_equal '3684542', values['high_seas_oecms_pas_coverage_area']
+  end
+
   test 'download_csv reflects updated values after cache key changes' do
     GlobalStatistic.instance.update!(total_protected_areas: 1)
     first = GlobalStatistic.download_csv

@@ -1,0 +1,27 @@
+.vw-protected-areas {
+  @apply tw-shared-region-country-site__wrapper;
+}
+
+.vw-protected-areas__container {
+  @apply tw-shared-region-country-site__container;
+}
+
+.vw-protected-areas__overview {
+  @apply tw-shared-region-country-site__overview;
+}
+
+.vw-protected-areas__col-wrapper {
+  @apply tw-shared-region-country-site__overview;
+}
+
+.vw-protected-areas__col-left {
+  @apply
+  tw-shared-base-flex-col-gap-6
+  md:w-1/2;
+}
+
+.vw-protected-areas__col-right {
+  @apply
+  tw-shared-base-flex-col-gap-6
+  md:w-1/2;
+}

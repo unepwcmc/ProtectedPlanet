@@ -91,7 +91,7 @@ class ProtectedArea < ApplicationRecord
     results = $redis.zrevrangebyscore(year_month, "+inf", "-inf", opts)
     results.map { |site_id, visits|
       {
-        protected_area: ProtectedArea.find_by_site_id(site_id),
+        protected_area: ProtectedArea.find_by(site_id: site_id),
         visits: visits.to_i
       }
     }
@@ -128,7 +128,7 @@ class ProtectedArea < ApplicationRecord
   #     WHERE EXTRACT(YEAR FROM t.year) >= ?
   #   SQL
 
-  #   result = ActiveRecord::Base.connection.execute(
+  #   result = ActiveRecord::Base.lease_connection.execute(
   #     ActiveRecord::Base.send(:sanitize_sql_array, [
   #       growth, start_year
   #     ])
@@ -141,7 +141,7 @@ class ProtectedArea < ApplicationRecord
     result = {}
 
     # Get sources from the protected area itself
-    pa_sources = ActiveRecord::Base.connection.execute(<<~SQL)
+    pa_sources = ActiveRecord::Base.lease_connection.execute(<<~SQL)
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
       INNER JOIN protected_areas_sources
@@ -151,7 +151,7 @@ class ProtectedArea < ApplicationRecord
     result[self.site_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
 
     # Get sources from all parcels
-    parcel_sources = ActiveRecord::Base.connection.execute(<<~SQL)
+    parcel_sources = ActiveRecord::Base.lease_connection.execute(<<~SQL)
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.site_pid
       FROM sources
       INNER JOIN protected_area_parcels_sources ON protected_area_parcels_sources.source_id = sources.id
@@ -219,11 +219,6 @@ class ProtectedArea < ApplicationRecord
     overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
     overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
     overlap
-  end
-
-  def self.sum_of_most_protected_marine_areas
-    reported_areas = without_proposed.most_protected_marine_areas(20).map(&:gis_marine_area)
-    reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
   def self.transboundary_sites
@@ -344,7 +339,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 
   def self.with_valid_iucn_categories

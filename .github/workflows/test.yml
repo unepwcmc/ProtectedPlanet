@@ -1,0 +1,266 @@
+name: Tests
+
+# Runs the Ruby and JavaScript suites on every push to the branches below and on
+# every pull request. Before this workflow existed, `.github/workflows/` held only
+# the deploy workflow, so nothing ran `rails test` or `vitest` on a push at all.
+#
+# STATUS: Ruby suite green, no skips. Full run 2026-09-16 on Rails 8.1.3.1 and
+# Ruby 4.0.6: 754 runs, 2036 assertions, 0 failures, 0 errors, 0 skips. The portal
+# release path is covered: the two FDW integration tests load a local stand-in for
+# the portal schema (test/support/portal_fdw/) instead of skipping. See
+# docs/known-issues.md.
+#
+# STILL NOT A REQUIRED CHECK. This was deliberate while the suite was red; it is
+# now an open decision rather than a wait. The complication is which branch: every
+# PR targets `master`, but the branch that deploys is `staging_kamal`, and it is
+# pushed to directly -- and GitHub rejects a direct push to a protected branch
+# whose commit has no passing required check yet. So protecting `staging_kamal`
+# means moving it to a PR flow, while protecting `master` gates every PR and
+# changes nobody's habits. Checks to require: `Ruby test suite`,
+# `JavaScript test suite`.
+#
+# The test database is built with `db:create db:migrate` (below), never from a
+# structure/schema dump. That is deliberate: a stale `db/structure.sql` can list a
+# migration as applied while still defining the pre-migration columns, and a
+# database loaded from it skips that migration forever. Building from migrations
+# is why CI has never hit that, and it is why a green run here means more than a
+# green run locally.
+#
+# On reporting failures honestly, see the note on the `Ruby test suite` step: do
+# NOT reach for `continue-on-error`.
+
+on:
+  pull_request:
+  push:
+    branches: [staging_kamal, master, develop]
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+# corepack asks before downloading a Yarn it has not seen. It skips the prompt on
+# a non-TTY, but set it explicitly so a runner change cannot hang the build.
+env:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
+
+jobs:
+  ruby:
+    name: Ruby test suite
+    # ubuntu-24.04 rather than the `self-hosted` runner the deploy workflow uses:
+    # nothing here needs the internal network, and it keeps a long test run off the
+    # deploy runner. It also matches Dockerfile.deploy's `FROM ubuntu:24.04`, so the
+    # GDAL and libpq versions line up with staging. NB the local dev image
+    # (Dockerfile, `FROM ruby:2.7-buster`) does NOT -- it still ships GDAL 2.2.3 from
+    # 2017, which is a separate problem worth fixing. Its pg_dump is no longer one of
+    # them: buster has no PGDG build of 17, so the dev image compiles the 17 client from
+    # source.
+    runs-on: ubuntu-24.04
+
+    services:
+      # Postgres 17 + PostGIS 3.5, matching staging (17.5 / PostGIS 3.5.2).
+      # Verified: all 204 migrations apply cleanly on PG17/PostGIS 3.x, and the
+      # schema they produce is free of the PostGIS 2.5 residue carried by a
+      # developer's locally-generated db/structure.sql.
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      elasticsearch:
+        image: elasticsearch:8.6.0
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: 'false'
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+        ports: ['9200:9200']
+        options: >-
+          --health-cmd "curl -sf http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      RAILS_ENV: test
+      # Any value: staging/production read this from Kamal secrets, but the app must
+      # boot here and Rails refuses to start without it.
+      SECRET_KEY_BASE: ci_only_not_a_real_secret_0123456789abcdef
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DBNAME: pp_test
+      # config/database.yml prefers this for the test database; it is the same server
+      # here, but keeping it explicit mirrors docker-compose, where tests target the
+      # PG17 `db_test` service while development stays on the older `db` service.
+      TEST_POSTGRES_HOST: 127.0.0.1
+      ELASTIC_SEARCH_URL: http://127.0.0.1:9200
+      REDIS_URL: redis://127.0.0.1:6379
+      PP_HOST: localhost
+      # Comfy reads these in config/initializers/comfortable_media_surfer.rb, and
+      # Admin::CallToActionsControllerTest builds its own Basic auth header from the
+      # same values. Left unset they are nil, Comfy denies, and ten admin tests fail
+      # with 401 -- a CI configuration gap that looks exactly like broken auth code.
+      COMFY_ADMIN_USERNAME: ci
+      COMFY_ADMIN_PASSWORD: ci
+
+    steps:
+      # submodules: db/ is the unepwcmc/protectedplanet-db submodule and holds all
+      # 204 migrations. Without this the checkout has an empty db/migrate and the
+      # schema step below silently builds nothing. The deploy workflow needs this for
+      # the same reason.
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      # gdal-bin: the `gdal` gem was removed; Ogr::Info and the download generators
+      # shell out to the ogrinfo/ogr2ogr CLIs instead.
+      # libgeos-dev: needed by rgeo, which activerecord-postgis-adapter sits on.
+      - name: Install native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gdal-bin libgeos-dev libpq-dev
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.6'   # matches .ruby-version and Dockerfile.deploy's ARG
+          bundler-cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.8.1'   # matches NODE_VERSION in Dockerfile / Dockerfile.deploy
+      # package.json pins "packageManager" to a Yarn Berry version, which ships
+      # via corepack rather than the classic yarn bundled with the runner.
+      # corepack from npm, not the runner's Node: v26 unbundled it (setup-node
+      # installs the official tarball, which ships only node/npm/npx), so a bare
+      # `corepack enable` exits 127. Same workaround as both Dockerfiles.
+      - run: npm install -g corepack@latest
+      - run: corepack enable
+      - run: yarn install --immutable
+
+      # Build assets up front. config/vite.json sets autoBuild=true for test, so
+      # skipping this does not fail -- it makes the first view-rendering test trigger
+      # a full esbuild + Tailwind build mid-suite, which is slow and looks like a
+      # hang. Building here keeps that cost visible as its own step.
+      # Vite only. An earlier version of this ran `rails assets:precompile` to fix
+      # "LoadError: cannot load such file -- sass" during the suite, but that was the
+      # wrong fix: the LoadError came from Sprockets initialising its processor set,
+      # which sassc-rails now satisfies (see the Gemfile). Precompiling additionally
+      # drags in comfortable_media_surfer's whole admin bundle, and the app's
+      # node_modules carries none of its JS deps (bootstrap, jquery, plupload,
+      # sortablejs, popper.js, @rails/ujs) -- which is why Dockerfile.deploy tolerates
+      # precompile as `|| echo ...`.
+      #
+      # The admin *stylesheet* does compile here, and must: the comfy admin layout
+      # emits stylesheet_link_tag "comfy/admin/cms/application", and test.rb sets
+      # assets.compile = true with unknown_asset_fallback = false, so the three
+      # Comfy::Admin::Cms::BaseController subclasses under app/controllers/admin fail
+      # to render if it cannot. With no precompiled manifest and no populated gem
+      # builds/ dir, Sprockets falls back to the gem's application.sass, whose only
+      # two node_modules imports -- codemirror and flatpickr, lines 3 and 6 -- come
+      # from the app's package.json. Everything else it imports ships in the gem.
+      # Verified by deleting those two packages under CI conditions: the admin
+      # controller tests error with "File to import not found or unreadable:
+      # codemirror/lib/codemirror".
+      #
+      # The deploy image takes a different path and does not rely on them:
+      # Dockerfile.deploy runs comfy:compile_assets first, which npm-installs inside
+      # the gem and dart-sass-builds its app/assets/builds/, and Sprockets resolves
+      # the prebuilt CSS in preference to the .sass source.
+      - name: Build test assets
+        run: bundle exec vite build --mode test
+
+      # entrypoints/init.sql creates this alongside the dev database locally; the CI
+      # postgres service container never runs that file, so pg_dump calls against it
+      # spew "database pp_test_backup does not exist" through the suite.
+      - name: Create the auxiliary test database
+        run: PGPASSWORD=postgres createdb -h 127.0.0.1 -U postgres pp_test_backup || true
+
+      - name: Build the test database from migrations
+        run: bundle exec rake db:create db:migrate
+
+      # NOT continue-on-error. That was the first attempt, and it was wrong: a
+      # continue-on-error step reports conclusion "success", so the whole run showed
+      # a green tick over 18 failures and 10 errors and nobody would ever have looked.
+      # A red cross that is not a required check is honest and still blocks nothing;
+      # a green tick that hides failures is worse than no CI at all.
+      - name: Ruby test suite
+        run: |
+          set -o pipefail
+          bundle exec rails test 2>&1 | tee /tmp/rails-test.log
+      - name: Summarise Ruby result
+        if: always()
+        run: |
+          line=$(grep -oE '[0-9]+ runs, [0-9]+ assertions, [0-9]+ failures, [0-9]+ errors, [0-9]+ skips' /tmp/rails-test.log | tail -1)
+          echo "### Ruby suite" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "${line:-no result line found}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Known baseline at the time this workflow landed: 18 failures, 10 errors." >> "$GITHUB_STEP_SUMMARY"
+          echo "Building the schema from migrations (rather than db:test:prepare, which" >> "$GITHUB_STEP_SUMMARY"
+          echo "seeds 248 countries and collides with fixtures) removes ~59 errors." >> "$GITHUB_STEP_SUMMARY"
+
+  javascript:
+    name: JavaScript test suite
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.8.1'
+      # corepack from npm, not the runner's Node: v26 unbundled it (setup-node
+      # installs the official tarball, which ships only node/npm/npx), so a bare
+      # `corepack enable` exits 127. Same workaround as both Dockerfiles.
+      - run: npm install -g corepack@latest
+      - run: corepack enable
+      - run: yarn install --immutable
+      # package.json defines `yarn test` (vitest) and no workflow has ever called it.
+      # See the note on the Ruby step: not continue-on-error, for the same reason.
+      - name: Vitest
+        run: yarn test
+
+      # REQUIRED, like Vitest above and unlike the Ruby suite: all three are green as
+      # of this commit, so there is no red-gate-everyone-ignores problem to avoid.
+      # They had never run anywhere -- `yarn lint`, `lint:css` and `typecheck` sat in
+      # package.json with no caller, no git hook (.git/hooks is all .sample, no
+      # husky/lefthook) and no workflow.
+      #
+      # ESLint and Stylelint are the ones with no other gate: `vite build` loads
+      # neither, so nothing but a developer's editor was reading them.
+      #
+      # Typecheck is DELIBERATELY REDUNDANT and cheap to drop if CI minutes matter.
+      # Since vite-plugin-checker({ vueTsc: true }) landed in cb5585bda the build
+      # itself gates types, and it gates them thoroughly -- verified by planting a
+      # deliberate `const x: number = 'str'` in a file that nothing imports: the
+      # build exited 2, because vue-tsc checks everything in the tsconfig include,
+      # not just the module graph. That gate already runs on PRs via the Ruby job's
+      # "Build test assets" step. This step is kept only because it is a 40-second
+      # standalone signal that names the failure directly, instead of surfacing as a
+      # failed asset build deep inside a job that needs Postgres, Elasticsearch and
+      # Redis to start first.
+      #
+      # Ordered after Vitest so a real test failure is not masked by a style nit, and
+      # split into three steps so the log says which check failed.
+      - name: ESLint
+        run: yarn lint --max-warnings 0
+
+      - name: Stylelint
+        run: yarn lint:css
+
+      - name: Typecheck (vue-tsc)
+        run: yarn typecheck

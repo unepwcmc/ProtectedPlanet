@@ -1,0 +1,10 @@
+@utility tw-shared-border-radius {
+  @apply rounded-[0.3125rem];
+}
+
+@utility tw-shared-border-grey-light {
+  @apply 
+  border 
+  border-solid
+  border-theme-grey-light;
+}

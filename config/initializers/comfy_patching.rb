@@ -97,7 +97,7 @@ Rails.configuration.to_prepare do
       delete_orphan_categories(_categories)
       
       _categories.each do |cat|
-        tag_name = cat[:tag_params]
+        tag_name = cat[:tag_params].split(',').first.strip
         _layout_category = Comfy::Cms::LayoutCategory.find_by(label: tag_name)
         Comfy::Cms::LayoutsCategory.find_or_create_by(
           layout_id: self.id,

@@ -36,6 +36,19 @@ class ComfyOpengraph
     end
   end
 
+  # The <title> and <meta name="description"> for a CMS page, from the same
+  # fragments (and with the same fallbacks) the OG tags use -- so the two cannot
+  # describe the page differently. Unlike `parse`, these do not depend on the
+  # fragment existing: og_title/og_description fall back to the page label and the
+  # site blurb, which is exactly what a missing fragment should produce.
+  def page_title
+    og_title
+  end
+
+  def page_description
+    og_description
+  end
+
   private
 
   def process_meta_tags(fragment)
@@ -56,7 +69,7 @@ class ComfyOpengraph
 
   def og_description
     social_desc = cms_fragment_content(:social_description, @page)
-    summary = cms_fragment_content(:summary, @page).delete("\n")
+    summary = cms_fragment_content(:summary, @page).to_s.delete("\n")
     fallback_summary = summary.blank? ? I18n.t('meta.site.description') : summary
     social_desc.blank? ? fallback_summary : social_desc
   end

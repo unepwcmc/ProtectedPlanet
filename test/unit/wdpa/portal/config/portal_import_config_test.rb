@@ -11,7 +11,7 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
   end
 
   test 'batch_import_protected_areas_from_view_size returns correct value' do
-    assert_equal 10, @config.batch_import_protected_areas_from_view_size
+    assert_equal 1000, @config.batch_import_protected_areas_from_view_size
   end
 
   test 'lock_timeout_ms returns correct value' do

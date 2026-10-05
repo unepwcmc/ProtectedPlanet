@@ -1,6 +1,6 @@
 class TabPresenter
-  include CountriesHelper
   include Rails.application.routes.url_helpers
+  include CountriesHelper
   include ActionView::Helpers::AssetTagHelper
 
   def initialize(geo_entity)
@@ -155,7 +155,7 @@ class TabPresenter
     {
       name: protected_area[:name],
       site_id: protected_area[:site_id],
-      thumbnail_link: ApplicationController.helpers.protected_area_cover(protected_area, with_tag: false)
+      thumbnail_link: ApplicationController.helpers.protected_area_cover(protected_area)
     }
   end
 end

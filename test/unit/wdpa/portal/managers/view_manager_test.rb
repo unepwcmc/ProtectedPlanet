@@ -6,17 +6,25 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
 
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_staging_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
-      portal_standard_sources])
+    @config.stubs(:portal_staging_materialised_view_values).returns(%w[staging_portal_standard_polygons staging_portal_standard_points
+      staging_portal_standard_sources])
 
     Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_view_values).returns(@config.portal_staging_materialised_view_values)
+
+    # A crashed run -- or a real import against this database -- leaves these
+    # behind, and every CREATE below would then fail on the leftover.
+    drop_test_views
   end
 
   def teardown
+    drop_test_views
+  end
+
+  def drop_test_views
     # Clean up any test views (CASCADE will also drop indexes)
-    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS portal_standard_polygons CASCADE')
-    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS portal_standard_points CASCADE')
-    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS portal_standard_sources CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS staging_portal_standard_polygons CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS staging_portal_standard_points CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS staging_portal_standard_sources CASCADE')
     @connection.execute('DROP MATERIALIZED VIEW IF EXISTS test_view CASCADE')
     
     # Clean up any orphaned indexes (if views were dropped without CASCADE)
@@ -44,17 +52,17 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
   test 'validate_required_views_exist returns true when all views exist' do
     # Create all required views
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_polygons AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_polygons AS
       SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_points AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_points AS
       SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_sources AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_sources AS
       SELECT 1 as id, 'test' as title
     SQL
 
@@ -71,7 +79,7 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
   test 'validate_required_views_exist returns false when some views are missing' do
     # Create only one view
     @connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW portal_standard_polygons AS
+      CREATE MATERIALIZED VIEW staging_portal_standard_polygons AS
       SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
     SQL
 

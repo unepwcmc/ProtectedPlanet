@@ -18,8 +18,10 @@ module Wdpa
         # CONFIGURATION VALUES
         # ============================================================================
 
+        # Attribute rows only — the adapter leaves geometry out of the SELECT, so
+        # a batch is a few MB, not a few GB.
         def self.batch_import_protected_areas_from_view_size
-          10
+          1000
         end
 
         def self.batch_import_pame_from_view_size
@@ -46,8 +48,10 @@ module Wdpa
 
         # Progress notification settings for large imports
         def self.progress_notification_interval
-          # Send progress update every N records
-          50000
+          # Send progress update every N records. Lower it with
+          # PP_IMPORT_PROGRESS_INTERVAL to exercise progress on a small dataset.
+          interval = ENV['PP_IMPORT_PROGRESS_INTERVAL'].to_i
+          interval.positive? ? interval : 50_000
         end
 
         def self.progress_notifications_enabled?
@@ -224,12 +228,6 @@ module Wdpa
         # Returns keys from portal_materialised_views_hash where required_for_downloads is true
         def self.required_views_for_downloads
           portal_materialised_views_hash.select { |_key, config| config[:required_for_downloads] }.keys
-        end
-
-        def self.get_live_materialised_view_name_from_staging(staging_name)
-          mapping = portal_materialised_views_hash
-          entry = mapping.values.find { |v| v[:staging] == staging_name }
-          entry ? entry[:live] : nil
         end
 
         def self.get_staging_materialised_view_name_from_live(live_name)

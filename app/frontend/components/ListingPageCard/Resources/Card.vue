@@ -1,62 +1,55 @@
 <template>
   <div
-    class="card"
-    :class="{ 'card--link': props.url }"
+    class="ct-listing-page-card-resources-card"
+    :class="{ 'ct-listing-page-card-resources-card--link': url }"
   >
     <a
-      v-if="props.url"
-      class="card__link"
-      :href="props.url"
-      :title="props.title"
+      v-if="url"
+      class="ct-listing-page-card-resources-card__link"
+      :href="url"
+      :title
     >
-      <p
-        class="card__date"
-        v-html="props.date"
-      />
-      <h3
-        class="card__h3"
-        v-html="props.title"
-      />
-      <p
-        class="card__summary"
-        v-html="props.summary"
-      />
+      <ListingPageCardResourcesInfo v-bind="props" />
     </a>
-    <template v-else>
-      <p
-        class="card__date"
-        v-html="props.date"
-      />
-      <h3
-        class="card__h3"
-        v-html="props.title"
-      />
-      <p
-        class="card__summary"
-        v-html="props.summary"
-      />
-      <a
-        v-if="props.fileUrl"
-        class="button--download"
-        :href="props.fileUrl"
-        target="_blank"
-        :title="props.title"
-      />
-      <a
-        v-if="props.linkUrl"
-        class="button--link-external"
-        :href="props.linkUrl"
-        target="_blank"
-        :title="props.title"
-        v-html="props.linkTitle"
-      />
-    </template>
+    <ListingPageCardResourcesInfo
+      v-else
+      v-bind="props"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ListingPageCardResourcesProps } from '@/types/backend'
+import ListingPageCardResourcesInfo from '@/components/ListingPageCard/Resources/Info.vue'
 
 type ListingPageCardResources = ListingPageCardResourcesProps
 const props = defineProps<ListingPageCardResources>()
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-listing-page-card-resources-card {
+  @apply
+  tw-shared-base-flex-col-gap-3
+  p-3
+  w-full
+  lg:min-h-50;
+}
+
+.ct-listing-page-card-resources-card--link {
+  @apply
+  border
+  border-solid
+  border-white
+  cursor-pointer
+  hover:border-theme-grey-dark;
+}
+
+.ct-listing-page-card-resources-card__link {
+  @apply
+  tw-shared-base-flex-col-gap-3
+  no-underline;
+}
+
+</style>

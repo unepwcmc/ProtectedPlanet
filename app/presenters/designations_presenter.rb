@@ -1,6 +1,4 @@
 class DesignationsPresenter
-  include Rails.application.routes.url_helpers
-
   JURISDICTIONSCOUNTRY = ['National', 'Regional', 'International', 'Not Applicable'].freeze
   JURISDICTIONSREGION = %w[National Regional International].freeze
 
@@ -44,16 +42,8 @@ class DesignationsPresenter
 
   attr_reader :geo_entity
 
-  def get_designations
-    geo_entity.designations.group_by do |design|
-      design.jurisdiction.name
-    rescue StandardError
-      'Not Reported'
-    end
-  end
-
   def get_jurisdiction(jurisdiction)
-    Jurisdiction.find_by_name(jurisdiction)
+    Jurisdiction.find_by(name: jurisdiction)
   end
 
   def designation_title(jurisdiction)

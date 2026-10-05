@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :home_carousel_slides
     resources :call_to_actions
     resources :banners, except: [:show]
   end
 
+  # HTTP Basic auth is attached in config/initializers/sidekiq.rb, which runs
+  # before this mount. Mounting it bare leaves the job console world-readable.
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 
@@ -12,23 +13,41 @@ Rails.application.routes.draw do
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
 
+  # Must precede the /:id catch-all below, which would otherwise swallow
+  # /sitemap.xml as a protected area lookup for site_id "sitemap".
+  get '/sitemap.xml', to: 'sitemaps#index', as: 'sitemap', format: false
+  get '/sitemaps/:name.xml', to: 'sitemaps#show', as: 'sitemap_chunk', format: false
+
+  # French and Spanish were never actually translated: config/locales contains only
+  # en files, so /fr and /es served identical English content at duplicate URLs.
+  # Locale routing is en-only now (see config/initializers/locale.rb), and these
+  # 301 the URLs search engines have already indexed onto their English
+  # equivalents -- consolidating the duplicates instead of 404ing them and throwing
+  # away whatever ranking those URLs had.
+  #
+  # Also ahead of /:id, which matches single-segment paths like /fr.
+  retired_locales = /es|fr/
+  get '/:locale', constraints: { locale: retired_locales }, to: redirect('/en')
+  get '/:locale/*path', constraints: { locale: retired_locales }, to: redirect { |params, request|
+    query = request.query_string.presence
+    ["/en/#{params[:path]}", query].compact.join('?')
+  }
+
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
 
-  scope '(:locale)', locale: /en|es|fr/ do
+  # en only: see the retired-locale redirects above.
+  scope '(:locale)', locale: /en/ do
     root to: 'home#index'
     get '/', to: 'home#index'
-
-    put '/admin/maintenance', as: 'maintenance'
-    put '/admin/clear_cache', as: 'clear_cache'
 
     ## Non-CMS routes
     get '/region/:iso', to: 'region#show', as: 'region'
 
     get '/country/:iso', to: 'country#show', as: 'country'
-    get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
-    get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
+    # No compare route: CountryController has never had a `compare` action, so it
+    # 404s. Removed once already and restored by a merge — see smoke:routes.
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
     get '/global_statistics_download', to: 'global_statistics#download'

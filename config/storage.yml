@@ -9,16 +9,16 @@ local:
 # Main service to be used for staging 
 staging:
   service: S3
-  access_key_id: <%= Rails.application.secrets.aws_access_key_id %>
-  secret_access_key: <%= Rails.application.secrets.aws_secret_access_key %>
-  region: <%= Rails.application.secrets.s3_region %>
-  bucket: <%= Rails.application.secrets.aws_files_bucket %>
+  access_key_id: <%= Rails.application.config_for(:app_secrets).aws_access_key_id %>
+  secret_access_key: <%= Rails.application.config_for(:app_secrets).aws_secret_access_key %>
+  region: <%= Rails.application.config_for(:app_secrets).s3_region %>
+  bucket: <%= Rails.application.config_for(:app_secrets).aws_files_bucket %>
 
 production:
   service: S3
-  access_key_id: <%= Rails.application.secrets.aws_access_key_id %>
-  secret_access_key: <%= Rails.application.secrets.aws_secret_access_key %>
-  region: <%= Rails.application.secrets.s3_region %>
-  bucket:  <%= Rails.application.secrets.aws_files_bucket %>
+  access_key_id: <%= Rails.application.config_for(:app_secrets).aws_access_key_id %>
+  secret_access_key: <%= Rails.application.config_for(:app_secrets).aws_secret_access_key %>
+  region: <%= Rails.application.config_for(:app_secrets).s3_region %>
+  bucket:  <%= Rails.application.config_for(:app_secrets).aws_files_bucket %>
 
   

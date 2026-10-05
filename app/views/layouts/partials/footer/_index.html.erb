@@ -1,0 +1,12 @@
+<% unless @for_pdf %>
+  <% get_footer_links %>
+  <footer class="vw-partials-footer">
+    <div class="vw-partials-footer__container">
+        <%= render partial: 'layouts/partials/footer/site_logo' %>
+        <%= render partial: 'layouts/partials/footer/explore', locals: { links: @links["explore_links"] } %>
+        <%= render partial: 'layouts/partials/footer/general_info', locals: { links: @links["general_info_links"] } %>
+        <%= render partial: 'layouts/partials/footer/communications' %>
+        <%= render partial: 'layouts/partials/footer/logos' %>
+    </div>
+  </footer>
+<% end %>

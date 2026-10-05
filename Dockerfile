@@ -1,183 +1,183 @@
-# Debian buster base. We compile Ruby 3.3 further down via ruby-build rather than
-# using a ruby:3.3-* image, because those are bookworm-based and would break the
-# GDAL 2.2.3 + ESRI FileGDB source build below (RHEL7 SDK needs old glibc). Keeping
-# buster isolates the Ruby 3.3 bump from the Debian/GDAL modernisation, which stays
-# in the deploy/infra phases. The base still ships Ruby 2.7; PATH is repointed to
-# 3.3 at the ruby-build step.
-FROM ruby:2.7-buster
+ARG RUBY_VERSION=4.0.6
+ARG NODE_VERSION=26.8.1
+ARG COREPACK_VERSION=0.36.0
 
-# Buster is EOL, so point APT to Debian archive mirrors before updating
-RUN printf 'deb https://archive.debian.org/debian buster main\n\
-deb https://archive.debian.org/debian buster-updates main\n\
-deb https://archive.debian.org/debian-security buster/updates main\n' > /etc/apt/sources.list \
- && printf 'Acquire::Check-Valid-Until "0";\nAcquire::Retries "3";\nAcquire::http::Pipeline-Depth "0";\n' > /etc/apt/apt.conf.d/99no-check-valid \
- && apt-get -o Acquire::Check-Valid-Until=false update
-# Node 24 LTS via official binary tarball. NodeSource dropped Debian buster apt
-# support, but the official build targets glibc 2.28 (buster) and runs fine here.
-# Vite 5 requires Node 18+; Webpacker 4 (webpack 4) still runs on Node 24 with
-# NODE_OPTIONS=--openssl-legacy-provider set on the webpacker service (compose).
-ENV NODE_VERSION=24.4.1
-RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
-    && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
-    && rm /tmp/node.tar.xz \
-    && node -v && npm -v
-RUN apt-get install -y \
-        apt-utils \
-        libgdal-dev \
-        libspatialite-dev \
-        shared-mime-info \
-        build-essential
-RUN apt-get install -y postgresql postgresql-client
-RUN apt-get install -y zip
+FROM ubuntu:24.04
+ARG RUBY_VERSION
+ARG NODE_VERSION
+ARG COREPACK_VERSION
 
-# for sassc specifically
-RUN apt-get install -y \
-    g++ \
-    make \
-    libsass1 \
-    libsass-dev
-RUN apt-get update && apt-get install -y gdal-bin libgdal-dev libproj-dev proj-data proj-bin libgeos-dev python-gdal
-RUN wget --no-check-certificate https://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz -O - | tar -xz 
-RUN wget https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.2/FileGDB_API-RHEL7-64gcc83.tar.gz -O - | tar -xz 
-RUN cp ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.a ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.so ./FileGDB_API-RHEL7-64gcc83/lib/libFileGDBAPI.so /usr/local/lib  \
-    && cp -a ./FileGDB_API-RHEL7-64gcc83/include/. /usr/local/include
-RUN cd ./gdal-2.2.3 && ./configure \
---prefix=/usr \
---with-fgdb=/usr/local \
---with-geos \
---with-geotiff=internal \
---with-hide-internal-symbols \
---with-libtiff=internal \
---with-libz=internal \
---with-threads \
---without-bsb \
---without-cfitsio \
---without-cryptopp \
---without-curl \
---without-dwgdirect \
---without-ecw \
---without-expat \
---without-fme \
---without-freexl \
---without-gif \
---without-gif \
---without-gnm \
---without-grass \
---without-grib \
---without-hdf4 \
---without-hdf5 \
---without-idb \
---without-ingres \
---without-jasper \
---without-jp2mrsid \
---without-jpeg \
---without-kakadu \
---without-libgrass \
---without-libkml \
---without-libtool \
---without-mrf \
---without-mrsid \
---without-mysql \
---without-netcdf \
---without-odbc \
---without-ogdi \
---without-openjpeg \
---without-pcidsk \
---without-pcraster \
---without-pcre \
---without-perl \
---with-pg \
---without-php \
---without-png \
---without-python \
---without-qhull \
---without-sde \
---without-sqlite3 \
---without-webp \
---without-xerces \
---without-xml2 \ 
-&& make && make install && ldconfig
+# GEM_HOME/BUNDLE_PATH came free with the ruby:* base image before; they have to
+# be set explicitly here, and must stay at /usr/local/bundle -- that is the path
+# docker-compose.yml mounts the shared `protectedplanet_bundler` volume on.
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    GEM_HOME=/usr/local/bundle \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_APP_CONFIG=/usr/local/bundle \
+    BUNDLE_SILENCE_ROOT_WARNING=1
+ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:/usr/local/bundle/bin:${PATH}"
 
-# This is required for Chromium to work (puppeter triggers Chromium then Chromium needs the following)
-RUN apt-get update && \
-    apt-get install -y \
-        ca-certificates \
-        fonts-liberation \
-        libgtk-3-0 \
-        libcups2 \
-        libx11-xcb1 \
-        libxcomposite1 \
-        libxdamage1 \
-        libxfixes3 \
-        libxrandr2 \
-        libgbm1 \
-        libnss3 \
-        libasound2 \
-        libdrm2 \
-        libxkbcommon0 && \
-    rm -rf /var/lib/apt/lists/*
 
-# RUN wget https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.2/FileGDB_API-RHEL7-64gcc83.tar.gz -O - | tar -xz 
-# RUN cp ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.a ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.so ./FileGDB_API-RHEL7-64gcc83/lib/libFileGDBAPI.so /usr/local/lib  \
-#     && cp -a ./FileGDB_API-RHEL7-64gcc83/include/. /usr/local/include
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Runtime libraries + the build toolchain, in one layer. The deploy image splits
+# these across stages; here the toolchain has to survive into the running
+# container so `bundle install` works against the mounted volume.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates curl gnupg tzdata git \
+      # GDAL 3.8.4 + geo stack. OpenFileGDB is built in -- no ESRI SDK, no
+      # source build.
+      gdal-bin libgdal-dev libproj-dev proj-data proj-bin libgeos-dev \
+      # Postgres (pg gem) + spatialite
+      libpq-dev libsqlite3-dev libspatialite-dev \
+      # image/asset handling. zip is for the .gdb download bundles; unzip is a
+      # different package and puppeteer needs it to extract Chrome -- without it
+      # the download "succeeds" but leaves no executable behind.
+      shared-mime-info zip unzip \
+      # toolchain: native gems, and ruby-build's own compile
+      build-essential pkg-config autoconf bison \
+      # rustc/cargo build YJIT into ruby (build-time only; see the ruby-build step)
+      rustc cargo \
+      libssl-dev libyaml-dev zlib1g-dev libreadline-dev libffi-dev libgmp-dev \
+      libxml2-dev libxslt1-dev xz-utils \
+      # Chromium runtime deps -- the PDF pipeline drives Puppeteer
+      fonts-liberation libgtk-3-0t64 libcups2t64 libx11-xcb1 libxcomposite1 \
+      libxdamage1 libxfixes3 libxrandr2 libgbm1 libnss3 libasound2t64 \
+      libdrm2 libxkbcommon0 libatk-bridge2.0-0t64 libpango-1.0-0 libcairo2 \
+      libxshmfence1 \
+ && rm -rf /var/lib/apt/lists/*
 
-# Yarn via Corepack (bundled with Node 24) instead of `npm install -g yarn`,
-# which only gets classic Yarn 1. Version is pinned to match package.json's
-# "packageManager" field.
-RUN corepack enable && \
-    corepack prepare yarn@4.17.1 --activate
+# Postgres client from PGDG rather than Ubuntu's 16. The compose stack runs a
+# Postgres 17 test database, and a v16 client aborts on "server version
+# mismatch"; v17 still talks to the v11 development server.
+RUN install -d /usr/share/postgresql-common/pgdg \
+ && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+      -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+ && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt noble-pgdg main" \
+      > /etc/apt/sources.list.d/pgdg.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-client-17 \
+ && rm -rf /var/lib/apt/lists/*
 
-# --- Ruby 3.3, compiled on buster ---
-# Placed after the heavy apt/Node/GDAL layers so those stay cache-valid (no GDAL
-# recompile) when only Ruby changes. GEM_HOME is inherited from the base
-# (/usr/local/bundle), so the shared bundler volume keeps working; gems get
-# rebuilt for 3.3 at runtime by the `install` service.
-ENV RUBY_VERSION_TARGET=3.3.7
-RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --no-install-recommends \
-        git autoconf bison libssl-dev libyaml-dev zlib1g-dev libreadline-dev libffi-dev libgmp-dev \
- && git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
+# Ruby via ruby-build, same version and mechanism as the deploy image.
+# YJIT is compiled in via RUBY_CONFIGURE_OPTS. `config.yjit = true` has been set
+# for non-local environments since load_defaults 8.1, but the Ruby built here had
+# no YJIT, so railties' `if config.yjit && defined?(RubyVM::YJIT.enable)` guard
+# silently skipped it -- the live staging container reported yjit=not-compiled
+# while the config said true. Building with it makes the existing config real.
+#
+# rustc/cargo are BUILD-ONLY: YJIT is compiled into the ruby binary, so nothing
+# Rust-related is needed at runtime. Ubuntu 24.04 ships rustc 1.75, comfortably
+# over the 1.60 YJIT needs for a release-mode build.
+#
+# NOT ZJIT: Ruby 4.0 ships it, but upstream still advise against production use.
+RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git /tmp/ruby-build \
  && PREFIX=/usr/local /tmp/ruby-build/install.sh \
- && ruby-build "${RUBY_VERSION_TARGET}" "/usr/local/ruby-${RUBY_VERSION_TARGET}" \
- && rm -rf /tmp/ruby-build /var/lib/apt/lists/*
-ENV PATH="/usr/local/ruby-${RUBY_VERSION_TARGET}/bin:${PATH}"
-# The compose commands use login shells (`bash -l -c`), which source /etc/profile
-# and rebuild PATH from scratch -- dropping the ENV above and falling back to the
-# base image's Ruby 2.7. This profile.d snippet re-prepends 3.3 for login shells.
-RUN printf 'export PATH=/usr/local/ruby-%s/bin:$PATH\n' "${RUBY_VERSION_TARGET}" > /etc/profile.d/ruby-3.3.sh
-RUN ruby -v | grep -q "3.3.7" && echo "Ruby 3.3.7 active"
+ && RUBY_CONFIGURE_OPTS="--enable-yjit" \
+    ruby-build "${RUBY_VERSION}" "/usr/local/ruby-${RUBY_VERSION}" \
+ && rm -rf /tmp/ruby-build \
+ && ruby -v | grep -q "${RUBY_VERSION}" \
+ && ruby -e 'abort("YJIT missing from this build") unless defined?(RubyVM::YJIT)'
 
-RUN mkdir /ProtectedPlanet
+# The compose commands use login shells (`bash -l -c`), which source /etc/profile
+# and rebuild PATH from scratch -- dropping the ENV above. Re-prepend it here.
+RUN printf 'export PATH=/usr/local/ruby-%s/bin:/usr/local/bundle/bin:$PATH\n' "${RUBY_VERSION}" \
+      > /etc/profile.d/ruby.sh
+
+# Node from the official tarball, plus corepack. Yarn's version is deliberately
+# NOT pinned here -- corepack reads it from package.json's "packageManager",
+# which is the single source of truth (`npm i -g yarn` would only get classic 1.x).
+#
+# corepack must be installed from npm: Node 26 no longer bundles it. The v26
+# tarball ships only node/npm/npx, so the plain `corepack enable` that worked on
+# 24 dies with "corepack: not found" (exit 127).
+#
+# node itself needs libatomic.so.1, which comes in via build-essential above.
+# corepack is installed straight from its registry tarball, NOT via
+# `npm install -g corepack@latest`. Node 26 unbundled corepack (a bare
+# `corepack enable` exits 127), but the npm that ships with Node 26.6.0 through
+# 26.8.2 (npm 11.18.0 - 11.19.1) is broken for EVERY install, global or local:
+#   npm error cannot set sizeCalculation without setting maxSize or maxEntrySize
+# Reproduced 2026-09-14 in clean `node:26.8.1-slim` and `ubuntu:24.04` + tarball,
+# on both arm64 and amd64, installing nothing more exotic than `is-odd`. It is an
+# upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
+# corepack, per package.json's "packageManager"), so the tarball path sidesteps it
+# entirely. Revisit when a Node 26 patch ships a working npm.
+# Reverted to linux-x64 deliberately. A native arm64 dev image would fix the
+# frontend toolchain (vue-tsc, tailwind and npm all misbehave under Rosetta --
+# the same `vite build --mode test` that fails emulated completed in 6.6s on
+# native arm64, measured 2026-09-14), but it cannot work: Chrome for Testing has
+# no linux-arm64 build, so `puppeteer browsers install chrome` fetches the x64
+# binary and the image build dies on
+#   rosetta error: failed to open elf at /lib64/ld-linux-x86-64.so.2
+# and Ubuntu 24.04 arm64 has no usable chromium package to substitute (`chromium`
+# has no candidate; `chromium-browser` is a snap shim). Chrome is needed for
+# local PDF generation, so x64 + emulation stays until that changes. The cost is
+# that `vite build` cannot run locally; CI builds assets fine.
+RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
+ && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
+ && rm /tmp/node.tar.xz \
+ && curl -fsSL "https://registry.npmjs.org/corepack/-/corepack-${COREPACK_VERSION}.tgz" -o /tmp/corepack.tgz \
+ && mkdir -p /usr/local/lib/node_modules/corepack \
+ && tar -xzf /tmp/corepack.tgz -C /usr/local/lib/node_modules/corepack --strip-components=1 \
+ && rm /tmp/corepack.tgz \
+ && chmod +x /usr/local/lib/node_modules/corepack/dist/corepack.js \
+ && ln -sf /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack \
+ && corepack enable
+
 WORKDIR /ProtectedPlanet
 
-ADD Gemfile /ProtectedPlanet/Gemfile
-ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
-ADD package.json /ProtectedPlanet/package.json
-ADD yarn.lock /ProtectedPlanet/yarn.lock
-ADD docker/scripts /ProtectedPlanet/docker/scripts
+# Gems first so this layer caches independently of app code.
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler --no-document \
+ && bundle install --jobs 4 --retry 3
 
-# We need the following to avoid bundler install error
-# https://nokogiri.org/tutorials/installing_nokogiri.html#installing-using-standard-system-libraries
-# Install the locked bundler (2.4.22) BEFORE any `bundle` call: Ruby 2.7's
-# rubygems errors hard when Gemfile.lock's BUNDLED WITH version is absent
-# (Ruby 2.6.3 only warned). Pin every bundle invocation to 2.4.22.
-# Bundler 1.17.3 cannot resolve the Rails 6 dependency graph -- it dies with
-# `undefined method 'name' for "Gemfile" String`. 2.4.22 is the last 2.x line
-# that still supports Ruby 2.7.
-# Compile native gems from source rather than pulling precompiled platform gems:
-# the precompiled x86_64-linux builds (pg, nokogiri) target a newer glibc than
-# buster's 2.28 and fail to load here. Applies to build-time and the runtime
-# `install` service (it is an ENV, so it survives the shared bundler volume).
-ENV BUNDLE_FORCE_RUBY_PLATFORM=true
-RUN gem install bundler -v 2.4.22
-RUN bundle _2.4.22_ config build.nokogiri --use-system-libraries
-RUN bundle _2.4.22_ install
+# JS deps. .yarnrc.yml sets nodeLinker: node-modules and must be present before
+# `yarn install`, or Yarn Berry silently defaults to PnP -- no node_modules/.bin,
+# so the puppeteer CLI below cannot be resolved. .puppeteerrc.cjs pins the Chrome
+# version and has to be here for the same reason.
+#
+# The corepack pre-warm (/root/.cache/node/corepack, not a mounted path) picks up
+# whatever package.json's "packageManager" asks for, so the first `yarn` in the
+# container doesn't stop to download one.
+COPY package.json yarn.lock .yarnrc.yml* .puppeteerrc.cjs ./
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack install && yarn -v
 
-# As it fails for not able to download r809590 during first time of yarn install so we need to skip it and install it manually later
-RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install
+# Chrome for Testing lives inside node_modules rather than puppeteer's default
+# $HOME/.cache/puppeteer, because node_modules is the one path docker-compose.yml
+# bind-mounts from the host across install/web/sidekiq. The default is
+# container-local: the download lands in whichever container ran it, is invisible
+# to the others, and is wiped on every recreate. When this line went missing,
+# docker/scripts/pdf-chrome exited instantly with "no Chrome at ..." and every PDF
+# job silently fell back to launching its own browser.
+ENV PUPPETEER_CACHE_DIR=/ProtectedPlanet/node_modules/.puppeteer-cache
 
+# PUPPETEER_SKIP_DOWNLOAD: puppeteer's postinstall download has no retry and is
+# not routed through the build cache mount below. Chrome is installed explicitly,
+# right after, in a controlled step instead.
+RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install --immutable \
+ || PUPPETEER_SKIP_DOWNLOAD=true yarn install
 
-COPY . /ProtectedPlanet
+# Same controlled install as Dockerfile.deploy -- see the long note there for why
+# each part is shaped this way. In short: the cache mount is wiped only AFTER a
+# failed attempt (never before the first, or Chrome is re-downloaded every build),
+# $PUPPETEER_CACHE_DIR is cleared on every attempt so a half-finished download
+# cannot read as "already installed", and verify-puppeteer.js is a hard gate that
+# actually launches the browser rather than trusting a directory to exist.
+COPY app/frontend/backend-scripts ./app/frontend/backend-scripts
+RUN --mount=type=cache,target=/puppeteer-dl-cache \
+    n=0; \
+    until rm -rf "$PUPPETEER_CACHE_DIR" \
+        && PUPPETEER_CACHE_DIR=/puppeteer-dl-cache ./node_modules/.bin/puppeteer browsers install chrome; do \
+        n=$((n+1)); \
+        if [ "$n" -ge 3 ]; then echo "Chrome download failed after 3 attempts" >&2; exit 1; fi; \
+        echo "Chrome download attempt $n failed, clearing the cache and retrying in 5s..."; \
+        find /puppeteer-dl-cache -mindepth 1 -delete; \
+        sleep 5; \
+    done \
+ && mkdir -p "$PUPPETEER_CACHE_DIR" \
+ && cp -a /puppeteer-dl-cache/. "$PUPPETEER_CACHE_DIR/" \
+ && node app/frontend/backend-scripts/verify-puppeteer.js
 
 EXPOSE 3000
 CMD ["rails", "server", "-b", "0.0.0.0"]

@@ -44,7 +44,7 @@ class Download::Generators::Gdb < Download::Generators::Base
     select = props[:cast_geom_to_multi] ? with_multi_geom(props[:select]) : props[:select]
     view_name = create_view query(select, props[:where])
 
-    row_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
+    row_count = ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
     # Rails.logger.info "[GDB export] #{name}: #{row_count} rows in view #{view_name}"
     return [] if row_count.zero?
 
@@ -67,7 +67,7 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   # Wraps "WKB_GEOMETRY" in ST_Multi() so every polygon feature is MULTIPOLYGON
-  # before it reaches the .gdb driver, preventing -skipfailures from silently
+  # before it reaches the OpenFileGDB driver, preventing -skipfailures from silently
   # dropping features whose stored geometry type is POLYGON rather than MULTIPOLYGON.
   # Still required under OpenFileGDB: it writes the layer as Multi Polygon too.
   def with_multi_geom(select)

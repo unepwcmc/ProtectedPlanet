@@ -2,23 +2,22 @@ class SearchAreasController < ApplicationController
   include Searchable
   include MapHelper
 
-  after_action :enable_caching
-
   before_action :check_db_type, only: [:index, :search_results]
   before_action :load_search, only: [:search_results]
   before_action :load_search_from_query_string, only: [:index]
   before_action :load_filters, only: [:index, :search_results]
+  after_action :enable_caching
 
   TABS = %w(region country site).freeze
   def index
-    placeholder = @db_type ? @db_type : 'oecm-wdpa'
-    
+
     @config_search_areas = {
       id: @db_type || 'all',
-      placeholder: I18n.t("global.placeholder.search-#{placeholder}")
-    }.to_json
+      placeholder: I18n.t("global.placeholder.search-wdpca")
+    }
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all')
+    @download_options = JSON.parse(helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all'))
+    @download_text = helpers.download_text
 
     @tabs = []
 
@@ -35,6 +34,8 @@ class SearchAreasController < ApplicationController
       overlays: MapOverlaysSerializer.new(search_overlays, map_yml).serialize,
       type: 'all'
     }
+
+    set_page_meta(title: t('meta.search_areas.title'), description: t('meta.search_areas.description'))
   end
 
   def search_results

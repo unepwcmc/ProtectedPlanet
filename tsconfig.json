@@ -13,11 +13,7 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["app/frontend/*"],
-      // Vite/vitest alias `vue` to the Vue 3 build (npm alias `vue3`) so Vue-2-only
-      // island files can coexist with Webpacker. Mirror that here so type-checking
-      // sees Vue 3 types, matching what actually runs. See vite.config.mts.
-      "vue": ["node_modules/vue3"]
+      "@/*": ["app/frontend/*"]
     },
     "types": ["vite/client"]
   },

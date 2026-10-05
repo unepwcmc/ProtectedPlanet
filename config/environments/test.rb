@@ -1,5 +1,3 @@
-secrets = Rails.application.secrets.mailer
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -38,16 +36,21 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
   config.active_storage.service = :test
+
+  # Do not regenerate db/structure.sql after migrating in test, matching staging and
+  # production: a test run should never rewrite a developer's schema file.
+  #
+  # This also used to be load-bearing for a second reason -- the dump shells out to
+  # pg_dump, and the dev image shipped v11, which refuses to talk to a Postgres 17 server
+  # ("aborting because of server version mismatch"), so `rake db:migrate` exited non-zero
+  # on PG17 even when all 204 migrations had applied. The dev image now builds pg_dump 17
+  # (see Dockerfile), so only the first reason still applies. Development still dumps
+  # normally, which is where structure.sql is meant to be regenerated.
+  config.active_record.dump_schema_after_migration = false
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

@@ -29,7 +29,11 @@ module Wdpa
           'out_bio' => { name: 'out_bio', type: :string }
         }.freeze
 
-        PORTAL_PAME_IGNORED_COLUMNS = %w[].freeze
+        # Batch cursor for Adapters::Pames: the portal's pame PK.
+        KEY_COLUMNS = %w[id].freeze
+
+        # The cursor is import machinery, not a PP attribute.
+        PORTAL_PAME_IGNORED_COLUMNS = KEY_COLUMNS
 
         def self.map_portal_pame_to_pp_evaluation(portal_attributes)
           attributes = map_portal_pame_to_attributes(portal_attributes)

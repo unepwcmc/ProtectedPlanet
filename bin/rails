@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby
-APP_PATH = File.expand_path('../config/application', __dir__)
-require_relative '../config/boot'
-require 'rails/commands'
+# Rails-generated binstub.
+#
+# The Bundler-generated version this replaced did `load Gem.bin_path("railties",
+# "rails")` without setting APP_PATH, which runs the rails GEM cli (`rails new`)
+# rather than this application's command runner -- so every `bin/rails <anything>`
+# printed the "rails new APP_PATH" help instead of doing the thing. It also aborted
+# outright whenever bin/bundle was not itself Bundler-generated, which is what kept
+# the vite dev-server container crash-looping.
+APP_PATH = File.expand_path("../config/application", __dir__)
+require_relative "../config/boot"
+require "rails/commands"

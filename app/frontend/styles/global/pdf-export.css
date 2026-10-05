@@ -1,0 +1,116 @@
+.tw-global-pdf-export .vw-layouts-application {
+  @apply p-6!;
+}
+
+.tw-global-pdf-export .vw-layouts-partials-topbar,
+.tw-global-pdf-export .vw-partials-bars-topbar-secondary,
+.tw-global-pdf-export .ct-map-baselayer-controls,
+.tw-global-pdf-export .maplibregl-ctrl-top-right,
+.tw-global-pdf-export .ct-banner,
+.tw-global-pdf-export .ct-cookie-consent,
+.tw-global-pdf-export .vw-partials-footer {
+  @apply hidden!;
+}
+
+/* Both the modern break-inside/-after and the legacy page-break-* aliases are
+   set: WebKit's break-inside is unreliable on flex/grid containers, which most
+   of these are, and honours the legacy name there. Additive, not a fallback. */
+.tw-global-pdf-export .tw-global-pdf-export__break-inside-avoid {
+  @apply break-inside-avoid!;
+  page-break-inside: avoid !important;
+}
+
+.tw-global-pdf-export .tw-global-pdf-export__break-after-avoid {
+  @apply break-after-avoid!;
+  page-break-after: avoid !important;
+}
+ 
+.tw-global-pdf-export .vw-country,
+.tw-global-pdf-export .vw-protected-areas,
+.tw-global-pdf-export .vw-region {
+  @apply 
+  bg-transparent!
+  pt-0!;
+}
+
+.tw-global-pdf-export .vw-protected-areas__col-wrapper {
+  @apply flex-col!;
+}
+
+.tw-global-pdf-export .tw-shared-card-stats {
+  @apply
+  border!
+  border-theme-grey!
+  bg-transparent!
+  text-theme-grey-black!;
+}
+
+.tw-global-pdf-export .vw-partials-stats-stats-overview {
+  @apply
+  border!
+  border-theme-grey!
+  bg-transparent!
+  text-theme-grey-black!
+  w-[33%]!;
+}
+
+.tw-global-pdf-export .vw-region__overview,
+.tw-global-pdf-export .vw-protected-areas__overview,
+.tw-global-pdf-export .vw-country__overview
+{
+  @apply break-after-page!;
+  page-break-after: always !important;
+}
+
+.tw-global-pdf-export .ct-map-disclaimer--country-region-pa {
+  @apply
+  border-x!
+  border-b
+  border-theme-grey-black!;
+}
+
+.tw-global-pdf-export .vw-partials-stats-stats-overview__title,
+.tw-global-pdf-export .vw-partials-stats-stats-overview__subtitle,
+.tw-global-pdf-export .vw-partials-stats-stats-overview__text,
+.tw-global-pdf-export .vw-partials-charts-chart-legend__title {
+  @apply text-theme-grey-black!;
+}
+
+.tw-global-pdf-export .ct-stats-sources__list,
+.tw-global-pdf-export .ct-stats-designations__jurisdictions,
+.tw-global-pdf-export .ct-map-disclaimer__body {
+  @apply
+  overflow-hidden!
+  h-full!
+  max-h-full!;
+}
+
+
+.tw-global-pdf-export .vw-protected-areas__col-left,
+.tw-global-pdf-export .vw-protected-areas__col-right {
+  @apply w-full!;
+}
+
+
+.tw-global-pdf-export .vw-protected-areas__container,
+.tw-global-pdf-export .vw-protected-areas__col-wrapper,
+.tw-global-pdf-export .vw-protected-areas__col-right,
+
+.tw-global-pdf-export .vw-country__container,
+.tw-global-pdf-export .vw-region__container,
+.tw-global-pdf-export .ct-region-country-pages {
+  @apply gap-12!;
+}
+
+.tw-global-pdf-export .ct-attributes-protected-area,
+.tw-global-pdf-export .ct-attributes-pame-list,
+.tw-global-pdf-export .ct-attributes-affiliations,
+.tw-global-pdf-export .ct-attributes-protected-area-sources,
+
+.tw-global-pdf-export .ct-stats-coverage,
+.tw-global-pdf-export .ct-region-country-pages__stats > div,
+.tw-global-pdf-export .ct-stats-sources,
+.tw-global-pdf-export .ct-stats-designations,
+.tw-global-pdf-export .vw-partials-stats-stats-related-countries {
+  @apply p-0!;
+}

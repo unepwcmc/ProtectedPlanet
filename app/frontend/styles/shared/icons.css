@@ -1,0 +1,117 @@
+@utility tw-shared-icon-base {
+  @apply 
+  bg-center 
+  bg-no-repeat 
+  bg-contain 
+  block;
+}
+
+@utility tw-shared-icon-button-reset {
+  @apply 
+  bg-transparent 
+  border-none 
+  cursor-pointer 
+  p-0;
+}
+
+@utility tw-shared-icon-area {
+  @apply 
+  tw-shared-icon-base 
+  size-13;
+
+  background-image: url('../../assets/icons/area.svg');
+}
+
+@utility tw-shared-icon-arrow-external {
+  @apply 
+  tw-shared-icon-base 
+  w-6.25 
+  h-3;
+
+  background-image: url('../../assets/icons/arrow-external.svg');
+}
+
+@utility tw-shared-icon-circle-chevron-black {
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+  
+  background-image: url('../../assets/icons/circle-chevron-black.svg');
+}
+
+@utility tw-shared-icon-circle-chevron-white {
+  @apply 
+  tw-shared-icon-base 
+  size-8.5;
+
+  background-image: url('../../assets/icons/circle-chevron-white.svg');
+}
+
+@utility tw-shared-icon-country {
+  @apply 
+  tw-shared-icon-base 
+  w-16.25 
+  h-12.5;
+
+  background-image: url('../../assets/icons/country.svg');
+}
+
+@utility tw-shared-icon-earth {
+  @apply 
+  tw-shared-icon-base 
+  size-15;
+
+  background-image: url('../../assets/icons/earth.svg');
+}
+
+@utility tw-shared-icon-loading-spinner {
+  @apply 
+  tw-shared-icon-base 
+  size-10;
+
+  background-image: url('../../assets/icons/loading-spinner.svg');
+}
+
+@utility tw-shared-icon-minus-mapbox {
+  background-image: url('../../assets/icons/minus-mapbox.svg');
+}
+
+@utility tw-shared-icon-pin-fact-terrestrial {
+  @apply
+  tw-shared-icon-base
+  w-7.25
+  h-9.5;
+
+  background-image: url('../../assets/icons/pin-fact-terrestrial.svg');
+}
+
+@utility tw-shared-icon-pin-fact-marine {
+  @apply
+  tw-shared-icon-base
+  w-7.25
+  h-9.5;
+
+  background-image: url('../../assets/icons/pin-fact-marine.svg');
+}
+
+@utility tw-shared-icon-pin-fact-oecm {
+  @apply
+  tw-shared-icon-base
+  w-7.25
+  h-9.5;
+
+  background-image: url('../../assets/icons/pin-fact-oecm.svg');
+}
+
+@utility tw-shared-icon-pin-map {
+  @apply 
+  tw-shared-icon-base 
+  w-3.5 
+  h-8;
+
+  background-image: url('../../assets/icons/pin.svg');
+}
+
+@utility tw-shared-icon-plus-mapbox {
+  background-image: url('../../assets/icons/plus.svg');
+}

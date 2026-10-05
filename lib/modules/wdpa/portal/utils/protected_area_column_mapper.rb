@@ -62,6 +62,16 @@ module Wdpa
           'oecm_asmt' => { name: 'oecm_assessment', type: :string, for_create: true }
         }.freeze
 
+        # Batch cursor for Adapters::ProtectedAreas: the portal's wdpas PK, not
+        # the natural key — site_pid is nullable upstream, and a NULL in the
+        # cursor makes the row comparison NULL, silently dropping the rest of
+        # that site.
+        KEY_COLUMNS = %w[wdpa_pk].freeze
+
+        # View columns that exist for the import machinery, not for PP: the
+        # batch cursor above, and ogc_fid for GDAL's FID.
+        PORTAL_PROTECTED_AREA_IGNORED_COLUMNS = (KEY_COLUMNS + %w[ogc_fid]).freeze
+
         # Column names to strip before insert (for_create: false). Used by Relation#remove_fields.
         def self.columns_not_for_create
           PORTAL_TO_PP_MAPPING.values
@@ -78,6 +88,14 @@ module Wdpa
         # Maps portal attributes to ProtectedAreaParcel attributes (non-spatial data only)
         def self.map_portal_to_pp_protected_area_parcel(portal_attributes)
           map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Relation::ProtectedAreaParcel)
+        end
+
+        # Portal view columns holding geometry. The attribute import discards
+        # them (GeometryImporter does that work set-based, in SQL), so readers
+        # leave them out of the SELECT rather than hauling every polygon into
+        # Ruby to drop it.
+        def self.geometry_portal_columns
+          PORTAL_TO_PP_MAPPING.select { |_portal_key, mapping| mapping[:type] == :geometry }.keys
         end
 
         # Common logic for mapping portal attributes with different relation classes
@@ -113,6 +131,8 @@ module Wdpa
                 attributes['is_oecm'] = Wdpa::Shared::TypeConverter.convert(value, as: :oecm_string)
               end
             else
+              next if PORTAL_PROTECTED_AREA_IGNORED_COLUMNS.include?(portal_key)
+
               # Log unmapped columns for debugging
               Rails.logger.debug "Unmapped portal column: #{portal_key} (value: #{value})"
             end

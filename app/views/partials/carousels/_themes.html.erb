@@ -1,15 +1,9 @@
 <% get_all_theme_cards %>
-
-<h2 class="text-center"><%= @items[:title] %></h2>
-
-<flickity 
-  class="flickity--themes"
-  :options="<%= get_config_carousel_themes %>"
-  ref="flickity"
->
-  <% @items[:cards].each do |slide| %>
-    <div class="carousel-cell">
-      <%= render partial: 'partials/sub_partials/themes', locals: { theme: slide } %>
-    </div>
-  <% end %>
-</flickity>
+<div class="vw-partials-carousels-themes">
+  <h2 class="vw-partials-carousels-themes__title">
+    <%= @items[:title] %>
+  </h2>
+  <div class="vw-partials-carousels-themes__carousels">
+    <%= turbo_mount "CarouselThemes", props: theme_cards_vue_props(@items) %>
+  </div>
+</div>

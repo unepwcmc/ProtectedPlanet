@@ -1,9 +1,21 @@
 ---
 :concurrency: 5
 production:
-  :concurrency: 25
+  :concurrency: 20
 staging:
-  :concurrency: 25
+  :concurrency: 20
 :queues:
   - default
+:capsules:
+  :pdf:
+    :queues:
+      - pdf
+    # Each job drives one page in the shared Chrome (docker/scripts/pdf-chrome),
+    # which costs ~90MB on top of that browser's fixed footprint - so this is a
+    # cap on concurrent *pages*, not concurrent browsers. Kept low all the same:
+    # the map renders through software WebGL, so past a couple of jobs the box
+    # runs out of CPU long before it runs out of memory and everything just gets
+    # slower together.
+    # Also make sure pdf generation is not making heavy traffic
+    :concurrency: 5
 

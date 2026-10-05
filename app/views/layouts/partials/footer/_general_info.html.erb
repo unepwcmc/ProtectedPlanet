@@ -1,0 +1,8 @@
+<div class="vw-partials-footer__col">
+  <h3 class="vw-partials-footer__title">
+    <%= t('global.footer.general-info') %>
+  </h3>
+  <% links.each do |link| %>
+    <%= link_to link[:title], link[:url], title: t('global.links.visit', link: link[:title]), class: 'vw-partials-footer__link' %>
+  <% end %>
+</div>

@@ -1,0 +1,11 @@
+@utility tw-shared-image-placeholder {
+  @apply 
+  flex 
+  items-center 
+  justify-center 
+  w-full
+  bg-theme-grey-light
+  bg-center
+  bg-cover
+  h-66.25;
+}

@@ -1,0 +1,22 @@
+.vw-country {
+  @apply tw-shared-region-country-site__wrapper;
+}
+
+.vw-country__container {
+  @apply tw-shared-region-country-site__container;
+}
+
+.vw-country__overview {
+  @apply tw-shared-region-country-site__overview;
+}
+
+.vw-country__restricted-message {
+  @apply 
+  bg-theme-grey-light
+  p-5
+  md:p-6.25;
+}
+
+.vw-country__restricted-message-text {
+  @apply tw-shared-font-hind-siliguri__leading-1-6-light-sm-grey-black;
+}

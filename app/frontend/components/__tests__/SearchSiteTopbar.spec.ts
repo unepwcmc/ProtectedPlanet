@@ -13,8 +13,8 @@ describe('SearchSiteTopbar', () => {
       props: { endpoint: '/en/search?search_term=', placeholder: 'Search the site' }
     })
 
-    expect(wrapper.find('.search__input').attributes('placeholder')).toBe('Search the site')
-    expect(wrapper.find('.search__trigger').exists()).toBe(true)
+    expect(wrapper.find('.ct-search__input').attributes('placeholder')).toBe('Search the site')
+    expect(wrapper.find('.ct-search__trigger').exists()).toBe(true)
   })
 
   it('navigates to endpoint + search term on submit', async () => {
@@ -22,8 +22,8 @@ describe('SearchSiteTopbar', () => {
       props: { endpoint: '/en/search?search_term=', placeholder: 'Search the site' }
     })
 
-    await wrapper.find('.search__input').setValue('marine protected areas')
-    await wrapper.find('.search__input').trigger('keyup.enter')
+    await wrapper.find('.ct-search__input').setValue('marine protected areas')
+    await wrapper.find('.ct-search__input').trigger('keyup.enter')
 
     expect(window.location.href).toBe('/en/search?search_term=marine protected areas')
   })

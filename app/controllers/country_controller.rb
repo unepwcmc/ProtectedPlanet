@@ -1,54 +1,21 @@
 # frozen_string_literal: true
 
 class CountryController < ApplicationController
-  after_action :enable_caching
   before_action :load_essential_vars
-  before_action :build_stats, only: :show
-  before_action :calculate_national_designations_counts, only: :show
-
+  before_action :build_stats, only: %i[show]
+  before_action :calculate_national_designations_counts, only: %i[show]
+  after_action :enable_caching
+  
   include MapHelper
   include CountriesHelper
 
   TABS_KEYS = %i[coverage message iucn governance sources designations growth sites].freeze
 
   def show
-    # Components above tabs
-    @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', @country.iso_3)
-
-    @flag_path = flag_path(@country.name)
-
-    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
-    @total_pame = @country
-      .protected_areas
-      .pas_with_pame_on_self_only
-      .joins(pame_evaluations: :countries)
-      .where(countries: { id: @country.id })
-      .distinct
-      .count
-    @total_wdpa = @country.protected_areas.wdpas.count
-
-    @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: all_services_for_point_query
-    }
-
-    @map_options = {
-      map: { boundsUrl: @country.extent_url }
-    }
-
-    helpers.opengraph_title_and_description_with_suffix(@country.name)
+    load_show_data
 
     respond_to do |format|
       format.html
-      format.pdf do
-        rasterizer_name = Rails.env.development? ? 'rasterize_dev_mode.js' : 'rasterize.js'
-        rasterizer = Rails.root.join('vendor/assets/javascripts', rasterizer_name)
-        url = url_for(action: :pdf, iso: @country.iso)
-        dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
-
-        `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
-        send_file dest_pdf, type: 'application/pdf'
-      end
     end
   end
 
@@ -78,15 +45,47 @@ class CountryController < ApplicationController
     @total_oecm = cached[:total_oecm]
   end
 
-  def pdf
-    @for_pdf = true
-  end
-
   def protected_areas
     redirect_to search_path(main: 'country', country: @country.id)
   end
 
   private
+
+  # Shared by :show and :pdf, which render the same template.
+  def load_show_data
+    # Components above tabs
+    @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', @country.iso_3)
+
+    @flag_path = helpers.flag_url(@country.iso_3)
+
+    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
+    @total_pame = @country
+      .protected_areas
+      .pas_with_pame_on_self_only
+      .joins(pame_evaluations: :countries)
+      .where(countries: { id: @country.id })
+      .distinct
+      .count
+    @total_wdpa = @country.protected_areas.wdpas.count
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: all_services_for_point_query,
+      title: map_yml[:title],
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
+    }
+
+    @map_options = {
+      map: { boundsUrl: @country.extent_url }
+    }
+
+    meta_description = t('meta.country.description', name: @country.name)
+
+    helpers.opengraph_title_and_description_with_suffix(@country.name)
+    set_page_meta(title: @country.name, description: meta_description)
+    @structured_data = structured_data_presenter.country(@country, description: meta_description)
+  end
 
   def calculate_national_designations_counts
     # ['National'] -> all avaliable juriidctions are in /app/presenters/designations_presenter.rb
@@ -133,23 +132,5 @@ class CountryController < ApplicationController
 
     @country_presenter = CountryPresenter.new(@country)
     @tab_presenter = TabPresenter.new(@country)
-  end
-
-  def flag_path(country_name)
-    character_replacements = {
-      ' ' => '-',
-      ',' => ''
-    }
-
-    path_string = country_name.downcase
-    character_replacements.each { |key, val| path_string.gsub!(key, val) }
-
-    ActionController::Base.helpers.image_url("flags/#{path_string}.svg")
-  rescue Sprockets::Rails::Helper::AssetNotFound
-    # Not every country has a flag asset -- a newly added or renamed one will not
-    # until someone adds the SVG. Returning nil degrades to the no-flag layout the
-    # views already handle (`if local_assigns[:flag]`) rather than 500ing the whole
-    # country page. Before load_defaults 6.0 this silently produced a broken path.
-    nil
   end
 end

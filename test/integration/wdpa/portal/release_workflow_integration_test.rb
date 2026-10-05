@@ -2,13 +2,16 @@ require 'test_helper'
 
 class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::IntegrationTest
   def setup
-    # Ensure staging tables exist; importer will ensure required views itself
+    # VACUUM cannot run inside a transaction, and this test runs in one. The release
+    # itself never does -- it is a rake task -- so the vacuum is the one step of
+    # cleanup that can only be exercised outside the suite.
+    Wdpa::Portal::Services::Core::TableCleanupService.any_instance.stubs(:perform_vacuum_operations)
+
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
   end
 
   def teardown
-    # Drop staging tables and any backup/live tables created during swap
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
 
     # Drop all portal-related materialized views (live, staging, backups)
@@ -16,19 +19,24 @@ class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::Integration
   end
 
   test 'runs full portal release workflow from import to swap and cleanup' do
-    # This end-to-end workflow requires the Portal FDW schema and tables (portal_fdw.*)
-    # to be present in the test database. If they are not available, skip gracefully.
-    fdw_check = ActiveRecord::Base.connection.execute(
-      "SELECT to_regclass('portal_fdw.wdpa_iso3') AS exists"
-    ).first
+    # portal_fdw is a foreign schema in real environments; the fixture recreates it
+    # as local tables with one seeded protected area. See test/support/portal_fdw/.
+    load_portal_fdw_fixture
 
-    skip 'Portal FDW schema/tables not available in test DB; full release workflow cannot be exercised here' if fdw_check['exists'].nil?
+    # The importer matches portal rows to countries by ISO3; with none loaded every
+    # row is dropped and staging_protected_areas comes out empty.
+    seed_reference_data
 
-    # 1. Run the high-level portal importer into staging + live helper tables
-    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, sample: nil)
+    # 1. Run the high-level portal importer into staging + live helper tables.
+    # Give it a release to hang its checkpoints off, as a real release does: without
+    # one they fall back to a shared tmp file, where offsets left by a previous run
+    # make the import skip every row.
+    release = Release.create!(label: 'Jan2026')
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, sample: nil, release_id: release.id)
 
     assert result[:success], "Portal import failed: #{Array(result[:hard_errors]).join(', ')}"
-    assert result[:protected_areas][:success], 'Protected areas staging import should succeed'
+    # The protected areas importer reports hard_errors rather than a :success flag.
+    assert_empty Array(result[:protected_areas][:hard_errors]), 'Protected areas staging import should succeed'
     assert result[:sources][:success], 'Sources staging import should succeed'
 
     # Basic sanity check that staging tables now contain data
@@ -52,48 +60,6 @@ class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::Integration
   end
 
   private
-
-  def create_test_portal_staging_views
-    polygons_view = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:polygons]
-    points_view   = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:points]
-    sources_view  = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:sources]
-
-    ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{polygons_view} AS
-      SELECT
-        1 as site_id,
-        '1' as site_pid,
-        'Test Polygon PA' as name,
-        'Designated' as status,
-        'Ia' as iucn_cat,
-        ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
-      UNION ALL
-      SELECT
-        2 as site_id,
-        '2' as site_pid,
-        'Test Polygon PA 2' as name,
-        'Designated' as status,
-        'II' as iucn_cat,
-        ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry;
-
-      CREATE MATERIALIZED VIEW #{points_view} AS
-      SELECT
-        3 as site_id,
-        '3' as site_pid,
-        'Test Point PA' as name,
-        'Designated' as status,
-        'III' as iucn_cat,
-        ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry;
-
-      CREATE MATERIALIZED VIEW #{sources_view} AS
-      SELECT
-        1 as id,
-        'Test Source' as title,
-        'Test Description' as description,
-        2024 as year,
-        'en' as language;
-    SQL
-  end
 
   def drop_all_portal_materialized_views
     conn = ActiveRecord::Base.connection

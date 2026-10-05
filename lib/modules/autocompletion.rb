@@ -39,6 +39,10 @@ module Autocompletion
       {
         id: identifier,
         is_pa: result.is_a?(ProtectedArea),
+        # Only a ProtectedArea has a site_pid (region/country results don't) —
+        # threaded through so the map's "jump to result" popup can show the
+        # same attributes as the click-to-query popup (useMapPopups.ts).
+        site_pid: result.is_a?(ProtectedArea) ? result.site_pid : nil,
         extent_url: extent_url,
         title: name,
         url: url

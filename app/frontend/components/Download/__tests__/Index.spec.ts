@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import Download from '@/components/Download/Index.vue'
-import { useDownloadStore } from '@/stores/useDownloadStore'
+import { useDownloads, resetDownloads } from '@/composables/useDownloads'
 import type { DownloadOption } from '@/types/backend'
 
 const textCommercial = {
@@ -35,16 +34,18 @@ function mountDownload(options: DownloadOption[] = [csvOption]) {
 }
 
 beforeEach(() => {
-  setActivePinia(createPinia())
+  localStorage.clear()
+  sessionStorage.clear()
+  resetDownloads()
 })
 
 describe('Download', () => {
   it('toggles the option popup on trigger click, unless disabled', async () => {
     const wrapper = mountDownload()
 
-    expect(wrapper.find('.download__target').classes()).not.toContain('active')
-    await wrapper.find('.download__trigger').trigger('click')
-    expect(wrapper.find('.download__target').classes()).toContain('active')
+    expect(wrapper.find('.ct-download-popup').exists()).toBe(false)
+    await wrapper.find('.ct-download__trigger').trigger('click')
+    expect(wrapper.find('.ct-download-popup').exists()).toBe(true)
   })
 
   it('does not open when downloadDisabled is true', async () => {
@@ -52,55 +53,55 @@ describe('Download', () => {
       props: { buttonText: 'Download', options: [csvOption], textCommercial, gaId: 'test', downloadDisabled: true }
     })
 
-    expect(wrapper.find('.download__trigger').attributes('disabled')).toBeDefined()
-    await wrapper.find('.download__trigger').trigger('click')
-    expect(wrapper.find('.download__target').classes()).not.toContain('active')
+    expect(wrapper.find('.ct-download__trigger').attributes('disabled')).toBeDefined()
+    await wrapper.find('.ct-download__trigger').trigger('click')
+    expect(wrapper.find('.ct-download-popup').exists()).toBe(false)
   })
 
   it('opens the commercial modal for a commercial-available option instead of downloading immediately', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const wrapper = mountDownload()
 
-    await wrapper.find('.download__trigger').trigger('click')
-    await wrapper.find('.popup__link').trigger('click')
+    await wrapper.find('.ct-download__trigger').trigger('click')
+    await wrapper.find('.ct-download-popup__link').trigger('click')
 
-    expect(wrapper.find('.modal--download-commercial').classes()).toContain('active')
+    expect(wrapper.find('.ct-download-commercial').exists()).toBe(true)
     expect(store.downloadItems).toEqual([])
   })
 
   it('adds a download item immediately for a non-commercial option', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const nonCommercial = { ...csvOption, commercialAvailable: false }
     const wrapper = mountDownload([nonCommercial])
 
-    await wrapper.find('.download__trigger').trigger('click')
-    await wrapper.find('.popup__link').trigger('click')
+    await wrapper.find('.ct-download__trigger').trigger('click')
+    await wrapper.find('.ct-download-popup__link').trigger('click')
 
     expect(store.downloadItems).toHaveLength(1)
     expect(store.downloadItems[0]).toMatchObject({ domain: 'protected_area', format: 'csv', token: 'abc' })
   })
 
   it('adds the item once the commercial modal is dismissed non-commercially', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     const wrapper = mountDownload()
 
-    await wrapper.find('.download__trigger').trigger('click')
-    await wrapper.find('.popup__link').trigger('click')
-    await wrapper.find('.modal__link-button').trigger('click')
+    await wrapper.find('.ct-download__trigger').trigger('click')
+    await wrapper.find('.ct-download-popup__link').trigger('click')
+    await wrapper.find('.ct-download-commercial__link-button').trigger('click')
 
     expect(store.downloadItems).toHaveLength(1)
-    expect(wrapper.find('.modal--download-commercial').classes()).not.toContain('active')
+    expect(wrapper.find('.ct-download-commercial').exists()).toBe(false)
   })
 
   it('attaches the store\'s search filters/term for a "search" domain option', async () => {
-    const store = useDownloadStore()
+    const store = useDownloads()
     store.updateSearchFilters([{ key: 'iucn_category', value: 'Ia' }])
     store.updateSearchTerm('coral reef')
     const wrapper = mountDownload([searchOption])
 
-    await wrapper.find('.download__trigger').trigger('click')
-    await wrapper.find('.popup__link').trigger('click')
-    await wrapper.find('.modal__link-button').trigger('click')
+    await wrapper.find('.ct-download__trigger').trigger('click')
+    await wrapper.find('.ct-download-popup__link').trigger('click')
+    await wrapper.find('.ct-download-commercial__link-button').trigger('click')
 
     expect(store.downloadItems[0]).toMatchObject({
       filters: [{ key: 'iucn_category', value: 'Ia' }],

@@ -5,10 +5,6 @@ class CountryStatistic < ApplicationRecord
     marine_area + overseas_total_marine_area
   end
 
-  def total_protected_marine_area
-    pa_marine_area + overseas_total_protected_marine_area
-  end
-
   def total_area
     land_area + marine_area
   end

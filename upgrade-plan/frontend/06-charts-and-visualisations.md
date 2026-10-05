@@ -14,6 +14,8 @@
 
 All charts render under Vue 3. amCharts upgraded. Country/region/marine stats match current production visuals.
 
+**Status (Jul 2026):** `ChartRowPa`/`ChartRowStacked`/`AmChartPie`/`AmChartMultiline` are all live Vue3/TS islands (`RegionCountryPages`, marine ocean-coverage + coverage-growth charts, Green List tab) — see the [README Wave 8 note](./README.md). **amCharts is still v4** — the two amCharts SFCs were ported to `<script setup lang="ts">` (template refs instead of global DOM ids, `onUnmounted` disposal) without touching the library itself; the v5 migration below remains a separate, not-yet-started follow-up.
+
 ---
 
 ## Current stack

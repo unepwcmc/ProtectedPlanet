@@ -1,5 +1,6 @@
 class Search::BaseSerializer
-  include Routeable
+  # *_path helpers only -- no :host needed, so no default_url_options here.
+  include Rails.application.routes.url_helpers
 
   def initialize(search, opts={})
     unless search.is_a?(Search)
@@ -48,7 +49,7 @@ class Search::BaseSerializer
 
   def image(obj)
     if obj.is_a?(ProtectedArea)
-      ApplicationController.helpers.protected_area_cover(obj, with_tag: false)
+      ApplicationController.helpers.protected_area_cover(obj)
     elsif obj.is_a?(Comfy::Cms::SearchablePage)
       obj.image
     else

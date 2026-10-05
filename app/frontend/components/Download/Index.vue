@@ -1,27 +1,26 @@
 <template>
   <div class="ct-download">
     <button
-      class="download__trigger"
-      :class="{ 'button--disabled': downloadDisabled }"
+      class="ct-download__trigger"
+      :class="{
+        'ct-download__trigger--disabled': downloadDisabled
+      }"
       :disabled="downloadDisabled"
       @click="toggleDownloadPane"
     >
       <span
-        class="download__trigger-text"
+        class="ct-download__trigger-text"
         v-text="buttonText"
       />
+      <IconDownload class="ct-download__trigger-icon" />
     </button>
-    <div
-      class="download__target"
-      :class="{ active: showPopup }"
-    >
-      <DownloadPopup
-        :options="options"
-        @select="clickDownloadOption"
-      />
-    </div>
+    <DownloadPopup
+      v-if="isPopupVisible"
+      :options
+      @select="clickDownloadOption"
+    />
     <DownloadCommercial
-      :isActive="showCommercialModal"
+      v-if="isCommercialModalVisible"
       :text="textCommercial"
       @close="closeCommercialModal"
       @nonCommercial="clickNonCommercial"
@@ -33,8 +32,9 @@
 import { ref } from 'vue'
 import DownloadCommercial from '@/components/Download/Commercial.vue'
 import DownloadPopup from '@/components/Download/Popup.vue'
-import { trackEvent } from '@/lib/analytics'
-import { useDownloadStore, type DownloadItemParams } from '@/stores/useDownloadStore'
+import IconDownload from '@/components/Icon/Download.vue'
+import useAnalytics from '@/composables/useAnalytics'
+import { useDownloads } from '@/composables/useDownloads'
 import type { DownloadOption, DownloadProps } from '@/types/backend'
 
 type Download = DownloadProps
@@ -42,27 +42,35 @@ const props = withDefaults(defineProps<Download>(), {
   downloadDisabled: false
 })
 
-const downloadStore = useDownloadStore()
+const isPopupVisible = ref(false)
+function toggleDownloadPane() {
+  if (props.downloadDisabled) return
+  isPopupVisible.value = !isPopupVisible.value
+}
 
+const isCommercialModalVisible = ref(false)
+function closeCommercialModal() {
+  isCommercialModalVisible.value = false
+}
+
+const { trackEvent } = useAnalytics()
+const downloads = useDownloads()
 const selectedDownloadOption = ref<DownloadOption | null>(null)
-const showCommercialModal = ref(false)
-const showPopup = ref(false)
-
 function addNewDownloadItem() {
   const params = selectedDownloadOption.value?.params
   if (!params) return
 
-  const item: DownloadItemParams = { ...params, id: Math.round(Math.random() * 100000) }
-  downloadStore.addNewDownloadItem(item)
+  // The store owns the id, the timestamps and — for the 'search' domain — the
+  // search state the download has to carry.
+  downloads.addNewDownloadItem(params)
   selectedDownloadOption.value = null
 }
-
 function clickDownloadOption(option: DownloadOption) {
-  showPopup.value = false
+  isPopupVisible.value = false
   selectedDownloadOption.value = option
 
   if (option.commercialAvailable) {
-    showCommercialModal.value = true
+    isCommercialModalVisible.value = true
   }
   else {
     addNewDownloadItem()
@@ -72,30 +80,39 @@ function clickDownloadOption(option: DownloadOption) {
     trackEvent('download_request', { label: `${props.gaId} request - ${option.title}` })
   }
 }
-
 function clickNonCommercial() {
-  const option = selectedDownloadOption.value
-  if (option?.params?.domain === 'search') {
-    selectedDownloadOption.value = {
-      ...option,
-      params: {
-        ...option.params,
-        filters: downloadStore.searchFilters,
-        search: downloadStore.searchTerm
-      }
-    }
-  }
-
   closeCommercialModal()
   addNewDownloadItem()
 }
-
-function closeCommercialModal() {
-  showCommercialModal.value = false
-}
-
-function toggleDownloadPane() {
-  if (props.downloadDisabled) return
-  showPopup.value = !showPopup.value
-}
 </script>
+
+<style scoped lang="css">
+@reference "#importtailwindcss";
+
+.ct-download {
+  @apply relative;
+}
+
+.ct-download__trigger {
+  @apply
+  shrink-0
+  tw-shared-button--download;
+}
+
+.ct-download__trigger--disabled {
+  @apply tw-shared-button--disabled;
+}
+
+.ct-download__trigger-text {
+  @apply
+  hidden
+  md:inline;
+}
+
+.ct-download__trigger-icon {
+  @apply
+  shrink-0
+  w-5
+  h-4.75;
+}
+</style>

@@ -43,7 +43,7 @@ module Wdpa
               ON cpas.protected_area_id = pas.id
               AND cpas.country_id = #{country_id}
           SQL
-          result = ActiveRecord::Base.connection.select_all(statics_query).first
+          result = ActiveRecord::Base.lease_connection.select_all(statics_query).first
 
           # Ensure all counts are integers (not nil)
           result.transform_values { |v| v.nil? ? 0 : v.to_i }

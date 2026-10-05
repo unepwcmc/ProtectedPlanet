@@ -1,7 +1,8 @@
 # Coverage — opt-in via COVERAGE=1 so local `rake test` stays fast; CI sets it.
 # Must start before any application code is required. The floor is a ratchet:
 # CI fails if line coverage drops below it. Raise it as coverage improves;
-# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026).
+# never lower it. Baseline was 54.6% on Rails 6.1 (Jul 2026); ratcheted to 62 on
+# Rails 8 (Aug 2026, ~64.4% actual after the spatial/relation test net).
 if ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start 'rails' do
@@ -10,7 +11,7 @@ if ENV['COVERAGE']
     add_group 'Presenters', 'app/presenters'
     add_group 'Workers', 'app/workers'
     add_group 'lib/modules', 'lib/modules'
-    minimum_coverage 54
+    minimum_coverage 62
   end
 end
 
@@ -23,24 +24,18 @@ ActiveRecord::Migration.maintain_test_schema!
 require 'mocha/minitest'
 require 'webmock/minitest'
 
-require 'database_cleaner'
-
-# factory_girl was renamed factory_bot (and 4.x doesn't run on Ruby 3.2+).
-# Alias the old constant so the ~400 existing FactoryGirl.* call sites keep
-# working without a mass rename. (Factory *definitions* were converted from
-# static to block attributes, as factory_bot 5+ requires.)
-FactoryGirl = FactoryBot
-
 WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
+
+# No test may announce itself in Slack. The release notifier posts to this webhook
+# the moment it takes the release lock, and the dev container has a real one set, so
+# any test that turns WebMock off (the ES ones must) would post to the team channel.
+ENV.delete('PP_SLACK_WEBHOOK_URL')
 
 Mocha.configure do |c|
   c.stubbing_non_existent_method = :prevent
-end
-
-class ActionMailer::TestCase
-  def html_body mail
-    mail.body.parts.find{ |p| p.content_type.match(/html/) }.body.raw_source
-  end
+  # Ruby 3 distinguishes positional hashes from keyword arguments; enforce the same in
+  # Mocha's #with matching so expectations can't silently mismatch the real call.
+  c.strict_keyword_argument_matching = true
 end
 
 module Minitest::Assertions
@@ -52,10 +47,6 @@ end
 
 class ActionDispatch::IntegrationTest
 
-  # Make the Capybara DSL available in all integration tests
-  include Capybara::DSL
-  Capybara.app = Rails.application
-
   def teardown
 
   end
@@ -66,14 +57,6 @@ class ActionController::TestCase
 end
 
 class ActiveSupport::TestCase
-  # No test should hit real S3. Building a download filename resolves the current
-  # WDPA release via Wdpa::S3.current_wdpa_identifier, which lists the import
-  # bucket over the network. Stub it globally; a test needing a specific label
-  # (or to exercise that method) can re-stub in its own setup.
-  setup do
-    Wdpa::S3.stubs(:current_wdpa_identifier).returns('WDPA_Jan2024')
-  end
-
   # The home page renders GlobalStatistic coverage percentages (HomePresenter
   # calls .round on them). The singleton row exists but its columns are nil until
   # seeded; in production they are always populated.
@@ -86,30 +69,87 @@ class ActiveSupport::TestCase
     )
   end
 
+  # Runs a block that reaps a real child process (Process.wait, or a real
+  # `system` call) without leaving its exit status in `$?` for the rest of the
+  # suite.
+  #
+  # `$?` is thread-local and starts out nil, so a test that genuinely waits on
+  # a child leaves a status behind that the NEXT test inherits. Code that reads
+  # `$?` after a stubbed `system` -- which never sets it -- then silently sees
+  # the previous test's exit code instead of nil. Confining the real process
+  # work to its own thread keeps `$?` where it belongs. Thread#value re-raises
+  # in the caller, so assert_raises still works across the boundary.
+  def without_leaking_child_status
+    Thread.new do
+      Thread.current.report_on_exception = false
+      yield
+    end.value
+  end
+
+  # ES indices outlive a test run: one a crashed run left behind makes create
+  # fail with resource_already_exists. Always start from a clean index.
+  def fresh_search_index index_name, collection
+    index = Search::Index.new index_name, collection
+    index.delete
+    index.create
+    index
+  end
+
+  # The portal importer resolves each row's country by ISO3 and drops the ones it
+  # cannot match, so a run against an empty countries table imports nothing at all.
+  # Loads the same CSVs db/seeds.rb does, without the CMS content that follows them
+  # there. Tests are transactional, so the rows go away with the test.
+  # Loads the local stand-in for the portal FDW schema plus the minimal seed row
+  # (test/support/portal_fdw/). Both files are idempotent, and the load runs on the
+  # test's own connection inside its transaction, so it rolls back with the test.
+  #
+  # This replaces a `skip` that fired whenever portal_fdw was absent — which in CI
+  # was always, so the release pipeline had no executing integration coverage at
+  # all. A load failure now fails the test loudly instead of skipping it quietly.
+  def load_portal_fdw_fixture
+    conn = ActiveRecord::Base.lease_connection
+    dir = Rails.root.join('test', 'support', 'portal_fdw')
+    conn.execute(File.read(dir.join('schema.sql')))
+    conn.execute(File.read(dir.join('seed.sql')))
+  end
+
+  def seed_reference_data
+    [Jurisdiction, Governance, IucnCategory, Region, Country].each do |model|
+      next if model.exists?
+
+      source = Rails.root.join('lib', 'data', 'seeds', "#{model.to_s.pluralize.underscore}.csv")
+      CSV.foreach(source, headers: true) do |row|
+        attributes = row.to_hash
+        attributes['region_id'] = Region.find_by(name: attributes.delete('region'))&.id if model == Country
+        model.create!(attributes)
+      end
+    end
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms
-    @site = FactoryGirl.create(:cms_site)
-    @layout = FactoryGirl.create(:cms_layout, site: @site)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
+    @site = FactoryBot.create(:cms_site)
+    @layout = FactoryBot.create(:cms_layout, site: @site)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ABOUT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::NEWS_AND_STORIES)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::RESOURCES)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::MONTHLY_RELEASE_NEWS)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::PARENT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::PARENT)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::Data::WDPCA)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::LEGAL)
   end
 
   # and home page needs some extra cms bits
   def seed_cms_home
     seed_cms
     # we need to add extra pages for pa categories on the home page
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::MARINE)
+    FactoryBot.create(:cms_page, site: @site, layout: @layout, slug: PageSlugs::ThematicAreas::EFFECTIVENESS)
     # and the CTAs
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::API)
-    FactoryGirl.create(:cms_cta, css_class: PageSlugs::Cta::LIVE_REPORT)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::API)
+    FactoryBot.create(:cms_cta, css_class: PageSlugs::Cta::PROTECTED_PLANET_REPORT)
 
   end
 end
@@ -119,7 +159,6 @@ Sidekiq.configure_client do |config|
   config.logger.level = Logger::WARN
 end
 
-Bystander.enable_testing!
 
 def assert_greater(a, b)
     assert_operator a, :>, b

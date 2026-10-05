@@ -1,8 +1,5 @@
-secrets = Rails.application.secrets.mailer
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  # config.webpacker.check_yarn_integrity = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -21,19 +18,18 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # dalli 3.x removed :dalli_store; :mem_cache_store is the Rails built-in (dalli-backed).
-  config.cache_store = :mem_cache_store, Rails.application.secrets.memcache_servers, { value_max_bytes: 10_485_760 }
+  config.cache_store = :mem_cache_store, Rails.application.config_for(:app_secrets).memcache_servers, { value_max_bytes: 10_485_760 }
 
   # http://wcmc.io/heroku_memcached for reference
-  client = Dalli::Client.new(Rails.application.secrets.memcache_servers, {value_max_bytes: 10485760})
+  client = Dalli::Client.new(Rails.application.config_for(:app_secrets).memcache_servers, {value_max_bytes: 10485760})
   config.action_dispatch.rack_cache = {:metastore => client, :entitystore => client }
 
-  # Enable Rack::Cache to put a simple HTTP cache in front of your application
-  # Add `rack-cache` to your Gemfile before enabling this.
-  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
-  # config.action_dispatch.rack_cache = true
-
-  # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_files = false
+  # One flat hash covers all of public/, so this is the safe half: stable URLs
+  # revalidate, which is cheap because Rack::Files answers If-Modified-Since with a
+  # 304 itself. Middleware::CacheHeaders then grants a long TTL to the
+  # fingerprinted build output.
+  config.public_file_server.headers = { 'cache-control' => 'public, max-age=0, must-revalidate' }
+  config.middleware.insert_before ActionDispatch::Static, Middleware::CacheHeaders
 
   # Compress JavaScripts and CSS.
   # Terser rather than Uglifier: uglify-js is ES5-era and its Ruby wrapper is
@@ -76,10 +72,6 @@ Rails.application.configure do
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
   # config.assets.precompile += %w( search.js )
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
-
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
@@ -107,19 +99,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.asset_host = secrets[:asset_host]
-  config.action_mailer.default_url_options = { :host => secrets[:host] }
-  config.action_mailer.smtp_settings = {
-    :enable_starttls_auto => true,
-    :address => secrets[:address],
-    :port => 587,
-    :domain => secrets[:domain],
-    :authentication => :login,
-    :user_name => secrets[:username],
-    :password => secrets[:password]
-  }
 
   config.active_storage.service = :staging
 end

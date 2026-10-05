@@ -25,7 +25,7 @@ module Wdpa
               next if row[0].blank?
 
               iso = row[0].strip
-              country = Country.find_by_iso_3(iso)
+              country = Country.find_by(iso_3: iso)
 
               if country
                 country.update(is_biopama: true)

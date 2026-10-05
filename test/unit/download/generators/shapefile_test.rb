@@ -10,7 +10,6 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   # The generator now builds its column lists per call in .query_conditions, so
   # the stubs below do reach the SELECT list.
   setup do
-    Download::Config.stubs(:has_successful_portal_release?).returns(true)
     Download::Config.stubs(:current_label).returns('Jan2024')
     Download::Generators::Shapefile.any_instance.stubs(:export_sources).returns(true)
   end
@@ -31,9 +30,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   # shapefile README (each a separate `system` call, chained with `and`).
   def expect_merge_steps(gen, zip_file_path, piece_paths)
     gen.expects(:system).with("zip -j #{zip_file_path} #{piece_paths.join(' ')}").returns(true)
-    gen.expects(:system).with("zip -ru #{zip_file_path} #{SOURCES_FILE}", { chdir: '.' }).returns(true)
+    gen.expects(:system).with("zip -ru #{zip_file_path} #{SOURCES_FILE}", chdir: '.').returns(true)
     gen.expects(:system).with("zip -ru #{zip_file_path} *",
-      { chdir: Download::Generators::Base::ATTACHMENTS_PATH }).returns(true)
+      chdir: Download::Generators::Base::ATTACHMENTS_PATH).returns(true)
     gen.expects(:system).with(
       "zip -j #{zip_file_path} #{Download::Generators::Base::SHAPEFILE_README_PATH}"
     ).returns(true)

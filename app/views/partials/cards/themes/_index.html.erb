@@ -1,0 +1,6 @@
+<% case local_assigns[:card_set]
+   when :data_areas then get_data_areas
+   when :thematic then get_thematic_areas
+   else get_thematic_areas
+   end %>
+<%= turbo_mount "CardsThemes", props: theme_cards_vue_props(@items) %>

@@ -27,6 +27,6 @@ class SearchCmsController < ApplicationController
       :requested_page,
       :items_per_page,
       :search_index,
-      :filters)
+      filters: {})
   end
 end

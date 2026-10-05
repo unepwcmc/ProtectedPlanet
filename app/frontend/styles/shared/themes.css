@@ -1,0 +1,64 @@
+/* Chart colour classes. Every value lives in styles/tailwind.css's chart @theme
+   block — nothing here spells out a colour. The names come straight from Rails
+   helpers (`legend_colour_class`) and from the components' index-based lookup. */
+.tw-shared-chart-legend-colour-aqua {
+  @apply bg-theme-chart-aqua;
+}
+
+.tw-shared-chart-legend-colour-blue {
+  @apply bg-theme-chart-blue;
+}
+
+.tw-shared-chart-legend-colour-purple {
+  @apply bg-theme-chart-purple;
+}
+
+/* The 12-colour designation palette, indexed 1-12. Shared by ChartRowStacked's
+   per-bar colouring and StatsDesignations' legend swatches. */
+.tw-shared-chart-theme-1 {
+  @apply bg-theme-chart-1;
+}
+
+.tw-shared-chart-theme-2 {
+  @apply bg-theme-chart-2;
+}
+
+.tw-shared-chart-theme-3 {
+  @apply bg-theme-chart-3;
+}
+
+.tw-shared-chart-theme-4 {
+  @apply bg-theme-chart-4;
+}
+
+.tw-shared-chart-theme-5 {
+  @apply bg-theme-chart-5;
+}
+
+.tw-shared-chart-theme-6 {
+  @apply bg-theme-chart-6;
+}
+
+.tw-shared-chart-theme-7 {
+  @apply bg-theme-chart-7;
+}
+
+.tw-shared-chart-theme-8 {
+  @apply bg-theme-chart-8;
+}
+
+.tw-shared-chart-theme-9 {
+  @apply bg-theme-chart-9;
+}
+
+.tw-shared-chart-theme-10 {
+  @apply bg-theme-chart-10;
+}
+
+.tw-shared-chart-theme-11 {
+  @apply bg-theme-chart-11;
+}
+
+.tw-shared-chart-theme-12 {
+  @apply bg-theme-chart-12;
+}

@@ -25,30 +25,9 @@ class ProtectedAreaPresenter
 
   def external_links
     [
-      dopa_link,
       world_heritage_outlook_link,
       story_map_links
     ].compact.flatten
-  end
-
-  def name_size
-    {
-      name: protected_area.name,
-      site_id: protected_area.site_id,
-      km: protected_area.gis_marine_area.to_i
-    }
-  end
-
-  def marine_designation
-    size = protected_area.reported_area.to_f.round(2)
-    {
-      name: protected_area.name,
-      site_id: protected_area.site_id,
-      country: marine_designation_country,
-      iso: protected_area.countries.first.try(:iso_3),
-      size: "#{number_with_delimiter(size, delimiter: ',')}km²",
-      date: protected_area.legal_status_updated_at.year
-    }
   end
 
   def current_pa_and_parcels_attributes
@@ -175,7 +154,7 @@ class ProtectedAreaPresenter
 
   def green_list_logo(gl_status)
     logo = gl_status.to_s.downcase == 'candidate' ? 'green-list-black' : 'green-list'
-    ActionController::Base.helpers.image_url("logos/#{logo}.png")
+    ActionController::Base.helpers.image_url("logos/#{logo}.webp")
   end
 
   def parcc_info
@@ -184,7 +163,7 @@ class ProtectedAreaPresenter
     [{
       site_pid: protected_area.site_pid,
       affiliation: 'parcc_info',
-      image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+      image_url: ActionController::Base.helpers.image_url('logos/parcc.webp'),
       link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
       link_url: url_for_related_source('parcc_info', protected_area)
     }]
@@ -194,30 +173,6 @@ class ProtectedAreaPresenter
 
   def marine_designation_country
     protected_area.countries.first.try(:name) || 'Area Beyond National Jurisdiction'
-  end
-
-  # As of 07Apr2025 it doesn't seem to be used
-  def completeness_for(attributes)
-    attributes.map do |attribute|
-      standard_attr = standard_attributes[attribute[:field]]
-
-      {
-        label: standard_attr[:label],
-        complete: attribute[:assert].call(
-          protected_area, standard_attr[:name]
-        )
-      }
-    end
-  end
-
-  def dopa_link
-    return unless protected_area.is_dopa
-
-    {
-      link: url_for_related_source('dopa_info', protected_area),
-      text: I18n.t('stats.dopa.title'),
-      button_title: I18n.t('stats.dopa.button-title', name: protected_area.name)
-    }
   end
 
   def world_heritage_outlook_link
@@ -240,7 +195,7 @@ class ProtectedAreaPresenter
 
   def url_for_related_source(source, protected_area)
     File.join(
-      Rails.application.secrets.related_sources_base_urls[source.to_sym],
+      AppSecrets.related_sources_base_urls[source.to_sym],
       protected_area.site_id.to_s
     )
   end

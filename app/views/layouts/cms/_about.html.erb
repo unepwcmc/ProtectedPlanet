@@ -1,19 +1,15 @@
-<%= render partial: "layouts/partials/hero-small", locals: { 
-  classes: @cms_page.slug,
-  image: cms_fragment_render(:image, @cms_page),
-  title: @cms_page.label,  
-} %>
-
-<section class="container--medium spacer-small--top">
-  <%= cms_fragment_render("content") %>
-</section>
-
-<section class="spacer-small--top">
+<div class="vw-layouts-cms-about">
+  <%= render partial: "layouts/partials/hero/small", locals: { 
+    classes: @cms_page.slug,
+    image: cms_fragment_render(:image, @cms_page),
+    title: @cms_page.label,  
+  } %>
+  <div class="vw-layouts-cms-about__content">
+    <%= cms_fragment_render("content") %>
+  </div>
   <%= render "partials/carousels/themes" %>
-</section>
-
-<section class="container spacer-small--top">
-  <%= render "partials/cards/resources" %>
-</section>
-
-<%= render "partials/ctas/live-report" %>
+  <div class="vw-layouts-cms-about__container">
+    <%= render "partials/cards/resources" %>
+  </div>
+  <%= render "partials/ctas/protected-planet-report" %>
+</div>

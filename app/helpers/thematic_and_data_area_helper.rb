@@ -22,15 +22,12 @@ module ThematicAndDataAreaHelper
     tabs_list.count { |tab| tab[:title].present? } > 1
   end
 
-  # Props for `frontend_mount "Tabs"` — only valid when no tab has `tab_extras`
-  # (those embed legacy Vue2 widgets still bound to `#v-app`, see
-  # ThematicAndDataAreaHelper#thematic_and_data_area_tab_extras_config).
-  def thematic_and_data_area_vue_tabs(tabs_list)
+  def thematic_and_data_area_vue_tabs(tabs_list, tab_extras = nil)
     tabs_list.map do |tab|
       {
         id: tab[:id],
         title: tab[:title],
-        bodyHtml: content_tag(:section, cms_fragment_render(tab[:content_id]), class: "container--medium")
+        bodyHtml: render(partial: 'partials/thematic_and_data_area/panel_content', locals: { tab_extras: tab_extras, tab: tab })
       }
     end
   end
@@ -43,10 +40,11 @@ module ThematicAndDataAreaHelper
 
   def thematic_and_data_area_hero_locals(page = @cms_page)
     locals = {
-      classes: "#{page.slug} thematic-area",
       image: cms_fragment_render(:image, page),
       summary: cms_fragment_render('summary', page),
-      title: page.fragments.find_by(identifier: 'short_title')&.content.presence || page.label
+      title: page.fragments.find_by(identifier: 'short_title')&.content.presence || page.label,
+      items_centre: true,
+      limited_title_width: true
     }
 
     button_link = cms_fragment_render('button-link', page)

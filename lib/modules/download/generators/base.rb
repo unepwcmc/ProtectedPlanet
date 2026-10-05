@@ -27,7 +27,7 @@ class Download::Generators::Base
   # Drops all temporary download views created by generators
   # (views with names starting with "tmp_downloads_")
   def self.clean_tmp_download_views
-    conn = ActiveRecord::Base.connection
+    conn = ActiveRecord::Base.lease_connection
     sql = <<-SQL
       SELECT table_name
       FROM information_schema.views
@@ -89,9 +89,34 @@ class Download::Generators::Base
   end
 
   def zip
-    system("zip -j #{zip_path} #{path}")
-    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-    system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+    run_zip("-j #{zip_path} #{path}") && add_sources && add_attachments
+  end
+
+  # `zip` exits 12 ("nothing to do") when every file named on the command line is
+  # already in the archive, byte-identical -- which is exactly what a leftover
+  # archive from an earlier attempt in tmp/ looks like. That is not a failure,
+  # but `system` reports it as one: the download was then marked failed *and* the
+  # stale archive was left in place, so every retry failed again for the same
+  # reason and that identifier could never be downloaded again. Treat 12 as
+  # success; let genuine zip errors through.
+  ZIP_NOTHING_TO_DO = 12
+
+  # Reads `system`'s own return value for the success path and only consults
+  # `$?` for the exit code when it reports failure. Going straight to
+  # `$?.success?` crashed with NoMethodError on nil whenever `system` had not
+  # actually run in this thread -- `$?` is thread-local and starts out nil --
+  # which is every caller whose `system` is stubbed. `&.` covers the same nil
+  # on the failure path (and `system` returning nil for a command that could
+  # not be executed at all).
+  def run_zip(args, chdir: nil)
+    opts = chdir ? { chdir: chdir } : {}
+    return true if system("zip #{args}", **opts)
+
+    exitstatus = $?&.exitstatus
+    return true if exitstatus == ZIP_NOTHING_TO_DO
+
+    Rails.logger.error("zip #{args} failed with status #{exitstatus.inspect}")
+    false
   end
 
   def query(conditions = [])
@@ -244,15 +269,15 @@ class Download::Generators::Base
   end
 
   def add_sources
-    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+    run_zip("-ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
   end
 
   def add_attachments
-    system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+    run_zip("-ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
   def add_shapefile_readme
-    system("zip -j #{zip_path} #{SHAPEFILE_README_PATH}")
+    run_zip("-j #{zip_path} #{SHAPEFILE_README_PATH}")
   end
 
   def path_without_extension
@@ -261,6 +286,6 @@ class Download::Generators::Base
   end
 
   def db
-    ActiveRecord::Base.connection
+    ActiveRecord::Base.lease_connection
   end
 end

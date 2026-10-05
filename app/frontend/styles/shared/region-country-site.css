@@ -1,0 +1,22 @@
+@utility tw-shared-region-country-site__wrapper {
+  @apply 
+  tw-shared-bg--grey-xlight
+  pt-4
+  md:pt-6
+  lg:pt-9
+  pb-4
+  md:pb-6
+  lg:pb-9;
+}
+
+@utility tw-shared-region-country-site__container {
+  @apply 
+  tw-shared-base-container
+  tw-shared-base-flex-col-gap-6;
+}
+
+@utility tw-shared-region-country-site__overview {
+  @apply 
+  tw-shared-base-flex-col-gap-6
+  md:flex-row;
+}

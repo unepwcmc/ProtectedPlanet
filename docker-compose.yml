@@ -1,13 +1,22 @@
 services:
   # One-shot dependency installer. Runs bundle + yarn install ONCE into the shared
-  # bundler + node_modules volumes so web/webpacker/vite/sidekiq don't race each
+  # bundler + node_modules volumes so web/vite/sidekiq don't race each
   # other running install concurrently on a cold `docker compose up`. Every ruby
   # service waits on this (service_completed_successfully) then just starts its server.
   install:
     platform: linux/x86_64
     container_name: protectedplanet-install
     image: protectedplanet-app
-    command: /bin/bash -l -c "bundle install && yarn install --frozen-lockfile && bundle exec rails comfy:compile_assets"
+    # `puppeteer browsers install chrome` is explicit rather than left to
+    # puppeteer's postinstall. Yarn records that the postinstall has already run
+    # and never looks at whether the browser is still on disk, so a
+    # node_modules/.puppeteer-cache that has been deleted -- or left stale by a
+    # .puppeteerrc.cjs version bump -- is NOT restored by `yarn install`
+    # (measured: 4s, no download). The Dockerfile installs Chrome into the image,
+    # but the bind mount below shadows that copy, so the host cache is what
+    # sidekiq actually executes and it needs its own way back. Idempotent, ~2s
+    # once the cache is warm.
+    command: /bin/bash -l -c "bundle install && yarn install && ./node_modules/.bin/puppeteer browsers install chrome && bundle exec rails comfy:compile_assets"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
@@ -28,7 +37,7 @@ services:
   web:
     platform: linux/x86_64
     container_name: protectedplanet-web
-    # Sole builder of the shared app image. webpacker, sidekiq and vite all run
+    # Sole builder of the shared app image. sidekiq and vite all run
     # the same `protectedplanet-app` image (identical Dockerfile) — one build,
     # no per-service image drift.
     image: protectedplanet-app
@@ -49,14 +58,12 @@ services:
       - '.env'
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
-      - WEBPACKER_DEV_SERVER_HOST=webpacker
       # https://vite-ruby.netlify.app/guide/troubleshooting.html#making-hmr-work-in-docker-compose
       - VITE_RUBY_HOST=vite
-      # Constrain vite_ruby's on-demand autoBuild (esbuild + Tailwind oxide) so it
-      # doesn't OOM-kill this container under x86 emulation. Mirrors the vite service:
-      # GOMAXPROCS caps the Go native threads; max-old-space-size caps the Node heap.
-      - GOMAXPROCS=1
-      - NODE_OPTIONS=--max-old-space-size=2560
+      # Tests hit the db_test service; development uses `db`. Both are
+      # postgis/postgis:17-3.5, so they cannot drift from each other.
+      - TEST_POSTGRES_HOST=db_test
+      - PP_IMPORT_PROGRESS_INTERVAL=500
     depends_on:
       install:
         condition: service_completed_successfully
@@ -65,8 +72,6 @@ services:
       redis:
         condition: service_started
       elasticsearch:
-        condition: service_started
-      webpacker:
         condition: service_started
       vite:
         condition: service_started
@@ -81,16 +86,61 @@ services:
   db:
     platform: linux/x86_64
     container_name: protectedplanet-db
-    image: kartoza/postgis:11.5-2.5
+    # The official PostGIS image, which ships PostgreSQL 17.5 + PostGIS 3.5.2 -- staging's
+    # exact versions, and the same image CI uses. Was kartoza/postgis:11.5-2.5 (PG 11.7 /
+    # PostGIS 2.5.4) until the cluster in protectedplanet_pg_data was upgraded in place.
+    #
+    # kartoza was dropped rather than bumped: its `17-3.5` tag actually installs PostGIS
+    # 3.6.1, which put dev a minor *ahead* of staging, and it never forwards SIGTERM (so
+    # `docker compose stop db` left the cluster dirty every time), ignores the data
+    # directory's postgresql.conf in favour of one it generates into /settings, and defaults
+    # to 1GB WAL segments -- which is how the old data directory reached 57GB.
+    image: postgis/postgis:17-3.5
     ports:
       - "5441:5432"
     networks:
       - protectedplanet
     env_file:
       - '.env'
+    environment:
+      # postgis/postgis inherits `VOLUME /var/lib/postgresql/data` from the official postgres
+      # image, so docker mounts a throwaway anonymous volume over that path and shadows the
+      # named volume below. Left at the default, this service initdb's a blank database on
+      # every start and the real cluster is invisible. Point PGDATA one level up instead.
+      - PGDATA=/var/lib/postgresql/17/main
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # Postgres 17 + PostGIS 3.x for the test database. This existed because `db` was stuck
+  # on 11.7 / PostGIS 2.5.4 -- six majors behind staging -- which is why a green local test
+  # run proved nothing: the PG17 `date_part` -> `extract` rename broke country pages on
+  # staging while every local check passed.
+  #
+  # `db` is now on 17-3.5 as well, so this is no longer what puts tests on 17; it stays
+  # only to keep test data on its own server and volume, where a test run physically
+  # cannot touch development data. If that is not worth a second Postgres container on
+  # this VM, delete this service, drop the protectedplanet_pg_test_data volume and the
+  # TEST_POSTGRES_HOST env var above, and tests fall back to `db` via config/database.yml.
+  db_test:
+    platform: linux/x86_64
+    container_name: protectedplanet-db-test
+    # Same image as `db` and as CI, so the test database is not a different PostGIS from the
+    # one development runs on. Test data is disposable, so this one just initdb's fresh --
+    # no upgrade needed. `rake db:create db:migrate` builds the schema.
+    image: postgis/postgis:17-3.5
+    ports:
+      - "5442:5432"
+    networks:
+      - protectedplanet
+    env_file:
+      - '.env'
+    environment:
+      # Same PGDATA reason as `db` above.
+      - PGDATA=/var/lib/postgresql/17/main
+    volumes:
+      - protectedplanet_pg_test_data:/var/lib/postgresql
+      - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   redis:
     container_name: protectedplanet-redis
     image: redis
@@ -109,12 +159,33 @@ services:
       - .:/ProtectedPlanet
       - ./node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
-      # See ## Step 5: Set up Chromium Binary for more info
-      - ./chrome:/ProtectedPlanet/node_modules/puppeteer/.local-chromium/linux-809590/chrome-linux
     networks:
       - protectedplanet
     env_file:
       - '.env'
+    environment:
+      # Dev-only, much larger render budget than the production default. Here the
+      # page's whole module graph is compiled on demand by the Vite dev server and
+      # served through the same 5-thread Puma the renders come from, so two
+      # concurrent PDFs take minutes where production - serving precompiled
+      # assets - takes seconds. With the production default (90s) most of a
+      # concurrent burst failed on pages that render perfectly one at a time.
+      # The three waits are sequential (fetch the HTML, render it, print it) and
+      # PDF_RASTERIZE_TIMEOUT_SECONDS has to sit above their sum plus zip time, or
+      # it kills renders that were still working. A render that is going to succeed
+      # here takes 100-250s, so the ceiling only ever fires on a genuine wedge.
+      - PDF_NAVIGATION_TIMEOUT_MS=120000
+      - PDF_READY_TIMEOUT_MS=240000
+      - PDF_RASTERIZE_TIMEOUT_SECONDS=660
+      # Dev-only: keep Chrome's output out of the sidekiq log. Unset in
+      # deployment, where it goes to stdout so `kamal app logs` picks it up.
+      - PDF_CHROME_LOG=/tmp/pdf-chrome.log
+      # Dev-only: --enable-low-end-device-mode, which shrinks Chrome's tile and
+      # resource pools the way it does on a low-memory phone. This whole stack
+      # shares a 1.5GB / 3 CPU VM and needs it; it also throttles the map raster
+      # work the PDFs are made of, so deployment leaves it unset. See
+      # app/frontend/backend-scripts/chrome-args.js.
+      - PDF_LOW_END_DEVICE_MODE=1
     depends_on:
       install:
         condition: service_completed_successfully
@@ -122,6 +193,15 @@ services:
         condition: service_started
       redis:
         condition: service_started
+    # Chrome's children (crashpad handler, renderers) are re-parented to PID 1
+    # when a Chrome dies, and PID 1 here is Sidekiq, which never calls wait() on
+    # anything it did not spawn - so each Chrome restart leaves ~11 permanent
+    # <defunct> entries. Measured: a container running the pre-supervisor script
+    # for 19h had 27 zombies out of 32 processes. The supervisor restarts Chrome
+    # far more often (crash restarts plus a scheduled recycle every 6h), so the
+    # leak compounds. `init: true` puts tini at PID 1 to reap them; it forwards
+    # SIGTERM, so Sidekiq still shuts down gracefully.
+    init: true
     command: /bin/bash -l -c "bundle exec sidekiq"
     stdin_open: true
     tty: true
@@ -153,38 +233,14 @@ services:
       - "5601:5601"
     networks:
       - protectedplanet
-  webpacker:
-    platform: linux/x86_64
-    container_name: protectedplanet-webpacker
-    image: protectedplanet-app
-    # Deps installed by the `install` service (waited on below). Just clear stale
-    # packs/cache and start the dev server.
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
-    depends_on:
-      install:
-        condition: service_completed_successfully
-    volumes:
-      - .:/ProtectedPlanet
-      - ./node_modules:/ProtectedPlanet/node_modules
-      - protectedplanet_bundler:/usr/local/bundle
-    ports:
-      - "3035:3035"
-    env_file:
-      - '.env'
-    environment:
-      # Keep Webpacker 4 / webpack 4 alive on Node 24: webpack 4 uses md4, which
-      # OpenSSL 3 rejects (ERR_OSSL_EVP_UNSUPPORTED). Removed with Webpacker (D3).
-      - NODE_OPTIONS=--openssl-legacy-provider
-    networks:
-      - protectedplanet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-  # Removed only once Webpacker is gone — see upgrade-plan/frontend/15-docker-vite-dev.md.
   vite:
     platform: linux/x86_64
     container_name: protectedplanet-vite
     image: protectedplanet-app
     command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/vite"
+    # The script already supervises `vite dev`; this only covers the container
+    # itself dying (OOM kill, failed install), not a compile error.
+    restart: unless-stopped
     depends_on:
       install:
         condition: service_completed_successfully
@@ -197,11 +253,6 @@ services:
     env_file:
       - '.env'
     environment:
-      # esbuild (Go binary) crashes under heavy parallel load when the x86 image
-      # runs under Apple-Silicon emulation. Single-threading it keeps `vite build`
-      # stable. Harmless on native amd64 (dev builds are tiny). A faster alternative
-      # is enabling Rosetta in Docker Desktop.
-      - GOMAXPROCS=1
       - VITE_RUBY_HOST=0.0.0.0
     networks:
       - protectedplanet
@@ -213,7 +264,7 @@ services:
     build:
       context: ${API_PATH}
     # Remove this once api is using the ruby 4 version
-    command: /bin/bash -l -c " bundle i; bundle exec rackup --host 0.0.0.0"
+    # command: /bin/bash -l -c " bundle i; bundle exec rackup --host 0.0.0.0"
     volumes:
       # This should be removed once the api is using the latest gem versions branch is merged 
       - ${API_PATH}:/ProtectedPlanetApi
@@ -302,6 +353,7 @@ networks:
 
 volumes:
   protectedplanet_minio_data:
+  protectedplanet_pg_test_data:
   protectedplanet_pg_data:
   protectedplanet_redis_data:
   protectedplanet_es_data:

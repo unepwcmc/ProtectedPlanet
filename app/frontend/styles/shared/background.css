@@ -1,0 +1,66 @@
+@utility tw-shared-bg--primary {
+  @apply 
+  bg-theme-primary 
+  text-white;
+}
+
+@utility tw-shared-bg--grey-xlight {
+  @apply 
+  bg-theme-grey-xlight 
+  text-theme-grey-black;
+}
+
+@utility tw-shared-bg--grey-xdark {
+  @apply 
+  bg-theme-grey-xdark 
+  text-white;
+}
+
+@utility tw-shared-bg--grey-black {
+  @apply 
+  bg-theme-grey-black 
+  text-white;
+}
+
+@utility tw-shared-bg--white-border-grey {
+  @apply 
+  border-theme-grey
+  bg-white;
+}
+  
+
+@utility tw-shared-bg-center-no-repeat-cover {
+  @apply 
+  bg-center
+  bg-no-repeat
+  bg-cover;
+}
+
+@utility tw-shared-bg-center-no-repeat-contain {
+  @apply 
+  bg-center
+  bg-no-repeat
+  bg-contain;
+}
+
+@utility tw-shared-bg-image-overlay {
+  @apply
+  isolate
+  relative
+  before:content-['']
+  before:absolute
+  before:inset-0
+  before:z-[-1];
+}
+
+@utility tw-shared-bg-image-overlay--white {
+  @apply
+  tw-shared-bg-image-overlay
+  before:bg-white/80;
+}
+
+@utility tw-shared-bg-image-overlay--black {
+  @apply  
+  tw-shared-bg-image-overlay
+  before:bg-black/40;
+}

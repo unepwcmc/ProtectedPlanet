@@ -2,8 +2,8 @@ require 'test_helper'
 
 class TestSearch < ActiveSupport::TestCase
   test '#search queries ElasticSearch with the given term, and returns the matching models' do
-    protected_area = FactoryGirl.create(:protected_area)
-    country = FactoryGirl.create(:country)
+    protected_area = FactoryBot.create(:protected_area)
+    country = FactoryBot.create(:country)
 
     search_query = "manbone"
 
@@ -47,7 +47,7 @@ class TestSearch < ActiveSupport::TestCase
   end
 
   test '.aggregations returns all the aggregations' do
-    country = FactoryGirl.create(:country)
+    country = FactoryBot.create(:country)
     expected_aggregations = {
       'country' => {
         model: country.id,

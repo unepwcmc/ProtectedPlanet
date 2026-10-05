@@ -29,7 +29,7 @@ module PortalRelease
     private
 
     def count(table)
-      ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{table}").to_i
+      ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{table}").to_i
     end
   end
 end

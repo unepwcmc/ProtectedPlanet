@@ -1,11 +1,7 @@
-<% if local_assigns.fetch(:show_resources, true) %>
-  <section class="container spacer-small--top">
+<% if local_assigns.fetch(:show_resources, false) %>
+  <section class="vw-thematic-and-data-area-footer__resources">
     <%= render "partials/cards/resources" %>
   </section>
 <% end %>
-
-<section class="spacer-small--bottom">
-  <%= render "partials/carousels/themes" %>
-</section>
-
-<%= render "partials/ctas/live-report" %>
+<%= render "partials/carousels/themes" %>
+<%= render "partials/ctas/protected-planet-report" %>

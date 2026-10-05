@@ -1,12 +1,15 @@
-# ProtectedPlanet ↔ Portal FDW Integration (Production)
+# PP ↔ Data Management Portal FDW
 
-### If you do not know what is Data Managenet Portal please read
-- [Protected Planet WIKI](https://github.com/unepwcmc/protected-planet-wiki)
-- [Release Process (Sync Data Management Portal Data to Protected Planet)](docs/release/release_process.md)
+The Protected Planet database reads Portal tables (protected areas,
+effectiveness, green list) directly over **PostgreSQL Foreign Data Wrappers**.
+The release importers read materialized views built on top of those foreign
+tables — the view definitions are in [`FDW_VIEWS.sql`](../../FDW_VIEWS.sql).
 
-## Goal
-- Allow the PP database to read specific tables (i,e protected areas, Effectiveness, Greenlist) from the Portal database via PostgreSQL FDW.
+New to the Portal? Read the
+[Protected Planet WIKI](https://github.com/unepwcmc/protected-planet-wiki) and
+the [release process](../release/release_process.md).
 
 ## Setup
-- [For local development](local.md)
-- [For Production](prod.md)
+
+- [Local development](local.md) — macOS + Docker Desktop
+- [Production](prod.md)

@@ -1,11 +1,12 @@
 class HomeController < ApplicationController
+  after_action :enable_caching
   include MapHelper
 
   def index
     @config_search_areas = {
       id: 'all',
       placeholder: I18n.t('global.placeholder.search-wdpca')
-    }.to_json
+    }
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
@@ -15,13 +16,13 @@ class HomeController < ApplicationController
     @site_facts = home_presenter.fact_card_stats
     @update_date = home_presenter.update_date
 
-    @carousel_slides = HomeCarouselSlide.all.select { |slide| slide.published }
-
     @main_map = {
       overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'all',
-      point_query_services: all_services_for_point_query
+      point_query_services: all_services_for_point_query,
+      popup_attributes: map_yml[:popup_attributes],
+      disclaimer: map_yml[:disclaimer]
     }
   end
 

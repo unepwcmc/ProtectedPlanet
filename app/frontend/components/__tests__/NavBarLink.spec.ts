@@ -11,14 +11,14 @@ describe('NavBarLink', () => {
     expect(wrapper.text()).toBe('Home')
     expect(wrapper.attributes('href')).toBe('/en')
     expect(wrapper.attributes('id')).toBe('home')
-    expect(wrapper.classes()).not.toContain('is-current-page')
+    expect(wrapper.classes()).not.toContain('ct-nav-bar-link--current')
   })
 
-  it('adds is-current-page when the link is active', () => {
+  it('adds ct-nav-bar-link--current when the link is active', () => {
     const wrapper = mount(NavBarLink, {
       props: { link: { id: 'home', label: 'Home', url: '/en', is_current_page: true } }
     })
 
-    expect(wrapper.classes()).toContain('is-current-page')
+    expect(wrapper.classes()).toContain('ct-nav-bar-link--current')
   })
 })

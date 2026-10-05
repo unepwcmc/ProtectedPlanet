@@ -13,7 +13,7 @@ module Wdpa
         def each(&block)
           if portal_sources_exist?
             query = "SELECT * FROM #{sources_view}"
-            ActiveRecord::Base.connection.select_all(query).each(&block)
+            ActiveRecord::Base.lease_connection.select_all(query).each(&block)
           else
             raise StandardError,
               "#{sources_view} table is required but does not exist"
@@ -22,7 +22,7 @@ module Wdpa
 
         def count
           if portal_sources_exist?
-            ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{sources_view}").to_i
+            ActiveRecord::Base.lease_connection.select_value("SELECT COUNT(*) FROM #{sources_view}").to_i
           else
             raise StandardError,
               "#{sources_view} table is required but does not exist"

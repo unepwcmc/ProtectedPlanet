@@ -2,22 +2,6 @@ module ApplicationHelper
   include ActionView::Helpers::NumberHelper
   include BemHelper
 
-  COVER_HELPERS = {
-    ProtectedArea => :protected_area_cover,
-    Country => :country_cover,
-    Region => :region_cover
-  }.freeze
-
-  PLACEHOLDERS = {
-    ProtectedArea => 'search-placeholder-country.png',
-    Country => 'search-placeholder-country.png',
-    Region => 'search-placeholder-region.png'
-  }.freeze
-
-  def get_square_side(area)
-    Math.sqrt(area / 100) * 100
-  end
-
   def commaify(number)
     number_with_delimiter(number, delimeter: ',')
   end
@@ -30,73 +14,54 @@ module ApplicationHelper
     request.fullpath == current_path
   end
 
-  def cover(item)
-    send COVER_HELPERS[item.class], item
-  end
-
-  def cover_placeholder(klass)
-    PLACEHOLDERS[klass]
-  end
-
   def tiles_path(params)
     Rails.application.routes.url_helpers.tiles_path(params)
   end
 
-  def cover_data(image_params, item_class)
-    placeholder = cover_placeholder(item_class)
-    {
-      'data-src': tiles_path(image_params),
-      'data-error': image_path(placeholder),
-      'data-loading': image_path(placeholder)
-    }
+  def protected_area_cover(protected_area)
+    version = AppSecrets.mapbox[:version]
+
+    tiles_path(id: protected_area.site_id, type: 'protected_area', version: version)
   end
 
-  def protected_area_cover(protected_area, with_tag: true)
-    version = Rails.application.secrets.mapbox[:version]
-    image_params = { id: protected_area.site_id, type: 'protected_area', version: version }
-    data = cover_data(image_params, protected_area.class)
-
-    return tiles_path(image_params) unless with_tag
-
-    image_tag(
-      cover_placeholder(protected_area.class),
+  def site_card_details(protected_areas)
+    Array(protected_areas).map do |protected_area|
       {
-        alt: protected_area.name,
-        class: 'image'
-      }.merge(data)
-    )
+        name: protected_area[:name],
+        site_id: protected_area[:site_id],
+        thumbnail_link: protected_area_cover(protected_area)
+      }
+    end
   end
 
-  def country_cover(country, with_tag: true)
-    version = Rails.application.secrets.mapbox[:version]
-    image_params = { id: country.iso, type: 'country', version: version }
-    data = cover_data(image_params, country.class)
+  # Flag assets are named by ISO3 (app/assets/images/flags/AFG.svg). Not every
+  # country has one -- Western Sahara has never shipped a flag, and a newly
+  # added or renamed country will not until someone adds the SVG. Return nil in
+  # that case so callers can omit the element entirely rather than emitting a
+  # URL that 404s into a broken-image icon.
+  def flag_url(iso_3)
+    return nil if iso_3.blank?
 
-    return tiles_path(image_params) unless with_tag
-
-    image_tag(
-      cover_placeholder(country.class),
-      { alt: country.name }.merge(data)
-    )
+    image_url("flags/#{iso_3}.svg")
+  rescue Sprockets::Rails::Helper::AssetNotFound,
+         Sprockets::Rails::Helper::AssetNotPrecompiled
+    nil
   end
 
-  def region_cover(region, with_tag: true)
-    version = Rails.application.secrets.mapbox[:version]
-    image_params = { id: region.iso, type: 'region', version: version }
-    return tiles_path(image_params) unless with_tag
+  def country_cover(country)
+    version = AppSecrets.mapbox[:version]
 
-    image_tag(
-      cover_placeholder(region.class),
-      alt: region.name
-    )
+    tiles_path(id: country.iso, type: 'country', version: version)
+  end
+
+  def region_cover(region)
+    version = AppSecrets.mapbox[:version]
+
+    tiles_path(id: region.iso, type: 'region', version: version)
   end
 
   def url_encode(text)
     ERB::Util.url_encode(text)
-  end
-
-  def is_regional_page(controller_name)
-    controller_name == 'region'
   end
 
   def get_cms_url(path)
@@ -117,7 +82,7 @@ module ApplicationHelper
   def get_resource_cards(all = false)
     return (@items = empty_resource_cards) if @cms_site.nil?
 
-    resources_page = @cms_site.pages.find_by_slug(PageSlugs::RESOURCES)
+    resources_page = @cms_site.pages.find_by(slug: PageSlugs::RESOURCES)
     return (@items = empty_resource_cards) if resources_page.nil?
 
     presenter = ResourcesPresenter.new(@cms_site, all)
@@ -147,7 +112,7 @@ module ApplicationHelper
   def get_news_items(all = false)
     return (@items = { title: nil, url: false, cards: [] }) if @cms_site.nil?
 
-    news_page = @cms_site.pages.find_by_slug(PageSlugs::NEWS_AND_STORIES)
+    news_page = @cms_site.pages.find_by(slug: PageSlugs::NEWS_AND_STORIES)
     return (@items = { title: nil, url: false, cards: [] }) if news_page.nil?
 
     published_pages = news_page.children.published
@@ -180,12 +145,33 @@ module ApplicationHelper
     @items = ThematicAreasPresenter.new(@cms_site).all_cards
   end
 
+  # Shared prop-building for anything rendering ThematicAreasPresenter cards
+  # via a Vue island (CarouselThemes carousel, CardsThemes grid) — both need
+  # the same `{ areaTypeLabel, cards: [...] }` shape from `@items`.
+  def theme_cards_vue_props(items)
+    {
+      areaTypeLabel: t('global.area-types.wdpca'),
+      cards: items[:cards].map do |slide|
+        page = slide[:obj]
+        {
+          url: root_url + page[:full_path],
+          linkTitle: "View the #{page[:label]} page",
+          label: page[:label],
+          imageUrl: cms_fragment_render(:image, page),
+          summary: cms_fragment_content(:summary, page),
+          pasNo: slide[:pas_no],
+          slug: page[:slug]
+        }
+      end
+    }
+  end
+
   def get_footer_links
-    @links = { 'links1' => [], 'links2' => [] }
+    @links = { 'explore_links' => [], 'general_info_links' => [] }
     return @links if @cms_site.nil?
 
-    @links['links1'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
-    @links['links2'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
+    @links['explore_links'] = make_footer_links(PageSlugs::FOOTER_LINKS_PRIMARY)
+    @links['general_info_links'] = make_footer_links(PageSlugs::FOOTER_LINKS_SECONDARY)
   end
 
   def get_local_classes(local_assigns)
@@ -204,7 +190,7 @@ module ApplicationHelper
 
   def make_footer_links(slug_array)
     slug_array.map do |slug|
-      page = @cms_site.pages.find_by_slug(slug)
+      page = @cms_site.pages.find_by(slug: slug)
       next if page.nil?
 
       {
@@ -219,14 +205,8 @@ module ApplicationHelper
     end.compact
   end
 
-  def get_config_carousel_themes
-    {
-      wrapAround: true
-    }.to_json
-  end
-
   def map_page(slug, map_children = false)
-    cms_page = Comfy::Cms::Page.find_by_slug(slug)
+    cms_page = Comfy::Cms::Page.find_by(slug: slug)
     return nil if cms_page.nil?
 
     mapped_page = {
@@ -257,11 +237,6 @@ module ApplicationHelper
   def banner_signature
     # Signature of current active banners set to support dismissing a group
     @banner_signature ||= Digest::SHA1.hexdigest(active_banners.map(&:id).join('-'))
-  end
-
-  def current_banner
-    # For backward compatibility where only first is used
-    active_banners.first
   end
 
   def banner_visible?

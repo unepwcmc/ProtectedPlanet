@@ -1,0 +1,20 @@
+.vw-partials-global-site-logo__icon {
+  @apply
+  tw-shared-icon-base
+  w-34.25
+  md:w-41
+  lg:w-54
+  h-5
+  md:h-6
+  lg:h-8.25;
+  
+  background-image: url('../../../../assets/icons/protected-planet.svg');
+}
+
+.vw-partials-global-site-logo__icon--footer {
+  @apply
+  tw-shared-icon-base
+  w-59.75
+  h-8.75;
+  background-image: url('../../../../assets/icons/protected-planet.svg');
+}

@@ -1,6 +1,6 @@
 <template>
   <span
-    v-if="props.total >= 0"
+    v-if="total >= 0"
     v-text="styledNumber"
   />
 </template>
@@ -17,25 +17,30 @@ const props = withDefaults(defineProps<Counter>(), {
 })
 
 const number = ref(0)
-const step = ref(0)
-const increase = ref(true)
+const styledNumber = computed(() => {
+  const roundingNumber = Math.pow(10, props.decimal)
+  return (Math.round(number.value * roundingNumber) / roundingNumber).toLocaleString()
+})
 
+const step = ref(0)
 function calculateStep() {
   step.value = Math.abs(props.total - number.value) / props.config.divisor
 }
+calculateStep()
 
+const isIncreasing = ref(true)
 function checkDirection() {
-  increase.value = number.value < props.total
+  isIncreasing.value = number.value < props.total
 }
 
 function count() {
   checkDirection()
 
   const interval = window.setInterval(() => {
-    if (increase.value && number.value + step.value < props.total) {
+    if (isIncreasing.value && number.value + step.value < props.total) {
       number.value += step.value
     }
-    else if (!increase.value && number.value - step.value > props.total) {
+    else if (!isIncreasing.value && number.value - step.value > props.total) {
       number.value -= step.value
     }
     else {
@@ -44,19 +49,10 @@ function count() {
     }
   }, props.config.speed)
 }
-
-const styledNumber = computed(() => {
-  const roundingNumber = Math.pow(10, props.decimal)
-  return (Math.round(number.value * roundingNumber) / roundingNumber).toLocaleString()
-})
-
 watch(() => props.total, () => {
   calculateStep()
   count()
 })
-
-calculateStep()
-
 onMounted(() => {
   if (props.animate) count()
 

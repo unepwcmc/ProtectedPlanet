@@ -52,7 +52,7 @@ module Wdpa
         end
 
         def self.import_geometry_from_view(view, target_table)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           geometry_column = get_geometry_column(target_table)
           unless geometry_column
@@ -84,7 +84,7 @@ module Wdpa
         end
 
         def self.validate_target_table(target_table)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           unless connection.table_exists?(target_table)
             Rails.logger.error "Target table #{target_table} does not exist"
@@ -109,7 +109,7 @@ module Wdpa
         def self.get_geometry_column(target_table)
           geometry_columns = find_geometry_columns_from_mapping
 
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           geometry_columns.find do |col_name|
             connection.column_exists?(target_table, col_name)
@@ -123,7 +123,7 @@ module Wdpa
         end
 
         def self.get_matching_condition(target_table)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
           has_site_pid = connection.column_exists?(target_table, 'site_pid')
 
           if has_site_pid
@@ -137,7 +137,7 @@ module Wdpa
         end
 
         def self.import_coordinates(geometry_column, target_table)
-          connection = ActiveRecord::Base.connection
+          connection = ActiveRecord::Base.lease_connection
 
           # Check if coordinate columns exist in the target table
           unless connection.column_exists?(target_table, "#{geometry_column}_longitude") &&
