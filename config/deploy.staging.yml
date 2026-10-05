@@ -23,10 +23,6 @@ servers:
       healthcheck:
         path: /
         interval: 5
-
-  # TWO Sidekiq roles, matching the two systemd units on the old host
-  # (pp_default and pp_import). Do not collapse them: the import queue runs
-  # long multi-GB WDPA jobs that would starve the default queue.
   job_default:
     hosts:
       - pp-web-staging-01.internal.unep-wcmc.org

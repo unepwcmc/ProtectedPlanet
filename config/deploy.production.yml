@@ -1,27 +1,3 @@
-# ⚠ THIS FILE ON THE `production_kamal` BRANCH IS THE PROXMOX PREFLIGHT CONFIG.
-# The `production` branch has its own config/deploy.production.yml which deploys
-# LIVE LINODE PRODUCTION. Do not merge this branch into `production`.
-#
-# The name is forced: unepwcmc/devops-actions' kamal-v2.x-deploy validates
-# `environment` as staging|production and passes it to Kamal as `-d`, so the
-# destination must be `production` and the file must be deploy.production.yml.
-# The GitHub environment stays `production_proxmox`, which is where the secrets live.
-# Kamal destination: production_proxmox
-#
-# The Proxmox PREFLIGHT PRODUCTION stack — VM 224 wcmc-pp-web-prod-01 on pve-04,
-# database VM 225 wcmc-pp-db-prod-01 (172.20.0.182). Production data, production RAILS_ENV,
-# nothing public pointed at it.
-#
-# Why a separate destination rather than `production`:
-#   Four of the six PP repos already have a `config/deploy.production.yml` that
-#   deploys the LIVE Linode production via Kamal 1 + Traefik. Reusing that name
-#   or the `production` GitHub environment would repoint live production deploys
-#   at this host. This mirrors what `staging_proxmox` did alongside Linode
-#   staging — see .github/workflows/deploy-production-kamal.yml.
-#
-# RAILS_ENV is `production` (unlike the staging destination, which runs the
-# `staging` Rails env). That is the point of preflight: production code paths,
-# production data, production config.
 image: unepwcmc/protectedplanet/rails-production
 
 # Base deploy.yml pins the staging host — override every reference to it.
@@ -56,14 +32,16 @@ servers:
         path: /
         interval: 5
 
-  # TWO Sidekiq roles, matching the two systemd units on Linode production
-  # (pp_default and pp_import). Do not collapse them: the import queue runs
-  # long multi-GB WDPA jobs that would starve the default queue.
   job_default:
     hosts:
       - pp-web-prod-01.internal.unep-wcmc.org
     options:
       add-host: host.docker.internal:host-gateway
+      # Chrome's children (crashpad handler, renderers) are re-parented to PID 1
+      # container that leak only grows. `--init` puts tini at PID 1 to reap
+      # them; it forwards SIGTERM, so Sidekiq still shuts down gracefully.
+      # Only this role needs it - no other Sidekiq role starts a browser.
+      init: true
       health-cmd: /app/bin/docker-sidekiq-healthcheck
       health-interval: 5s
       health-retries: 3
@@ -71,22 +49,10 @@ servers:
       health-timeout: 3s
     cmd: bundle exec sidekiq -C config/sidekiq.yml
 
-  job_import:
-    hosts:
-      - pp-web-prod-01.internal.unep-wcmc.org
-    options:
-      add-host: host.docker.internal:host-gateway
-      health-cmd: /app/bin/docker-sidekiq-healthcheck
-      health-interval: 5s
-      health-retries: 3
-      health-start-period: 10s
-      health-timeout: 3s
-    cmd: bundle exec sidekiq -C config/sidekiq-import.yml
-
 env:
   clear:
     RAILS_ENV: production
-    # PP_HOST keeps its prefix: config/secrets.yml reads it, and a bare HOST is
+    # PP_HOST keeps its prefix: config/app_secrets.yml reads it, and a bare HOST is
     # far too generic to be safe in a Rails env alongside PORT and DATABASE_HOST.
     PP_HOST: pp-web-prod-01.internal.unep-wcmc.org
 
