@@ -201,8 +201,8 @@ The portal release importers can read stats from the `stats` schema instead of C
 
 | Setting | Behaviour |
 |---------|-----------|
-| `PP_STATS_SOURCE=csv` (default) | Current behaviour — stats imported from `lib/data/seeds/*.csv` |
-| `PP_STATS_SOURCE=db` | Stats read from `stats.national_stats`, `stats.pame_stats`, `stats.global_stats` |
+| `PP_STATS_SOURCE=db` (default) | Stats read from `stats.national_stats`, `stats.pame_stats`, `stats.global_stats` |
+| `PP_STATS_SOURCE=csv` | Legacy fallback — stats imported from `lib/data/seeds/*.csv` |
 
 Applies to the portal release flow only (`rake pp:portal:release`). The legacy live import flow (`Wdpa::Importer`) is unchanged and always uses CSV.
 

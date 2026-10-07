@@ -17,12 +17,12 @@ module Wdpa
           self.label = nil
           self.release_id = nil
           self.checkpoints_enabled = true
-          @stats_source = 'csv'
+          @stats_source = 'db'
         end
 
         def stats_source=(val)
           normalized = val.to_s.strip.downcase
-          normalized = 'csv' if normalized.empty?
+          normalized = 'db' if normalized.empty?
           unless STATS_SOURCES.include?(normalized)
             raise ArgumentError, "Invalid stats source '#{val}' (PP_STATS_SOURCE) — expected one of: #{STATS_SOURCES.join(', ')}"
           end

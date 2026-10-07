@@ -129,15 +129,15 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_in_delta 26.9, base.pct(0.269), 0.0001
   end
 
-  test 'stats_source config validates values and defaults to csv' do
-    assert_equal 'csv', Wdpa::Portal::ImportRuntimeConfig.stats_source
-    refute Wdpa::Portal::ImportRuntimeConfig.stats_from_db?
-
-    Wdpa::Portal::ImportRuntimeConfig.stats_source = 'db'
+  test 'stats_source config validates values and defaults to db' do
+    assert_equal 'db', Wdpa::Portal::ImportRuntimeConfig.stats_source
     assert Wdpa::Portal::ImportRuntimeConfig.stats_from_db?
 
+    Wdpa::Portal::ImportRuntimeConfig.stats_source = 'csv'
+    refute Wdpa::Portal::ImportRuntimeConfig.stats_from_db?
+
     Wdpa::Portal::ImportRuntimeConfig.stats_source = ''
-    assert_equal 'csv', Wdpa::Portal::ImportRuntimeConfig.stats_source
+    assert_equal 'db', Wdpa::Portal::ImportRuntimeConfig.stats_source
 
     assert_raises(ArgumentError) do
       Wdpa::Portal::ImportRuntimeConfig.stats_source = 'bogus'

@@ -232,7 +232,7 @@ PP_RELEASE_ONLY_PHASES=create_staging_materialized_views,preflight bundle exec r
 | `PP_RELEASE_START_AT` | Phase to start at |
 | `PP_RELEASE_STOP_AFTER` | Phase to stop after |
 | `PP_RELEASE_STAGING_LIGHTWEIGHT` | Disable indexes during staging (faster) |
-| `PP_STATS_SOURCE` | `csv` (default) or `db` — see [Stats Server DB Ingestion](../stats_server_db_ingestion.md) |
+| `PP_STATS_SOURCE` | `db` (default) — stats read from the `stats` schema — or `csv`, the legacy seed files. See [Stats Server DB Ingestion](../stats_server_db_ingestion.md) |
 
 Full list: [Release Orchestration](release_orchestration.md#configuration).
 

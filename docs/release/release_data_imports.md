@@ -83,7 +83,7 @@ During a release, data flows through a staging process:
 
 **File location**: [`lib/modules/wdpa/portal/importers/country_statistics.rb`](../../lib/modules/wdpa/portal/importers/country_statistics.rb)
 
-**Source is switchable**: `PP_STATS_SOURCE` selects `csv` (default — files in `lib/data/seeds/`) or `db` (the `stats` schema written by the stats server, via `Wdpa::Portal::Importers::StatsDbSource::*`). Statistics are supplied by the Protected Areas Programme team, not calculated by this app. See [stats server DB ingestion](../stats_server_db_ingestion.md).
+**Source is switchable**: `PP_STATS_SOURCE` selects `db` (default — the `stats` schema written by the stats server, via `Wdpa::Portal::Importers::StatsDbSource::*`) or `csv` (legacy fallback — files in `lib/data/seeds/`). Statistics are supplied by the Protected Areas Programme team, not calculated by this app. See [stats server DB ingestion](../stats_server_db_ingestion.md).
 
 ### 5. Country Protected Area Geometry Statistics
 
