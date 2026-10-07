@@ -27,7 +27,9 @@ class Wdpa::Portal::ReleaseErrorReportingIntegrationTest < ActionDispatch::Integ
     ActiveRecord::Base.lease_connection.execute('UPDATE portal_fdw.wdpas SET site_type_id = NULL')
 
     release = Release.create!(label: 'Jan2026')
-    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, release_id: release.id)
+    seed_stats_fixture(release.label)
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true,
+      label: release.label, release_id: release.id)
 
     refute result[:success], 'a release that imports no protected areas must not succeed'
 
@@ -50,7 +52,9 @@ class Wdpa::Portal::ReleaseErrorReportingIntegrationTest < ActionDispatch::Integ
     seed_reference_data
 
     release = Release.create!(label: 'Jan2026')
-    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, release_id: release.id)
+    seed_stats_fixture(release.label)
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true,
+      label: release.label, release_id: release.id)
 
     assert result[:success], "valid data must still import cleanly: #{Array(result[:hard_errors]).inspect}"
     assert_empty result[:hard_errors]

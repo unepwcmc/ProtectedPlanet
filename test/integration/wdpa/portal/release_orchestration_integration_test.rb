@@ -12,6 +12,9 @@ class Wdpa::Portal::ReleaseOrchestrationIntegrationTest < ActionDispatch::Integr
     # row is dropped and the release has nothing to promote.
     seed_reference_data
 
+    # The release reads stats from the `stats` schema, which is empty in the suite.
+    seed_stats_fixture(LABEL)
+
     # post_swap re-indexes through Elasticsearch, which WebMock would block; the ES
     # container is on the compose network, not localhost, so the allowance misses it.
     WebMock.disable!

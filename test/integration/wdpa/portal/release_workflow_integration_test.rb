@@ -32,7 +32,9 @@ class Wdpa::Portal::ReleaseWorkflowIntegrationTest < ActionDispatch::Integration
     # one they fall back to a shared tmp file, where offsets left by a previous run
     # make the import skip every row.
     release = Release.create!(label: 'Jan2026')
-    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, sample: nil, release_id: release.id)
+    seed_stats_fixture(release.label)
+    result = Wdpa::Portal::Importer.import(create_staging_materialized_views: true, sample: nil,
+      label: release.label, release_id: release.id)
 
     assert result[:success], "Portal import failed: #{Array(result[:hard_errors]).join(', ')}"
     # The protected areas importer reports hard_errors rather than a :success flag.

@@ -129,6 +129,21 @@ class Wdpa::Portal::Importers::StatsDbSourceTest < ActiveSupport::TestCase
     assert_in_delta 26.9, base.pct(0.269), 0.0001
   end
 
+  # The release integration tests seed this fixture; it has to stay readable by the
+  # real SQL, so this one runs against the stats schema rather than stubbed rows.
+  test 'the seeded stats fixture is readable by the db source' do
+    seed_stats_fixture('Jun2026')
+
+    national = Wdpa::Portal::Importers::StatsDbSource::NationalStats.rows
+    assert_equal ['GBR'], national.map { |row| row[:iso3] }
+    assert_equal 2.0, national.first[:attrs]['pa_land_area']
+    assert_in_delta 20.0, national.first[:attrs]['percentage_pa_land_cover'], 0.0001
+
+    pame = Wdpa::Portal::Importers::StatsDbSource::PameStats.rows
+    assert_equal ['GBR'], pame.map { |row| row[:iso3] }
+    assert_in_delta 20.0, pame.first[:attrs]['pame_percentage_pa_land_cover'], 0.0001
+  end
+
   test 'stats_source config validates values and defaults to db' do
     assert_equal 'db', Wdpa::Portal::ImportRuntimeConfig.stats_source
     assert Wdpa::Portal::ImportRuntimeConfig.stats_from_db?

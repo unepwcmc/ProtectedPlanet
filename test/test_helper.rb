@@ -126,6 +126,41 @@ class ActiveSupport::TestCase
     end
   end
 
+  # Stats come from the `stats` schema unless PP_STATS_SOURCE=csv, and a vintage with
+  # no rows is a hard error by design — so a release in a test needs a run to read.
+  # One row per table is enough: countries absent from a run import as zero coverage.
+  # Runs on the test's own connection inside its transaction, so it rolls back with it.
+  def seed_stats_fixture(label)
+    conn = ActiveRecord::Base.lease_connection
+    run_id = conn.quote("test-run-#{label}")
+    meta = "#{run_id}, 'test', 'test', #{conn.quote(label)}, 'test', now()"
+
+    conn.execute(<<~SQL)
+      INSERT INTO stats.national_stats (
+        metadata_ns_uuid, metadata_basemap, metadata_grid, metadata_vintage,
+        metadata_version, metadata_run_timestamp, iso3,
+        pa_marine, pa_terrestrial, total_marine, total_terrestrial,
+        pa_oecm_marine, pa_oecm_terrestrial,
+        pa_marine_pct, pa_terrestrial_pct, pa_oecm_marine_pct, pa_oecm_terrestrial_pct
+      ) VALUES (#{meta}, 'GBR', 1, 2, 10, 20, 3, 4, 0.1, 0.2, 0.3, 0.4)
+    SQL
+
+    conn.execute(<<~SQL)
+      INSERT INTO stats.pame_stats (
+        metadata_pame_uuid, metadata_basemap, metadata_grid, metadata_vintage,
+        metadata_version, metadata_run_timestamp, iso3,
+        pame_pa_marine, pame_pa_terrestrial, pame_pa_marine_pct, pame_pa_terrestrial_pct
+      ) VALUES (#{meta}, 'GBR', 1, 2, 0.1, 0.2)
+    SQL
+
+    conn.execute(<<~SQL)
+      INSERT INTO stats.global_stats (
+        metadata_gs_uuid, metadata_ns_uuid, metadata_basemap, metadata_grid,
+        metadata_vintage, metadata_version, metadata_run_timestamp, stat_type, stat_value
+      ) VALUES (#{run_id}, #{meta}, 'total_protected_areas', 1)
+    SQL
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms
