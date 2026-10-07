@@ -87,6 +87,7 @@
 
   div {
     @apply
+    tw-shared-base-flex-col-gap-3
     tw-shared-font-hind-siliguri__light-base-grey-black
     leading-[1.6];
   }

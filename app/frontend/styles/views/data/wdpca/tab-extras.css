@@ -15,3 +15,7 @@
 .vw-data-wdpca-tab-extras__map {
   @apply tw-shared-map-section;
 }
+
+.vw-data-wdpca-tab-extras__resources {
+  @apply tw-shared-base-container;
+}
