@@ -47,6 +47,13 @@ servers:
       health-retries: 3
       health-start-period: 10s
       health-timeout: 3s
+    env:
+      clear:
+        # Pool sizing only -- Puma does not run in this role. config/database.yml
+        # derives the ActiveRecord pool from this, and Sidekiq runs 25 threads
+        # here (20 default + 5 pdf capsule). Left at the root value of 5 it
+        # starved: 25 threads queued on 5 connections, then ConnectionTimeoutError.
+        RAILS_MAX_THREADS: 25
     cmd: bundle exec sidekiq -C config/sidekiq.yml
 
 env:
