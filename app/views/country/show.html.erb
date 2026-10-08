@@ -38,6 +38,7 @@
     <%= turbo_mount "RegionCountryPages", props: {
           data: @stats_data,
           tabs: @tabs,
+          defaultTabId: @default_tab_id,
           gaId: "Country page stats",
           relatedCountriesHtml: has_related_countries? ? render(partial: "partials/stats/stats-related-countries", locals: {
             country_children: @country.children.any? ? @country.children : nil,

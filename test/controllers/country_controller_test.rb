@@ -65,4 +65,32 @@ class CountryControllerTest < ActionController::TestCase
     assert_not_nil assigns(:stats_data)
     assert_not_nil assigns(:tabs)
   end
+
+  # A country with OECMs opens on the combined "Protected Areas & OECMs" tab;
+  # one without still has only the WDPA tab to open on. Separate countries because
+  # build_stats is cached per ISO.
+  test '.show defaults to the combined tab only where the country has OECMs' do
+    FactoryBot.create(:region, iso: 'GL')
+    region = FactoryBot.create(:region)
+    plain = FactoryBot.create(:country, name: 'Orange Emirate', iso_3: 'PUM', region: region)
+    with_oecms = FactoryBot.create(:country, name: 'Lemon Republic', iso_3: 'LEM', region: region)
+    FactoryBot.create(:country_statistic, country: plain)
+    FactoryBot.create(:country_statistic,
+      country: with_oecms,
+      oecms_pa_land_area: 10,
+      oecms_pa_marine_area: 5,
+      percentage_oecms_pa_land_cover: 1,
+      percentage_oecms_pa_marine_cover: 2
+    )
+    FactoryBot.create(:protected_area, is_oecm: true, countries: [with_oecms])
+    seed_cms
+
+    get :show, params: { iso: 'PUM' }
+    assert_equal ['wdpa'], assigns(:tabs).map { |tab| tab[:id] }
+    assert_equal 'wdpa', assigns(:default_tab_id)
+
+    get :show, params: { iso: 'LEM' }
+    assert_equal %w[wdpa wdpa_oecm], assigns(:tabs).map { |tab| tab[:id] }
+    assert_equal 'wdpa_oecm', assigns(:default_tab_id)
+  end
 end

@@ -2,13 +2,14 @@ class RegionController < ApplicationController
   before_action :load_vars
   before_action :build_stats, only: :show
   after_action :enable_caching
-  
+
   TABS_KEYS = %i[coverage message iucn governance sources designations sites].freeze
+  OECM_TAB_ID = 'wdpa_oecm'
 
   include MapHelper
 
   def show
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', params[:iso].upcase)
+    @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', params[:iso].upcase)
 
     @total_pame = @region.protected_areas.pas_with_pame_on_self_or_any_parcel.count
     @total_wdpa = @region.protected_areas.wdpas.count
@@ -47,13 +48,16 @@ class RegionController < ApplicationController
 
       if total_oecm.positive?
         stats_data.merge!(build_oecm_hash)
-        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpca_oecm') })
+        tabs.push({ id: OECM_TAB_ID, title: I18n.t('global.area-types.wdpca_oecm') })
       end
 
       { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
     end
 
     @tabs = cached[:tabs]
+    # Areas that have OECMs open on the combined tab; the rest have only the one.
+    # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/381#update-77584731
+    @default_tab_id = @tabs.any? { |tab| tab[:id] == OECM_TAB_ID } ? OECM_TAB_ID : @tabs.first[:id]
     @stats_data = cached[:stats_data]
     @total_oecm = cached[:total_oecm]
   end
@@ -82,11 +86,11 @@ class RegionController < ApplicationController
   end
 
   def map_overlays
-    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+    overlays(%w[oecm marine_wdpa terrestrial_wdpa])
   end
 
   def load_vars
-    params[:iso]!="GL" or raise_404
+    params[:iso] != 'GL' or raise_404
     @region = Region.where(iso: params[:iso].upcase).first
     @region or raise_404
     @presenter = RegionPresenter.new @region

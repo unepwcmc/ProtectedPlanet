@@ -7,6 +7,7 @@
     >
       <TabStrip
         :children="tabs"
+        :defaultSelectedId="selectedDatabaseId"
         :gaId
         @click:tab="onSelectDatabase"
       />
@@ -84,7 +85,7 @@ import type {
 type RegionCountryPages = RegionCountryPagesProps
 const props = defineProps<RegionCountryPages>()
 
-const selectedDatabaseId = ref(props.tabs[0].id)
+const selectedDatabaseId = ref(props.defaultTabId || props.tabs[0].id)
 const activeDatabase = computed(() => props.data[selectedDatabaseId.value])
 function onSelectDatabase(id: string) {
   selectedDatabaseId.value = id

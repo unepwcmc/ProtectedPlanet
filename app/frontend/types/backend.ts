@@ -45,6 +45,7 @@ export interface CookieConsentProps {
   description: string
   accept: string
   reject: string
+  privacyPolicyPath: string
 }
 
 // partials/cards/_articles.html.erb.
@@ -685,6 +686,8 @@ export interface RegionCountryPagesTab {
 // country#show / region#show.
 export interface RegionCountryPagesProps {
   data: Record<string, RegionCountryPagesDatabase>
+  // Tab to open on; the combined WDPA+OECM tab wherever the area has OECMs.
+  defaultTabId?: string
   gaId?: string
   // Rendered partials/stats/_stats-related-countries.html.erb (country page
   // only) — trusted server markup, passed as a prop since turbo_mount has no

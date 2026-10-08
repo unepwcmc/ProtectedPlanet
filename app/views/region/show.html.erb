@@ -29,6 +29,7 @@
       <%= turbo_mount "RegionCountryPages", props: {
           data: @stats_data,
           tabs: @tabs,
+          defaultTabId: @default_tab_id,
           gaId: "Region page stats"
         } %>
     </section>

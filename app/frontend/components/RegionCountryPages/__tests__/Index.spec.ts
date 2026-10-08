@@ -52,6 +52,23 @@ describe('RegionCountryPages', () => {
     expect(wrapper.text()).toContain('WDPA+OECM message')
   })
 
+  it('opens on defaultTabId instead of the first tab', () => {
+    const wrapper = mount(RegionCountryPages, {
+      props: {
+        data: {
+          wdpa: buildDatabase({ message: { text: 'WDPA message' } }),
+          wdpa_oecm: buildDatabase({ message: { text: 'WDPA+OECM message' } })
+        },
+        defaultTabId: 'wdpa_oecm',
+        tabs: [{ id: 'wdpa', title: 'WDPA' }, { id: 'wdpa_oecm', title: 'WDPA+OECM' }]
+      },
+      global
+    })
+
+    expect(wrapper.text()).toContain('WDPA+OECM message')
+    expect(wrapper.findAll('[role="tab"]')[1].classes()).toContain('ct-tab-strip-tab--active')
+  })
+
   it('remaps snake_case coverage fields to StatsCoverage props', () => {
     const wrapper = mount(RegionCountryPages, {
       props: { data: { wdpa: buildDatabase() }, tabs: [{ id: 'wdpa', title: 'WDPA' }] },

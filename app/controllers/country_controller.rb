@@ -10,6 +10,7 @@ class CountryController < ApplicationController
   include CountriesHelper
 
   TABS_KEYS = %i[coverage message iucn governance sources designations growth sites].freeze
+  OECM_TAB_ID = 'wdpa_oecm'
 
   def show
     load_show_data
@@ -34,13 +35,15 @@ class CountryController < ApplicationController
 
       if total_oecm.positive?
         stats_data.merge!(build_hash(:wdpa_oecm))
-        tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpca_oecm') })
+        tabs.push({ id: OECM_TAB_ID, title: I18n.t('global.area-types.wdpca_oecm') })
       end
 
       { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
     end
 
     @tabs = cached[:tabs]
+    # Areas that have OECMs open on the combined tab; the rest have only the one.
+    @default_tab_id = @tabs.any? { |tab| tab[:id] == OECM_TAB_ID } ? OECM_TAB_ID : @tabs.first[:id]
     @stats_data = cached[:stats_data]
     @total_oecm = cached[:total_oecm]
   end
