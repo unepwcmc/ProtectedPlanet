@@ -129,9 +129,13 @@ class ActiveSupport::TestCase
   # Stats come from the `stats` schema unless PP_STATS_SOURCE=csv, and a vintage with
   # no rows is a hard error by design — so a release in a test needs a run to read.
   # One row per table is enough: countries absent from a run import as zero coverage.
-  # Runs on the test's own connection inside its transaction, so it rolls back with it.
+  # The stats server owns that schema in real environments, so nothing in db/migrate
+  # creates it and the fixture has to (test/support/stats/schema.sql). Runs on the
+  # test's own connection inside its transaction, so it rolls back with the test.
   def seed_stats_fixture(label)
     conn = ActiveRecord::Base.lease_connection
+    conn.execute(File.read(Rails.root.join('test', 'support', 'stats', 'schema.sql')))
+
     run_id = conn.quote("test-run-#{label}")
     meta = "#{run_id}, 'test', 'test', #{conn.quote(label)}, 'test', now()"
 
