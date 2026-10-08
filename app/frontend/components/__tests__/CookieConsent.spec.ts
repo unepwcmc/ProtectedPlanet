@@ -4,9 +4,10 @@ import CookieConsent from '@/components/CookieConsent.vue'
 
 // Mirrors what layouts/partials/_cookie_consent.html.erb passes.
 const props = {
-  description: 'See our <a href="/legal">Privacy policy</a> page.',
+  description: 'See our <a href="/en/privacy-policy">Privacy policy</a> page.',
   accept: 'Accept',
-  reject: 'Reject'
+  reject: 'Reject',
+  privacyPolicyPath: '/en/privacy-policy'
 }
 
 // jsdom keeps cookies between tests — clear so consent-state assertions are isolated.
@@ -22,7 +23,7 @@ describe('CookieConsent', () => {
     const wrapper = mount(CookieConsent, { props })
 
     expect(wrapper.find('.ct-cookie-consent').exists()).toBe(true)
-    expect(wrapper.find('.ct-cookie-consent__description a').attributes('href')).toBe('/legal')
+    expect(wrapper.find('.ct-cookie-consent__description a').attributes('href')).toBe('/en/privacy-policy')
   })
 
   it('does not render when consent was already granted', () => {
@@ -31,6 +32,16 @@ describe('CookieConsent', () => {
     const wrapper = mount(CookieConsent, { props })
 
     expect(wrapper.find('.ct-cookie-consent').exists()).toBe(false)
+  })
+
+  it('does not render on the privacy policy page, whatever the consent state', () => {
+    window.history.replaceState({}, '', '/en/privacy-policy/')
+
+    const wrapper = mount(CookieConsent, { props })
+
+    expect(wrapper.find('.ct-cookie-consent').exists()).toBe(false)
+
+    window.history.replaceState({}, '', '/')
   })
 
   it('does not render when consent was already denied', () => {

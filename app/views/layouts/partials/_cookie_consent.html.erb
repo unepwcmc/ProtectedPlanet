@@ -1,6 +1,7 @@
+<% privacy_policy_path = "/en/#{PageSlugs::PRIVACY_POLICY}" %>
 <%= turbo_mount "CookieConsent", props: {
-      description: t('global.cookie_consent.description',
-      url: "en/#{PageSlugs::PRIVACY_POLICY}"),
+      description: t('global.cookie_consent.description', url: privacy_policy_path),
       accept: t('global.cookie_consent.accept'),
-      reject: t('global.cookie_consent.reject')
+      reject: t('global.cookie_consent.reject'),
+      privacyPolicyPath: privacy_policy_path
     } %>

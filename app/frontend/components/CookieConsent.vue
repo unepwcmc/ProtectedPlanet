@@ -36,7 +36,13 @@ import type { CookieConsentProps } from '@/types/backend'
 
 const props = defineProps<CookieConsentProps>()
 
-const isVisible = ref(getConsent() === null)
+function normalisePath(path: string) {
+  return path.replace(/\/+$/, '').toLowerCase()
+}
+// The banner overlays the page, so it must never cover the privacy policy it links to.
+const isOnPrivacyPolicy = normalisePath(window.location.pathname) === normalisePath(props.privacyPolicyPath)
+const isVisible = ref(!isOnPrivacyPolicy && getConsent() === null)
+
 // Banner sits over an overlay, so the page behind it shouldn't scroll while it's up.
 useFreezeBackground(isVisible)
 const { acceptAnalytics, rejectAnalytics } = useAnalytics()
