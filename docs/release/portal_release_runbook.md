@@ -59,15 +59,15 @@ Lets you inspect staging data and choose exactly when to swap.
 
 ```bash
 # --- on the host ---
-ssh xxxxx@xxxxx                               # ask devops for user/host
-tmux kill-session -t pp-release 2>/dev/null   # clear any stale session
-tmux new -s pp-release                         # ON THE HOST not inside docker container bash
+ssh xxxxx@xxxxx                                 # ask devops for user/host
+tmux kill-session -t pp-release                 # clear any stale session
+tmux new -s pp-release                          # ON THE HOST not inside docker container bash
 
 WEB=$(docker ps -q --filter label=service=protectedplanet --filter label=role=web | head -1)
 docker exec -it "$WEB" bash                    # after triggering this command you are now inside the container, at /app
 
 # --- inside the container ---
-PP_RELEASE_DRY_RUN=true bundle exec rake 'pp:portal:release[Sep2026]'
+PP_RELEASE_DRY_RUN=true bundle exec rake 'pp:portal:release[Oct2026]'
 
 # Detach: Ctrl-b then d   (release keeps running; reattach later with `tmux attach -t pp-release`)
 ```
@@ -86,7 +86,7 @@ bundle exec rake pp:portal:status
 When ready to go live (same label!):
 
 ```bash
-PP_RELEASE_START_AT=finalise_swap bundle exec rake 'pp:portal:release[Sep2026]'
+PP_RELEASE_START_AT=finalise_swap bundle exec rake 'pp:portal:release[Oct2026]'
 
 # Detach: Ctrl-b then d   (release keeps running; reattach later with `tmux attach -t pp-release`)
 
