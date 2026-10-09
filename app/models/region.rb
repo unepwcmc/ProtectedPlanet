@@ -68,7 +68,7 @@ class Region < ApplicationRecord
         FROM protected_areas
         INNER JOIN countries_protected_areas
           ON protected_areas.id = countries_protected_areas.protected_area_id
-          AND countries_protected_areas.country_id IN (#{countries.pluck(:id).join(',')})
+          AND countries_protected_areas.country_id IN (#{country_ids_sql})
       ) AS pas_for_country ON pas_for_country.designation_id = designations.id
       INNER JOIN
         protected_areas_sources
@@ -115,7 +115,7 @@ class Region < ApplicationRecord
         FROM protected_areas
         INNER JOIN countries_protected_areas
           ON protected_areas.id = countries_protected_areas.protected_area_id
-          AND countries_protected_areas.country_id IN (#{countries.pluck(:id).join(',')})
+          AND countries_protected_areas.country_id IN (#{country_ids_sql})
           #{'WHERE protected_areas.is_oecm = false' if exclude_oecms}
       ) AS pas_for_country ON pas_for_country.designation_id = designations.id
       GROUP BY jurisdictions.name
@@ -136,7 +136,7 @@ class Region < ApplicationRecord
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
       INNER JOIN countries_protected_areas
-      ON countries_protected_areas.country_id IN (#{countries.pluck(:id).join(',')})
+      ON countries_protected_areas.country_id IN (#{country_ids_sql})
       INNER JOIN protected_areas_sources
       ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
       AND protected_areas_sources.source_id = sources.id
@@ -152,13 +152,18 @@ class Region < ApplicationRecord
 
   private
 
+  # Re-plucked by every raw-SQL builder below -- four extra queries per region page.
+  def country_ids_sql
+    @country_ids_sql ||= countries.pluck(:id).join(',')
+  end
+
   def protected_areas_inner_join(group_by, exclude_oecms)
     "
       SELECT #{group_by}, COUNT(protected_areas.id) AS count
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id
-        AND countries_protected_areas.country_id IN (#{countries.pluck(:id).join(',')})
+        AND countries_protected_areas.country_id IN (#{country_ids_sql})
         #{'WHERE protected_areas.is_oecm = false' if exclude_oecms}
       GROUP BY #{group_by}
     "
