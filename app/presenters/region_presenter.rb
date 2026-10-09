@@ -6,8 +6,10 @@ class RegionPresenter
 
   def initialize(region)
     @region = region
-    @countries = @region.countries
-    @statistics = @countries.map(&:statistic).compact
+    # Preloaded: both @statistics here and geometry_ratio below walked the countries
+    # calling #statistic, which was two separate N+1s over every country in the region.
+    @countries = @region.countries.includes(:country_statistic).to_a
+    @statistics = @countries.filter_map(&:statistic)
     @designations_presenter = DesignationsPresenter.new(region, true)
   end
 
@@ -83,24 +85,9 @@ class RegionPresenter
     geometry_ratio[:polygons]
   end
 
+  # Read three times per region page (chart_point_poly plus both percentages).
   def geometry_ratio
-    polygons_count = 0
-    points_count = 0
-
-    @countries.each do |country|
-      statistic = country.statistic
-      polygons_count += statistic&.polygons_count || 0
-      points_count += statistic&.points_count || 0
-    end
-
-    total = polygons_count + points_count
-
-    return { polygons: 0, points: 0 } if total == 0
-
-    {
-      polygons: ((polygons_count / total.to_f) * 100).round,
-      points: ((points_count / total.to_f) * 100).round
-    }
+    @geometry_ratio ||= calculate_geometry_ratio
   end
 
   def percentage_oecms_pa_land_cover
@@ -188,6 +175,19 @@ class RegionPresenter
   end
 
   private
+
+  def calculate_geometry_ratio
+    polygons_count = @statistics.sum { |statistic| statistic.polygons_count || 0 }
+    points_count = @statistics.sum { |statistic| statistic.points_count || 0 }
+    total = polygons_count + points_count
+
+    return { polygons: 0, points: 0 } if total.zero?
+
+    {
+      polygons: ((polygons_count / total.to_f) * 100).round,
+      points: ((points_count / total.to_f) * 100).round
+    }
+  end
 
   attr_reader :region
 
