@@ -53,7 +53,7 @@ class Country < ApplicationRecord
     foreign_key: 'country_id',
     association_foreign_key: 'pame_evaluation_id'
 
-  BLACKLISTED_ISO3 = ['IOT'].freeze # Add countries in this list which we dont to show anywhere
+  BLACKLISTED_ISO3 = ['IOT'].freeze # Countries to hide everywhere on the site
 
   default_scope { where.not(iso_3: BLACKLISTED_ISO3) }
 
@@ -111,17 +111,18 @@ class Country < ApplicationRecord
       return staging_pame_evaluations.joins(protected_area: :countries).where(countries: { id: id })&.pluck(:protected_area_id)&.uniq&.count
     end
 
-    # protected areas located in the overseas territories have PAME evaluations reported by their parent country
-    # look up the parent country and count staging protected areas with staging PAME evaluations for the given overseas territory
+    # PAME evaluations for an overseas territory are reported by its parent country,
+    # so count through the parent.
     parent&.staging_pame_evaluations&.joins(protected_area: :countries)&.where(countries: { id: id })&.pluck(:protected_area_id)&.uniq&.count
   end
 
-  # As of 03Feb2026 we don't use it see app/presenters/region_presenter.rb
+  # Unused since 03Feb2026; superseded by app/presenters/region_presenter.rb.
   # def self.countries_with_gl
   #   joins(:protected_areas).merge(ProtectedArea.pas_with_green_list_on_self_only).distinct
   # end
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb app/presenters/region_presenter.rb
+  # Hidden since 01Apr2025 -- not enough data to show. See green_list_controller.rb,
+  # app/views/green_list/index.html.erb and region_presenter.rb.
   # def total_gl_coverage
   #   # 1. Add up reported_area for green-listed parcels in this country (lightweight: no geom)
   #   parcel_total = protected_area_parcels

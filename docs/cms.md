@@ -18,7 +18,7 @@ We add:
 
 Both in `config/initializers/`:
 
-- `comfortable_mexican_sofa.rb` — extends `Seeds::Importer` / `Seeds::Exporter`
+- `comfortable_media_surfer.rb` — extends `Seeds::Importer` / `Seeds::Exporter`
   (via metaprogramming) so they carry the `CallToAction` model.
 - `comfy_patching.rb` — reopens the Comfy models to add relationships and
   methods, plus importer/exporter changes that reopen existing methods and so

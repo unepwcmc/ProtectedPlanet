@@ -19,8 +19,7 @@ post-deploy checklist for staging.
 ## 0. Get a shell in the right container
 
 Everything below runs **as the app user, from the app root, inside `job_default`**
-— never `job_import` (no `pdf` capsule) and never `web` (Puma never starts a
-browser).
+— never `web`, where Puma never starts a browser.
 
 ```bash
 bin/kamal app exec -d staging --roles=job_default --reuse -i "bash"
@@ -46,11 +45,10 @@ bin/kamal app logs -d staging --roles=job_default --grep "pdf-chrome" -n 100
 Want `[pdf-chrome] ready on 127.0.0.1:9222 (pid N)` within ~45s of boot
 (`PDF_CHROME_READY_SECONDS`).
 
-These two must produce **no** `[pdf-chrome] ready` line at all:
+The `web` role must produce **no** `[pdf-chrome] ready` line at all:
 
 ```bash
-bin/kamal app logs -d staging --roles=job_import --grep "pdf-chrome"
-bin/kamal app logs -d staging --roles=web        --grep "pdf-chrome"
+bin/kamal app logs -d staging --roles=web --grep "pdf-chrome"
 ```
 
 And exactly one browser should exist in `job_default`:

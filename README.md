@@ -3,7 +3,7 @@
 [protectedplanet.net](https://protectedplanet.net) — the public site for the World
 Database on Protected Areas (WDPA) and WD-OECM.
 
-Rails 8 / Ruby 3.3 · PostgreSQL + PostGIS · Elasticsearch · Sidekiq · Vue 3 +
+Rails 8.1 / Ruby 4.0 · PostgreSQL + PostGIS · Elasticsearch · Sidekiq · Vue 3 +
 Vite + Tailwind v4 · Comfortable Media Surfer (CMS) · deployed with Kamal.
 
 > **New here?** Read the [Protected Planet WIKI](https://github.com/unepwcmc/protected-planet-wiki)

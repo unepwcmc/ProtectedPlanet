@@ -2,8 +2,8 @@ class ApplicationController < ActionController::Base
   CACHE_FETCH_TTL = 30.days
 
   # Clumsy rescue from fragments custom not null database errors
-  rescue_from ActiveRecord::StatementInvalid, :with => :record_invalid_error
-  class PageNotFound < StandardError; end;
+  rescue_from ActiveRecord::StatementInvalid, with: :record_invalid_error
+  class PageNotFound < StandardError; end
 
   protect_from_forgery with: :exception
   before_action :set_request_host_for_url_helpers
@@ -22,29 +22,29 @@ class ApplicationController < ActionController::Base
   def opengraph
     return if admin_path?
 
-    @opengraph ||= OpengraphBuilder.new('og': og_tags, 'twitter': twitter_tags)
+    @opengraph ||= OpengraphBuilder.new(og: og_tags, twitter: twitter_tags)
   end
 
   def og_tags
     {
-      'site_name': t('meta.site.name'),
-      'title': t('meta.site.title'),
-      'description': t('meta.site.description'),
-      'url': request.url,
-      'type': 'website',
-      'image': social_image_url,
+      site_name: t('meta.site.name'),
+      title: t('meta.site.title'),
+      description: t('meta.site.description'),
+      url: request.url,
+      type: 'website',
+      image: social_image_url,
       'image:alt': t('meta.image_alt'),
       'image:height': 630,
       'image:width': 1200,
-      'locale': 'en_GB'
+      locale: 'en_GB'
     }
   end
 
   def twitter_tags
     {
-      'card': t('meta.twitter.card'),
-      'site': t('meta.twitter.site'),
-      'creator': t('meta.twitter.creator')
+      card: t('meta.twitter.card'),
+      site: t('meta.twitter.site'),
+      creator: t('meta.twitter.creator')
     }
   end
 
@@ -116,29 +116,20 @@ class ApplicationController < ActionController::Base
     render_error_page(404)
   end
 
-  # NO SHARED HTML CACHE. `enable_caching` used to put every rendered page into
-  # Rack::Cache/memcached behind an s-maxage window, which is why a CMS edit could
-  # stay invisible for as long as that window (30 days, as it was set) -- nothing
-  # invalidated it but a deploy. It also meant one visitor's `csrf_meta_tags` token
-  # was served to the next, and it is why a deploy had to flush memcached before the
-  # digest-stamped asset paths in the stored HTML 404'd.
+  # NO SHARED HTML CACHE. Pages re-render every request; what is cached is the
+  # expensive work behind them (country/region statistics, marine figures,
+  # blank-term search aggregations, Mapbox tiles), via Rails.cache.fetch.
   #
-  # What replaced it is caching the EXPENSIVE WORK rather than the page: the country
-  # and region statistics, totals and designation counts, the marine figures, the
-  # blank-term search aggregations and the Mapbox tiles all sit behind
-  # Rails.cache.fetch. Pages re-render every request, from warm data.
+  # `enable_caching` used to store the rendered page instead, which made CMS edits
+  # invisible until a deploy, served one visitor's csrf_meta_tags token to the
+  # next, and forced a memcached flush on deploy before the stored HTML's
+  # digest-stamped asset paths 404'd. See docs/caching.md.
   #
-  # Two deliberate exceptions, both keyed by something that changes with their
-  # content, so neither can go stale the way HTML did:
+  # Two exceptions, both keyed by something that changes with their content:
   #   SitemapsController   its own TTL, see the note there
   #   AssetsController     tile PNGs, keyed by the record's updated_at
   #
   # test/integration/no_shared_html_cache_test.rb fails if this comes back.
-
-  # as of 04Apr it doesn't seem to be used
-  def after_sign_in_path_for(resource)
-    session[:previous_url] || root_path
-  end
 
   private
 
@@ -151,7 +142,7 @@ class ApplicationController < ActionController::Base
   def load_cms_content
     return if admin_path?
 
-    # Strips out the locale and any query params (including the query character) 
+    # Strips out the locale and any query params (including the query character)
     # when attempting to find the page in the DB by its full_path
     sanitised_request = request.original_fullpath.gsub(%r{\A/#{I18n.default_locale}/?}, '/')[/[^?]+/]
 
@@ -160,7 +151,7 @@ class ApplicationController < ActionController::Base
     return unless @cms_page
 
     comfy_opengraph = ComfyOpengraph.new(
-      { 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
+      { 'social-title': 'title', 'social-description': 'description', image: 'image' },
       page: @cms_page
     )
     comfy_opengraph.parse(opengraph: opengraph, type: 'og')
@@ -186,8 +177,8 @@ class ApplicationController < ActionController::Base
       # Only get custom not null cms tags
       # Currently only works with dates but it's already more generalised to work with texts
       fragments_params.values.select { |v| v['tag'].include?('not_null') }.map do |fragment|
-        if fragment['tag'].include?('date') && fragment['datetime'].blank? ||
-            fragment['tag'].include?('text') && fragment['content'].blank?
+        if (fragment['tag'].include?('date') && fragment['datetime'].blank?) ||
+           (fragment['tag'].include?('text') && fragment['content'].blank?)
           null_fragments << fragment['identifier']
         end
       end
@@ -196,21 +187,16 @@ class ApplicationController < ActionController::Base
     end
 
     # Anything that is NOT the Comfy fragment case is a genuine database error and
-    # must surface. This used to log and redirect, which meant a broken query was
-    # indistinguishable from a normal 302.
+    # must surface. This used to log and redirect, which made a broken query
+    # indistinguishable from a normal 302 -- after the move to PostgreSQL 17,
+    # Country#coverage_growth raised `column "date_part" does not exist` on EVERY
+    # country page and they all silently redirected to the homepage, with nothing
+    # reaching AppSignal.
     #
-    # That is not hypothetical: after the move to the PostgreSQL 17 staging host,
-    # Country#coverage_growth raised
-    #   PG::UndefinedColumn: ERROR: column "date_part" does not exist
-    # on EVERY country page. All of them silently redirected to the homepage, no
-    # error reached AppSignal, and nothing looked wrong from the outside -- it was
-    # found only because a route smoke test compared against production.
-    #
-    # NB: raising from inside a rescue_from handler propagates straight to the error
+    # NB raising from inside a rescue_from handler goes straight to the error
     # middleware -- it is NOT re-dispatched to the StandardError handler above -- so
     # a bare re-raise in production would lose the styled error page. Hence: report
-    # explicitly, then raise in development/test where a loud backtrace is what you
-    # want, and render the normal 500 page in production.
+    # explicitly, raise in development/test, render the 500 page in production.
     Rails.logger.error("record_invalid_error: #{exception.class}: #{exception.message}") if exception
     Appsignal.send_error(exception) if exception && defined?(Appsignal)
 
@@ -253,12 +239,12 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error_page(status)
-    render template: "layouts/error_page",
-           layout: "application",
-           formats: [:html],
-           content_type: "text/html",
-           status: status == 404 ? :not_found : :internal_server_error,
-           locals: { error_status: status }
+    render template: 'layouts/error_page',
+      layout: 'application',
+      formats: [:html],
+      content_type: 'text/html',
+      status: status == 404 ? :not_found : :internal_server_error,
+      locals: { error_status: status }
   end
 
   def check_for_pdf

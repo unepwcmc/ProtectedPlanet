@@ -108,8 +108,9 @@ class ProtectedArea < ApplicationRecord
       protected_area_parcels.joins(:green_list_status).where(green_list_statuses: { gl_status: 'Candidate' }).exists?
   end
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb
-  # Growth chart: PA-only for now; parcel gis_area could be included in a future update.
+  # Hidden since 01Apr2025 -- not enough data to show. See green_list_controller.rb
+  # and app/views/green_list/index.html.erb.
+  # Growth chart is PA-only; parcel gis_area could be added later.
   # def self.greenlist_coverage_growth(start_year = 0)
   #   # Is in this format: [{year: year, value: area}...]
   #   # Takes an optional start year from which to start counting

@@ -47,8 +47,8 @@ Frontend: `yarn test` (Vitest, specs in `__tests__` next to the code),
 `yarn test:watch`, `yarn typecheck` (vue-tsc), `yarn lint`, `yarn lint:css`.
 
 CI is [`.github/workflows/test.yml`](../.github/workflows/test.yml). It replays
-all migrations and runs both suites, but is **deliberately not a required check**
-while the Ruby suite is red — see the comment at the top of that file, and
+all migrations and runs both suites. The Ruby suite is green, but neither suite
+is a required check yet and no branch is protected — see
 [known-issues.md](known-issues.md).
 
 ## Conventions

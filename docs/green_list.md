@@ -1,75 +1,62 @@
-# Green List Functionality
+# Green List
 
-## Overview
+The [IUCN Green List](https://iucngreenlist.org) of Protected and Conserved Areas
+is a global standard for protected areas. Protected Planet imports and displays
+Green List status for both **protected areas and their parcels**.
 
-The IUCN Green List of Protected and Conserved Areas is a global standard for protected areas. The Protected Planet application supports importing and displaying green list data for both **protected areas** and their **parcels**. Green list status can be set on the PA record and/or on individual parcels.
+## Status lives in two places
 
-## Current Implementation
+`protected_areas` and `protected_area_parcels` each have their own optional
+`green_list_status_id` (both `belongs_to :green_list_status, optional: true`).
+A parcel does **not** inherit the PA's status.
 
-**Parcel-aware behaviour:** The PA and each parcel have their own `green_list_status_id`. A PA is considered green-listed for search/display if the PA record is green-listed **or** any of its parcels is green-listed. The application does not require all parcels to inherit the PA’s status; parcel-level status is supported.
+A site counts as green-listed when the PA record **or any** of its parcels is —
+see [protected areas and parcels](protected_area_parcels.md).
 
-**Search / indexing:** The `special_status` field used for filtering (e.g. “Green Listed”) is derived from `pa_or_any_its_parcels_is_greenlisted` and `pa_or_any_its_parcels_is_greenlist_candidate` on `ProtectedArea`, so a PA appears in Green List filters when it or any of its parcels is green-listed.
+`green_list_statuses` holds the status definitions (`gl_status`, `gl_expiry`,
+`gl_link`).
 
-## Data Model
+## Scopes and methods
 
-### Tables
-- `green_list_statuses` – Status definitions (e.g. `gl_status`, `gl_expiry`, `gl_link`)
-- `protected_areas` – `green_list_status_id` (optional), plus other PA attributes
-- `protected_area_parcels` – `green_list_status_id` (optional) per parcel
+On `ProtectedArea` (`app/models/protected_area.rb`):
 
-### Relationships
-- `ProtectedArea` `belongs_to` `GreenListStatus` (optional)
-- `ProtectedAreaParcel` `belongs_to` `GreenListStatus` (optional)
+| | Returns |
+|---|---|
+| `pas_with_green_list_on_self_only` | PAs green-listed on their **own** record, ignoring parcels |
+| `pas_with_green_list_on_self_or_any_parcel` | PAs green-listed on the record **or** any parcel — **PA** records, not parcels; use `.protected_area_parcels` to reach those |
+| `#pa_or_any_its_parcels_is_greenlisted` | `true` if the PA or any parcel is Green Listed / Relisted |
+| `#pa_or_any_its_parcels_is_greenlist_candidate` | `true` if the PA or any parcel is a Candidate |
 
-## Scopes and queries
+Parcels with a status: `ProtectedAreaParcel.where.not(green_list_status_id: nil)`,
+or `ProtectedAreaParcel.joins(:green_list_status)`.
 
-### ProtectedArea
-- **`pas_with_green_list_on_self_only`** – PAs whose **own** record has a green list status (ignores parcels). Returns PA records.
-- **`pas_with_green_list_on_self_or_any_parcel`** – PAs that are green-listed on the PA record **or** on any parcel. Returns **PA** records (not parcels); use `.protected_area_parcels` on each PA to get parcels.
+## Search
 
-### Instance methods (for search/indexing)
-- **`pa_or_any_its_parcels_is_greenlisted`** – `true` if the PA or any of its parcels is Green Listed / Relisted.
-- **`pa_or_any_its_parcels_is_greenlist_candidate`** – `true` if the PA or any of its parcels is a Candidate.
+`ProtectedArea#special_status` builds the `Green Listed` / `Candidate` filter
+values from the two instance methods above, so a PA appears in Green List filters
+when it *or any parcel* qualifies.
 
-### Parcels
-- Parcels with a green list status: `ProtectedAreaParcel.where.not(green_list_status_id: nil)` or join through `green_list_status`.
+## Import
 
-## Import Process
+Green List data comes from the **portal materialised view**, not from CSV. The
+view is created and refreshed as part of the release (see `FDW_VIEWS.sql`).
 
-### Data sources
-Green list data is sourced from the **portal materialised view**, not from CSV files. The view is created and refreshed as part of the portal release (e.g. via `FDW_VIEWS.sql`).
+`Wdpa::Portal::Importers::GreenList` reads it through
+`Wdpa::Portal::Adapters::ImportViewsAdapter`, resolves each row to a PA or parcel
+by `site_id` / `site_pid`, and writes into `staging_green_list_statuses`,
+`staging_protected_areas` and `staging_protected_area_parcels`.
 
-### Importers
-- **Portal importer:** `Wdpa::Portal::Importers::GreenList` – reads from the green list materialised view via `Wdpa::Portal::Adapters::Greenlist` and imports into staging tables (`staging_protected_areas`, `staging_protected_area_parcels`, `staging_green_list_statuses`).
-
-Import logic resolves each view row to a PA or parcel (by `site_id` / `site_pid`) and sets `green_list_status_id` on the corresponding record. The data model supports parcel-specific status when the view contains parcel-level rows.
-
-## Usage
-
-### Import
 ```ruby
-# Portal importer (staging)
 Wdpa::Portal::Importers::GreenList.import_to_staging(notifier: notifier)
-```
-
-### Query examples
-```ruby
-# PAs green-listed on the PA record only (no parcel logic)
-ProtectedArea.pas_with_green_list_on_self_only
-
-# PAs green-listed on the PA and/or on any parcel (returns PAs, not parcels)
-ProtectedArea.pas_with_green_list_on_self_or_any_parcel
-
-# Parcels that have a green list status
-ProtectedAreaParcel.where.not(green_list_status_id: nil)
-# Or with join:
-ProtectedAreaParcel.joins(:green_list_status)
 ```
 
 ## Downloads
 
-The general download worker uses green list to build the set of areas for the “greenlist” download type. It currently uses `ProtectedArea.pas_with_green_list_on_self_only` to collect `site_id`s.
+The "greenlist" download type collects its `site_id`s from
+`ProtectedArea.pas_with_green_list_on_self_only` — PA-level status only, parcels
+excluded (`app/workers/download_workers/base.rb`).
 
-## Related documentation
-- [Protected Area Parcels](protected_area_parcels.md)
-- [Release Process](./release/release_process.md)
+## See also
+
+- [Protected areas and parcels](protected_area_parcels.md)
+- [Release process](release/release_process.md)

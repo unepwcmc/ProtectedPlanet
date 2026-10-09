@@ -1,9 +1,9 @@
 require 'test_helper'
 
-# Characterizes the .gdb export command building (previously untested) and locks the
-# driver to OpenFileGDB (was the proprietary Esri "FileGDB" SDK driver). `system` is
-# stubbed so no real ogr2ogr runs -- the current dev image's GDAL 2.2.3 has OpenFileGDB
-# read-only, so real .gdb writing is validated separately against a GDAL 3.6+ container.
+# Characterizes the .gdb export command building and locks the driver to
+# OpenFileGDB (was the proprietary Esri "FileGDB" SDK driver). `system` is stubbed,
+# so this asserts the command only -- no real ogr2ogr runs. Real .gdb output is
+# verified separately; see docs/GDAL-openfilegdb-migration.md.
 class OgrPostgresGdbExportTest < ActiveSupport::TestCase
   def setup
     Ogr::Postgres.stubs(:db_config).returns({ host: 'h', username: 'u', password: nil, database: 'd' })

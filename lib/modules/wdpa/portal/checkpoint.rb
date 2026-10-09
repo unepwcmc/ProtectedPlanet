@@ -11,30 +11,16 @@ module Wdpa
       class << self
         # Memoized per release, NOT per process.
         #
-        # This was a bare `@store ||=`, memoized for the life of the process. Only
-        # reset_all! cleared it, and that runs solely as the last phase of a
-        # *successful* PortalRelease::Service run. Anything else — a direct
-        # Wdpa::Portal::Importer.import, a failed or partial release, a second
-        # import in the same Ruby process — left the previous release's cursors in
-        # memory, so the next release resumed from them.
+        # A bare `@store ||=` survives for the life of the process, and only
+        # reset_all! clears it -- which runs solely as the last phase of a
+        # *successful* release. Anything else (a direct Importer.import, a failed
+        # or partial release, two imports in one console session or test run) then
+        # resumes from the previous release's cursors and imports zero records,
+        # surfacing as "Target staging table staging_protected_areas does not exist
+        # or has no records".
         #
-        # Latent in production, which runs one release per process
-        # (rake pp:portal:release), so the release id never changes mid-process.
-        # It bites a console running two imports, a dry run and resume in one
-        # session, and the test suite — and would bite production if imports ever
-        # moved into a long-lived worker.
-        #
-        # Measured 2026-09-16, two imports in one process against one seeded row:
-        #   Jan2026 (release 49): imported=1, @store cursor => [1]
-        #   Feb2026 (release 50): imported=0, success=false — still reading
-        #                         release 49's cursor; release 50's own stats_json
-        #                         checkpoints were never loaded (nil)
-        # That is the "Target staging table staging_protected_areas does not exist
-        # or has no records" failure, and the cause of the order-dependent failure
-        # in release_orchestration_integration_test.rb (seed 3923).
-        #
-        # Reloading whenever the current release changes makes each release read
-        # its own checkpoints, while resume WITHIN a release still works.
+        # Reloading when the release id changes makes each release read its own
+        # checkpoints; resume WITHIN a release still works.
         def store
           release_id = Wdpa::Portal::ImportRuntimeConfig.release_id
           if @store.nil? || @store_release_id != release_id

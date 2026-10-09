@@ -143,7 +143,8 @@ class RegionPresenter
     @statistics.map(&:marine_area).compact.reduce(:+)
   end
 
-  # As of 01Apr2025 we do not have enough data to show so hidding see app/controllers/green_list_controller.rb app/views/green_list/index.html.erb
+  # Hidden since 01Apr2025 -- not enough data to show. See green_list_controller.rb
+  # and app/views/green_list/index.html.erb.
   # def top_gl_coverage_countries
   #   # List of all countries with at least one green list PA, grouped by region
   #   countries = Country.countries_with_gl.where(region: region)
