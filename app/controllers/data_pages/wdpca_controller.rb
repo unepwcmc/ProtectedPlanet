@@ -1,5 +1,4 @@
 class DataPages::WdpcaController < ApplicationController
-  after_action :enable_caching
   include MapHelper
 
   def index

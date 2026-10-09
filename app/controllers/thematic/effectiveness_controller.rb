@@ -1,5 +1,4 @@
 class Thematic::EffectivenessController < ApplicationController
-  after_action :enable_caching
   include GreenListPageData
 
   def index

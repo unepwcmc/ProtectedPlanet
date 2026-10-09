@@ -65,9 +65,10 @@ class Search
   # already fast.
   #
   # Staleness is bounded by the TTL, and .kamal/hooks/post-deploy clears Rails.cache
-  # on every deploy, so shipping new data clears these entries too. This matters
-  # more since the move to `expires_in 0, must_revalidate` on the page itself --
-  # these responses are no longer sitting in Rack::Cache.
+  # on every deploy, so shipping new data clears these entries too. This is now the
+  # only cache standing between a visitor and the query: there is no shared HTML
+  # cache above it any more (see ApplicationController), so the page itself
+  # re-renders every request and this is what keeps that cheap.
   SEARCH_CACHE_TTL = 1.hour
 
   def fetch_query_results

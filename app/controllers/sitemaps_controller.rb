@@ -7,7 +7,9 @@ class SitemapsController < ApplicationController
   skip_before_action :load_cms_content
   skip_before_action :check_for_pdf
 
-  # Not enable_caching: its 30-day s-maxage would outlive several WDPA releases.
+  # The one place that still asks a shared cache to hold a response. Safe here and
+  # not for HTML: the TTL is sized to a release, and a sitemap that is a few hours
+  # behind costs nothing, where a CMS page that is costs an editor their afternoon.
   after_action :cache_for_sitemap_ttl
 
   def index

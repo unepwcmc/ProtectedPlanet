@@ -31,7 +31,8 @@ class CacheHeadersTest < ActiveSupport::TestCase
 
   # These set their own Cache-Control and this middleware runs last on the way out,
   # so a pattern matching them would silently win. Tiles are in the list on
-  # purpose: AssetsController sets the header itself, so Rack::Cache can see it.
+  # purpose: AssetsController sets the header itself, since /assets/tiles/:id
+  # carries no build digest for the patterns here to match.
   test 'endpoints that own their policy are never stamped' do
     ['/assets/tiles/555637',
      '/assets/tiles/ITA',

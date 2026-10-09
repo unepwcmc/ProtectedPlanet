@@ -1,5 +1,4 @@
 class DataPages::GdpameController < ApplicationController
-  after_action :enable_caching
   
   DEFAULT_PARAMS =
   {

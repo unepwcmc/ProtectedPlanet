@@ -24,10 +24,11 @@ class AssetsController < ApplicationController
       return
     end
 
-    # Set here rather than in Middleware::CacheHeaders, which sits ABOVE
-    # Rack::Cache: a header stamped there is applied after Rack::Cache has already
-    # judged the response uncacheable, so tiles would never be stored and every
-    # request would pay the record lookup above. The value stays shared.
+    # Set here rather than in Middleware::CacheHeaders, which only stamps paths that
+    # carry a digest -- /assets/tiles/:id does not, and must keep its own policy. Safe
+    # to cache this long because the Rails.cache key above carries the record's
+    # updated_at, so a changed record produces a different tile URL rather than a
+    # stale image. The value stays shared with the fingerprinted assets.
     #
     # Guarded: false in dev without tmp/caching-dev.txt, where the tile is
     # regenerated every request anyway, so a year-long browser TTL only gets in

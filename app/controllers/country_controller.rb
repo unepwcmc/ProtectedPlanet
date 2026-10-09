@@ -4,7 +4,6 @@ class CountryController < ApplicationController
   before_action :load_essential_vars
   before_action :build_stats, only: %i[show]
   before_action :calculate_national_designations_counts, only: %i[show]
-  after_action :enable_caching
   
   include MapHelper
   include CountriesHelper
@@ -61,15 +60,9 @@ class CountryController < ApplicationController
 
     @flag_path = helpers.flag_url(@country.iso_3)
 
-    # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
-    @total_pame = @country
-      .protected_areas
-      .pas_with_pame_on_self_only
-      .joins(pame_evaluations: :countries)
-      .where(countries: { id: @country.id })
-      .distinct
-      .count
-    @total_wdpa = @country.protected_areas.wdpas.count
+    totals = protected_area_totals
+    @total_pame = totals[:pame]
+    @total_wdpa = totals[:wdpa]
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
@@ -88,6 +81,33 @@ class CountryController < ApplicationController
     helpers.opengraph_title_and_description_with_suffix(@country.name)
     set_page_meta(title: @country.name, description: meta_description)
     @structured_data = structured_data_presenter.country(@country, description: meta_description)
+  end
+
+  # The two counts rendered above the tabs. Cached for the same reason build_stats is
+  # -- the PAME one is a DISTINCT across three joins, and for a country the size of USA
+  # it is the slowest query on the page. Keyed by release label, so a new WDPA release
+  # gets its own entries rather than waiting out the TTL.
+  def protected_area_totals
+    cache_key = [
+      'country',
+      'totals',
+      @country.iso_3,
+      Download::Config.current_label
+    ].join(':')
+
+    Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
+      {
+        # Exclude transboundary PAs where the PAME evaluation is associated only with another country.
+        pame: @country
+          .protected_areas
+          .pas_with_pame_on_self_only
+          .joins(pame_evaluations: :countries)
+          .where(countries: { id: @country.id })
+          .distinct
+          .count,
+        wdpa: @country.protected_areas.wdpas.count
+      }
+    end
   end
 
   def calculate_national_designations_counts

@@ -3,7 +3,6 @@ class SearchController < ApplicationController
 
   before_action :load_search, only: [:index, :search_results]
 
-  after_action :enable_caching
 
   def index
     categories = I18n.t('search.categories')

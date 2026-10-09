@@ -18,11 +18,13 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # dalli 3.x removed :dalli_store; :mem_cache_store is the Rails built-in (dalli-backed).
+  # http://wcmc.io/heroku_memcached for reference
   config.cache_store = :mem_cache_store, Rails.application.config_for(:app_secrets).memcache_servers, { value_max_bytes: 10_485_760 }
 
-  # http://wcmc.io/heroku_memcached for reference
-  client = Dalli::Client.new(Rails.application.config_for(:app_secrets).memcache_servers, {value_max_bytes: 10485760})
-  config.action_dispatch.rack_cache = {:metastore => client, :entitystore => client }
+  # NO Rack::Cache. It used to store rendered HTML here keyed by URL, which is what
+  # made CMS edits invisible until the next deploy. The cache store above still holds
+  # the expensive work behind it (statistics, search aggregations, Mapbox tiles), so
+  # pages re-render every request from warm data. See docs/caching.md.
 
   # One flat hash covers all of public/, so this is the safe half: stable URLs
   # revalidate, which is cheap because Rack::Files answers If-Modified-Since with a

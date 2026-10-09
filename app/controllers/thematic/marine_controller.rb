@@ -1,5 +1,4 @@
 class Thematic::MarineController < ApplicationController
-  after_action :enable_caching
   include ActionView::Helpers::NumberHelper
   include MapHelper
 

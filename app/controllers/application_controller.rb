@@ -116,22 +116,24 @@ class ApplicationController < ActionController::Base
     render_error_page(404)
   end
 
-  # max-age=0 + must-revalidate forces the BROWSER to recheck the HTML every visit,
-  # so it never keeps serving digest-stamped asset paths that the next build deleted.
-  # s-maxage lets the SHARED cache (Rack::Cache/memcached) serve the full window
-  # regardless, answering revalidation with a 304; post-deploy flushes that store.
+  # NO SHARED HTML CACHE. `enable_caching` used to put every rendered page into
+  # Rack::Cache/memcached behind an s-maxage window, which is why a CMS edit could
+  # stay invisible for as long as that window (30 days, as it was set) -- nothing
+  # invalidated it but a deploy. It also meant one visitor's `csrf_meta_tags` token
+  # was served to the next, and it is why a deploy had to flush memcached before the
+  # digest-stamped asset paths in the stored HTML 404'd.
   #
-  # Unguarded by perform_caching, unlike AssetsController#tiles: this only sets
-  # headers on a response already being rendered, so there's no expensive work to
-  # skip in dev. If that ever changes (e.g. this starts gating real caching work),
-  # add the same perform_caching guard tiles uses.
-  def enable_caching
-    options = { public: true, must_revalidate: true }
-    shared_max_age = AppSecrets.cache_max_age
-    options['s-maxage'] = shared_max_age if shared_max_age.present?
-
-    expires_in 0, options
-  end
+  # What replaced it is caching the EXPENSIVE WORK rather than the page: the country
+  # and region statistics, totals and designation counts, the marine figures, the
+  # blank-term search aggregations and the Mapbox tiles all sit behind
+  # Rails.cache.fetch. Pages re-render every request, from warm data.
+  #
+  # Two deliberate exceptions, both keyed by something that changes with their
+  # content, so neither can go stale the way HTML did:
+  #   SitemapsController   its own TTL, see the note there
+  #   AssetsController     tile PNGs, keyed by the record's updated_at
+  #
+  # test/integration/no_shared_html_cache_test.rb fails if this comes back.
 
   # as of 04Apr it doesn't seem to be used
   def after_sign_in_path_for(resource)

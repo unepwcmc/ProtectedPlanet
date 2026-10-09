@@ -1,7 +1,6 @@
 class RegionController < ApplicationController
   before_action :load_vars
   before_action :build_stats, only: :show
-  after_action :enable_caching
 
   TABS_KEYS = %i[coverage message iucn governance sources designations sites].freeze
   OECM_TAB_ID = 'wdpa_oecm'
@@ -11,8 +10,9 @@ class RegionController < ApplicationController
   def show
     @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', params[:iso].upcase)
 
-    @total_pame = @region.protected_areas.pas_with_pame_on_self_or_any_parcel.count
-    @total_wdpa = @region.protected_areas.wdpas.count
+    totals = protected_area_totals
+    @total_pame = totals[:pame]
+    @total_wdpa = totals[:wdpa]
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
@@ -63,6 +63,26 @@ class RegionController < ApplicationController
   end
 
   private
+
+  # The two counts rendered above the tabs. Cached for the same reason as the stats
+  # above -- a region spans every country in it, so these are the slowest queries on
+  # the page. Keyed by release label, so a new WDPA release gets its own entries
+  # rather than waiting out the TTL.
+  def protected_area_totals
+    cache_key = [
+      'region',
+      'totals',
+      @region.iso,
+      Download::Config.current_label
+    ].join(':')
+
+    Rails.cache.fetch(cache_key, expires_in: CACHE_FETCH_TTL) do
+      {
+        pame: @region.protected_areas.pas_with_pame_on_self_or_any_parcel.count,
+        wdpa: @region.protected_areas.wdpas.count
+      }
+    end
+  end
 
   def build_hash(tab)
     oecm = tab == :wdpa_oecm

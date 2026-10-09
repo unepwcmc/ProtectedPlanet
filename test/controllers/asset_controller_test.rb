@@ -12,8 +12,8 @@ class AssetsControllerTest < ActionController::TestCase
     assert_equal "the tile", @response.body
   end
 
-  # Set in the action rather than Middleware::CacheHeaders, which sits above
-  # Rack::Cache and so would stamp too late for the response to be stored.
+  # Set in the action rather than Middleware::CacheHeaders, whose patterns only match
+  # paths carrying a build digest -- /assets/tiles/:id has none.
   test ".tiles sets the shared long-lived cache policy on the response" do
     pa = FactoryBot.create(:protected_area, site_id: 555_222)
 

@@ -73,8 +73,9 @@ gem 'turbo-mount', '~> 0.4.4'
 
 group :production, :staging do
 #  gem 'unicorn'
+  # Backs :mem_cache_store. rack-cache was dropped with the shared HTML cache --
+  # nothing sets config.action_dispatch.rack_cache any more. See docs/caching.md.
   gem 'dalli', '~> 3.2'
-  gem 'rack-cache', '~> 1.2'
 end
 #
 group :development do

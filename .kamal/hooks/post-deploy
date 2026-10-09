@@ -3,27 +3,24 @@ set -euo pipefail
 
 # Flush the cache after the new containers are live.
 #
-# WHY THIS IS NOT OPTIONAL:
-# staging/production enable Rack::Cache with Memcached as the metastore AND
-# entitystore (config/environments/staging.rb), and `enable_caching` serves pages
-# with `Cache-Control: public, max-age=2592000` -- 30 days. Rack::Cache keys those
-# full HTML responses by URL, and the HTML embeds digest-stamped asset paths
-# (/vite/assets/application-<hash>.js).
+# WHAT THIS IS FOR NOW:
+# Rails.cache holds derived data with long TTLs -- country and region statistics and
+# totals, the marine figures, blank-term search aggregations, Mapbox tiles. Most of
+# those keys carry the release label, so a data release gets fresh entries on its
+# own, but a code deploy that changes how a figure is DERIVED does not. This flush
+# covers that case.
 #
-# Every build produces new hashes and deletes the old files. So without this flush a
-# deploy leaves Rack::Cache serving last deploy's HTML, pointing at assets that no
-# longer exist -> application-<old>.js 404s -> the Vue app never boots -> the site
-# renders but is inert (this is exactly what happened after the Vite cutover, and
-# had to be flushed by hand).
+# It used to be load-bearing for a different reason: Rack::Cache stored rendered HTML
+# in the same memcached, that HTML embedded digest-stamped asset paths
+# (/vite/assets/application-<hash>.js), and every build deletes the files the old
+# digests point at -- so skipping the flush left the site rendering but inert. That
+# cannot happen any more: there is no shared HTML cache (see ApplicationController),
+# so every page is rendered fresh and always names the current build's assets.
 #
-# Rails.cache.clear issues Dalli's flush_all, which clears the Rails cache and the
-# Rack::Cache stores in one go -- they share the same memcached server.
-#
-# NB: flush_all clears the WHOLE memcached instance. Today only ProtectedPlanet
-# points at this host's memcached (verified: no other container defines MEMCACHE_*).
-# If another app is ever pointed at it, give it its own instance or a namespace
-# rather than making this flush narrower -- stale HTML here is worse than a cold
-# cache elsewhere.
+# NB: Rails.cache.clear issues Dalli's flush_all, which clears the WHOLE memcached
+# instance. Today only ProtectedPlanet points at this host's memcached (verified: no
+# other container defines MEMCACHE_*). If another app is ever pointed at it, give it
+# its own instance rather than making this flush narrower.
 #
 # --primary --roles web for the same reason as pre-deploy: `app exec` otherwise
 # fans out to every role and runs this once per role.
@@ -39,10 +36,11 @@ if kamal app exec \
   echo "==> Cache flushed"
 else
   # The containers are already live at this point, so this cannot roll anything
-  # back -- but it must be loud, because the symptom (a site that loads and does
-  # nothing) looks nothing like a failed deploy.
-  echo "!!! CACHE FLUSH FAILED — Rack::Cache may still be serving HTML that references"
-  echo "!!! asset digests from the previous build, which will 404 and leave the page inert."
+  # back. No longer fatal to the site -- pages render fresh either way -- but still
+  # loud, because stale derived figures are the kind of wrong that nobody reports.
+  echo "!!! CACHE FLUSH FAILED — derived figures (statistics, totals, search"
+  echo "!!! aggregations, tiles) may still be the previous build's. Pages themselves"
+  echo "!!! are unaffected: nothing caches rendered HTML."
   echo "!!! Flush manually, e.g.:"
   echo "!!!   kamal app exec --primary --roles web \"bundle exec rails runner 'Rails.cache.clear'\""
   exit 1
@@ -66,8 +64,8 @@ fi
 # all have passed locally. Anything local CAN see is already caught by the test
 # suite and bin/preflight-deploy steps 5-8.
 #
-# AFTER the cache flush, deliberately: Rack::Cache serves HTML for 30 days, so a
-# walk before the flush would grade last deploy's cached responses.
+# AFTER the cache flush, deliberately: a walk before it would grade pages built from
+# the previous build's derived figures rather than this one's.
 
 # The scheme is explicit and MUST stay https. PP_HOST (config/deploy.staging.yml)
 # is a bare hostname; over http kamal-proxy 301s every route, and the walker counts

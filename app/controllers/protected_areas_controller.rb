@@ -1,6 +1,5 @@
 class ProtectedAreasController < ApplicationController
   after_action :record_visit
-  after_action :enable_caching
   include MapHelper
 
   def show

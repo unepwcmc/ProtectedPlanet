@@ -6,7 +6,6 @@ class SearchAreasController < ApplicationController
   before_action :load_search, only: [:search_results]
   before_action :load_search_from_query_string, only: [:index]
   before_action :load_filters, only: [:index, :search_results]
-  after_action :enable_caching
 
   TABS = %w(region country site).freeze
   def index
