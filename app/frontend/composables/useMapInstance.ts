@@ -3,6 +3,7 @@ import {
   Map as MapLibreMap,
   AttributionControl,
   NavigationControl,
+  ScaleControl,
   setRTLTextPlugin,
   setWorkerUrl,
   type MapOptions,
@@ -24,6 +25,9 @@ export interface MapControlsOptions {
   showZoom: boolean
   showCompass: boolean
   showBaselayerControls: boolean
+  showScale: boolean
+  scaleUnit: 'metric' | 'imperial'
+  scaleMaxWidth: number
   attributionLocation: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 }
 
@@ -44,10 +48,35 @@ export default function () {
     if (!map.value) return
 
     if (controlsOptions.showZoom) {
-      map.value.addControl(new NavigationControl({ showCompass: controlsOptions.showCompass }))
+      map.value.addControl(new NavigationControl({
+        showCompass: controlsOptions.showCompass
+      }))
     }
 
-    map.value.addControl(new AttributionControl({ compact: true }), controlsOptions.attributionLocation)
+    if (controlsOptions.showScale) {
+      map.value.addControl(new ScaleControl({
+        maxWidth: controlsOptions.scaleMaxWidth,
+        unit: controlsOptions.scaleUnit
+      }))
+    }
+
+    // No `compact`: MapLibre then collapses the attribution to its own pill below
+    // 640px of canvas width and shows the full strip above it. The empty object is
+    // required — the constructor's default parameter is `{ compact: true }` plus a
+    // MapLibre credit link, so omitting it entirely pins the pill at every width.
+    map.value.addControl(new AttributionControl({}), controlsOptions.attributionLocation)
+    collapseCompactAttribution()
+    // It re-expands the pill every time a resize crosses that width.
+    map.value.on('resize', collapseCompactAttribution)
+  }
+
+  // MapLibre adds the compact pill pre-expanded and only collapses it on the
+  // first pan, so mirror its own collapse — drop `compact-show`, leave the
+  // details element open — to have small maps start compact.
+  function collapseCompactAttribution() {
+    map.value?.getContainer()
+      .querySelector('.maplibregl-ctrl-attrib.maplibregl-compact')
+      ?.classList.remove('maplibregl-compact-show')
   }
 
   function initMap(

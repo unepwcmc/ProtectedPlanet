@@ -32,6 +32,9 @@ export const CONTROLS_OPTIONS_DEFAULT = {
   showZoom: true,
   showCompass: false,
   showBaselayerControls: true,
+  showScale: true,
+  scaleUnit: 'metric' as const,
+  scaleMaxWidth: 80,
   attributionLocation: 'bottom-left' as const
 }
 

@@ -13,9 +13,21 @@
 }
 
 .maplibregl-ctrl-bottom-left {
-  @apply 
-  flex 
-  flex-col-reverse;
+  @apply
+  flex
+  items-end;
+}
+
+/* The scale extends the attribution strip into one continuous bar — matching
+   background, no margins. Nesting it inside .maplibregl-ctrl-attrib-inner
+   instead would not survive, as MapLibre rewrites that innerHTML whenever the
+   style's attributions change. Keyed off the full strip: below 640px of canvas
+   width MapLibre swaps in its collapsible pill, and the scale then keeps its
+   own background and offset. */
+.maplibregl-ctrl-attrib:not(.maplibregl-compact) + .maplibregl-ctrl-scale {
+  @apply
+  m-0
+  bg-white/50;
 }
 
 .maplibregl-ctrl.maplibregl-ctrl-group:not(:empty) {

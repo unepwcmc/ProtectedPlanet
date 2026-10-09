@@ -13,7 +13,9 @@ const fakeMapInstance = {
   resize: vi.fn(),
   getLayer: vi.fn(),
   getStyle: vi.fn(() => ({ layers: [] })),
-  isStyleLoaded: vi.fn(() => true)
+  isStyleLoaded: vi.fn(() => true),
+  // addControls reads the attribution element out of it to collapse the compact pill.
+  getContainer: vi.fn(() => document.createElement('div'))
 }
 
 function MapImplementation() {
@@ -24,6 +26,7 @@ vi.mock('maplibre-gl', () => ({
   Map: vi.fn(MapImplementation),
   AttributionControl: vi.fn(),
   NavigationControl: vi.fn(),
+  ScaleControl: vi.fn(),
   Marker: vi.fn(),
   Popup: vi.fn(),
   setRTLTextPlugin: vi.fn(),
