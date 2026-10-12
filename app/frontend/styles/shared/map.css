@@ -15,19 +15,19 @@
 .maplibregl-ctrl-bottom-left {
   @apply
   flex
-  items-end;
+  flex-col-reverse;
 }
 
-/* The scale extends the attribution strip into one continuous bar — matching
-   background, no margins. Nesting it inside .maplibregl-ctrl-attrib-inner
-   instead would not survive, as MapLibre rewrites that innerHTML whenever the
-   style's attributions change. Keyed off the full strip: below 640px of canvas
-   width MapLibre swaps in its collapsible pill, and the scale then keeps its
-   own background and offset. */
-.maplibregl-ctrl-attrib:not(.maplibregl-compact) + .maplibregl-ctrl-scale {
+/* The baselayer picker is absolutely positioned on the canvas, not in a
+   MapLibre corner, so clearing it means repeating its own bottom inset plus
+   height here; the right inset is matched so the two align. The doubled class
+   is needed to outweigh MapLibre's own corner margin, not decoration. */
+.maplibregl-ctrl-bottom-right .maplibregl-ctrl.maplibregl-ctrl-scale {
   @apply
-  m-0
-  bg-white/50;
+  mr-2.5
+  mb-12
+  md:mb-16.5
+  lg:mr-4;
 }
 
 .maplibregl-ctrl.maplibregl-ctrl-group:not(:empty) {

@@ -54,10 +54,12 @@ export default function () {
     }
 
     if (controlsOptions.showScale) {
+      // Bottom-right rather than its default bottom-left corner, so it stacks
+      // above the baselayer picker; map.css owns that offset.
       map.value.addControl(new ScaleControl({
         maxWidth: controlsOptions.scaleMaxWidth,
         unit: controlsOptions.scaleUnit
-      }))
+      }), 'bottom-right')
     }
 
     // No `compact`: MapLibre then collapses the attribution to its own pill below
