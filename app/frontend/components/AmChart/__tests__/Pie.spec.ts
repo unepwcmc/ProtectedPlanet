@@ -98,6 +98,18 @@ describe('AmChartPie', () => {
     expect((colorsCall?.[1] as { colors: unknown[] }).colors).toHaveLength(12)
   })
 
+  it('sets the palette before loading data', () => {
+    mount(AmChartPie, { props: { dataset: [{ id: 1, title: 'A', value: 5 }] } })
+
+    // amCharts copies the current colour set into each slice as the data item is
+    // pushed, so a palette set afterwards never reaches the slices.
+    const pieSeries = lastPieSeries()
+    const colorsIndex = pieSeries.set.mock.calls.findIndex(([key]) => key === 'colors')
+
+    expect(pieSeries.set.mock.invocationCallOrder[colorsIndex])
+      .toBeLessThan(pieSeries.data.setAll.mock.invocationCallOrder[0])
+  })
+
   it('sets innerRadius only when doughnut is true', () => {
     mount(AmChartPie, { props: { dataset: [], doughnut: true } })
     expect(lastChart().options.innerRadius).toBe('50%')

@@ -47,11 +47,6 @@ function createChart() {
     categoryField: 'title',
     valueField: 'value'
   }))
-  // Fires once amCharts has turned `dataset` into slices — the real "drawn"
-  // signal, unlike this function returning.
-  pieSeries.events.once('datavalidated', markChartRenderDone)
-  pieSeries.data.setAll(props.dataset)
-
   removeActiveState()
   removeHoverState()
   removeLabels()
@@ -59,6 +54,13 @@ function createChart() {
   setTooltip()
 
   if (props.spacers) createSpacers()
+
+  // Must stay last: amCharts copies the current `colors` set into each slice as
+  // the data item is pushed, so the palette has to be in place before the data.
+  // Fires once amCharts has turned `dataset` into slices — the real "drawn"
+  // signal, unlike this function returning.
+  pieSeries.events.once('datavalidated', markChartRenderDone)
+  pieSeries.data.setAll(props.dataset)
 }
 
 watch(() => props.dataset, (dataset) => {
