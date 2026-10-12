@@ -25,8 +25,8 @@
 .maplibregl-ctrl-bottom-right .maplibregl-ctrl.maplibregl-ctrl-scale {
   @apply
   mr-2.5
-  mb-12
-  md:mb-16.5
+  mb-13
+  md:mb-17
   lg:mr-4;
 }
 
