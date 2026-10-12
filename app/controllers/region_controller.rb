@@ -51,7 +51,7 @@ class RegionController < ApplicationController
         tabs.push({ id: OECM_TAB_ID, title: I18n.t('global.area-types.wdpca_oecm') })
       end
 
-      { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm }
+      { tabs: tabs, stats_data: stats_data, total_oecm: total_oecm, overview: build_overview }
     end
 
     @tabs = cached[:tabs]
@@ -60,9 +60,22 @@ class RegionController < ApplicationController
     @default_tab_id = @tabs.any? { |tab| tab[:id] == OECM_TAB_ID } ? OECM_TAB_ID : @tabs.first[:id]
     @stats_data = cached[:stats_data]
     @total_oecm = cached[:total_oecm]
+    @overview = cached[:overview]
   end
 
   private
+
+  # The figures above the tabs. They live in the same entry as the tab stats
+  # because they come from the same countries/statistics load -- kept outside it,
+  # they were the only reason a cache hit still had to touch the countries table.
+  def build_overview
+    {
+      chart_point_poly: presenter.chart_point_poly,
+      total_countries: @region.countries.count,
+      total_points_percentage: presenter.total_points_percentage,
+      total_polygons_percentage: presenter.total_polygons_percentage
+    }
+  end
 
   # The two counts rendered above the tabs. Cached for the same reason as the stats
   # above -- a region spans every country in it, so these are the slowest queries on
@@ -91,7 +104,7 @@ class RegionController < ApplicationController
     # What this does is call the corresponding method in tab presenter to build
     # the value for each key, populating the hash
     hash[tab] = TABS_KEYS.map do |key|
-      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: oecm) }
+      { "#{key}": tab_presenter.send("#{key}", oecms_tab: oecm) }
     end.reduce(&:merge)
 
     hash
@@ -113,7 +126,15 @@ class RegionController < ApplicationController
     params[:iso] != 'GL' or raise_404
     @region = Region.where(iso: params[:iso].upcase).first
     @region or raise_404
-    @presenter = RegionPresenter.new @region
-    @tab_presenter = TabPresenter.new(@region)
+  end
+
+  # Built on demand rather than in load_vars: every caller sits inside a cached
+  # block, so a cache hit never needs either of them.
+  def presenter
+    @presenter ||= RegionPresenter.new(@region)
+  end
+
+  def tab_presenter
+    @tab_presenter ||= TabPresenter.new(@region)
   end
 end

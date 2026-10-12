@@ -6,10 +6,6 @@ class RegionPresenter
 
   def initialize(region)
     @region = region
-    # Preloaded: both @statistics here and geometry_ratio below walked the countries
-    # calling #statistic, which was two separate N+1s over every country in the region.
-    @countries = @region.countries.includes(:country_statistic).to_a
-    @statistics = @countries.filter_map(&:statistic)
     @designations_presenter = DesignationsPresenter.new(region, true)
   end
 
@@ -99,15 +95,15 @@ class RegionPresenter
   end
 
   def oecms_pa_land_area
-    @statistics.map(&:oecms_pa_land_area).compact.reduce(:+)
+    statistics.map(&:oecms_pa_land_area).compact.reduce(:+)
   end
 
   def pa_land_area
-    @statistics.map(&:pa_land_area).compact.reduce(:+)
+    statistics.map(&:pa_land_area).compact.reduce(:+)
   end
 
   def land_area
-    @statistics.map(&:land_area).compact.reduce(:+)
+    statistics.map(&:land_area).compact.reduce(:+)
   end
 
   def percentage_oecms_pa_marine_cover
@@ -119,15 +115,15 @@ class RegionPresenter
   end
 
   def oecms_pa_marine_area
-    @statistics.map(&:oecms_pa_marine_area).compact.reduce(:+)
+    statistics.map(&:oecms_pa_marine_area).compact.reduce(:+)
   end
 
   def pa_marine_area
-    @statistics.map(&:pa_marine_area).compact.reduce(:+)
+    statistics.map(&:pa_marine_area).compact.reduce(:+)
   end
 
   def marine_area
-    @statistics.map(&:marine_area).compact.reduce(:+)
+    statistics.map(&:marine_area).compact.reduce(:+)
   end
 
   # Hidden since 01Apr2025 -- not enough data to show. See green_list_controller.rb
@@ -177,8 +173,8 @@ class RegionPresenter
   private
 
   def calculate_geometry_ratio
-    polygons_count = @statistics.sum { |statistic| statistic.polygons_count || 0 }
-    points_count = @statistics.sum { |statistic| statistic.points_count || 0 }
+    polygons_count = statistics.sum { |statistic| statistic.polygons_count || 0 }
+    points_count = statistics.sum { |statistic| statistic.points_count || 0 }
     total = polygons_count + points_count
 
     return { polygons: 0, points: 0 } if total.zero?
@@ -187,6 +183,18 @@ class RegionPresenter
       polygons: ((polygons_count / total.to_f) * 100).round,
       points: ((points_count / total.to_f) * 100).round
     }
+  end
+
+  # Loaded on first use, not in the constructor: every consumer of these except
+  # geometry_ratio sits inside RegionController's cached stats blob, so on a cache
+  # hit nothing asks for them and the region pays no query at all.
+  # Preloaded because statistics used to be an N+1 over every country in the region.
+  def countries
+    @countries ||= region.countries.includes(:country_statistic).to_a
+  end
+
+  def statistics
+    @statistics ||= countries.filter_map(&:statistic)
   end
 
   attr_reader :region

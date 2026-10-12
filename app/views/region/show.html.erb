@@ -3,14 +3,14 @@
   <div class="vw-region__container">
     <section class="vw-region__overview tw-global-pdf-export__break-inside-avoid">
       <%= render partial: "partials/stats/stats-overview", locals: { 
-        chart_point_poly: @presenter.chart_point_poly,
+        chart_point_poly: @overview[:chart_point_poly],
         legend_map: map_legend,
         title: @region.name,
-        total_countries: spaceify(@region.countries.count),
+        total_countries: spaceify(@overview[:total_countries]),
         total_oecm: @total_oecm,
         total_pame: @total_pame,
-        total_points_percentage: @presenter.total_points_percentage,
-        total_polygons_percentage: @presenter.total_polygons_percentage,
+        total_points_percentage: @overview[:total_points_percentage],
+        total_polygons_percentage: @overview[:total_polygons_percentage],
         total_wdpa: @total_wdpa,
       } %>
       <%= turbo_mount "Map", props: {
