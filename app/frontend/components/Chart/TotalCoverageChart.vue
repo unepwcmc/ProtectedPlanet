@@ -63,8 +63,8 @@ const { total, coverage } = defineProps<ChartTotalCoverageChart>()
 .ct-total-coverage-chart__total-bar {
   @apply
   relative
-  flex h-13
-  items-center
+  flex 
+  h-13
   justify-between;
 }
 
