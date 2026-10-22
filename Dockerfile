@@ -1,5 +1,5 @@
 ARG RUBY_VERSION=4.0.6
-ARG NODE_VERSION=26.8.1
+ARG NODE_VERSION=26.12.1
 ARG COREPACK_VERSION=0.36.0
 
 FROM ubuntu:24.04
@@ -101,7 +101,9 @@ RUN printf 'export PATH=/usr/local/ruby-%s/bin:/usr/local/bundle/bin:$PATH\n' "$
 # on both arm64 and amd64, installing nothing more exotic than `is-odd`. It is an
 # upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
 # corepack, per package.json's "packageManager"), so the tarball path sidesteps it
-# entirely. Revisit when a Node 26 patch ships a working npm.
+# entirely. The npm bug is FIXED as of 26.12.1 (npm 11.20.0, verified 2026-10-22):
+# installs succeed again. The tarball path stays anyway -- it needs no working npm,
+# so NODE_VERSION stays safe to bump in either direction.
 # Reverted to linux-x64 deliberately. A native arm64 dev image would fix the
 # frontend toolchain (vue-tsc, tailwind and npm all misbehave under Rosetta --
 # the same `vite build --mode test` that fails emulated completed in 6.6s on
