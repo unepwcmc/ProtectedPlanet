@@ -6,7 +6,7 @@
 # would not give us the 24.04 GDAL.
 
 ARG RUBY_VERSION=4.0.6
-ARG NODE_VERSION=26.8.1
+ARG NODE_VERSION=26.12.1
 ARG COREPACK_VERSION=0.36.0
 
 # ---------------------------------------------------------------------------
@@ -88,7 +88,9 @@ ENV PATH="/usr/local/ruby-${RUBY_VERSION}/bin:${PATH}"
 # on both arm64 and amd64, installing nothing more exotic than `is-odd`. It is an
 # upstream npm bug, not ours. Nothing else here needs npm (yarn comes from
 # corepack, per package.json's "packageManager"), so the tarball path sidesteps it
-# entirely. Revisit when a Node 26 patch ships a working npm.
+# entirely. The npm bug is FIXED as of 26.12.1 (npm 11.20.0, verified 2026-10-22):
+# installs succeed again. The tarball path stays anyway -- it needs no working npm,
+# so NODE_VERSION stays safe to bump in either direction.
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" -o /tmp/node.tar.xz \
  && tar -xf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
  && rm /tmp/node.tar.xz \
